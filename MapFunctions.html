@@ -1,0 +1,397 @@
+<script>
+  // Map-related functions
+  let map;
+  let mapInitialized = false;
+
+  function isSpatialSectionVisible() {
+    const spatialSection = document.getElementById('step4Form');
+    if (!spatialSection) return false;
+    return $(spatialSection).is(':visible');
+  }
+  
+  function ensureMapInitialized() {
+    if (!map || !map.getContainer()) {
+      debugLog('DEBUG: ensureMapInitialized - Map not initialized, initializing now');
+      // Check if spatial section is actually visible
+      if (isSpatialSectionVisible()) {
+        initMap();
+        return true;
+      } else {
+        debugLog('DEBUG: ensureMapInitialized - Spatial section not visible, deferring initialization');
+        return false;
+      }
+    }
+    
+    // If map exists and spatial section is visible, aggressively invalidate size
+    if (isSpatialSectionVisible() && map && map.invalidateSize) {
+      requestAnimationFrame(() => {
+        debugLog('DEBUG: ensureMapInitialized - Invalidating map size (rAF)');
+        map.invalidateSize(true);
+      });
+      setTimeout(() => {
+        if (map && map.invalidateSize) {
+          debugLog('DEBUG: ensureMapInitialized - Invalidating map size (delayed)');
+          map.invalidateSize(true);
+        }
+      }, 180);
+    }
+    
+    return true;
+  }
+  
+  function initMap() {
+    try {
+      debugLog('DEBUG: initMap - Initializing map');
+      
+      // Check if container exists and is visible
+      const mapContainer = document.getElementById('map');
+      if (!mapContainer) {
+        console.error('DEBUG: initMap - Map container not found');
+        return;
+      }
+
+      if (!isSpatialSectionVisible()) {
+        debugLog('DEBUG: initMap - Spatial section not visible yet, deferring init');
+        setTimeout(() => {
+          if (isSpatialSectionVisible()) initMap();
+        }, 120);
+        return;
+      }
+
+      const rect = mapContainer.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) {
+        debugLog('DEBUG: initMap - Container has zero size, deferring init');
+        setTimeout(() => {
+          if (isSpatialSectionVisible()) initMap();
+        }, 150);
+        return;
+      }
+
+      if (map) {
+        try {
+          map.remove();
+        } catch (e) {
+          debugWarn('DEBUG: initMap - Existing map removal warning:', e);
+        }
+        map = null;
+      }
+      
+      // Initialize map with better defaults
+      map = L.map('map', {
+        zoomControl: true,
+        attributionControl: true,
+        scrollWheelZoom: true,
+        doubleClickZoom: true,
+        boxZoom: true,
+        keyboard: true,
+        dragging: true,
+        touchZoom: true
+      }).setView([28.0, -90.0], 6); // Better default for Gulf of Mexico area
+      
+      // Add multiple tile layer options with fallbacks
+      const tileLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        opacity: 1,
+        detectRetina: true
+      });
+      
+      let tileLoadErrors = 0;
+      const maxTileErrors = 5;
+      
+      // Add error handling for tile loading
+      tileLayer.on('tileerror', function(e) {
+        tileLoadErrors++;
+        debugWarn('DEBUG: initMap - Tile loading error:', e, 'Error count:', tileLoadErrors);
+        
+        if (tileLoadErrors >= maxTileErrors) {
+          debugWarn('DEBUG: initMap - Too many tile errors, trying alternative provider');
+          setTimeout(() => {
+            tryAlternativeTileProvider();
+          }, 1000);
+        }
+      });
+      
+      tileLayer.on('tileload', function(e) {
+        if (!mapInitialized) {
+          debugLog('DEBUG: initMap - First tile loaded successfully');
+          mapInitialized = true;
+          
+          // Force tile visibility after first tile loads
+          setTimeout(() => {
+            forceTileVisibility();
+          }, 200);
+        }
+      });
+      
+      tileLayer.addTo(map);
+
+      setTimeout(() => {
+        const loadedTiles = document.querySelectorAll('#map .leaflet-tile-loaded').length;
+        if (loadedTiles === 0) {
+          debugWarn('DEBUG: initMap - No loaded tiles after timeout, attempting fallback provider');
+          tryAlternativeTileProvider();
+        }
+      }, 2200);
+      
+      // Force map to resize after a short delay
+      setTimeout(() => {
+        if (map && map.invalidateSize) {
+          map.invalidateSize(true);
+          requestAnimationFrame(() => {
+            if (map && map.invalidateSize) {
+              map.invalidateSize(true);
+            }
+          });
+          debugLog('DEBUG: initMap - Map size invalidated after initialization');
+        }
+        updateMap();
+      }, 200);
+      
+      debugLog('DEBUG: initMap - Map initialized successfully');
+    } catch (e) {
+      console.error('DEBUG: initMap - Error in initMap:', e);
+      // Don't show alert in production, just log the error
+      console.error('Failed to initialize map: ' + e.message);
+    }
+  }
+  
+  function updateMap() {
+    try {
+      debugLog('DEBUG: updateMap - Updating map');
+      
+      // Ensure map is initialized
+      if (!ensureMapInitialized()) {
+        debugLog('DEBUG: updateMap - Map not ready, skipping update');
+        return;
+      }
+      
+      // Double-check that map is actually available before using it
+      if (!map || !map.eachLayer) {
+        debugLog('DEBUG: updateMap - Map object not properly initialized, skipping update');
+        return;
+      }
+      
+      const ulLat = parseFloat($('#upperLeftLat').val());
+      const ulLon = parseFloat($('#upperLeftLon').val());
+      const urLat = parseFloat($('#upperRightLat').val());
+      const urLon = parseFloat($('#upperRightLon').val());
+      const lrLat = parseFloat($('#lowerRightLat').val());
+      const lrLon = parseFloat($('#lowerRightLon').val());
+      const llLat = parseFloat($('#lowerLeftLat').val());
+      const llLon = parseFloat($('#lowerLeftLon').val());
+
+      const hasAll = [ulLat,ulLon,urLat,urLon,lrLat,lrLon,llLat,llLon].every(v=>!isNaN(v) && v!==0);
+
+      // Remove existing polygons / markers
+      map.eachLayer(l=>{ if(l instanceof L.Polygon || l instanceof L.Marker) map.removeLayer(l);});
+
+      if(hasAll){
+        const coords=[[ulLat,ulLon],[urLat,urLon],[lrLat,lrLon],[llLat,llLon]];
+        const polygon=L.polygon(coords,{color:'blue'}).addTo(map);
+        map.fitBounds(polygon.getBounds());
+        debugLog('DEBUG: updateMap - Polygon drawn & bounds set');
+      }else{
+        // fallback: single center marker based on whatever non-NaN coordinate exists
+        const latCandidates=[ulLat,urLat,lrLat,llLat].filter(v=>!isNaN(v));
+        const lonCandidates=[ulLon,urLon,lrLon,llLon].filter(v=>!isNaN(v));
+        if(latCandidates.length && lonCandidates.length){
+          const cLat=latCandidates.reduce((a,b)=>a+b)/latCandidates.length;
+          const cLon=lonCandidates.reduce((a,b)=>a+b)/lonCandidates.length;
+          L.marker([cLat,cLon]).addTo(map);
+          map.setView([cLat,cLon],6);
+          debugLog('DEBUG: updateMap - Single marker placed');
+        }else{
+          debugLog('DEBUG: updateMap - Not enough coordinates to update map');
+        }
+      }
+    }catch(e){console.error('DEBUG: updateMap - Error:',e);} }
+  
+  // Function to completely reinitialize map if tiles aren't loading
+  function reinitializeMap() {
+    try {
+      debugLog('DEBUG: reinitializeMap - Reinitializing map completely');
+      
+      // Remove existing map if it exists
+      if (map) {
+        map.remove();
+        map = null;
+        mapInitialized = false;
+      }
+      
+      // Clear the map container
+      const mapContainer = document.getElementById('map');
+      if (mapContainer) {
+        mapContainer.innerHTML = '';
+      }
+      
+      // Wait a moment then reinitialize
+      setTimeout(() => {
+        initMap();
+      }, 100);
+      
+    } catch (e) {
+      console.error('DEBUG: reinitializeMap - Error:', e);
+    }
+  }
+  
+  // Function to check if map tiles are loading properly
+  function checkMapTileLoading() {
+    debugLog('DEBUG: checkMapTileLoading - Checking if map tiles are loading');
+    
+    if (!map) {
+      debugWarn('DEBUG: checkMapTileLoading - Map not initialized');
+      return false;
+    }
+    
+    // Check if any tiles have loaded
+    const tileElements = document.querySelectorAll('#map .leaflet-tile');
+    const tilesLoaded = tileElements.length > 0;
+    
+    debugLog('DEBUG: checkMapTileLoading - Found', tileElements.length, 'tile elements');
+    
+    // If no tiles loaded after 5 seconds, try alternative tile provider
+    if (!tilesLoaded && mapInitialized) {
+      debugWarn('DEBUG: checkMapTileLoading - No tiles loaded, trying alternative provider');
+      tryAlternativeTileProvider();
+    }
+    
+    return tilesLoaded;
+  }
+  
+  // Function to try alternative tile providers
+  function tryAlternativeTileProvider() {
+    try {
+      debugLog('DEBUG: tryAlternativeTileProvider - Trying alternative tile provider');
+      
+      if (!map) return;
+      
+      // Remove existing tile layers
+      map.eachLayer(function(layer) {
+        if (layer instanceof L.TileLayer) {
+          map.removeLayer(layer);
+        }
+      });
+      
+      // Try CartoDB Positron tiles as alternative (more reliable than OSM sometimes)
+      const alternativeTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        maxZoom: 19,
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        opacity: 1
+      });
+      
+      alternativeTileLayer.on('tileload', function(e) {
+        debugLog('DEBUG: tryAlternativeTileProvider - Alternative tiles loading successfully');
+        mapInitialized = true;
+        // Force tile visibility
+        setTimeout(() => {
+          forceTileVisibility();
+        }, 100);
+      });
+      
+      alternativeTileLayer.on('tileerror', function(e) {
+        debugWarn('DEBUG: tryAlternativeTileProvider - Alternative tile provider also failing, trying HTTPS OpenStreetMap');
+        // Try yet another alternative - direct OpenStreetMap with different subdomain
+        tryOpenStreetMapHTTPS();
+      });
+      
+      alternativeTileLayer.addTo(map);
+      
+    } catch (e) {
+      console.error('DEBUG: tryAlternativeTileProvider - Error:', e);
+    }
+  }
+  
+  // Try OpenStreetMap with HTTPS explicitly
+  function tryOpenStreetMapHTTPS() {
+    try {
+      debugLog('DEBUG: tryOpenStreetMapHTTPS - Trying HTTPS OpenStreetMap');
+      
+      if (!map) return;
+      
+      // Remove existing tile layers
+      map.eachLayer(function(layer) {
+        if (layer instanceof L.TileLayer) {
+          map.removeLayer(layer);
+        }
+      });
+      
+      const httpsOsmTileLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        opacity: 1
+      });
+      
+      httpsOsmTileLayer.on('tileload', function(e) {
+        debugLog('DEBUG: tryOpenStreetMapHTTPS - HTTPS OSM tiles loading successfully');
+        mapInitialized = true;
+        setTimeout(() => {
+          forceTileVisibility();
+        }, 100);
+      });
+      
+      httpsOsmTileLayer.on('tileerror', function(e) {
+        debugWarn('DEBUG: tryOpenStreetMapHTTPS - HTTPS OSM also failing, showing fallback message');
+        setTimeout(() => {
+          if (typeof showToast === 'function') {
+            showToast('warning', 'Map tiles having loading issues. Try refreshing the page or check your internet connection.');
+          }
+        }, 1000);
+      });
+      
+      httpsOsmTileLayer.addTo(map);
+      
+    } catch (e) {
+      console.error('DEBUG: tryOpenStreetMapHTTPS - Error:', e);
+    }
+  }
+  
+  // Force tile visibility with CSS
+  function forceTileVisibility() {
+    try {
+      debugLog('DEBUG: forceTileVisibility - Forcing tile visibility');
+      
+      const mapContainer = document.getElementById('map');
+      if (!mapContainer) return;
+      
+      // Force all tile elements to be visible
+      const tiles = mapContainer.querySelectorAll('.leaflet-tile');
+      debugLog('DEBUG: forceTileVisibility - Found', tiles.length, 'tile elements');
+      
+      tiles.forEach((tile, index) => {
+        tile.style.opacity = '1';
+        tile.style.visibility = 'visible';
+        tile.style.display = 'block';
+        debugLog('DEBUG: forceTileVisibility - Tile', index, 'forced visible, src:', tile.src ? tile.src.substring(0, 50) + '...' : 'no src');
+      });
+      
+      // Force tile pane visibility
+      const tilePanes = mapContainer.querySelectorAll('.leaflet-tile-pane');
+      tilePanes.forEach(pane => {
+        pane.style.opacity = '1';
+        pane.style.visibility = 'visible';
+      });
+      
+      // Force tile container visibility
+      const tileContainers = mapContainer.querySelectorAll('.leaflet-tile-container');
+      tileContainers.forEach(container => {
+        container.style.opacity = '1';
+        container.style.visibility = 'visible';
+      });
+      
+      debugLog('DEBUG: forceTileVisibility - Tile visibility forced');
+      
+    } catch (e) {
+      console.error('DEBUG: forceTileVisibility - Error:', e);
+    }
+  }
+  
+  // Make functions globally available
+  window.reinitializeMap = reinitializeMap;
+  window.checkMapTileLoading = checkMapTileLoading;
+  window.tryAlternativeTileProvider = tryAlternativeTileProvider;
+  window.tryOpenStreetMapHTTPS = tryOpenStreetMapHTTPS;
+  window.forceTileVisibility = forceTileVisibility;
+  
+  </script> 

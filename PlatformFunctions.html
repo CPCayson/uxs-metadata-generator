@@ -1,0 +1,271 @@
+<script>
+  // PlatformFunctions.html
+
+    function triggerPlatformFlowUpdate() {
+      if (typeof validateStepSync === 'function') {
+        validateStepSync(2);
+      }
+      if (window.FormEvents && typeof window.FormEvents.emit === 'function') {
+        window.FormEvents.emit('changed');
+      } else if (typeof refreshXMLPreview === 'function') {
+        refreshXMLPreview();
+      }
+    }
+
+    function applyPlatformFields(platform) {
+      if (!platform) return;
+
+      $('#platformId').val(platform.id || '');
+      $('#platformName').val(platform.name || '');
+      $('#platformType').val(platform.type === 'Other' ? 'Other' : (platform.type || ''));
+      $('#customPlatformTypeSection').toggle(platform.type === 'Other');
+      $('#customPlatformType').val(platform.type === 'Other' ? platform.type : '');
+      $('#manufacturer').val(platform.manufacturer || '');
+      $('#model').val(platform.model || '');
+      $('#weight').val(platform.weight || '');
+      $('#length').val(platform.length || '');
+      $('#width').val(platform.width || '');
+      $('#height').val(platform.height || '');
+      $('#material').val(platform.material || '');
+      $('#speed').val(platform.speed || '');
+      $('#powerSource').val(platform.powerSource || '');
+      $('#navigationSystem').val(platform.navigationSystem || '');
+      $('#sensorMounts').val(platform.sensorMounts || '');
+      $('#operationalArea').val(platform.operationalArea || '');
+      $('#serialNumber').val(platform.serialNumber || '');
+      $('#deploymentDate').val(platform.deploymentDate || '');
+      $('#platformComments').val(platform.comments || '');
+    }
+  
+  /** Client wrapper — name must differ from server savePlatform() to avoid google.script.run resolution issues. */
+  function persistPlatformToSheet(platformData) {
+    try {
+      if (!platformData || typeof platformData !== 'object') {
+        showToast('error', 'Platform data is missing. Fill the platform form and try again.');
+        return;
+      }
+      const payload = cloneForServerTransport(platformData);
+      if (!payload || typeof payload !== 'object') {
+        showToast('error', 'Platform data could not be prepared for save.');
+        return;
+      }
+      debugLog('DEBUG: persistPlatformToSheet - Saving platform:', payload);
+      showLoading(true);
+      const runner = google.script.run
+        .withSuccessHandler(function(platforms) {
+          debugLog('DEBUG: persistPlatformToSheet - Platform saved successfully');
+          updatePlatformOptions(platforms);
+          showToast('success', 'Platform saved to library (Google Sheet).');
+          $('#savePlatformFeedback').text('Saved to platform library (Google Sheet).').show();
+          setTimeout(() => $('#savePlatformFeedback').fadeOut(), 3000);
+          triggerPlatformFlowUpdate();
+          showLoading(false);
+        })
+        .withFailureHandler(function(e) {
+          console.error('DEBUG: persistPlatformToSheet - Error:', e);
+          showToast('error', `Failed to save platform: ${e.message}`);
+          google.script.run.logValidationResult('Platform Save Error', { error: e.message });
+          showLoading(false);
+        });
+      if (typeof runner['savePlatform'] !== 'function') {
+        showToast('error', 'Save platform is not available. Redeploy the web app.');
+        showLoading(false);
+        return;
+      }
+      runner['savePlatform'](payload);
+    } catch (e) {
+      console.error('DEBUG: persistPlatformToSheet - Exception:', e);
+      showToast('error', `Failed to save platform: ${e.message}`);
+      showLoading(false);
+    }
+  }
+  
+  function updatePlatformOptions(platforms) {
+    try {
+      debugLog('DEBUG: updatePlatformOptions - Updating platform options with:', platforms);
+      const datalist = $('#platformOptions');
+      const select = $('#savedPlatforms');
+      datalist.empty();
+      select.empty().append('<option value="">-- Load platform from library (fills this form only) --</option>');
+  
+      if (platforms && Array.isArray(platforms)) {
+        platforms.forEach((p, index) => {
+          const platformId = String(p?.id || '').trim();
+          const platformName = String(p?.name || platformId).trim();
+          if (!platformId) {
+            debugWarn(`DEBUG: updatePlatformOptions - Skipping invalid platform at index ${index}:`, p);
+            return;
+          }
+          datalist.append(`<option value="${escapeXml(platformId)}">${escapeXml(platformName)}</option>`);
+          select.append(`<option value="${escapeXml(platformId)}">${escapeXml(platformName)} (ID: ${escapeXml(platformId)})</option>`);
+        });
+      } else {
+        debugWarn('DEBUG: updatePlatformOptions - No valid platforms array provided');
+      }
+      debugLog('DEBUG: updatePlatformOptions - Platform options updated');
+    } catch (e) {
+      console.error('DEBUG: updatePlatformOptions - Error:', e);
+      showToast('error', 'Failed to update platform options: ' + e.message);
+      google.script.run.logValidationResult('Platform Options Update Error', { error: e.message });
+    }
+  }
+
+  function normalizePlatformId(value) {
+    return String(value || '').trim().toLowerCase();
+  }
+
+  function findPlatformById(platforms, platformId) {
+    const targetId = normalizePlatformId(platformId);
+    if (!targetId || !Array.isArray(platforms)) {
+      return null;
+    }
+    return platforms.find((platform) => normalizePlatformId(platform?.id) === targetId) || null;
+  }
+
+  function fetchAndApplyPlatformById(platformId, options = {}) {
+    const selectedId = String(platformId || '').trim();
+    if (!selectedId) {
+      return;
+    }
+
+    showLoading(true);
+    google.script.run
+      .withSuccessHandler(function(platforms) {
+        const platform = findPlatformById(platforms, selectedId);
+        if (platform) {
+          applyPlatformFields(platform);
+          triggerPlatformFlowUpdate();
+          if (options.showToast !== false) {
+            showToast('success', 'Platform loaded successfully');
+          }
+        } else if (options.showNotFoundToast !== false) {
+          showToast('warning', `Platform not found for ID: ${selectedId}`);
+        }
+
+        if (options.resetSavedSelection) {
+          $('#savedPlatforms').val('');
+        }
+        showLoading(false);
+      })
+      .withFailureHandler(function(e) {
+        console.error('DEBUG: fetchAndApplyPlatformById - Error:', e);
+        showToast('error', 'Failed to load platform: ' + e.message);
+        if (options.resetSavedSelection) {
+          $('#savedPlatforms').val('');
+        }
+        showLoading(false);
+      })
+      .getPlatforms();
+  }
+  
+  function initPlatformHandlers(platformsList) {
+    try {
+      debugLog('DEBUG: initPlatformHandlers - Initializing platform handlers');
+
+      if (Array.isArray(platformsList)) {
+        updatePlatformOptions(platformsList);
+      }
+  
+      $('#platformType').off('change.platformFlow').on('change.platformFlow', function() {
+        const isOther = $(this).val() === 'Other';
+        $('#customPlatformTypeSection').toggle(isOther);
+        if (!isOther) {
+          $('#customPlatformType').val('');
+        }
+        if (typeof validateStepSync === 'function') {
+          validateStepSync(2);
+        }
+      });
+  
+      $('#savePlatform').off('click.platformFlow').on('click.platformFlow', function(e) {
+        try {
+          e.preventDefault();
+          debugLog('DEBUG: initPlatformHandlers - Save platform button clicked');
+          const platformData = {
+            id: $('#platformId').val(),
+            name: $('#platformName').val(),
+            type: $('#platformType').val() === 'Other' ? $('#customPlatformType').val() : $('#platformType').val(),
+            manufacturer: $('#manufacturer').val(),
+            model: $('#model').val(),
+            weight: parseFloat($('#weight').val()) || 0,
+            length: parseFloat($('#length').val()) || 0,
+            width: parseFloat($('#width').val()) || 0,
+            height: parseFloat($('#height').val()) || 0,
+            material: $('#material').val(),
+            speed: parseFloat($('#speed').val()) || 0,
+            powerSource: $('#powerSource').val(),
+            navigationSystem: $('#navigationSystem').val(),
+            sensorMounts: $('#sensorMounts').val(),
+            operationalArea: $('#operationalArea').val(),
+            serialNumber: $('#serialNumber').val(),
+            deploymentDate: $('#deploymentDate').val(),
+            comments: $('#platformComments').val()
+          };
+  
+          const formData = collectFormData();
+          formData.platform = platformData;
+          showLoading(true);
+          google.script.run
+            .withSuccessHandler(function(validation) {
+              if (!validation.valid) {
+                showToast('error', `Validation failed: ${validation.errors.length} error${validation.errors.length !== 1 ? 's' : ''}`);
+                if (typeof updateValidationResults === 'function') {
+                  updateValidationResults(validation);
+                }
+                showLoading(false);
+                return;
+              }
+              if (!platformData || !String(platformData.id || '').trim()) {
+                showToast('error', 'Platform ID is required.');
+                showLoading(false);
+                return;
+              }
+              persistPlatformToSheet(platformData);
+            })
+            .withFailureHandler(function(e) {
+              console.error('DEBUG: persistPlatformToSheet - Validation error:', e);
+              showToast('error', 'Validation failed: ' + e.message);
+              showLoading(false);
+            })
+            .validateFormDataWithRules(formData, $('#validationLevel').val() || 'strict');
+        } catch (e) {
+          console.error('DEBUG: initPlatformHandlers - Save platform error:', e);
+          showToast('error', 'Failed to save platform: ' + e.message);
+          showLoading(false);
+        }
+      });
+  
+      $('#savedPlatforms').off('change.platformFlow').on('change.platformFlow', function() {
+        try {
+          const platformId = $(this).val();
+          debugLog('DEBUG: initPlatformHandlers - Loading platform:', platformId);
+          if (!platformId) return;
+          fetchAndApplyPlatformById(platformId, { resetSavedSelection: false, showToast: true, showNotFoundToast: true });
+        } catch (e) {
+          console.error('DEBUG: savedPlatforms - Exception:', e);
+          showToast('error', 'Failed to load platform: ' + e.message);
+          showLoading(false);
+        }
+      });
+  
+      $('#platformId').off('input.platformFlow').on('input.platformFlow', function() {
+        if (typeof validateStepSync === 'function') {
+          validateStepSync(2);
+        }
+      });
+  
+      $('#platformForm .form-control, #platformForm .form-select')
+        .off('input.platformFlow change.platformFlow')
+        .on('input.platformFlow change.platformFlow', function() {
+          if (typeof validateStepSync === 'function') {
+            validateStepSync(2);
+          }
+      });
+  
+      debugLog('DEBUG: initPlatformHandlers - Platform handlers initialized');
+    } catch (e) {
+      console.error('DEBUG: initPlatformHandlers - Exception:', e);
+      showToast('error', 'Failed to initialize platform handlers: ' + e.message);
+    }
+  }
+  </script>

@@ -1,0 +1,3250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="UxS Metadata Generator for creating and managing metadata for unmanned systems missions.">
+  <title>UxS Metadata Generator</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+  <script>
+    (function initializeThemeFromStorage() {
+      try {
+        var storedTheme = localStorage.getItem('uxsTheme');
+        if (storedTheme === 'light' || storedTheme === 'dark') {
+          document.documentElement.setAttribute('data-theme', storedTheme);
+          return;
+        }
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch (e) {
+      }
+    })();
+  </script>
+  <style>
+    :root {
+      /* Sticky step nav height (updated on load/resize from .header-nav) */
+      --header-offset: 58px;
+      --primary-color: #1e40af;
+      --primary-light: #3b82f6;
+      --secondary-color: #4b5563;
+      --success-color: #10b981;
+      --warning-color: #f59e0b;
+      --error-color: #ef4444;
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-color: #1f2937;
+      --border-color: #e2e8f0;
+      --muted-text-color: #6b7280;
+      --input-bg: #ffffff;
+      --input-focus-bg: #ffffff;
+      --input-autofill-bg: #eaf2ff;
+      color-scheme: light;
+    }
+
+    html {
+      scroll-padding-top: var(--header-offset);
+      overflow-x: clip;
+    }
+
+    @supports not (overflow: clip) {
+      html {
+        overflow-x: hidden;
+      }
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      padding-top: 0;
+      min-height: 100vh;
+    }
+
+    .font-heading,
+    .header h1,
+    .card-title,
+    .nav-tabs .nav-link {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    .main-form-shell {
+      width: 100%;
+    }
+
+    @media (min-width: 577px) and (max-width: 1199.98px) {
+      .main-form-shell {
+        max-width: 1140px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+
+    .header {
+      position: relative;
+      left: auto;
+      right: auto;
+      background: linear-gradient(120deg, var(--primary-color), var(--primary-light));
+      color: white;
+      padding: 1rem 1.5rem 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.65rem;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .header-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem 0.75rem;
+      padding-top: 0.65rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.28);
+    }
+
+    .header-toolbar .dropdown-menu {
+      color: var(--text-color);
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .header-info-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.3rem 0.55rem;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      color: #ffffff;
+      font-size: 0.82rem;
+      line-height: 1.25;
+    }
+
+    .header-info-box a {
+      color: #ffffff;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+
+    .header-info-box a:hover,
+    .header-info-box a:focus {
+      color: #ffffff;
+      text-decoration-thickness: 2px;
+    }
+
+    .header-info-text {
+      display: inline;
+    }
+
+    .metadata-nav-wrap {
+      margin-bottom: 1.5rem;
+    }
+
+    .header .header-nav.metadata-nav-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 1030;
+      margin-top: 0.15rem;
+      margin-bottom: 1rem;
+      margin-left: -1.5rem;
+      margin-right: -1.5rem;
+      padding: 0.55rem 1.5rem 0.5rem;
+      width: calc(100% + 3rem);
+      max-width: none;
+      box-sizing: border-box;
+      border-top: 1px solid rgba(255, 255, 255, 0.25);
+      background: linear-gradient(120deg, var(--primary-color), var(--primary-light));
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    }
+
+    .metadata-nav-inner {
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 0.5rem 0.5rem 0.5rem 0.65rem;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+      align-items: center;
+    }
+
+    .nav-tabs.metadata-tabs {
+      margin-bottom: 0;
+      flex: 1 1 auto;
+      min-width: 0;
+      box-shadow: none;
+      background: transparent;
+      padding: 0.25rem 0;
+    }
+
+    .nav-actions {
+      flex-shrink: 0;
+    }
+
+    .nav-actions .form-check-input {
+      cursor: pointer;
+    }
+
+    .nav-tabs {
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 0.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+    }
+
+    .nav-tabs .nav-link {
+      color: var(--secondary-color);
+      padding: 0.75rem 1.25rem;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .nav-tabs .nav-link:hover {
+      background-color: var(--border-color);
+    }
+
+    .nav-tabs .nav-link.active {
+      background: linear-gradient(120deg, var(--primary-color), var(--primary-light));
+      color: white;
+      border: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .nav-tabs .nav-link.disabled {
+      color: #adb5bd;
+      cursor: not-allowed;
+    }
+
+    .nav-tabs .nav-link .label-short {
+      display: none;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+      margin-bottom: 1.5rem;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    .card-title {
+      color: var(--primary-color);
+      font-weight: 600;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    .card-title::after {
+      content: '';
+      display: block;
+      width: 72px;
+      height: 3px;
+      margin-top: 0.5rem;
+      border-radius: 3px;
+      background: linear-gradient(120deg, var(--primary-color), var(--primary-light));
+    }
+
+    .form-label {
+      font-weight: 500;
+      color: var(--text-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-control, .form-select {
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      padding: 0.625rem;
+      transition: all 0.2s ease;
+      background-color: var(--input-bg);
+      color: var(--text-color);
+    }
+
+    .form-control::placeholder {
+      color: var(--muted-text-color);
+      opacity: 1;
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      outline: none;
+      background-color: var(--input-focus-bg);
+      color: var(--text-color);
+    }
+
+    .form-control:-webkit-autofill,
+    .form-control:-webkit-autofill:hover,
+    .form-control:-webkit-autofill:focus,
+    .form-select:-webkit-autofill,
+    .form-select:-webkit-autofill:hover,
+    .form-select:-webkit-autofill:focus {
+      -webkit-text-fill-color: var(--text-color);
+      box-shadow: 0 0 0 1000px var(--input-autofill-bg) inset;
+      transition: background-color 9999s ease-in-out 0s;
+    }
+
+    .form-control.is-invalid, .form-select.is-invalid {
+      border-color: var(--error-color);
+    }
+
+    .form-control.fix-suggested, .form-select.fix-suggested {
+      border-color: var(--warning-color);
+      background-color: #fefce8;
+    }
+
+    .form-control.is-valid, .form-select.is-valid {
+      border-color: var(--success-color);
+      background-color: rgba(16, 185, 129, 0.07);
+    }
+
+    .form-check:not(.form-switch) .form-check-input {
+      width: 1.1em;
+      height: 1.1em;
+      margin-top: 0.2em;
+      cursor: pointer;
+    }
+
+    .form-check-input:focus {
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.28);
+    }
+
+    .form-check:not(.form-switch) .form-check-input:checked {
+      background-color: var(--primary-light);
+      border-color: var(--primary-light);
+    }
+
+    .btn {
+      border-radius: 6px;
+      padding: 0.625rem 1.25rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-light);
+      border-color: var(--primary-light);
+    }
+
+    .btn-success {
+      background-color: var(--success-color);
+      border-color: var(--success-color);
+    }
+
+    .btn-success:hover {
+      background-color: #059669;
+      border-color: #059669;
+    }
+
+    /* Glassmorphic XML preview shell */
+    .xml-preview-glass {
+      position: relative;
+      border-radius: 14px;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(147, 197, 253, 0.08) 100%);
+      backdrop-filter: blur(18px) saturate(1.35);
+      -webkit-backdrop-filter: blur(18px) saturate(1.35);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      box-shadow:
+        0 10px 40px rgba(15, 23, 42, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    }
+
+    .xml-preview-glass--snippet {
+      margin-bottom: 0;
+    }
+
+    /* Solid inner panel so line numbers and code stay sharp (glass stays on outer .xml-preview-glass only). */
+    .xml-preview-scroll {
+      font-family: 'JetBrains Mono', 'Consolas', 'Monaco', monospace;
+      font-size: 13px;
+      line-height: 1.55;
+      max-height: none;
+      overflow: auto;
+      padding: 10px 12px;
+      background: #0f172a;
+      color: #f8fafc;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .xml-preview-glass--modal .xml-preview-scroll {
+      max-height: 60vh;
+    }
+
+    .modal .xml-preview-glass--modal .xml-preview-scroll {
+      max-height: min(70vh, 720px);
+    }
+
+    .xml-preview-lines {
+      margin: 0;
+    }
+
+    .xml-preview-line {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      min-height: 1.55em;
+    }
+
+    .xml-preview-line:nth-child(even) .xml-line-num {
+      background: #0a1020;
+    }
+
+    .xml-preview-line:nth-child(even) .xml-line-code {
+      background: #152238;
+    }
+
+    .xml-line-num {
+      flex: 0 0 2.75rem;
+      text-align: right;
+      padding: 0 10px 0 6px;
+      user-select: none;
+      font-size: 12px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      line-height: inherit;
+      color: #e2e8f0;
+      border-right: 1px solid #475569;
+      background: #020617;
+    }
+
+    .xml-line-code {
+      flex: 1;
+      margin: 0;
+      padding: 0 0 0 10px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      overflow-x: auto;
+      font: inherit;
+      font-weight: 400;
+      color: #f8fafc;
+      background: transparent;
+    }
+
+    .xml-preview-error .xml-line-num {
+      color: #fecaca;
+      background: #1c0a0a;
+      border-right-color: #7f1d1d;
+    }
+
+    .xml-preview-error .xml-preview-line:nth-child(even) .xml-line-num {
+      background: #2a1010;
+    }
+
+    .xml-preview-error .xml-preview-line:nth-child(even) .xml-line-code {
+      background: #2a1515;
+    }
+
+    .xml-preview-panel--error-xml {
+      border-color: rgba(251, 191, 36, 0.45);
+      box-shadow:
+        0 10px 40px rgba(120, 53, 15, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    .xml-hl.xml-bracket { color: #cbd5e1; }
+    .xml-hl.xml-slash { color: #fb7185; }
+    .xml-hl.xml-tag-name { color: #38bdf8; font-weight: 600; }
+    .xml-hl.xml-attr-name { color: #a5b4fc; }
+    .xml-hl.xml-equals { color: #94a3b8; }
+    .xml-hl.xml-attr-value { color: #fde047; }
+    .xml-hl.xml-comment { color: #4ade80; font-style: italic; }
+    .xml-hl.xml-decl { color: #c084fc; }
+
+    /* Validation-linked line highlight (tooltip via native title on .xml-preview-line) */
+    .xml-preview-line.xml-preview-line--issue-error {
+      background: rgba(127, 29, 29, 0.35);
+      box-shadow: inset 4px 0 0 #f87171;
+    }
+
+    .xml-preview-line.xml-preview-line--issue-warn {
+      background: rgba(120, 53, 15, 0.35);
+      box-shadow: inset 4px 0 0 #fbbf24;
+    }
+
+    .xml-preview-line.xml-preview-line--issue-error .xml-line-num {
+      color: #fecaca;
+      background: #1c0a0a;
+      border-right-color: #7f1d1d;
+    }
+
+    .xml-preview-line.xml-preview-line--issue-warn .xml-line-num {
+      color: #fde68a;
+      background: #1a1408;
+      border-right-color: #92400e;
+    }
+
+    .xml-preview-line[title] {
+      cursor: help;
+    }
+
+    .xml-validator-side-panel {
+      max-width: 100%;
+    }
+
+    /* Flex children need min-height 0 to scroll inside a column (Bootstrap has no min-height-0). */
+    .min-height-0 {
+      min-height: 0 !important;
+    }
+
+    .xml-live-card-body {
+      min-height: 0;
+    }
+
+    .xml-side-column-sticky .xml-live-card-body {
+      flex: 1 1 0 !important;
+      min-height: 0 !important;
+      overflow: hidden !important;
+    }
+
+    /*
+      Bootstrap sets .tab-content > .tab-pane.active { display: block }, which overrides
+      utility d-flex and prevents the preview column from filling the sticky sidebar.
+    */
+    .xml-live-tab-content.tab-content {
+      flex: 1 1 0 !important;
+      min-height: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+
+    .xml-side-column-sticky #liveXmlTabContent {
+      flex: 1 1 0 !important;
+      min-height: 0 !important;
+      overflow: hidden !important;
+    }
+
+    .xml-live-tab-content > .tab-pane.active,
+    .xml-live-tab-content > .tab-pane.active.show {
+      display: flex !important;
+      flex-direction: column !important;
+      flex: 1 1 0 !important;
+      min-height: 0 !important;
+    }
+
+    /*
+      Preview tab: CSS grid so the dark XML console row always receives remaining height.
+      (Nested flex alone often collapses the snippet to a few lines.)
+    */
+    .xml-live-preview-pane {
+      display: grid !important;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      grid-template-columns: minmax(0, 1fr);
+      min-height: 0 !important;
+    }
+
+    .xml-side-column-sticky .xml-live-preview-pane {
+      flex: 1 1 0 !important;
+      min-height: 0 !important;
+    }
+
+    /* Default: allow shrink in generic layouts. Sidebar overrides below with a floor (min-height:0 here collapsed the grid row). */
+    .xml-live-snippet-shell {
+      min-height: 0;
+      overflow: hidden !important;
+    }
+
+    .xml-validation-status-bar {
+      background: rgba(248, 250, 252, 0.95);
+      border-color: var(--border-color) !important;
+    }
+
+    /* Live sidebar snippet: fill grid/flex cell + viewport-based floor so it never stays ~3 lines tall */
+    #xmlPreviewSnippet.xml-preview-scroll {
+      max-height: none !important;
+      flex: 1 1 0 !important;
+      align-self: stretch !important;
+      width: 100%;
+      min-height: clamp(240px, calc(100dvh - var(--header-offset) - 18.5rem), 78dvh) !important;
+      overflow-x: auto !important;
+      overflow-y: auto !important;
+    }
+
+    /* Floor the glass shell so the grid 1fr row + overflow:hidden never clips the editor to ~2 lines. */
+    #liveXmlPanePreview .xml-preview-glass--snippet,
+    #liveXmlPanePreview .xml-live-snippet-shell {
+      flex: 1 1 0 !important;
+      min-height: clamp(200px, calc(100dvh - var(--header-offset) - 19rem), 75dvh) !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+
+    /*
+      Do NOT set min-height: 0 here — it beat #xmlPreviewSnippet's clamp() (higher specificity) and collapsed
+      the live preview to ~2 lines. Overflow/scroll is handled on #xmlPreviewSnippet only.
+    */
+    #liveXmlPanePreview .xml-preview-glass--snippet .xml-preview-scroll {
+      max-height: none !important;
+      flex: 1 1 0 !important;
+      overflow-y: auto !important;
+    }
+
+    #liveXmlPaneIssues .xml-validator-issues {
+      max-height: calc(100vh - var(--header-offset) - 16rem);
+      overflow-y: auto;
+    }
+
+    .main-form-shell .main-form-row {
+      min-height: 0;
+    }
+
+    /* XML sidebar column: flex column at all widths so inner preview can grow when stacked below md */
+    .xml-side-column-sticky {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    @media (max-width: 767.98px) {
+      .xml-side-column-sticky {
+        min-height: min(88dvh, 56rem);
+      }
+
+      .xml-side-column-sticky > .card.xml-validator-side-panel {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .xml-side-column-sticky .card-body.xml-live-card-body {
+        flex: 1 1 0;
+        min-height: 0;
+      }
+    }
+
+    @media (min-width: 768px) {
+      /* Stretch row so the XML column can fill viewport height (avoid flex-start shrink). */
+      .main-form-shell .main-form-row {
+        align-items: stretch;
+      }
+
+      /* Sidebar: sticky, full viewport height; inner preview pane scrolls. */
+      .xml-side-column-sticky {
+        position: sticky;
+        top: calc(var(--header-offset) + 0.75rem);
+        align-self: stretch;
+        min-height: calc(100vh - var(--header-offset) - 1.5rem);
+        min-height: calc(100dvh - var(--header-offset) - 1.5rem);
+        height: calc(100vh - var(--header-offset) - 1.5rem);
+        height: calc(100dvh - var(--header-offset) - 1.5rem);
+        max-height: calc(100dvh - var(--header-offset) - 1.5rem);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        z-index: 12;
+        padding-bottom: 0;
+      }
+
+      .xml-side-column-sticky > .card.xml-validator-side-panel {
+        flex: 1 1 0;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 0 !important;
+      }
+
+      .xml-side-column-sticky .card-body.xml-live-card-body {
+        flex: 1 1 0;
+        min-height: 0;
+        overflow: hidden;
+      }
+
+      .xml-side-column-sticky .xml-live-tab-content,
+      .xml-side-column-sticky #liveXmlPanePreview,
+      .xml-side-column-sticky #liveXmlPaneIssues {
+        min-height: 0;
+      }
+
+      .xml-side-column-sticky #liveXmlPanePreview .xml-preview-glass--snippet {
+        flex: 1 1 0;
+        min-height: clamp(220px, calc(100dvh - var(--header-offset) - 18rem), 76dvh) !important;
+      }
+
+      .xml-side-column-sticky #liveXmlPanePreview .xml-preview-glass--snippet .xml-preview-scroll {
+        max-height: none !important;
+        /* min-height intentionally omitted — see #xmlPreviewSnippet clamp() above */
+      }
+
+      .xml-side-column-sticky #liveXmlPaneIssues .xml-validator-issues {
+        max-height: none;
+        flex: 1 1 0;
+        min-height: 0;
+      }
+
+      #liveXmlPaneIssues .xml-validator-issues {
+        max-height: none;
+      }
+    }
+
+    .xml-preview-line.xml-preview-line--focus-flash {
+      outline: 2px solid rgba(59, 130, 246, 0.95);
+      outline-offset: -2px;
+      animation: xml-focus-flash 1s ease-out;
+    }
+
+    @keyframes xml-focus-flash {
+      0% {
+        background-color: rgba(59, 130, 246, 0.22);
+      }
+      100% {
+        background-color: transparent;
+      }
+    }
+
+    .xml-validator-issues {
+      background: rgba(248, 250, 252, 0.95) !important;
+      border-color: var(--border-color) !important;
+    }
+
+    .xml-validator-issues #validationResultsSnippet {
+      background: transparent !important;
+      padding: 0 !important;
+      border-radius: 0 !important;
+      max-height: none !important;
+    }
+
+    .xml-validator-issues #validationResultsSnippet .alert {
+      font-size: 0.8125rem;
+      padding: 0.5rem 0.65rem;
+    }
+
+    .xml-preview-placeholder {
+      min-height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .xml-tag { color: #38bdf8; }
+    .xml-attribute { color: #a5b4fc; }
+    .xml-value { color: #fde047; }
+    .xml-text { color: #f8fafc; }
+    .xml-namespace { color: #2dd4bf; }
+
+    .sensor-item {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      transition: box-shadow 0.2s ease;
+    }
+
+    .sensor-item:hover {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .map-preview {
+      height: 400px;
+      width: 100%;
+      background-color: #e5e7eb;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid var(--border-color);
+    }
+
+    /* Ensure Leaflet map tiles display properly */
+    .map-preview .leaflet-container {
+      height: 100% !important;
+      width: 100% !important;
+      border-radius: 6px;
+      background-color: #e5e7eb;
+    }
+
+    .map-preview .leaflet-control-container {
+      font-size: 12px;
+    }
+
+    /* Keep Leaflet default overflow behavior; clipping this can hide all base tiles */
+    .map-preview .leaflet-tile-container {
+      overflow: visible;
+    }
+
+    /* Fix for potential z-index issues with map controls */
+    .map-preview .leaflet-control {
+      z-index: 1000;
+    }
+
+    .map-preview .leaflet-bar a {
+      min-width: 36px;
+      min-height: 36px;
+      line-height: 34px;
+      font-size: 18px;
+    }
+
+    .map-preview .leaflet-touch .leaflet-bar a {
+      min-width: 40px;
+      min-height: 40px;
+      line-height: 38px;
+    }
+
+    /* Ensure map tiles are properly sized and visible */
+    .map-preview .leaflet-tile {
+      max-width: none !important;
+      max-height: none !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      display: block !important;
+    }
+
+    /* Keep tile pane defaults from Leaflet; only enforce visibility */
+    .map-preview .leaflet-tile-pane,
+    .map-preview .leaflet-tile-container {
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    /* Loading state for map */
+    .map-preview .leaflet-container.leaflet-loading {
+      background-color: #f3f4f6;
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjAgMTBhMTAgMTAgMCAwIDEgMTAgMTBoLTJhOCA4IDAgMCAwLTgtOHYtMnoiIGZpbGw9IiM5NzQzZjciLz48L3N2Zz4=');
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    /* Map error state */
+    .map-preview .map-error {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: #6b7280;
+      font-size: 14px;
+      background-color: #f9fafb;
+    }
+
+    /* Ensure map is visible when step is active */
+    #step4Form.active .map-preview {
+      display: block;
+      visibility: visible;
+    }
+
+    /* Mobile-friendly popover styling */
+    .popover {
+      max-width: 280px;
+      font-size: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      border: 1px solid var(--border-color);
+    }
+    
+    .popover-header {
+      background-color: var(--primary-color);
+      color: white;
+      font-weight: 600;
+    }
+    
+    .popover-body {
+      padding: 12px;
+      line-height: 1.4;
+    }
+    
+    /* Make sure popovers are above other content */
+    .popover {
+      z-index: 1100;
+    }
+
+    #loading {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      z-index: 2000;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    #loading::after {
+      content: '';
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid white;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .modal-fullscreen {
+      width: 95vw;
+      max-width: none;
+      height: 95vh;
+      margin: 2.5vh auto;
+    }
+
+    .modal-fullscreen .modal-content {
+      height: 100%;
+    }
+
+    .modal-dialog {
+      margin: 1.75rem auto;
+      padding-left: env(safe-area-inset-left, 0px);
+      padding-right: env(safe-area-inset-right, 0px);
+    }
+
+    .modal-content {
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    .modal-header {
+      padding-top: max(1rem, env(safe-area-inset-top, 0px));
+    }
+
+    .modal-fullscreen #xmlPreviewFull.xml-preview-scroll,
+    .modal-fullscreen #validationResultsFull {
+      height: calc(100vh - 130px);
+      max-height: none;
+    }
+
+    /* Validation Results Styling */
+    #validationResultsFull, #validationResultsSnippet {
+      background-color: #ffffff;
+      color: #333333;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      padding: 1rem;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+    }
+
+    #validationResultsFull .alert {
+      margin-bottom: 0.75rem;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      padding: 12px 16px;
+    }
+
+    #validationResultsFull .alert:last-child,
+    #validationResultsSnippet .alert:last-child {
+      margin-bottom: 0;
+    }
+
+    .sensor-header {
+      cursor: pointer;
+      user-select: none;
+      padding: 0.5rem;
+      background-color: var(--border-color);
+      border-radius: 4px;
+      margin-bottom: 0;
+    }
+
+    .sensor-header[aria-expanded="true"] .fa-chevron-down {
+      transform: rotate(180deg);
+    }
+
+    .sensor-header[aria-expanded="false"] .fa-chevron-down {
+      transform: rotate(0deg);
+    }
+
+    .sensor-header .fa-chevron-down {
+      transition: transform 0.3s ease;
+    }
+
+    #validationSummary {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 0.75rem;
+      margin-left: 1rem;
+      max-width: 300px;
+    }
+
+    .step-form {
+      display: none;
+    }
+
+    .step-form.active {
+      display: block;
+    }
+
+    /* Form visual polish */
+    .step-form .card {
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .step-form .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(120deg, var(--step-accent-start, var(--primary-color)), var(--step-accent-end, var(--primary-light)));
+    }
+
+    #step1Form {
+      --step-accent-start: var(--primary-color);
+      --step-accent-end: var(--primary-light);
+    }
+
+    #step2Form {
+      --step-accent-start: var(--success-color);
+      --step-accent-end: var(--primary-light);
+    }
+
+    #step3Form {
+      --step-accent-start: var(--warning-color);
+      --step-accent-end: var(--primary-light);
+    }
+
+    #step4Form {
+      --step-accent-start: var(--secondary-color);
+      --step-accent-end: var(--primary-light);
+    }
+
+    #step5Form {
+      --step-accent-start: var(--error-color);
+      --step-accent-end: var(--warning-color);
+    }
+
+    .step-form .card-title {
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .step-form .card-title::after {
+      background: linear-gradient(120deg, var(--step-accent-start, var(--primary-color)), var(--step-accent-end, var(--primary-light)));
+    }
+
+    .step-form form .mb-3,
+    .step-form form .mb-4 {
+      margin-bottom: 1rem !important;
+    }
+
+    .step-form .form-label {
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .step-form .form-label small {
+      display: block;
+      margin-top: 0.2rem;
+      color: var(--secondary-color);
+      font-weight: 400;
+      line-height: 1.35;
+    }
+
+    .step-form .form-control,
+    .step-form .form-select {
+      min-height: 42px;
+      border-radius: 8px;
+      border-width: 1px;
+      background-image: linear-gradient(var(--card-bg), var(--card-bg));
+    }
+
+    .step-form textarea.form-control {
+      min-height: 96px;
+    }
+
+    .step-form .form-control::placeholder,
+    .step-form .form-select::placeholder {
+      color: var(--secondary-color);
+      opacity: 0.75;
+    }
+
+    .step-form .form-control:hover,
+    .step-form .form-select:hover {
+      border-color: var(--primary-light);
+    }
+
+    .step-form .form-control:focus,
+    .step-form .form-select:focus {
+      transform: translateY(-1px);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+    }
+
+    .step-form .input-group .btn {
+      border-radius: 8px;
+    }
+
+    .step-form .btn {
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+    .step-form .next-step,
+    #generateBtn {
+      background: linear-gradient(120deg, var(--primary-color), var(--primary-light));
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.14);
+    }
+
+    #nextMissionBtn {
+      background: linear-gradient(120deg, var(--primary-color), var(--primary-light));
+    }
+
+    #nextPlatformBtn {
+      background: linear-gradient(120deg, var(--success-color), var(--primary-light));
+    }
+
+    #nextSensorsBtn {
+      background: linear-gradient(120deg, var(--warning-color), var(--primary-light));
+    }
+
+    #nextSpatialBtn {
+      background: linear-gradient(120deg, var(--secondary-color), var(--primary-light));
+    }
+
+    #generateBtn {
+      background: linear-gradient(120deg, var(--error-color), var(--warning-color));
+    }
+
+    .step-form .next-step:hover,
+    #generateBtn:hover {
+      filter: brightness(1.03);
+      color: #fff;
+    }
+
+    #mission-tab.nav-link.active {
+      background: linear-gradient(120deg, var(--primary-color), var(--primary-light));
+    }
+
+    #platform-tab.nav-link.active {
+      background: linear-gradient(120deg, var(--success-color), var(--primary-light));
+    }
+
+    #sensors-tab.nav-link.active {
+      background: linear-gradient(120deg, var(--warning-color), var(--primary-light));
+    }
+
+    #spatial-tab.nav-link.active {
+      background: linear-gradient(120deg, var(--secondary-color), var(--primary-light));
+    }
+
+    #output-tab.nav-link.active {
+      background: linear-gradient(120deg, var(--error-color), var(--warning-color));
+    }
+
+    .step-form .prev-step,
+    .step-form .clear-btn {
+      border-color: var(--border-color);
+      background-color: var(--card-bg);
+    }
+
+    .form-section {
+      padding: 1rem 1.1rem 0.5rem;
+      margin-bottom: 1.25rem;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--step-accent-start, var(--primary-color));
+      background: linear-gradient(
+        145deg,
+        color-mix(in srgb, var(--step-accent-start, var(--primary-color)) 10%, var(--card-bg)) 0%,
+        var(--card-bg) 55%
+      );
+    }
+
+    .form-section > h6:first-child {
+      margin-top: 0;
+    }
+
+    .step-form.active .form-control:not(.is-invalid):not(.fix-suggested),
+    .step-form.active .form-select:not(.is-invalid):not(.fix-suggested) {
+      border-left-width: 3px;
+      border-left-color: var(--step-accent-start, var(--primary-color));
+    }
+
+    .step-form .form-control[required]:not(.is-invalid):not(.is-valid),
+    .step-form .form-select[required]:not(.is-invalid):not(.is-valid) {
+      box-shadow: inset 0 -2px 0 0 rgba(239, 68, 68, 0.28);
+    }
+
+    .step-form.active .form-check:not(.form-switch) .form-check-input:checked {
+      background-color: var(--step-accent-start);
+      border-color: var(--step-accent-start);
+    }
+
+    .form-label .label-optional {
+      color: var(--secondary-color);
+      font-weight: 400;
+      font-size: 0.88em;
+    }
+
+    .nav-tabs .nav-link:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 3px;
+    }
+
+    .nav-tabs .nav-link.active:focus-visible {
+      outline-color: rgba(255, 255, 255, 0.95);
+    }
+
+    .sensor-header:focus-visible {
+      outline: 2px solid var(--primary-light);
+      outline-offset: 3px;
+    }
+
+    .btn:focus-visible,
+    .dropdown-toggle:focus-visible,
+    label.btn:focus-visible {
+      outline: 2px solid var(--primary-light);
+      outline-offset: 2px;
+    }
+
+    a:focus-visible {
+      outline: 2px solid var(--primary-light);
+      outline-offset: 2px;
+    }
+
+    @media (max-width: 992px) {
+      .col-md-8, .col-md-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+      }
+
+      .step-form .card-body {
+        padding: 1.1rem;
+      }
+
+      .step-form .form-control,
+      .step-form .form-select {
+        min-height: 44px;
+      }
+
+      .step-form textarea.form-control {
+        min-height: 110px;
+      }
+
+      .step-form .row > [class*="col-"] {
+        margin-bottom: 0.5rem;
+      }
+
+      .nav-tabs {
+        padding: 0.5rem 1rem;
+      }
+
+      .nav-tabs .nav-link {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+      }
+
+      .card-body {
+        padding: 1rem;
+      }
+
+      .btn {
+        padding: 0.5rem 1rem;
+      }
+
+      #validationSummary {
+        max-width: 100%;
+        margin-left: 0;
+        margin-bottom: 1rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .header {
+        padding: 0.75rem 1rem 0;
+      }
+
+      .header h1 {
+        font-size: 1.25rem;
+      }
+
+      .header-info-box {
+        padding: 0.35rem 0.45rem;
+        min-width: 34px;
+        justify-content: center;
+      }
+
+      .header-info-text {
+        display: none;
+      }
+
+      .metadata-nav-wrap {
+        margin-left: -1rem;
+        margin-right: -1rem;
+        margin-bottom: 1rem;
+      }
+
+      .header .header-nav.metadata-nav-wrap {
+        margin-left: -1rem;
+        margin-right: -1rem;
+        margin-bottom: 1rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        width: calc(100% + 2rem);
+      }
+
+      .metadata-nav-inner {
+        border-radius: 0;
+      }
+
+      .step-form .card {
+        border-radius: 10px;
+      }
+
+      .step-form .card-body {
+        padding: 0.95rem;
+      }
+
+      .step-form .form-label {
+        font-size: 0.92rem;
+      }
+
+      .form-control, .form-select {
+        font-size: 0.9rem;
+      }
+
+      .step-form .form-control,
+      .step-form .form-select,
+      .step-form .btn {
+        min-height: 46px;
+      }
+
+      .step-form textarea.form-control {
+        min-height: 120px;
+      }
+
+      .step-form .input-group {
+        gap: 0.4rem;
+      }
+
+      .step-form .input-group > .form-control,
+      .step-form .input-group > .form-select,
+      .step-form .input-group > .btn {
+        width: 100%;
+        border-radius: 8px;
+      }
+
+      .step-form .d-flex {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .step-form .btn {
+        width: 100%;
+      }
+
+      .btn {
+        width: auto;
+        margin-bottom: 0.5rem;
+      }
+
+      .btn-group {
+        flex-direction: column;
+      }
+
+      .modal-fullscreen {
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+      }
+
+      .xml-preview-scroll {
+        font-size: 12px;
+      }
+
+      .xml-line-num {
+        flex-basis: 2.35rem;
+        font-size: 11px;
+        padding-right: 6px;
+      }
+
+      .map-preview {
+        height: 300px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .nav-tabs .nav-link {
+        padding: 0.5rem 0.6rem;
+        font-size: 0.82rem;
+      }
+
+      .nav-tabs .nav-link .label-full {
+        display: none;
+      }
+
+      .nav-tabs .nav-link .label-short {
+        display: inline;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .nav-tabs .nav-link,
+      .sensor-header .fa-chevron-down,
+      .form-control,
+      .form-select,
+      .btn {
+        transition-duration: 0.01ms !important;
+      }
+
+      .step-form .form-control:focus,
+      .step-form .form-select:focus {
+        transform: none !important;
+      }
+
+      #loading::after {
+        animation: none !important;
+      }
+    }
+
+    :root[data-theme="dark"] {
+      --bg-color: #111827;
+      --card-bg: #1f2937;
+      --text-color: #d1d5db;
+      --border-color: #374151;
+      --muted-text-color: #9ca3af;
+      --input-bg: #1f2937;
+      --input-focus-bg: #1f2937;
+      --input-autofill-bg: #253347;
+      color-scheme: dark;
+    }
+
+    :root[data-theme="dark"] body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+    }
+
+    :root[data-theme="dark"] .card,
+    :root[data-theme="dark"] .nav-tabs,
+    :root[data-theme="dark"] .form-control,
+    :root[data-theme="dark"] .form-select {
+      background-color: var(--card-bg);
+      border-color: var(--border-color);
+      color: var(--text-color);
+    }
+
+    :root[data-theme="dark"] .sensor-item,
+    :root[data-theme="dark"] #validationSummary {
+      background-color: var(--card-bg);
+    }
+
+    :root[data-theme="dark"] .xml-preview-glass {
+      background: linear-gradient(135deg, rgba(148, 163, 184, 0.1) 0%, rgba(30, 41, 59, 0.4) 50%, rgba(56, 189, 248, 0.07) 100%);
+      border-color: rgba(148, 163, 184, 0.22);
+      box-shadow:
+        0 10px 40px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    }
+
+    :root[data-theme="dark"] .xml-preview-scroll {
+      background: #0b1120;
+      color: #f8fafc;
+    }
+
+    :root[data-theme="dark"] .xml-preview-line:nth-child(even) .xml-line-code {
+      background: #121a2e;
+    }
+
+    :root[data-theme="dark"] .xml-validator-issues {
+      background: rgba(31, 41, 55, 0.95) !important;
+    }
+
+    :root[data-theme="dark"] .form-control.is-valid,
+    :root[data-theme="dark"] .form-select.is-valid {
+      background-color: rgba(16, 185, 129, 0.12);
+    }
+
+    :root[data-theme="dark"] .form-section {
+      background: linear-gradient(
+        145deg,
+        color-mix(in srgb, var(--step-accent-start, var(--primary-light)) 14%, var(--card-bg)) 0%,
+        var(--card-bg) 55%
+      );
+    }
+
+    :root[data-theme="dark"] .form-control.fix-suggested,
+    :root[data-theme="dark"] .form-select.fix-suggested {
+      background-color: rgba(120, 53, 15, 0.25);
+    }
+  </style>
+</head>
+<body>
+  <div id="loading" aria-live="polite">Loading...</div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-top">
+      <h1>UxS Metadata Generator</h1>
+      <div class="d-flex align-items-center gap-2 flex-wrap">
+        <div class="header-info-box" aria-label="UxS Metadata Profile Page">
+          <i class="fas fa-circle-info" aria-hidden="true"></i>
+          <span class="header-info-text">UxS Metadata Profile Page: <a href="https://www.ncei.noaa.gov/products/uncrewed-system-metadata-templates" target="_blank" rel="noopener noreferrer">Open</a></span>
+        </div>
+        <div id="validationSummary" aria-live="polite"></div>
+        <div id="networkStatus">
+          <span id="statusText" class="badge bg-success">Online</span>
+        </div>
+      </div>
+    </div>
+    <div class="header-toolbar">
+      <input type="file" id="importXml" accept=".xml" class="visually-hidden">
+      <label for="importXml" class="btn btn-sm btn-light mb-0">
+        <i class="fas fa-file-import me-1"></i> Import XML
+      </label>
+      <div class="dropdown">
+        <button class="btn btn-sm btn-outline-light dropdown-toggle" type="button" id="templateDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="fas fa-file-code me-1"></i> Templates
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="templateDropdown">
+          <li><h6 class="dropdown-header">Load Template</h6></li>
+          <li>
+            <select class="form-select mx-2" id="templateSelect" style="width: 200px;" aria-label="Select Template">
+              <option value="">-- Select Template --</option>
+            </select>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <button type="button" class="dropdown-item" id="saveTemplateBtn" data-bs-toggle="modal" data-bs-target="#saveTemplateModal">
+              <i class="fas fa-save me-1"></i> Save as Template
+            </button>
+          </li>
+          <li>
+            <button type="button" class="dropdown-item" id="deleteTemplateBtn">
+              <i class="fas fa-trash me-1"></i> Delete Template
+            </button>
+          </li>
+        </ul>
+      </div>
+      <span class="small text-white text-opacity-75 text-nowrap align-self-center ms-1" id="metadataSchemaHeaderLabel"><span class="fw-semibold text-white">Target schema:</span> ISO 19115-2</span>
+      <input type="hidden" id="metadataSchema" name="metadataSchema" value="iso19115-2" autocomplete="off" aria-hidden="true">
+    </div>
+    <!-- Navigation: after Target schema (ISO 19115-2) -->
+    <nav class="header-nav metadata-nav-wrap" aria-label="Form steps">
+      <div class="metadata-nav-inner d-flex flex-wrap align-items-center justify-content-between gap-2 w-100">
+        <ul class="nav nav-tabs metadata-tabs" id="metadataTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="mission-tab" data-step="1" href="#step1Form" role="tab" aria-controls="step1Form" aria-selected="true"><span class="label-full">1. Mission</span><span class="label-short">1 Msn</span></a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="platform-tab" data-step="2" href="#step2Form" role="tab" aria-controls="step2Form" aria-selected="false"><span class="label-full">2. Platform</span><span class="label-short">2 Plat</span></a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="sensors-tab" data-step="3" href="#step3Form" role="tab" aria-controls="step3Form" aria-selected="false"><span class="label-full">3. Sensors</span><span class="label-short">3 Sens</span></a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="spatial-tab" data-step="4" href="#step4Form" role="tab" aria-controls="step4Form" aria-selected="false"><span class="label-full">4. Spatial</span><span class="label-short">4 Spat</span></a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="output-tab" data-step="5" href="#step5Form" role="tab" aria-controls="step5Form" aria-selected="false"><span class="label-full">5. Output</span><span class="label-short">5 Out</span></a>
+          </li>
+        </ul>
+        <div class="nav-actions d-flex flex-wrap align-items-center gap-2">
+          <div class="form-check form-switch d-flex align-items-center m-0">
+            <input class="form-check-input" type="checkbox" id="themeToggle" aria-label="Toggle dark theme">
+            <label class="form-check-label small ms-2 mb-0" for="themeToggle">Dark mode</label>
+          </div>
+          <div class="form-check form-switch d-flex align-items-center m-0">
+            <input class="form-check-input" type="checkbox" id="debugToggle" aria-label="Toggle debug mode">
+            <label class="form-check-label small ms-2 mb-0" for="debugToggle">Debug</label>
+          </div>
+          <button type="button" class="btn btn-sm btn-outline-success" id="runSchemaHealthBtn" aria-label="Run schema health checks" data-debug-ui="true" hidden>
+            <i class="fas fa-vial me-1"></i> Run Smoke Tests
+          </button>
+          <span class="text-muted align-self-center small d-none d-md-inline" aria-label="XML preview auto-update status">XML Preview auto-updates</span>
+          <button type="button" class="btn btn-sm btn-outline-danger" id="clearBtnHeader" aria-label="Clear All Forms">
+            <i class="fas fa-eraser me-1"></i> Clear Form
+          </button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container-fluid py-4 main-form-shell">
+    <div class="row align-items-start main-form-row">
+      <!-- Left Panel - Form -->
+      <div class="col-md-8 col-lg-8">
+        <!-- Step 1: Mission Form -->
+        <div id="step1Form" class="step-form active" role="tabpanel" aria-labelledby="mission-tab">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Mission Information</h5>
+              <form id="missionForm">
+                <div class="form-section">
+                <div class="mb-3">
+                                  <label for="missionId" class="form-label">Mission ID * <small>(e.g., PS2418L0_ER_UUV01_Norbit_MB_20240505T1510Z_MD)</small></label>
+                <input type="text" class="form-control" id="missionId" name="missionId" placeholder="e.g., PS2418L0_ER_UUV01_Norbit_MB_20240505T1510Z_MD" value="PS2418L0_ER_UUV01_Norbit_MB_20240505T1510Z_MD" required aria-describedby="missionIdError">
+                  <div id="missionIdError" class="invalid-feedback"></div>
+                </div>
+                <div class="mb-3">
+                  <label for="missionTitle" class="form-label">Mission Title *</label>
+                  <input type="text" class="form-control" id="missionTitle" name="missionTitle" placeholder="e.g., Point Sur 2024 Leg 18 Eagle Ray MultiBeam Sonar Data UUV Dive 01" value="Point Sur 2024 Leg 18 Eagle Ray MultiBeam Sonar Data UUV Dive 01" required aria-describedby="missionTitleError">
+                  <div id="missionTitleError" class="invalid-feedback"></div>
+                </div>
+                <div class="mb-3">
+                  <label for="alternateTitle" class="form-label">Alternate Title <span class="label-optional">(optional)</span></label>
+                  <input type="text" class="form-control" id="alternateTitle" name="alternateTitle" placeholder="e.g., PS2418L0_ER_UUV01_Norbit_MB_20240505T1510Z" value="PS2418L0_ER_UUV01_Norbit_MB_20240505T1510Z">
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="startDate" class="form-label">Start Date *</label>
+                    <input type="datetime-local" class="form-control" id="startDate" name="startDate" value="2024-05-05T15:10:00" required aria-describedby="startDateError">
+                    <div id="startDateError" class="invalid-feedback"></div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="endDate" class="form-label">End Date <span class="label-optional">(optional)</span></label>
+                    <input type="datetime-local" class="form-control" id="endDate" name="endDate" value="2024-05-06T12:00:00" aria-describedby="endDateError">
+                    <div id="endDateError" class="invalid-feedback"></div>
+                  </div>
+                </div>
+                </div>
+                <div class="form-section">
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="temporalExtentIntervalUnit" class="form-label">Temporal sampling interval unit (<code>gml:timeInterval</code> @unit)</label>
+                    <input type="text" class="form-control" id="temporalExtentIntervalUnit" name="temporalExtentIntervalUnit" placeholder="e.g., day, hour, or UOM URI">
+                    <div class="form-text">Optional. NOAA template uses a unit token with a numeric value below.</div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="temporalExtentIntervalValue" class="form-label">Temporal sampling interval value</label>
+                    <input type="text" class="form-control" id="temporalExtentIntervalValue" name="temporalExtentIntervalValue" placeholder="e.g., 1">
+                    <div class="form-text">Paired with interval unit for <code>gml:timeInterval</code> inside acquisition period.</div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="metadataRecordDate" class="form-label">Metadata record date (<code>gmd:dateStamp</code>)</label>
+                    <input type="datetime-local" class="form-control" id="metadataRecordDate" name="metadataRecordDate" aria-describedby="metadataRecordDateHelp">
+                    <div id="metadataRecordDateHelp" class="form-text">Leave blank to use the server time when XML is generated.</div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="publicationDate" class="form-label">Dataset publication date (citation)</label>
+                    <input type="datetime-local" class="form-control" id="publicationDate" name="publicationDate" aria-describedby="publicationDateHelp">
+                    <div id="publicationDateHelp" class="form-text"><code>CI_DateTypeCode</code> publication, separate from completion/end.</div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="language" class="form-label">Language</label>
+                    <input type="text" class="form-control" id="language" name="language" placeholder="e.g., eng" value="eng">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="characterSet" class="form-label">Character Set</label>
+                    <input type="text" class="form-control" id="characterSet" name="characterSet" placeholder="e.g., utf8" value="utf8">
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="scopeCode" class="form-label">Scope Code</label>
+                  <select class="form-select" id="scopeCode" name="scopeCode">
+                    <option value="">Select scope</option>
+                    <option value="dataset" selected>Dataset</option>
+                    <option value="series">Series</option>
+                    <option value="application">Application</option>
+                  </select>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="organization" class="form-label">Organization *</label>
+                    <input type="text" class="form-control" id="organization" name="organization" placeholder="e.g., NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT" value="NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT" required aria-describedby="organizationError">
+                    <div id="organizationError" class="invalid-feedback"></div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="contactIndividualName" class="form-label">Contact person name (<code>gmd:individualName</code>)</label>
+                    <input type="text" class="form-control" id="contactIndividualName" name="contactIndividualName" placeholder="e.g., point of contact for citation / author block">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="contactEmail" class="form-label">Contact Email *</label>
+                    <input type="email" class="form-control" id="contactEmail" name="contactEmail" placeholder="e.g., errol.ronje@noaa.gov" value="errol.ronje@noaa.gov" required aria-describedby="contactEmailError">
+                    <div id="contactEmailError" class="invalid-feedback"></div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="contactPhone" class="form-label">Contact Phone</label>
+                    <input type="text" class="form-control" id="contactPhone" name="contactPhone" placeholder="e.g., (555) 555-5555" value="(555) 555-5555">
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="rorOrgSearch" class="form-label">Organization Lookup (ROR)</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" id="rorOrgSearch" placeholder="Search organizations in ROR registry">
+                    <button type="button" class="btn btn-outline-primary" id="searchRorBtn">Search ROR</button>
+                  </div>
+                  <div class="form-text">Select a ROR organization to store a persistent organization ID for citation metadata.</div>
+                  <div id="rorOrgResults" class="list-group mt-2"></div>
+                  <div id="selectedRorSummary" class="small mt-2 text-muted"></div>
+                  <input type="hidden" id="organizationRorId" name="organizationRorId" value="">
+                  <input type="hidden" id="organizationRorUri" name="organizationRorUri" value="">
+                  <input type="hidden" id="organizationRorDisplayName" name="organizationRorDisplayName" value="">
+                  <input type="hidden" id="organizationRorCountry" name="organizationRorCountry" value="">
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-12">
+                    <label for="contactUrl" class="form-label">Contact URL</label>
+                    <input type="url" class="form-control" id="contactUrl" name="contactUrl" placeholder="e.g., https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio" value="https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-3">
+                    <label for="contactUrlProtocol" class="form-label">Contact URL protocol</label>
+                    <input type="text" class="form-control" id="contactUrlProtocol" name="contactUrlProtocol" placeholder="HTTPS (default if empty)">
+                  </div>
+                  <div class="col-md-4">
+                    <label for="contactUrlResourceName" class="form-label">Contact URL resource name</label>
+                    <input type="text" class="form-control" id="contactUrlResourceName" name="contactUrlResourceName" placeholder="e.g., program portfolio page">
+                  </div>
+                  <div class="col-md-5">
+                    <label for="contactUrlResourceDescription" class="form-label">Contact URL description</label>
+                    <input type="text" class="form-control" id="contactUrlResourceDescription" name="contactUrlResourceDescription" placeholder="Short description for CI_OnlineResource">
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="citationPublisherOrganization" class="form-label">Citation publisher organization</label>
+                  <input type="text" class="form-control" id="citationPublisherOrganization" name="citationPublisherOrganization" placeholder="Default: NOAA National Centers for Environmental Information">
+                  <div class="form-text">Second <code>gmd:citedResponsibleParty</code> with role <code>publisher</code> (Navy UxS template).</div>
+                </div>
+                <div class="mb-3">
+                  <label for="contactAddress" class="form-label">Contact Address</label>
+                  <textarea class="form-control" id="contactAddress" name="contactAddress" rows="3" placeholder="e.g., Suite 1003, 1021 Balch Boulevard, Stennis Space Center, MS 39529, USA">Suite 1003, 1021 Balch Boulevard, Stennis Space Center, MS 39529, USA</textarea>
+                </div>
+                <div class="mb-3">
+                  <label for="abstract" class="form-label">Abstract *</label>
+                  <textarea class="form-control" id="abstract" name="abstract" rows="3" placeholder="e.g., The MDBC Mapping, Groundtruthing and Modeling team along with USM will conduct UUV acquisition..." required aria-describedby="abstractError">The MDBC Mapping, Groundtruthing and Modeling team along with USM will conduct UUV acquisition...</textarea>
+                  <div class="d-flex flex-wrap gap-2 align-items-center mt-2">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" id="suggestGcmdFromAbstractBtn" aria-label="Suggest GCMD science keywords from abstract text">Suggest GCMD keywords from abstract</button>
+                    <span class="form-text mb-0">Uses your abstract terms to search NASA GCMD Science Keywords (same KMS as manual search — not a separate AI service).</span>
+                  </div>
+                  <div id="gcmdAbstractInlineResults" class="list-group mt-2" hidden aria-live="polite" aria-label="GCMD matches suggested from abstract"></div>
+                  <p id="gcmdAbstractInlineHint" class="form-text small text-muted mt-1 mb-0" hidden>Suggested matches also appear in the <strong>Science Keywords</strong> accordion section below. Click a row to add to your mission.</p>
+                  <div id="abstractError" class="invalid-feedback"></div>
+                </div>
+                <div class="mb-3">
+                  <label for="purpose" class="form-label">Purpose (<code>gmd:purpose</code>)</label>
+                  <textarea class="form-control" id="purpose" name="purpose" rows="2" placeholder="Why the data were collected (distinct from abstract)"></textarea>
+                </div>
+                <div class="mb-3">
+                  <label for="supplementalInformation" class="form-label">Supplemental information</label>
+                  <textarea class="form-control" id="supplementalInformation" name="supplementalInformation" rows="2" placeholder="Any other descriptive information about the dataset"></textarea>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">GCMD Keywords</label>
+                  <div class="form-text mb-2">Search each NASA GCMD vocabulary separately (NCEI: science, data center, and location keywords are required; platform, instrument, and project when applicable). Selected terms use stable UUIDs. Use <strong>Suggest from abstract</strong> above for science keyword ideas.</div>
+                  <div class="accordion accordion-flush" id="gcmdFacetAccordion">
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingGcmd_sciencekeywords">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGcmd_sciencekeywords" aria-expanded="true" aria-controls="collapseGcmd_sciencekeywords">
+                          Science Keywords <span class="badge bg-secondary ms-2 gcmd-facet-selected-count" data-gcmd-scheme="sciencekeywords">0</span>
+                          <span class="text-muted small fw-normal ms-2">(required — theme)</span>
+                        </button>
+                      </h2>
+                      <div id="collapseGcmd_sciencekeywords" class="accordion-collapse collapse show" aria-labelledby="headingGcmd_sciencekeywords" data-bs-parent="#gcmdFacetAccordion">
+                        <div class="accordion-body">
+                          <div class="input-group">
+                            <input type="text" class="form-control gcmd-facet-search-input" id="gcmdSearch_sciencekeywords" data-gcmd-scheme="sciencekeywords" placeholder="Search science keyword label" autocomplete="off" aria-label="Search GCMD science keywords">
+                            <button type="button" class="btn btn-outline-primary gcmd-facet-search-btn" data-gcmd-scheme="sciencekeywords">Search</button>
+                          </div>
+                          <div id="gcmdFacetResults_sciencekeywords" class="list-group mt-2"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingGcmd_datacenters">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGcmd_datacenters" aria-expanded="false" aria-controls="collapseGcmd_datacenters">
+                          Data Centers <span class="badge bg-secondary ms-2 gcmd-facet-selected-count" data-gcmd-scheme="datacenters">0</span>
+                          <span class="text-muted small fw-normal ms-2">(required — data centre)</span>
+                        </button>
+                      </h2>
+                      <div id="collapseGcmd_datacenters" class="accordion-collapse collapse" aria-labelledby="headingGcmd_datacenters" data-bs-parent="#gcmdFacetAccordion">
+                        <div class="accordion-body">
+                          <div class="input-group">
+                            <input type="text" class="form-control gcmd-facet-search-input" id="gcmdSearch_datacenters" data-gcmd-scheme="datacenters" placeholder="Search data center keyword" autocomplete="off" aria-label="Search GCMD data centers">
+                            <button type="button" class="btn btn-outline-primary gcmd-facet-search-btn" data-gcmd-scheme="datacenters">Search</button>
+                          </div>
+                          <div id="gcmdFacetResults_datacenters" class="list-group mt-2"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingGcmd_locations">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGcmd_locations" aria-expanded="false" aria-controls="collapseGcmd_locations">
+                          Locations <span class="badge bg-secondary ms-2 gcmd-facet-selected-count" data-gcmd-scheme="locations">0</span>
+                          <span class="text-muted small fw-normal ms-2">(required — place)</span>
+                        </button>
+                      </h2>
+                      <div id="collapseGcmd_locations" class="accordion-collapse collapse" aria-labelledby="headingGcmd_locations" data-bs-parent="#gcmdFacetAccordion">
+                        <div class="accordion-body">
+                          <div class="input-group">
+                            <input type="text" class="form-control gcmd-facet-search-input" id="gcmdSearch_locations" data-gcmd-scheme="locations" placeholder="Search location keyword" autocomplete="off" aria-label="Search GCMD locations">
+                            <button type="button" class="btn btn-outline-primary gcmd-facet-search-btn" data-gcmd-scheme="locations">Search</button>
+                          </div>
+                          <div id="gcmdFacetResults_locations" class="list-group mt-2"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingGcmd_platforms">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGcmd_platforms" aria-expanded="false" aria-controls="collapseGcmd_platforms">
+                          Platforms <span class="badge bg-secondary ms-2 gcmd-facet-selected-count" data-gcmd-scheme="platforms">0</span>
+                          <span class="text-muted small fw-normal ms-2">(recommended — platform)</span>
+                        </button>
+                      </h2>
+                      <div id="collapseGcmd_platforms" class="accordion-collapse collapse" aria-labelledby="headingGcmd_platforms" data-bs-parent="#gcmdFacetAccordion">
+                        <div class="accordion-body">
+                          <div class="input-group">
+                            <input type="text" class="form-control gcmd-facet-search-input" id="gcmdSearch_platforms" data-gcmd-scheme="platforms" placeholder="Search platform keyword" autocomplete="off" aria-label="Search GCMD platforms">
+                            <button type="button" class="btn btn-outline-primary gcmd-facet-search-btn" data-gcmd-scheme="platforms">Search</button>
+                          </div>
+                          <div id="gcmdFacetResults_platforms" class="list-group mt-2"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingGcmd_instruments">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGcmd_instruments" aria-expanded="false" aria-controls="collapseGcmd_instruments">
+                          Instruments <span class="badge bg-secondary ms-2 gcmd-facet-selected-count" data-gcmd-scheme="instruments">0</span>
+                          <span class="text-muted small fw-normal ms-2">(recommended — instrument)</span>
+                        </button>
+                      </h2>
+                      <div id="collapseGcmd_instruments" class="accordion-collapse collapse" aria-labelledby="headingGcmd_instruments" data-bs-parent="#gcmdFacetAccordion">
+                        <div class="accordion-body">
+                          <div class="input-group">
+                            <input type="text" class="form-control gcmd-facet-search-input" id="gcmdSearch_instruments" data-gcmd-scheme="instruments" placeholder="Search instrument keyword" autocomplete="off" aria-label="Search GCMD instruments">
+                            <button type="button" class="btn btn-outline-primary gcmd-facet-search-btn" data-gcmd-scheme="instruments">Search</button>
+                          </div>
+                          <div id="gcmdFacetResults_instruments" class="list-group mt-2"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingGcmd_projects">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGcmd_projects" aria-expanded="false" aria-controls="collapseGcmd_projects">
+                          Projects <span class="badge bg-secondary ms-2 gcmd-facet-selected-count" data-gcmd-scheme="projects">0</span>
+                          <span class="text-muted small fw-normal ms-2">(recommended — project)</span>
+                        </button>
+                      </h2>
+                      <div id="collapseGcmd_projects" class="accordion-collapse collapse" aria-labelledby="headingGcmd_projects" data-bs-parent="#gcmdFacetAccordion">
+                        <div class="accordion-body">
+                          <div class="input-group">
+                            <input type="text" class="form-control gcmd-facet-search-input" id="gcmdSearch_projects" data-gcmd-scheme="projects" placeholder="Search project keyword" autocomplete="off" aria-label="Search GCMD projects">
+                            <button type="button" class="btn btn-outline-primary gcmd-facet-search-btn" data-gcmd-scheme="projects">Search</button>
+                          </div>
+                          <div id="gcmdFacetResults_projects" class="list-group mt-2"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingGcmd_providers">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGcmd_providers" aria-expanded="false" aria-controls="collapseGcmd_providers">
+                          Providers <span class="badge bg-secondary ms-2 gcmd-facet-selected-count" data-gcmd-scheme="providers">0</span>
+                          <span class="text-muted small fw-normal ms-2">(optional — data centre)</span>
+                        </button>
+                      </h2>
+                      <div id="collapseGcmd_providers" class="accordion-collapse collapse" aria-labelledby="headingGcmd_providers" data-bs-parent="#gcmdFacetAccordion">
+                        <div class="accordion-body">
+                          <div class="input-group">
+                            <input type="text" class="form-control gcmd-facet-search-input" id="gcmdSearch_providers" data-gcmd-scheme="providers" placeholder="Search provider keyword" autocomplete="off" aria-label="Search GCMD providers">
+                            <button type="button" class="btn btn-outline-primary gcmd-facet-search-btn" data-gcmd-scheme="providers">Search</button>
+                          </div>
+                          <div id="gcmdFacetResults_providers" class="list-group mt-2"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-3">
+                    <label class="form-label small text-muted">Selected GCMD keywords (all facets)</label>
+                    <div id="selectedGcmdKeywords" class="mt-1"></div>
+                  </div>
+                  <textarea id="gcmdKeywordsJson" name="gcmdKeywordsJson" class="visually-hidden"></textarea>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Citation Preview</label>
+                  <div class="card bg-light">
+                    <div class="card-body py-2">
+                      <div class="small mb-0">
+                        <strong>Organization (ROR):</strong>
+                        <div id="citationPreviewRor" class="text-muted">No ROR organization linked.</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="citeAs" class="form-label">Cite as (use limitation)</label>
+                  <textarea class="form-control" id="citeAs" name="citeAs" rows="2" placeholder="Primary citation statement for this dataset"></textarea>
+                </div>
+                <div class="mb-3">
+                  <label for="otherCiteAs" class="form-label">Other citation / reference text</label>
+                  <textarea class="form-control" id="otherCiteAs" name="otherCiteAs" rows="2" placeholder="Additional citation guidance, related papers, etc."></textarea>
+                </div>
+                <div class="mb-3">
+                  <label for="dataLicensePreset" class="form-label">Data license (NOAA / NCEI)</label>
+                  <select class="form-select" id="dataLicensePreset" name="dataLicensePreset">
+                    <option value="custom" selected>Custom — encode “Data license URL” as plain text in metadata</option>
+                    <option value="cc0_acdo">CC0-1.0 — ACDO / Metadata WG (Creative Commons + SPDX gmx:Anchor pair)</option>
+                    <option value="cc0_acdo_and_ncei">CC0-1.0 — ACDO anchors + NCEI docucomp (CC0) xlink (Navy template style)</option>
+                    <option value="ncei_cc0">NCEI docucomp — CC0 data license statement (xlink only)</option>
+                    <option value="ncei_cc_by_4">NCEI docucomp — CC BY 4.0</option>
+                    <option value="ncei_cc0_internal_noaa">NCEI docucomp — CC0 for Internal NOAA Source Data</option>
+                  </select>
+                  <div class="form-text">Machine-readable licenses: use an option above for <code>gmx:Anchor</code> blocks and/or NCEI docucomp links per ACDO / Metadata WG guidance. “Custom” keeps the previous <code>Data license: …</code> line from the URL field.</div>
+                </div>
+                <div class="mb-3">
+                  <label for="licenseUrl" class="form-label">Data license URL</label>
+                  <input type="url" class="form-control" id="licenseUrl" name="licenseUrl" placeholder="https://...">
+                  <div class="form-text">Used only when <strong>Custom</strong> is selected. Presets embed fixed URLs in XML automatically.</div>
+                </div>
+                <div class="mb-3">
+                  <label for="nceiAccessionId" class="form-label">NCEI accession ID</label>
+                  <input type="text" class="form-control" id="nceiAccessionId" name="nceiAccessionId" placeholder="e.g., NCEI accession number">
+                </div>
+                <div class="mb-3">
+                  <label for="accessConstraints" class="form-label">Access Constraints</label>
+                  <textarea class="form-control" id="accessConstraints" name="accessConstraints" rows="3" placeholder="e.g., Data should not be distributed beyond members of the Science Team...">Data should not be distributed beyond members of the Science Team...</textarea>
+                </div>
+                <div class="mb-3">
+                  <label for="distributionLiability" class="form-label">Distribution Liability</label>
+                  <textarea class="form-control" id="distributionLiability" name="distributionLiability" rows="3" placeholder="e.g., NOAA and NCEI make no warranty, expressed or implied...">NOAA and NCEI make no warranty, expressed or implied...</textarea>
+                </div>
+                </div>
+                <div class="form-section">
+                <div class="accordion accordion-flush" id="metadataAggregationAccordion">
+                  <div class="accordion-item border-0 bg-transparent">
+                    <h2 class="accordion-header" id="metadataAggregationHeading">
+                      <button class="accordion-button collapsed text-muted shadow-none bg-transparent px-0 py-2" type="button" data-bs-toggle="collapse" data-bs-target="#metadataAggregationCollapse" aria-expanded="false" aria-controls="metadataAggregationCollapse">
+                        Aggregation <span class="label-optional">(optional)</span>
+                      </button>
+                    </h2>
+                    <div id="metadataAggregationCollapse" class="accordion-collapse collapse" aria-labelledby="metadataAggregationHeading" data-bs-parent="#metadataAggregationAccordion">
+                      <div class="accordion-body px-0 pt-0 pb-1">
+                <div class="row mb-3">
+                  <div class="col-md-12">
+                    <label for="parentProjectTitle" class="form-label">Parent project title</label>
+                    <input type="text" class="form-control" id="parentProjectTitle" name="parentProjectTitle" placeholder="Larger work / project title">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="parentProjectDate" class="form-label">Parent project publication date</label>
+                    <input type="datetime-local" class="form-control" id="parentProjectDate" name="parentProjectDate">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="parentProjectCode" class="form-label">Parent project ID</label>
+                    <input type="text" class="form-control" id="parentProjectCode" name="parentProjectCode" placeholder="Project identifier">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-12">
+                    <label for="relatedDatasetTitle" class="form-label">Related dataset title</label>
+                    <input type="text" class="form-control" id="relatedDatasetTitle" name="relatedDatasetTitle">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="relatedDatasetDate" class="form-label">Related dataset publication date</label>
+                    <input type="datetime-local" class="form-control" id="relatedDatasetDate" name="relatedDatasetDate">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="relatedDatasetCode" class="form-label">Related dataset ID</label>
+                    <input type="text" class="form-control" id="relatedDatasetCode" name="relatedDatasetCode">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-12">
+                    <label for="relatedDatasetOrg" class="form-label">Related data organization</label>
+                    <input type="text" class="form-control" id="relatedDatasetOrg" name="relatedDatasetOrg">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="relatedDataUrl" class="form-label">Related data URL</label>
+                    <input type="url" class="form-control" id="relatedDataUrl" name="relatedDataUrl">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="relatedDataUrlTitle" class="form-label">Related URL title</label>
+                    <input type="text" class="form-control" id="relatedDataUrlTitle" name="relatedDataUrlTitle">
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="relatedDataUrlDescription" class="form-label">Related data description</label>
+                  <textarea class="form-control" id="relatedDataUrlDescription" name="relatedDataUrlDescription" rows="2"></textarea>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-12">
+                    <label for="associatedPublicationTitle" class="form-label">Associated publication title</label>
+                    <input type="text" class="form-control" id="associatedPublicationTitle" name="associatedPublicationTitle">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="associatedPublicationDate" class="form-label">Associated publication date</label>
+                    <input type="datetime-local" class="form-control" id="associatedPublicationDate" name="associatedPublicationDate">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="associatedPublicationCode" class="form-label">Associated publication ID (e.g., DOI)</label>
+                    <input type="text" class="form-control" id="associatedPublicationCode" name="associatedPublicationCode">
+                  </div>
+                </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                </div>
+                <div class="mb-3">
+                  <label for="status" class="form-label">Status</label>
+                  <select class="form-select" id="status" name="status">
+                    <option value="">Select status</option>
+                    <option value="completed">Completed</option>
+                    <option value="ongoing" selected>Ongoing</option>
+                    <option value="highImportance">High Importance</option>
+                  </select>
+                </div>
+                <div class="d-flex justify-content-end gap-2 flex-wrap">
+                  <button type="button" class="btn btn-secondary clear-btn" id="clearMissionBtn" aria-label="Clear Mission Form">Clear</button>
+                  <button type="button" class="btn btn-primary next-step" id="nextMissionBtn" aria-label="Next Step: Platform">Next: Platform</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Platform Form -->
+        <div id="step2Form" class="step-form" role="tabpanel" aria-labelledby="platform-tab">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Platform Information</h5>
+              <form id="platformForm">
+                <div class="mb-3">
+                  <label for="savedPlatforms" class="form-label">Load platform from library</label>
+                  <select id="savedPlatforms" class="form-select" name="savedPlatforms" aria-label="Saved Platforms">
+                    <option value="">-- Load platform from library (fills this form only) --</option>
+                  </select>
+                  <div class="form-text">Choosing a row loads that platform into <strong>this metadata form</strong> only. It does not save to the library.</div>
+                </div>
+                <div class="mb-3">
+                  <label for="platformId" class="form-label">Platform ID *</label>
+                  <input type="text" class="form-control" id="platformId" name="platformId" placeholder="Enter platform identifier" value="" list="platformOptions" required aria-describedby="platformIdError">
+                  <datalist id="platformOptions"></datalist>
+                  <div id="platformIdError" class="invalid-feedback"></div>
+                </div>
+                <div class="mb-3">
+                  <label for="platformName" class="form-label">Platform Name *</label>
+                  <input type="text" class="form-control" id="platformName" name="platformName" placeholder="e.g., Eagle Ray UUV" value="Eagle Ray UUV" required aria-describedby="platformNameError">
+                  <div id="platformNameError" class="invalid-feedback"></div>
+                </div>
+                <div class="mb-3">
+                  <label for="platformType" class="form-label">Platform Type</label>
+                  <select class="form-select" id="platformType" name="platformType">
+                    <option value="">Select type</option>
+                    <option value="UUV" selected>UUV</option>
+                    <option value="USV">USV</option>
+                    <option value="UAS">UAS</option>
+                    <option value="Glider">Glider</option>
+                    <option value="Saildrone">Saildrone</option>
+                    <option value="Surface Vessel">Surface Vessel</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div class="mb-3" id="customPlatformTypeSection" style="display: none;">
+                  <label for="customPlatformType" class="form-label">Custom Platform Type</label>
+                  <input type="text" class="form-control" id="customPlatformType" name="customPlatformType" placeholder="Enter custom platform type">
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="manufacturer" class="form-label">Manufacturer</label>
+                    <input type="text" class="form-control" id="manufacturer" name="manufacturer" placeholder="e.g., Hydroid" value="Hydroid">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="model" class="form-label">Model</label>
+                    <input type="text" class="form-control" id="model" name="model" placeholder="e.g., REMUS 600" value="REMUS 600">
+                  </div>
+                </div>
+                <div class="form-section">
+                <h6 class="mb-3">Physical Characteristics</h6>
+                <div class="row mb-3">
+                  <div class="col-md-3">
+                    <label for="weight" class="form-label">Weight (kg)</label>
+                    <input type="number" class="form-control" id="weight" name="weight" placeholder="e.g., 300" value="300" step="0.1" min="0" aria-describedby="weightError">
+                    <div id="weightError" class="invalid-feedback"></div>
+                  </div>
+                  <div class="col-md-3">
+                    <label for="length" class="form-label">Length (m)</label>
+                    <input type="number" class="form-control" id="length" name="length" placeholder="e.g., 3.25" value="3.25" step="0.01" min="0" aria-describedby="lengthError">
+                    <div id="lengthError" class="invalid-feedback"></div>
+                  </div>
+                  <div class="col-md-3">
+                    <label for="width" class="form-label">Width (m)</label>
+                    <input type="number" class="form-control" id="width" name="width" placeholder="e.g., 0.5" value="0.5" step="0.01" min="0" aria-describedby="widthError">
+                    <div id="widthError" class="invalid-feedback"></div>
+                  </div>
+                  <div class="col-md-3">
+                    <label for="height" class="form-label">Height (m)</label>
+                    <input type="number" class="form-control" id="height" name="height" placeholder="e.g., 0.5" value="0.5" step="0.01" min="0" aria-describedby="heightError">
+                    <div id="heightError" class="invalid-feedback"></div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="material" class="form-label">Material</label>
+                    <input type="text" class="form-control" id="material" name="material" placeholder="e.g., Aluminum" value="Aluminum">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="speed" class="form-label">Speed (m/s)</label>
+                    <input type="number" class="form-control" id="speed" name="speed" placeholder="e.g., 2.3" value="2.3" step="0.1" min="0" aria-describedby="speedError">
+                    <div id="speedError" class="invalid-feedback"></div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="powerSource" class="form-label">Power Source</label>
+                    <input type="text" class="form-control" id="powerSource" name="powerSource" placeholder="e.g., Lithium-ion Battery" value="Lithium-ion Battery">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="navigationSystem" class="form-label">Navigation System</label>
+                    <input type="text" class="form-control" id="navigationSystem" name="navigationSystem" placeholder="e.g., GPS/INS" value="GPS/INS">
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="sensorMounts" class="form-label">Sensor Mounts <small>(e.g., Forward Payload Bay, Aft Section)</small></label>
+                  <input type="text" class="form-control" id="sensorMounts" name="sensorMounts" placeholder="e.g., Forward Payload Bay" value="Forward Payload Bay">
+                </div>
+                <div class="mb-3">
+                  <label for="operationalArea" class="form-label">Operational Area <small>(e.g., Gulf of Mexico, 500m depth)</small></label>
+                  <textarea class="form-control" id="operationalArea" name="operationalArea" rows="3" placeholder="e.g., Gulf of Mexico, 500m depth">Gulf of Mexico, 500m depth</textarea>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="serialNumber" class="form-label">Serial Number</label>
+                    <input type="text" class="form-control" id="serialNumber" name="serialNumber" placeholder="e.g., SN-12345" value="SN-12345">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="deploymentDate" class="form-label">Deployment Date</label>
+                    <input type="date" class="form-control" id="deploymentDate" name="deploymentDate" value="2024-05-01" aria-describedby="deploymentDateError">
+                    <div id="deploymentDateError" class="invalid-feedback"></div>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="platformComments" class="form-label">Comments</label>
+                  <textarea class="form-control" id="platformComments" name="platformComments" rows="3" placeholder="e.g., Equipped with Norbit Multibeam Sonar">Equipped with Norbit Multibeam Sonar</textarea>
+                </div>
+                </div>
+                <div class="mb-3">
+                  <button type="button" class="btn btn-outline-primary mt-2" id="savePlatform" aria-label="Save platform to Google Sheet library">Save platform to library (Google Sheet)</button>
+                  <div class="form-text mt-2">Writes the current platform row to the <strong>backend library</strong> (Google Sheet), not just the form. Fix any validation errors below before saving.</div>
+                </div>
+                <div id="savePlatformFeedback" class="text-success mb-3"></div>
+                <div class="d-flex justify-content-end gap-2 flex-wrap">
+                  <button type="button" class="btn btn-secondary prev-step" aria-label="Previous Step: Mission">Previous: Mission</button>
+                  <button type="button" class="btn btn-primary next-step" id="nextPlatformBtn" aria-label="Next Step: Sensors">Next: Sensors</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Sensors Form -->
+        <div id="step3Form" class="step-form" role="tabpanel" aria-labelledby="sensors-tab">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Sensor Information</h5>
+              <form id="sensorsForm">
+                <div class="form-section">
+                <div class="mb-3">
+                  <label for="sensorSelect" class="form-label">Select Sensor Type to Add</label>
+                  <div class="input-group">
+                    <select class="form-select" id="sensorSelect" name="sensorSelect" aria-label="Select Sensor Type">
+                      <option value="">-- Select Sensor Type to Add --</option>
+                    </select>
+                    <button type="button" class="btn btn-outline-primary" id="addSensorBtn" aria-label="Add Selected Sensor">Add Sensor</button>
+                  </div>
+                </div>
+                <div id="sensorsList" class="mb-3">
+                  <div class="text-muted text-center">No sensors added yet. Select a sensor type to add.</div>
+                </div>
+                <div class="mb-3 d-flex gap-2 flex-wrap align-items-end">
+                  <div class="flex-fill">
+                    <label for="savedSensors" class="form-label">Load sensor from library</label>
+                    <select id="savedSensors" class="form-select" name="savedSensors" aria-label="Saved Sensors">
+                      <option value="">-- Load sensor from library (adds to this form only) --</option>
+                    </select>
+                    <div class="form-text">Adds a sensor block to <strong>this mission form</strong> only. Does not save to the library.</div>
+                  </div>
+                  <button type="button" class="btn btn-outline-primary mt-4 align-self-end" id="saveInstruments" aria-label="Save sensors to Google Sheet library">Save sensors to library (Sheet)</button>
+                </div>
+                <div class="form-text mb-3">“Save sensors to library” writes listed sensors to the <strong>backend library</strong> (Google Sheet). Each card’s “Save to library” saves that one sensor the same way.</div>
+                </div>
+                <div class="d-flex justify-content-end gap-2 flex-wrap">
+                  <button type="button" class="btn btn-secondary prev-step" aria-label="Previous Step: Platform">Previous: Platform</button>
+                  <button type="button" class="btn btn-primary next-step" id="nextSensorsBtn" aria-label="Next Step: Spatial">Next: Spatial</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4: Spatial Form -->
+        <div id="step4Form" class="step-form" role="tabpanel" aria-labelledby="spatial-tab">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Spatial Information</h5>
+              <form id="spatialForm">
+                <div class="mb-3">
+                  <label for="referenceSystem" class="form-label">Reference System</label>
+                  <input type="text" class="form-control" id="referenceSystem" name="referenceSystem" placeholder="e.g., EPSG:4326" value="EPSG:4326">
+                </div>
+                <div class="mb-3">
+                  <label for="dimensions" class="form-label">Dimensions (horizontal representation)</label>
+                  <input type="number" class="form-control" id="dimensions" name="dimensions" value="2" min="1" max="3" aria-describedby="dimensionsError">
+                  <div id="dimensionsError" class="invalid-feedback"></div>
+                  <div class="form-text">Used when grid metadata below is off (simple <code>MD_Georectified</code>).</div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-4">
+                    <label for="verticalMinimum" class="form-label">Vertical minimum</label>
+                    <input type="text" class="form-control" id="verticalMinimum" name="verticalMinimum" placeholder="e.g., depth or altitude min">
+                  </div>
+                  <div class="col-md-4">
+                    <label for="verticalMaximum" class="form-label">Vertical maximum</label>
+                    <input type="text" class="form-control" id="verticalMaximum" name="verticalMaximum" placeholder="e.g., depth or altitude max">
+                  </div>
+                  <div class="col-md-4">
+                    <label for="verticalCrsUrl" class="form-label">Vertical CRS (URL or code)</label>
+                    <input type="text" class="form-control" id="verticalCrsUrl" name="verticalCrsUrl" placeholder="https://... or EPSG">
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="verticalCrsXlinkHref" class="form-label">Vertical CRS by reference (<code>xlink:href</code>)</label>
+                  <input type="text" class="form-control" id="verticalCrsXlinkHref" name="verticalCrsXlinkHref" placeholder="e.g., #verticalCRSandUnits or full URI">
+                  <div class="form-text">If set, emitted as <code>gmd:verticalCRS</code> xlink (Navy template) instead of inline <code>RS_Identifier</code>.</div>
+                </div>
+                <div class="mb-3 form-check">
+                  <input type="checkbox" class="form-check-input" id="useGridRepresentation" name="useGridRepresentation">
+                  <label class="form-check-label" for="useGridRepresentation">Use gridded representation (<code>MD_GridSpatialRepresentation</code>)</label>
+                </div>
+                <div id="gridMetadataSection" class="form-section border rounded p-3 mb-3 bg-light" style="display: none;">
+                  <div class="row mb-2">
+                    <div class="col-md-6">
+                      <label for="gridCellGeometry" class="form-label">Cell geometry</label>
+                      <select class="form-select" id="gridCellGeometry" name="gridCellGeometry">
+                        <option value="area" selected>area</option>
+                        <option value="point">point</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row g-2 mb-2">
+                    <div class="col-md-4">
+                      <label class="form-label small">Column size</label>
+                      <input type="number" class="form-control form-control-sm" id="gridColumnSize" name="gridColumnSize" min="0" placeholder="pixels / cells">
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label small">Column resolution</label>
+                      <input type="text" class="form-control form-control-sm" id="gridColumnResolution" name="gridColumnResolution" placeholder="with units">
+                    </div>
+                  </div>
+                  <div class="row g-2 mb-2">
+                    <div class="col-md-4">
+                      <label class="form-label small">Row size</label>
+                      <input type="number" class="form-control form-control-sm" id="gridRowSize" name="gridRowSize" min="0">
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label small">Row resolution</label>
+                      <input type="text" class="form-control form-control-sm" id="gridRowResolution" name="gridRowResolution" placeholder="with units">
+                    </div>
+                  </div>
+                  <div class="row g-2">
+                    <div class="col-md-4">
+                      <label class="form-label small">Vertical size</label>
+                      <input type="number" class="form-control form-control-sm" id="gridVerticalSize" name="gridVerticalSize" min="0">
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label small">Vertical resolution</label>
+                      <input type="text" class="form-control form-control-sm" id="gridVerticalResolution" name="gridVerticalResolution" placeholder="with units">
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="extentDescription" class="form-label">Extent narrative (<code>gmd:EX_Extent</code> / <code>gmd:description</code>)</label>
+                  <textarea class="form-control" id="extentDescription" name="extentDescription" rows="2" placeholder="Brief description of overall spatial/temporal extent (NOAA template)"></textarea>
+                  <div class="form-text">If empty, geographic description below is also used for this element when generating XML.</div>
+                </div>
+                <div class="mb-3">
+                  <label for="geographicDescription" class="form-label">Geographic Description</label>
+                  <textarea class="form-control" id="geographicDescription" name="geographicDescription" rows="3" placeholder="e.g., Gulf of Mexico, 29N to 27N, 91W to 89W">Gulf of Mexico, 29N to 27N, 91W to 89W</textarea>
+                </div>
+                <div class="form-section">
+                <h6 class="mb-3">Bounding Box <small>(Supports decimal or DMS, e.g., 28° 44.22511' N)</small></h6>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="upperLeftLat" class="form-label">Upper Left Latitude</label>
+                    <input type="text" class="form-control" id="upperLeftLat" name="upperLeftLat" placeholder="e.g., 29.0 or 29° N" value="29.0" aria-describedby="upperLeftLatError">
+                    <div id="upperLeftLatError" class="invalid-feedback"></div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="upperLeftLon" class="form-label">Upper Left Longitude</label>
+                    <input type="text" class="form-control" id="upperLeftLon" name="upperLeftLon" placeholder="e.g., -91.0 or 91° W" value="-91.0" aria-describedby="upperLeftLonError">
+                    <div id="upperLeftLonError" class="invalid-feedback"></div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="upperRightLat" class="form-label">Upper Right Latitude</label>
+                    <input type="text" class="form-control" id="upperRightLat" name="upperRightLat" placeholder="e.g., 29.0 or 29° N" value="29.0" aria-describedby="upperRightLatError">
+                    <div id="upperRightLatError" class="invalid-feedback"></div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="upperRightLon" class="form-label">Upper Right Longitude</label>
+                    <input type="text" class="form-control" id="upperRightLon" name="upperRightLon" placeholder="e.g., -89.0 or 89° W" value="-89.0" aria-describedby="upperRightLonError">
+                    <div id="upperRightLonError" class="invalid-feedback"></div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="lowerRightLat" class="form-label">Lower Right Latitude</label>
+                    <input type="text" class="form-control" id="lowerRightLat" name="lowerRightLat" placeholder="e.g., 27.0 or 27° N" value="27.0" aria-describedby="lowerRightLatError">
+                    <div id="lowerRightLatError" class="invalid-feedback"></div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="lowerRightLon" class="form-label">Lower Right Longitude</label>
+                    <input type="text" class="form-control" id="lowerRightLon" name="lowerRightLon" placeholder="e.g., -89.0 or 89° W" value="-89.0" aria-describedby="lowerRightLonError">
+                    <div id="lowerRightLonError" class="invalid-feedback"></div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="lowerLeftLat" class="form-label">Lower Left Latitude</label>
+                    <input type="text" class="form-control" id="lowerLeftLat" name="lowerLeftLat" placeholder="e.g., 27.0 or 27° N" value="27.0" aria-describedby="lowerLeftLatError">
+                    <div id="lowerLeftLatError" class="invalid-feedback"></div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="lowerLeftLon" class="form-label">Lower Left Longitude</label>
+                    <input type="text" class="form-control" id="lowerLeftLon" name="lowerLeftLon" placeholder="e.g., -91.0 or 91° W" value="-91.0" aria-describedby="lowerLeftLonError">
+                    <div id="lowerLeftLonError" class="invalid-feedback"></div>
+                  </div>
+                </div>
+                <div id="map" class="map-preview" aria-label="Map showing the bounding box of the mission area"></div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="accuracyStandard" class="form-label">Accuracy Standard</label>
+                    <input type="text" class="form-control" id="accuracyStandard" name="accuracyStandard" placeholder="e.g., RMS Error" value="RMS Error">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="accuracyValue" class="form-label">Accuracy Value (m)</label>
+                    <input type="number" class="form-control" id="accuracyValue" name="accuracyValue" placeholder="e.g., 1.5" value="1.5" step="0.1" min="0" aria-describedby="accuracyValueError">
+                    <div id="accuracyValueError" class="invalid-feedback"></div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="errorLevel" class="form-label">Error Level</label>
+                    <input type="text" class="form-control" id="errorLevel" name="errorLevel" placeholder="e.g., 95% Confidence" value="95% Confidence">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="errorValue" class="form-label">Error Value (m)</label>
+                    <input type="number" class="form-control" id="errorValue" name="errorValue" placeholder="e.g., 2.0" value="2.0" step="0.1" min="0" aria-describedby="errorValueError">
+                    <div id="errorValueError" class="invalid-feedback"></div>
+                  </div>
+                </div>
+                <div class="mb-3 form-check">
+                  <input type="checkbox" class="form-check-input" id="hasTrajectory" name="hasTrajectory">
+                  <label class="form-check-label" for="hasTrajectory">Has Trajectory Data</label>
+                </div>
+                <div id="trajectorySection" style="display: none;">
+                  <div class="mb-3">
+                    <label for="trajectorySampling" class="form-label">Trajectory Sampling Rate (Hz)</label>
+                    <input type="number" class="form-control" id="trajectorySampling" name="trajectorySampling" placeholder="e.g., 10" value="10" step="0.1" min="0" aria-describedby="trajectorySamplingError">
+                    <div id="trajectorySamplingError" class="invalid-feedback"></div>
+                  </div>
+                </div>
+                </div>
+                <div class="d-flex justify-content-end gap-2 flex-wrap">
+                  <button type="button" class="btn btn-secondary prev-step" aria-label="Previous Step: Sensors">Previous: Sensors</button>
+                  <button type="button" class="btn btn-primary next-step" id="nextSpatialBtn" aria-label="Next Step: Output">Next: Output</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 5: Output Form -->
+        <div id="step5Form" class="step-form" role="tabpanel" aria-labelledby="output-tab">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Output Settings</h5>
+              <form id="outputForm">
+                <div class="form-section">
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="metadataStandard" class="form-label">Metadata Standard</label>
+                    <input type="text" class="form-control" id="metadataStandard" name="metadataStandard" placeholder="e.g., ISO 19115-2" value="ISO 19115-2">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="metadataVersion" class="form-label">Metadata Version</label>
+                    <input type="text" class="form-control" id="metadataVersion" name="metadataVersion" placeholder="e.g., 2.0" value="2.0">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="outputFormat" class="form-label">Output Format</label>
+                    <select class="form-select" id="outputFormat" name="outputFormat">
+                      <option value="xml" selected>XML</option>
+                      <option value="json">JSON</option>
+                      <option value="geojson">GeoJSON</option>
+                      <option value="dcat-jsonld">DCAT JSON-LD</option>
+                      <option value="csv">CSV</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="outputValidationLevel" class="form-label">Validation Level</label>
+                    <select class="form-select" id="outputValidationLevel" name="validationLevel">
+                      <option value="basic">Basic</option>
+                      <option value="strict" selected>Strict</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="outputLocation" class="form-label">Output Location</label>
+                  <select class="form-select" id="outputLocation" name="outputLocation">
+                    <option value="download" selected>Download</option>
+                    <option value="Google Drive">Google Drive</option>
+                  </select>
+                  <div class="form-text">S3 export coming soon. Currently supported: Download, Google Drive.</div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="awsBucket" class="form-label">AWS S3 Bucket (Coming soon)</label>
+                    <input type="text" class="form-control" id="awsBucket" name="awsBucket" placeholder="Coming soon - e.g., my-metadata-bucket" readonly>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="awsPrefix" class="form-label">AWS S3 Prefix (Coming soon)</label>
+                    <input type="text" class="form-control" id="awsPrefix" name="awsPrefix" placeholder="Coming soon - e.g., missions/2024" readonly>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="doi" class="form-label">DOI</label>
+                    <input type="text" class="form-control" id="doi" name="doi" placeholder="e.g., 10.1000/xyz123">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="distributionFileFormat" class="form-label">Data file format (distribution)</label>
+                    <input type="text" class="form-control" id="distributionFileFormat" name="distributionFileFormat" placeholder="e.g., NetCDF, GeoTIFF" value="NetCDF">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="metadataLandingUrl" class="form-label">Metadata landing page URL</label>
+                    <input type="url" class="form-control" id="metadataLandingUrl" name="metadataLandingUrl" placeholder="https://...">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="downloadUrl" class="form-label">Direct download URL</label>
+                    <input type="url" class="form-control" id="downloadUrl" name="downloadUrl" placeholder="https://...">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-4">
+                    <label for="downloadProtocol" class="form-label">Download protocol</label>
+                    <input type="text" class="form-control" id="downloadProtocol" name="downloadProtocol" placeholder="e.g., HTTPS">
+                  </div>
+                  <div class="col-md-4">
+                    <label for="downloadLinkName" class="form-label">Download link name</label>
+                    <input type="text" class="form-control" id="downloadLinkName" name="downloadLinkName">
+                  </div>
+                  <div class="col-md-4">
+                    <label for="downloadLinkDescription" class="form-label">Download link description</label>
+                    <input type="text" class="form-control" id="downloadLinkDescription" name="downloadLinkDescription">
+                  </div>
+                </div>
+                </div>
+                <div class="form-section p-3">
+                  <h6 class="small text-uppercase text-muted mb-2">NOAA / NCEI UxS XML template</h6>
+                  <div class="form-check mb-2">
+                    <input type="checkbox" class="form-check-input" id="useNceiMetadataContactXlink">
+                    <label class="form-check-label" for="useNceiMetadataContactXlink">NCEI xlink metadata contact (template style)</label>
+                    <div class="form-text">Emits <code>gmd:contact</code> as the NCEI docucomp xlink only, like <code>NOAANavyUxSAcquisition_MetadataTempate_19115-2-GMI_2026-2</code>. Unchecked: full contact from the mission form (organization, email, etc.).</div>
+                  </div>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="omitRootReferenceSystemInfo">
+                    <label class="form-check-label" for="omitRootReferenceSystemInfo">Omit root horizontal reference system</label>
+                    <div class="form-text">Omits top-level <code>gmd:referenceSystemInfo</code> (the Navy template has none). Spatial CRS in the mission form is unchanged for other uses.</div>
+                  </div>
+                </div>
+                <div class="form-section">
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="templateCategory" class="form-label">Template Category</label>
+                    <select class="form-select" id="templateCategory" name="templateCategory">
+                      <option value="basic" selected>Basic</option>
+                      <option value="uuv">UUV</option>
+                      <option value="usv">USV</option>
+                      <option value="uas">UAS</option>
+                      <option value="custom">Custom</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="mb-3 form-check">
+                  <input type="checkbox" class="form-check-input" id="saveAsTemplate" name="saveAsTemplate" checked>
+                  <label class="form-check-label" for="saveAsTemplate">Save as Template</label>
+                </div>
+                <div class="mb-3">
+                  <label for="templateName" class="form-label">Template Name</label>
+                  <input type="text" class="form-control" id="templateName" name="templateName" placeholder="e.g., UUV Mission Template" value="UUV Mission Template">
+                </div>
+                <div class="mb-3">
+                  <label for="finalNotes" class="form-label">Final Notes</label>
+                  <textarea class="form-control" id="finalNotes" name="finalNotes" rows="3" placeholder="e.g., Metadata reviewed by team on 2024-05-10">Metadata reviewed by team on 2024-05-10</textarea>
+                </div>
+                </div>
+                <div class="d-flex justify-content-end gap-2 flex-wrap">
+                  <button type="button" class="btn btn-secondary prev-step" aria-label="Previous Step: Spatial">Previous: Spatial</button>
+                  <button type="button" class="btn btn-primary" id="generateBtn" aria-label="Generate Metadata">Generate Metadata</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Panel — live XML preview + validation (column sticky on wide screens) -->
+      <div class="col-md-4 col-lg-4 xml-side-column-sticky">
+        <div class="card xml-validator-side-panel mb-4 h-100">
+          <div class="card-body p-3 d-flex flex-column xml-live-card-body" style="min-height: 0;">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-1 flex-shrink-0">
+              <h5 class="card-title mb-0">Live XML &amp; validation</h5>
+              <select id="validationLevel" class="form-select form-select-sm" style="max-width: 7.5rem;" name="validationLevel" title="Validation strictness (form + XML)">
+                <option value="basic">Basic</option>
+                <option value="strict" selected>Strict</option>
+              </select>
+            </div>
+            <p class="small text-muted mb-1 flex-shrink-0">Preview updates as you type. Lines with issues are highlighted; use the Issues tab and click an item to jump to the XML line.</p>
+            <ul class="nav nav-tabs nav-fill mb-2 flex-shrink-0" role="tablist" id="liveXmlTabList">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="liveXmlTabPreview" data-bs-toggle="tab" data-bs-target="#liveXmlPanePreview" type="button" role="tab" aria-controls="liveXmlPanePreview" aria-selected="true">Preview</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="liveXmlTabIssues" data-bs-toggle="tab" data-bs-target="#liveXmlPaneIssues" type="button" role="tab" aria-controls="liveXmlPaneIssues" aria-selected="false">Issues</button>
+              </li>
+            </ul>
+            <div class="tab-content flex-grow-1 d-flex flex-column min-height-0 xml-live-tab-content" id="liveXmlTabContent">
+              <div class="tab-pane fade show active flex-grow-1 d-flex flex-column min-height-0 xml-live-preview-pane" id="liveXmlPanePreview" role="tabpanel" aria-labelledby="liveXmlTabPreview" tabindex="0">
+                <div id="xmlValidationStatusBar" class="xml-validation-status-bar d-flex align-items-center justify-content-between flex-wrap gap-1 py-1 px-2 small rounded mb-2 border flex-shrink-0" aria-live="polite">
+                  <span id="xmlValidationStatusCounts" class="fw-semibold">—</span>
+                  <span id="xmlValidationStatusLineCount" class="text-muted"></span>
+                </div>
+                <div class="xml-preview-glass xml-preview-glass--snippet xml-live-snippet-shell flex-grow-1 d-flex flex-column mb-2">
+                  <div id="xmlPreviewSnippet" class="xml-preview-scroll xml-preview-lines flex-grow-1" role="region" aria-label="XML preview"></div>
+                </div>
+                <div class="d-flex flex-wrap gap-2 mb-1 xml-live-preview-actions flex-shrink-0">
+                  <button type="button" class="btn btn-outline-secondary btn-sm flex-grow-1" data-bs-toggle="modal" data-bs-target="#xmlPreviewModal" aria-label="View full XML">Full XML</button>
+                  <button type="button" class="btn btn-outline-secondary btn-sm flex-grow-1" data-bs-toggle="modal" data-bs-target="#validationResultsModal" aria-label="View full validation results">Full results</button>
+                  <button type="button" class="btn btn-outline-primary btn-sm flex-grow-1" id="copyXmlSnippetBtn" aria-label="Copy XML to clipboard">Copy XML</button>
+                </div>
+              </div>
+              <div class="tab-pane fade flex-grow-1 d-flex flex-column min-height-0" id="liveXmlPaneIssues" role="tabpanel" aria-labelledby="liveXmlTabIssues" tabindex="0">
+                <div class="xml-validator-issues border rounded p-2 small flex-grow-1 overflow-auto" aria-label="Validation issues">
+                  <div id="validationResultsSnippet" class="mb-0" aria-live="polite"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- XML Preview Modal -->
+  <div class="modal fade" id="xmlPreviewModal" tabindex="-1" aria-labelledby="xmlPreviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="xmlPreviewModalLabel">Full XML Preview</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="xml-preview-glass xml-preview-glass--modal">
+            <div id="xmlPreviewFull" class="xml-preview-scroll xml-preview-lines" style="max-height: 60vh;" aria-label="Full XML preview"></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" id="toggleFullScreenXml" aria-label="Toggle Full Screen">Full Screen</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Validation Results Modal -->
+  <div class="modal fade" id="validationResultsModal" tabindex="-1" aria-labelledby="validationResultsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="validationResultsModalLabel">Full Validation Results</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="validationResultsFull" style="max-height: 60vh; overflow-y: auto;"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" id="toggleFullScreenValidation" aria-label="Toggle Full Screen">Full Screen</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Save Template Modal -->
+  <div class="modal fade" id="saveTemplateModal" tabindex="-1" aria-labelledby="saveTemplateModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="saveTemplateModalLabel">Save Template</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="newTemplateName" class="form-label">Template Name</label>
+            <input type="text" class="form-control" id="newTemplateName" name="newTemplateName" placeholder="e.g., UUV Mission Template" aria-describedby="newTemplateNameError">
+            <div id="newTemplateNameError" class="invalid-feedback"></div>
+          </div>
+          <div class="mb-3">
+            <label for="newTemplateCategory" class="form-label">Template Category</label>
+            <select class="form-select" id="newTemplateCategory" name="newTemplateCategory">
+              <option value="basic">Basic</option>
+              <option value="uuv">UUV</option>
+              <option value="usv">USV</option>
+              <option value="uas">UAS</option>
+              <option value="custom">Custom</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
+          <button type="button" class="btn btn-primary" id="confirmSaveTemplate" data-bs-dismiss="modal" aria-label="Save Template">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Includes -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
+  <script>
+    (function() {
+      var debugEnabled = false;
+      try {
+        var storedDebugUi = localStorage.getItem('uxsDebugUi');
+        if (storedDebugUi === '1') {
+          debugEnabled = true;
+        } else if (storedDebugUi === '0') {
+          debugEnabled = false;
+        } else {
+          debugEnabled = window.UXS_DEBUG === true;
+        }
+      } catch (e) {
+        debugEnabled = window.UXS_DEBUG === true;
+      }
+
+      window.UXS_DEBUG = debugEnabled;
+
+      function isDebugNoise(args) {
+        if (!args || args.length === 0) return false;
+        var first = args[0];
+        if (typeof first !== 'string') return false;
+        return /(DEBUG:|🔵|XMLFunctions\s+(MINIMAL|Debug|DIAGNOSTIC)|FORM DATA DEBUG|===\s*XMLFunctions|===\s*END DEBUG)/i.test(first);
+      }
+
+      var originalLog = console.log.bind(console);
+      var originalInfo = console.info ? console.info.bind(console) : originalLog;
+      var originalWarn = console.warn ? console.warn.bind(console) : originalLog;
+
+      console.log = function() {
+        var args = Array.prototype.slice.call(arguments);
+        if (!window.UXS_DEBUG && isDebugNoise(args)) return;
+        return originalLog.apply(console, args);
+      };
+
+      if (console.info) {
+        console.info = function() {
+          var args = Array.prototype.slice.call(arguments);
+          if (!window.UXS_DEBUG && isDebugNoise(args)) return;
+          return originalInfo.apply(console, args);
+        };
+      }
+
+      if (console.warn) {
+        console.warn = function() {
+          var args = Array.prototype.slice.call(arguments);
+          if (!window.UXS_DEBUG && isDebugNoise(args)) return;
+          return originalWarn.apply(console, args);
+        };
+      }
+    })();
+  </script>
+  <?!= include('Utils'); ?>
+  <?!= include('MapFunctions'); ?>
+  <?!= include('PlatformFunctions'); ?>
+  <?!= include('SensorFunctions'); ?>
+  <?!= include('XMLFunctions'); ?>
+          <script>
+        function getActiveWizardStep() {
+          return parseInt($('#metadataTabs .nav-link.active').data('step') || '1', 10) || 1;
+        }
+
+        /**
+         * Hide platform/sensor blocking errors until the user reaches those steps so the side validator
+         * matches the current tab (preview still won't generate XML until the full form validates server-side).
+         */
+        function filterValidationForWizardStep(validation) {
+          if (!validation || typeof validation !== 'object') {
+            return validation;
+          }
+          const step = getActiveWizardStep();
+          const origErrors = validation.errors || [];
+          const origWarnings = validation.warnings || [];
+
+          function isPlatformErr(err) {
+            const msg = String((err && err.message) || err || '');
+            const d = err && err.details;
+            if (d && (d.field === 'platformId' || d.field === 'platformName')) {
+              return true;
+            }
+            const rid = err && err.ruleId;
+            if (rid && String(rid).indexOf('platform.') === 0) {
+              return true;
+            }
+            return /^Platform ID is required/i.test(msg) || /^Platform name is required/i.test(msg);
+          }
+
+          function isSensorErr(err) {
+            const msg = String((err && err.message) || err || '');
+            const rid = err && err.ruleId;
+            if (rid && String(rid).indexOf('sensors.') === 0) {
+              return true;
+            }
+            return (
+              /Sensor validation issues/i.test(msg) ||
+              /Sensor \d+ is missing an ID/i.test(msg) ||
+              (/missing a type/i.test(msg) && /Sensor \d+/i.test(msg))
+            );
+          }
+
+          const filteredErrors = origErrors.filter(function (err) {
+            if (step <= 1 && isPlatformErr(err)) {
+              return false;
+            }
+            if (step <= 2 && isSensorErr(err)) {
+              return false;
+            }
+            return true;
+          });
+
+          const filteredWarnings = origWarnings.filter(function (w) {
+            const msg = String((w && w.message) || w || '');
+            if (step <= 2 && /sensors?\./i.test(String((w && w.ruleId) || ''))) {
+              return false;
+            }
+            if (step <= 2 && /at least one sensor/i.test(msg)) {
+              return false;
+            }
+            return true;
+          });
+
+          const hidden = origErrors.length - filteredErrors.length;
+          const out = $.extend(true, {}, validation, {
+            errors: filteredErrors,
+            warnings: filteredWarnings
+          });
+          out.valid = filteredErrors.length === 0;
+          if (hidden > 0) {
+            out._wizardDeferredErrorCount = hidden;
+          } else {
+            delete out._wizardDeferredErrorCount;
+          }
+          return out;
+        }
+
+        function updateXmlValidationStatusBar(validation) {
+          var $counts = $('#xmlValidationStatusCounts');
+          var $lines = $('#xmlValidationStatusLineCount');
+          if (!$counts.length) return;
+          var xml = window.__lastFullXmlForView || '';
+          var lineCount = xml ? String(xml).split(/\r?\n/).length : 0;
+          $lines.text(lineCount ? lineCount + ' lines' : '');
+          if (validation === true) {
+            $counts.html('<span class="text-success">Valid</span>');
+            return;
+          }
+          if (!validation || typeof validation !== 'object') {
+            $counts.text('—');
+            return;
+          }
+          var err = validation.errors ? validation.errors.length : 0;
+          var warn = validation.warnings ? validation.warnings.length : 0;
+          var ok =
+            validation.valid === true &&
+            err === 0 &&
+            (!validation._wizardDeferredErrorCount || validation._wizardDeferredErrorCount === 0);
+          if (ok && warn === 0) {
+            $counts.html('<span class="text-success">Valid</span>');
+            return;
+          }
+          $counts.text(err + ' err · ' + warn + ' warn');
+        }
+
+        function validationIssueHtmlWithGoto(issue, index, kind, escapeFn) {
+          var raw = typeof issue === 'string' ? { message: issue } : issue;
+          var xml = window.__lastFullXmlForView || '';
+          var line =
+            typeof window.computePreviewGotoLineForIssue === 'function'
+              ? window.computePreviewGotoLineForIssue(xml, raw)
+              : 1;
+          var message = raw.message != null ? raw.message : issue;
+          var label = kind === 'error' ? 'Error' : 'Warning';
+          var cls = kind === 'error' ? 'alert-danger' : 'alert-warning';
+          return (
+            '<div class="alert ' + cls + ' mb-2 validation-goto-line px-3 py-2" role="button" tabindex="0" data-goto-line="' +
+            line +
+            '" style="cursor: pointer;">' +
+            '<strong>' +
+            label +
+            ' ' +
+            (index + 1) +
+            ':</strong> ' +
+            escapeFn(message) +
+            '</div>'
+          );
+        }
+
+        // Validation Results Display Function
+        function updateValidationResults(validation) {
+          validation = filterValidationForWizardStep(validation);
+          console.log('DEBUG: updateValidationResults - Updating validation results');
+          console.log('DEBUG: updateValidationResults - Received validation:', JSON.stringify(validation));
+          function escapeValidationHtml(str) {
+            var s = String(str == null ? '' : str);
+            return s
+              .replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+              .replace(/"/g, '&quot;')
+              .replace(/'/g, '&#39;');
+          }
+          try {
+            const $resultsSnippet = $('#validationResultsSnippet');
+            const $resultsFull = $('#validationResultsFull');
+            
+            if (!$resultsSnippet.length || !$resultsFull.length) {
+              console.warn('DEBUG: updateValidationResults - Validation result elements not found');
+              console.log('DEBUG: updateValidationResults - Available elements:', 
+                $('#validationResultsSnippet').length + ' snippet, ' + 
+                $('#validationResultsFull').length + ' full');
+              return;
+            }
+            
+            console.log('DEBUG: updateValidationResults - Clearing existing content');
+            $resultsSnippet.empty();
+            $resultsFull.empty();
+        
+            // Handle the case where validation passed completely (deferred wizard issues still need the summary path)
+            if (
+              validation === true ||
+              (validation &&
+                validation.valid === true &&
+                !validation._wizardDeferredErrorCount &&
+                (!validation.errors || validation.errors.length === 0) &&
+                (!validation.warnings || validation.warnings.length === 0))
+            ) {
+              const successHtml = '<div class="alert alert-success"><i class="fas fa-check-circle"></i> All validations passed</div>';
+              $resultsSnippet.html(successHtml);
+              $resultsFull.html(successHtml);
+              updateXmlValidationStatusBar(validation);
+              return;
+            }
+        
+            // Handle validation object with errors/warnings arrays (current format)
+            if (validation && typeof validation === 'object') {
+              console.log('DEBUG: updateValidationResults - Processing validation object');
+              console.log('DEBUG: updateValidationResults - Object keys:', Object.keys(validation));
+              console.log('DEBUG: updateValidationResults - Errors array length:', validation.errors ? validation.errors.length : 'undefined');
+              console.log('DEBUG: updateValidationResults - Warnings array length:', validation.warnings ? validation.warnings.length : 'undefined');
+              
+              // Create summary with better styling
+              const errorCount = validation.errors ? validation.errors.length : 0;
+              const warningCount = validation.warnings ? validation.warnings.length : 0;
+              const totalIssues = errorCount + warningCount;
+              
+              let summaryText = validation.summary || 'Validation completed';
+              if (totalIssues > 0) {
+                summaryText = errorCount + ' error(s) and ' + warningCount + ' warning(s) found';
+              }
+              
+              const deferredNote =
+                validation._wizardDeferredErrorCount > 0
+                  ? '<p class="small text-muted mb-0 mt-2">' +
+                    escapeValidationHtml(
+                      validation._wizardDeferredErrorCount +
+                        ' issue(s) from Platform/Sensors are hidden on this step — open steps 2–3 to see and fix them for XML preview.'
+                    ) +
+                    '</p>'
+                  : '';
+
+              const summaryHtml = 
+                '<div class="alert alert-info mb-3" style="background-color: #e3f2fd; border: 1px solid #1976d2; color: #0d47a1; padding: 15px; border-radius: 5px;">' +
+                  '<h6 style="margin: 0 0 10px 0; font-weight: bold;">🔍 Validation Summary</h6>' +
+                  '<p style="margin: 0;">' + escapeValidationHtml(summaryText) + '</p>' +
+                  deferredNote +
+                  (totalIssues > 0 ? '<div style="margin-top: 10px;"><strong>Total Issues:</strong> ' + totalIssues + '</div>' : '') +
+                '</div>';
+              
+              console.log('DEBUG: updateValidationResults - Adding summary HTML');
+              $resultsFull.append(summaryHtml);
+              $resultsSnippet.append(summaryHtml);
+              
+              // Handle errors with better styling
+              if (validation.errors && validation.errors.length > 0) {
+                console.log('DEBUG: updateValidationResults - Processing ' + validation.errors.length + ' errors');
+                validation.errors.forEach(function(error, index) {
+                  const message = error.message || error;
+                  const errorHtml = validationIssueHtmlWithGoto(error, index, 'error', escapeValidationHtml);
+                  console.log('DEBUG: updateValidationResults - Adding error HTML:', message);
+                  $resultsFull.append(errorHtml);
+                  $resultsSnippet.append(errorHtml);
+                });
+              }
+              
+              // Handle warnings with better styling
+              if (validation.warnings && validation.warnings.length > 0) {
+                console.log('DEBUG: updateValidationResults - Processing ' + validation.warnings.length + ' warnings');
+                validation.warnings.forEach(function(warning, index) {
+                  const message = warning.message || warning;
+                  const warningHtml = validationIssueHtmlWithGoto(warning, index, 'warning', escapeValidationHtml);
+                  console.log('DEBUG: updateValidationResults - Adding warning HTML:', message);
+                  $resultsFull.append(warningHtml);
+                  $resultsSnippet.append(warningHtml);
+                });
+              }
+              
+              // If no errors or warnings, but valid is false, show generic message
+              if (validation.valid === false && (!validation.errors || validation.errors.length === 0) && (!validation.warnings || validation.warnings.length === 0)) {
+                const genericHtml = 
+                  '<div class="alert alert-warning mb-2" style="background-color: #fff3e0; border: 1px solid #ff9800; color: #e65100; padding: 12px; border-radius: 5px;">' +
+                    '<strong>⚠️ Warning:</strong> Some validation issues found but no specific details available' +
+                  '</div>';
+                console.log('DEBUG: updateValidationResults - Adding generic warning');
+                $resultsFull.append(genericHtml);
+                $resultsSnippet.append(genericHtml);
+              }
+              
+              console.log('DEBUG: updateValidationResults - Finished processing validation object');
+              console.log('DEBUG: updateValidationResults - Final snippet HTML length:', $resultsSnippet.html().length);
+              console.log('DEBUG: updateValidationResults - Final full HTML length:', $resultsFull.html().length);
+            }
+            // Handle unknown format
+            else {
+              console.warn('DEBUG: updateValidationResults - Unknown validation format:', typeof validation, validation);
+              const unknownHtml = '<div class="alert alert-warning mb-2"><i class="fas fa-question-circle"></i> Validation completed but results format not recognized</div>';
+              $resultsFull.append(unknownHtml);
+              $resultsSnippet.append(unknownHtml);
+            }
+            
+            console.log('DEBUG: updateValidationResults - Validation results updated');
+            updateXmlValidationStatusBar(validation);
+            
+            // Ensure the modal content is visible and styled properly
+            $resultsFull.css({
+              'background-color': '#ffffff',
+              'color': '#333333',
+              'padding': '20px',
+              'border-radius': '8px',
+              'max-height': '70vh',
+              'overflow-y': 'auto'
+            });
+            
+            $resultsSnippet.css({
+              'background-color': '#ffffff',
+              'color': '#333333',
+              'padding': '15px',
+              'border-radius': '8px'
+            });
+            
+            // Force visibility and z-index
+            $resultsFull.show().css('visibility', 'visible');
+            $resultsSnippet.show().css('visibility', 'visible');
+            
+            console.log('DEBUG: updateValidationResults - Applied styling and visibility');
+          } catch (e) {
+            console.error('DEBUG: updateValidationResults - Error:', e);
+            const errorHtml = '<div style="background-color: #ffebee; border: 1px solid #f44336; color: #b71c1c; padding: 15px; border-radius: 5px;"><strong>❌ Error:</strong> Error displaying validation results: ' + escapeValidationHtml(e.message) + '</div>';
+            $('#validationResultsSnippet').html(errorHtml);
+            $('#validationResultsFull').html(errorHtml);
+            if (typeof showToast === 'function') {
+              showToast('error', 'Failed to update validation results: ' + e.message);
+            }
+          }
+        }
+        </script>
+  
+  <!-- Fallback check if XMLFunctions didn't load -->
+  <script>
+    console.log('DEBUG: Index.html - Checking if XMLFunctions include worked...');
+    setTimeout(function() {
+      if (typeof refreshXMLPreview === 'undefined') {
+        console.error('🚨 CRITICAL: XMLFunctions.html failed to load via include!');
+        console.error('🚨 Possible causes:');
+        console.error('🚨 1. XMLFunctions.html file does not exist in Google Apps Script');
+        console.error('🚨 2. File name mismatch (should be exactly "XMLFunctions")');
+        console.error('🚨 3. Syntax error in XMLFunctions.html preventing execution');
+        console.error('🚨 4. Google Apps Script include system issue');
+        
+        // Try to provide a basic refresh function as fallback
+        window.refreshXMLPreview = function() {
+          console.error('Fallback refreshXMLPreview called - XMLFunctions not loaded');
+          alert('XMLFunctions.html failed to load. Please check Google Apps Script console.');
+        };
+        
+        // Show user-visible error
+        if (typeof showToast === 'function') {
+          showToast('error', '⚠️ XMLFunctions.html failed to load. Check console for details.');
+        }
+      } else {
+        console.log('✅ XMLFunctions.html loaded successfully!');
+      }
+    }, 100);
+  </script>
+  
+  <?!= include('Scripts'); ?>
+
+  <script>
+    function resolveThemePreference() {
+      var storedTheme = null;
+      try {
+        storedTheme = localStorage.getItem('uxsTheme');
+      } catch (e) {
+      }
+      if (storedTheme === 'light' || storedTheme === 'dark') {
+        return storedTheme;
+      }
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+      }
+      return 'light';
+    }
+
+    function applyTheme(theme, persist) {
+      var nextTheme = theme === 'dark' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', nextTheme);
+
+      if (persist) {
+        try {
+          localStorage.setItem('uxsTheme', nextTheme);
+        } catch (e) {
+        }
+      }
+
+      var themeToggle = document.getElementById('themeToggle');
+      if (themeToggle) {
+        themeToggle.checked = nextTheme === 'dark';
+      }
+    }
+
+    function applyDebugMode(enabled) {
+      const debugOn = !!enabled;
+      window.UXS_DEBUG = debugOn;
+
+      try {
+        localStorage.setItem('uxsDebugUi', debugOn ? '1' : '0');
+        localStorage.setItem('uxsDebugLogs', debugOn ? '1' : '0');
+      } catch (e) {
+      }
+
+      document.querySelectorAll('[data-debug-ui="true"]').forEach((el) => {
+        el.hidden = !debugOn;
+      });
+
+      const debugToggle = document.getElementById('debugToggle');
+      if (debugToggle) {
+        debugToggle.checked = debugOn;
+      }
+    }
+
+    // Debug script loading
+    console.log('DEBUG: Index.html - All includes processed');
+    console.log('DEBUG: Index.html - Checking XMLFunctions loading status:');
+    console.log('DEBUG: Index.html - XMLFunctionsLoadAttempt:', window.XMLFunctionsLoadAttempt);
+    console.log('DEBUG: Index.html - XMLFunctionsLoaded:', window.XMLFunctionsLoaded);
+    console.log('DEBUG: Index.html - XMLFunctionsScriptExecuted:', window.XMLFunctionsScriptExecuted);
+    console.log('DEBUG: Index.html - XMLFunctionsLoadError:', window.XMLFunctionsLoadError);
+    console.log('DEBUG: Index.html - refreshXMLPreview type:', typeof refreshXMLPreview);
+    
+    // If XMLFunctions didn't load, provide debugging info
+    if (typeof refreshXMLPreview === 'undefined') {
+      console.error('ERROR: Index.html - XMLFunctions did not load properly!');
+      console.error('ERROR: Index.html - Available debug info:', {
+        loadAttempt: window.XMLFunctionsLoadAttempt,
+        loaded: window.XMLFunctionsLoaded, 
+        scriptExecuted: window.XMLFunctionsScriptExecuted,
+        loadError: window.XMLFunctionsLoadError,
+        debugFunctions: window.debugXMLFunctions
+      });
+    }
+    
+    // Initialize mobile-friendly tooltips/popovers
+    document.addEventListener('DOMContentLoaded', function() {
+      applyTheme(resolveThemePreference(), false);
+
+      const themeToggle = document.getElementById('themeToggle');
+      if (themeToggle) {
+        themeToggle.addEventListener('change', function() {
+          applyTheme(this.checked ? 'dark' : 'light', true);
+        });
+      }
+
+      if (window.matchMedia) {
+        const darkModeMatcher = window.matchMedia('(prefers-color-scheme: dark)');
+        const syncSystemTheme = function(event) {
+          let hasStoredPreference = false;
+          try {
+            hasStoredPreference = !!localStorage.getItem('uxsTheme');
+          } catch (e) {
+            hasStoredPreference = false;
+          }
+          if (!hasStoredPreference) {
+            applyTheme(event.matches ? 'dark' : 'light', false);
+          }
+        };
+
+        if (typeof darkModeMatcher.addEventListener === 'function') {
+          darkModeMatcher.addEventListener('change', syncSystemTheme);
+        } else if (typeof darkModeMatcher.addListener === 'function') {
+          darkModeMatcher.addListener(syncSystemTheme);
+        }
+      }
+
+      function syncHeaderOffset() {
+        const nav = document.querySelector('.header .header-nav.metadata-nav-wrap');
+        if (!nav) return;
+        let h = Math.ceil(nav.getBoundingClientRect().height);
+        if (h < 44) h = 44;
+        document.documentElement.style.setProperty('--header-offset', h + 'px');
+      }
+      syncHeaderOffset();
+      window.addEventListener('resize', syncHeaderOffset);
+      try {
+        if (window.ResizeObserver) {
+          const navEl = document.querySelector('.header .header-nav.metadata-nav-wrap');
+          if (navEl) new ResizeObserver(syncHeaderOffset).observe(navEl);
+        }
+      } catch (e) { /* ignore */ }
+
+      let debugUiEnabled = false;
+      try {
+        debugUiEnabled = localStorage.getItem('uxsDebugUi') === '1';
+      } catch (e) {
+        debugUiEnabled = false;
+      }
+
+      applyDebugMode(debugUiEnabled);
+
+      const debugToggle = document.getElementById('debugToggle');
+      if (debugToggle) {
+        debugToggle.addEventListener('change', function() {
+          applyDebugMode(this.checked);
+        });
+      }
+
+      // Detect if we're on a mobile device
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                      ('ontouchstart' in window) || 
+                      (navigator.maxTouchPoints > 0);
+      
+      console.log('DEBUG: Device detection - isMobile:', isMobile);
+      
+      if (isMobile) {
+        // On mobile, use popovers with click trigger instead of tooltips
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+          // Convert tooltip to popover for mobile
+          const title = popoverTriggerEl.getAttribute('title');
+          popoverTriggerEl.setAttribute('data-bs-toggle', 'popover');
+          popoverTriggerEl.setAttribute('data-bs-content', title);
+          popoverTriggerEl.setAttribute('data-bs-trigger', 'click');
+          popoverTriggerEl.setAttribute('data-bs-placement', 'auto');
+          popoverTriggerEl.removeAttribute('title');
+          
+          return new bootstrap.Popover(popoverTriggerEl, {
+            trigger: 'click',
+            placement: 'auto',
+            container: 'body'
+          });
+        });
+        
+        // Close popovers when clicking elsewhere
+        document.addEventListener('click', function(e) {
+          popoverList.forEach(function(popover) {
+            if (!popover._element.contains(e.target)) {
+              popover.hide();
+            }
+          });
+        });
+        
+        console.log('DEBUG: Mobile popovers initialized for', popoverList.length, 'elements');
+      } else {
+        // On desktop, use regular tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl, {
+            trigger: 'hover focus',
+            placement: 'auto'
+          });
+        });
+        console.log('DEBUG: Desktop tooltips initialized for', tooltipList.length, 'elements');
+      }
+      
+    });
+
+    // Update network status indicator
+    function updateNetworkStatus() {
+      const statusText = $('#statusText');
+      if (navigator.onLine) {
+        statusText.text('Online').removeClass('bg-danger').addClass('bg-success');
+      } else {
+        statusText.text('Offline').removeClass('bg-success').addClass('bg-danger');
+      }
+    }
+    updateNetworkStatus();
+    window.addEventListener('online', updateNetworkStatus);
+    window.addEventListener('offline', updateNetworkStatus);
+  </script>
+
+</body>
+</html>

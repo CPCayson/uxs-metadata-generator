@@ -1,0 +1,33 @@
+Section_Number,Section_Title,XML_Element_Or_Construct,Overview_Summary,Alignment_Status,Implementation_Notes
+0,Document & namespaces (intro),gmi:MI_Metadata root,Root declares gmi/gmd/gco namespaces; ISO 19115-2 imagery and gridded extensions,Aligned,UniversalXMLGenerator builds gmi:MI_Metadata; namespaces match Navy NCEI template pattern
+1,Root and Header,gmi:MI_Metadata,Root element for metadata record,Aligned,SchemaValidator.gs root assembly
+1,Root and Header,gmd:fileIdentifier,Unique ID; catalog identifier; NOAA notes gov.noaa.ncei.uxs: prefix,Aligned,mission.id with nceiPrefixedFileId_; output.nceiFileIdPrefix can disable prefix
+1,Root and Header,gmd:language,Language of metadata default eng USA,Aligned,Defaults to CharacterString eng; USA when mission.language empty or eng
+1,Root and Header,gmd:characterSet,Character encoding,Aligned,Emitted with mission.characterSet or utf8
+1,Root and Header,gmd:hierarchyLevel / MD_ScopeCode,Scope dataset,Aligned,mission.scopeCode or dataset
+1,Root and Header,gmd:contact,Metadata record contact preparer not necessarily field scientist,Partial,Inline CI_ResponsibleParty OR xlink to NCEI when output.useNceiMetadataContactXlink
+1,Root and Header,gmd:dateStamp,When metadata created or last updated YYYY-MM-DD or timestamp,Aligned,metadataRecordDate else output.metadataRecordDate else server now; emitted as DateTime
+1,Root and Header,gmd:metadataStandardName & metadataStandardVersion,ISO 19115-2 citation,Aligned,output.metadataStandard / metadataVersion or Navy template strings
+1,Root and Header,gmd:referenceSystemInfo,Spatial reference (overview sometimes grouped with header in docs),Partial,spatial.referenceSystem default EPSG:4326; omitted when output.omitRootReferenceSystemInfo
+2,Spatial representation,gmd:spatialRepresentationInfo / MD_GridSpatialRepresentation,Gridded multidimensional structure,Partial,Emitted when spatial grid representation enabled; skipped if users never enable grid panel
+2,Spatial representation,gmd:numberOfDimensions,Count of axes,Partial,Derived from grid axes when grid branch used
+2,Spatial representation,gmd:axisDimensionProperties,Repeatable row column vertical,Partial,Maps to spatial.gridRepresentation.axes with dimensionName dimensionSize resolution
+2,Spatial representation,gmd:dimensionName,row column vertical,Aligned,Per-axis labels from form
+2,Spatial representation,gmd:dimensionSize & gmd:resolution,Element count and spacing,Partial,Resolution uses gco:Measure when parseable else CharacterString in grid branch
+2,Spatial representation,gmd:cellGeometry,Point vs area,Partial,From form when gridded representation checked
+3A,Identification — citation,gmd:citation / title dates identifier citedResponsibleParty,Lifecycle IDs and parties,Partial,Title dates DOI accession metadata id aligned; author/originator richness vs full Navy template
+3A,Identification — citation,gmd:date types creation publication,Dataset lifecycle dates,Aligned,startDate publicationDate; completion endDate also supported
+3B,Identification — description,gmd:abstract gmd:purpose gmd:status,Summary mission goals reason collected progress,Aligned,mission.abstract purpose status -> MD_ProgressCode
+3C,Identification — keywords,gmd:descriptiveKeywords,GCMD theme place platform instrument project data centre,Partial,gcmdKeywordsJson -> descriptiveKeywords; ongoing scheme validation vs NCEI
+3D,Identification — constraints,gmd:resourceConstraints MD_LegalConstraints useLimitation otherConstraints,License cite-as access,Partial,dataLicensePreset licenseUrl citeAs otherCiteAs; order of blocks may matter to validators
+3E,Identification — aggregation,gmd:aggregationInfo,Parent project related dataset publication,Partial,parentProject* relatedDataset* associatedPublication*; less rich than full template in places
+3F,Identification — extent,EX_Extent geographic temporal vertical,BBox text description time period vertical min max CRS,Aligned,spatial.boundingBox geographicDescription; mission startDate endDate; verticalMinimum verticalMaximum verticalCrsUrl
+4,Content information,gmd:contentInfo / gmi:MI_CoverageDescription,Variables and coverage,Aligned,Per-sensor bands; contentType physicalMeasurement style
+4,Content information,gmd:dimension / gco:MemberName gmd:descriptor,Variable name and sensor context,Partial,Depends on optional sensor variable fields; thin if not filled
+5,Distribution,gmd:distributionInfo MD_Distributor,Access fees format transfer options,Aligned,distributorContact xlink; fees ordering instructions; MD_Format; onLine landing + download with function codes
+6,Data quality & maintenance,gmd:dataQualityInfo DQ_DataQuality scope,Quality at dataset scope,Partial,Block only emitted if spatial.accuracyStandard or spatial.errorLevel set — not an always-on empty lineage block
+6,Data quality & maintenance,gmd:lineage / LI_Lineage,Processing history,Not_in_generator,No lineage element wired in SchemaValidator.gs; overview notes template often empty here too
+6,Data quality & maintenance,gmd:metadataMaintenance maintenanceAndUpdateFrequency,Metadata update cadence,Aligned,Emitted as direct child of gmi:MI_Metadata (addMetadataMaintenanceRoot) — ISO schema sibling to dataQualityInfo not nested inside it; output.metadataMaintenanceFrequency default asNeeded
+7,Acquisition,gmi:acquisitionInformation MI_Instrument MI_Platform,Hardware instruments nested on platform,Aligned,sensors and platform IDs types descriptions; xlink to platform for instruments where used
+8,Formatting conventions,Placeholder syntax {{ text }},Double-brace placeholders in static template,Different,Generator fills XML from JSON; operators use forms not literal {{}} substitution in output XML
+8,Formatting conventions,xlink:href on contacts code lists vocabularies,External links,Partial,Used for NCEI metadata/distributor contacts and resource constraint anchors per presets; not every xlink from Navy sample may appear

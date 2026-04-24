@@ -1,0 +1,1180 @@
+<script>
+// XMLFunctions.html - MINIMAL WORKING VERSION
+console.log('🔵 XMLFunctions MINIMAL - Starting to load');
+
+// Set global debug flags
+window.XMLFunctionsLoadAttempt = true;
+window.XMLFunctionsLoaded = false;
+window.XMLFunctionsScriptExecuted = true;
+window.__xmlPreviewEpoch = window.__xmlPreviewEpoch || 0;
+window.__lastPreviewIssuesByLine = window.__lastPreviewIssuesByLine || {};
+window.__xmlFullPreviewStale = false;
+window.__xmlTypingUntil = 0;
+
+console.log('🔵 XMLFunctions MINIMAL - Global flags set');
+
+var PREVIEW_RULE_NEEDLES = {
+  'mission.id.required': ['fileIdentifier', 'gmd:fileIdentifier'],
+  'mission.title.required': ['gmd:title', 'citation'],
+  'mission.abstract.required': ['abstract', 'gmd:abstract'],
+  'mission.dates.valid': ['EX_TemporalExtent', 'beginPosition', 'endPosition', 'dateTime'],
+  'mission.contact.email': ['electronicMailAddress', 'gmd:contact', 'CI_ResponsibleParty'],
+  'platform.id.required': ['LE_Platform', 'serialNumber', 'source'],
+  'platform.name.required': ['LE_Platform', 'platform'],
+  'platform.dimensions.valid': ['dimension', 'MD_Georectified'],
+  'spatial.coordinates.valid': ['cornerPoint', 'EX_GeographicBoundingBox', 'westBoundLongitude'],
+  'spatial.bounding.box.logical': ['EX_GeographicBoundingBox', 'extent'],
+  'sensors.at.least.one': ['MI_AcquisitionInformation', 'MI_Instrument'],
+  'sensors.valid.ids': ['MI_Instrument', 'identifier'],
+  'sensors.valid.frequency': ['MI_Instrument'],
+  'sensors.valid.beamCount': ['MI_Instrument'],
+  'sensors.valid.installDate': ['MI_Instrument']
+};
+
+var STRUCTURAL_NEEDLE_MAP = {
+  fileIdentifier: 'fileIdentifier',
+  dateStamp: 'dateStamp',
+  hierarchyLevel: 'hierarchyLevel',
+  identificationInfo: 'identificationInfo',
+  'citation/title': 'citation',
+  extent: 'extent',
+  distributionInfo: 'distributionInfo',
+  metadataMaintenance: 'metadataMaintenance'
+};
+
+/** Form control id/name → substrings likely to appear on the matching XML line (order = search order). */
+var FORM_FIELD_XML_NEEDLES = {
+  missionId: ['fileIdentifier', 'gmd:fileIdentifier', 'MD_Identifier'],
+  missionTitle: ['gmd:title', 'title', 'citation'],
+  alternateTitle: ['alternateTitle', 'otherCitationDetails', 'title'],
+  abstract: ['gmd:abstract', 'abstract'],
+  purpose: ['purpose', 'gmd:purpose'],
+  supplementalInformation: ['supplementalInformation', 'gmd:supplementalInformation'],
+  organization: ['organisationName', 'organizationName', 'CI_ResponsibleParty'],
+  contactIndividualName: ['individualName', 'gmd:individualName'],
+  contactEmail: ['electronicMailAddress', 'gmd:electronicMailAddress'],
+  contactPhone: ['telephone', 'voice', 'gmd:voice'],
+  contactUrl: ['CI_OnlineResource', 'linkage', 'gmd:linkage'],
+  contactAddress: ['deliveryPoint', 'address', 'CI_Address'],
+  startDate: ['beginPosition', 'EX_TemporalExtent', 'temporalElement'],
+  endDate: ['endPosition', 'EX_TemporalExtent', 'temporalElement'],
+  temporalExtentIntervalUnit: ['duration', 'TM_PeriodDuration'],
+  temporalExtentIntervalValue: ['duration', 'TM_PeriodDuration'],
+  metadataRecordDate: ['dateStamp', 'gmd:dateStamp'],
+  publicationDate: ['publicationDate', 'date'],
+  language: ['languageCode', 'LanguageCode'],
+  characterSet: ['characterSet', 'MD_CharacterSetCode'],
+  scopeCode: ['MD_ScopeCode', 'hierarchyLevelName'],
+  citeAs: ['otherCitationDetails', 'citation'],
+  otherCiteAs: ['otherCitationDetails'],
+  licenseUrl: ['license', 'useConstraints'],
+  nceiAccessionId: ['accession', 'identifier'],
+  accessConstraints: ['accessConstraints', 'MD_RestrictionCode'],
+  distributionLiability: ['useLimitation', 'distributionFormat'],
+  platformId: ['LE_Platform', 'serialNumber', 'MD_Identifier', 'source'],
+  platformName: ['LE_Platform', 'description', 'gmd:title'],
+  platformType: ['MI_Platform', 'platformType'],
+  customPlatformType: ['platformType'],
+  manufacturer: ['manufacturer', 'party'],
+  model: ['model', 'name'],
+  serialNumber: ['serialNumber', 'identifier'],
+  weight: ['dimension', 'MD_Band'],
+  length: ['dimension', 'MD_Band'],
+  width: ['dimension', 'MD_Band'],
+  height: ['dimension', 'MD_Band'],
+  material: ['description', 'LE_Platform'],
+  speed: ['dimension', 'MI_Platform'],
+  powerSource: ['description'],
+  navigationSystem: ['description'],
+  sensorMounts: ['description'],
+  operationalArea: ['EX_GeographicDescription', 'geographicIdentifier'],
+  deploymentDate: ['beginPosition', 'temporalElement'],
+  platformComments: ['description', 'LE_Platform'],
+  referenceSystem: ['referenceSystemInfo', 'code', 'RS_Identifier'],
+  dimensions: ['dimension', 'MD_Georectified'],
+  verticalMinimum: ['verticalElement', 'minimumValue'],
+  verticalMaximum: ['verticalElement', 'maximumValue'],
+  verticalCrsUrl: ['verticalCRS', 'referenceSystem'],
+  verticalCrsXlinkHref: ['verticalCRS', 'xlink:href'],
+  extentDescription: ['EX_Extent', 'description'],
+  geographicDescription: ['EX_GeographicDescription', 'geographicIdentifier'],
+  upperLeftLat: ['northBoundLatitude', 'EX_GeographicBoundingBox', 'cornerPoint'],
+  upperLeftLon: ['westBoundLongitude', 'EX_GeographicBoundingBox', 'cornerPoint'],
+  upperRightLat: ['northBoundLatitude', 'EX_GeographicBoundingBox', 'cornerPoint'],
+  upperRightLon: ['eastBoundLongitude', 'EX_GeographicBoundingBox', 'cornerPoint'],
+  lowerLeftLat: ['southBoundLatitude', 'EX_GeographicBoundingBox', 'cornerPoint'],
+  lowerLeftLon: ['westBoundLongitude', 'EX_GeographicBoundingBox', 'cornerPoint'],
+  lowerRightLat: ['southBoundLatitude', 'EX_GeographicBoundingBox', 'cornerPoint'],
+  lowerRightLon: ['eastBoundLongitude', 'EX_GeographicBoundingBox', 'cornerPoint'],
+  gridCellGeometry: ['cellGeometry', 'MD_GridSpatialRepresentation'],
+  gridColumnSize: ['axisDimension', 'dimensionSize'],
+  gridRowSize: ['axisDimension', 'dimensionSize'],
+  gridVerticalSize: ['axisDimension', 'dimensionSize'],
+  sensorId: ['MI_Instrument', 'identifier', 'serialNumber'],
+  sensorType: ['MI_Instrument', 'type', 'sensor'],
+  sensorSelect: ['MI_Instrument'],
+  firmwareVersion: ['MI_Instrument', 'version']
+};
+
+function mergeNeedleLists(keys) {
+  var seen = {};
+  var out = [];
+  (keys || []).forEach(function(k) {
+    if (!k) return;
+    var list = FORM_FIELD_XML_NEEDLES[k];
+    if (!list) return;
+    for (var i = 0; i < list.length; i++) {
+      var n = list[i];
+      if (n && !seen[n]) {
+        seen[n] = 1;
+        out.push(n);
+      }
+    }
+  });
+  return out;
+}
+
+function snapshotXmlPreviewSourceField(el) {
+  if (!el || !el.tagName) {
+    return { id: '', name: '', value: '', inputType: '' };
+  }
+  var tag = el.tagName.toLowerCase();
+  if (tag !== 'input' && tag !== 'select' && tag !== 'textarea') {
+    return { id: el.id || '', name: el.name || '', value: '', inputType: tag };
+  }
+  var $el = typeof jQuery !== 'undefined' ? jQuery(el) : null;
+  var type = ($el && $el.attr('type')) || el.type || '';
+  type = String(type).toLowerCase();
+  function checked() {
+    if ($el && $el.length) {
+      return $el.is(':checked');
+    }
+    return !!el.checked;
+  }
+  function rawVal() {
+    if ($el && $el.length) {
+      return $el.val();
+    }
+    return el.value;
+  }
+  if (type === 'checkbox') {
+    return {
+      id: el.id || '',
+      name: el.name || '',
+      value: checked() ? String(rawVal() || 'on') : '',
+      inputType: 'checkbox',
+      checked: checked()
+    };
+  }
+  if (type === 'radio') {
+    return {
+      id: el.id || '',
+      name: el.name || '',
+      value: checked() ? String(rawVal() || '') : '',
+      inputType: 'radio'
+    };
+  }
+  if (type === 'hidden') {
+    return { id: el.id || '', name: el.name || '', value: String(rawVal() || ''), inputType: 'hidden' };
+  }
+  var v = rawVal();
+  return {
+    id: el.id || '',
+    name: el.name || '',
+    value: v != null ? String(v) : '',
+    inputType: type || tag
+  };
+}
+
+/**
+ * Scroll the snippet to the row matching the active field using already-rendered preview DOM (no XML string).
+ */
+function scrollXmlPreviewSnippetDomForField(field, scrollBehavior) {
+  if (!field || typeof jQuery === 'undefined') {
+    return;
+  }
+  var $wrap = jQuery('#xmlPreviewSnippet');
+  if (!$wrap.length) {
+    return;
+  }
+  var $rows = $wrap.find('.xml-preview-line');
+  if (!$rows.length) {
+    return;
+  }
+
+  var id = String(field.id || '').trim();
+  var name = String(field.name || '').trim();
+  var val = field.value != null ? String(field.value) : '';
+  var inputType = String(field.inputType || '').toLowerCase();
+  var skipValue =
+    inputType === 'checkbox' ||
+    inputType === 'radio' ||
+    inputType === 'hidden' ||
+    val === 'on';
+
+  var needles = mergeNeedleLists([id, name]);
+  var vTrim = val.trim();
+  var fragOk = !skipValue && vTrim.length >= 1 && vTrim.length <= 500;
+  var preferNeedles = skipValue || vTrim.length < 3;
+
+  var fragments = [];
+  if (fragOk) {
+    if (vTrim.indexOf('\n') !== -1) {
+      vTrim.split(/\n/).forEach(function(part) {
+        part = part.trim();
+        if (part.length >= 1 && part.length <= 220) {
+          fragments.push(part);
+        }
+      });
+    } else {
+      fragments.push(vTrim);
+    }
+    if (/^\d{4}-\d{2}-\d{2}T/.test(vTrim)) {
+      fragments.push(vTrim.substring(0, 10));
+      if (vTrim.length > 16) {
+        fragments.push(vTrim.substring(0, 16));
+      }
+    }
+  }
+
+  function rowPlain($row) {
+    return String($row.find('.xml-line-code').text() || '');
+  }
+
+  function findRow(testFn) {
+    var found = null;
+    $rows.each(function() {
+      if (testFn(jQuery(this))) {
+        found = this;
+        return false;
+      }
+    });
+    return found;
+  }
+
+  var el = null;
+  var fi;
+  var ni;
+
+  function matchFragments() {
+    for (fi = 0; fi < fragments.length; fi++) {
+      var frag = fragments[fi];
+      var hit = findRow(function($r) {
+        return rowPlain($r).indexOf(frag) !== -1;
+      });
+      if (hit) {
+        return hit;
+      }
+    }
+    return null;
+  }
+
+  function matchNeedles() {
+    for (ni = 0; ni < needles.length; ni++) {
+      var nd = needles[ni];
+      var hit = findRow(function($r) {
+        return rowPlain($r).indexOf(nd) !== -1;
+      });
+      if (hit) {
+        return hit;
+      }
+    }
+    return null;
+  }
+
+  if (preferNeedles) {
+    el = matchNeedles() || matchFragments();
+  } else {
+    el = matchFragments() || matchNeedles();
+  }
+
+  if (!el) {
+    return;
+  }
+
+  var behavior = scrollBehavior === 'smooth' ? 'smooth' : 'auto';
+  try {
+    el.scrollIntoView({ block: 'center', behavior: behavior });
+  } catch (e) {
+    el.scrollIntoView(true);
+  }
+  var $row = jQuery(el);
+  $row.addClass('xml-preview-line--focus-flash');
+  setTimeout(function() {
+    $row.removeClass('xml-preview-line--focus-flash');
+  }, scrollBehavior === 'smooth' ? 1100 : 650);
+}
+
+var __xmlScrollImmediateRaf = null;
+var __xmlScrollDebounceTimer = null;
+
+function scheduleXmlPreviewScrollImmediate() {
+  if (__xmlScrollImmediateRaf != null) {
+    return;
+  }
+  __xmlScrollImmediateRaf = requestAnimationFrame(function() {
+    __xmlScrollImmediateRaf = null;
+    try {
+      var xml = window.__lastFullXmlForView || '';
+      if (typeof scrollXmlPreviewToActiveField === 'function') {
+        scrollXmlPreviewToActiveField(xml, { scrollBehavior: 'auto' });
+      }
+    } catch (e) {
+      console.warn('scheduleXmlPreviewScrollImmediate:', e);
+    }
+  });
+}
+
+/** Debounced scroll (use on form change while typing; avoids walking all lines every keystroke). */
+function scheduleXmlPreviewScrollDebounced() {
+  if (__xmlScrollDebounceTimer != null) {
+    clearTimeout(__xmlScrollDebounceTimer);
+  }
+  __xmlScrollDebounceTimer = setTimeout(function() {
+    __xmlScrollDebounceTimer = null;
+    scheduleXmlPreviewScrollImmediate();
+  }, 200);
+}
+
+/**
+ * Scroll the snippet to the line best matching the active form field (XML string and/or current DOM).
+ * @param {string} fullXml - latest preview XML; may be empty to use DOM-only matching.
+ * @param {{scrollBehavior?: 'auto'|'smooth'}} options - use 'auto' while typing for instant follow.
+ */
+function scrollXmlPreviewToActiveField(fullXml, options) {
+  options = options || {};
+  var scrollBehavior = options.scrollBehavior === 'smooth' ? 'smooth' : 'auto';
+
+  var field = window.__xmlPreviewSourceField;
+  if (!field) {
+    return;
+  }
+
+  var id = String(field.id || '').trim();
+  var name = String(field.name || '').trim();
+  var val = field.value != null ? String(field.value) : '';
+  var inputType = String(field.inputType || '').toLowerCase();
+  var skipValue =
+    inputType === 'checkbox' ||
+    inputType === 'radio' ||
+    inputType === 'hidden' ||
+    val === 'on';
+
+  var needles = mergeNeedleLists([id, name]);
+  var vTrim = val.trim();
+  var fragOk = !skipValue && vTrim.length >= 1 && vTrim.length <= 500;
+  var preferNeedles = skipValue || vTrim.length < 3;
+
+  var fragments = [];
+  if (fragOk) {
+    if (vTrim.indexOf('\n') !== -1) {
+      vTrim.split(/\n/).forEach(function(part) {
+        part = part.trim();
+        if (part.length >= 1 && part.length <= 220) {
+          fragments.push(part);
+        }
+      });
+    } else {
+      fragments.push(vTrim);
+    }
+    if (/^\d{4}-\d{2}-\d{2}T/.test(vTrim)) {
+      fragments.push(vTrim.substring(0, 10));
+      if (vTrim.length > 16) {
+        fragments.push(vTrim.substring(0, 16));
+      }
+    }
+  }
+
+  var targetLine = 0;
+  var lines = fullXml ? String(fullXml).split(/\r?\n/) : [];
+
+  function matchXmlFragments() {
+    var fi;
+    var li;
+    for (fi = 0; fi < fragments.length; fi++) {
+      var frag = fragments[fi];
+      for (li = 0; li < lines.length; li++) {
+        if (lines[li].indexOf(frag) !== -1) {
+          return li + 1;
+        }
+      }
+    }
+    return 0;
+  }
+
+  function matchXmlNeedles() {
+    var ni;
+    var li;
+    for (ni = 0; ni < needles.length; ni++) {
+      var nd = needles[ni];
+      for (li = 0; li < lines.length; li++) {
+        if (lines[li].indexOf(nd) !== -1) {
+          return li + 1;
+        }
+      }
+    }
+    return 0;
+  }
+
+  if (lines.length) {
+    if (preferNeedles) {
+      targetLine = matchXmlNeedles() || matchXmlFragments();
+    } else {
+      targetLine = matchXmlFragments() || matchXmlNeedles();
+    }
+  }
+
+  if (targetLine) {
+    var $wrap = typeof jQuery !== 'undefined' ? jQuery('#xmlPreviewSnippet') : null;
+    if ($wrap && $wrap.length) {
+      var $row = $wrap.find('.xml-preview-line[data-line="' + targetLine + '"]');
+      if ($row.length) {
+        try {
+          $row[0].scrollIntoView({ block: 'center', behavior: scrollBehavior });
+        } catch (e) {
+          $row[0].scrollIntoView(true);
+        }
+        $row.addClass('xml-preview-line--focus-flash');
+        setTimeout(function() {
+          $row.removeClass('xml-preview-line--focus-flash');
+        }, scrollBehavior === 'smooth' ? 1100 : 650);
+        return;
+      }
+    }
+  }
+
+  scrollXmlPreviewSnippetDomForField(field, scrollBehavior);
+}
+
+function findLinesForNeedle(lines, needle) {
+  if (needle === undefined || needle === null || needle === '') return [];
+  var lower = String(needle).toLowerCase();
+  var out = [];
+  for (var i = 0; i < lines.length; i++) {
+    if (lines[i].toLowerCase().indexOf(lower) !== -1) {
+      out.push(i + 1);
+    }
+  }
+  return out;
+}
+
+function guessNeedlesFromIssue(issue) {
+  var needles = [];
+  if (issue.ruleId && PREVIEW_RULE_NEEDLES[issue.ruleId]) {
+    needles = needles.concat(PREVIEW_RULE_NEEDLES[issue.ruleId]);
+  }
+  var details = issue.details || {};
+  var f = details.field;
+  if (f === 'missionId') {
+    needles.push('fileIdentifier', 'gmd:fileIdentifier');
+  } else if (f === 'missionTitle') {
+    needles.push('gmd:title', 'title');
+  } else if (f === 'abstract') {
+    needles.push('abstract', 'gmd:abstract');
+  } else if (f === 'contactEmail') {
+    needles.push('electronicMailAddress', 'gmd:contact');
+  } else if (f === 'startDate' || f === 'endDate') {
+    needles.push('beginPosition', 'endPosition', 'EX_TemporalExtent');
+  } else if (f === 'platformId') {
+    needles.push('LE_Platform', 'serialNumber', 'MD_Identifier');
+  } else if (f === 'platformName') {
+    needles.push('LE_Platform', 'platform');
+  }
+  if (Array.isArray(details.fields)) {
+    details.fields.forEach(function(name) {
+      if (name === 'startDate' || name === 'endDate') {
+        needles.push('EX_TemporalExtent', 'beginPosition');
+      }
+    });
+  }
+  var msg = String(issue.message || '');
+  var m = msg.match(/missing required ([\w]+(?:\/[\w]+)?)/i);
+  if (m) {
+    var label = m[1];
+    var mapped = STRUCTURAL_NEEDLE_MAP[label];
+    if (mapped) {
+      needles.push(mapped);
+    } else {
+      needles.push(label.split('/').pop(), label.replace('/', ''));
+    }
+  }
+  if (/Invalid root namespace|namespace mixing/i.test(msg)) {
+    needles.push('MI_Metadata', 'xmlns');
+  }
+  var uniq = {};
+  var out = [];
+  needles.forEach(function(n) {
+    if (n && !uniq[n]) {
+      uniq[n] = true;
+      out.push(n);
+    }
+  });
+  return out;
+}
+
+function normalizeValidationToIssueList(val) {
+  if (!val || typeof val !== 'object') return [];
+  var out = [];
+  (val.errors || []).forEach(function(e) {
+    if (typeof e === 'string') {
+      out.push({ message: e, level: 'error' });
+    } else {
+      out.push({
+        message: e.message || String(e),
+        level: 'error',
+        details: e.details || {},
+        ruleId: e.ruleId
+      });
+    }
+  });
+  (val.warnings || []).forEach(function(w) {
+    if (typeof w === 'string') {
+      out.push({ message: w, level: 'warning' });
+    } else {
+      out.push({
+        message: w.message || String(w),
+        level: 'warning',
+        details: w.details || {},
+        ruleId: w.ruleId
+      });
+    }
+  });
+  return out;
+}
+
+/**
+ * Best-effort primary line for one issue (for click-to-jump in Issues tab).
+ * @param {string} xmlText
+ * @param {{message?: string, details?: object, ruleId?: string, level?: string}|string} raw
+ */
+function computePreviewGotoLineForIssue(xmlText, raw) {
+  var msg = typeof raw === 'string' ? raw : raw && raw.message != null ? String(raw.message) : '';
+  var details = raw && typeof raw === 'object' ? raw.details || {} : {};
+  var ruleId = raw && raw.ruleId;
+  var level = raw && raw.level === 'warning' ? 'warning' : 'error';
+  var issue = { level: level, message: msg, details: details, ruleId: ruleId };
+  var map = buildIssuesByLineMap(String(xmlText || ''), [issue]);
+  var keys = Object.keys(map)
+    .map(function(k) {
+      return parseInt(k, 10);
+    })
+    .sort(function(a, b) {
+      return a - b;
+    });
+  return keys.length ? keys[0] : 1;
+}
+
+function buildIssuesByLineMap(xmlText, issueList) {
+  var lines = String(xmlText).split(/\r?\n/);
+  var map = {};
+  function addLine(lineNum, payload) {
+    if (lineNum < 1 || lineNum > lines.length) return;
+    var k = String(lineNum);
+    if (!map[k]) map[k] = [];
+    var dup = map[k].some(function(x) {
+      return x.message === payload.message && x.severity === payload.severity;
+    });
+    if (!dup) map[k].push(payload);
+  }
+  issueList.forEach(function(issue) {
+    var sev = issue.level === 'warning' ? 'warning' : 'error';
+    var msg = issue.message || '';
+    var needles = guessNeedlesFromIssue(issue);
+    var found = [];
+    for (var ni = 0; ni < needles.length; ni++) {
+      var hits = findLinesForNeedle(lines, needles[ni]);
+      for (var hi = 0; hi < hits.length; hi++) {
+        found.push(hits[hi]);
+      }
+    }
+    var uniqLines = {};
+    found.forEach(function(ln) {
+      uniqLines[ln] = true;
+    });
+    var lineNums = Object.keys(uniqLines).map(function(x) {
+      return parseInt(x, 10);
+    });
+    lineNums.sort(function(a, b) {
+      return a - b;
+    });
+    if (lineNums.length === 0) {
+      var lineMatch = msg.match(/\bline\s+(\d+)\b/i);
+      if (lineMatch) {
+        addLine(parseInt(lineMatch[1], 10), { severity: sev, message: msg });
+      } else {
+        addLine(1, { severity: sev, message: msg });
+      }
+    } else {
+      lineNums.slice(0, 8).forEach(function(ln) {
+        addLine(ln, { severity: sev, message: msg });
+      });
+    }
+  });
+  return map;
+}
+
+function mergeValidationDisplay(formVal, xmlVal) {
+  formVal = formVal || { valid: true, errors: [], warnings: [] };
+  xmlVal = xmlVal || { valid: true, errors: [], warnings: [] };
+  var errors = [].concat(formVal.errors || []).concat(xmlVal.errors || []);
+  var warnings = [].concat(formVal.warnings || []).concat(xmlVal.warnings || []);
+  var valid = formVal.valid !== false && xmlVal.valid !== false && errors.length === 0;
+  var summary = valid
+    ? warnings.length
+      ? warnings.length + ' warning(s)'
+      : ''
+    : errors.length + ' error(s)';
+  return {
+    valid: valid,
+    errors: errors,
+    warnings: warnings,
+    summary: summary
+  };
+}
+
+function finalizeXmlPreviewFromServer(xml, formValidation, level, previewEpoch, precomputedXmlValidation) {
+  var lv = level || 'strict';
+  if (previewEpoch != null && previewEpoch !== window.__xmlPreviewEpoch) {
+    return;
+  }
+  window.__lastFullXmlForView = xml;
+
+  function applyPreviewAndScroll(xmlValidation) {
+    if (previewEpoch != null && previewEpoch !== window.__xmlPreviewEpoch) {
+      return;
+    }
+    var merged = mergeValidationDisplay(formValidation, xmlValidation);
+    if (typeof updateValidationResults === 'function') {
+      updateValidationResults(merged);
+    }
+    var issueList = normalizeValidationToIssueList(formValidation).concat(
+      normalizeValidationToIssueList(xmlValidation)
+    );
+    var issuesByLine = buildIssuesByLineMap(xml, issueList);
+    applyXmlPreviewPanels(xml, xml, { isError: false, issuesByLine: issuesByLine });
+    var typing = typeof window.__xmlTypingUntil === 'number' && Date.now() < window.__xmlTypingUntil;
+    requestAnimationFrame(function() {
+      try {
+        scrollXmlPreviewToActiveField(xml, { scrollBehavior: typing ? 'auto' : 'smooth' });
+      } catch (scrollErr) {
+        console.warn('scrollXmlPreviewToActiveField:', scrollErr);
+      }
+    });
+  }
+
+  if (precomputedXmlValidation != null && typeof precomputedXmlValidation === 'object') {
+    applyPreviewAndScroll(precomputedXmlValidation);
+    return;
+  }
+
+  validateXML(xml, lv)
+    .then(function(xmlValidation) {
+      applyPreviewAndScroll(xmlValidation);
+    })
+    .catch(function(err) {
+      if (previewEpoch != null && previewEpoch !== window.__xmlPreviewEpoch) {
+        return;
+      }
+      console.warn('validateXML failed:', err);
+      if (typeof updateValidationResults === 'function') {
+        updateValidationResults(formValidation);
+      }
+      applyXmlPreviewPanels(xml, xml, { isError: false, issuesByLine: {} });
+      var typing = typeof window.__xmlTypingUntil === 'number' && Date.now() < window.__xmlTypingUntil;
+      requestAnimationFrame(function() {
+        try {
+          scrollXmlPreviewToActiveField(xml, { scrollBehavior: typing ? 'auto' : 'smooth' });
+        } catch (scrollErr2) {
+          console.warn('scrollXmlPreviewToActiveField:', scrollErr2);
+        }
+      });
+    });
+}
+
+/**
+ * @param {{ quiet?: boolean }} [options] - quiet: do not show full-page loading (use while typing for live preview).
+ */
+function refreshXMLPreview(options) {
+  var opts = options && typeof options === 'object' ? options : {};
+  var quiet = !!opts.quiet;
+
+  if (typeof collectFormData !== 'function') {
+    console.error('🔴 collectFormData function not found');
+    return;
+  }
+
+  if (!quiet) {
+    showLoading(true);
+  } else {
+    var $snippet = typeof jQuery !== 'undefined' ? jQuery('#xmlPreviewSnippet') : null;
+    if ($snippet && $snippet.length) {
+      $snippet.attr('aria-busy', 'true');
+    }
+  }
+
+  try {
+    const data = collectFormData();
+
+    const validationLevel =
+      typeof window.getValidationLevel === 'function'
+        ? window.getValidationLevel()
+        : $('#validationLevel').val() || 'strict';
+
+    window.__xmlPreviewEpoch = (window.__xmlPreviewEpoch || 0) + 1;
+    var previewEpoch = window.__xmlPreviewEpoch;
+
+    window.__xmlPreviewRequestInFlight = true;
+    google.script.run
+      .withSuccessHandler(function(result) {
+        window.__xmlPreviewRequestInFlight = false;
+        if (!quiet) {
+          showLoading(false);
+        } else {
+          var $s = typeof jQuery !== 'undefined' ? jQuery('#xmlPreviewSnippet') : null;
+          if ($s && $s.length) {
+            $s.attr('aria-busy', 'false');
+          }
+        }
+        if (previewEpoch !== window.__xmlPreviewEpoch) {
+          return;
+        }
+        result = result || {};
+        if (result.success && result.xml) {
+          finalizeXmlPreviewFromServer(
+            String(result.xml),
+            result.validation,
+            validationLevel,
+            previewEpoch,
+            result.xmlValidation
+          );
+        } else {
+          if (typeof updateValidationResults === 'function') {
+            updateValidationResults(
+              result.validation || {
+                valid: false,
+                errors: [{ message: result.error || 'Fix validation errors to generate XML preview.' }],
+                warnings: []
+              }
+            );
+          }
+          var $sn = $('#xmlPreviewSnippet');
+          var $fu = $('#xmlPreviewFull');
+          if ($sn.length) {
+            $sn
+              .removeClass('xml-preview-lines xml-preview-glass-inner')
+              .html(
+                '<div class="xml-preview-placeholder px-3 py-2 text-muted small">' +
+                  '<p class="mb-1">Form validation must pass before a new XML preview is generated.</p>' +
+                  '<p class="mb-0">Use the <strong>Issues</strong> tab for details. After fixing required fields (mission dates, contact email, complete sensor ID + type on each card), the preview updates automatically.</p>' +
+                  '</div>'
+              );
+          }
+          if ($fu.length) {
+            var lastFull = typeof window.__lastFullXmlForView === 'string' ? window.__lastFullXmlForView : '';
+            if (lastFull && lastFull.length > 0) {
+              window.__xmlFullPreviewStale = true;
+            } else {
+              $fu.empty().removeClass('xml-preview-lines xml-preview-glass-inner');
+            }
+          }
+        }
+      })
+      .withFailureHandler(function(e) {
+        window.__xmlPreviewRequestInFlight = false;
+        console.error('🔴 Server error:', e);
+        if (!quiet) {
+          showLoading(false);
+        } else {
+          var $s2 = typeof jQuery !== 'undefined' ? jQuery('#xmlPreviewSnippet') : null;
+          if ($s2 && $s2.length) {
+            $s2.attr('aria-busy', 'false');
+          }
+        }
+        if (previewEpoch !== window.__xmlPreviewEpoch) {
+          return;
+        }
+
+        var errText = (e && e.message) ? String(e.message) : String(e);
+        var xmlDecl =
+          String.fromCharCode(60, 63) +
+          'xml version="1.0" encoding="UTF-8"' +
+          String.fromCharCode(63, 62);
+        var errorXml =
+          xmlDecl +
+          '\n<error>\n  <message>XML generation failed: ' +
+          errText +
+          '</message>\n  <timestamp>' +
+          new Date().toISOString() +
+          '</timestamp>\n</error>';
+
+        applyXmlPreviewPanels(errorXml, errorXml, { isError: true });
+        showToast('error', 'XML generation failed: ' + (e.message || e));
+      })
+      .refreshXMLPreviewWithValidation(data, validationLevel);
+  } catch (e) {
+    window.__xmlPreviewRequestInFlight = false;
+    console.error('🔴 Client error:', e);
+    if (!quiet) {
+      showLoading(false);
+    } else {
+      var $s3 = typeof jQuery !== 'undefined' ? jQuery('#xmlPreviewSnippet') : null;
+      if ($s3 && $s3.length) {
+        $s3.attr('aria-busy', 'false');
+      }
+    }
+    showToast('error', 'Failed to generate XML: ' + e.message);
+  }
+}
+
+function escapeXml(text) {
+  if (!text) return '';
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function escapeAttr(text) {
+  return String(text == null ? '' : text)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/\r\n|\n|\r/g, ' — ');
+}
+
+/** Pretty-print XML string (client-side; avoids template literals with ${ for HtmlService safety). */
+function formatXML(xml) {
+  if (xml == null || xml === '') return '';
+  return String(xml).replace(/></g, '>\n<').replace(/^\s+|\s+$/g, '');
+}
+
+/** Safe text for display in preview (no HTML tags). */
+function syntaxHighlight(xml) {
+  return escapeXml(xml == null ? '' : xml);
+}
+
+/**
+ * Colorize one line of already-escaped XML (entities only; no raw < >).
+ */
+function highlightSingleLineEscapedXml(escaped) {
+  var placeholders = [];
+  var i = 0;
+  function nextPh(html) {
+    placeholders.push(html);
+    return '\u0001PH' + (i++) + '\u0001';
+  }
+  var s = String(escaped);
+  s = s.replace(/(&lt;!--[\s\S]*?--&gt;)/g, function(m) {
+    return nextPh('<span class="xml-hl xml-comment">' + m + '</span>');
+  });
+  s = s.replace(/(&lt;\?[\s\S]*?\?&gt;)/g, function(m) {
+    return nextPh('<span class="xml-hl xml-decl">' + m + '</span>');
+  });
+  s = s.replace(/(&lt;)(\/?)([\w:-]+)/g, '<span class="xml-hl xml-bracket">$1</span><span class="xml-hl xml-slash">$2</span><span class="xml-hl xml-tag-name">$3</span>');
+  s = s.replace(/\s([\w:-]+)(=)(&quot;[\s\S]*?&quot;)/g, ' <span class="xml-hl xml-attr-name">$1</span><span class="xml-hl xml-equals">$2</span><span class="xml-hl xml-attr-value">$3</span>');
+  s = s.replace(/\s([\w:-]+)(=)(&#39;[\s\S]*?&#39;)/g, ' <span class="xml-hl xml-attr-name">$1</span><span class="xml-hl xml-equals">$2</span><span class="xml-hl xml-attr-value">$3</span>');
+  s = s.replace(/&gt;/g, '<span class="xml-hl xml-bracket">&gt;</span>');
+  s = s.replace(/\u0001PH(\d+)\u0001/g, function(_, idx) {
+    return placeholders[parseInt(idx, 10)] || '';
+  });
+  return s;
+}
+
+function isProbablyXmlText(s) {
+  return /^\s*</.test(String(s || ''));
+}
+
+/**
+ * Build inner HTML for the preview panels: one row per line with line numbers and highlighting.
+ */
+function buildXmlPreviewInnerHtml(xmlText, options) {
+  options = options || {};
+  var raw = String(xmlText == null ? '' : xmlText);
+  var lines = raw.split(/\r?\n/);
+  var ibl = options.issuesByLine || {};
+  var parts = [];
+  for (var li = 0; li < lines.length; li++) {
+    var line = lines[li];
+    var n = li + 1;
+    if (options.plainError) {
+      parts.push(
+        '<div class="xml-preview-line xml-preview-line--error">' +
+        '<span class="xml-line-num" aria-hidden="true">' + n + '</span>' +
+        '<div class="xml-line-code text-danger">' + escapeXml(line) + '</div></div>'
+      );
+      continue;
+    }
+    var hl = highlightSingleLineEscapedXml(escapeXml(line));
+    var rowIssues = ibl[String(n)] || [];
+    var extraClass = '';
+    var tip = '';
+    var aria = '';
+    if (rowIssues.length) {
+      var hasErr = rowIssues.some(function(x) {
+        return x.severity === 'error';
+      });
+      extraClass = hasErr ? ' xml-preview-line--issue-error' : ' xml-preview-line--issue-warn';
+      tip = rowIssues
+        .map(function(x) {
+          return x.message;
+        })
+        .join(' · ');
+      aria = ' aria-label="' + escapeAttr(tip) + '"';
+    }
+    parts.push(
+      '<div class="xml-preview-line' +
+        extraClass +
+        '"' +
+        (tip ? ' title="' + escapeAttr(tip) + '"' : '') +
+        aria +
+        ' data-line="' +
+        n +
+        '">' +
+        '<span class="xml-line-num" aria-hidden="true">' +
+        n +
+        '</span>' +
+        '<div class="xml-line-code">' +
+        hl +
+        '</div></div>'
+    );
+  }
+  return parts.join('');
+}
+
+function applyXmlPreviewPanels(snippetXml, fullXml, options) {
+  options = options || {};
+  var isError = !!options.isError;
+  var $sn = $('#xmlPreviewSnippet');
+  var $fu = $('#xmlPreviewFull');
+  if (!$sn.length || !$fu.length) {
+    return;
+  }
+
+  if (isError) {
+    var sn = String(snippetXml || '');
+    var fu = String(fullXml || '');
+    var asXml = isProbablyXmlText(fu) || isProbablyXmlText(sn);
+    $sn.removeClass('xml-preview-glass-inner xml-preview-panel--error-xml');
+    $fu.removeClass('xml-preview-glass-inner xml-preview-panel--error-xml');
+    $sn.addClass('xml-preview-lines');
+    $fu.addClass('xml-preview-lines');
+    if (asXml) {
+      $sn.addClass('xml-preview-glass-inner xml-preview-panel--error-xml');
+      $fu.addClass('xml-preview-glass-inner xml-preview-panel--error-xml');
+      $sn.removeClass('xml-preview-error');
+      $fu.removeClass('xml-preview-error');
+      $sn.html(buildXmlPreviewInnerHtml(sn, {}));
+      $fu.html(buildXmlPreviewInnerHtml(fu, {}));
+    } else {
+      $sn.addClass('xml-preview-error');
+      $fu.addClass('xml-preview-error');
+      $sn.html(buildXmlPreviewInnerHtml(sn, { plainError: true }));
+      $fu.html(buildXmlPreviewInnerHtml(fu, { plainError: true }));
+    }
+    if (typeof window.syncXmlLiveSnippetToShell === 'function') {
+      requestAnimationFrame(function() {
+        window.syncXmlLiveSnippetToShell();
+      });
+    }
+    return;
+  }
+
+  $sn.removeClass('xml-preview-error xml-preview-panel--error-xml');
+  $fu.removeClass('xml-preview-error xml-preview-panel--error-xml');
+  $sn.addClass('xml-preview-lines xml-preview-glass-inner');
+  $fu.addClass('xml-preview-lines xml-preview-glass-inner');
+  var ibl = options.issuesByLine || {};
+  window.__lastPreviewIssuesByLine = ibl;
+  $sn.html(buildXmlPreviewInnerHtml(String(snippetXml || ''), { issuesByLine: ibl }));
+  var modalEl = typeof document !== 'undefined' ? document.getElementById('xmlPreviewModal') : null;
+  var modalOpen = modalEl && modalEl.classList.contains('show');
+  if (modalOpen) {
+    $fu.html(buildXmlPreviewInnerHtml(String(fullXml || ''), { issuesByLine: ibl }));
+    window.__xmlFullPreviewStale = false;
+  } else {
+    window.__xmlFullPreviewStale = true;
+  }
+  if (typeof window.syncXmlLiveSnippetToShell === 'function') {
+    requestAnimationFrame(function() {
+      window.syncXmlLiveSnippetToShell();
+    });
+  }
+}
+
+function refreshXmlFullPreviewIfStale() {
+  var $fu = typeof jQuery !== 'undefined' ? jQuery('#xmlPreviewFull') : null;
+  if (!$fu || !$fu.length) {
+    return;
+  }
+  if (!window.__xmlFullPreviewStale) {
+    return;
+  }
+  var xml = window.__lastFullXmlForView || '';
+  var ibl = window.__lastPreviewIssuesByLine || {};
+  $fu.removeClass('xml-preview-error xml-preview-panel--error-xml');
+  $fu.addClass('xml-preview-lines xml-preview-glass-inner');
+  $fu.html(buildXmlPreviewInnerHtml(String(xml), { issuesByLine: ibl }));
+  window.__xmlFullPreviewStale = false;
+}
+
+/** Async wrapper around server validateXML. */
+function validateXML(xml, level) {
+  return new Promise(function(resolve, reject) {
+    google.script.run
+      .withSuccessHandler(resolve)
+      .withFailureHandler(reject)
+      .validateXML(xml, level || 'basic');
+  });
+}
+
+/** Programmatic export: same as clicking Export XML. */
+function exportXML() {
+  var $btn = $('#exportXml');
+  if ($btn.length) {
+    $btn.trigger('click');
+    return true;
+  }
+  if (typeof showToast === 'function') {
+    showToast('warning', 'Export control not found');
+  }
+  return false;
+}
+
+window.formatXMLBasic = formatXML;
+window.syntaxHighlightBasic = syntaxHighlight;
+window.buildXmlPreviewInnerHtml = buildXmlPreviewInnerHtml;
+window.applyXmlPreviewPanels = applyXmlPreviewPanels;
+window.highlightSingleLineEscapedXml = highlightSingleLineEscapedXml;
+window.finalizeXmlPreviewFromServer = finalizeXmlPreviewFromServer;
+window.buildIssuesByLineMap = buildIssuesByLineMap;
+window.mergeValidationDisplay = mergeValidationDisplay;
+window.snapshotXmlPreviewSourceField = snapshotXmlPreviewSourceField;
+window.scrollXmlPreviewToActiveField = scrollXmlPreviewToActiveField;
+window.scheduleXmlPreviewScrollImmediate = scheduleXmlPreviewScrollImmediate;
+window.scheduleXmlPreviewScrollDebounced = scheduleXmlPreviewScrollDebounced;
+window.computePreviewGotoLineForIssue = computePreviewGotoLineForIssue;
+window.refreshXmlFullPreviewIfStale = refreshXmlFullPreviewIfStale;
+
+function populateFormWithData(data) {
+  try {
+    console.log('DEBUG: populateFormWithData - Starting form population with XML data');
+    
+    $('#metadataSchema').val('iso19115-2');
+    
+    // Call existing function
+    if (typeof populateForms === 'function') {
+      console.log('DEBUG: populateFormWithData - populateForms function found, calling it');
+      populateForms(data);
+    } else if (typeof window.populateForms === 'function') {
+      console.log('DEBUG: populateFormWithData - Using window.populateForms');
+      window.populateForms(data);
+    } else {
+      console.error('DEBUG: populateFormWithData - populateForms function not available anywhere');
+      console.log('DEBUG: populateFormWithData - Available function types:');
+      console.log('  - populateForms:', typeof populateForms);
+      console.log('  - window.populateForms:', typeof window.populateForms);
+      console.log('  - Available window functions:', Object.keys(window).filter(k => k.includes('populate')));
+      
+      // Try manual form population as fallback
+      console.log('DEBUG: populateFormWithData - Attempting basic form population fallback');
+      if (data && typeof data === 'object') {
+        let fieldsPopulated = 0;
+        
+        // Basic form field population
+        ['missionId', 'missionTitle', 'abstract', 'contactEmail', 'platformName', 'platformId'].forEach(fieldName => {
+          const field = document.getElementById(fieldName) || document.querySelector('[name="' + fieldName + '"]');
+          let value = null;
+          
+          // Try to find the value in different parts of the data structure
+          if (data.mission && data.mission[fieldName]) {
+            value = data.mission[fieldName];
+          } else if (data.platform && data.platform[fieldName]) {
+            value = data.platform[fieldName];
+          } else if (data[fieldName]) {
+            value = data[fieldName];
+          }
+          
+          if (field && value) {
+            field.value = value;
+            fieldsPopulated++;
+            console.log('DEBUG: populateFormWithData - Set', fieldName, '=', value);
+          }
+        });
+        
+        console.log('DEBUG: populateFormWithData - Populated', fieldsPopulated, 'fields using fallback');
+        
+        if (fieldsPopulated === 0) {
+          if (typeof showToast === 'function') {
+            showToast('error', 'Unable to populate form - populateForms function not available');
+          }
+          return;
+        }
+      } else {
+        console.error('DEBUG: populateFormWithData - No valid data provided');
+        return;
+      }
+    }
+    
+    // Refresh XML preview after population
+    setTimeout(() => {
+      if (typeof refreshXMLPreview === 'function') {
+        refreshXMLPreview();
+      }
+    }, 500);
+    
+    console.log('DEBUG: populateFormWithData - Form population complete');
+  } catch (e) {
+    console.error('DEBUG: populateFormWithData - Error:', e);
+    if (typeof showToast === 'function') {
+      showToast('error', 'Failed to populate form with XML data: ' + e.message);
+    }
+  }
+}
+
+function generateXMLWithSchema(data, schema) {
+  try {
+    console.log('DEBUG: generateXMLWithSchema - Generating XML for schema:', schema);
+    
+    return new Promise((resolve, reject) => {
+      google.script.run
+        .withSuccessHandler(function(xml) {
+          console.log('DEBUG: generateXMLWithSchema - XML generated successfully');
+          resolve(xml);
+        })
+        .withFailureHandler(function(e) {
+          console.error('DEBUG: generateXMLWithSchema - Error:', e);
+          reject(new Error(e.message || 'XML generation failed'));
+        })
+        .generateXML(data, schema);
+    });
+  } catch (e) {
+    console.error('DEBUG: generateXMLWithSchema - Exception:', e);
+    return Promise.reject(e);
+  }
+}
+
+// Set up document ready handlers
+$(document).ready(function() {
+  console.log('🔵 XMLFunctions MINIMAL - Document ready');
+
+  console.log('🔵 XMLFunctions MINIMAL - Realtime preview mode active');
+
+  $(document)
+    .off('shown.bs.modal.xmlFullStale', '#xmlPreviewModal')
+    .on('shown.bs.modal.xmlFullStale', '#xmlPreviewModal', function() {
+      if (typeof refreshXmlFullPreviewIfStale === 'function') {
+        refreshXmlFullPreviewIfStale();
+      }
+    });
+  
+  // Mark as loaded
+  window.XMLFunctionsLoaded = true;
+  console.log('🔵 XMLFunctions MINIMAL - All functions loaded and ready');
+  console.log('🔵 XMLFunctions MINIMAL - refreshXMLPreview type:', typeof refreshXMLPreview);
+});
+
+console.log('🔵 XMLFunctions MINIMAL - Script execution completed');
+console.log('🔵 XMLFunctions MINIMAL - Final refreshXMLPreview type:', typeof refreshXMLPreview);
+</script>

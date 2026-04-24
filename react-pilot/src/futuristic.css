@@ -1,0 +1,5750 @@
+/**
+ * Futuristic theme layer for the React pilot.
+ *
+ * Loads after index.css + pilot-ui.css so it has final say over tokens &
+ * chrome. Goals:
+ *   - cyberpunk-adjacent but still enterprise-readable
+ *   - glassmorphic cards, neon accents, animated gradient header
+ *   - glowing focus, subtle grid texture, mono "tech" labels
+ *   - works in both light and dark modes (dark = full space look)
+ */
+
+/* ── Tokens overrides ─────────────────────────────────────────────── */
+:root {
+  --fx-cyan: #22d3ee;
+  --fx-blue: #3b82f6;
+  --fx-indigo: #6366f1;
+  --fx-violet: #a855f7;
+  --fx-magenta: #ec4899;
+  --fx-mint: #34d399;
+
+  --fx-neon: var(--fx-cyan);
+  --fx-neon-2: var(--fx-violet);
+
+  --fx-accent-gradient: linear-gradient(
+    100deg,
+    var(--fx-cyan) 0%,
+    var(--fx-blue) 35%,
+    var(--fx-violet) 70%,
+    var(--fx-magenta) 100%
+  );
+
+  --fx-bg-base: #f4f7ff;
+  --fx-bg-deep: #e8edff;
+  --fx-surface: rgba(255, 255, 255, 0.72);
+  --fx-surface-strong: rgba(255, 255, 255, 0.92);
+  --fx-border: rgba(99, 102, 241, 0.22);
+  --fx-border-soft: rgba(99, 102, 241, 0.12);
+  --fx-glow: 0 0 0 1px rgba(99, 102, 241, 0.15), 0 10px 40px rgba(59, 130, 246, 0.12);
+  --fx-glow-strong: 0 0 0 1px rgba(99, 102, 241, 0.35),
+    0 8px 28px rgba(59, 130, 246, 0.22),
+    0 18px 60px rgba(168, 85, 247, 0.18);
+
+  --fx-grid-color: rgba(99, 102, 241, 0.08);
+  --fx-scan-color: rgba(99, 102, 241, 0.05);
+
+  /* ── Light mode core palette (used by index.css / pilot-ui.css via var()) ── */
+  --primary-color: #0891b2;
+  --primary-light: #6366f1;
+  --bg-color: #f4f7ff;
+  --card-bg: #ffffff;
+  --border-color: rgba(99, 102, 241, 0.2);
+  --text-color: #0f172a;
+  --muted-text-color: #64748b;
+  --input-bg: #f8fafc;
+  --input-focus-bg: #ffffff;
+  --input-autofill-bg: #f0f9ff;
+}
+
+:root[data-theme='dark'] {
+  --fx-bg-base: #050816;
+  --fx-bg-deep: #020617;
+  --fx-surface: rgba(15, 23, 42, 0.62);
+  --fx-surface-strong: rgba(15, 23, 42, 0.82);
+  --fx-border: rgba(34, 211, 238, 0.28);
+  --fx-border-soft: rgba(34, 211, 238, 0.14);
+  --fx-glow: 0 0 0 1px rgba(34, 211, 238, 0.18),
+    0 0 24px rgba(34, 211, 238, 0.1),
+    0 20px 60px rgba(2, 6, 23, 0.65);
+  --fx-glow-strong: 0 0 0 1px rgba(34, 211, 238, 0.45),
+    0 0 32px rgba(34, 211, 238, 0.22),
+    0 18px 70px rgba(168, 85, 247, 0.22);
+
+  --fx-grid-color: rgba(34, 211, 238, 0.08);
+  --fx-scan-color: rgba(168, 85, 247, 0.07);
+
+  --primary-color: #22d3ee;
+  --primary-light: #818cf8;
+  --bg-color: #050816;
+  --card-bg: rgba(15, 23, 42, 0.78);
+  --border-color: rgba(34, 211, 238, 0.22);
+  --text-color: #e2e8f0;
+  --muted-text-color: #94a3b8;
+  --input-bg: rgba(2, 6, 23, 0.55);
+  --input-focus-bg: rgba(2, 6, 23, 0.72);
+}
+
+/* ── Space / grid body ────────────────────────────────────────────── */
+html,
+body {
+  background: var(--fx-bg-base);
+}
+
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Subtle grid overlay */
+body::before {
+  background-image:
+    linear-gradient(var(--fx-grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--fx-grid-color) 1px, transparent 1px);
+  background-size: 48px 48px, 48px 48px;
+  background-position: -1px -1px, -1px -1px;
+  mask-image: radial-gradient(ellipse at top, #000 20%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at top, #000 20%, transparent 75%);
+  opacity: 0.9;
+}
+
+/* Animated ambient aurora glow */
+body::after {
+  background:
+    radial-gradient(60rem 32rem at 10% -10%, rgba(34, 211, 238, 0.18), transparent 70%),
+    radial-gradient(48rem 28rem at 95% -5%, rgba(168, 85, 247, 0.15), transparent 70%),
+    radial-gradient(40rem 24rem at 50% 110%, rgba(59, 130, 246, 0.12), transparent 70%);
+  animation: fx-aurora 22s ease-in-out infinite alternate;
+  opacity: 0.9;
+}
+
+:root[data-theme='dark'] body::after {
+  background:
+    radial-gradient(60rem 32rem at 10% -10%, rgba(34, 211, 238, 0.22), transparent 70%),
+    radial-gradient(48rem 28rem at 95% -5%, rgba(168, 85, 247, 0.25), transparent 70%),
+    radial-gradient(40rem 24rem at 50% 110%, rgba(59, 130, 246, 0.22), transparent 70%);
+  opacity: 1;
+}
+
+@keyframes fx-aurora {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    transform: translate3d(-2%, 1%, 0) scale(1.05);
+    filter: hue-rotate(-10deg);
+  }
+  100% {
+    transform: translate3d(2%, -1%, 0) scale(1.02);
+    filter: hue-rotate(8deg);
+  }
+}
+
+/* Float content above the aurora/grid layers */
+#root,
+.pilot-app-header,
+main.pilot-shell,
+.pilot-app-footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   LIGHT MODE SURFACE OVERRIDES
+   The :root block above provides the palette. These rules fix surfaces
+   that are hardcoded dark in dark-mode rules above.
+   ══════════════════════════════════════════════════════════════════════ */
+:root:not([data-theme='dark']) {
+  color-scheme: light;
+}
+
+/* Header ── stays dark-cyberpunk in light mode too so the brand bar carries
+   the same neon energy as the dark theme. The base .pilot-app-header rule
+   lower in this file already paints the gradient + controls; light mode used
+   to override it with a pastel pearl, which felt cheap and disconnected. */
+
+/* Body ── soft white surface but with the same grid + aurora as dark mode,
+   just dialed down so it reads as "daytime cyberpunk" instead of flat white. */
+:root:not([data-theme='dark']) body {
+  background:
+    radial-gradient(ellipse at top, #ffffff 0%, #eef2ff 55%, #e0e7ff 100%);
+  background-attachment: fixed;
+}
+
+:root:not([data-theme='dark']) body::before {
+  /* Slightly stronger grid than before so the "HUD" texture is actually visible
+     against the pale background. */
+  opacity: 0.75;
+}
+
+:root:not([data-theme='dark']) body::after {
+  background:
+    radial-gradient(60rem 32rem at 10% -10%, rgba(34, 211, 238, 0.18), transparent 70%),
+    radial-gradient(48rem 28rem at 95% -5%, rgba(168, 85, 247, 0.16), transparent 70%),
+    radial-gradient(40rem 24rem at 50% 110%, rgba(99, 102, 241, 0.14), transparent 70%);
+  opacity: 0.95;
+}
+
+/* Cards ── crisp white with a visible neon edge and a real shadow so they
+   sit above the textured background instead of dissolving into it. */
+:root:not([data-theme='dark']) #root .card {
+  background: #ffffff;
+  border-color: rgba(99, 102, 241, 0.32);
+  box-shadow:
+    0 0 0 1px rgba(99, 102, 241, 0.08),
+    0 1px 2px rgba(15, 23, 42, 0.06),
+    0 10px 32px rgba(30, 27, 75, 0.10),
+    0 24px 60px rgba(168, 85, 247, 0.06);
+}
+
+/* Brighten up the card's neon rim in light mode so it's legible on white. */
+:root:not([data-theme='dark']) #root .card::before {
+  background: linear-gradient(
+    140deg,
+    rgba(8, 145, 178, 0.55),
+    rgba(99, 102, 241, 0.4) 45%,
+    rgba(168, 85, 247, 0.22) 75%,
+    transparent 100%
+  );
+  opacity: 0.7;
+}
+
+:root:not([data-theme='dark']) .panel {
+  background: linear-gradient(
+    160deg,
+    rgba(8, 145, 178, 0.06) 0%,
+    #ffffff 55%
+  ) !important;
+  border-color: rgba(99, 102, 241, 0.28) !important;
+  box-shadow:
+    0 0 0 1px rgba(99, 102, 241, 0.08),
+    0 4px 12px rgba(30, 27, 75, 0.06),
+    0 14px 32px rgba(168, 85, 247, 0.04) !important;
+}
+
+/* Forms ── crisper border + stronger focus ring so inputs actually look
+   interactive on a white card, not like empty rectangles. */
+:root:not([data-theme='dark']) #root .form-control,
+:root:not([data-theme='dark']) #root .form-select {
+  background-color: #ffffff;
+  border-color: rgba(99, 102, 241, 0.45);
+  color: #0f172a;
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+:root:not([data-theme='dark']) #root .form-control:hover:not(:disabled):not(:focus),
+:root:not([data-theme='dark']) #root .form-select:hover:not(:disabled):not(:focus) {
+  border-color: rgba(8, 145, 178, 0.6);
+}
+
+:root:not([data-theme='dark']) #root .form-control:focus,
+:root:not([data-theme='dark']) #root .form-select:focus {
+  border-color: #0891b2;
+  box-shadow:
+    0 0 0 3px rgba(34, 211, 238, 0.22),
+    0 0 18px rgba(99, 102, 241, 0.16);
+  background-color: #ffffff;
+}
+
+:root:not([data-theme='dark']) #root .form-control::placeholder {
+  color: #94a3b8;
+}
+
+/* Buttons */
+:root:not([data-theme='dark']) .button {
+  background: linear-gradient(135deg, #0891b2, #6366f1);
+  color: #fff;
+  border-color: transparent;
+}
+
+:root:not([data-theme='dark']) .button:hover {
+  background: linear-gradient(135deg, #0e7490, #4f46e5);
+}
+
+:root:not([data-theme='dark']) .button-secondary {
+  background: rgba(99, 102, 241, 0.08);
+  color: #4338ca;
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+:root:not([data-theme='dark']) .button-secondary:hover {
+  background: rgba(99, 102, 241, 0.14);
+}
+
+/* Step nav ── keep the manta ray area dark (looks great as a dark strip) */
+:root:not([data-theme='dark']) .pilot-step-nav,
+:root:not([data-theme='dark']) .header .header-nav.pilot-step-nav.metadata-nav-wrap {
+  border-top-color: rgba(99, 102, 241, 0.3);
+}
+
+/* Validation panel chips ── legible on light bg */
+:root:not([data-theme='dark']) .chip-err {
+  background: rgba(239, 68, 68, 0.1);
+  color: #b91c1c;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+:root:not([data-theme='dark']) .chip-warn {
+  background: rgba(245, 158, 11, 0.1);
+  color: #92400e;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+:root:not([data-theme='dark']) .issue-err {
+  border-left-color: #ef4444;
+}
+
+:root:not([data-theme='dark']) .issue-warn {
+  border-left-color: #f59e0b;
+}
+
+:root:not([data-theme='dark']) .issue-jump {
+  color: #1e1b4b;
+}
+
+:root:not([data-theme='dark']) .issue-field {
+  color: #4338ca;
+}
+
+/* Score bar */
+:root:not([data-theme='dark']) .score-bar-bg {
+  background: rgba(99, 102, 241, 0.12);
+}
+
+:root:not([data-theme='dark']) .score-bar-fill {
+  background: linear-gradient(90deg, #0891b2, #6366f1);
+}
+
+/* Mode pills */
+:root:not([data-theme='dark']) .mode-pill {
+  color: #4338ca;
+  border-color: rgba(99, 102, 241, 0.25);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+:root:not([data-theme='dark']) .mode-pill.active {
+  background: #6366f1;
+  color: #fff;
+  border-color: #6366f1;
+}
+
+/* Status list */
+:root:not([data-theme='dark']) .status-list strong {
+  color: #1e1b4b;
+}
+
+:root:not([data-theme='dark']) .status-message {
+  color: #475569;
+}
+
+/* Validation panel / side stack ── crisp white surface, readable borders */
+:root:not([data-theme='dark']) .workspace-side-stack > .validation-panel,
+:root:not([data-theme='dark']) .workspace-side-stack > *:not(.fx-xml-preview-panel) {
+  background: #ffffff;
+  color: #0f172a;
+  border-color: rgba(99, 102, 241, 0.28);
+  box-shadow:
+    0 0 0 1px rgba(99, 102, 241, 0.08),
+    0 1px 2px rgba(15, 23, 42, 0.06),
+    0 10px 28px rgba(30, 27, 75, 0.08);
+}
+
+/* Step nav bar ── keep the dark cyberpunk strip in light mode too, it's the
+   one element that tied the page to the dark theme visually. */
+:root:not([data-theme='dark']) .pilot-step-nav .nav-tabs.metadata-tabs .nav-link {
+  color: #cbd5e1;
+}
+
+:root:not([data-theme='dark']) .pilot-step-nav .nav-tabs.metadata-tabs .nav-link.active {
+  color: #ecfeff;
+  border-bottom-color: transparent;
+}
+
+/* XML preview panel ── always keeps its dark terminal look */
+:root:not([data-theme='dark']) .fx-xml-preview-panel,
+:root:not([data-theme='dark']) .workspace-side-stack--xml-full .fx-xml-preview-panel {
+  background: #0b1220;
+}
+
+/* Footer */
+:root:not([data-theme='dark']) .pilot-app-footer {
+  color: #64748b;
+  border-top: 1px solid rgba(99, 102, 241, 0.15);
+}
+
+/* Hint text */
+:root:not([data-theme='dark']) .hint {
+  color: #64748b;
+}
+
+/* Library panel (sensors/platforms) */
+:root:not([data-theme='dark']) .library-panel {
+  background: rgba(99, 102, 241, 0.04);
+  border-color: rgba(99, 102, 241, 0.18);
+}
+
+:root:not([data-theme='dark']) .library-row {
+  border-bottom-color: rgba(99, 102, 241, 0.1);
+}
+
+:root:not([data-theme='dark']) .library-row-label {
+  color: #1e1b4b;
+}
+
+/* Tether: brighter in light mode for contrast */
+:root:not([data-theme='dark']) .fx-tether__line {
+  filter: drop-shadow(0 0 4px rgba(8, 145, 178, 0.8));
+}
+
+:root:not([data-theme='dark']) .fx-tether__dot {
+  filter: drop-shadow(0 0 6px rgba(8, 145, 178, 0.95));
+}
+
+:root:not([data-theme='dark']) .fx-tether__dot--end {
+  filter: drop-shadow(0 0 6px rgba(99, 102, 241, 0.95));
+}
+
+/* Issue tether: also bright in light mode */
+:root:not([data-theme='dark']) .fx-tether__issue-line {
+  filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.9));
+}
+
+:root:not([data-theme='dark']) .fx-tether__issue-glow {
+  opacity: 0.5;
+}
+
+/* ── Step nav tabs light mode ─────────────────────────────────────── */
+:root:not([data-theme='dark']) .nav-tabs.metadata-tabs .nav-link {
+  color: #3730a3;
+}
+
+:root:not([data-theme='dark']) .nav-tabs.metadata-tabs .nav-link.active {
+  color: #1e1b4b;
+  border-bottom-color: #6366f1;
+}
+
+/* ── Futuristic header ────────────────────────────────────────────── */
+.pilot-app-header {
+  background:
+    linear-gradient(120deg, #0b1120 0%, #111c44 40%, #1e1b4b 70%, #2e1065 100%) !important;
+  color: #e0e7ff;
+  border-bottom: 1px solid rgba(34, 211, 238, 0.35);
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.18),
+    0 18px 48px rgba(14, 165, 233, 0.18),
+    0 2px 0 rgba(255, 255, 255, 0.04) inset;
+  overflow: hidden;
+}
+
+.pilot-app-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: linear-gradient(180deg, #000, transparent 85%);
+  -webkit-mask-image: linear-gradient(180deg, #000, transparent 85%);
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.pilot-app-header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--fx-accent-gradient);
+  background-size: 300% 100%;
+  animation: fx-sweep 8s linear infinite;
+  filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.55));
+}
+
+@keyframes fx-sweep {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+.pilot-app-header h1 {
+  font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+  font-size: 1.7rem;
+  letter-spacing: -0.01em;
+  background: linear-gradient(90deg, #ffffff, #a5f3fc 45%, #c4b5fd 85%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 22px rgba(34, 211, 238, 0.18);
+}
+
+.pilot-header-eyebrow {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  color: var(--fx-cyan);
+  text-shadow: 0 0 8px rgba(34, 211, 238, 0.5);
+}
+
+.pilot-header-eyebrow::before {
+  content: '◆ ';
+  color: var(--fx-magenta);
+  margin-right: 0.35em;
+}
+
+.pilot-header-subtext {
+  color: rgba(226, 232, 240, 0.85);
+  font-size: 0.9rem;
+}
+
+/* Workspace switch */
+.pilot-app-header .workspace-switch {
+  background: rgba(2, 6, 23, 0.45);
+  border: 1px solid rgba(34, 211, 238, 0.35);
+  border-radius: 999px;
+  padding: 3px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 0 18px rgba(34, 211, 238, 0.12);
+}
+
+.pilot-app-header .workspace-switch__btn {
+  border-radius: 999px;
+  padding: 0.4rem 0.95rem;
+  color: rgba(226, 232, 240, 0.85);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pilot-app-header .workspace-switch__btn:hover {
+  background: rgba(34, 211, 238, 0.1);
+  color: #e0f2fe;
+}
+
+.pilot-app-header .workspace-switch__btn--active,
+.pilot-app-header .workspace-switch__btn--active:hover {
+  background: linear-gradient(120deg, var(--fx-cyan), var(--fx-violet));
+  color: #0b1120;
+  font-weight: 700;
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.6),
+    0 0 18px rgba(34, 211, 238, 0.55),
+    0 0 30px rgba(168, 85, 247, 0.4);
+}
+
+/* Profile select in header */
+.pilot-app-header select.form-select {
+  background: rgba(2, 6, 23, 0.55);
+  color: #e0f2fe;
+  border: 1px solid rgba(34, 211, 238, 0.35);
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  box-shadow: inset 0 0 14px rgba(34, 211, 238, 0.08);
+}
+
+.pilot-app-header select.form-select:focus {
+  border-color: var(--fx-cyan);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.25);
+}
+
+.pilot-app-header .form-label {
+  color: var(--fx-cyan) !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* ── Glassmorphic cards / panels ──────────────────────────────────── */
+#root .card {
+  background: var(--fx-surface);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid var(--fx-border-soft);
+  border-radius: 16px;
+  box-shadow: var(--fx-glow);
+  position: relative;
+  overflow: hidden;
+}
+
+#root .card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    140deg,
+    rgba(34, 211, 238, 0.45),
+    rgba(168, 85, 247, 0.25) 45%,
+    transparent 70%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+:root[data-theme='dark'] #root .card {
+  background: var(--fx-surface);
+  border-color: var(--fx-border-soft);
+}
+
+#root .card > h2:first-of-type {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.18rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  background: linear-gradient(90deg, var(--fx-cyan), var(--fx-violet));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+#root .card > h2:first-of-type::after {
+  background: var(--fx-accent-gradient) !important;
+  height: 2px;
+  width: 80px;
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.55);
+}
+
+/* Side stack extra crisp */
+#root .workspace-side-stack > .card {
+  border-radius: 14px;
+}
+
+/* Inner panels */
+.panel {
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--fx-cyan) 7%, var(--card-bg)) 0%,
+    var(--card-bg) 60%
+  ) !important;
+  border: 1px solid var(--fx-border-soft) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.06),
+    0 12px 28px rgba(15, 23, 42, 0.06) !important;
+  position: relative;
+}
+
+:root[data-theme='dark'] .panel {
+  background: linear-gradient(
+    160deg,
+    rgba(34, 211, 238, 0.08) 0%,
+    rgba(15, 23, 42, 0.75) 60%
+  ) !important;
+  border-color: rgba(34, 211, 238, 0.18) !important;
+}
+
+/* Step-level gradient top bar already exists in index.css; intensify it */
+.pilot-step .panel::before {
+  height: 2px !important;
+  filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.5));
+}
+
+/* Bracketed corners on main step card (HUD accent) */
+#root .workspace-main.pilot-step.card::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border-top: 1px solid var(--fx-cyan);
+  border-right: 1px solid var(--fx-cyan);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* Panel titles — mono tech labels */
+.panel-title,
+#root .panel-title {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.82rem !important;
+  color: color-mix(in srgb, var(--fx-cyan) 55%, var(--text-color));
+}
+
+.panel-title::before {
+  content: '// ';
+  color: var(--fx-magenta);
+  font-weight: 700;
+  opacity: 0.7;
+}
+
+/* ── Form controls ────────────────────────────────────────────────── */
+#root .form-control,
+#root .form-select {
+  border-radius: 10px;
+  border: 1px solid var(--fx-border-soft);
+  background-color: var(--input-bg);
+  box-shadow: inset 0 0 0 1px transparent;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background-color 0.18s ease,
+    transform 0.12s ease;
+}
+
+#root .form-control:hover:not(:disabled):not(:focus),
+#root .form-select:hover:not(:disabled):not(:focus) {
+  border-color: color-mix(in srgb, var(--fx-cyan) 55%, var(--fx-border));
+}
+
+#root .form-control:focus,
+#root .form-select:focus {
+  border-color: var(--fx-cyan);
+  box-shadow:
+    0 0 0 3px rgba(34, 211, 238, 0.22),
+    0 0 18px rgba(34, 211, 238, 0.18);
+}
+
+#root .workspace-main.pilot-step .form-control:focus:not(.is-invalid):not(.form-control--invalid),
+#root .workspace-main.pilot-step .form-select:focus:not(.is-invalid):not(.form-control--invalid) {
+  transform: translateY(-1px);
+}
+
+/* Required underline glow */
+#root .workspace-main.pilot-step .form-control[required]:not(.is-invalid):not(.is-valid):not(.form-control--invalid),
+#root .workspace-main.pilot-step .form-select[required]:not(.is-invalid):not(.is-valid):not(.form-control--invalid),
+#root .workspace-main.pilot-step .form-control[aria-required='true']:not(.is-invalid):not(.is-valid):not(.form-control--invalid),
+#root .workspace-main.pilot-step .form-select[aria-required='true']:not(.is-invalid):not(.is-valid):not(.form-control--invalid) {
+  box-shadow: inset 0 -2px 0 0 rgba(236, 72, 153, 0.55);
+}
+
+.form-label,
+label {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* ── Buttons ──────────────────────────────────────────────────────── */
+.button,
+#root .btn-primary {
+  background: linear-gradient(120deg, var(--fx-cyan), var(--fx-blue) 55%, var(--fx-violet)) !important;
+  background-size: 200% 100% !important;
+  border: 1px solid rgba(34, 211, 238, 0.55) !important;
+  color: #0b1120 !important;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border-radius: 10px !important;
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.25),
+    0 8px 20px rgba(59, 130, 246, 0.28),
+    0 0 26px rgba(168, 85, 247, 0.18) !important;
+  transition:
+    background-position 0.4s ease,
+    transform 0.1s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
+}
+
+:root[data-theme='dark'] .button,
+:root[data-theme='dark'] #root .btn-primary {
+  color: #020617 !important;
+}
+
+.button:hover:not(:disabled),
+#root .btn-primary:hover {
+  background-position: 100% 50% !important;
+  filter: brightness(1.05) saturate(1.1);
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.45),
+    0 10px 26px rgba(59, 130, 246, 0.35),
+    0 0 32px rgba(168, 85, 247, 0.3) !important;
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(1px) scale(0.995);
+}
+
+.button-secondary {
+  background: rgba(15, 23, 42, 0.02) !important;
+  color: var(--fx-blue) !important;
+  border: 1px solid rgba(59, 130, 246, 0.35) !important;
+  box-shadow: none !important;
+}
+
+:root[data-theme='dark'] .button-secondary {
+  background: rgba(2, 6, 23, 0.45) !important;
+  color: var(--fx-cyan) !important;
+  border-color: rgba(34, 211, 238, 0.35) !important;
+}
+
+.button-secondary:hover:not(:disabled) {
+  background: rgba(34, 211, 238, 0.1) !important;
+  border-color: var(--fx-cyan) !important;
+  color: var(--fx-cyan) !important;
+  box-shadow: 0 0 18px rgba(34, 211, 238, 0.22) !important;
+}
+
+/* ── Step navigation pills / tabs ─────────────────────────────────── */
+.nav-tabs.metadata-tabs.pilot-metadata-tabs .nav-link {
+  border-radius: 999px;
+  padding: 0.45rem 0.95rem !important;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--fx-border-soft);
+  color: color-mix(in srgb, var(--text-color) 85%, transparent);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease,
+    background 0.15s ease,
+    box-shadow 0.2s ease;
+}
+
+.nav-tabs.metadata-tabs.pilot-metadata-tabs .nav-link:hover {
+  border-color: var(--fx-cyan);
+  color: var(--fx-cyan);
+  background: rgba(34, 211, 238, 0.06);
+}
+
+.nav-tabs.metadata-tabs.pilot-metadata-tabs .nav-link.active {
+  background: linear-gradient(120deg, var(--fx-cyan), var(--fx-violet)) !important;
+  border-color: transparent !important;
+  color: #020617 !important;
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.55),
+    0 0 22px rgba(34, 211, 238, 0.4),
+    0 6px 18px rgba(168, 85, 247, 0.32) !important;
+}
+
+/* Step nav dots: neon */
+.pilot-step-nav__dot {
+  box-shadow: 0 0 8px currentColor;
+}
+
+.nav-link--step-ok .pilot-step-nav__dot { background: var(--fx-mint); color: var(--fx-mint); }
+.nav-link--step-warn .pilot-step-nav__dot { background: #fbbf24; color: #fbbf24; }
+.nav-link--step-err .pilot-step-nav__dot { background: var(--fx-magenta); color: var(--fx-magenta); }
+
+/* ── Mode pills / validator / chips ───────────────────────────────── */
+.mode-pill {
+  border-radius: 999px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.74rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--fx-border-soft);
+}
+
+.mode-pill.active {
+  background: linear-gradient(120deg, var(--fx-cyan), var(--fx-violet));
+  color: #020617;
+  border-color: transparent;
+  box-shadow: 0 0 18px rgba(34, 211, 238, 0.4);
+}
+
+.chip,
+.kw-chip {
+  border-radius: 999px !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: 0.04em;
+}
+
+#root .kw-chip {
+  background: linear-gradient(120deg,
+    color-mix(in srgb, var(--fx-cyan) 18%, transparent),
+    color-mix(in srgb, var(--fx-violet) 14%, transparent)) !important;
+  border-color: var(--fx-border-soft) !important;
+}
+
+#root .kw-chip:hover {
+  border-color: var(--fx-cyan) !important;
+  box-shadow: 0 0 14px rgba(34, 211, 238, 0.35);
+}
+
+.count-badge {
+  background: rgba(34, 211, 238, 0.12);
+  border-color: var(--fx-border-soft);
+  color: var(--fx-cyan);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+/* Score bar = pure neon */
+.score-bar-bg {
+  background: rgba(148, 163, 184, 0.2);
+  box-shadow: inset 0 0 0 1px rgba(34, 211, 238, 0.12);
+}
+
+.score-bar-fill {
+  background: var(--fx-accent-gradient) !important;
+  background-size: 200% 100% !important;
+  box-shadow: 0 0 16px rgba(34, 211, 238, 0.5);
+  animation: fx-sweep 6s linear infinite;
+}
+
+/* ── Mission actions strip ────────────────────────────────────────── */
+.mission-actions {
+  background: linear-gradient(
+    120deg,
+    color-mix(in srgb, var(--fx-cyan) 10%, transparent),
+    color-mix(in srgb, var(--fx-violet) 10%, transparent)
+  ) !important;
+  border: 1px solid var(--fx-border-soft) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 0 24px rgba(34, 211, 238, 0.08);
+}
+
+/* ── XML preview: terminal look ───────────────────────────────────── */
+.xml-preview-box,
+.xml-preview-box--scroll {
+  background: #05060c !important;
+  border: 1px solid rgba(34, 211, 238, 0.28) !important;
+  border-radius: 12px !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(34, 211, 238, 0.05),
+    0 0 24px rgba(34, 211, 238, 0.08);
+  color: #d1fae5;
+}
+
+.xml-preview-box pre,
+.xml-pre--hl code {
+  color: #d1fae5 !important;
+  text-shadow: 0 0 6px rgba(52, 211, 153, 0.18);
+}
+
+.xml-hl-tag {
+  color: #22d3ee !important;
+  text-shadow: 0 0 8px rgba(34, 211, 238, 0.35);
+}
+
+.xml-hl-text { color: #e0e7ff !important; }
+
+/* ── Footer ───────────────────────────────────────────────────────── */
+.pilot-app-footer {
+  background: linear-gradient(120deg,
+    color-mix(in srgb, var(--fx-cyan) 5%, var(--card-bg)),
+    color-mix(in srgb, var(--fx-violet) 5%, var(--card-bg))) !important;
+  border: 1px solid var(--fx-border-soft) !important;
+  border-radius: 14px !important;
+  color: color-mix(in srgb, var(--text-color) 85%, var(--muted-text-color));
+  box-shadow: 0 0 24px rgba(34, 211, 238, 0.06);
+}
+
+/* ── Manta widget: holographic FAB + card ─────────────────────────── */
+.manta-widget-trigger {
+  background: linear-gradient(120deg, var(--fx-cyan), var(--fx-blue) 55%, var(--fx-violet)) !important;
+  background-size: 200% 100%;
+  color: #020617 !important;
+  border: 1px solid rgba(34, 211, 238, 0.5) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.4),
+    0 10px 30px rgba(34, 211, 238, 0.35),
+    0 0 40px rgba(168, 85, 247, 0.35) !important;
+  transition: background-position 0.5s ease, transform 0.1s ease, box-shadow 0.25s ease;
+}
+
+.manta-widget-trigger:hover {
+  background-position: 100% 50%;
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.6),
+    0 14px 36px rgba(34, 211, 238, 0.45),
+    0 0 50px rgba(168, 85, 247, 0.5) !important;
+}
+
+/* ── Widget card: full HUD overhaul ──────────────────────────────── */
+.manta-widget {
+  background:
+    linear-gradient(
+      160deg,
+      rgba(2, 8, 25, 0.97) 0%,
+      rgba(6, 12, 36, 0.97) 55%,
+      rgba(10, 8, 36, 0.97) 100%
+    ) !important;
+  color: #e0e7ff !important;
+  border: 1px solid rgba(34, 211, 238, 0.38) !important;
+  border-radius: 18px !important;
+  backdrop-filter: blur(20px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.18),
+    0 0 40px rgba(34, 211, 238, 0.12),
+    0 24px 80px rgba(2, 6, 23, 0.72),
+    0 0 80px rgba(168, 85, 247, 0.14) !important;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Gradient mesh ambient layer */
+.manta-widget::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 30% at 20% -10%, rgba(34, 211, 238, 0.12), transparent 65%),
+    radial-gradient(ellipse 50% 28% at 85% 105%, rgba(168, 85, 247, 0.1), transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Animated top accent line */
+.manta-widget::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--fx-accent-gradient);
+  background-size: 300% 100%;
+  animation: fx-sweep 8s linear infinite;
+  filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.7));
+  z-index: 1;
+}
+
+/* All direct children sit above the ambient layers */
+.manta-widget > * { position: relative; z-index: 2; }
+
+/* ── Widget header ───────────────────────────────────────────────── */
+.manta-widget__header {
+  background: rgba(0, 0, 0, 0.28) !important;
+  border-bottom: 1px solid rgba(34, 211, 238, 0.2) !important;
+  padding: 11px 14px !important;
+}
+
+.manta-widget__logo {
+  filter: drop-shadow(0 0 6px rgba(34, 211, 238, 0.6));
+}
+
+.manta-widget__title {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+  font-size: 0.95rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  background: linear-gradient(90deg, #ffffff, #a5f3fc 50%, #c4b5fd) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+}
+
+.manta-widget__icon-btn {
+  background: rgba(34, 211, 238, 0.08) !important;
+  border: 1px solid rgba(34, 211, 238, 0.28) !important;
+  color: #7dd3fc !important;
+  border-radius: 8px !important;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s !important;
+}
+
+.manta-widget__icon-btn:hover {
+  background: rgba(34, 211, 238, 0.18) !important;
+  border-color: var(--fx-cyan) !important;
+  box-shadow: 0 0 14px rgba(34, 211, 238, 0.3) !important;
+  color: #e0f2fe !important;
+}
+
+/* ── Search bar ──────────────────────────────────────────────────── */
+.manta-widget__search {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(34, 211, 238, 0.12) !important;
+}
+
+.manta-widget__search-bar {
+  background: rgba(0, 0, 0, 0.32) !important;
+  border: 1px solid rgba(34, 211, 238, 0.25) !important;
+  border-radius: 10px !important;
+  transition: border-color 0.18s, box-shadow 0.18s !important;
+}
+
+.manta-widget__search-bar:focus-within {
+  border-color: var(--fx-cyan) !important;
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.18), 0 0 20px rgba(34, 211, 238, 0.12) !important;
+}
+
+.manta-widget__search-input {
+  color: #e0e7ff !important;
+  background: transparent !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+  font-size: 0.83rem !important;
+  caret-color: var(--fx-cyan);
+}
+
+.manta-widget__search-input::placeholder {
+  color: rgba(148, 163, 184, 0.6) !important;
+}
+
+.manta-widget__search-scheme {
+  background: rgba(34, 211, 238, 0.06) !important;
+  border-left: 1px solid rgba(34, 211, 238, 0.18) !important;
+  color: #7dd3fc !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+  font-size: 0.72rem !important;
+}
+
+/* Results */
+.manta-widget__search-results {
+  background: rgba(0, 0, 0, 0.22) !important;
+  border: 1px solid rgba(34, 211, 238, 0.15) !important;
+  border-radius: 10px !important;
+  margin-top: 4px !important;
+}
+
+li.manta-widget__result-item:hover {
+  background: rgba(34, 211, 238, 0.07) !important;
+}
+
+.manta-widget__result-label {
+  color: #bfdbfe !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+  font-size: 0.79rem !important;
+}
+
+.manta-widget__org-meta {
+  color: rgba(148, 163, 184, 0.7) !important;
+}
+
+.manta-widget__copy-btn {
+  background: rgba(34, 211, 238, 0.06) !important;
+  border-color: rgba(34, 211, 238, 0.22) !important;
+  color: #7dd3fc !important;
+}
+
+.manta-widget__copy-btn:hover {
+  background: rgba(34, 211, 238, 0.18) !important;
+  border-color: var(--fx-cyan) !important;
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.3) !important;
+  color: #e0f2fe !important;
+}
+
+/* ── Action buttons ──────────────────────────────────────────────── */
+.manta-widget__actions {
+  border-bottom: 1px solid rgba(34, 211, 238, 0.12) !important;
+  background: rgba(0, 0, 0, 0.18) !important;
+}
+
+.manta-widget__action-btn {
+  background: rgba(34, 211, 238, 0.06) !important;
+  border: 1px solid rgba(34, 211, 238, 0.22) !important;
+  color: #bfdbfe !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  border-radius: 8px !important;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s !important;
+}
+
+.manta-widget__action-btn:hover:not(:disabled) {
+  background: rgba(34, 211, 238, 0.14) !important;
+  border-color: var(--fx-cyan) !important;
+  color: #e0f2fe !important;
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.22) !important;
+}
+
+.manta-widget__action-btn--quality {
+  background: rgba(99, 102, 241, 0.1) !important;
+  border-color: rgba(99, 102, 241, 0.3) !important;
+  color: #c4b5fd !important;
+}
+
+.manta-widget__action-btn--quality:hover:not(:disabled) {
+  background: rgba(99, 102, 241, 0.2) !important;
+  border-color: var(--fx-violet) !important;
+  box-shadow: 0 0 14px rgba(99, 102, 241, 0.3) !important;
+}
+
+.manta-widget__action-btn--keywords {
+  background: rgba(168, 85, 247, 0.08) !important;
+  border-color: rgba(168, 85, 247, 0.28) !important;
+  color: #d8b4fe !important;
+}
+
+.manta-widget__action-btn--keywords:hover:not(:disabled) {
+  background: rgba(168, 85, 247, 0.18) !important;
+  border-color: var(--fx-violet) !important;
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.28) !important;
+}
+
+/* ── Quality panel ───────────────────────────────────────────────── */
+.manta-widget__quality-panel {
+  background: rgba(0, 0, 0, 0.28) !important;
+  border: 1px solid rgba(34, 211, 238, 0.22) !important;
+  border-radius: 12px !important;
+  margin: 6px 14px 0 !important;
+}
+
+.manta-widget__quality-header {
+  border-bottom: 1px solid rgba(34, 211, 238, 0.14) !important;
+}
+
+.manta-widget__quality-score-num {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+  text-shadow: 0 0 16px currentColor;
+}
+
+.manta-widget__quality-breakdown {
+  border-top: 1px solid rgba(34, 211, 238, 0.12) !important;
+}
+
+.manta-widget__quality-section {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+  color: #7dd3fc !important;
+  text-transform: lowercase !important;
+}
+
+.manta-widget__quality-section::before {
+  content: '> ';
+  color: rgba(34, 211, 238, 0.5);
+}
+
+.manta-widget__quality-row {
+  border-bottom-color: rgba(34, 211, 238, 0.08) !important;
+}
+
+.manta-widget__fix-btn {
+  background: linear-gradient(120deg,
+    rgba(34, 211, 238, 0.14),
+    rgba(99, 102, 241, 0.14)) !important;
+  border: 1px solid rgba(34, 211, 238, 0.3) !important;
+  color: #7dd3fc !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+}
+
+.manta-widget__fix-btn:hover {
+  background: linear-gradient(120deg,
+    rgba(34, 211, 238, 0.24),
+    rgba(99, 102, 241, 0.24)) !important;
+  box-shadow: 0 0 16px rgba(34, 211, 238, 0.28) !important;
+  color: #e0f2fe !important;
+}
+
+.manta-widget__quality-modes {
+  border-top: 1px solid rgba(34, 211, 238, 0.14) !important;
+}
+
+.manta-widget__mode-btn {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+  color: rgba(148, 163, 184, 0.7) !important;
+  border-right-color: rgba(34, 211, 238, 0.12) !important;
+}
+
+.manta-widget__mode-btn:hover {
+  background: rgba(34, 211, 238, 0.07) !important;
+  color: #7dd3fc !important;
+}
+
+.manta-widget__mode-btn--active {
+  background: rgba(34, 211, 238, 0.12) !important;
+  color: var(--fx-cyan) !important;
+  box-shadow: inset 0 -2px 0 rgba(34, 211, 238, 0.5) !important;
+}
+
+/* ── Top-issues list (new in AssistantShell) ─────────────────────── */
+.manta-widget__top-issues {
+  padding: 6px 0 0;
+}
+
+.manta-widget__issue-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 4px 14px;
+  border-bottom: 1px solid rgba(34, 211, 238, 0.07);
+  font-size: 0.73rem;
+  line-height: 1.4;
+  color: #cbd5e1;
+}
+
+.manta-widget__issue-item:last-of-type {
+  border-bottom: none;
+}
+
+.manta-widget__issue-sev {
+  flex-shrink: 0;
+  font-weight: 800;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.68rem;
+  padding: 1px 5px;
+  border-radius: 4px;
+  margin-top: 1px;
+}
+
+.manta-widget__issue-sev--e {
+  background: rgba(220, 38, 38, 0.2);
+  color: #f87171;
+  border: 1px solid rgba(220, 38, 38, 0.3);
+}
+
+.manta-widget__issue-sev--w {
+  background: rgba(217, 119, 6, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(217, 119, 6, 0.3);
+}
+
+.manta-widget__issue-msg {
+  flex: 1;
+  min-width: 0;
+  color: #94a3b8;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.manta-widget__issue-field {
+  font-size: 0.66rem;
+  color: rgba(34, 211, 238, 0.6);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Recent / records ────────────────────────────────────────────── */
+.manta-widget__recent {
+  border-top: 1px solid rgba(34, 211, 238, 0.12) !important;
+}
+
+.manta-widget__section-title {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: rgba(34, 211, 238, 0.7) !important;
+}
+
+.manta-widget__section-title::before {
+  content: '// ';
+  color: var(--fx-magenta);
+  opacity: 0.7;
+}
+
+.manta-widget__recent-list li {
+  border-bottom: 1px solid rgba(34, 211, 238, 0.06) !important;
+}
+
+.manta-widget__recent-list li:hover {
+  background: rgba(34, 211, 238, 0.05) !important;
+}
+
+#root .manta-widget .linkish,
+.manta-widget .manta-widget__recent-list .linkish {
+  color: #7dd3fc !important;
+  font-size: 0.82rem !important;
+}
+
+#root .manta-widget .linkish:hover {
+  color: #e0f2fe !important;
+}
+
+/* ── Tip footer ──────────────────────────────────────────────────── */
+.manta-widget__tip {
+  background: rgba(0, 0, 0, 0.22) !important;
+  border-top: 1px solid rgba(34, 211, 238, 0.15) !important;
+}
+
+.manta-widget__tip-text {
+  color: rgba(148, 163, 184, 0.8) !important;
+  font-size: 0.72rem !important;
+  font-style: italic !important;
+}
+
+.manta-widget__tip-chevron {
+  color: rgba(34, 211, 238, 0.5) !important;
+}
+
+/* ── Score badge ─────────────────────────────────────────────────── */
+.manta-widget__score-badge {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+  font-size: 0.75rem !important;
+  font-weight: 900 !important;
+  margin-left: 4px;
+  text-shadow: 0 0 8px currentColor;
+}
+
+/* ── Search status ───────────────────────────────────────────────── */
+.manta-widget__search-status {
+  color: rgba(148, 163, 184, 0.75) !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+  font-size: 0.75rem !important;
+}
+
+.manta-widget__search-status--loading::before {
+  content: '⬡ ';
+  color: var(--fx-cyan);
+  animation: fx-cursor-blink 0.6s steps(1) infinite;
+}
+
+/* ── Suggest notices ─────────────────────────────────────────────── */
+.manta-widget__suggest-notice {
+  background: rgba(6, 20, 40, 0.7) !important;
+  border-color: rgba(34, 211, 238, 0.28) !important;
+  color: #7dd3fc !important;
+}
+
+.manta-widget__suggest-hint {
+  color: var(--fx-cyan) !important;
+  opacity: 0.8;
+}
+
+.manta-widget__suggest-seed-label {
+  color: rgba(148, 163, 184, 0.65) !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+}
+
+/* Profile badge */
+.manta-widget__profile-badge {
+  background: rgba(34, 211, 238, 0.1) !important;
+  color: var(--fx-cyan) !important;
+  border: 1px solid rgba(34, 211, 238, 0.28) !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+}
+
+/* ── Focus ring (global a11y) ─────────────────────────────────────── */
+#root :where(a, button, input, select, textarea, summary):focus-visible {
+  outline: 2px solid var(--fx-cyan) !important;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgba(34, 211, 238, 0.18);
+}
+
+/* ── CRT scanlines (very subtle) ──────────────────────────────────── */
+#root::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 2px,
+    var(--fx-scan-color) 2px,
+    var(--fx-scan-color) 3px
+  );
+  mix-blend-mode: overlay;
+  opacity: 0.35;
+}
+
+:root[data-theme='dark'] #root::before {
+  opacity: 0.55;
+}
+
+/* ── HUD corner brackets on side-stack cards ─────────────────────── */
+#root .workspace-side-stack > .card {
+  position: relative;
+}
+
+#root .workspace-side-stack > .card::after,
+#root .workspace-main.pilot-step.card::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  border-top: 1px solid var(--fx-cyan);
+  border-right: 1px solid var(--fx-cyan);
+  opacity: 0.5;
+  pointer-events: none;
+  filter: drop-shadow(0 0 4px rgba(34, 211, 238, 0.5));
+}
+
+/* Matching bottom-left bracket on the main step card */
+#root .workspace-main.pilot-step.card {
+  position: relative;
+}
+
+#root .workspace-main.pilot-step.card > :last-child::after {
+  content: '';
+}
+
+/* ── Animated scanning border on main step card ──────────────────── */
+#root .workspace-main.pilot-step.card {
+  overflow: hidden;
+}
+
+#root .workspace-main.pilot-step.card > h2:first-of-type {
+  position: relative;
+  padding-left: 0.95rem;
+}
+
+#root .workspace-main.pilot-step.card > h2:first-of-type::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.15em;
+  bottom: 0.25em;
+  width: 3px;
+  border-radius: 3px;
+  background: var(--fx-accent-gradient);
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.6);
+}
+
+/* ── Terminal blink on the brand title ───────────────────────────── */
+.pilot-app-header h1 {
+  position: relative;
+  display: inline-block;
+}
+
+.pilot-app-header h1::after {
+  content: '_';
+  margin-left: 0.25em;
+  color: var(--fx-cyan);
+  -webkit-text-fill-color: var(--fx-cyan);
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.8);
+  animation: fx-cursor-blink 1.05s steps(1) infinite;
+}
+
+@keyframes fx-cursor-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* ── Animated data stream on the header gradient underline ───────── */
+.pilot-app-header::after {
+  background:
+    linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.6) 8%,
+      transparent 16%),
+    var(--fx-accent-gradient);
+  background-size: 40% 100%, 300% 100%;
+  background-repeat: no-repeat, repeat;
+  animation: fx-sweep 8s linear infinite, fx-scanline 3.5s linear infinite;
+}
+
+@keyframes fx-scanline {
+  0%   { background-position: -40% 0, 0% 50%; }
+  100% { background-position: 140% 0, 300% 50%; }
+}
+
+/* ── Card hover: lift + intensify halo ────────────────────────────── */
+#root .card {
+  transition: box-shadow 0.3s ease, transform 0.25s ease, border-color 0.3s ease;
+}
+
+#root .card:hover {
+  box-shadow: var(--fx-glow-strong);
+  border-color: var(--fx-border);
+}
+
+/* ── Status message: terminal prefix ──────────────────────────────── */
+.status-message {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.85rem !important;
+}
+
+.status-message::before {
+  content: '> ';
+  color: var(--fx-cyan);
+  font-weight: 700;
+  text-shadow: 0 0 6px rgba(34, 211, 238, 0.5);
+}
+
+/* ── Active step's panel gets a pulsing top edge ─────────────────── */
+@keyframes fx-pulse-edge {
+  0%, 100% { opacity: 0.75; filter: drop-shadow(0 0 6px rgba(34, 211, 238, 0.4)); }
+  50%      { opacity: 1;    filter: drop-shadow(0 0 14px rgba(34, 211, 238, 0.9)); }
+}
+
+.pilot-step .panel::before {
+  animation: fx-pulse-edge 3.6s ease-in-out infinite;
+}
+
+/* ── Live XML panel: terminal / HUD look ─────────────────────────── */
+
+/* Tighten the whole side card so the preview fills it. */
+#root .workspace-side.workspace-side--tabbed {
+  padding: 0.85rem 0.95rem 1rem;
+  max-height: min(82vh, 820px);
+}
+
+/* Compact tab bar, keep tab labels single-line */
+.workspace-side-tablist { margin-bottom: 0.4rem !important; }
+
+#root .nav-tabs.metadata-tabs.pilot-metadata-tabs .nav-link {
+  padding: 0.32rem 0.7rem !important;
+  font-size: 0.7rem !important;
+  letter-spacing: 0.08em !important;
+  white-space: nowrap;
+  line-height: 1.1;
+}
+
+/* Expand mode: side column stretches to a full tall panel and XML fills it */
+.workspace-side-stack--xml-full .workspace-side--xml-full {
+  max-height: none;
+  min-height: min(88vh, 960px);
+  height: calc(100vh - var(--header-offset, 58px) - 3rem);
+  padding: 0.75rem 0.9rem 0.9rem;
+}
+
+.workspace-side-stack--xml-full .workspace-side-tabpanel--xml {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Panel container: no padding around the preview, tight flex column */
+.fx-xml-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: 0.4rem;
+}
+
+.fx-xml-panel--expanded { flex: 1; }
+
+/* Kill the legacy big gradient h2 + underline decoration for this panel.
+   The legacy .card > h2:first-of-type rules bloat the header by ~60px. */
+#root .fx-xml-panel > .fx-xml-header > h2,
+#root .fx-xml-panel .fx-xml-header h2 {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: none !important;
+  color: var(--text-color) !important;
+  -webkit-text-fill-color: currentColor !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.78rem !important;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1.1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+#root .fx-xml-panel .fx-xml-header h2::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* Header row: title + meta pills + expand button */
+.fx-xml-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: 0.25rem 0 0.1rem;
+}
+
+.fx-xml-title-dot {
+  color: var(--fx-mint);
+  font-size: 0.7em;
+  text-shadow: 0 0 8px currentColor;
+  animation: fx-pulse-dot 2.2s ease-in-out infinite;
+}
+
+@keyframes fx-pulse-dot {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.fx-xml-title-sub {
+  font-size: 0.72rem;
+  color: var(--fx-cyan);
+  letter-spacing: 0.14em;
+  opacity: 0.8;
+}
+
+.fx-xml-header-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.fx-xml-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.22rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--fx-border-soft);
+  background: color-mix(in srgb, var(--fx-cyan) 6%, transparent);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  color: color-mix(in srgb, var(--text-color) 80%, var(--muted-text-color));
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+.fx-xml-pill-label {
+  color: var(--fx-cyan);
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.fx-xml-pill-value { font-weight: 700; }
+
+.fx-xml-pill-value--mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  max-width: 14ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fx-xml-pill--active {
+  border-color: var(--fx-cyan);
+  color: var(--text-color);
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.35),
+    0 0 14px rgba(34, 211, 238, 0.35);
+}
+
+.fx-xml-expand-btn {
+  appearance: none;
+  border: 1px solid var(--fx-border-soft);
+  background: rgba(2, 6, 23, 0.25);
+  color: var(--fx-cyan);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.28rem 0.7rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, color 0.18s ease;
+}
+
+.fx-xml-expand-btn:hover {
+  border-color: var(--fx-cyan);
+  color: #f0fdfa;
+  box-shadow: 0 0 14px rgba(34, 211, 238, 0.35);
+}
+
+.fx-xml-expand-btn[aria-pressed='true'] {
+  background: linear-gradient(120deg, var(--fx-cyan), var(--fx-violet));
+  color: #020617;
+  border-color: transparent;
+  box-shadow: 0 0 18px rgba(34, 211, 238, 0.5);
+}
+
+.fx-xml-intro {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.72rem !important;
+  line-height: 1.35 !important;
+  letter-spacing: 0.01em;
+  color: color-mix(in srgb, var(--text-color) 55%, var(--muted-text-color)) !important;
+  margin: 0 !important;
+  max-width: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fx-xml-intro::before {
+  content: '// ';
+  color: var(--fx-magenta);
+}
+
+/* Collapsible toolbar: hidden by default; reveal with the tools button */
+.fx-xml-toolbar {
+  display: none !important;
+  flex-wrap: wrap;
+  gap: 0.3rem !important;
+  padding: 0.4rem 0 !important;
+  margin: 0 !important;
+  border-top: 1px dashed var(--fx-border-soft);
+  border-bottom: 1px dashed var(--fx-border-soft);
+}
+
+.fx-xml-panel--tools-open .fx-xml-toolbar {
+  display: flex !important;
+}
+
+/* Tight, single-line secondary buttons in the toolbar */
+.fx-xml-toolbar .button {
+  margin-top: 0 !important;
+  padding: 0.3rem 0.65rem !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.02em !important;
+  white-space: nowrap;
+  line-height: 1.1 !important;
+  min-height: 0 !important;
+  flex: 0 0 auto;
+}
+
+/* Small "tools" / diff toggle / diff summary — all compact */
+.fx-xml-panel .xml-diff-toggle {
+  font-size: 0.72rem;
+  margin: 0.1rem 0 0 !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color: color-mix(in srgb, var(--text-color) 70%, var(--muted-text-color));
+}
+
+.fx-xml-panel .xml-diff-summary {
+  margin: 0 !important;
+  font-size: 0.7rem !important;
+  color: var(--fx-violet);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.fx-xml-panel > .hint {
+  margin: 0 !important;
+  font-size: 0.72rem !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color: color-mix(in srgb, var(--text-color) 55%, var(--muted-text-color));
+}
+
+.fx-xml-panel .xml-import-panel {
+  margin: 0 !important;
+  padding: 0.45rem 0.55rem !important;
+  border: 1px dashed var(--fx-border-soft);
+  border-radius: 10px;
+  background: rgba(2, 6, 23, 0.18);
+}
+
+.fx-xml-panel .xml-import-hint {
+  font-size: 0.72rem !important;
+  margin: 0 0 0.35rem !important;
+}
+
+.fx-xml-panel .xml-import-textarea {
+  font-size: 0.72rem !important;
+  min-height: 5rem;
+}
+
+/* Scroll region: terminal shell — star of the panel, make it big & flex-grow */
+#root .fx-xml-scroll {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 320px;
+  max-height: none !important;
+  padding: 0;
+  margin-top: 0.25rem;
+  border-radius: 12px;
+  background:
+    radial-gradient(120% 60% at 50% -10%, rgba(34, 211, 238, 0.12), transparent 60%),
+    #04060d !important;
+  border: 1px solid rgba(34, 211, 238, 0.35) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(34, 211, 238, 0.08),
+    0 0 24px rgba(34, 211, 238, 0.12);
+  overflow: auto;
+  /* JS drives scroll explicitly (smooth on focus, instant while typing).
+     CSS-level smooth scroll compounds with JS and feels laggy. */
+  scroll-behavior: auto;
+  overscroll-behavior: contain;
+  contain: layout paint;
+}
+
+/* Expand mode: XML scroller truly fills the sidebar height */
+.fx-xml-panel--expanded .fx-xml-scroll {
+  min-height: 0 !important;
+  height: auto;
+}
+
+.fx-xml-panel--expanded {
+  height: 100%;
+}
+
+.fx-xml-scroll::before {
+  content: '';
+  position: sticky;
+  top: 0;
+  display: block;
+  height: 26px;
+  margin: 0 -1px;
+  background:
+    linear-gradient(180deg, rgba(4, 6, 13, 0.95), rgba(4, 6, 13, 0)),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 10px,
+      rgba(34, 211, 238, 0.08) 10px 11px
+    );
+  pointer-events: none;
+  z-index: 2;
+}
+
+.fx-xml-lines {
+  display: block;
+  margin: -26px 0 0; /* pull under the sticky header overlay */
+  padding: 0.25rem 0 0.75rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  counter-reset: xmlLine;
+}
+
+.fx-xml-line {
+  display: grid;
+  grid-template-columns: 3.25rem 1fr;
+  column-gap: 0.65rem;
+  position: relative;
+  padding: 0 0.75rem;
+  color: #cbd5e1;
+  border-left: 2px solid transparent;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+  /* Let the browser skip layout/paint for offscreen lines.
+     Huge win for 300+ line XML documents. */
+  content-visibility: auto;
+  contain-intrinsic-size: 0 1.25rem;
+  contain: layout paint style;
+}
+
+.fx-xml-line:hover {
+  background: rgba(34, 211, 238, 0.04);
+}
+
+.fx-xml-line-num {
+  color: rgba(148, 163, 184, 0.55);
+  user-select: none;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  padding-right: 0.55rem;
+  border-right: 1px solid rgba(34, 211, 238, 0.15);
+}
+
+.fx-xml-line-code {
+  display: block;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: #e0e7ff;
+}
+
+.fx-xml-line .xml-hl-tag {
+  color: #22d3ee !important;
+  text-shadow: 0 0 6px rgba(34, 211, 238, 0.3);
+}
+
+.fx-xml-line .xml-hl-text {
+  color: #f1f5f9 !important;
+}
+
+/* Changed line marker (when diff toggle is on) */
+.fx-xml-line--changed {
+  background: linear-gradient(
+    90deg,
+    rgba(168, 85, 247, 0.14),
+    rgba(168, 85, 247, 0.04) 70%,
+    transparent
+  );
+  border-left-color: var(--fx-violet);
+}
+
+.fx-xml-line--changed .fx-xml-line-num {
+  color: rgba(216, 180, 254, 0.95);
+}
+
+/* Focused / tracked line: neon cyan bar + background glow + pulse */
+.fx-xml-line--active {
+  background: linear-gradient(
+    90deg,
+    rgba(34, 211, 238, 0.25),
+    rgba(34, 211, 238, 0.05) 60%,
+    rgba(168, 85, 247, 0.05)
+  );
+  border-left-color: var(--fx-cyan);
+  box-shadow: inset 0 0 0 1px rgba(34, 211, 238, 0.22);
+  color: #f0fdfa;
+  animation: fx-xml-flash 1.1s ease-out 1;
+}
+
+.fx-xml-line--active .fx-xml-line-num {
+  color: var(--fx-cyan);
+  text-shadow: 0 0 8px rgba(34, 211, 238, 0.8);
+}
+
+.fx-xml-line--active .fx-xml-line-code {
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.25);
+}
+
+/* Caret/chevron marker in the gutter for the active line */
+.fx-xml-line--active::before {
+  content: '▸';
+  position: absolute;
+  left: 0.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--fx-cyan);
+  font-size: 0.85rem;
+  text-shadow: 0 0 8px rgba(34, 211, 238, 0.9);
+}
+
+@keyframes fx-xml-flash {
+  0% {
+    background: rgba(34, 211, 238, 0.45);
+    box-shadow: inset 0 0 0 1px rgba(34, 211, 238, 0.8);
+  }
+  100% {
+    background: linear-gradient(
+      90deg,
+      rgba(34, 211, 238, 0.25),
+      rgba(34, 211, 238, 0.05) 60%,
+      rgba(168, 85, 247, 0.05)
+    );
+  }
+}
+
+/* Light-mode adjustments: keep the terminal dark (it's meant to evoke a HUD console) */
+:root:not([data-theme='dark']) .fx-xml-line { color: #cbd5e1; }
+
+/* Expand mode: also pin the scroll area to the viewport so it scrolls with you */
+.workspace-side-stack--xml-full {
+  position: sticky;
+  top: calc(var(--header-offset, 58px) + 0.5rem);
+  align-self: start;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .fx-xml-line--active { animation: none; }
+  .fx-xml-title-dot { animation: none; }
+  .fx-xml-scroll { scroll-behavior: auto; }
+}
+
+/* ── Reduced motion ───────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  body::after,
+  .pilot-app-header::after,
+  .pilot-app-header h1::after,
+  .pilot-step .panel::before,
+  .score-bar-fill {
+    animation: none !important;
+  }
+  #root::before { display: none; }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   Manta Ray Widget v3 — HUD chrome
+   New classes for: flex layout, tab bar, score ring, section bars,
+   issues list, live table, records grid, suggest button.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── Widget: flex column so header/tabs/footer stay fixed ────────── */
+.manta-widget {
+  display: flex !important;
+  flex-direction: column !important;
+  /* Never overflow past the top of the viewport — stays below the header */
+  max-height: calc(100dvh - 100px) !important;
+  overflow: hidden !important;
+}
+
+/* ── Tab bar ─────────────────────────────────────────────────────── */
+.manta-widget__tabs {
+  display: flex;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(34, 211, 238, 0.15);
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.manta-widget__tab {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 8px 3px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: rgba(148, 163, 184, 0.55);
+  cursor: pointer;
+  position: relative;
+  transition: color 0.14s, background 0.14s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.manta-widget__tab:hover {
+  color: #7dd3fc;
+  background: rgba(34, 211, 238, 0.05);
+}
+
+.manta-widget__tab--active {
+  color: var(--fx-cyan);
+  background: rgba(34, 211, 238, 0.08);
+}
+
+.manta-widget__tab--active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 18%;
+  right: 18%;
+  height: 2px;
+  background: var(--fx-cyan);
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(34, 211, 238, 0.8);
+}
+
+/* Status dots on tabs */
+.manta-widget__tab-dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.manta-widget__tab-dot--error { background: #f87171; box-shadow: 0 0 5px #f8717199; }
+.manta-widget__tab-dot--warn  { background: #fbbf24; box-shadow: 0 0 5px #fbbf2499; }
+.manta-widget__tab-dot--ok    { background: #34d399; box-shadow: 0 0 5px #34d39999; }
+
+/* ── Scrollable panel ────────────────────────────────────────────── */
+.manta-widget__panel {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(34, 211, 238, 0.18) transparent;
+}
+
+.manta-widget__panel::-webkit-scrollbar { width: 4px; }
+.manta-widget__panel::-webkit-scrollbar-thumb {
+  background: rgba(34, 211, 238, 0.18);
+  border-radius: 4px;
+}
+
+/* ── Score ring ──────────────────────────────────────────────────── */
+.manta-score-ring-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  pointer-events: none;
+}
+
+.manta-score-ring-num {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 1.3rem;
+  font-weight: 900;
+  line-height: 1;
+  transition: color 0.5s ease;
+}
+
+.manta-score-ring-denom {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.57rem;
+  color: rgba(148, 163, 184, 0.65);
+  line-height: 1;
+}
+
+.manta-ring-placeholder {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 6px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(148, 163, 184, 0.35);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+/* ── Quality view layout ─────────────────────────────────────────── */
+.manta-widget__quality-view {
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.manta-widget__quality-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.manta-widget__ring-wrap { flex-shrink: 0; }
+
+.manta-widget__quality-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* ── Section completion bars ─────────────────────────────────────── */
+.manta-widget__section-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(34, 211, 238, 0.1);
+  border-radius: 10px;
+  padding: 7px 10px;
+}
+
+.manta-section-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.manta-section-bar__label {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.66rem;
+  color: rgba(148, 163, 184, 0.65);
+  width: 68px;
+  flex-shrink: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.manta-section-bar__track {
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.manta-section-bar__fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 4px;
+}
+
+.manta-section-bar__stat {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.62rem;
+  font-weight: 800;
+  width: 26px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ── Issues section ──────────────────────────────────────────────── */
+.manta-widget__issues-section {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(34, 211, 238, 0.12);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.manta-widget__issues-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 11px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.12s;
+}
+
+.manta-widget__issues-header:hover {
+  background: rgba(34, 211, 238, 0.06);
+}
+
+.manta-widget__issues-label {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(34, 211, 238, 0.65);
+}
+
+.manta-widget__issues-toggle {
+  color: rgba(148, 163, 184, 0.45);
+  font-size: 0.58rem;
+}
+
+/* ── Quality actions bar ─────────────────────────────────────────── */
+.manta-widget__quality-actions {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+
+.manta-widget__refresh-btn {
+  background: rgba(34, 211, 238, 0.07);
+  border: 1px solid rgba(34, 211, 238, 0.22);
+  border-radius: 8px;
+  color: #7dd3fc;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+  flex-shrink: 0;
+  transition: background 0.13s, box-shadow 0.13s;
+  padding: 0;
+}
+
+.manta-widget__refresh-btn:hover:not(:disabled) {
+  background: rgba(34, 211, 238, 0.15);
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.3);
+}
+
+.manta-widget__refresh-btn--block {
+  width: 100%;
+  height: 30px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+/* ── Search: history chips ───────────────────────────────────────── */
+.manta-widget__search-history {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 6px 14px 2px;
+}
+
+.manta-widget__history-chip {
+  background: rgba(34, 211, 238, 0.06);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.67rem;
+  color: #7dd3fc;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.manta-widget__history-chip:hover {
+  background: rgba(34, 211, 238, 0.14);
+  border-color: var(--fx-cyan);
+}
+
+/* ── Search: suggest row ─────────────────────────────────────────── */
+.manta-widget__suggest-row {
+  padding: 8px 14px;
+  border-top: 1px solid rgba(34, 211, 238, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.manta-widget__suggest-btn {
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.71rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  color: #d8b4fe;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: background 0.14s, box-shadow 0.14s, color 0.14s;
+  width: 100%;
+}
+
+.manta-widget__suggest-btn:hover:not(:disabled) {
+  background: rgba(168, 85, 247, 0.2);
+  border-color: var(--fx-violet);
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.3);
+  color: #f0e6ff;
+}
+
+.manta-widget__suggest-hint-text {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.7rem;
+  color: rgba(251, 191, 36, 0.7);
+  margin: 0;
+}
+
+/* ── Live view ───────────────────────────────────────────────────── */
+.manta-widget__live-view {
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.manta-widget__live-updated {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.64rem;
+  color: rgba(34, 211, 238, 0.45);
+  margin: 0;
+}
+
+.manta-widget__live-updated::before {
+  content: '◉ ';
+  color: rgba(34, 211, 238, 0.6);
+}
+
+.manta-widget__live-empty {
+  color: rgba(148, 163, 184, 0.55);
+  font-size: 0.76rem;
+  text-align: center;
+  padding: 24px 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  line-height: 1.6;
+}
+
+.manta-widget__live-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.manta-widget__live-row {
+  border-bottom: 1px solid rgba(34, 211, 238, 0.06);
+}
+
+.manta-widget__live-row:last-child { border-bottom: none; }
+
+.manta-widget__live-key {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.67rem;
+  color: rgba(34, 211, 238, 0.55);
+  padding: 4px 10px 4px 0;
+  white-space: nowrap;
+  vertical-align: top;
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.manta-widget__live-val {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  color: #bfdbfe;
+  padding: 4px 0;
+  word-break: break-word;
+  vertical-align: top;
+}
+
+.manta-widget__live-array {
+  color: rgba(196, 181, 253, 0.85);
+  font-size: 0.68rem;
+}
+
+/* ── Records view ────────────────────────────────────────────────── */
+.manta-widget__records-view {
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.manta-widget__records-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.manta-widget__record-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.manta-widget__record-item:hover {
+  background: rgba(34, 211, 238, 0.06);
+  border-color: rgba(34, 211, 238, 0.15);
+}
+
+.manta-widget__record-icon {
+  color: rgba(34, 211, 238, 0.45);
+  font-size: 0.72rem;
+  flex-shrink: 0;
+}
+
+.manta-widget__record-title {
+  flex: 1;
+  font-size: 0.8rem !important;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* ── Reduced motion additions ────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .manta-section-bar__fill { transition: none !important; }
+  .manta-score-ring-num    { transition: none !important; }
+  .manta-widget::after     { animation: none !important; }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   Spatial extent map — cyberpunk HUD
+   ════════════════════════════════════════════════════════════════════ */
+
+.fx-map-wrap { margin: 0.75rem 0 1rem; }
+
+.fx-map-frame {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(34, 211, 238, 0.45);
+  background: #04060d;
+  box-shadow:
+    inset 0 0 0 1px rgba(34, 211, 238, 0.12),
+    0 0 0 1px rgba(2, 6, 23, 0.5),
+    0 0 28px rgba(34, 211, 238, 0.18),
+    0 18px 60px rgba(168, 85, 247, 0.15);
+  isolation: isolate;
+}
+
+#root .fx-map {
+  width: 100%;
+  height: min(360px, 46vh);
+  border: 0 !important;
+  border-radius: 14px;
+  background: #04060d;
+  box-shadow: none !important;
+  z-index: 0;
+}
+
+/* Dark-matter tiles: tint cyan/violet so the HUD feels unified. */
+#root .fx-map .leaflet-tile-pane {
+  filter: saturate(1.15) hue-rotate(-10deg) brightness(0.95) contrast(1.05);
+}
+
+/* Leaflet controls — neon pill style */
+#root .fx-map .leaflet-control-zoom {
+  border: 1px solid rgba(34, 211, 238, 0.35) !important;
+  background: rgba(2, 6, 23, 0.72);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 14px rgba(34, 211, 238, 0.2);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+#root .fx-map .leaflet-control-zoom a {
+  background: transparent !important;
+  border: none !important;
+  color: #7dd3fc !important;
+  font-weight: 800;
+  text-shadow: 0 0 6px rgba(34, 211, 238, 0.6);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+#root .fx-map .leaflet-control-zoom a:hover {
+  background: rgba(34, 211, 238, 0.14) !important;
+  color: #ecfeff !important;
+}
+
+#root .fx-map .leaflet-control-attribution {
+  background: rgba(2, 6, 23, 0.55) !important;
+  color: rgba(148, 163, 184, 0.75) !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.62rem !important;
+  letter-spacing: 0.02em;
+  padding: 1px 6px !important;
+  border-top-left-radius: 6px;
+}
+
+#root .fx-map .leaflet-control-attribution a {
+  color: #7dd3fc !important;
+}
+
+/* BBox rectangle — neon dashed outline with a gentle march. */
+.fx-map-bbox {
+  filter: drop-shadow(0 0 6px rgba(34, 211, 238, 0.85))
+    drop-shadow(0 0 16px rgba(34, 211, 238, 0.35));
+  animation: fx-map-march 4s linear infinite;
+}
+
+@keyframes fx-map-march {
+  to { stroke-dashoffset: -40; }
+}
+
+.fx-map-bbox-glow {
+  filter: blur(3px);
+}
+
+/* HUD overlay — corner brackets + crosshair + sweeping scan line. */
+.fx-map-hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  mix-blend-mode: screen;
+}
+
+.fx-map-corner {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-color: var(--fx-cyan, #22d3ee);
+  border-style: solid;
+  border-width: 0;
+  filter: drop-shadow(0 0 6px rgba(34, 211, 238, 0.75));
+  opacity: 0.85;
+}
+
+.fx-map-corner--tl { top: 10px; left: 10px; border-top-width: 1px; border-left-width: 1px; }
+.fx-map-corner--tr { top: 10px; right: 10px; border-top-width: 1px; border-right-width: 1px; }
+.fx-map-corner--bl { bottom: 28px; left: 10px; border-bottom-width: 1px; border-left-width: 1px; }
+.fx-map-corner--br { bottom: 28px; right: 10px; border-bottom-width: 1px; border-right-width: 1px; }
+
+.fx-map-crosshair {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 22px;
+  height: 22px;
+  transform: translate(-50%, -50%);
+  opacity: 0.6;
+}
+
+.fx-map-crosshair::before,
+.fx-map-crosshair::after {
+  content: '';
+  position: absolute;
+  background: var(--fx-cyan, #22d3ee);
+  box-shadow: 0 0 8px rgba(34, 211, 238, 0.8);
+}
+
+.fx-map-crosshair::before {
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  transform: translateX(-50%);
+}
+
+.fx-map-crosshair::after {
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  transform: translateY(-50%);
+}
+
+.fx-map-scan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 36px;
+  top: -40px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(34, 211, 238, 0.08) 40%,
+    rgba(34, 211, 238, 0.28) 60%,
+    rgba(168, 85, 247, 0.18) 80%,
+    transparent 100%
+  );
+  filter: blur(2px);
+  animation: fx-map-scan 5.5s ease-in-out infinite;
+}
+
+@keyframes fx-map-scan {
+  0%   { top: -40px; opacity: 0; }
+  10%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { top: 110%; opacity: 0; }
+}
+
+/* Telemetry readout strip */
+.fx-map-readout {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  padding: 5px 9px;
+  border-radius: 8px;
+  border: 1px solid rgba(34, 211, 238, 0.35);
+  background: rgba(2, 6, 23, 0.72);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  color: #bae6fd;
+  box-shadow:
+    inset 0 0 0 1px rgba(34, 211, 238, 0.08),
+    0 0 18px rgba(34, 211, 238, 0.18);
+}
+
+.fx-map-readout-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.fx-map-readout-dot--ok {
+  background: #34d399;
+  box-shadow: 0 0 8px #34d399;
+  animation: fx-pulse-dot 1.8s ease-in-out infinite;
+}
+
+.fx-map-readout-dot--idle {
+  background: #fbbf24;
+  box-shadow: 0 0 8px #fbbf24;
+}
+
+.fx-map-readout-label {
+  color: var(--fx-cyan, #22d3ee);
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.fx-map-readout-val {
+  color: #ecfeff;
+  font-variant-numeric: tabular-nums;
+}
+
+.fx-map-readout-sep { color: rgba(148, 163, 184, 0.5); }
+
+.fx-map-readout-status {
+  color: var(--fx-violet, #a855f7);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+/* Hint line under the map */
+.fx-map-wrap .spatial-extent-map-hint {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.72rem !important;
+  color: color-mix(in srgb, var(--text-color) 55%, var(--muted-text-color)) !important;
+}
+
+.fx-map-wrap .spatial-extent-map-hint::before {
+  content: '// ';
+  color: var(--fx-magenta);
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   Cyberpunk polish boost — applied everywhere
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Richer, more saturated accent gradient */
+:root {
+  --fx-accent-gradient: linear-gradient(
+    100deg,
+    #22d3ee 0%,
+    #0ea5e9 25%,
+    #6366f1 55%,
+    #d946ef 80%,
+    #ec4899 100%
+  );
+}
+
+/* A slow magenta-cyan glow edge on every card (cardrim) */
+#root .card::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--fx-angle, 0deg),
+    transparent 0deg,
+    rgba(34, 211, 238, 0.55) 60deg,
+    transparent 140deg,
+    rgba(168, 85, 247, 0.5) 240deg,
+    transparent 320deg
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  /* Perf: don't animate the conic gradient on idle cards — only while hovered.
+     Running this on every card at all times forced a full repaint per frame. */
+  animation: none;
+}
+
+#root .card:hover::after {
+  opacity: 0.55;
+  animation: fx-card-rim 9s linear infinite;
+}
+
+@property --fx-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes fx-card-rim {
+  to { --fx-angle: 360deg; }
+}
+
+/* Slight chromatic aberration on the header title (cyberpunk classic) */
+.pilot-app-header h1 {
+  text-shadow:
+    0 0 22px rgba(34, 211, 238, 0.22),
+    1px 0 0 rgba(236, 72, 153, 0.25),
+    -1px 0 0 rgba(34, 211, 238, 0.35);
+}
+
+/* Subtle horizontal scan line sweeping across each pilot step card once on mount / step change */
+#root .workspace-main.pilot-step.card {
+  position: relative;
+}
+
+#root .workspace-main.pilot-step.card > :not(h2):not(.fx-map-hud)::before {
+  /* intentionally no content — placeholder to let step content stay stacked */
+}
+
+#root .workspace-main.pilot-step.card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(34, 211, 238, 0.06) 48%,
+    rgba(168, 85, 247, 0.05) 52%,
+    transparent 100%
+  );
+  transform: translateY(-100%);
+  animation: fx-step-scan 1.4s ease-out 0.05s 1 forwards;
+  z-index: 0;
+  mix-blend-mode: screen;
+}
+
+@keyframes fx-step-scan {
+  to { transform: translateY(100%); }
+}
+
+/* Make sure the scan doesn't sit on top of interactive content */
+#root .workspace-main.pilot-step.card > * { position: relative; z-index: 1; }
+
+/* Primary button gains a moving sheen */
+.button::after,
+#root .btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 60%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.6s ease;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+.button,
+#root .btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+
+.button:hover:not(:disabled)::after,
+#root .btn-primary:hover::after {
+  transform: translateX(120%);
+}
+
+/* Step nav dots get a stronger neon halo + slow pulse for current step */
+.nav-tabs.metadata-tabs.pilot-metadata-tabs .nav-link.active .pilot-step-nav__dot {
+  animation: fx-pulse-dot 1.8s ease-in-out infinite;
+}
+
+/* Required-field underline in magenta, already partly there — amplify with glow */
+#root .workspace-main.pilot-step .form-control[required]:not(.is-invalid):not(.is-valid):not(.form-control--invalid),
+#root .workspace-main.pilot-step .form-select[required]:not(.is-invalid):not(.is-valid):not(.form-control--invalid) {
+  box-shadow:
+    inset 0 -2px 0 0 rgba(236, 72, 153, 0.6),
+    0 0 0 0 rgba(236, 72, 153, 0) !important;
+}
+
+/* When required + focused: layer magenta + cyan glow */
+#root .workspace-main.pilot-step .form-control[required]:focus:not(.is-invalid):not(.is-valid):not(.form-control--invalid),
+#root .workspace-main.pilot-step .form-select[required]:focus:not(.is-invalid):not(.is-valid):not(.form-control--invalid) {
+  box-shadow:
+    inset 0 -2px 0 0 rgba(236, 72, 153, 0.75),
+    0 0 0 3px rgba(34, 211, 238, 0.22),
+    0 0 20px rgba(236, 72, 153, 0.2) !important;
+}
+
+/* More cyberpunk in dark mode */
+:root[data-theme='dark'] body::after {
+  background:
+    radial-gradient(60rem 32rem at 10% -10%, rgba(34, 211, 238, 0.28), transparent 70%),
+    radial-gradient(48rem 28rem at 95% -5%, rgba(236, 72, 153, 0.25), transparent 70%),
+    radial-gradient(40rem 24rem at 50% 110%, rgba(168, 85, 247, 0.28), transparent 70%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-map-bbox,
+  .fx-map-scan,
+  #root .card::after,
+  #root .workspace-main.pilot-step.card::before,
+  .nav-tabs.metadata-tabs.pilot-metadata-tabs .nav-link.active .pilot-step-nav__dot {
+    animation: none !important;
+  }
+  .button::after,
+  #root .btn-primary::after { display: none !important; }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   Manta Ray Widget v4 — HUD frame, VALIDATE, ASK terminal
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── HUD corner brackets ─────────────────────────────────────────── */
+.manta-hud-c {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  z-index: 10;
+  pointer-events: none;
+  filter: drop-shadow(0 0 5px rgba(34, 211, 238, 0.7));
+  transition: opacity 0.3s;
+}
+
+.manta-hud-c--tl { top: 7px;    left: 7px;   border-top:    1.5px solid var(--fx-cyan); border-left:  1.5px solid var(--fx-cyan); }
+.manta-hud-c--tr { top: 7px;    right: 7px;  border-top:    1.5px solid var(--fx-cyan); border-right: 1.5px solid var(--fx-cyan); }
+.manta-hud-c--bl { bottom: 7px; left: 7px;   border-bottom: 1.5px solid var(--fx-cyan); border-left:  1.5px solid var(--fx-cyan); }
+.manta-hud-c--br { bottom: 7px; right: 7px;  border-bottom: 1.5px solid var(--fx-cyan); border-right: 1.5px solid var(--fx-cyan); }
+
+/* ── HUD scanline ────────────────────────────────────────────────── */
+@keyframes manta-scan-drop {
+  0%   { top: -2px;   opacity: 0;   }
+  4%   {              opacity: 0.55; }
+  96%  {              opacity: 0.55; }
+  100% { top: 100%;   opacity: 0;   }
+}
+
+.manta-hud-scanline {
+  position: absolute;
+  left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(34, 211, 238, 0.65) 50%, transparent 100%);
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.35);
+  animation: manta-scan-drop 11s linear infinite;
+  z-index: 6;
+  pointer-events: none;
+}
+
+/* Live score shown in header */
+.manta-hud-live-score {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  margin-right: 4px;
+  text-shadow: 0 0 10px currentColor;
+  flex-shrink: 0;
+}
+
+/* ── Issue rows ──────────────────────────────────────────────────── */
+.manta-issues-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 4px 0;
+  max-height: 160px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(34, 211, 238, 0.15) transparent;
+}
+
+.manta-issues-list::-webkit-scrollbar { width: 4px; }
+.manta-issues-list::-webkit-scrollbar-thumb { background: rgba(34, 211, 238, 0.15); border-radius: 4px; }
+
+.manta-issue-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px;
+  border-left: 2px solid transparent;
+  transition: background 0.12s, border-color 0.12s;
+  min-height: 32px;
+}
+
+.manta-issue-row--err {
+  border-left-color: rgba(248, 113, 113, 0.55);
+  background: rgba(248, 113, 113, 0.04);
+}
+
+.manta-issue-row--wrn {
+  border-left-color: rgba(251, 191, 36, 0.45);
+  background: rgba(251, 191, 36, 0.03);
+}
+
+.manta-issue-row:hover {
+  background: rgba(34, 211, 238, 0.04) !important;
+  border-left-color: rgba(34, 211, 238, 0.4) !important;
+}
+
+@keyframes manta-issue-flash {
+  0%   { background: rgba(34, 211, 238, 0.18); }
+  60%  { background: rgba(34, 211, 238, 0.08); }
+  100% { background: transparent; }
+}
+
+.manta-issue-row--new {
+  animation: manta-issue-flash 1.6s ease-out forwards;
+}
+
+.manta-issue-badge {
+  flex-shrink: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.62rem;
+  font-weight: 900;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.manta-issue-badge--err {
+  background: rgba(248, 113, 113, 0.18);
+  color: #f87171;
+  border: 1px solid rgba(248, 113, 113, 0.35);
+  text-shadow: 0 0 6px rgba(248, 113, 113, 0.5);
+}
+
+.manta-issue-badge--wrn {
+  background: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.35);
+}
+
+.manta-issue-msg {
+  flex: 1;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.73rem;
+  color: #94a3b8;
+  line-height: 1.35;
+  min-width: 0;
+}
+
+.manta-issue-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.manta-issue-section {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.62rem;
+  color: rgba(34, 211, 238, 0.5);
+  background: rgba(34, 211, 238, 0.07);
+  border: 1px solid rgba(34, 211, 238, 0.15);
+  border-radius: 4px;
+  padding: 1px 5px;
+  white-space: nowrap;
+}
+
+.manta-issue-def-btn {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  color: #c4b5fd;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.13s, box-shadow 0.13s;
+  padding: 0;
+  line-height: 1;
+}
+
+.manta-issue-def-btn:hover {
+  background: rgba(168, 85, 247, 0.22);
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+  color: #f0e6ff;
+}
+
+.manta-issue-def-btn--on {
+  background: rgba(168, 85, 247, 0.28) !important;
+  border-color: var(--fx-violet) !important;
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.5) !important;
+  color: #f0e6ff !important;
+}
+
+/* ── Definition panel ────────────────────────────────────────────── */
+.manta-def-panel {
+  margin: 4px 12px 8px;
+  background: linear-gradient(135deg, rgba(15, 4, 28, 0.9), rgba(6, 12, 36, 0.9));
+  border: 1px solid rgba(168, 85, 247, 0.45);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.12), 0 8px 28px rgba(0, 0, 0, 0.4);
+  animation: manta-def-appear 0.2s ease-out;
+}
+
+@keyframes manta-def-appear {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.manta-def-panel__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  background: rgba(168, 85, 247, 0.12);
+  border-bottom: 1px solid rgba(168, 85, 247, 0.25);
+}
+
+.manta-def-panel__label {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: rgba(196, 181, 253, 0.8);
+  text-transform: uppercase;
+}
+
+.manta-def-panel__field {
+  flex: 1;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  color: #d8b4fe;
+  background: rgba(168, 85, 247, 0.15);
+  border-radius: 4px;
+  padding: 1px 7px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.manta-def-panel__close {
+  background: none;
+  border: none;
+  color: rgba(196, 181, 253, 0.5);
+  cursor: pointer;
+  font-size: 0.7rem;
+  padding: 2px 4px;
+  flex-shrink: 0;
+  transition: color 0.12s;
+}
+.manta-def-panel__close:hover { color: #f0e6ff; }
+
+.manta-def-panel__text {
+  padding: 10px 12px 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.73rem;
+  color: #bfdbfe;
+  line-height: 1.6;
+  margin: 0;
+  white-space: pre-line;
+}
+
+.manta-def-panel__ask-btn {
+  display: block;
+  width: calc(100% - 24px);
+  margin: 4px 12px 10px;
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 7px;
+  padding: 5px 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #c4b5fd;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.13s, box-shadow 0.13s;
+}
+.manta-def-panel__ask-btn:hover {
+  background: rgba(168, 85, 247, 0.2);
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.25);
+  color: #f0e6ff;
+}
+
+/* ── ASK / terminal chat ─────────────────────────────────────────── */
+.manta-chat {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+/* Suggestion chips */
+.manta-chat__suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px 12px 4px;
+  border-bottom: 1px solid rgba(34, 211, 238, 0.1);
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.manta-chat__suggest-chip {
+  background: rgba(34, 211, 238, 0.06);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.65rem;
+  color: #7dd3fc;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+
+.manta-chat__suggest-chip:hover {
+  background: rgba(34, 211, 238, 0.14);
+  border-color: var(--fx-cyan);
+  color: #e0f2fe;
+}
+
+/* Chat history */
+.manta-chat__history {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(34, 211, 238, 0.15) transparent;
+  min-height: 0;
+}
+
+.manta-chat__history::-webkit-scrollbar { width: 4px; }
+.manta-chat__history::-webkit-scrollbar-thumb { background: rgba(34, 211, 238, 0.15); border-radius: 4px; }
+
+/* System message */
+.manta-chat__msg--system {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.67rem;
+  color: rgba(34, 211, 238, 0.45);
+  text-align: center;
+  padding: 5px 8px;
+  border-top:    1px solid rgba(34, 211, 238, 0.1);
+  border-bottom: 1px solid rgba(34, 211, 238, 0.1);
+}
+
+/* User message */
+.manta-chat__msg--user {
+  align-self: flex-end;
+  background: rgba(34, 211, 238, 0.1);
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  border-radius: 12px 12px 3px 12px;
+  padding: 7px 11px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.76rem;
+  color: #e0f2fe;
+  max-width: 88%;
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.1);
+}
+
+/* Assistant message */
+.manta-chat__msg--assistant {
+  align-self: flex-start;
+  background: rgba(6, 12, 36, 0.65);
+  border: 1px solid rgba(34, 211, 238, 0.15);
+  border-radius: 3px 12px 12px 12px;
+  padding: 9px 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.73rem;
+  color: #bfdbfe;
+  max-width: 96%;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  animation: manta-msg-in 0.2s ease-out;
+  position: relative;
+}
+
+.manta-chat__msg--assistant::before {
+  content: '> ';
+  color: rgba(34, 211, 238, 0.5);
+  font-weight: 700;
+}
+
+.manta-chat__msg--thinking {
+  align-self: flex-start;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.7rem;
+  color: rgba(34, 211, 238, 0.45);
+  animation: fx-cursor-blink 0.8s steps(1) infinite;
+}
+
+@keyframes manta-msg-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.manta-chat__code {
+  background: rgba(34, 211, 238, 0.1);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  border-radius: 4px;
+  padding: 0 5px;
+  font-size: 0.85em;
+  color: #67e8f9;
+  font-family: inherit;
+}
+
+/* Input row */
+.manta-chat__input-row {
+  display: flex;
+  gap: 7px;
+  padding: 9px 12px;
+  border-top: 1px solid rgba(34, 211, 238, 0.14);
+  background: rgba(0, 0, 0, 0.22);
+  flex-shrink: 0;
+}
+
+.manta-chat__input {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.38);
+  border: 1px solid rgba(34, 211, 238, 0.28);
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.77rem;
+  color: #e0e7ff;
+  caret-color: #22d3ee;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.manta-chat__input:focus {
+  border-color: var(--fx-cyan);
+  box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.2), 0 0 16px rgba(34, 211, 238, 0.12);
+}
+
+.manta-chat__input::placeholder { color: rgba(148, 163, 184, 0.45); }
+
+.manta-chat__submit {
+  background: linear-gradient(120deg, var(--fx-cyan), var(--fx-violet));
+  border: none;
+  border-radius: 8px;
+  color: #020617;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  padding: 7px 12px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: filter 0.15s, transform 0.1s;
+}
+
+.manta-chat__submit:hover:not(:disabled) {
+  filter: brightness(1.12) saturate(1.1);
+  box-shadow: 0 0 18px rgba(34, 211, 238, 0.4);
+}
+
+.manta-chat__submit:active:not(:disabled) { transform: scale(0.96); }
+.manta-chat__submit:disabled { opacity: 0.45; cursor: default; }
+
+/* ── Reduced motion for new additions ────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .manta-hud-scanline          { animation: none !important; }
+  .manta-issue-row--new        { animation: none !important; }
+  .manta-def-panel             { animation: none !important; }
+  .manta-chat__msg--assistant  { animation: none !important; }
+  .manta-chat__msg--thinking   { animation: none !important; }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   Manta Ray LENS MODE — wraps the XML validator panel via portal
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── Lens root: absolutely fills .workspace-side-stack ───────────── */
+.manta-lens {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.6rem;           /* match the card inside */
+  overflow: hidden;
+  animation: manta-lens-in 0.28s ease-out;
+  /* Let the bar/tray/glass layers provide their own bg; root is transparent */
+  background: transparent;
+}
+
+@keyframes manta-lens-in {
+  from { opacity: 0; transform: scale(0.985); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ── Corner brackets framing the panel ───────────────────────────── */
+.manta-lens-corner {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  z-index: 54;
+  pointer-events: none;
+  animation: manta-lens-corner-pulse 3s ease-in-out infinite;
+}
+
+@keyframes manta-lens-corner-pulse {
+  0%, 100% { filter: drop-shadow(0 0 6px rgba(34, 211, 238, 0.8));  opacity: 0.9; }
+  50%       { filter: drop-shadow(0 0 14px rgba(34, 211, 238, 1));   opacity: 1; }
+}
+
+.manta-lens-corner--tl { top: 8px;    left: 8px;   border-top:    2px solid #22d3ee; border-left:  2px solid #22d3ee; }
+.manta-lens-corner--tr { top: 8px;    right: 8px;  border-top:    2px solid #22d3ee; border-right: 2px solid #22d3ee; }
+.manta-lens-corner--bl { bottom: 8px; left: 8px;   border-bottom: 2px solid #22d3ee; border-left:  2px solid #22d3ee; }
+.manta-lens-corner--br { bottom: 8px; right: 8px;  border-bottom: 2px solid #22d3ee; border-right: 2px solid #22d3ee; }
+
+/* ── HUD header bar ──────────────────────────────────────────────── */
+.manta-lens-bar {
+  flex-shrink: 0;
+  height: 42px;
+  background: rgb(3, 5, 14);
+  border-bottom: 1px solid rgba(34, 211, 238, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px 0 12px;
+  position: relative;
+  overflow: hidden;
+  z-index: 52;
+}
+
+/* Animated accent sweep on bar bottom */
+.manta-lens-bar::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: var(--fx-accent-gradient);
+  background-size: 300% 100%;
+  animation: fx-sweep 6s linear infinite;
+  filter: drop-shadow(0 0 5px rgba(34, 211, 238, 0.7));
+}
+
+.manta-lens-bar__brand {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #a5f3fc, #c4b5fd);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.manta-lens-bar__tags {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.manta-lens-tag {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.65rem;
+  font-weight: 900;
+  padding: 2px 7px;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.manta-lens-tag--err  {
+  background: rgba(248, 113, 113, 0.18);
+  color: #f87171;
+  border: 1px solid rgba(248, 113, 113, 0.42);
+  text-shadow: 0 0 8px rgba(248, 113, 113, 0.6);
+}
+
+.manta-lens-tag--warn {
+  background: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.4);
+}
+
+.manta-lens-tag--ok {
+  background: rgba(34, 211, 238, 0.1);
+  color: #22d3ee;
+  border: 1px solid rgba(34, 211, 238, 0.36);
+  text-shadow: 0 0 8px rgba(34, 211, 238, 0.5);
+}
+
+/* Mode pills in lens bar */
+.manta-lens-bar__modes {
+  display: flex;
+  gap: 1px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  border-radius: 5px;
+  padding: 2px;
+  flex-shrink: 0;
+}
+
+.manta-lens-mode-btn {
+  background: none;
+  border: none;
+  border-radius: 3px;
+  padding: 2px 7px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  color: rgba(148, 163, 184, 0.55);
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: background 0.13s, color 0.13s;
+}
+
+.manta-lens-mode-btn:hover:not(:disabled) { color: #7dd3fc; background: rgba(34, 211, 238, 0.08); }
+
+.manta-lens-mode-btn--active {
+  background: rgba(34, 211, 238, 0.16);
+  color: var(--fx-cyan);
+}
+
+/* Bar right section */
+.manta-lens-bar__right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.manta-lens-bar__refresh {
+  background: rgba(34, 211, 238, 0.07);
+  border: 1px solid rgba(34, 211, 238, 0.25);
+  border-radius: 5px;
+  color: #7dd3fc;
+  width: 26px; height: 26px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.13s;
+  padding: 0;
+}
+
+.manta-lens-bar__refresh:hover:not(:disabled) { background: rgba(34, 211, 238, 0.16); }
+
+.manta-lens-bar__exit {
+  background: linear-gradient(120deg,
+    rgba(34, 211, 238, 0.12),
+    rgba(168, 85, 247, 0.12));
+  border: 1px solid rgba(34, 211, 238, 0.38);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.62rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  color: #67e8f9;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: background 0.14s, box-shadow 0.14s;
+  white-space: nowrap;
+}
+
+.manta-lens-bar__exit:hover {
+  background: linear-gradient(120deg,
+    rgba(34, 211, 238, 0.24),
+    rgba(168, 85, 247, 0.24));
+  box-shadow: 0 0 14px rgba(34, 211, 238, 0.35);
+}
+
+/* Cross-mode readiness under lens HUD (syncs wizard mode like widget VALIDATE) */
+.manta-lens-readiness-row {
+  flex-shrink: 0;
+  z-index: 51;
+}
+
+.manta-lens .readiness-strip--lens {
+  margin: 0;
+  padding: 3px 10px 4px;
+  border: none;
+  border-bottom: 1px solid rgba(34, 211, 238, 0.22);
+  border-radius: 0;
+  background: rgba(2, 4, 12, 0.92);
+}
+
+.manta-lens .readiness-strip--lens .readiness-strip__head {
+  display: none;
+}
+
+.manta-lens .readiness-strip--lens .readiness-strip__pills {
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.manta-lens .readiness-strip--lens .readiness-pill {
+  background: rgba(15, 23, 42, 0.85);
+  color: #e2e8f0;
+  border: 1px solid rgba(34, 211, 238, 0.22);
+  padding: 2px 8px;
+  font-size: 0.62rem;
+}
+
+.manta-lens .readiness-strip--lens .readiness-pill--ok {
+  border-color: rgba(52, 211, 153, 0.45);
+  background: rgba(16, 185, 129, 0.12);
+}
+
+.manta-lens .readiness-strip--lens .readiness-pill--err {
+  border-color: rgba(248, 113, 113, 0.45);
+  background: rgba(248, 113, 113, 0.1);
+}
+
+.manta-lens .readiness-strip--lens .readiness-pill--active {
+  box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.35);
+}
+
+.manta-lens .readiness-strip--lens .readiness-pill__badge {
+  color: inherit;
+  font-size: 0.58rem;
+}
+
+/* ── Score progress bar ───────────────────────────────────────────── */
+.manta-lens-progress-bar {
+  flex-shrink: 0;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  z-index: 52;
+  background-color: rgb(3, 5, 14);
+}
+
+.manta-lens-progress-fill {
+  height: 100%;
+  min-width: 4px;
+  transition: width 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Section completion bars ──────────────────────────────────────── */
+.manta-lens-section-bars {
+  flex-shrink: 0;
+  padding: 6px 12px 5px;
+  background: rgb(3, 5, 14);
+  border-bottom: 2px solid rgba(34, 211, 238, 0.22);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  z-index: 52;
+}
+
+/* ── Glass zone — XML panel is visible through the tinted glass ───── */
+.manta-lens-glass {
+  flex: 1;
+  min-height: 0;
+  /* tinted but readable — bump opacity so XML stays visible but doesn't
+     bleed up into the solid sections above */
+  background: rgba(3, 5, 14, 0.42);
+  position: relative;
+  overflow: hidden;
+  /* clicks and scroll pass through to the XML panel beneath */
+  pointer-events: none;
+}
+
+/* Subtle grid overlay in the glass zone */
+.manta-lens-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(34, 211, 238, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, 0.035) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+}
+
+/* Scanline sweeping through glass zone */
+.manta-lens-scanline {
+  position: absolute;
+  left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(34, 211, 238, 0.55) 30%,
+    rgba(34, 211, 238, 0.85) 50%,
+    rgba(34, 211, 238, 0.55) 70%,
+    transparent 100%
+  );
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.45);
+  animation: manta-scan-drop 7s linear infinite;
+  pointer-events: none;
+}
+
+/* ── Issues tray pinned at the bottom ─────────────────────────────── */
+.manta-lens-tray {
+  flex-shrink: 0;
+  max-height: 230px;
+  background: rgb(3, 5, 14);
+  border-top: 2px solid rgba(34, 211, 238, 0.28);
+  display: flex;
+  flex-direction: column;
+  z-index: 52;
+  overflow: hidden;
+}
+
+.manta-lens-tray__header {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.63rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(34, 211, 238, 0.58);
+  padding: 6px 12px 4px;
+  border-bottom: 1px solid rgba(34, 211, 238, 0.1);
+  flex-shrink: 0;
+}
+
+.manta-lens-tray__header--row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+}
+
+.manta-lens-tray__header-title {
+  letter-spacing: 0.12em;
+  flex-shrink: 0;
+}
+
+.manta-lens-tray__filter-empty {
+  padding: 12px;
+  font-size: 0.72rem;
+  color: rgba(148, 163, 184, 0.85);
+  text-align: center;
+  line-height: 1.45;
+}
+
+.manta-lens-tray__header::before {
+  content: '◉ ';
+  animation: fx-cursor-blink 2.5s steps(1) infinite;
+}
+
+.manta-lens-tray__list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(34, 211, 238, 0.14) transparent;
+}
+
+.manta-lens-tray__list::-webkit-scrollbar { width: 4px; }
+.manta-lens-tray__list::-webkit-scrollbar-thumb { background: rgba(34, 211, 238, 0.14); border-radius: 4px; }
+
+.manta-lens-tray__footer {
+  flex-shrink: 0;
+  padding: 7px 12px;
+  border-top: 1px solid rgba(34, 211, 238, 0.1);
+}
+
+/* All-clear state in tray */
+.manta-lens-all-clear {
+  padding: 14px 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.85rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  color: rgba(34, 211, 238, 0.65);
+  text-shadow: 0 0 18px rgba(34, 211, 238, 0.4);
+  text-align: center;
+}
+
+/* ── Lens toggle button (inside normal widget header) ────────────── */
+.manta-lens-toggle-btn {
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.32);
+  border-radius: 7px;
+  padding: 4px 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.64rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  color: #c4b5fd;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: background 0.13s, box-shadow 0.13s, color 0.13s;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.manta-lens-toggle-btn:hover {
+  background: rgba(168, 85, 247, 0.22);
+  border-color: var(--fx-violet);
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.38);
+  color: #f0e6ff;
+}
+
+/* ── Clickable section bar in lens ───────────────────────────────── */
+.manta-section-bar--clickable {
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.13s, box-shadow 0.13s;
+  padding: 2px 4px;
+  margin: -2px -4px;
+  width: calc(100% + 8px);
+}
+
+.manta-section-bar--clickable:hover {
+  background: rgba(34, 211, 238, 0.08);
+}
+
+.manta-section-bar--active {
+  background: rgba(34, 211, 238, 0.14) !important;
+  box-shadow: inset 2px 0 0 var(--fx-cyan);
+}
+
+.manta-section-bar--active .manta-section-bar__label {
+  color: var(--fx-cyan) !important;
+  text-shadow: 0 0 8px rgba(34, 211, 238, 0.55);
+}
+
+/* ── Glass zone search bar ────────────────────────────────────────── */
+.manta-lens-glass__search {
+  position: absolute;
+  top: 10px; left: 10px; right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(3, 5, 14, 0.82);
+  border: 1px solid rgba(34, 211, 238, 0.35);
+  border-radius: 7px;
+  padding: 5px 10px;
+  z-index: 2;
+  pointer-events: all;
+  backdrop-filter: blur(6px) saturate(1.3);
+  box-shadow: 0 0 14px rgba(34, 211, 238, 0.12);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.manta-lens-glass__search:focus-within {
+  border-color: var(--fx-cyan);
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.28);
+}
+
+.manta-lens-glass__search-icon {
+  color: rgba(34, 211, 238, 0.55);
+  font-size: 1rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.manta-lens-glass__search-input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  color: #e0f2fe;
+  caret-color: var(--fx-cyan);
+}
+
+.manta-lens-glass__search-input::placeholder { color: rgba(148, 163, 184, 0.45); }
+
+.manta-lens-glass__search-clear {
+  background: none;
+  border: none;
+  color: rgba(148, 163, 184, 0.45);
+  cursor: pointer;
+  font-size: 0.72rem;
+  padding: 0;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: color 0.13s;
+}
+
+.manta-lens-glass__search-clear:hover { color: #f87171; }
+
+/* Active highlight label in the glass zone */
+.manta-lens-glass__hl-label {
+  position: absolute;
+  bottom: 8px; left: 10px; right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.63rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: rgba(34, 211, 238, 0.7);
+  text-transform: lowercase;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.manta-lens-glass__hl-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--fx-cyan);
+  box-shadow: 0 0 6px var(--fx-cyan);
+  flex-shrink: 0;
+  animation: manta-lens-corner-pulse 2s ease-in-out infinite;
+}
+
+/* ── XML line glow-highlight (injected via DOM by AssistantShell) ── */
+.fx-xml-line.manta-lens-hl {
+  background: rgba(34, 211, 238, 0.14) !important;
+  box-shadow: inset 3px 0 0 #22d3ee !important;
+  position: relative;
+}
+
+.fx-xml-line.manta-lens-hl .fx-xml-line-code {
+  color: #e0f2fe !important;
+  text-shadow: 0 0 8px rgba(34, 211, 238, 0.55) !important;
+}
+
+.fx-xml-line.manta-lens-hl .fx-xml-line-num {
+  color: var(--fx-cyan) !important;
+}
+
+/* Primary match when multiple XML lines hit (Lens ◀ ▶ navigation) */
+.fx-xml-line.manta-lens-hl--focus {
+  background: rgba(34, 211, 238, 0.26) !important;
+  box-shadow:
+    inset 3px 0 0 #22d3ee,
+    0 0 22px rgba(34, 211, 238, 0.35) !important;
+  z-index: 1;
+  animation: manta-lens-focus-pulse 1.4s ease-in-out infinite;
+}
+
+.fx-xml-line.manta-lens-hl--focus .fx-xml-line-code {
+  color: #fff !important;
+  text-shadow: 0 0 12px rgba(34, 211, 238, 0.85) !important;
+}
+
+@keyframes manta-lens-focus-pulse {
+  0%, 100% { filter: brightness(1); }
+  50%      { filter: brightness(1.12); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-xml-line.manta-lens-hl--focus { animation: none !important; }
+}
+
+/* ── Lens glass: hit nav + regex hint row ─────────────────────────── */
+.manta-lens-glass__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 4px 10px 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.04em;
+  color: rgba(148, 163, 184, 0.75);
+}
+
+.manta-lens-glass__hits {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.manta-lens-glass__hit-nav {
+  display: flex;
+  gap: 2px;
+}
+
+.manta-lens-glass__hit-btn {
+  background: rgba(34, 211, 238, 0.08);
+  border: 1px solid rgba(34, 211, 238, 0.28);
+  border-radius: 4px;
+  color: #7dd3fc;
+  width: 22px;
+  height: 22px;
+  font-size: 0.65rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.manta-lens-glass__hit-btn:hover:not(:disabled) {
+  background: rgba(34, 211, 238, 0.18);
+  border-color: rgba(34, 211, 238, 0.5);
+}
+
+.manta-lens-glass__hit-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.manta-lens-glass__kbd-hint {
+  opacity: 0.85;
+  text-align: right;
+  flex: 1;
+  min-width: 140px;
+}
+
+.manta-lens-glass__kbd-hint kbd {
+  display: inline-block;
+  padding: 1px 4px;
+  border-radius: 3px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: rgba(0, 0, 0, 0.35);
+  font-size: 0.56rem;
+  color: #cbd5e1;
+}
+
+/* Issue filter chips (lens tray) */
+.manta-lens-tray__filters {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-left: auto;
+}
+
+.manta-lens-filter-chip {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: rgba(0, 0, 0, 0.35);
+  color: rgba(148, 163, 184, 0.75);
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+
+.manta-lens-filter-chip:hover {
+  color: #e2e8f0;
+  border-color: rgba(34, 211, 238, 0.35);
+}
+
+.manta-lens-filter-chip--active {
+  border-color: rgba(34, 211, 238, 0.55);
+  background: rgba(34, 211, 238, 0.12);
+  color: #7dd3fc;
+}
+
+.manta-lens-copy-field {
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 4px;
+  color: rgba(148, 163, 184, 0.65);
+  width: 22px;
+  height: 22px;
+  font-size: 0.62rem;
+  cursor: pointer;
+  margin-right: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: color 0.12s, border-color 0.12s, background 0.12s;
+}
+
+.manta-lens-copy-field:hover {
+  color: #22d3ee;
+  border-color: rgba(34, 211, 238, 0.45);
+  background: rgba(34, 211, 238, 0.08);
+}
+
+/* ── Issue rows in lens tray ──────────────────────────────────────── */
+.manta-lens-issue-wrap {
+  border-bottom: 1px solid rgba(34, 211, 238, 0.06);
+  transition: background 0.13s;
+}
+
+.manta-lens-issue-wrap:last-child { border-bottom: none; }
+
+.manta-lens-issue-wrap--active {
+  background: rgba(34, 211, 238, 0.07);
+  border-left: 2px solid rgba(34, 211, 238, 0.6);
+}
+
+.manta-lens-issue-row {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding-right: 4px;
+  transition: background 0.1s;
+}
+
+.manta-lens-issue-row:hover { background: rgba(34, 211, 238, 0.05); }
+
+.manta-lens-issue-row > .manta-issue-row {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ASK (chat) button on each issue row */
+.manta-lens-ask-btn {
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid rgba(168, 85, 247, 0.28);
+  border-radius: 5px;
+  width: 24px; height: 24px;
+  font-size: 0.72rem;
+  cursor: pointer;
+  color: rgba(196, 181, 253, 0.7);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.13s, border-color 0.13s, color 0.13s;
+  margin-right: 4px;
+}
+
+.manta-lens-ask-btn:hover {
+  background: rgba(168, 85, 247, 0.18);
+  border-color: var(--fx-violet);
+  color: #f0e6ff;
+}
+
+.manta-lens-ask-btn--active {
+  background: rgba(168, 85, 247, 0.22);
+  border-color: var(--fx-violet);
+  color: #f0e6ff;
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+}
+
+/* Inline ask answer panel */
+.manta-lens-ask-answer {
+  background: rgba(168, 85, 247, 0.08);
+  border-left: 2px solid rgba(168, 85, 247, 0.55);
+  padding: 7px 12px 8px;
+  animation: manta-lens-in 0.2s ease-out;
+}
+
+.manta-lens-ask-answer__label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.63rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: rgba(196, 181, 253, 0.8);
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.manta-lens-ask-answer__label code {
+  background: rgba(168, 85, 247, 0.18);
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-size: 0.65rem;
+  color: #c4b5fd;
+}
+
+.manta-lens-ask-answer__close {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: rgba(148, 163, 184, 0.5);
+  cursor: pointer;
+  font-size: 0.72rem;
+  padding: 0;
+  transition: color 0.13s;
+}
+
+.manta-lens-ask-answer__close:hover { color: #f87171; }
+
+.manta-lens-ask-answer__text {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  line-height: 1.55;
+  color: rgba(203, 213, 225, 0.85);
+  margin: 0;
+}
+
+/* Header clear-highlight chip */
+.manta-lens-tray__clear-hl {
+  margin-left: auto;
+  background: none;
+  border: 1px solid rgba(34, 211, 238, 0.22);
+  border-radius: 4px;
+  padding: 1px 7px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: rgba(34, 211, 238, 0.55);
+  cursor: pointer;
+  transition: color 0.13s, border-color 0.13s;
+  flex-shrink: 0;
+}
+
+.manta-lens-tray__clear-hl:hover { color: var(--fx-cyan); border-color: var(--fx-cyan); }
+
+.manta-lens-tray__header {
+  display: flex;
+  align-items: center;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   LENS — PRODUCTION POLISH
+   Overrides applied only within the lens context so nothing else breaks.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── HUD bar refinements ──────────────────────────────────────────── */
+.manta-lens-bar {
+  gap: 7px;
+  padding: 0 10px 0 14px;
+}
+
+.manta-lens-bar__brand {
+  font-size: 0.74rem;
+  letter-spacing: 0.16em;
+}
+
+/* Score number inside the ring — tighter with /100 */
+.manta-lens-bar .manta-score-ring-text {
+  font-size: 0.9rem !important;
+}
+
+/* Mode pill group */
+.manta-lens-bar__modes {
+  gap: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid rgba(34, 211, 238, 0.18);
+}
+
+.manta-lens-mode-btn {
+  padding: 4px 8px;
+  font-size: 0.6rem;
+  letter-spacing: 0.09em;
+  border-right: 1px solid rgba(34, 211, 238, 0.12);
+}
+
+.manta-lens-mode-btn:last-child { border-right: none; }
+
+.manta-lens-mode-btn--active {
+  background: rgba(34, 211, 238, 0.18);
+  color: #67e8f9;
+}
+
+/* ── Section bars — clean grid, no gray backgrounds ──────────────── */
+.manta-lens-section-bars {
+  padding: 4px 0 4px;
+  gap: 0;
+}
+
+/* Reset widget-level section-bar styles within the lens */
+.manta-lens-section-bars .manta-section-bar,
+.manta-lens-section-bars .manta-section-bar--clickable {
+  display: grid !important;
+  grid-template-columns: 76px 1fr 32px !important;
+  align-items: center !important;
+  gap: 8px !important;
+  height: 28px !important;
+  min-height: 28px !important;
+  padding: 0 14px !important;
+  margin: 0 !important;
+  width: 100% !important;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  flex-direction: unset !important;
+  transition: background 0.12s !important;
+}
+
+.manta-lens-section-bars .manta-section-bar--clickable {
+  cursor: pointer !important;
+}
+
+.manta-lens-section-bars .manta-section-bar--clickable:hover {
+  background: rgba(34, 211, 238, 0.06) !important;
+}
+
+.manta-lens-section-bars .manta-section-bar--active {
+  background: rgba(34, 211, 238, 0.10) !important;
+  border-left: 2px solid rgba(34, 211, 238, 0.7) !important;
+}
+
+.manta-lens-section-bars .manta-section-bar--active .manta-section-bar__label {
+  color: #67e8f9 !important;
+}
+
+.manta-lens-section-bars .manta-section-bar__label {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+  font-size: 0.67rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.01em !important;
+  color: rgba(148, 163, 184, 0.75) !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  text-shadow: none !important;
+}
+
+.manta-lens-section-bars .manta-section-bar__track {
+  height: 3px !important;
+  border-radius: 2px !important;
+  background: rgba(255, 255, 255, 0.07) !important;
+  overflow: hidden !important;
+}
+
+.manta-lens-section-bars .manta-section-bar__fill {
+  height: 100% !important;
+  border-radius: 2px !important;
+  transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.manta-lens-section-bars .manta-section-bar__stat {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+  font-size: 0.66rem !important;
+  font-weight: 900 !important;
+  text-align: right !important;
+  flex-shrink: 0 !important;
+  letter-spacing: 0.02em !important;
+}
+
+/* Divider between sections and glass */
+.manta-lens-section-bars {
+  border-bottom: 1px solid rgba(34, 211, 238, 0.14) !important;
+  padding-bottom: 5px !important;
+}
+
+/* ── Tray header ──────────────────────────────────────────────────── */
+.manta-lens-tray__header {
+  font-size: 0.6rem !important;
+  letter-spacing: 0.22em !important;
+  padding: 7px 14px 5px !important;
+  color: rgba(34, 211, 238, 0.5) !important;
+}
+
+/* ── Issue rows in lens tray — tighter and cleaner ───────────────── */
+.manta-lens-tray .manta-issue-row {
+  padding: 7px 14px !important;
+  gap: 7px !important;
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.manta-lens-tray .manta-issue-badge {
+  font-size: 0.58rem !important;
+  padding: 2px 6px !important;
+  border-radius: 3px !important;
+  flex-shrink: 0 !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.04em !important;
+  min-width: 44px !important;
+  text-align: center !important;
+}
+
+.manta-lens-tray .manta-issue-msg {
+  font-size: 0.71rem !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  color: rgba(203, 213, 225, 0.9) !important;
+  letter-spacing: 0 !important;
+}
+
+.manta-lens-tray .manta-issue-section {
+  font-size: 0.57rem !important;
+  padding: 2px 7px !important;
+  border-radius: 3px !important;
+  letter-spacing: 0.06em !important;
+  font-weight: 700 !important;
+  flex-shrink: 0 !important;
+}
+
+.manta-lens-tray .manta-issue-def-btn {
+  width: 20px !important;
+  height: 20px !important;
+  font-size: 0.65rem !important;
+}
+
+.manta-lens-tray .manta-issue-actions {
+  gap: 4px !important;
+  flex-shrink: 0 !important;
+}
+
+/* Issue row hover */
+.manta-lens-issue-row:hover .manta-issue-row {
+  background: none !important;
+}
+
+/* ── FIX ISSUES button — solid, premium ──────────────────────────── */
+.manta-lens-tray__footer {
+  padding: 9px 12px !important;
+}
+
+.manta-lens-tray .manta-widget__fix-btn {
+  width: 100% !important;
+  padding: 9px 16px !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+  font-size: 0.72rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.15em !important;
+  text-transform: uppercase !important;
+  border-radius: 8px !important;
+  background: linear-gradient(
+    120deg,
+    rgba(34, 211, 238, 0.18) 0%,
+    rgba(168, 85, 247, 0.18) 100%
+  ) !important;
+  border: 1px solid rgba(34, 211, 238, 0.5) !important;
+  color: #e0f2fe !important;
+  transition: background 0.18s, box-shadow 0.18s, transform 0.1s !important;
+}
+
+.manta-lens-tray .manta-widget__fix-btn:hover {
+  background: linear-gradient(
+    120deg,
+    rgba(34, 211, 238, 0.28) 0%,
+    rgba(168, 85, 247, 0.28) 100%
+  ) !important;
+  box-shadow: 0 0 22px rgba(34, 211, 238, 0.3), 0 0 8px rgba(168, 85, 247, 0.2) !important;
+  transform: translateY(-1px) !important;
+}
+
+.manta-lens-tray .manta-widget__fix-btn:active {
+  transform: translateY(0) !important;
+}
+
+/* ── Lens panel border — sharper, premium ────────────────────────── */
+.manta-lens {
+  border: 1px solid rgba(34, 211, 238, 0.35) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 0 40px rgba(34, 211, 238, 0.1),
+    0 0 80px rgba(168, 85, 247, 0.06) !important;
+}
+
+/* ── Reduced motion ───────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .manta-lens               { animation: none !important; }
+  .manta-lens-corner        { animation: none !important; }
+  .manta-lens-scanline      { animation: none !important; }
+  .manta-lens-bar::after    { animation: none !important; }
+  .manta-lens-progress-fill { transition: none !important; }
+  .manta-lens-ask-answer    { animation: none !important; }
+  .manta-lens-glass__hl-dot { animation: none !important; }
+  .manta-lens-tray .manta-widget__fix-btn { transition: none !important; }
+  .manta-lens-section-bars .manta-section-bar__fill { transition: none !important; }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   FUTURISTIC DROPDOWNS — native <select> reskin + dark popup chrome
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Strip native chrome + paint a neon chevron. Works cross-browser. */
+#root select.form-select,
+#root .form-select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* Neon cyan chevron — inline SVG so no asset pipeline needed */
+  background-image:
+    linear-gradient(transparent, transparent),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none' stroke='%2322d3ee' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='3,5 7,9 11,5'/></svg>");
+  background-repeat: no-repeat, no-repeat;
+  background-position: right 0.7rem center, 0 0;
+  background-size: 12px 12px, auto;
+  padding-right: 2rem;
+  /* Ask the browser for a dark chrome on the native popup */
+  color-scheme: dark;
+  cursor: pointer;
+}
+
+#root select.form-select:hover:not(:disabled):not(:focus) {
+  background-image:
+    linear-gradient(transparent, transparent),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none' stroke='%2367e8f9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='3,5 7,9 11,5'/></svg>");
+}
+
+#root select.form-select:focus {
+  background-image:
+    linear-gradient(transparent, transparent),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none' stroke='%23e0f2fe' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'><polyline points='3,5 7,9 11,5'/></svg>");
+}
+
+/* Native <option> styling — mostly respected on Chromium + Firefox when
+   color-scheme is dark. Safari renders the OS-native panel. */
+#root select.form-select option {
+  background: #05080e;
+  color: #e0f2fe;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+#root select.form-select option:checked,
+#root select.form-select option:hover {
+  background: linear-gradient(120deg, rgba(34, 211, 238, 0.35), rgba(168, 85, 247, 0.35));
+  color: #ffffff;
+}
+
+#root select.form-select optgroup {
+  background: #020617;
+  color: var(--fx-cyan);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Disabled dropdown reads as "locked" */
+#root select.form-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(0.3);
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   GCMD KEYWORDS — faceted search, results dropdown, chips
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Facet panel gets a left-edge neon rule */
+#root .keyword-facet {
+  position: relative;
+  padding-left: 14px !important;
+}
+
+#root .keyword-facet::before {
+  content: '';
+  position: absolute;
+  top: 14px;
+  bottom: 14px;
+  left: 6px;
+  width: 2px;
+  background: linear-gradient(180deg,
+    transparent,
+    var(--fx-cyan) 20%,
+    var(--fx-violet) 80%,
+    transparent);
+  border-radius: 2px;
+  opacity: 0.55;
+  box-shadow: 0 0 8px rgba(34, 211, 238, 0.45);
+  pointer-events: none;
+}
+
+#root .keyword-facet .panel-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+#root .keyword-facet .panel-title::before {
+  content: '▸';
+  color: var(--fx-cyan);
+  font-size: 0.75rem;
+  text-shadow: 0 0 6px rgba(34, 211, 238, 0.7);
+}
+
+/* Search row — glyph-prefixed input + glowing submit */
+.kw-search-row {
+  position: relative;
+  margin-bottom: 0.5rem !important;
+}
+
+#root .kw-search-row .form-control {
+  padding-left: 2rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  background-image:
+    linear-gradient(transparent, transparent),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%2322d3ee' stroke-width='1.75' stroke-linecap='round'><circle cx='7' cy='7' r='4.5'/><line x1='10.5' y1='10.5' x2='13.5' y2='13.5'/></svg>");
+  background-repeat: no-repeat, no-repeat;
+  background-position: 0.6rem center, 0 0;
+  background-size: 14px 14px, auto;
+}
+
+#root .kw-search-row .button {
+  padding: 0 0.85rem !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.12em;
+  min-width: 68px;
+}
+
+/* Results panel — styled as a HUD dropdown list */
+#root .kw-results {
+  list-style: none;
+  padding: 4px !important;
+  margin: 0.35rem 0 0.6rem;
+  max-height: 180px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(34, 211, 238, 0.2) transparent;
+  background:
+    radial-gradient(120% 100% at 50% -10%, rgba(34, 211, 238, 0.06), transparent 60%),
+    rgba(5, 8, 22, 0.55);
+  border: 1px solid var(--fx-border-soft);
+  border-radius: 10px;
+  box-shadow:
+    inset 0 0 0 1px rgba(34, 211, 238, 0.06),
+    0 6px 20px rgba(2, 6, 23, 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+#root .kw-results:empty {
+  display: none;
+}
+
+#root .kw-results::-webkit-scrollbar        { width: 6px; }
+#root .kw-results::-webkit-scrollbar-thumb  {
+  background: linear-gradient(180deg, var(--fx-cyan), var(--fx-violet));
+  border-radius: 6px;
+}
+
+#root .kw-results li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#root .kw-results li + li {
+  border-top: 1px dashed rgba(34, 211, 238, 0.1);
+}
+
+#root .kw-results .linkish {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.8rem;
+  color: #e0f2fe;
+  transition: background 0.12s ease, color 0.12s ease, transform 0.1s ease;
+  text-align: left;
+}
+
+#root .kw-results .linkish:hover {
+  background: linear-gradient(90deg,
+    rgba(34, 211, 238, 0.14),
+    rgba(168, 85, 247, 0.12));
+  color: #ffffff;
+  transform: translateX(2px);
+}
+
+/* Rewrite the literal "+ " prefix into a glyph badge */
+#root .kw-results .linkish {
+  /* keep the raw text; we style it with first-letter-ish trick via ::before */
+  text-indent: 0;
+}
+
+#root .kw-results .linkish::before {
+  content: '+';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  background: rgba(34, 211, 238, 0.12);
+  border: 1px solid rgba(34, 211, 238, 0.4);
+  color: var(--fx-cyan);
+  font-weight: 900;
+  font-size: 0.72rem;
+  flex-shrink: 0;
+  box-shadow: 0 0 6px rgba(34, 211, 238, 0.35);
+}
+
+#root .kw-results .linkish:hover::before {
+  background: var(--fx-cyan);
+  color: #020617;
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.7);
+}
+
+/* Chip row — selected keywords */
+#root .keyword-facet .chip-row {
+  gap: 6px;
+  margin-top: 2px;
+}
+
+#root .kw-chip {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 12px !important;
+  font-size: 0.74rem !important;
+  font-weight: 600;
+  color: #e0f2fe !important;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* LED indicator before each chip */
+#root .kw-chip::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--fx-cyan);
+  box-shadow: 0 0 6px rgba(34, 211, 238, 0.85);
+  flex-shrink: 0;
+}
+
+/* Make the literal "×" render as a styled close pill */
+#root .kw-chip {
+  /* collapse whitespace before the × so we can style it via last-letter workaround */
+  letter-spacing: 0.02em;
+}
+
+/* Hover: switch indicator to magenta (destructive affordance) */
+#root .kw-chip:hover {
+  border-color: var(--fx-magenta) !important;
+  box-shadow:
+    0 0 14px rgba(236, 72, 153, 0.45),
+    inset 0 0 0 1px rgba(236, 72, 153, 0.25) !important;
+  color: #fff !important;
+}
+
+#root .kw-chip:hover::before {
+  background: var(--fx-magenta);
+  box-shadow: 0 0 8px rgba(236, 72, 153, 0.9);
+}
+
+/* Count badge — tabular digits, cyan terminal feel */
+#root .keyword-facet .count-badge {
+  margin-left: auto;
+  padding: 1px 8px !important;
+  font-size: 0.7rem !important;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  background: rgba(34, 211, 238, 0.1) !important;
+  border: 1px solid rgba(34, 211, 238, 0.38) !important;
+  color: var(--fx-cyan) !important;
+  box-shadow: 0 0 8px rgba(34, 211, 238, 0.22);
+  border-radius: 999px !important;
+  text-shadow: 0 0 8px rgba(34, 211, 238, 0.55);
+}
+
+/* When a facet has 0 chips the badge goes dim */
+#root .keyword-facet .count-badge:is(:empty),
+#root .keyword-facet .panel-title .count-badge:is(:empty) {
+  opacity: 0.35;
+}
+
+/* AI suggest panel: inset neon frame + monospace */
+#root .ai-suggest {
+  background:
+    radial-gradient(120% 80% at 0% 0%, rgba(168, 85, 247, 0.10), transparent 60%),
+    rgba(5, 8, 22, 0.4) !important;
+  border: 1px solid rgba(168, 85, 247, 0.25) !important;
+  border-radius: 12px !important;
+  position: relative;
+}
+
+#root .ai-suggest::before {
+  content: 'AI ◆';
+  position: absolute;
+  top: -8px;
+  right: 14px;
+  padding: 1px 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.62rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  color: #e9d5ff;
+  background: linear-gradient(90deg, var(--fx-violet), var(--fx-magenta));
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.55);
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   VALIDATOR CHIPS — error / warning pills go neon
+   ════════════════════════════════════════════════════════════════════ */
+
+#root .score-chips .chip {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.68rem !important;
+  padding: 3px 10px !important;
+  border-radius: 999px !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#root .score-chips .chip::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+#root .score-chips .chip-err {
+  color: #fecaca !important;
+  background: rgba(248, 113, 113, 0.15) !important;
+  border: 1px solid rgba(248, 113, 113, 0.55) !important;
+  box-shadow: 0 0 12px rgba(248, 113, 113, 0.3);
+  text-shadow: 0 0 8px rgba(248, 113, 113, 0.55);
+}
+
+#root .score-chips .chip-err::before {
+  background: #f87171;
+  box-shadow: 0 0 8px rgba(248, 113, 113, 0.9);
+  animation: fx-pulse-dot 1.4s ease-in-out infinite;
+}
+
+#root .score-chips .chip-warn {
+  color: #fde68a !important;
+  background: rgba(251, 191, 36, 0.12) !important;
+  border: 1px solid rgba(251, 191, 36, 0.5) !important;
+  box-shadow: 0 0 12px rgba(251, 191, 36, 0.22);
+  text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
+}
+
+#root .score-chips .chip-warn::before {
+  background: #fbbf24;
+  box-shadow: 0 0 8px rgba(251, 191, 36, 0.85);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #root .score-chips .chip-err::before { animation: none !important; }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   HEADER PROFILE SELECTOR — the dropdown in the top-right
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Container around "Profile:" label + select */
+.pilot-app-header .pilot-header-controls,
+.pilot-app-header .header-top > div:last-child {
+  /* pill-in-a-frame feel */
+  position: relative;
+}
+
+/* The "Profile:" label glitches into a terminal prompt */
+.pilot-app-header .form-label[for='profileSelect'] {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--fx-cyan) !important;
+  text-shadow: 0 0 8px rgba(34, 211, 238, 0.55);
+}
+
+.pilot-app-header .form-label[for='profileSelect']::before {
+  content: '▸';
+  color: var(--fx-violet);
+  font-size: 0.7rem;
+  text-shadow: 0 0 6px rgba(168, 85, 247, 0.85);
+  animation: fx-cursor-blink 2.2s steps(1) infinite;
+}
+
+/* The profile dropdown itself — full cyberpunk pill */
+.pilot-app-header select#profileSelect,
+.pilot-app-header select.form-select {
+  background:
+    linear-gradient(120deg,
+      rgba(34, 211, 238, 0.10),
+      rgba(168, 85, 247, 0.10)),
+    rgba(2, 6, 23, 0.75) !important;
+  border: 1px solid rgba(34, 211, 238, 0.45) !important;
+  border-radius: 999px !important;
+  padding: 0.35rem 2rem 0.35rem 0.95rem !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.76rem !important;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #e0f2fe !important;
+  box-shadow:
+    inset 0 0 10px rgba(34, 211, 238, 0.15),
+    0 0 0 0 rgba(34, 211, 238, 0) !important;
+  /* Move the chevron in from the default 0.7rem so it balances the pill */
+  background-position: right 0.85rem center, 0 0, 0 0 !important;
+  background-size: 10px 10px, auto, auto !important;
+  background-repeat: no-repeat, no-repeat, no-repeat !important;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.2s ease,
+    transform 0.12s ease;
+}
+
+.pilot-app-header select#profileSelect:hover {
+  border-color: var(--fx-cyan) !important;
+  box-shadow:
+    inset 0 0 12px rgba(34, 211, 238, 0.22),
+    0 0 16px rgba(34, 211, 238, 0.35) !important;
+  transform: translateY(-1px);
+}
+
+.pilot-app-header select#profileSelect:focus,
+.pilot-app-header select#profileSelect:focus-visible {
+  border-color: #e0f2fe !important;
+  box-shadow:
+    inset 0 0 14px rgba(34, 211, 238, 0.28),
+    0 0 0 3px rgba(34, 211, 238, 0.28),
+    0 0 22px rgba(168, 85, 247, 0.35) !important;
+  outline: none !important;
+}
+
+/* Subtle orbiting accent when the pill is focused */
+.pilot-app-header select#profileSelect:focus-visible {
+  animation: fx-profile-orbit 3.5s linear infinite;
+}
+
+@keyframes fx-profile-orbit {
+  0%   { box-shadow:
+           inset 0 0 14px rgba(34, 211, 238, 0.28),
+           0 0 0 3px rgba(34, 211, 238, 0.28),
+           0 0 22px rgba(168, 85, 247, 0.35); }
+  50%  { box-shadow:
+           inset 0 0 14px rgba(168, 85, 247, 0.28),
+           0 0 0 3px rgba(168, 85, 247, 0.28),
+           0 0 22px rgba(34, 211, 238, 0.35); }
+  100% { box-shadow:
+           inset 0 0 14px rgba(34, 211, 238, 0.28),
+           0 0 0 3px rgba(34, 211, 238, 0.28),
+           0 0 22px rgba(168, 85, 247, 0.35); }
+}
+
+/* Dark chrome for the native popup + mono gradient highlight on the
+   currently-selected profile option */
+.pilot-app-header select#profileSelect {
+  color-scheme: dark;
+}
+
+.pilot-app-header select#profileSelect option {
+  background: #04060d;
+  color: #e0f2fe;
+  padding: 6px 10px;
+}
+
+.pilot-app-header select#profileSelect option:checked {
+  background: linear-gradient(120deg,
+    rgba(34, 211, 238, 0.45),
+    rgba(168, 85, 247, 0.45));
+  color: #ffffff;
+  font-weight: 900;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   KEYWORD CHIP ENTER ANIMATION — chips fly in from the search bar
+   ════════════════════════════════════════════════════════════════════ */
+
+@keyframes fx-kw-chip-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.92);
+    filter: blur(2px);
+    box-shadow: 0 0 0 0 rgba(34, 211, 238, 0);
+  }
+  55% {
+    opacity: 1;
+    filter: blur(0);
+    box-shadow: 0 0 18px rgba(34, 211, 238, 0.55);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+    box-shadow: 0 0 0 0 rgba(34, 211, 238, 0);
+  }
+}
+
+/* Each newly rendered chip plays the enter sweep once.
+   Existing chips re-animating on unrelated re-renders is harmless —
+   React keeps keys stable so the animation only fires on real mounts. */
+#root .keyword-facet .kw-chip {
+  animation: fx-kw-chip-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform, opacity, filter;
+}
+
+/* Stagger the first few chips for a quick cascade look */
+#root .keyword-facet .kw-chip:nth-child(2)  { animation-delay: 0.04s; }
+#root .keyword-facet .kw-chip:nth-child(3)  { animation-delay: 0.08s; }
+#root .keyword-facet .kw-chip:nth-child(4)  { animation-delay: 0.12s; }
+#root .keyword-facet .kw-chip:nth-child(5)  { animation-delay: 0.16s; }
+#root .keyword-facet .kw-chip:nth-child(6)  { animation-delay: 0.20s; }
+
+/* Result rows cascade in from the search field */
+@keyframes fx-kw-result-in {
+  from { opacity: 0; transform: translateX(-6px); }
+  to   { opacity: 1; transform: translateX(0);    }
+}
+
+#root .kw-results li {
+  animation: fx-kw-result-in 0.22s ease-out both;
+}
+#root .kw-results li:nth-child(1)  { animation-delay: 0.00s; }
+#root .kw-results li:nth-child(2)  { animation-delay: 0.025s; }
+#root .kw-results li:nth-child(3)  { animation-delay: 0.05s; }
+#root .kw-results li:nth-child(4)  { animation-delay: 0.075s; }
+#root .kw-results li:nth-child(5)  { animation-delay: 0.10s; }
+#root .kw-results li:nth-child(n+6) { animation-delay: 0.125s; }
+
+/* Count badge pulses briefly when its value changes. We can't hook
+   into React cheaply, so simulate with a fresh transition on every
+   paint: when the number inside changes, the width reflows and this
+   box-shadow transition runs. Keeps cost near-zero. */
+#root .keyword-facet .count-badge {
+  transition:
+    box-shadow 0.45s ease,
+    color 0.25s ease,
+    background 0.25s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pilot-app-header select#profileSelect:focus-visible { animation: none !important; }
+  #root .keyword-facet .kw-chip { animation: none !important; }
+  #root .kw-results li { animation: none !important; }
+  .pilot-app-header .form-label[for='profileSelect']::before { animation: none !important; }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   CHIP × PILL + DISINTEGRATE LEAVE ANIMATION
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Split the chip into a label + a close pill */
+#root .kw-chip .kw-chip__label {
+  display: inline-block;
+  line-height: 1;
+}
+
+#root .kw-chip .kw-chip__x {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-left: 2px;
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-weight: 900;
+  font-size: 0.78rem;
+  line-height: 1;
+  color: rgba(148, 163, 184, 0.7);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid transparent;
+  transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease, transform 0.12s ease;
+}
+
+#root .kw-chip:hover .kw-chip__x {
+  color: #fff;
+  background: rgba(236, 72, 153, 0.35);
+  border-color: rgba(236, 72, 153, 0.75);
+  transform: rotate(90deg);
+}
+
+/* Leave animation — chip shears right, fades, chromatic-aberration ghost */
+@keyframes fx-kw-chip-out {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: blur(0) drop-shadow(0 0 0 rgba(236, 72, 153, 0));
+    box-shadow: 0 0 0 0 rgba(236, 72, 153, 0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateX(4px) scale(1.04);
+    filter: blur(0) drop-shadow(2px 0 0 rgba(34, 211, 238, 0.7))
+                   drop-shadow(-2px 0 0 rgba(236, 72, 153, 0.7));
+    box-shadow: 0 0 22px rgba(236, 72, 153, 0.55);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(18px) scale(0.9);
+    filter: blur(3px);
+    box-shadow: 0 0 0 0 rgba(236, 72, 153, 0);
+  }
+}
+
+#root .kw-chip.kw-chip--leaving {
+  /* override the enter animation — this also stops the stagger delays
+     from applying to the leave sequence */
+  animation: fx-kw-chip-out 0.26s cubic-bezier(0.4, 0, 0.6, 1) both !important;
+  pointer-events: none;
+  /* Size stays fixed during leave so neighbouring chips don't reflow twice */
+  will-change: transform, opacity, filter;
+}
+
+#root .kw-chip.kw-chip--leaving .kw-chip__x {
+  background: var(--fx-magenta);
+  color: #fff;
+  border-color: var(--fx-magenta);
+  transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #root .kw-chip.kw-chip--leaving { animation: none !important; opacity: 0 !important; }
+  #root .kw-chip:hover .kw-chip__x { transform: none !important; }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   FIELD → XML LINE TETHER (neon SVG overlay)
+   ════════════════════════════════════════════════════════════════════ */
+
+.fx-tether {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;     /* never intercepts clicks */
+  z-index: 40;              /* above cards, below modals/widget */
+  /* Opacity is controlled per-wire element, not on the SVG wrapper,
+     so both wires can appear independently. */
+}
+
+/* ── Wire 1 (field → XML): hidden by default, shown via fx-tether--on ── */
+.fx-tether__glow,
+.fx-tether__line,
+.fx-tether__dot {
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+
+.fx-tether--on .fx-tether__glow,
+.fx-tether--on .fx-tether__line,
+.fx-tether--on .fx-tether__dot {
+  opacity: 1;
+}
+
+.fx-tether__line {
+  /* Energy-flow: march the dashes continuously along the path */
+  stroke-linecap: round;
+  animation: fx-tether-flow 1.1s linear infinite;
+  filter: drop-shadow(0 0 3px rgba(34, 211, 238, 0.85));
+}
+
+.fx-tether__glow {
+  stroke-linecap: round;
+}
+
+@keyframes fx-tether-flow {
+  from { stroke-dashoffset: 0;   }
+  to   { stroke-dashoffset: -24; }
+}
+
+/* ── Reel-in: draw the path from the field end toward the XML line ── */
+.fx-tether--drawing .fx-tether__line {
+  /* pathLength=1 on the <path> element lets us work in 0..1 space */
+  stroke-dasharray: 1 1 !important;
+  animation: fx-tether-draw 0.4s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+}
+
+.fx-tether--drawing .fx-tether__glow {
+  stroke-dasharray: 1 1;
+  animation: fx-tether-draw 0.4s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+}
+
+@keyframes fx-tether-draw {
+  from { stroke-dashoffset: 1; }
+  to   { stroke-dashoffset: 0; }
+}
+
+/* During draw-in the endpoint dots appear with a brief burst */
+.fx-tether--on.fx-tether--drawing .fx-tether__dot {
+  animation: fx-tether-dot-pop 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes fx-tether-dot-pop {
+  0%   { opacity: 0; r: 0;   }
+  60%  { opacity: 1; r: 5.2; }
+  100% { opacity: 0.95; r: 3.2; }
+}
+
+.fx-tether__dot {
+  filter: drop-shadow(0 0 5px rgba(34, 211, 238, 0.9));
+  animation: fx-tether-dot 1.8s ease-in-out infinite;
+}
+
+.fx-tether__dot--end {
+  filter: drop-shadow(0 0 5px rgba(168, 85, 247, 0.9));
+}
+
+@keyframes fx-tether-dot {
+  0%, 100% { r: 3.2; opacity: 0.95; }
+  50%      { r: 4.4; opacity: 1;    }
+}
+
+/* ── Issue → Field wire ─────────────────────────────────────────── */
+.fx-tether__issue-glow,
+.fx-tether__issue-line,
+.fx-tether__issue-dot {
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.fx-tether--issue .fx-tether__issue-glow,
+.fx-tether--issue .fx-tether__issue-line,
+.fx-tether--issue .fx-tether__issue-dot {
+  opacity: 1;
+}
+
+.fx-tether__issue-line {
+  stroke-linecap: round;
+  animation: fx-tether-issue-flow 0.9s linear infinite;
+  filter: drop-shadow(0 0 3px rgba(245, 158, 11, 0.85));
+}
+
+.fx-tether__issue-glow {
+  stroke-linecap: round;
+}
+
+@keyframes fx-tether-issue-flow {
+  from { stroke-dashoffset: 0;   }
+  to   { stroke-dashoffset: 18;  }
+}
+
+.fx-tether__issue-dot {
+  filter: drop-shadow(0 0 5px rgba(245, 158, 11, 0.9));
+  animation: fx-tether-dot 1.6s ease-in-out infinite;
+}
+
+.fx-tether__issue-dot--end {
+  filter: drop-shadow(0 0 5px rgba(244, 63, 94, 0.9));
+  animation: fx-tether-dot 1.4s ease-in-out infinite 0.3s;
+}
+
+/* Issue rows glow on hover to show the wire will appear */
+[data-pilot-issue-field]:hover {
+  background: rgba(245, 158, 11, 0.06) !important;
+  box-shadow: inset 3px 0 0 rgba(245, 158, 11, 0.6) !important;
+}
+
+[data-pilot-issue-sev='e']:hover {
+  background: rgba(244, 63, 94, 0.06) !important;
+  box-shadow: inset 3px 0 0 rgba(244, 63, 94, 0.6) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-tether__issue-line { animation: none !important; }
+  .fx-tether__issue-dot  { animation: none !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-tether__line { animation: none !important; }
+  .fx-tether__dot  { animation: none !important; }
+  .fx-tether--drawing .fx-tether__line,
+  .fx-tether--drawing .fx-tether__glow { animation: none !important; stroke-dasharray: 6 6 !important; }
+  .fx-tether--drawing .fx-tether__dot  { animation: none !important; }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   MISSION-CONTROL FOOTER — HUD status strip
+   ════════════════════════════════════════════════════════════════════ */
+
+.pilot-app-footer.mission-footer {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 16px !important;
+  margin-top: 1.25rem !important;
+  border-radius: 12px !important;
+  background:
+    linear-gradient(90deg,
+      rgba(34, 211, 238, 0.04),
+      rgba(168, 85, 247, 0.04) 50%,
+      rgba(34, 211, 238, 0.04)),
+    rgba(3, 6, 20, 0.78) !important;
+  border: 1px solid rgba(34, 211, 238, 0.28) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(34, 211, 238, 0.05),
+    0 0 28px rgba(34, 211, 238, 0.08) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Scanning bottom rail (same flavor as the header underline) */
+.mission-footer::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 1px;
+  background: var(--fx-accent-gradient);
+  background-size: 300% 100%;
+  animation: fx-sweep 8s linear infinite;
+  filter: drop-shadow(0 0 6px rgba(34, 211, 238, 0.55));
+  pointer-events: none;
+}
+
+/* Ambient grid texture (hairline) */
+.mission-footer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(34, 211, 238, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, 0.035) 1px, transparent 1px);
+  background-size: 28px 28px;
+  opacity: 0.35;
+  pointer-events: none;
+  mask-image: linear-gradient(90deg, transparent, #000 20%, #000 80%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 20%, #000 80%, transparent);
+}
+
+/* Clusters */
+.mission-footer__cluster {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
+}
+
+.mission-footer__cluster--left  { flex-shrink: 0; }
+.mission-footer__cluster--mid   { flex: 1; justify-content: center; gap: 18px; }
+.mission-footer__cluster--right { flex-shrink: 0; margin-left: auto; }
+
+/* Vertical divider between left and middle */
+.mission-footer__spine {
+  width: 1px;
+  height: 22px;
+  background: linear-gradient(180deg,
+    transparent,
+    rgba(34, 211, 238, 0.55),
+    transparent);
+  flex-shrink: 0;
+}
+
+/* Status LED */
+.mission-footer__led {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.mission-footer__led::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  opacity: 0.65;
+}
+
+.mission-footer__status--ok {
+  color: var(--fx-cyan);
+  text-shadow: 0 0 8px rgba(34, 211, 238, 0.6);
+}
+
+.mission-footer__status--ok.mission-footer__led {
+  background: #22d3ee;
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.9);
+  animation: mission-led-ok 2.6s ease-in-out infinite;
+}
+
+.mission-footer__status--ok.mission-footer__led::after {
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.45), transparent 65%);
+}
+
+.mission-footer__status--dirty {
+  color: var(--fx-magenta);
+  text-shadow: 0 0 8px rgba(236, 72, 153, 0.65);
+}
+
+.mission-footer__status--dirty.mission-footer__led {
+  background: #ec4899;
+  box-shadow: 0 0 12px rgba(236, 72, 153, 0.95);
+  animation: mission-led-dirty 1s ease-in-out infinite;
+}
+
+.mission-footer__status--dirty.mission-footer__led::after {
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.55), transparent 65%);
+}
+
+@keyframes mission-led-ok {
+  0%, 100% { box-shadow: 0 0 8px  rgba(34, 211, 238, 0.75); }
+  50%      { box-shadow: 0 0 14px rgba(34, 211, 238, 1);    }
+}
+
+@keyframes mission-led-dirty {
+  0%, 100% { box-shadow: 0 0 10px rgba(236, 72, 153, 0.85); transform: scale(1);    }
+  50%      { box-shadow: 0 0 18px rgba(236, 72, 153, 1);    transform: scale(1.18); }
+}
+
+.mission-footer__label {
+  font-weight: 800;
+  color: rgba(148, 163, 184, 0.7);
+  letter-spacing: 0.18em;
+}
+
+.mission-footer__state {
+  font-weight: 900;
+  letter-spacing: 0.16em;
+}
+
+/* Middle meta items */
+.mission-footer__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px;
+  border-radius: 6px;
+  background: rgba(5, 8, 22, 0.55);
+  border: 1px solid rgba(34, 211, 238, 0.18);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+}
+
+.mission-footer__key {
+  color: rgba(148, 163, 184, 0.55);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+.mission-footer__val {
+  color: #e0f2fe;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+}
+
+/* Live clock gets a pulsing colon to read as "running" */
+.mission-footer__val--clock {
+  color: var(--fx-cyan);
+  text-shadow: 0 0 6px rgba(34, 211, 238, 0.45);
+  position: relative;
+}
+
+.mission-footer__val--persist {
+  color: #a5f3fc;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-transform: lowercase;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+}
+
+/* Heartbeat dot next to "persisted" */
+.mission-footer__heartbeat {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22d3ee;
+  box-shadow: 0 0 6px rgba(34, 211, 238, 0.85);
+  animation: mission-heartbeat 1.8s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes mission-heartbeat {
+  0%, 55%, 100% { transform: scale(1);   opacity: 0.9; }
+  15%           { transform: scale(1.4); opacity: 1;   }
+  30%           { transform: scale(1);   opacity: 0.8; }
+  45%           { transform: scale(1.25); opacity: 1;  }
+}
+
+/* Version chip on the right */
+.mission-footer__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: linear-gradient(120deg,
+    rgba(34, 211, 238, 0.12),
+    rgba(168, 85, 247, 0.12));
+  border: 1px solid rgba(34, 211, 238, 0.38);
+  box-shadow:
+    inset 0 0 8px rgba(34, 211, 238, 0.12),
+    0 0 14px rgba(34, 211, 238, 0.22);
+}
+
+.mission-footer__chip-key {
+  color: rgba(148, 163, 184, 0.7);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+.mission-footer__chip-val {
+  color: #e0f2fe;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 6px rgba(34, 211, 238, 0.55);
+}
+
+/* Responsive: on narrow viewports the middle cluster wraps below */
+@media (max-width: 720px) {
+  .pilot-app-footer.mission-footer {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .mission-footer__spine { display: none; }
+  .mission-footer__cluster--mid {
+    flex-basis: 100%;
+    justify-content: flex-start;
+    gap: 10px;
+    order: 3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mission-footer::after                           { animation: none !important; }
+  .mission-footer__status--ok.mission-footer__led,
+  .mission-footer__status--dirty.mission-footer__led,
+  .mission-footer__heartbeat                       { animation: none !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   COMET TAB — Manta Ray assistant widget
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.manta-widget__comet {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.manta-widget__comet-desc {
+  font-size: 0.73rem;
+  color: rgba(148, 163, 184, 0.7);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── Scan row ─────────────────────────────────────────────────────────── */
+
+.manta-widget__comet-scan-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.manta-widget__comet-input {
+  flex: 1;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  border-radius: 7px;
+  padding: 7px 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  color: #e2e8f0;
+  outline: none;
+  transition: border-color 0.15s;
+  min-width: 0;
+}
+.manta-widget__comet-input::placeholder {
+  color: rgba(148, 163, 184, 0.4);
+}
+.manta-widget__comet-input:focus {
+  border-color: rgba(34, 211, 238, 0.55);
+  background: rgba(15, 23, 42, 0.85);
+}
+
+.manta-widget__comet-scan-btn {
+  flex-shrink: 0;
+  background: rgba(34, 211, 238, 0.1);
+  border: 1px solid rgba(34, 211, 238, 0.35);
+  border-radius: 7px;
+  padding: 7px 14px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--fx-cyan);
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: background 0.15s, border-color 0.15s;
+}
+.manta-widget__comet-scan-btn:hover:not(:disabled) {
+  background: rgba(34, 211, 238, 0.2);
+  border-color: var(--fx-cyan);
+}
+.manta-widget__comet-scan-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Error message ────────────────────────────────────────────────────── */
+
+.manta-widget__comet-error {
+  font-size: 0.72rem;
+  color: #f87171;
+  margin: 0;
+  padding: 6px 10px;
+  background: rgba(248, 113, 113, 0.07);
+  border: 1px solid rgba(248, 113, 113, 0.2);
+  border-radius: 6px;
+}
+
+/* ── Record meta bar ──────────────────────────────────────────────────── */
+
+.manta-widget__comet-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  background: rgba(34, 211, 238, 0.05);
+  border: 1px solid rgba(34, 211, 238, 0.15);
+  border-radius: 7px;
+  min-width: 0;
+}
+
+.manta-widget__comet-meta-label {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: rgba(34, 211, 238, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  flex-shrink: 0;
+}
+
+.manta-widget__comet-meta-title {
+  flex: 1;
+  font-size: 0.73rem;
+  color: #cbd5e1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.manta-widget__comet-open-link {
+  flex-shrink: 0;
+  font-size: 0.68rem;
+  color: rgba(34, 211, 238, 0.65);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: color 0.15s;
+}
+.manta-widget__comet-open-link:hover {
+  color: var(--fx-cyan);
+  text-decoration: underline;
+}
+
+/* ── Gap list ─────────────────────────────────────────────────────────── */
+
+.manta-widget__comet-gaps {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.manta-widget__comet-gaps-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 2px;
+}
+
+.manta-widget__comet-gaps-count {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #fbbf24;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.manta-widget__comet-gaps-ok {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #34d399;
+  letter-spacing: 0.04em;
+}
+
+/* ── Load into wizard button ──────────────────────────────────────────── */
+
+.manta-widget__comet-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.manta-widget__comet-load-btn {
+  width: 100%;
+  padding: 9px 14px;
+  background: rgba(34, 211, 238, 0.12);
+  border: 1px solid rgba(34, 211, 238, 0.4);
+  border-radius: 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--fx-cyan);
+  cursor: pointer;
+  text-align: center;
+  letter-spacing: 0.04em;
+  transition: background 0.15s, border-color 0.15s;
+}
+.manta-widget__comet-load-btn:hover:not(:disabled) {
+  background: rgba(34, 211, 238, 0.22);
+  border-color: var(--fx-cyan);
+}
+.manta-widget__comet-load-btn--done {
+  background: rgba(52, 211, 153, 0.1);
+  border-color: rgba(52, 211, 153, 0.35);
+  color: #34d399;
+  cursor: default;
+}
+.manta-widget__comet-load-btn:disabled {
+  cursor: default;
+  opacity: 0.75;
+}
+
+.manta-widget__comet-loaded-hint {
+  font-size: 0.7rem;
+  color: rgba(148, 163, 184, 0.65);
+  margin: 0;
+  padding: 0 2px;
+  line-height: 1.5;
+}
+
+.manta-widget__comet-skeleton-note {
+  font-size: 0.72rem;
+  color: rgba(251, 191, 36, 0.8);
+  margin: 0;
+  padding: 6px 10px;
+  background: rgba(251, 191, 36, 0.06);
+  border: 1px solid rgba(251, 191, 36, 0.18);
+  border-radius: 6px;
+  line-height: 1.5;
+}

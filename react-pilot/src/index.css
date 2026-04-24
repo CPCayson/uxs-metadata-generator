@@ -1,0 +1,416 @@
+/* React pilot layer on top of ./styles/legacy-index-shell.css (repo root Index.html). */
+
+:root {
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --shadow-sm: 0 1px 2px rgb(15 23 42 / 0.05);
+  --shadow-md: 0 4px 16px rgb(15 23 42 / 0.06);
+  --shadow-card: var(--shadow-sm), 0 12px 32px rgb(15 23 42 / 0.04);
+  --bg: var(--bg-color);
+  --surface: var(--card-bg);
+  --border: var(--border-color);
+  --text-muted: var(--muted-text-color);
+  --focus-ring: var(--primary-light);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family:
+    'Plus Jakarta Sans',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--primary-light) 28%, transparent);
+  color: var(--text-color);
+}
+
+.font-heading,
+.header h1,
+.card-title,
+.nav-tabs .nav-link,
+#root .card > h2:first-of-type,
+#root .panel-title {
+  font-family:
+    'Plus Jakarta Sans',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+}
+
+/* Full-bleed header matches deployed Index.html bar width */
+.pilot-app-header--fullbleed {
+  width: 100%;
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+  box-sizing: border-box;
+  padding: 1rem clamp(1rem, 3vw, 2.75rem) 0;
+}
+
+/* Constrain the header's inner row to the same width as the pilot shell so
+   brand + actions line up with the content below on ultra-wide screens. */
+.pilot-app-header--fullbleed .header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: min(96vw, 1920px);
+  margin: 0 auto;
+  padding-bottom: 0.85rem;
+}
+
+@media (min-width: 1200px) and (max-width: 1599.98px) {
+  .pilot-app-header--fullbleed .header-top {
+    max-width: min(94vw, 1440px);
+  }
+}
+
+.nav-tabs.metadata-tabs.pilot-metadata-tabs .nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1rem;
+}
+
+.nav-tabs.metadata-tabs.pilot-metadata-tabs .nav-link.active {
+  box-shadow: 0 2px 14px rgb(37 99 235 / 0.22);
+}
+
+/* --- #root (React mount): slightly tighter cards / forms than global .card --- */
+#root .card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  margin-bottom: 1.5rem;
+  padding: 1.35rem 1.5rem 1.5rem;
+}
+
+#root .card > h2:first-of-type {
+  color: var(--primary-color);
+  font-weight: 600;
+  margin-bottom: 0.85rem;
+  margin-top: 0;
+  position: relative;
+  font-size: 1.12rem;
+  letter-spacing: -0.02em;
+}
+
+#root .card > h2:first-of-type::after {
+  content: '';
+  display: block;
+  width: 72px;
+  height: 3px;
+  margin-top: 0.5rem;
+  border-radius: 3px;
+  background: linear-gradient(120deg, var(--primary-color), var(--primary-light));
+}
+
+.form-label {
+  font-weight: 500;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+}
+
+#root .form-control,
+#root .form-select {
+  width: 100%;
+  max-width: 100%;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  padding: 0.625rem;
+  min-height: 2.5rem;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background-color 0.15s ease;
+  background-color: var(--input-bg);
+  color: var(--text-color);
+}
+
+#root input[type='datetime-local'].form-control,
+#root input[type='date'].form-control,
+#root input[type='time'].form-control {
+  min-height: 2.65rem;
+}
+
+#root .form-control::placeholder {
+  color: var(--muted-text-color);
+  opacity: 1;
+}
+
+#root .form-control:focus,
+#root .form-select:focus {
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  outline: none;
+  background-color: var(--input-focus-bg);
+  color: var(--text-color);
+}
+
+#root .form-control:-webkit-autofill,
+#root .form-control:-webkit-autofill:hover,
+#root .form-control:-webkit-autofill:focus,
+#root .form-select:-webkit-autofill,
+#root .form-select:-webkit-autofill:hover,
+#root .form-select:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text-color);
+  box-shadow: 0 0 0 1000px var(--input-autofill-bg) inset;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+#root .btn {
+  border-radius: 6px;
+  padding: 0.625rem 1.25rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+#root .btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+#root .btn-primary:hover {
+  background-color: var(--primary-light);
+  border-color: var(--primary-light);
+}
+
+/* Dark: extra shadow tokens (legacy shell sets palette + .card) */
+:root[data-theme='dark'] {
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.35);
+  --shadow-md: 0 6px 24px rgb(0 0 0 / 0.35);
+  --shadow-card: var(--shadow-sm), 0 16px 40px rgb(0 0 0 / 0.25);
+}
+
+:root[data-theme='dark'] #root .card > h2:first-of-type {
+  color: #93c5fd;
+}
+
+:root[data-theme='dark'] ::selection {
+  background: color-mix(in srgb, var(--primary-light) 35%, transparent);
+  color: #f8fafc;
+}
+
+:root[data-theme='dark'] #root .card,
+:root[data-theme='dark'] .nav-tabs,
+:root[data-theme='dark'] #root .form-control,
+:root[data-theme='dark'] #root .form-select {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+  color: var(--text-color);
+}
+
+:root[data-theme='dark'] .metadata-nav-inner {
+  background: var(--card-bg);
+}
+
+:root[data-theme='dark'] #root .form-control.is-valid,
+:root[data-theme='dark'] #root .form-select.is-valid {
+  background-color: rgba(16, 185, 129, 0.12);
+}
+
+:root[data-theme='dark'] #root .form-control.fix-suggested,
+:root[data-theme='dark'] #root .form-select.fix-suggested {
+  background-color: rgba(120, 53, 15, 0.25);
+}
+
+/* Pilot header chrome on gradient bar */
+.pilot-app-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #ffffff;
+}
+
+.pilot-header-eyebrow {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.82);
+  margin: 0 0 0.25rem;
+}
+
+.pilot-header-subtext {
+  margin-top: 0.5rem;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 65ch;
+}
+
+.pilot-header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem 1rem;
+}
+
+.pilot-app-header .toggle {
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 500;
+}
+
+.pilot-app-header .workspace-switch {
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: none;
+}
+
+.pilot-app-header .workspace-switch__btn {
+  color: #ffffff;
+}
+
+.pilot-app-header .workspace-switch__btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.pilot-app-header .workspace-switch__btn--active {
+  background: #ffffff;
+  color: var(--primary-color);
+}
+
+.pilot-app-header .workspace-switch__btn--active:hover {
+  filter: none;
+  background: #f1f5f9;
+}
+
+.pilot-app-header .form-check-label {
+  color: rgba(255, 255, 255, 0.95);
+  cursor: pointer;
+}
+
+.pilot-app-header .form-check-input {
+  cursor: pointer;
+}
+
+.pilot-app-header .form-check-input:focus {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+/* Per-step accent bar + title underline (legacy .step-form .card / #stepNForm) */
+.pilot-step--mission {
+  --step-accent-start: var(--primary-color);
+  --step-accent-end: var(--primary-light);
+}
+
+.pilot-step--platform {
+  --step-accent-start: var(--success-color);
+  --step-accent-end: var(--primary-light);
+}
+
+.pilot-step--sensors {
+  --step-accent-start: var(--warning-color);
+  --step-accent-end: var(--primary-light);
+}
+
+.pilot-step--spatial {
+  --step-accent-start: var(--secondary-color);
+  --step-accent-end: var(--primary-light);
+}
+
+.pilot-step--keywords {
+  --step-accent-start: var(--primary-color);
+  --step-accent-end: var(--primary-light);
+}
+
+.pilot-step--distribution {
+  --step-accent-start: var(--error-color);
+  --step-accent-end: var(--warning-color);
+}
+
+.pilot-step .panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.pilot-step .panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(120deg, var(--step-accent-start), var(--step-accent-end));
+  pointer-events: none;
+  z-index: 1;
+}
+
+#root .pilot-step.card > h2:first-of-type::after {
+  background: linear-gradient(120deg, var(--step-accent-start), var(--step-accent-end));
+}
+
+/*
+ * Legacy Index uses .step-form.active + .form-section; React mounts steps on
+ * article.workspace-main.pilot-step without .step-form — mirror those rules here.
+ */
+#root .workspace-main.pilot-step .form-control:not(.is-invalid):not(.form-control--invalid):not(.fix-suggested),
+#root .workspace-main.pilot-step .form-select:not(.is-invalid):not(.form-control--invalid):not(.fix-suggested) {
+  min-height: 42px;
+  border-radius: 8px;
+  border-left-width: 3px;
+  border-left-color: var(--step-accent-start, var(--primary-color));
+  background-image: linear-gradient(var(--card-bg), var(--card-bg));
+}
+
+#root .workspace-main.pilot-step textarea.form-control:not(.is-invalid):not(.form-control--invalid):not(.fix-suggested) {
+  min-height: 96px;
+}
+
+#root .workspace-main.pilot-step .form-control[required]:not(.is-invalid):not(.is-valid):not(.form-control--invalid),
+#root .workspace-main.pilot-step .form-select[required]:not(.is-invalid):not(.is-valid):not(.form-control--invalid),
+#root .workspace-main.pilot-step .form-control[aria-required='true']:not(.is-invalid):not(.is-valid):not(.form-control--invalid),
+#root .workspace-main.pilot-step .form-select[aria-required='true']:not(.is-invalid):not(.is-valid):not(.form-control--invalid) {
+  box-shadow: inset 0 -2px 0 0 rgba(239, 68, 68, 0.28);
+}
+
+#root .workspace-main.pilot-step .form-control:hover:not(:disabled):not(:focus):not(.is-invalid):not(.form-control--invalid),
+#root .workspace-main.pilot-step .form-select:hover:not(:disabled):not(:focus):not(.is-invalid):not(.form-control--invalid) {
+  border-color: var(--primary-light);
+}
+
+#root .workspace-main.pilot-step .form-control:focus:not(.is-invalid):not(.form-control--invalid),
+#root .workspace-main.pilot-step .form-select:focus:not(.is-invalid):not(.form-control--invalid) {
+  transform: translateY(-1px);
+}
+
+#root .workspace-main.pilot-step .form-control[required]:focus:not(.is-invalid):not(.is-valid):not(.form-control--invalid),
+#root .workspace-main.pilot-step .form-select[required]:focus:not(.is-invalid):not(.is-valid):not(.form-control--invalid),
+#root .workspace-main.pilot-step .form-control[aria-required='true']:focus:not(.is-invalid):not(.is-valid):not(.form-control--invalid),
+#root .workspace-main.pilot-step .form-select[aria-required='true']:focus:not(.is-invalid):not(.is-valid):not(.form-control--invalid) {
+  box-shadow:
+    0 0 0 3px rgba(59, 130, 246, 0.1),
+    inset 0 -2px 0 0 rgba(239, 68, 68, 0.28);
+}
+
+#root .workspace-main.pilot-step .panel {
+  border-left: 4px solid var(--step-accent-start, var(--primary-color));
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--step-accent-start, var(--primary-color)) 10%, var(--card-bg)) 0%,
+    var(--card-bg) 55%
+  );
+}
+
+:root[data-theme='dark'] #root .workspace-main.pilot-step .panel {
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--step-accent-start, var(--primary-light)) 14%, var(--card-bg)) 0%,
+    var(--card-bg) 55%
+  );
+}

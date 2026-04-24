@@ -1,0 +1,373 @@
+<script>
+  // Utils.html - Fixed Version
+
+  if (typeof window.debugLog !== 'function') {
+    window.debugLog = function(...args) {
+      if (window.UXS_DEBUG) {
+        console.log(...args);
+      }
+    };
+  }
+
+  if (typeof window.debugWarn !== 'function') {
+    window.debugWarn = function(...args) {
+      if (window.UXS_DEBUG) {
+        console.warn(...args);
+      }
+    };
+  }
+
+  /**
+   * Deep-clone plain objects/arrays for google.script.run.
+   * Strips non-JSON types so the server always receives a serializable payload.
+   */
+  function cloneForServerTransport(value) {
+    if (value === undefined || value === null) return value;
+    if (typeof value !== 'object') return value;
+    try {
+      return JSON.parse(JSON.stringify(value));
+    } catch (e) {
+      console.error('cloneForServerTransport failed:', e);
+      return null;
+    }
+  }
+  
+  function showLoading(show) {
+    try {
+      debugLog('DEBUG: showLoading - Setting loading indicator to:', show);
+      const $loading = $('#loading');
+      if ($loading.length) {
+        $loading.css({
+          display: show ? 'flex' : 'none',
+          alignItems: 'center',
+          gap: '0.5rem'
+        });
+      }
+      debugLog('DEBUG: showLoading - Loading indicator updated');
+    } catch (e) {
+      console.error('DEBUG: showLoading - Error:', e);
+    }
+  }
+  
+  function clearFormData(formId = null) {
+    try {
+      debugLog('DEBUG: clearFormData - Clearing form:', formId || 'all forms');
+      
+      // Clear the cache first to prevent restoration
+      debugLog('DEBUG: clearFormData - Clearing cached data');
+      localStorage.removeItem('uxsMetadataFormData');
+      sessionStorage.clear();
+      
+      if (formId && typeof formId === 'string') {
+        const $form = $(`#${formId}`);
+        if ($form.length) {
+          $form[0].reset();
+          $form.find('.form-control, .form-select').removeClass('is-invalid is-warning fix-suggested populated-field');
+          $form.find('.invalid-feedback, .warning-feedback').text('');
+          
+          // Clear all input values explicitly
+          $form.find('input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="number"], input[type="date"], input[type="datetime-local"], textarea').val('');
+          $form.find('select').prop('selectedIndex', 0);
+          $form.find('input[type="checkbox"]').prop('checked', false);
+          $form.find('input[type="radio"]').prop('checked', false);
+          
+          if (formId === 'sensorsForm') {
+            const $sensorsList = $('#sensorsList');
+            if ($sensorsList.length) {
+              $sensorsList.empty().html('<div class="text-muted text-center">No sensors added yet. Select a sensor type to add.</div>');
+            }
+          }
+        } else {
+          debugWarn('DEBUG: clearFormData - Form not found:', formId);
+        }
+      } else if (!formId) {
+        // Clear all forms
+        ['missionForm', 'platformForm', 'sensorsForm', 'spatialForm', 'outputForm'].forEach(id => {
+          const $form = $(`#${id}`);
+          if ($form.length) {
+            $form[0].reset();
+            // Clear all input values explicitly
+            $form.find('input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="number"], input[type="date"], input[type="datetime-local"], textarea').val('');
+            $form.find('select').prop('selectedIndex', 0);
+            $form.find('input[type="checkbox"]').prop('checked', false);
+            $form.find('input[type="radio"]').prop('checked', false);
+          }
+        });
+        
+        // Reset specific elements
+        const $sensorsList = $('#sensorsList');
+        if ($sensorsList.length) {
+          $sensorsList.empty().html('<div class="text-muted text-center">No sensors added yet. Select a sensor type to add.</div>');
+        }
+        const $schema = $('#metadataSchema');
+        if ($schema.length) {
+          $schema.val('iso19115-2');
+        }
+        const $hasTrajectory = $('#hasTrajectory');
+        if ($hasTrajectory.length) {
+          $hasTrajectory.prop('checked', false);
+        }
+        const $trajectorySection = $('#trajectorySection');
+        if ($trajectorySection.length) {
+          $trajectorySection.hide();
+        }
+        const $customPlatformTypeSection = $('#customPlatformTypeSection');
+        if ($customPlatformTypeSection.length) {
+          $customPlatformTypeSection.hide();
+        }
+        const $saveAsTemplate = $('#saveAsTemplate');
+        if ($saveAsTemplate.length) {
+          $saveAsTemplate.prop('checked', true);
+        }
+        const $elements = $('#templateName, #templateCategory, #finalNotes, #xmlPreviewSnippet, #xmlPreviewFull');
+        if ($elements.length) {
+          $elements.val('').text('');
+        }
+        const $validationResults = $('#validationResultsSnippet, #validationResultsFull');
+        if ($validationResults.length) {
+          $validationResults.empty();
+        }
+        $('.form-control, .form-select').removeClass('is-invalid is-warning fix-suggested populated-field');
+        $('.invalid-feedback, .warning-feedback').text('');
+      } else {
+        console.error('DEBUG: clearFormData - Invalid formId type:', typeof formId, formId);
+        throw new Error('Invalid formId provided');
+      }
+      try {
+        updateMap();
+      } catch (e) {
+        console.error('DEBUG: clearFormData - Error updating map:', e);
+      }
+      
+      // Disable cache restoration temporarily
+      window._cacheRestoreDisabled = true;
+      
+      // Clear validation results
+      const $validationResults = $('#validationResultsSnippet, #validationResultsFull');
+      if ($validationResults.length) {
+        $validationResults.empty();
+      }
+      
+      // Set validation to "all passed" for cleared form
+      if (typeof updateValidationResults === 'function') {
+        updateValidationResults({
+          valid: true,
+          errors: [],
+          warnings: [],
+          summary: 'All validations passed (form cleared)'
+        });
+      }
+      
+      debugLog('DEBUG: clearFormData - Form cleared successfully');
+    } catch (e) {
+      console.error('DEBUG: clearFormData - Error:', e);
+      showToast('error', 'Failed to clear form: ' + e.message);
+    }
+  }
+  
+  function isOnline() {
+    const online = navigator.onLine;
+    debugLog('DEBUG: isOnline - Current network status:', online ? 'Online' : 'Offline');
+    return online;
+  }
+  
+  function saveToCache(key, data) {
+    try {
+      debugLog('DEBUG: saveToCache - Saving to cache, key:', key);
+      localStorage.setItem(`uxs_${key}`, JSON.stringify(data)); // Fixed: added uxs_ prefix
+      debugLog('DEBUG: saveToCache - Successfully saved to cache');
+    } catch (e) {
+      console.error('DEBUG: saveToCache - Error:', e);
+    }
+  }
+  
+  function loadFromCache(key) {
+    try {
+      debugLog('DEBUG: loadFromCache - Loading from cache, key:', key);
+      const cached = localStorage.getItem(`uxs_${key}`); // Fixed: added uxs_ prefix
+      const result = cached ? JSON.parse(cached) : null;
+      debugLog('DEBUG: loadFromCache - Loaded from cache:', result);
+      return result;
+    } catch (e) {
+      console.error('DEBUG: loadFromCache - Error:', e);
+      return null;
+    }
+  }
+  
+  function dmsToDecimal(dms) {
+    try {
+      debugLog('DEBUG: dmsToDecimal - Processing input:', dms);
+      if (!dms || typeof dms !== 'string') {
+        if (dms !== '') {
+          console.warn(`Invalid coordinate input: ${dms}, returning 0`);
+        }
+        return 0;
+      }
+  
+      const floatVal = parseFloat(dms);
+      if (!isNaN(floatVal)) {
+        debugLog('DEBUG: dmsToDecimal - Input is a number, returning:', floatVal);
+        return floatVal;
+      }
+  
+      const dmsRegex = /^(-?\d+)[°\s]+(\d+\.?\d*)'?\s*([NSWE])?$/i;
+      const match = dms.match(dmsRegex);
+      if (match) {
+        let degrees = parseFloat(match[1]);
+        let minutes = parseFloat(match[2]) / 60;
+        let direction = match[3] ? match[3].toUpperCase() : '';
+        debugLog('DEBUG: dmsToDecimal - Parsed DMS - degrees:', degrees, 'minutes:', minutes, 'direction:', direction);
+  
+        let decimal = degrees + minutes;
+        if (direction === 'S' || direction === 'W') {
+          decimal = -decimal;
+        }
+        debugLog('DEBUG: dmsToDecimal - Converted to decimal:', decimal);
+        return decimal;
+      }
+  
+      const parts = dms.split(/\s+/);
+      if (parts.length >= 2) {
+        let degrees = parseFloat(parts[0]);
+        let minutes = parseFloat(parts[1]) / 60;
+        let direction = parts[2] ? parts[2].toUpperCase() : '';
+        debugLog('DEBUG: dmsToDecimal - Fallback parsing - degrees:', degrees, 'minutes:', minutes, 'direction:', direction);
+  
+        if (isNaN(degrees) || isNaN(minutes)) {
+          console.warn(`Unable to parse coordinate parts: ${dms}, returning 0`);
+          return 0;
+        }
+  
+        let decimal = degrees + minutes;
+        if (direction === 'S' || direction === 'W') {
+          decimal = -decimal;
+        }
+        debugLog('DEBUG: dmsToDecimal - Fallback converted to decimal:', decimal);
+        return decimal;
+      }
+  
+      console.warn(`Unable to parse coordinate: ${dms}, returning 0`);
+      return 0;
+    } catch (e) {
+      console.error('DEBUG: dmsToDecimal - Error:', e.message, `Input: ${dms}`);
+      return 0;
+    }
+  }
+  
+  function escapeXml(unsafe) {
+    try {
+      debugLog('DEBUG: escapeXml - Escaping input:', unsafe);
+      if (!unsafe) {
+        debugLog('DEBUG: escapeXml - Input is empty, returning empty string');
+        return '';
+      }
+      const escaped = String(unsafe)
+        .replace(/&/g, '&amp;')    // Fixed: proper HTML entity
+        .replace(/</g, '&lt;')     // Fixed: proper HTML entity
+        .replace(/>/g, '&gt;')     // Fixed: proper HTML entity
+        .replace(/"/g, '&quot;')   // Fixed: proper HTML entity
+        .replace(/'/g, '&#39;');   // Fixed: proper HTML entity
+      debugLog('DEBUG: escapeXml - Escaped output:', escaped);
+      return escaped;
+    } catch (e) {
+      console.error('DEBUG: escapeXml - Error:', e);
+      return String(unsafe);
+    }
+  }
+  
+  function showToast(type, message) {
+    try {
+      console.log(`DEBUG: showToast - Showing toast of type: ${type}, message: ${message}`);
+      
+      // Create toast container if it doesn't exist
+      if (!$('#toastContainer').length) {
+        $('body').append('<div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 9999;"></div>');
+      }
+  
+      // Map toast types to Bootstrap classes and icons
+      const typeMap = {
+        'success': { bg: 'bg-success', icon: 'fas fa-check-circle' },
+        'error': { bg: 'bg-danger', icon: 'fas fa-exclamation-circle' },
+        'warning': { bg: 'bg-warning', icon: 'fas fa-exclamation-triangle' },
+        'info': { bg: 'bg-info', icon: 'fas fa-info-circle' }
+      };
+      
+      const toastConfig = typeMap[type] || typeMap.info;
+      
+      const toast = $(`
+        <div class="toast align-items-center text-white ${toastConfig.bg} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="d-flex">
+            <div class="toast-body">
+              <i class="${toastConfig.icon} me-2"></i>${message.replace(/[<>&'"]/g, function(c) { return c === '<' ? '&lt;' : c === '>' ? '&gt;' : c === '&' ? '&amp;' : c === "'" ? '&#39;' : '&quot;'; })}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+        </div>
+      `);
+  
+      $('#toastContainer').append(toast);
+      
+      // Use Bootstrap 5 Toast API
+      const bsToast = new bootstrap.Toast(toast[0], {
+        delay: 5000,
+        autohide: true
+      });
+      bsToast.show();
+  
+      // Clean up after toast is hidden
+      toast.on('hidden.bs.toast', function() {
+        $(this).remove();
+      });
+      
+      debugLog('DEBUG: showToast - Toast displayed');
+    } catch (e) {
+      console.error('DEBUG: showToast - Error:', e);
+      // Fallback to alert if toast fails
+      alert(`${type.toUpperCase()}: ${message}`);
+    }
+  }
+  
+  function debounce(func, wait) {
+    let timeout;
+    return function(...args) {
+      debugLog('DEBUG: debounce - Scheduling function call with wait:', wait);
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        debugLog('DEBUG: debounce - Executing debounced function');
+        func.apply(this, args);
+      }, wait);
+    };
+  }
+  
+  // Additional utility function for creating toast container
+  function createToastContainer() {
+    if ($('#toastContainer').length === 0) {
+      const container = $('<div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 9999;"></div>');
+      $('body').append(container);
+      debugLog('DEBUG: createToastContainer - Toast container created');
+      return container;
+    }
+    return $('#toastContainer');
+  }
+  
+  // Initialize utilities when document is ready
+  $(document).ready(function() {
+    try {
+      // Bind clear button to clearFormData
+      $('#clearBtnHeader').click(function(e) {
+        e.preventDefault();
+        if (confirm('Are you sure you want to clear all forms?')) {
+          clearFormData();
+          showToast('success', 'All forms cleared successfully');
+        }
+      });
+      
+      // Initialize toast container
+      createToastContainer();
+      
+      debugLog('DEBUG: Utils document.ready - Utilities initialized successfully');
+    } catch (e) {
+      console.error('DEBUG: Utils document.ready - Error:', e);
+    }
+  });
+  </script>

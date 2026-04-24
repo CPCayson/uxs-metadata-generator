@@ -1,0 +1,27 @@
+# Local Netlify
+.netlify/
+
+# Dependencies
+node_modules/
+
+# Build / publish outputs
+dist/
+dist-ssr/
+pilot-share/
+
+# Environment and secrets (tracked examples: **/.env.example)
+.env
+.env.local
+.env.*.local
+
+# Archives (local exports / backups — do not publish)
+*.zip
+
+# Logs and OS noise
+*.log
+.DS_Store
+Thumbs.db
+
+# Editor (optional — uncomment if you never commit IDE settings)
+# .vscode/
+# .idea/

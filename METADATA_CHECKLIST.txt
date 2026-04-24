@@ -1,0 +1,140 @@
+METADATA ALIGNMENT — DONE vs TO-DO
+==================================
+Last aligned with: METADATA_ELEMENT_ALIGNMENT.csv, OVERVIEW_TEMPLATE_ALIGNMENT.csv,
+Excel_Element_Map.txt, METADATA_FIELD_MAP.md, SchemaValidator.gs behavior.
+
+LEGEND
+  [x] = done / in place
+  [ ] = still needed or open gap
+  (~) = partial / acceptable but watch
+
+
+────────────────────────────────────────────────────────────────────────────
+A. DOCUMENTATION & TRACKING (this effort)
+────────────────────────────────────────────────────────────────────────────
+
+  [x] Field-level CSV: METADATA_ELEMENT_ALIGNMENT.csv (Excel placeholder ↔ app ↔ XML)
+  [x] Overview-level CSV: OVERVIEW_TEMPLATE_ALIGNMENT.csv (ISO sections ↔ implementation)
+  [x] Existing maps retained: METADATA_FIELD_MAP.md, Excel_Element_Map.txt
+  [ ] Keep CSVs updated when SchemaValidator / forms change (process, not one-time)
+  [ ] Operator one-pager: dateStamp precedence (metadataRecordDate → output → server now)
+  [ ] Operator one-pager: temporal extent = mission start/end (form + Excel wording)
+
+
+────────────────────────────────────────────────────────────────────────────
+B. CORE XML / GENERATOR — LARGELY DONE
+────────────────────────────────────────────────────────────────────────────
+
+  [x] Root gmi:MI_Metadata, namespaces, ISO 19115-2 spine
+  [x] gmd:fileIdentifier with gov.noaa.ncei.uxs: prefix (toggle via output.nceiFileIdPrefix)
+  [x] gmd:language (default eng; USA), characterSet, hierarchyLevel (default dataset)
+  [x] gmd:dateStamp from metadata record date chain
+  [x] metadataStandardName / metadataStandardVersion
+  [x] Citation: title, creation/publication/completion dates, DOI, accession, metadata ID
+  [x] gmd:abstract, gmd:purpose, gmd:status (MD_ProgressCode)
+  [x] GCMD keywords → descriptiveKeywords (JSON → mission.gcmdKeywords)
+  [x] License presets + docucomp xlink / ACDO-style blocks (per preset)
+  [x] Cite-as / otherConstraints / distribution liability wiring
+  [x] Geographic bbox, text extent, temporal (TimePeriod), vertical extent + optional CRS URL
+  [x] Aggregation: parent project, related dataset, associated publication
+  [x] gmd:contentInfo / gmi:MI_CoverageDescription, contentType, bands per sensor
+  [x] gmd:distributionInfo: format, fees, ordering, landing page, download URL + functions
+  [x] gmd:metadataMaintenance + maintenanceAndUpdateFrequency (default asNeeded)
+  [x] gmi:acquisitionInformation: platform + instruments (nested as designed)
+  [x] organizationRor* → extra CI_OnlineResource
+  [x] Optional NCEI xlink for metadata contact and distributor contact
+  [x] Root referenceSystemInfo (EPSG default) with intentional omit flag for Navy template
+  [x] Grid spatial representation when user enables grid (axes, dimensionSize, resolution, cellGeometry)
+  [x] Strict structural validation (spine + schema) — note: structural ≠ narrative completeness
+
+
+────────────────────────────────────────────────────────────────────────────
+C. GAPS — SHOULD DO OR DECIDE
+────────────────────────────────────────────────────────────────────────────
+
+  [ ] UI label parity: expose "mission id" wording vs fileIdentifier / NCEI metadata ID in docs
+  [ ] GCMD: periodic validation that scheme / type codes match NCEI expectations
+  [ ] Clarify in UI/help: cite-as / otherConstraints vs accessConstraints (code vs prose)
+  [ ] Validate constraint block ordering vs NCEI template if external validators complain
+  [ ] Cited responsible parties: richer author / publisher / originator blocks vs full Navy template
+  [ ] Aggregation blocks: match Navy template richness (order, citedResponsibleParty) where required
+  [ ] Publication / preview messaging: stress publication date everywhere it matters
+  [ ] Excel / form: completion (end) date visibility so editors are not surprised
+  [ ] Grid: prompt users to enable gridded representation when data are gridded; document resolution parse rules
+  [ ] Sensor optional fields: encourage variable name / type / descriptor so contentInfo is not thin
+  [ ] ACDO licensing prose: consider stable public permalink + update path if NOAA guidance changes (see Excel_Element_Map.txt)
+
+
+────────────────────────────────────────────────────────────────────────────
+D. GAPS — OPTIONAL / NICE-TO-HAVE
+────────────────────────────────────────────────────────────────────────────
+
+  [ ] gmd:lineage / LI_Lineage — not generated today; add if processing history is required
+  [ ] gmd:dataQualityInfo — only emitted when spatial.accuracyStandard or spatial.errorLevel set; expand if you need always-on DQ block
+  [ ] Template-style {{ }} placeholders — app uses forms/JSON; document mapping for Excel users
+  [ ] Parity pass: every xlink:href pattern in Navy reference sample vs generator output
+
+
+────────────────────────────────────────────────────────────────────────────
+E. CONFIDENCE REMINDERS (from field CSV)
+────────────────────────────────────────────────────────────────────────────
+
+  High: file id, title, dates, identifiers, abstract, purpose, bbox, vertical, distribution,
+        format, landing/download, platform/instrument core, license presets, MD_Format.
+  Medium: dateStamp semantics, grid axes, metadata contact mode, citation parties, keywords,
+          aggregation, cite-as confusion, variable/coverage narrative.
+  Low: MemberName / TypeName / descriptor unless optional sensor fields are filled.
+
+
+────────────────────────────────────────────────────────────────────────────
+Quick “green / yellow / red”
+────────────────────────────────────────────────────────────────────────────
+
+  Green:  Core identification, extent, distribution, acquisition, maintenance, most constraints.
+  Yellow: Keywords, grid (when off), citation party richness, aggregation detail, UX copy.
+  Red:    None for “cannot produce valid XML” — main gaps are completeness, docs, and lineage/DQ options.
+
+
+────────────────────────────────────────────────────────────────────────────
+F. MARCH 2026 PROGRAM vs THIS CHECKLIST (scope boundary)
+────────────────────────────────────────────────────────────────────────────
+This file + METADATA_ELEMENT_ALIGNMENT.csv + OVERVIEW_TEMPLATE_ALIGNMENT.csv track
+**metadata element coverage and XML mapping**. They do NOT replace a full release
+status report.
+
+  Quick crosswalk — “Is it in *this* metadata checklist?”
+    Topic                                      | In checklist?
+    ------------------------------------------ | -------------
+    XML + distribution story                   | Yes — sections B (gmd:distributionInfo, transfer options, landing/download)
+    GeoJSON / DCAT exports                   | No — not in this checklist (track in program / release notes)
+    Live validation debounce / stale guards    | No — not in this checklist
+    Client cache, HtmlService, HTML structure  | No — not in this checklist
+    Deployed E2E QA                            | No — not documented here; **schedule for last week of March** (see below)
+
+  Covered here (or implied by field maps):
+    [x] ISO 19115-2 single-schema / production profile (no 19115-3 path in model)
+    [x] ROR in XML (organizationRor* → CI_OnlineResource) — see section B
+    [x] GCMD in XML (descriptiveKeywords) — section B + gap C “scheme validation”
+    [x] Exports that are “same mission state” → XML path is what these docs describe
+    [~] “Validation” here = structural/schema + mapping confidence — not live UI debounce
+
+  Not covered by this checklist (track in program / release notes):
+    [ ] Removal of 19115-3 code paths (engineering change — verify in repo changelog)
+    [ ] Schema health checks vs old smoke tests
+    [ ] Live ROR + GCMD authority UI (search, selection, hidden fields, citation preview)
+    [ ] Safer HTML rendering for lookup results
+    [ ] GeoJSON and DCAT JSON-LD export pipelines
+    [ ] Debounced server validation + stale-response guards
+    [ ] localStorage restore for arrays and lookup-backed fields
+    [ ] HtmlService: URL template literal fixes, HTML structure repairs
+    [ ] Cache recovery for corrupt external JSON
+    [ ] Leaflet overflow / map diagnostics cleanup
+    [ ] $(document).ready consolidation, export loading-state timing
+
+  Last week of March (03/30/2026 – 03/31/2026) — **do deployed E2E QA here**
+    [ ] Full manual E2E QA on the deployed production URL (primary remaining release gate)
+    [ ] Complete deployed-environment QA on production web app URL
+    [ ] Record pass/fail matrix (import, validate, export XML/GeoJSON/DCAT, ROR/GCMD flows)
+    [ ] Documentation: Excel/ISO alignment artifacts finalized (field CSV, overview CSV,
+        operator follow-ups for dateStamp / temporal wording — sections A and C above)
+    [ ] Release packaging / handoff checklist (only after QA sign-off)

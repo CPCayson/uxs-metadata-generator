@@ -1,0 +1,49 @@
+Excel thing	What it matches to right now	Gap / note
+fileIdentifier	missionId -> mission.id (generator prefixes gov.noaa.ncei.uxs: unless output.nceiFileIdPrefix is false)	mostly fine; UI still labels missionId
+dateStamp	metadataRecordDate, else output.metadataRecordDate, else server "now"	still fuzzy for users: "record prepared" vs mission dates; document the precedence in operator guidance
+title	missionTitle -> mission.title	fine
+creation date	startDate -> citation CI_Date creation	works; template also uses gco:Date sometimes while we often emit DateTime
+publication date	publicationDate -> citation publication	date type exists; preview / validation messaging may not stress it everywhere
+completion / end date	endDate -> citation completion	if Excel only lists creation + publication, completion can surprise editors
+DOI	output.doi -> citation identifier	fine
+NCEI accession	nceiAccessionId -> citation identifier	fine
+NCEI metadata id repeat	mission.id in citation	aligned with template pattern
+abstract	abstract	fine
+purpose	purpose -> gmd:purpose	field exists and is emitted; gap is mostly UX copy and Excel row alignment, not missing XML
+keywords	gcmdKeywordsJson -> mission.gcmdKeywords -> descriptiveKeywords	need ongoing check that GCMD scheme / type codes match NCEI expectations
+otherConstraints / cite-as	citeAs (useLimitation), otherCiteAs, distributionLiability (plain otherConstraints)	still easy to confuse with accessConstraints (code vs prose)
+data license (UI control)	mission.dataLicensePreset select on Mission form + mission.licenseUrl when needed	validators may care about order of gmd:resourceConstraints / otherConstraints blocks relative to template
+data license preset custom	mission.dataLicensePreset = custom + mission.licenseUrl	gmd:otherConstraints with gco:CharacterString "Data license: {url}"; licenseUrl ignored for other presets
+data license preset cc0_acdo	mission.dataLicensePreset = cc0_acdo	two gmd:otherConstraints with gmx:Anchor (Creative Commons Zero 1.0 URL + full NOAA CC0-1.0 prose; SPDX CC0-1.0 URL + SPDX label line) per ACDO / Metadata WG style examples
+data license preset cc0_acdo_and_ncei	mission.dataLicensePreset = cc0_acdo_and_ncei	same two gmx:Anchor blocks as cc0_acdo plus additional gmd:resourceConstraints with xlink:href to NCEI docucomp CC0 statement (Navy template pattern)
+data license preset ncei_cc0	mission.dataLicensePreset = ncei_cc0	standalone gmd:resourceConstraints xlink to docucomp ...10bb305d... (CC0 data license statement); no ACDO anchor pair unless combined manually elsewhere
+data license preset ncei_cc_by_4	mission.dataLicensePreset = ncei_cc_by_4	xlink docucomp ...551ecbfb... (CC BY 4.0); no bundled ACDO anchor text in app
+data license preset ncei_cc0_internal_noaa	mission.dataLicensePreset = ncei_cc0_internal_noaa	xlink docucomp ...493b9ff1... (CC0 internal NOAA source data)
+data license XML import	parser sets mission.dataLicensePreset from docucomp xlink and/or paired CC0+SPDX anchors	custom preset and licenseUrl only when plain "Data license:" line present
+ACDO / Open Data Licensing guidance (human document)	not in JSON; CC0 anchor prose is hard-coded in SchemaValidator.gs from published examples	Jason Cooper: consider maintaining an internal copy of the ACDO checklist / open-data licensing guidance — the working Google Doc may not be accessible to all external partners; follow up with NOAA Enterprise Metadata WG or NCEI for an official public permalink; if guidance changes, update generator strings and this map
+parent project	parentProjectTitle / Date / Code -> aggregationInfo	fields exist; aggregation order and citedResponsibleParty richness differ from full Navy template
+related dataset	relatedDataset* + URL fields -> aggregationInfo	same; related org/URL not as rich as template citation block
+associated publication	associatedPublication* -> aggregationInfo + initiativeType sciencePaper	mapping confidence and optional empty blocks
+geographic bbox	spatial.boundingBox corners -> EX_GeographicBoundingBox	good
+text geographic description	spatial.geographicDescription	fine
+temporal extent	startDate / endDate -> gml:TimePeriod inside EX_Extent	generator wired; ensure form labels and Excel both say temporal comes from mission dates
+vertical extent	verticalMinimum / verticalMaximum / verticalCrsUrl -> EX_VerticalExtent	generator and parser wired; CRS URL optional
+grid dimensions & cell geometry	spatial.gridRepresentation.axes + cellGeometry from form when use grid checked	collected when grid panel used; easy to leave off if users do not enable gridded representation
+grid resolution	spatial.gridRepresentation.axes[].resolution -> gco:Measure when parseable	same; free text resolution falls back to CharacterString in older paths only inside grid branch
+platform	platform.*	fine; several client/server aliases (platformId, platformName, platformComments)
+platform description	platformComments -> platform.description via mapClientDataToServer	alias easy to miss in docs
+instrument / sensor	sensors[] -> acquisition + MI_CoverageDescription bands	good overall; coverage variable names optional on sensors
+content / variable description	sensor variableName / dataType / coverageDescriptor or derived text	still thin unless users fill optional sensor fields
+distribution format	distributionFormatName / distributionFileFormat -> distributorFormat MD_Format	fine
+landing page	metadataLandingUrl -> distributorTransferOptions + NCEI Geoportal default from file id	pretty good
+download URL	downloadUrl -> second transfer option with download function	pretty good
+fees	distributionFeesText (output)	defaults match template if unset
+ordering instructions	distributionOrderingInstructions (output)	same
+metadata maintenance	metadataMaintenanceFrequency (output) -> root metadataMaintenance	fine
+root reference system	spatial.referenceSystem -> referenceSystemInfo omitted if output.omitRootReferenceSystemInfo	intentional omit for Navy template
+metadata contact	full CI_ResponsibleParty or NCEI xlink if output.useNceiMetadataContactXlink	one simple inline contact vs template xlink-only preparer
+dataset POC (citedResponsibleParty)	mission organization + email in identification	partial vs template multi-party author/publisher/originator
+ROR org info	organizationRor* -> extra CI_OnlineResource	pretty polished
+aggregation initiative types	DS_AssociationTypeCode / DS_InitiativeTypeCode	generator updated; validate against your target XSD if issues appear
+contentInfo	gmi:MI_CoverageDescription / MD_Band per sensor	replaces older feature-catalogue style
+strict validation	detectStructuralSpineElements + schema validation	can pass while narrative metadata still thin; strict is structural not completeness

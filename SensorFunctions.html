@@ -1,0 +1,893 @@
+<script>
+  // SensorFunctions.html
+  
+  const SENSOR_TYPES = [
+    { type: "Paroscientific Pressure Sensor", fields: ["pressureRange", "uncertainty", "operationMode", "installDate", "confidenceInterval", "sensorLanguage", "sensorCharacterSet", "event"] },
+    { type: "SBE CTD Sensor", fields: ["conductivityRange", "temperatureRange", "uncertainty", "operationMode", "installDate", "confidenceInterval", "sensorLanguage", "sensorCharacterSet", "event"] },
+    { type: "Norbit MBES Sensor", fields: ["frequency", "beamCount", "depthRating", "uncertainty", "operationMode", "installDate", "confidenceInterval", "sensorLanguage", "sensorCharacterSet", "event"] }
+  ];
+  
+  // Helper function to check if a sensor type is a predefined standard type
+  function isPredefinedSensorType(sensorType) {
+    return SENSOR_TYPES.some(st => st.type === sensorType);
+  }
+  
+  // Helper function to get sensor configuration (predefined or custom)
+  function getSensorTypeConfig(sensorType) {
+    // First try to find predefined type
+    let config = SENSOR_TYPES.find(t => t.type === sensorType);
+    
+    // If not found, treat as custom sensor with all available fields
+    if (!config) {
+      debugLog(`DEBUG: getSensorTypeConfig - Custom sensor type detected: "${sensorType}", using all available fields`);
+      config = { type: sensorType, fields: ALL_AVAILABLE_FIELDS, isCustom: true };
+    }
+    
+    return config;
+  }
+  
+  // All available fields for custom sensors
+  const ALL_AVAILABLE_FIELDS = [
+    "pressureRange", "conductivityRange", "temperatureRange", "frequency", 
+    "beamCount", "depthRating", "uncertainty", "operationMode", "installDate", 
+    "confidenceInterval", "sensorLanguage", "sensorCharacterSet", "event",
+    "serialNumber", "manufacturer", "model", "calibrationDate", "accuracy",
+    "resolution", "powerRequirement", "dataFormat", "communicationProtocol",
+    "operatingTemperature", "operatingPressure", "dimensions", "weight",
+    "warranty", "notes"
+  ];
+
+  function normalizeSensorDomId(idValue) {
+    return String(idValue || `sensor_${Date.now()}`)
+      .trim()
+      .replace(/[^A-Za-z0-9_-]/g, '_');
+  }
+
+  /** Inline panel: suggest GCMD Science + Instrument terms from this sensor card (Scripts.html). */
+  function getSensorGcmdPanelHtml(sensorDomId) {
+    const id = normalizeSensorDomId(sensorDomId);
+    return `
+              <div class="sensor-gcmd-panel border rounded p-2 mb-3 bg-light">
+                <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+                  <span class="small fw-semibold mb-0">GCMD suggestions (this sensor)</span>
+                  <button type="button" class="btn btn-sm btn-outline-primary suggest-sensor-gcmd-btn" data-sensor-dom-id="${escapeXml(id)}" aria-label="Suggest GCMD keywords from this sensor">Suggest keywords</button>
+                </div>
+                <p class="form-text small mb-2 mb-0">Uses type, model, manufacturer, and notes to search <strong>Science</strong> and <strong>Instrument</strong> GCMD vocabularies. Tap a row to add it to the mission keyword list.</p>
+                <div id="sensorGcmdResults-${id}" class="list-group list-group-flush border sensor-gcmd-result-list"></div>
+              </div>`;
+  }
+
+  function triggerSensorFlowUpdate() {
+    if (typeof validateStepSync === 'function') {
+      validateStepSync(3);
+    }
+    if (window.FormEvents && typeof window.FormEvents.emit === 'function') {
+      window.FormEvents.emit('changed');
+    } else if (typeof refreshXMLPreview === 'function') {
+      refreshXMLPreview();
+    }
+  }
+
+  function validateSensorCard($sensorItem) {
+    const cardId = $sensorItem.attr('id');
+    const sensorId = ($sensorItem.find('[name="sensorId"]').val() || '').trim();
+    const sensorType = ($sensorItem.find('[name="sensorType"]').val() || '').trim();
+    const beamCountRaw = $sensorItem.find('[name="beamCount"]').val();
+    const beamCount = beamCountRaw === '' ? 0 : parseInt(beamCountRaw, 10);
+    const installDate = $sensorItem.find('[name="installDate"]').val();
+    const frequency = ($sensorItem.find('[name="frequency"]').val() || '').trim();
+
+    $sensorItem.find('.invalid-feedback').text('');
+    $sensorItem.find('.form-control').removeClass('is-invalid');
+
+    let valid = true;
+
+    if (!sensorId) {
+      $sensorItem.find(`#sensorIdError-${cardId}`).text('Sensor ID is required.');
+      $sensorItem.find('[name="sensorId"]').addClass('is-invalid');
+      valid = false;
+    }
+    if (!sensorType) {
+      $sensorItem.find(`#sensorTypeError-${cardId}`).text('Sensor Type is required.');
+      $sensorItem.find('[name="sensorType"]').addClass('is-invalid');
+      valid = false;
+    }
+    if (!isNaN(beamCount) && beamCount < 0) {
+      $sensorItem.find(`#beamCountError-${cardId}`).text('Beam Count cannot be negative.');
+      $sensorItem.find('[name="beamCount"]').addClass('is-invalid');
+      valid = false;
+    }
+    if (installDate && new Date(installDate) > new Date()) {
+      $sensorItem.find(`#installDateError-${cardId}`).text('Install Date cannot be in the future.');
+      $sensorItem.find('[name="installDate"]').addClass('is-invalid');
+      valid = false;
+    }
+    if (frequency && !/^\d+(\s+and\s+\d+)?\s*kHz$/i.test(frequency)) {
+      $sensorItem.find(`#frequencyError-${cardId}`).text('Frequency must be in format "200 kHz" or "200 and 400 kHz".');
+      $sensorItem.find('[name="frequency"]').addClass('is-invalid');
+      valid = false;
+    }
+
+    return valid;
+  }
+
+  function collectSensorDataFromCard($sensorItem) {
+    const beamCountRaw = $sensorItem.find('[name="beamCount"]').val();
+    return {
+      id: ($sensorItem.find('[name="sensorId"]').val() || '').trim(),
+      type: ($sensorItem.find('[name="sensorType"]').val() || '').trim(),
+      firmware: $sensorItem.find('[name="firmware"]').val(),
+      installDate: $sensorItem.find('[name="installDate"]').val(),
+      uncertainty: $sensorItem.find('[name="uncertainty"]').val(),
+      operationMode: $sensorItem.find('[name="operationMode"]').val(),
+      frequency: $sensorItem.find('[name="frequency"]').val(),
+      beamCount: beamCountRaw === '' ? 0 : parseInt(beamCountRaw, 10),
+      depthRating: $sensorItem.find('[name="depthRating"]').val(),
+      confidenceInterval: $sensorItem.find('[name="confidenceInterval"]').val(),
+      sensorLanguage: $sensorItem.find('[name="sensorLanguage"]').val(),
+      sensorCharacterSet: $sensorItem.find('[name="sensorCharacterSet"]').val(),
+      event: $sensorItem.find('[name="event"]').val(),
+      pressureRange: $sensorItem.find('[name="pressureRange"]').val(),
+      conductivityRange: $sensorItem.find('[name="conductivityRange"]').val(),
+      temperatureRange: $sensorItem.find('[name="temperatureRange"]').val(),
+      manufacturer: $sensorItem.find('[name="manufacturer"]').val(),
+      model: $sensorItem.find('[name="model"]').val(),
+      serialNumber: $sensorItem.find('[name="serialNumber"]').val(),
+      calibrationDate: $sensorItem.find('[name="calibrationDate"]').val(),
+      accuracy: $sensorItem.find('[name="accuracy"]').val(),
+      resolution: $sensorItem.find('[name="resolution"]').val(),
+      powerRequirement: $sensorItem.find('[name="powerRequirement"]').val(),
+      dataFormat: $sensorItem.find('[name="dataFormat"]').val(),
+      communicationProtocol: $sensorItem.find('[name="communicationProtocol"]').val(),
+      operatingTemperature: $sensorItem.find('[name="operatingTemperature"]').val(),
+      operatingPressure: $sensorItem.find('[name="operatingPressure"]').val(),
+      dimensions: $sensorItem.find('[name="dimensions"]').val(),
+      weight: $sensorItem.find('[name="weight"]').val(),
+      warranty: $sensorItem.find('[name="warranty"]').val(),
+      notes: $sensorItem.find('[name="notes"]').val()
+    };
+  }
+  
+  /** Client wrapper — name must differ from server saveSensor() to avoid google.script.run resolution issues. */
+  function persistSensorToSheet(sensorData) {
+    try {
+      if (!sensorData || typeof sensorData !== 'object') {
+        showToast('error', 'Sensor data is missing. Refresh the page and try again.');
+        return;
+      }
+      if (!String(sensorData.id || '').trim()) {
+        showToast('error', 'Sensor ID is required.');
+        return;
+      }
+      const payload = cloneForServerTransport(sensorData);
+      if (!payload || typeof payload !== 'object') {
+        showToast('error', 'Sensor data could not be prepared for save.');
+        return;
+      }
+      debugLog('DEBUG: persistSensorToSheet - Saving sensor:', payload);
+      showLoading(true);
+      const runner = google.script.run
+        .withSuccessHandler(function(sensors) {
+          debugLog('DEBUG: persistSensorToSheet - Sensor saved successfully');
+          updateSensorOptions(sensors || []);
+          showToast('success', 'Sensor saved to library (Google Sheet).');
+          triggerSensorFlowUpdate();
+          showLoading(false);
+        })
+        .withFailureHandler(function(e) {
+          console.error('DEBUG: persistSensorToSheet - Error:', e);
+          showToast('error', 'Failed to save sensor: ' + e.message);
+          google.script.run.logValidationResult('Sensor Save Error', { error: e.message });
+          showLoading(false);
+        });
+      if (typeof runner['saveSensor'] !== 'function') {
+        showToast('error', 'Save sensor is not available. Redeploy the web app.');
+        showLoading(false);
+        return;
+      }
+      runner['saveSensor'](payload);
+    } catch (e) {
+      console.error('DEBUG: persistSensorToSheet - Exception:', e);
+      showToast('error', 'Failed to save sensor: ' + e.message);
+      showLoading(false);
+    }
+  }
+  
+  function updateSensorOptions(sensorTypesList) {
+    try {
+      debugLog('DEBUG: updateSensorOptions - Updating sensor dropdowns with:', sensorTypesList);
+      const $sensorTypeSelect = $('#sensorSelect');
+      const $savedSensorsSelect = $('#savedSensors');
+      $sensorTypeSelect.empty().append('<option value="">-- Select Sensor Type to Add --</option>');
+      $savedSensorsSelect.empty().append('<option value="">-- Load sensor from library (adds to this form only) --</option>');
+  
+      SENSOR_TYPES.forEach(type => {
+        $sensorTypeSelect.append(`<option value="${escapeXml(type.type)}">${escapeXml(type.type)}</option>`);
+      });
+      
+      // Add custom sensor option
+      $sensorTypeSelect.append('<option value="CUSTOM_SENSOR">🔧 Add New Custom Sensor</option>');
+  
+      if (sensorTypesList && Array.isArray(sensorTypesList)) {
+        sensorTypesList.forEach((s, index) => {
+          if (!s || typeof s.id === 'undefined' || typeof s.type === 'undefined') {
+            console.warn(`DEBUG: updateSensorOptions - Skipping invalid sensor at index ${index}:`, s);
+            return;
+          }
+          $savedSensorsSelect.append(`<option value="${escapeXml(s.id)}">${escapeXml(s.type)} (ID: ${escapeXml(s.id)})</option>`);
+        });
+      }
+      debugLog('DEBUG: updateSensorOptions - Sensor dropdowns updated');
+    } catch (e) {
+      console.error('DEBUG: updateSensorOptions - Error:', e);
+      showToast('error', 'Failed to update sensor options: ' + e.message);
+    }
+  }
+  
+  function addCustomSensor() {
+    try {
+      debugLog('DEBUG: addCustomSensor - Creating custom sensor form');
+      const uniqueId = `sensor_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      
+      const customSensorHtml = `
+        <div class="sensor-item" id="${uniqueId}">
+          <div class="sensor-header d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#${uniqueId}_details" aria-expanded="true" aria-controls="${uniqueId}_details">
+            <h6 class="mb-0">🔧 New Custom Sensor</h6>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div id="${uniqueId}_details" class="collapse show">
+            <div class="p-3">
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Sensor ID *</label>
+                  <input type="text" class="form-control" name="sensorId" value="" placeholder="e.g., Custom_Sensor_001" required>
+                  <div id="sensorIdError-${uniqueId}" class="invalid-feedback"></div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Sensor Type *</label>
+                  <input type="text" class="form-control" name="sensorType" value="Custom Sensor" placeholder="e.g., Custom Temperature Sensor, galaxysword, etc." required>
+                  <div id="sensorTypeError-${uniqueId}" class="invalid-feedback"></div>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Firmware Version</label>
+                  <input type="text" class="form-control" name="firmware" value="" placeholder="e.g., v1.2.3">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Manufacturer</label>
+                  <input type="text" class="form-control" name="manufacturer" value="" placeholder="e.g., Acme Sensors Inc">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Model</label>
+                  <input type="text" class="form-control" name="model" value="" placeholder="e.g., TS-2000">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Serial Number</label>
+                  <input type="text" class="form-control" name="serialNumber" value="" placeholder="e.g., SN123456789">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Pressure Range</label>
+                  <input type="text" class="form-control" name="pressureRange" value="" placeholder="e.g., 0-1000 psi">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Temperature Range</label>
+                  <input type="text" class="form-control" name="temperatureRange" value="" placeholder="e.g., -5 to 35°C">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Conductivity Range</label>
+                  <input type="text" class="form-control" name="conductivityRange" value="" placeholder="e.g., 0-70 mS/cm">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Frequency</label>
+                  <input type="text" class="form-control" name="frequency" value="" placeholder="e.g., 200 and 400 kHz">
+                  <div id="frequencyError-${uniqueId}" class="invalid-feedback"></div>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Beam Count</label>
+                  <input type="number" class="form-control" name="beamCount" value="" placeholder="e.g., 512" min="0">
+                  <div id="beamCountError-${uniqueId}" class="invalid-feedback"></div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Depth Rating</label>
+                  <input type="text" class="form-control" name="depthRating" value="" placeholder="e.g., 6000m">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Uncertainty</label>
+                  <input type="text" class="form-control" name="uncertainty" value="" placeholder="e.g., +/- 0.1%">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Accuracy</label>
+                  <input type="text" class="form-control" name="accuracy" value="" placeholder="e.g., ±0.01%">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Resolution</label>
+                  <input type="text" class="form-control" name="resolution" value="" placeholder="e.g., 0.001">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Operation Mode</label>
+                  <input type="text" class="form-control" name="operationMode" value="" placeholder="e.g., Long-term Accuracy">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Install Date</label>
+                  <input type="date" class="form-control" name="installDate" value="">
+                  <div id="installDateError-${uniqueId}" class="invalid-feedback"></div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Calibration Date</label>
+                  <input type="date" class="form-control" name="calibrationDate" value="">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Confidence Interval</label>
+                  <input type="text" class="form-control" name="confidenceInterval" value="" placeholder="e.g., RMS">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Power Requirement</label>
+                  <input type="text" class="form-control" name="powerRequirement" value="" placeholder="e.g., 12V DC, 2A">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Data Format</label>
+                  <input type="text" class="form-control" name="dataFormat" value="" placeholder="e.g., ASCII, Binary">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Communication Protocol</label>
+                  <input type="text" class="form-control" name="communicationProtocol" value="" placeholder="e.g., RS232, Ethernet">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Operating Temperature</label>
+                  <input type="text" class="form-control" name="operatingTemperature" value="" placeholder="e.g., -10°C to +50°C">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Operating Pressure</label>
+                  <input type="text" class="form-control" name="operatingPressure" value="" placeholder="e.g., 0-1000 bar">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Dimensions</label>
+                  <input type="text" class="form-control" name="dimensions" value="" placeholder="e.g., 30cm x 15cm x 10cm">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Weight</label>
+                  <input type="text" class="form-control" name="weight" value="" placeholder="e.g., 2.5 kg">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Sensor Language</label>
+                  <input type="text" class="form-control" name="sensorLanguage" value="" placeholder="e.g., English">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Sensor Character Set</label>
+                  <input type="text" class="form-control" name="sensorCharacterSet" value="" placeholder="e.g., utf8">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Warranty</label>
+                  <input type="text" class="form-control" name="warranty" value="" placeholder="e.g., 2 years">
+                </div>
+                <div class="col-md-12">
+                  <label class="form-label">Event</label>
+                  <input type="text" class="form-control" name="event" value="" placeholder="e.g., Arrived at mission area">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-12">
+                  <label class="form-label">Notes</label>
+                  <textarea class="form-control" name="notes" rows="3" placeholder="Additional notes or specifications..."></textarea>
+                </div>
+              </div>
+              ${getSensorGcmdPanelHtml(uniqueId)}
+              <div class="text-end">
+                <button type="button" class="btn btn-sm btn-success me-2 save-individual-sensor" aria-label="Save this sensor to Google Sheet library">💾 Save sensor to library (Sheet)</button>
+                <button type="button" class="btn btn-sm btn-danger remove-sensor" aria-label="Remove Custom Sensor">Remove</button>
+              </div>
+            </div>
+          </div>
+        </div>`;
+      
+      $('#sensorsList').append(customSensorHtml);
+      $(`#${uniqueId}_details`).collapse('show');
+      
+      $('#sensorsList .text-muted').remove();
+      $('#sensorSelect').val('');
+      $('#addSensorBtn').prop('disabled', true);
+      triggerSensorFlowUpdate();
+      showToast('success', 'Custom sensor form added! Fill in the fields you need.');
+      debugLog('DEBUG: addCustomSensor - Custom sensor form added to UI');
+    } catch (e) {
+      console.error('DEBUG: addCustomSensor - Error:', e);
+      showToast('error', 'Failed to add custom sensor: ' + e.message);
+    }
+  }
+
+  function addSensor(sensor) {
+    try {
+      debugLog('DEBUG: addSensor - Adding sensor:', sensor);
+      sensor = sensor || {};
+      const sensorType = sensor.type || $('#sensorSelect').val();
+      if (!sensorType) {
+        showToast('warning', 'Please select a sensor type');
+        return;
+      }
+      
+      // Handle custom sensor creation
+      if (sensorType === 'CUSTOM_SENSOR') {
+        addCustomSensor();
+        return;
+      }
+      
+      const domBlockId = `sensor_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const sensorDomId = normalizeSensorDomId(domBlockId);
+      const sensorIdValue = sensor.id != null && String(sensor.id).trim() !== '' ? String(sensor.id).trim() : '';
+
+      // Get sensor configuration (predefined or custom)
+      const sensorTypeConfig = getSensorTypeConfig(sensorType);
+
+      const fieldsHtml = sensorTypeConfig.fields.map(field => {
+        const idAttr = `id="${field}Error-${sensorDomId}"`;
+        switch (field) {
+          case "pressureRange":
+            return `
+              <div class="col-md-6">
+                <label class="form-label">Pressure Range</label>
+                <input type="text" class="form-control" name="pressureRange" value="${escapeXml(sensor.pressureRange || '')}" placeholder="e.g., 0-1000 psi">
+              </div>`;
+          case "conductivityRange":
+            return `
+              <div class="col-md-6">
+                <label class="form-label">Conductivity Range</label>
+                <input type="text" class="form-control" name="conductivityRange" value="${escapeXml(sensor.conductivityRange || '')}" placeholder="e.g., 0-70 mS/cm">
+              </div>`;
+          case "temperatureRange":
+            return `
+              <div class="col-md-6">
+                <label class="form-label">Temperature Range</label>
+                <input type="text" class="form-control" name="temperatureRange" value="${escapeXml(sensor.temperatureRange || '')}" placeholder="e.g., -5 to 35°C">
+              </div>`;
+          case "frequency":
+            return `
+              <div class="col-md-6">
+                <label class="form-label">Frequency</label>
+                <input type="text" class="form-control" name="frequency" value="${escapeXml(sensor.frequency || '')}" placeholder="e.g., 200 and 400 kHz">
+                <div ${idAttr} class="invalid-feedback"></div>
+              </div>`;
+          case "beamCount":
+            return `
+              <div class="col-md-6">
+                <label class="form-label">Beam Count</label>
+                <input type="number" class="form-control" name="beamCount" value="${escapeXml(sensor.beamCount || '')}" placeholder="e.g., 512" min="0">
+                <div ${idAttr} class="invalid-feedback"></div>
+              </div>`;
+          case "depthRating":
+            return `
+              <div class="col-md-6">
+                <label class="form-label">Depth Rating</label>
+                <input type="text" class="form-control" name="depthRating" value="${escapeXml(sensor.depthRating || '')}" placeholder="e.g., 6000m">
+              </div>`;
+          case "uncertainty":
+            return `
+              <div class="col-md-6">
+                <label class="form-label">Uncertainty <small>(e.g., +/- 0.1%)</small></label>
+                <input type="text" class="form-control" name="uncertainty" value="${escapeXml(sensor.uncertainty || '')}" placeholder="e.g., +/- 0.1% / +/- 0.1 cm/s">
+              </div>`;
+          case "operationMode":
+            return `
+              <div class="col-md-6">
+                <label class="form-label">Operation Mode</label>
+                <input type="text" class="form-control" name="operationMode" value="${escapeXml(sensor.operationMode || '')}" placeholder="e.g., Long-term Accuracy">
+              </div>`;
+          case "installDate":
+            return `
+              <div class="col-md-6">
+                <label class="form-label">Install Date</label>
+                <input type="date" class="form-control" name="installDate" value="${escapeXml(sensor.installDate || '')}">
+                <div ${idAttr} class="invalid-feedback"></div>
+              </div>`;
+          case "confidenceInterval":
+            return `
+              <div class="col-md-6">
+                <label class="form-label">Confidence Interval</label>
+                <input type="text" class="form-control" name="confidenceInterval" value="${escapeXml(sensor.confidenceInterval || '')}" placeholder="e.g., RMS">
+              </div>`;
+          case "sensorLanguage":
+            return `
+              <div class="col-md-6">
+                <label class="form-label">Sensor Language</label>
+                <input type="text" class="form-control" name="sensorLanguage" value="${escapeXml(sensor.sensorLanguage || '')}" placeholder="e.g., English">
+              </div>`;
+          case "sensorCharacterSet":
+            return `
+              <div class="col-md-6">
+                <label class="form-label">Sensor Character Set</label>
+                <input type="text" class="form-control" name="sensorCharacterSet" value="${escapeXml(sensor.sensorCharacterSet || '')}" placeholder="e.g., utf8">
+              </div>`;
+          case "event":
+            return `
+              <div class="col-md-12">
+                <label class="form-label">Event</label>
+                <input type="text" class="form-control" name="event" value="${escapeXml(sensor.event || '')}" placeholder="e.g., Arrived at mission area">
+              </div>`;
+          case "serialNumber":
+            return `
+              <div class="col-md-6">
+                <label class="form-label">Serial Number</label>
+                <input type="text" class="form-control" name="serialNumber" value="${escapeXml(sensor.serialNumber || '')}" placeholder="e.g., SN123456789">
+              </div>`;
+          case "manufacturer":
+            return `
+              <div class="col-md-6">
+                <label class="form-label">Manufacturer</label>
+                <input type="text" class="form-control" name="manufacturer" value="${escapeXml(sensor.manufacturer || '')}" placeholder="e.g., Acme Sensors Inc">
+              </div>`;
+          case "model":
+            return `
+              <div class="col-md-6">
+                <label class="form-label">Model</label>
+                <input type="text" class="form-control" name="model" value="${escapeXml(sensor.model || '')}" placeholder="e.g., TS-2000">
+              </div>`;
+          case "calibrationDate":
+            return `
+              <div class="col-md-6">
+                <label class="form-label">Calibration Date</label>
+                <input type="date" class="form-control" name="calibrationDate" value="${escapeXml(sensor.calibrationDate || '')}">
+              </div>`;
+          case "accuracy":
+            return `
+              <div class="col-md-6">
+                <label class="form-label">Accuracy</label>
+                <input type="text" class="form-control" name="accuracy" value="${escapeXml(sensor.accuracy || '')}" placeholder="e.g., ±0.01%">
+              </div>`;
+          case "resolution":
+            return `
+              <div class="col-md-6">
+                <label class="form-label">Resolution</label>
+                <input type="text" class="form-control" name="resolution" value="${escapeXml(sensor.resolution || '')}" placeholder="e.g., 0.001">
+              </div>`;
+          case "powerRequirement":
+            return `
+              <div class="col-md-6">
+                <label class="form-label">Power Requirement</label>
+                <input type="text" class="form-control" name="powerRequirement" value="${escapeXml(sensor.powerRequirement || '')}" placeholder="e.g., 12V DC, 2A">
+              </div>`;
+          case "dataFormat":
+            return `
+              <div class="col-md-6">
+                <label class="form-label">Data Format</label>
+                <input type="text" class="form-control" name="dataFormat" value="${escapeXml(sensor.dataFormat || '')}" placeholder="e.g., ASCII, Binary">
+              </div>`;
+          case "communicationProtocol":
+            return `
+              <div class="col-md-6">
+                <label class="form-label">Communication Protocol</label>
+                <input type="text" class="form-control" name="communicationProtocol" value="${escapeXml(sensor.communicationProtocol || '')}" placeholder="e.g., RS232, Ethernet">
+              </div>`;
+          case "operatingTemperature":
+            return `
+              <div class="col-md-6">
+                <label class="form-label">Operating Temperature</label>
+                <input type="text" class="form-control" name="operatingTemperature" value="${escapeXml(sensor.operatingTemperature || '')}" placeholder="e.g., -10°C to +50°C">
+              </div>`;
+          case "operatingPressure":
+            return `
+              <div class="col-md-6">
+                <label class="form-label">Operating Pressure</label>
+                <input type="text" class="form-control" name="operatingPressure" value="${escapeXml(sensor.operatingPressure || '')}" placeholder="e.g., 0-1000 bar">
+              </div>`;
+          case "dimensions":
+            return `
+              <div class="col-md-6">
+                <label class="form-label">Dimensions</label>
+                <input type="text" class="form-control" name="dimensions" value="${escapeXml(sensor.dimensions || '')}" placeholder="e.g., 30cm x 15cm x 10cm">
+              </div>`;
+          case "weight":
+            return `
+              <div class="col-md-6">
+                <label class="form-label">Weight</label>
+                <input type="text" class="form-control" name="weight" value="${escapeXml(sensor.weight || '')}" placeholder="e.g., 2.5 kg">
+              </div>`;
+          case "warranty":
+            return `
+              <div class="col-md-6">
+                <label class="form-label">Warranty</label>
+                <input type="text" class="form-control" name="warranty" value="${escapeXml(sensor.warranty || '')}" placeholder="e.g., 2 years">
+              </div>`;
+          case "notes":
+            return `
+              <div class="col-md-12">
+                <label class="form-label">Notes</label>
+                <textarea class="form-control" name="notes" rows="3" placeholder="Additional notes or specifications...">${escapeXml(sensor.notes || '')}</textarea>
+              </div>`;
+          default:
+            return '';
+        }
+      }).join('');
+  
+      // Check if this is a custom sensor
+      const isCustomSensor = !isPredefinedSensorType(sensorType);
+      const sensorIcon = isCustomSensor ? '🔧' : '';
+      const headerText = `${sensorIcon} ${escapeXml(sensorIdValue || sensorType || 'New Sensor')}${isCustomSensor ? ' (Custom)' : ''}`;
+
+      const sensorHtml = `
+        <div class="sensor-item" id="${sensorDomId}">
+          <div class="sensor-header d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#${sensorDomId}_details" aria-expanded="true" aria-controls="${sensorDomId}_details">
+            <h6 class="mb-0">${headerText}</h6>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div id="${sensorDomId}_details" class="collapse show">
+            <div class="p-3">
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Sensor ID *</label>
+                  <input type="text" class="form-control" name="sensorId" value="${escapeXml(sensorIdValue)}" placeholder="e.g., Norbit_MBES_001" required>
+                  <div id="sensorIdError-${sensorDomId}" class="invalid-feedback"></div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Sensor Type *</label>
+                  <input type="text" class="form-control" name="sensorType" value="${escapeXml(sensor.type || sensorType || '')}" placeholder="e.g., Norbit WBMS MBES" ${isCustomSensor ? 'required' : 'readonly'}>
+                  ${isCustomSensor ? `<div id="sensorTypeError-${sensorDomId}" class="invalid-feedback"></div>` : ''}
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Firmware Version</label>
+                  <input type="text" class="form-control" name="firmware" value="${escapeXml(sensor.firmware || '')}" placeholder="e.g., v1.2.3">
+                </div>
+                ${isCustomSensor ? `
+                <div class="col-md-6">
+                  <label class="form-label">Manufacturer</label>
+                  <input type="text" class="form-control" name="manufacturer" value="${escapeXml(sensor.manufacturer || '')}" placeholder="e.g., Acme Sensors Inc">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Model</label>
+                  <input type="text" class="form-control" name="model" value="${escapeXml(sensor.model || '')}" placeholder="e.g., TS-2000">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Serial Number</label>
+                  <input type="text" class="form-control" name="serialNumber" value="${escapeXml(sensor.serialNumber || '')}" placeholder="e.g., SN123456789">
+                </div>
+              </div>
+              <div class="row mb-3">
+                ` : ''}
+                ${fieldsHtml}
+              </div>
+              ${getSensorGcmdPanelHtml(sensorDomId)}
+              <div class="text-end">
+                <button type="button" class="btn btn-sm btn-success me-2 save-individual-sensor" aria-label="Save this sensor to Google Sheet library">💾 Save sensor to library (Sheet)</button>
+                <button type="button" class="btn btn-sm btn-danger remove-sensor" aria-label="Remove sensor ${escapeXml(sensorIdValue || 'New Sensor')}">Remove</button>
+              </div>
+            </div>
+          </div>
+        </div>`;
+      
+      $('#sensorsList').append(sensorHtml);
+      $(`#${sensorDomId}_details`).collapse('show');
+      
+      $('#sensorsList .text-muted').remove();
+      $('#sensorSelect').val('');
+      $('#addSensorBtn').prop('disabled', true);
+      triggerSensorFlowUpdate();
+      debugLog('DEBUG: addSensor - Sensor added to UI');
+    } catch (e) {
+      console.error('DEBUG: addSensor - Error:', e);
+      showToast('error', 'Failed to add sensor: ' + e.message);
+    }
+  }
+  
+  function initSensorHandlers(sensorTypesList) {
+    try {
+      debugLog('DEBUG: initSensorHandlers - Initializing with types:', sensorTypesList);
+      updateSensorOptions(sensorTypesList);
+
+      $('#sensorSelect').off('change.sensorFlow').on('change.sensorFlow', function() {
+        const sensorType = $(this).val();
+        $('#addSensorBtn').prop('disabled', !sensorType);
+        debugLog('DEBUG: Sensor type selected:', sensorType);
+      });
+
+      $('#addSensorBtn').off('click.sensorFlow').on('click.sensorFlow', function(e) {
+        e.preventDefault();
+        debugLog('DEBUG: initSensorHandlers - Add sensor button clicked');
+        const selectedSensorType = $('#sensorSelect').val();
+        if (!selectedSensorType) {
+          showToast('warning', 'Please select a sensor type first');
+          return;
+        }
+        addSensor({ type: selectedSensorType });
+      });
+
+      $('#saveInstruments').off('click.sensorFlow').on('click.sensorFlow', function(e) {
+        try {
+          e.preventDefault();
+          debugLog('DEBUG: initSensorHandlers - Save instruments button clicked');
+
+          let allValid = true;
+          const sensors = [];
+
+          $('#sensorsList .sensor-item').each(function() {
+            const $sensorItem = $(this);
+            if (!validateSensorCard($sensorItem)) {
+              allValid = false;
+              return;
+            }
+
+            sensors.push(collectSensorDataFromCard($sensorItem));
+          });
+
+          if (!allValid) {
+            showToast('error', 'Please fix errors in the sensor form');
+            return;
+          }
+
+          if (sensors.length === 0) {
+            showToast('warning', 'No sensors to save');
+            return;
+          }
+
+          const batchPayload = cloneForServerTransport(sensors);
+          if (!Array.isArray(batchPayload) || batchPayload.length !== sensors.length) {
+            showToast('error', 'Sensor list could not be prepared for save.');
+            return;
+          }
+
+          const level =
+            typeof window.getValidationLevel === 'function'
+              ? window.getValidationLevel()
+              : $('#validationLevel').val() || 'strict';
+          const formData = collectFormData();
+
+          showLoading(true);
+          google.script.run
+            .withSuccessHandler(function(validation) {
+              if (!validation || !validation.valid) {
+                if (validation && typeof updateValidationResults === 'function') {
+                  updateValidationResults(validation);
+                }
+                const errN = (validation && validation.errors && validation.errors.length) || 0;
+                showToast('error', errN ? 'Validation failed: ' + errN + ' error(s)' : 'Validation failed');
+                showLoading(false);
+                return;
+              }
+
+              const batchRunner = google.script.run
+                .withSuccessHandler(function(updatedSensors) {
+                  updateSensorOptions(updatedSensors || []);
+                  showToast(
+                    'success',
+                    sensors.length +
+                      ' sensor' +
+                      (sensors.length !== 1 ? 's' : '') +
+                      ' saved to library (Google Sheet).'
+                  );
+                  triggerSensorFlowUpdate();
+                  showLoading(false);
+                })
+                .withFailureHandler(function(err) {
+                  console.error('DEBUG: saveInstruments - Save batch error:', err);
+                  showToast('error', 'Failed to save sensors to library: ' + err.message);
+                  showLoading(false);
+                });
+              if (typeof batchRunner['saveSensorsBatch'] !== 'function') {
+                showToast('error', 'Batch save is not available. Redeploy the web app.');
+                showLoading(false);
+                return;
+              }
+              batchRunner['saveSensorsBatch'](batchPayload);
+            })
+            .withFailureHandler(function(ev) {
+              console.error('DEBUG: saveInstruments - Validation request error:', ev);
+              showToast('error', 'Validation failed: ' + (ev && ev.message ? ev.message : String(ev)));
+              showLoading(false);
+            })
+            .validateFormDataWithRules(formData, level);
+        } catch (e) {
+          console.error('DEBUG: saveInstruments - Error:', e);
+          showToast('error', 'Failed to save sensors: ' + e.message);
+          showLoading(false);
+        }
+      });
+
+      $('#savedSensors').off('change.sensorFlow').on('change.sensorFlow', function() {
+        try {
+          const sensorId = $(this).val();
+          debugLog('DEBUG: initSensorHandlers - Loading sensor:', sensorId);
+          if (!sensorId) return;
+          showLoading(true);
+          google.script.run
+            .withSuccessHandler(function(sensors) {
+              const sensor = sensors.find(s => s.id === sensorId);
+              if (sensor) {
+                addSensor(sensor);
+                triggerSensorFlowUpdate();
+                showToast('success', 'Sensor loaded successfully');
+              } else {
+                showToast('warning', 'Sensor not found');
+              }
+              $('#savedSensors').val('');  // Reset the dropdown
+              showLoading(false);
+            })
+            .withFailureHandler(function(e) {
+              console.error('DEBUG: savedSensors - Error:', e);
+              showToast('error', 'Failed to load sensor: ' + e.message);
+              $('#savedSensors').val('');  // Reset the dropdown
+              showLoading(false);
+            })
+            .getSensors();
+        } catch (e) {
+          console.error('DEBUG: savedSensors - Exception:', e);
+          showToast('error', 'Failed to load sensor: ' + e.message);
+          $('#savedSensors').val('');  // Reset the dropdown
+          showLoading(false);
+        }
+      });
+
+      $(document)
+        .off('click.sensorFlow', '#sensorsList .remove-sensor')
+        .on('click.sensorFlow', '#sensorsList .remove-sensor', function() {
+          if (confirm('Are you sure you want to remove this sensor?')) {
+            $(this).closest('.sensor-item').remove();
+            if (!$('#sensorsList .sensor-item').length) {
+              $('#sensorsList').html('<div class="text-muted text-center">No sensors added yet. Select a sensor type to add.</div>');
+            }
+            triggerSensorFlowUpdate();
+            showToast('success', 'Sensor removed');
+          }
+        });
+
+      $(document)
+        .off('click.sensorFlow', '#sensorsList .save-individual-sensor')
+        .on('click.sensorFlow', '#sensorsList .save-individual-sensor', function() {
+          try {
+            const $sensorItem = $(this).closest('.sensor-item');
+            if (!validateSensorCard($sensorItem)) {
+              showToast('error', 'Please fix errors in the sensor form');
+              return;
+            }
+
+            const sensorData = collectSensorDataFromCard($sensorItem);
+            persistSensorToSheet(sensorData);
+            $(this).removeClass('btn-success').addClass('btn-secondary').html('✅ Saved').prop('disabled', true);
+          } catch (e) {
+            console.error('DEBUG: saveIndividualSensor - Error:', e);
+            showToast('error', 'Failed to save sensor: ' + e.message);
+          }
+        });
+
+      $(document)
+        .off('input.sensorFlow change.sensorFlow', '#sensorsList .form-control, #sensorsList textarea, #sensorsList select')
+        .on('input.sensorFlow change.sensorFlow', '#sensorsList .form-control, #sensorsList textarea, #sensorsList select', debounce(function() {
+          if (typeof validateStepSync === 'function') {
+            validateStepSync(3);
+          }
+        }, 500));
+  
+      debugLog('DEBUG: initSensorHandlers - Sensor handlers initialized');
+    } catch (e) {
+      console.error('DEBUG: initSensorHandlers - Exception:', e);
+      showToast('error', 'Failed to initialize sensor handlers: ' + e.message);
+    }
+  }
+  </script>  

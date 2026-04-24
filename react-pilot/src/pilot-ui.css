@@ -1,0 +1,391 @@
+/**
+ * Pilot UI refinement layer — layout rhythm, zones, density, scrollbars.
+ * Loads after App.css; relies on tokens from index.css (:root).
+ */
+
+/* --- Focus & motion (a11y + polish) --- */
+#root :where(a, button, input, select, textarea, summary):focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #root *,
+  #root *::before,
+  #root *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* --- Main step column: vertical rhythm --- */
+#root .workspace-main.pilot-step.card {
+  padding-top: 1.5rem;
+  padding-bottom: 1.75rem;
+}
+
+#root .workspace-main .card-intro {
+  margin-bottom: 1.1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 85%, transparent);
+}
+
+#root .workspace-main .panel {
+  margin-bottom: 1.15rem;
+}
+
+#root .workspace-main .panel:last-child {
+  margin-bottom: 0;
+}
+
+#root .workspace-main .panel-title {
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  padding-bottom: 0.45rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 90%, var(--text-color));
+}
+
+/* --- Side column cards (validator + XML) --- */
+#root .workspace-side-stack > .card {
+  padding: 1.2rem 1.35rem 1.4rem;
+}
+
+#root .workspace-side-stack > .card > h2:first-of-type {
+  font-size: 1.02rem;
+  margin-bottom: 0.45rem;
+}
+
+#root .workspace-side-stack > .card > h2:first-of-type::after {
+  width: 56px;
+  height: 2px;
+  margin-top: 0.4rem;
+}
+
+#root .workspace-side--tabbed.card {
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Validator: clear bands --- */
+.validation-panel__intro .card-intro {
+  margin-top: 0.35rem;
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+  max-width: none;
+}
+
+.validation-panel__mode-score {
+  margin: 0.75rem 0 0;
+  padding: 0.85rem 0.9rem;
+  border-radius: var(--radius-md, 10px);
+  background: color-mix(in srgb, var(--text-color) 3.5%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--border) 92%, transparent);
+}
+
+:root[data-theme='dark'] .validation-panel__mode-score {
+  background: color-mix(in srgb, #fff 4%, var(--surface));
+  border-color: var(--border);
+}
+
+.validation-panel__mode-score .mode-pills {
+  margin-top: 0;
+  margin-bottom: 0.65rem;
+}
+
+.validation-panel__mode-score .score-row {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.validation-panel__meta {
+  margin-top: 0.85rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid color-mix(in srgb, var(--border) 88%, transparent);
+}
+
+.validation-panel__meta .status-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  font-size: 0.8125rem;
+}
+
+.validation-panel__meta .status-list > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.5rem;
+  line-height: 1.45;
+}
+
+.validation-panel__meta .status-list strong {
+  min-width: 5.75rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.validation-panel__tools {
+  margin-top: 0.85rem;
+}
+
+.validation-panel__tools .mission-actions {
+  margin-top: 0;
+}
+
+.validation-panel__tools .hint {
+  margin-top: 0.55rem;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+.validation-panel__issues-wrap {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid color-mix(in srgb, var(--border) 88%, transparent);
+}
+
+.validation-panel__issues-wrap > strong {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 0.35rem;
+}
+
+.validation-panel__feed {
+  margin-top: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid color-mix(in srgb, var(--border) 88%, transparent);
+}
+
+.validation-panel__feed .status-message {
+  margin-top: 0;
+}
+
+/* --- Form fields: readability --- */
+#root .workspace-main textarea.form-control {
+  min-height: 5.5rem;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+/* --- Keyword step: flow facets into 2/3 columns when there is room so a
+       widescreen pilot-main doesn't render seven identical stacked panels. --- */
+@media (min-width: 1100px) {
+  #root .pilot-step--keywords {
+    /* Panels are direct children of the step card; target the seven facet
+       sections + the AI suggest card and lay them out on a responsive grid. */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.15rem;
+    align-items: start;
+  }
+
+  #root .pilot-step--keywords > h2,
+  #root .pilot-step--keywords > .card-intro,
+  #root .pilot-step--keywords > .ai-suggest {
+    grid-column: 1 / -1;
+  }
+
+  #root .pilot-step--keywords .panel {
+    margin-bottom: 0;
+  }
+}
+
+#root .keyword-facet {
+  padding: 1.1rem 1.2rem 1.15rem;
+  border: 1px solid color-mix(in srgb, var(--border) 85%, var(--text-color));
+  box-shadow: var(--shadow-sm, 0 1px 2px rgb(0 0 0 / 0.04));
+}
+
+#root .keyword-facet .panel-title {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0.5rem;
+}
+
+#root .kw-chip {
+  font-weight: 500;
+  padding: 0.32rem 0.65rem;
+  transition:
+    background 0.12s ease,
+    border-color 0.12s ease,
+    transform 0.1s ease;
+}
+
+#root .kw-chip:hover {
+  border-color: color-mix(in srgb, var(--focus-ring) 50%, var(--border));
+  transform: translateY(-1px);
+}
+
+#root .kw-results {
+  border-radius: var(--radius-sm, 6px);
+  border: 1px solid color-mix(in srgb, var(--border) 90%, transparent);
+  padding: 0.35rem 0.5rem;
+  background: color-mix(in srgb, var(--text-color) 2.5%, var(--surface));
+}
+
+:root[data-theme='dark'] #root .kw-results {
+  background: color-mix(in srgb, #fff 3%, var(--surface));
+}
+
+/* --- Sensor cards --- */
+#root .sensor-card.panel {
+  border-width: 1px;
+  border-left-width: 4px;
+  border-left-color: color-mix(in srgb, var(--focus-ring) 55%, var(--border));
+}
+
+#root .sensor-card-head .panel-title {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+/* --- Platform library rows --- */
+#root .platform-library-row {
+  padding: 0.45rem 0.5rem;
+  border-radius: var(--radius-sm, 6px);
+  border: 1px solid transparent;
+  transition: background 0.12s ease;
+}
+
+#root .platform-library-row:hover {
+  background: color-mix(in srgb, var(--text-color) 4%, var(--surface));
+  border-color: color-mix(in srgb, var(--border) 80%, transparent);
+}
+
+/* --- Toggles (spatial, etc.) --- */
+#root label.toggle {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  margin-top: 0.85rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: var(--radius-sm, 6px);
+  background: color-mix(in srgb, var(--text-color) 2.8%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--border) 85%, transparent);
+  cursor: pointer;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+#root label.toggle input {
+  margin-top: 0.2rem;
+  flex-shrink: 0;
+}
+
+/* --- Details / disclosure --- */
+#root .sensor-extra-details {
+  border: 1px dashed color-mix(in srgb, var(--border) 70%, var(--text-muted));
+  border-radius: var(--radius-sm, 6px);
+  padding: 0.35rem 0.65rem 0.65rem;
+  background: color-mix(in srgb, var(--text-color) 2%, var(--surface));
+}
+
+#root .sensor-extra-summary {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+/* --- XML preview readability --- */
+#root .xml-pre--hl {
+  margin: 0;
+}
+
+#root .xml-preview-box--scroll {
+  border-radius: var(--radius-sm, 6px);
+}
+
+#root .xml-pre--hl code {
+  line-height: 1.5;
+  font-size: 0.8125rem;
+}
+
+/* --- Thin scrollbars (WebKit) --- */
+.issue-list::-webkit-scrollbar,
+.xml-preview-box--scroll::-webkit-scrollbar,
+.kw-results::-webkit-scrollbar,
+.pilot-debug-log__list::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+.issue-list::-webkit-scrollbar-thumb,
+.xml-preview-box--scroll::-webkit-scrollbar-thumb,
+.kw-results::-webkit-scrollbar-thumb,
+.pilot-debug-log__list::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--text-muted) 55%, transparent);
+  border-radius: 999px;
+}
+
+.issue-list,
+.xml-preview-box--scroll,
+.kw-results,
+.pilot-debug-log__list {
+  scrollbar-color: color-mix(in srgb, var(--text-muted) 55%, transparent) transparent;
+  scrollbar-width: thin;
+}
+
+/* --- Pilot notes --- */
+#root .pilot-notes {
+  padding: 1.35rem 1.5rem 1.5rem;
+}
+
+#root .pilot-notes ol {
+  margin-top: 0.5rem;
+  line-height: 1.55;
+}
+
+#root .pilot-notes li {
+  color: color-mix(in srgb, var(--text-color) 88%, var(--text-muted));
+}
+
+/* --- Ghost / link buttons --- */
+#root .linkish {
+  padding: 0.15rem 0;
+  border-radius: var(--radius-sm, 6px);
+  text-underline-offset: 3px;
+  color: var(--primary-color);
+}
+
+#root .linkish:hover {
+  color: var(--primary-light);
+  background: color-mix(in srgb, var(--focus-ring) 8%, transparent);
+}
+
+:root[data-theme='dark'] #root .linkish {
+  color: #93c5fd;
+}
+
+/* --- Header brand density --- */
+.pilot-header-brand h1 {
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.pilot-header-subtext {
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 380px) {
+  .validation-panel__meta .status-list strong {
+    min-width: 0;
+    flex: 0 0 100%;
+  }
+}

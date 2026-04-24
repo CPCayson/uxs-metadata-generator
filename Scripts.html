@@ -1,0 +1,3056 @@
+<script>
+if (typeof window.UXS_DEBUG === "undefined") {
+  window.UXS_DEBUG = false;
+}
+if (typeof window.debugLog !== "function") {
+  window.debugLog = function(...args) {
+    if (window.UXS_DEBUG) {
+      console.log(...args);
+    }
+  };
+}
+if (typeof window.debugWarn !== "function") {
+  window.debugWarn = function(...args) {
+    if (window.UXS_DEBUG) {
+      console.warn(...args);
+    }
+  };
+}
+function escapeHtml(value) {
+  var s = String(value === void 0 || value === null ? "" : value);
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+function runAppsScript(functionName, ...args) {
+  return new Promise((resolve, reject) => {
+    if (typeof google === "undefined" || !google.script || !google.script.run) {
+      reject(new Error("Google Apps Script environment is not available"));
+      return;
+    }
+    const safeReject = (error) => {
+      reject(error instanceof Error ? error : new Error((error == null ? void 0 : error.message) || String(error)));
+    };
+    try {
+      const runner = google.script.run.withSuccessHandler(resolve).withFailureHandler(safeReject);
+      if (typeof runner[functionName] !== "function") {
+        safeReject(new Error("Apps Script function not found: ".concat(functionName)));
+        return;
+      }
+      runner[functionName](...args);
+    } catch (error) {
+      safeReject(error);
+    }
+  });
+}
+function downloadContent(content, mimeType, filename) {
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = filename;
+  anchor.click();
+  URL.revokeObjectURL(url);
+}
+const SUPPORTED_OUTPUT_LOCATIONS = ["download", "Google Drive"];
+const metadataLookupState = {
+  rorResults: [],
+  selectedRor: null,
+  gcmdFacetResults: {},
+  sensorCardGcmdResults: {},
+  selectedGcmdKeywords: []
+};
+const GCMD_FACET_SCHEMES = ["sciencekeywords", "datacenters", "locations", "platforms", "instruments", "projects", "providers"];
+const GCMD_FACET_LABELS = {
+  sciencekeywords: "Science Keywords",
+  datacenters: "Data Centers",
+  locations: "Locations",
+  platforms: "Platforms",
+  instruments: "Instruments",
+  projects: "Projects",
+  providers: "Providers"
+};
+function normalizeGcmdSchemeForFacet_(schemeRaw) {
+  const s = String(schemeRaw || "").trim().toLowerCase();
+  return GCMD_FACET_SCHEMES.includes(s) ? s : "sciencekeywords";
+}
+function clearAbstractInlineGcmdPanels_() {
+  const $inline = $("#gcmdAbstractInlineResults");
+  const $inlineHint = $("#gcmdAbstractInlineHint");
+  if ($inline.length) {
+    $inline.empty().attr("hidden", "hidden");
+  }
+  if ($inlineHint.length) {
+    $inlineHint.attr("hidden", "hidden");
+  }
+}
+function updateGcmdFacetCountBadges_() {
+  const selected = metadataLookupState.selectedGcmdKeywords || [];
+  const counts = {};
+  GCMD_FACET_SCHEMES.forEach((sch) => {
+    counts[sch] = 0;
+  });
+  selected.forEach((k) => {
+    const sch = normalizeGcmdSchemeForFacet_(k.scheme);
+    counts[sch] = (counts[sch] || 0) + 1;
+  });
+  GCMD_FACET_SCHEMES.forEach((sch) => {
+    $(".gcmd-facet-selected-count[data-gcmd-scheme=\"".concat(sch, "\"]")).text(String(counts[sch] || 0));
+  });
+}
+/** Extra GCMD search terms when these tokens appear in sensor text (short-term heuristic; not exhaustive). */
+const GCMD_SENSOR_TERM_HINTS = {
+  thermometer: ["temperature", "thermal"],
+  ctd: ["conductivity", "temperature", "salinity"],
+  mbes: ["multibeam", "bathymetry", "sonar"],
+  multibeam: ["bathymetry", "acoustic"],
+  sonar: ["acoustic", "sound"],
+  adcp: ["current", "velocity", "circulation"],
+  pressure: ["barometric", "pressure"],
+  paroscientific: ["pressure"],
+  norbit: ["multibeam", "sonar"],
+  conductivity: ["salinity", "temperature"],
+  sbe: ["conductivity", "temperature"]
+};
+const GCMD_ABSTRACT_STOPWORDS = new Set([
+  "about", "after", "along", "among", "being", "been", "before", "between", "both", "could", "during", "each", "from", "further", "having", "here", "into", "including", "itself", "more", "most", "other", "only", "over", "same", "shall", "should", "such", "than", "that", "their", "them", "then", "there", "these", "this", "those", "through", "under", "using", "very", "were", "what", "when", "where", "which", "while", "will", "with", "within", "would", "your"
+]);
+function normalizeOutputLocation(location2) {
+  const normalized = String(location2 || "").trim();
+  return SUPPORTED_OUTPUT_LOCATIONS.includes(normalized) ? normalized : "download";
+}
+function syncRorHiddenFields() {
+  const ror = metadataLookupState.selectedRor || {};
+  $("#organizationRorId").val(ror.shortId || "");
+  $("#organizationRorUri").val(ror.id || "");
+  $("#organizationRorDisplayName").val(ror.displayName || "");
+  $("#organizationRorCountry").val(ror.country || "");
+}
+function renderCitationPreview() {
+  const $rorPreview = $("#citationPreviewRor");
+  if ($rorPreview.length) {
+    const ror = metadataLookupState.selectedRor;
+    if (ror && (ror.shortId || ror.id)) {
+      const displayName = ror.displayName || $("#organization").val().trim() || "Organization";
+      const canonicalUri = ror.id || "https://ror.org/".concat(ror.shortId);
+      $rorPreview.text("".concat(displayName, ". ROR: ").concat(canonicalUri));
+    } else {
+      $rorPreview.text("No ROR organization linked.");
+    }
+  }
+}
+function renderSelectedRor() {
+  const $summary = $("#selectedRorSummary");
+  if (!$summary.length) return;
+  const ror = metadataLookupState.selectedRor;
+  if (!ror) {
+    $summary.text("No ROR organization selected.");
+    renderCitationPreview();
+    return;
+  }
+  const country = ror.country ? " (".concat(escapeHtml(ror.country), ")") : "";
+  $summary.html(
+    '<span class="badge bg-success me-2">Linked</span>'.concat(escapeHtml(ror.displayName || "Organization")).concat(country, " - <code>").concat(escapeHtml(ror.shortId || ""), "</code>")
+  );
+  renderCitationPreview();
+}
+function selectRorOrganization(result) {
+  if (!result) return;
+  metadataLookupState.selectedRor = result;
+  syncRorHiddenFields();
+  renderSelectedRor();
+  if ($("#organization").val().trim() === "") {
+    $("#organization").val(result.displayName || "").trigger("input");
+  }
+  showToast("success", "Organization linked to ROR");
+}
+function renderRorResults(items) {
+  const $results = $("#rorOrgResults");
+  if (!$results.length) return;
+  $results.empty();
+  if (!Array.isArray(items) || items.length === 0) {
+    $results.html('<div class="text-muted small">No organization matches found.</div>');
+    return;
+  }
+  items.forEach((item, idx) => {
+    const countryText = item.country ? " - ".concat(escapeHtml(item.country)) : "";
+    const row = '\n        <button type="button" class="list-group-item list-group-item-action ror-result-item" data-ror-index="'.concat(idx, '">\n          <div class="d-flex w-100 justify-content-between">\n            <strong>').concat(escapeHtml(item.displayName || "Unnamed organization"), "</strong>\n            <small>").concat(escapeHtml(item.shortId || ""), '</small>\n          </div>\n          <small class="text-muted">').concat(escapeHtml(item.id || "")).concat(countryText, "</small>\n        </button>\n      ");
+    $results.append(row);
+  });
+}
+async function performRorSearch() {
+  const query = String($("#rorOrgSearch").val() || "").trim();
+  if (!query) {
+    showToast("warning", "Enter an organization name to search ROR");
+    return;
+  }
+  try {
+    const response = await runAppsScript("searchRorOrganizations", query, 1, 8);
+    const items = Array.isArray(response == null ? void 0 : response.items) ? response.items : [];
+    metadataLookupState.rorResults = items;
+    renderRorResults(items);
+  } catch (error) {
+    console.error("DEBUG: performRorSearch - Error:", error);
+    showToast("error", "ROR search failed: ".concat(error.message));
+  }
+}
+function syncGcmdKeywordsHiddenField() {
+  $("#gcmdKeywordsJson").val(JSON.stringify(metadataLookupState.selectedGcmdKeywords || []));
+}
+function renderSelectedGcmdKeywords() {
+  const $selected = $("#selectedGcmdKeywords");
+  if (!$selected.length) return;
+  const selected = metadataLookupState.selectedGcmdKeywords || [];
+  $selected.empty();
+  if (selected.length === 0) {
+    $selected.html('<div class="text-muted small">No GCMD keywords selected.</div>');
+    updateGcmdFacetCountBadges_();
+    renderCitationPreview();
+    return;
+  }
+  const byScheme = {};
+  GCMD_FACET_SCHEMES.forEach((sch) => {
+    byScheme[sch] = [];
+  });
+  selected.forEach((item) => {
+    const sch = normalizeGcmdSchemeForFacet_(item.scheme);
+    if (!byScheme[sch]) byScheme[sch] = [];
+    byScheme[sch].push(item);
+  });
+  let firstGroup = true;
+  GCMD_FACET_SCHEMES.forEach((sch) => {
+    const items = byScheme[sch] || [];
+    if (!items.length) return;
+    const label = GCMD_FACET_LABELS[sch] || sch;
+    const headingClass = firstGroup ? "small fw-semibold text-muted mb-1" : "small fw-semibold text-muted mt-2 mb-1";
+    firstGroup = false;
+    $selected.append('<div class="'.concat(headingClass, '">').concat(escapeHtml(label), "</div>"));
+    items.forEach((item) => {
+      const badge = '\n        <span class="badge bg-primary me-2 mb-2 p-2">\n          '.concat(escapeHtml(item.prefLabel), '\n          <button type="button" class="btn-close btn-close-white ms-2 align-middle remove-gcmd-keyword" data-gcmd-uuid="').concat(escapeHtml(item.uuid), '" aria-label="Remove"></button>\n        </span>\n      ');
+      $selected.append(badge);
+    });
+  });
+  updateGcmdFacetCountBadges_();
+  renderCitationPreview();
+}
+function addGcmdKeyword(keyword) {
+  if (!keyword || !keyword.uuid) return;
+  const exists = metadataLookupState.selectedGcmdKeywords.some((k) => k.uuid === keyword.uuid);
+  if (exists) return;
+  metadataLookupState.selectedGcmdKeywords.push(keyword);
+  syncGcmdKeywordsHiddenField();
+  renderSelectedGcmdKeywords();
+}
+function removeGcmdKeyword(uuid) {
+  metadataLookupState.selectedGcmdKeywords = metadataLookupState.selectedGcmdKeywords.filter((k) => k.uuid !== uuid);
+  syncGcmdKeywordsHiddenField();
+  renderSelectedGcmdKeywords();
+}
+function renderGcmdResults(matches, $container, context) {
+  const ctx = String(context || "sciencekeywords");
+  const $results = $container && $container.length ? $container : $();
+  if (!$results.length) return;
+  $results.empty();
+  if (!Array.isArray(matches) || matches.length === 0) {
+    $results.html('<div class="text-muted small">No GCMD matches found.</div>');
+    return;
+  }
+  matches.forEach((item, idx) => {
+    const definition = item.definition ? String(item.definition).slice(0, 140) : "";
+    const definitionSuffix = item.definition && item.definition.length > 140 ? "..." : "";
+    const row = '\n        <button type="button" class="list-group-item list-group-item-action gcmd-result-item" data-gcmd-context="'.concat(escapeHtml(ctx), '" data-gcmd-index="').concat(idx, '">\n          <div class="d-flex w-100 justify-content-between">\n            <strong>').concat(escapeHtml(item.prefLabel || ""), "</strong>\n            <small>").concat(escapeHtml(item.scheme || ""), '</small>\n          </div>\n          <small class="text-muted"><code>').concat(escapeHtml(item.uuid || ""), "</code></small>\n          ").concat(definition ? '<div class="small text-muted mt-1">'.concat(escapeHtml(definition)).concat(definitionSuffix, "</div>") : "", "\n        </button>\n      ");
+    $results.append(row);
+  });
+}
+function gcmdCandidateTermsFromAbstract(text) {
+  const raw = String(text || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, " ")
+    .split(/\s+/)
+    .map((w) => w.trim())
+    .filter((w) => w.length >= 5 && !GCMD_ABSTRACT_STOPWORDS.has(w));
+  const seen = /* @__PURE__ */ new Set();
+  const out = [];
+  raw.forEach((w) => {
+    if (!seen.has(w)) {
+      seen.add(w);
+      out.push(w);
+    }
+  });
+  return out.slice(0, 6);
+}
+async function suggestGcmdFromAbstract() {
+  const terms = gcmdCandidateTermsFromAbstract($("#abstract").val());
+  if (!terms.length) {
+    showToast("warning", "Add a longer abstract (distinct words, 5+ letters) to suggest GCMD science keywords.");
+    return;
+  }
+  try {
+    const merged = [];
+    const seenUuid = new Set((metadataLookupState.selectedGcmdKeywords || []).map((k) => k.uuid));
+    let keywordVersion = null;
+    for (let i = 0; i < terms.length; i++) {
+      const term = terms[i];
+      const response = await runAppsScript("searchGcmdKeywords", term, "sciencekeywords", 5, 2);
+      keywordVersion = keywordVersion || (response == null ? void 0 : response.keywordVersion) || null;
+      const matches = Array.isArray(response == null ? void 0 : response.matches) ? response.matches : [];
+      matches.forEach((m) => {
+        if (m && m.uuid && !seenUuid.has(m.uuid)) {
+          seenUuid.add(m.uuid);
+          merged.push(m);
+        }
+      });
+    }
+    const scienceScheme = "sciencekeywords";
+    metadataLookupState.gcmdFacetResults[scienceScheme] = merged.map((item) => ({
+      uuid: item.uuid,
+      prefLabel: item.prefLabel,
+      scheme: item.scheme,
+      schemeLongName: item.schemeLongName || null,
+      keywordVersion
+    }));
+    const $inline = $("#gcmdAbstractInlineResults");
+    const $inlineHint = $("#gcmdAbstractInlineHint");
+    if (typeof navigateToStep === "function") {
+      navigateToStep(1, { skipValidation: true });
+    }
+    renderGcmdResults(merged, $("#gcmdFacetResults_sciencekeywords"), scienceScheme);
+    if ($inline.length) {
+      if (merged.length) {
+        renderGcmdResults(merged, $inline, scienceScheme);
+        $inline.removeAttr("hidden");
+        if ($inlineHint.length) $inlineHint.removeAttr("hidden");
+      } else {
+        $inline.empty().attr("hidden", "hidden");
+        if ($inlineHint.length) $inlineHint.attr("hidden", "hidden");
+      }
+    }
+    const n = merged.length;
+    showToast(n ? "success" : "warning", n ? "Suggested ".concat(n, " GCMD match(es) — click a row under abstract or in the Science Keywords section.") : "No GCMD science keyword matches for abstract terms — try manual search.");
+  } catch (error) {
+    console.error("DEBUG: suggestGcmdFromAbstract - Error:", error);
+    showToast("error", "GCMD suggestion failed: ".concat(error.message));
+  }
+}
+async function performGcmdFacetSearch(schemeRaw) {
+  const scheme = String(schemeRaw || "sciencekeywords").trim().toLowerCase();
+  if (!GCMD_FACET_SCHEMES.includes(scheme)) {
+    showToast("error", "Unknown GCMD vocabulary.");
+    return;
+  }
+  const query = String($("#gcmdSearch_".concat(scheme)).val() || "").trim();
+  if (!query) {
+    showToast("warning", "Enter a keyword to search this GCMD vocabulary");
+    return;
+  }
+  clearAbstractInlineGcmdPanels_();
+  try {
+    const response = await runAppsScript("searchGcmdKeywords", query, scheme, 15, 3);
+    const matches = Array.isArray(response == null ? void 0 : response.matches) ? response.matches : [];
+    metadataLookupState.gcmdFacetResults[scheme] = matches.map((item) => ({
+      uuid: item.uuid,
+      prefLabel: item.prefLabel,
+      scheme: item.scheme,
+      schemeLongName: item.schemeLongName || null,
+      keywordVersion: response.keywordVersion || null
+    }));
+    renderGcmdResults(matches, $("#gcmdFacetResults_".concat(scheme)), scheme);
+  } catch (error) {
+    console.error("DEBUG: performGcmdFacetSearch - Error:", error);
+    showToast("error", "GCMD search failed: ".concat(error.message));
+  }
+}
+function collectSensorCardTextForGcmd($card) {
+  if (!$card || !$card.length) return "";
+  const parts = [
+    $card.find('[name="sensorType"]').val(),
+    $card.find('[name="model"]').val(),
+    $card.find('[name="manufacturer"]').val(),
+    $card.find('[name="notes"]').val()
+  ];
+  return parts.map((p) => String(p || "").trim()).filter(Boolean).join(" ");
+}
+function expandSensorTermsForGcmd(rawText) {
+  const tokens = String(rawText || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, " ")
+    .split(/\s+/)
+    .map((t) => t.trim())
+    .filter((t) => t.length >= 3);
+  const seen = /* @__PURE__ */ new Set();
+  const out = [];
+  tokens.forEach((w) => {
+    if (!seen.has(w)) {
+      seen.add(w);
+      out.push(w);
+    }
+    const hints = GCMD_SENSOR_TERM_HINTS[w];
+    if (hints) {
+      hints.forEach((h) => {
+        if (!seen.has(h)) {
+          seen.add(h);
+          out.push(h);
+        }
+      });
+    }
+  });
+  return out.slice(0, 8);
+}
+function renderSensorCardGcmdList(sensorDomId, mergedForAdd) {
+  const $c = $("#sensorGcmdResults-".concat(sensorDomId));
+  if (!$c.length) return;
+  $c.empty();
+  if (!Array.isArray(mergedForAdd) || mergedForAdd.length === 0) {
+    $c.html('<div class="text-muted small">No GCMD matches for this sensor text. Edit type, model, or notes and try again.</div>');
+    return;
+  }
+  mergedForAdd.forEach((item, idx) => {
+    const definition = item.definition ? String(item.definition).slice(0, 120) : "";
+    const definitionSuffix = item.definition && item.definition.length > 120 ? "..." : "";
+    const row = '\n      <button type="button" class="list-group-item list-group-item-action sensor-gcmd-result-item py-2" data-sensor-dom-id="'.concat(escapeHtml(sensorDomId), '" data-gcmd-index="').concat(idx, '">\n        <div class="d-flex w-100 justify-content-between align-items-start gap-2">\n          <strong class="small">').concat(escapeHtml(item.prefLabel || ""), '</strong>\n          <small class="text-nowrap">').concat(escapeHtml(item.scheme || ""), "</small>\n        </div>\n        ").concat(definition ? '<div class="small text-muted mt-1">'.concat(escapeHtml(definition)).concat(definitionSuffix, "</div>") : "", "\n      </button>\n    ");
+    $c.append(row);
+  });
+}
+async function suggestGcmdFromSensorCard(sensorDomId) {
+  const $card = $("#".concat(sensorDomId));
+  if (!$card.length) {
+    showToast("error", "Sensor card not found.");
+    return;
+  }
+  const blob = collectSensorCardTextForGcmd($card);
+  let terms = expandSensorTermsForGcmd(blob);
+  if (!terms.length) {
+    showToast("warning", "Enter sensor type, model, manufacturer, or notes to suggest GCMD keywords.");
+    return;
+  }
+  terms = terms.slice(0, 5);
+  try {
+    showToast("info", "Searching GCMD Science + Instrument keywords…");
+    const merged = [];
+    const seenUuid = /* @__PURE__ */ new Set();
+    let keywordVersion = null;
+    for (let i = 0; i < terms.length; i++) {
+      const term = terms[i];
+      for (let j = 0; j < 2; j++) {
+        const scheme = j === 0 ? "sciencekeywords" : "instruments";
+        const response = await runAppsScript("searchGcmdKeywords", term, scheme, 4, 2);
+        keywordVersion = keywordVersion || (response == null ? void 0 : response.keywordVersion) || null;
+        const matches = Array.isArray(response == null ? void 0 : response.matches) ? response.matches : [];
+        matches.forEach((m) => {
+          if (!m || !m.uuid || seenUuid.has(m.uuid)) return;
+          seenUuid.add(m.uuid);
+          merged.push({
+            uuid: m.uuid,
+            prefLabel: m.prefLabel,
+            scheme: m.scheme,
+            schemeLongName: m.schemeLongName || null,
+            definition: m.definition,
+            keywordVersion: keywordVersion || null
+          });
+        });
+      }
+    }
+    metadataLookupState.sensorCardGcmdResults[sensorDomId] = merged;
+    renderSensorCardGcmdList(sensorDomId, merged);
+    const n = merged.length;
+    showToast(n ? "success" : "warning", n ? "Found ".concat(n, " GCMD term(s) — tap to add to the mission keyword list.") : "No GCMD matches. Try different wording in sensor fields.");
+  } catch (error) {
+    console.error("DEBUG: suggestGcmdFromSensorCard - Error:", error);
+    showToast("error", "GCMD suggestion failed: ".concat(error.message));
+  }
+}
+function hydrateLookupsFromMissionData(mission) {
+  const m = mission || {};
+  const rorId = m.organizationRorId || m.rorId || "";
+  const rorUri = m.organizationRorUri || (rorId ? "https://ror.org/".concat(rorId) : "");
+  const rorDisplayName = m.organizationRorDisplayName || "";
+  const rorCountry = m.organizationRorCountry || "";
+  if (rorId || rorUri || rorDisplayName) {
+    metadataLookupState.selectedRor = {
+      shortId: rorId || "",
+      id: rorUri || "",
+      displayName: rorDisplayName || "",
+      country: rorCountry || ""
+    };
+  } else {
+    metadataLookupState.selectedRor = null;
+  }
+  syncRorHiddenFields();
+  renderSelectedRor();
+  let keywords = [];
+  if (Array.isArray(m.gcmdKeywords)) {
+    keywords = m.gcmdKeywords;
+  } else if (m.gcmdKeywords && typeof m.gcmdKeywords === "object") {
+    keywords = Object.values(m.gcmdKeywords);
+  } else if (typeof m.gcmdKeywordsJson === "string" && m.gcmdKeywordsJson.trim()) {
+    try {
+      const parsed = JSON.parse(m.gcmdKeywordsJson);
+      keywords = Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      keywords = [];
+    }
+  }
+  metadataLookupState.selectedGcmdKeywords = keywords.filter((k) => k && k.uuid && k.prefLabel).map((k) => ({
+    uuid: k.uuid,
+    prefLabel: k.prefLabel,
+    scheme: k.scheme || "sciencekeywords",
+    schemeLongName: k.schemeLongName || null,
+    keywordVersion: k.keywordVersion || null
+  }));
+  syncGcmdKeywordsHiddenField();
+  renderSelectedGcmdKeywords();
+}
+function renderXmlPreviewSafe(snippetXml, fullXml, options = {}) {
+  if (typeof window.applyXmlPreviewPanels === "function") {
+    window.applyXmlPreviewPanels(snippetXml, fullXml, options);
+    return;
+  }
+  const snippetText = String(snippetXml || "");
+  const fullText = String(fullXml || "");
+  const errorClass = options.isError ? "text-danger" : "";
+  const $snippetPre = $("<pre></pre>").addClass(errorClass).text(snippetText);
+  const $fullPre = $("<pre></pre>").addClass(errorClass).text(fullText);
+  $("#xmlPreviewSnippet").empty().append($snippetPre);
+  $("#xmlPreviewFull").empty().append($fullPre);
+}
+function collectLeafPaths(data, currentPath = "", pathSet = /* @__PURE__ */ new Set()) {
+  if (data === null || data === void 0) {
+    return pathSet;
+  }
+  if (Array.isArray(data)) {
+    data.forEach((item, index) => {
+      collectLeafPaths(item, "".concat(currentPath, "[").concat(index, "]"), pathSet);
+    });
+    return pathSet;
+  }
+  if (typeof data === "object") {
+    Object.entries(data).forEach(([key, value]) => {
+      const nextPath = currentPath ? "".concat(currentPath, ".").concat(key) : key;
+      collectLeafPaths(value, nextPath, pathSet);
+    });
+    return pathSet;
+  }
+  const asString = String(data).trim();
+  if (asString !== "") {
+    pathSet.add(currentPath);
+  }
+  return pathSet;
+}
+function getDroppedFieldPaths(beforeData, afterData) {
+  const beforePaths = collectLeafPaths(beforeData);
+  const afterPaths = collectLeafPaths(afterData);
+  return Array.from(beforePaths).filter((path) => !afterPaths.has(path));
+}
+function showConversionWarningBanner(targetSchema, unmappedFields = [], droppedFields = []) {
+  $("#conversionWarningBanner").remove();
+  if (unmappedFields.length === 0 && droppedFields.length === 0) {
+    return;
+  }
+  const schemaLabel = "ISO 19115-2";
+  const unmappedPreview = unmappedFields.slice(0, 6).join(", ");
+  const droppedPreview = droppedFields.slice(0, 6).join(", ");
+  const unmappedSuffix = unmappedFields.length > 6 ? " (+".concat(unmappedFields.length - 6, " more)") : "";
+  const droppedSuffix = droppedFields.length > 6 ? " (+".concat(droppedFields.length - 6, " more)") : "";
+  const safeHtml = (value) => $("<div></div>").text(String(value || "")).html();
+  window.__LAST_CONVERSION_REPORT = {
+    targetSchema,
+    unmappedFields: Array.isArray(unmappedFields) ? unmappedFields : [],
+    droppedFields: Array.isArray(droppedFields) ? droppedFields : []
+  };
+  const warningHtml = '\n      <div id="conversionWarningBanner" class="alert alert-warning mt-2" role="alert">\n        <strong>Schema conversion is best-effort (not lossless).</strong>\n        <div class="small mt-1">Converted to '.concat(schemaLabel, ".</div>\n        ").concat(unmappedFields.length ? '<div class="small mt-1"><strong>Unmapped conversion rules:</strong> '.concat(safeHtml(unmappedPreview)).concat(safeHtml(unmappedSuffix), "</div>") : "", "\n        ").concat(droppedFields.length ? '<div class="small mt-1"><strong>Potentially dropped fields after round-trip:</strong> '.concat(safeHtml(droppedPreview)).concat(safeHtml(droppedSuffix), "</div>") : "", '\n        <div class="mt-2">\n          <button type="button" class="btn btn-sm btn-outline-dark" id="viewConversionDiffBtn">View Conversion Diff</button>\n        </div>\n      </div>\n    ');
+  const $tabs = $(".nav-tabs").first();
+  if ($tabs.length) {
+    $tabs.after(warningHtml);
+  } else {
+    $("body").prepend(warningHtml);
+  }
+  $("#viewConversionDiffBtn").off("click").on("click", function() {
+    openConversionDiffModal(window.__LAST_CONVERSION_REPORT);
+  });
+  showToast("warning", "Schema conversion completed with best-effort warnings. Review conversion details banner.");
+}
+function ensureConversionDiffModal() {
+  if ($("#conversionDiffModal").length) {
+    return;
+  }
+  const modalHtml = '\n      <div class="modal fade" id="conversionDiffModal" tabindex="-1" aria-labelledby="conversionDiffModalLabel" aria-hidden="true">\n        <div class="modal-dialog modal-lg">\n          <div class="modal-content">\n            <div class="modal-header">\n              <h5 class="modal-title" id="conversionDiffModalLabel">Schema Conversion Diff</h5>\n              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>\n            </div>\n            <div class="modal-body" id="conversionDiffModalBody"></div>\n            <div class="modal-footer">\n              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>\n            </div>\n          </div>\n        </div>\n      </div>\n    ';
+  $("body").append(modalHtml);
+}
+function openConversionDiffModal(report) {
+  ensureConversionDiffModal();
+  const conversionReport = report || {};
+  const schemaLabel = "ISO 19115-2";
+  const unmappedFields = Array.isArray(conversionReport.unmappedFields) ? conversionReport.unmappedFields : [];
+  const droppedFields = Array.isArray(conversionReport.droppedFields) ? conversionReport.droppedFields : [];
+  const safeHtml = (value) => $("<div></div>").text(String(value || "")).html();
+  const renderList = (title, items, emptyText) => {
+    if (!items.length) {
+      return '<div class="mb-3"><h6>'.concat(safeHtml(title), '</h6><div class="text-muted small">').concat(safeHtml(emptyText), "</div></div>");
+    }
+    const listItems = items.map((item) => "<li><code>".concat(safeHtml(item), "</code></li>")).join("");
+    return '\n        <div class="mb-3">\n          <h6>'.concat(safeHtml(title), " (").concat(items.length, ')</h6>\n          <ul class="small mb-0" style="max-height: 180px; overflow-y: auto;">').concat(listItems, "</ul>\n        </div>\n      ");
+  };
+  const html = '\n      <div class="alert alert-warning mb-3">\n        Conversion target: <strong>'.concat(safeHtml(schemaLabel), "</strong>. Conversion is best-effort and may not be lossless.\n      </div>\n      ").concat(renderList("Unmapped conversion rules", unmappedFields, "No unmapped rules reported for this schema direction."), "\n      ").concat(renderList("Potentially dropped fields after round-trip", droppedFields, "No dropped fields detected in this conversion pass."), "\n    ");
+  $("#conversionDiffModalBody").html(html);
+  const modalEl = document.getElementById("conversionDiffModal");
+  if (window.bootstrap && modalEl) {
+    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+    modal.show();
+  }
+}
+const SCHEMA_VISIBILITY_RULES = {
+  "iso19115-2": {
+    show: ["#doi", "#distributionLiability", "#scopeCode", "#organization", "#contactPhone", "#contactAddress", "#contactUrl", "#metadataStandard", "#metadataVersion"],
+    hide: []
+  }
+};
+const UNMAPPED_PATH_SELECTOR_HINTS = {
+  "mdb:resourceScope": "#scopeCode",
+  "cit:party": "#organization",
+  "cit:number": "#contactPhone",
+  "cit:deliveryPoint": "#contactAddress",
+  "cit:linkage": "#contactUrl",
+  "mdb:metadataStandard": "#metadataStandard",
+  "cit:edition": "#metadataVersion"
+};
+function mapUnmappedPathsToSelectors(unmappedPaths = []) {
+  const selectors = /* @__PURE__ */ new Set();
+  (unmappedPaths || []).forEach((path) => {
+    if (UNMAPPED_PATH_SELECTOR_HINTS[path]) {
+      selectors.add(UNMAPPED_PATH_SELECTOR_HINTS[path]);
+    }
+  });
+  return Array.from(selectors);
+}
+function setFieldVisibility(selector, visible) {
+  const $field = $(selector);
+  if (!$field.length) {
+    return;
+  }
+  const $container = $field.closest(".mb-3, .col-md-6, .col-md-12");
+  if ($container.length) {
+    $container.toggle(visible);
+  } else {
+    $field.toggle(visible);
+  }
+}
+function clearSchemaConversionRiskMarkers() {
+  $(".schema-conversion-risk-note").remove();
+  $(".schema-conversion-risk").removeClass("schema-conversion-risk");
+}
+function setSchemaDiagnosticsNote(message = "") {
+  const noteId = "schemaDiagnosticsNote";
+  let $note = $("#".concat(noteId));
+  if (!message) {
+    if ($note.length) {
+      $note.remove();
+    }
+    return;
+  }
+  if (!$note.length) {
+    $note = $('<div id="'.concat(noteId, '" class="form-text text-warning mt-1 w-100"></div>'));
+  }
+  const $anchor = $("#metadataSchemaHeaderLabel");
+  const $schemaControl = $anchor.length ? $anchor : $("#metadataSchema");
+  if ($schemaControl.length) {
+    $note.insertAfter($schemaControl);
+  } else if (!$note.parent().length) {
+    $("body").prepend($note);
+  }
+  $note.text(message);
+}
+function applySchemaConversionRiskMarkers(selectedSchema, dynamicRiskSelectors = null) {
+  const riskySelectors = Array.isArray(dynamicRiskSelectors) ? dynamicRiskSelectors : [];
+  clearSchemaConversionRiskMarkers();
+  if (!riskySelectors.length) {
+    return;
+  }
+  riskySelectors.forEach((selector) => {
+    const $field = $(selector);
+    if (!$field.length) return;
+    const $container = $field.closest(".mb-3, .col-md-6, .col-md-12");
+    const $target = $container.length ? $container : $field.parent();
+    $target.addClass("schema-conversion-risk");
+    if ($target.find(".schema-conversion-risk-note").length === 0) {
+      $target.append('<div class="form-text text-warning schema-conversion-risk-note">Conversion to this schema may be best-effort for this field.</div>');
+    }
+  });
+}
+async function updateSchemaRiskSelectorsFromDiagnostics(sourceSchema, targetSchema) {
+  try {
+    if (!sourceSchema || !targetSchema || sourceSchema === targetSchema) {
+      window.__SCHEMA_DYNAMIC_RISK = null;
+      setSchemaDiagnosticsNote("");
+      applySchemaConversionRiskMarkers(targetSchema, []);
+      return;
+    }
+    const diagnostics = await runAppsScript("getSchemaConversionDiagnostics", sourceSchema, targetSchema);
+    const dynamicSelectors = mapUnmappedPathsToSelectors((diagnostics == null ? void 0 : diagnostics.unmappedSourcePaths) || []);
+    window.__SCHEMA_DYNAMIC_RISK = {
+      sourceSchema,
+      targetSchema,
+      selectors: dynamicSelectors
+    };
+    setSchemaDiagnosticsNote("");
+    applySchemaConversionRiskMarkers(targetSchema, dynamicSelectors);
+  } catch (error) {
+    console.error("DEBUG: updateSchemaRiskSelectorsFromDiagnostics - Failed:", error);
+    window.__SCHEMA_DYNAMIC_RISK = null;
+    setSchemaDiagnosticsNote("Schema conversion diagnostics are currently unavailable; field-specific risk hints may be incomplete.");
+    applySchemaConversionRiskMarkers(targetSchema, []);
+  }
+}
+function applySchemaFieldVisibility(selectedSchema) {
+  const schema = String(selectedSchema || "iso19115-2").toLowerCase();
+  const rules = SCHEMA_VISIBILITY_RULES[schema] || SCHEMA_VISIBILITY_RULES["iso19115-2"];
+  Object.values(SCHEMA_VISIBILITY_RULES).forEach((ruleSet) => {
+    (ruleSet.show || []).forEach((selector) => setFieldVisibility(selector, true));
+    (ruleSet.hide || []).forEach((selector) => setFieldVisibility(selector, true));
+  });
+  (rules.hide || []).forEach((selector) => setFieldVisibility(selector, false));
+  (rules.show || []).forEach((selector) => setFieldVisibility(selector, true));
+  const dynamicRisk = window.__SCHEMA_DYNAMIC_RISK;
+  const dynamicSelectors = dynamicRisk && dynamicRisk.targetSchema === schema ? dynamicRisk.selectors : null;
+  applySchemaConversionRiskMarkers(schema, dynamicSelectors);
+}
+function debounceFn(fn, waitMs) {
+  let timeoutId = null;
+  return function debounced(...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => fn.apply(this, args), waitMs);
+  };
+}
+const FormEvents = /* @__PURE__ */ (function() {
+  const listeners = {};
+  return {
+    on(eventName, handler) {
+      if (!listeners[eventName]) {
+        listeners[eventName] = [];
+      }
+      listeners[eventName].push(handler);
+    },
+    emit(eventName, payload) {
+      (listeners[eventName] || []).forEach((handler) => {
+        try {
+          handler(payload);
+        } catch (error) {
+          console.error("DEBUG: FormEvents.emit - Handler error:", error);
+        }
+      });
+    }
+  };
+})();
+window.FormEvents = FormEvents;
+function initFormEventBus() {
+  if (window.__FORM_EVENTS_INITIALIZED) {
+    return;
+  }
+  const debouncedPreviewRefresh = debounceFn(() => {
+    if (typeof refreshXMLPreview === "function") {
+      refreshXMLPreview({ quiet: true });
+    }
+  }, 90);
+  FormEvents.on("changed", (payload) => {
+    window.__xmlTypingUntil = Date.now() + 900;
+    if (payload && payload.el && typeof window.snapshotXmlPreviewSourceField === "function") {
+      window.__xmlPreviewSourceField = window.snapshotXmlPreviewSourceField(payload.el);
+    }
+    if (typeof window.scheduleXmlPreviewScrollDebounced === "function") {
+      window.scheduleXmlPreviewScrollDebounced();
+    } else if (typeof window.scheduleXmlPreviewScrollImmediate === "function") {
+      window.scheduleXmlPreviewScrollImmediate();
+    }
+    debouncedPreviewRefresh();
+  });
+  $(document).off("focusin.xmlPreviewField").on("focusin.xmlPreviewField", "form input, form select, form textarea, #metadataSchema", function() {
+    if (typeof window.snapshotXmlPreviewSourceField === "function") {
+      window.__xmlPreviewSourceField = window.snapshotXmlPreviewSourceField(this);
+    }
+    if (typeof window.scheduleXmlPreviewScrollImmediate === "function") {
+      window.scheduleXmlPreviewScrollImmediate();
+    }
+  });
+  window.__FORM_EVENTS_INITIALIZED = true;
+}
+function hasMeaningfulData(value) {
+  if (value === null || value === void 0) return false;
+  if (typeof value === "string") return value.trim().length > 0;
+  if (typeof value === "number") return true;
+  if (typeof value === "boolean") return value;
+  if (Array.isArray(value)) return value.some((item) => hasMeaningfulData(item));
+  if (typeof value === "object") return Object.values(value).some((item) => hasMeaningfulData(item));
+  return false;
+}
+function showRestoredSessionBanner() {
+  if (window.__RESTORE_BANNER_SHOWN) {
+    return;
+  }
+  const bannerHtml = '\n      <div id="restoredSessionBanner" class="alert alert-warning alert-dismissible fade show mt-2" role="alert">\n        Restored unsaved session data from local storage.\n        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n      </div>\n    ';
+  const $header = $(".header").first();
+  if ($header.length) {
+    $header.after(bannerHtml);
+  } else {
+    $("body").prepend(bannerHtml);
+  }
+  window.__RESTORE_BANNER_SHOWN = true;
+}
+function initSessionAutoSave() {
+  if (window.__SESSION_AUTOSAVE_INITIALIZED) {
+    return;
+  }
+  const autosave = () => {
+    try {
+      collectFormData();
+    } catch (error) {
+      console.error("DEBUG: initSessionAutoSave - Autosave failed:", error);
+    }
+  };
+  window.__SESSION_AUTOSAVE_TIMER = setInterval(autosave, 3e4);
+  $(window).off("beforeunload.sessionAutosave").on("beforeunload.sessionAutosave", autosave);
+  window.__SESSION_AUTOSAVE_INITIALIZED = true;
+}
+function getValidationLevel() {
+  const activeStep = parseInt($("#metadataTabs .nav-link.active").data("step") || "1", 10) || 1;
+  const $out = $("#outputValidationLevel");
+  if (activeStep === 5 && $out.length && $out.val()) {
+    return $out.val();
+  }
+  return $("#validationLevel").val() || "strict";
+}
+class LiveValidator {
+  constructor() {
+    this.serverRequestId = 0;
+    this.pendingServerTimer = null;
+    this.serverResponseTimer = null;
+  }
+  setupLiveValidation() {
+    try {
+      debugLog("DEBUG: LiveValidator - Setting up live validation");
+      const selector = "form input, form select, form textarea, #metadataSchema";
+      const serverDebounceTyping = 650;
+      const serverDebounceBlur = 280;
+      $(document).off("input.liveValidation keyup.liveValidation", selector).on("input.liveValidation keyup.liveValidation", selector, (e) => {
+        FormEvents.emit("changed", { el: e.target });
+        this.queueServerValidation(serverDebounceTyping);
+      });
+      $(document).off("blur.liveValidation change.liveValidation", selector).on("blur.liveValidation change.liveValidation", selector, (e) => {
+        FormEvents.emit("changed", { el: e.target });
+        this.queueServerValidation(serverDebounceBlur);
+      });
+      debugLog("DEBUG: LiveValidator - Bound to", $(selector).length, "form elements");
+      debugLog("DEBUG: LiveValidator - Live validation setup complete");
+    } catch (e) {
+      console.error("DEBUG: LiveValidator - Setup error:", e);
+    }
+  }
+  queueServerValidation(delayMs) {
+    clearTimeout(this.pendingServerTimer);
+    this.pendingServerTimer = setTimeout(() => {
+      this.pendingServerTimer = null;
+      this.runServerValidation();
+    }, delayMs);
+  }
+  validateCurrentStep() {
+    this.queueServerValidation(0);
+  }
+  runServerValidation() {
+    if (window.__xmlPreviewRequestInFlight) {
+      return;
+    }
+    const requestId = ++this.serverRequestId;
+    const data = collectFormData();
+    const level = getValidationLevel();
+    if (typeof google === "undefined" || !google.script || !google.script.run) {
+      const fallbackResult = window.fallbackValidation(data);
+      if (requestId === this.serverRequestId) {
+        updateValidationUI(fallbackResult);
+      }
+      return;
+    }
+    clearTimeout(this.serverResponseTimer);
+    this.serverResponseTimer = setTimeout(() => {
+      if (requestId !== this.serverRequestId) return;
+      debugWarn("DEBUG: LiveValidator - Server validation timeout, using fallback");
+      updateValidationUI(window.fallbackValidation(data));
+    }, 1e4);
+    google.script.run.withSuccessHandler((validation) => {
+      clearTimeout(this.serverResponseTimer);
+      if (requestId !== this.serverRequestId) return;
+      if (validation && validation.valid === true && (!validation.errors || validation.errors.length === 0)) {
+        const fallbackResult = window.fallbackValidation(data);
+        if (!fallbackResult.valid && fallbackResult.errors.length > 0) {
+          updateValidationUI(fallbackResult);
+          return;
+        }
+      }
+      updateValidationUI(validation);
+    }).withFailureHandler((e) => {
+      clearTimeout(this.serverResponseTimer);
+      if (requestId !== this.serverRequestId) return;
+      console.error("DEBUG: LiveValidator - FAILURE handler:", e);
+      updateValidationUI(window.fallbackValidation(data));
+    }).validateFormDataWithRules(data, level);
+  }
+}
+function triggerManualValidation() {
+  debugLog("DEBUG: triggerManualValidation - Starting manual validation");
+  const data = collectFormData();
+  debugLog("DEBUG: triggerManualValidation - Form data:", JSON.stringify(data));
+  if (typeof google !== "undefined" && google.script && google.script.run) {
+    google.script.run.withSuccessHandler((validation) => {
+      debugLog("DEBUG: triggerManualValidation - Validation response:", JSON.stringify(validation));
+      updateValidationUI(validation);
+      showToast("info", "Manual validation completed");
+    }).withFailureHandler((e) => {
+      console.error("DEBUG: triggerManualValidation - Validation error:", e);
+      showToast("error", "Manual validation failed: " + e.message);
+    }).validateFormDataWithRules(data, getValidationLevel());
+  } else {
+    showToast("error", "Google Apps Script validation not available");
+  }
+}
+if (typeof window !== "undefined") {
+  window.getValidationLevel = getValidationLevel;
+  window.triggerManualValidation = triggerManualValidation;
+  window.testServerConnection = function() {
+    debugLog("DEBUG: testServerConnection - Testing server connection");
+    if (typeof google !== "undefined" && google.script && google.script.run) {
+      google.script.run.withSuccessHandler((result) => {
+        debugLog("DEBUG: testServerConnection - Server responded:", result);
+        showToast("success", "Server connection working");
+      }).withFailureHandler((e) => {
+        console.error("DEBUG: testServerConnection - Server error:", e);
+        showToast("error", "Server connection failed: " + e.message);
+      }).validateFormDataWithRules({ mission: { id: "test", title: "test" } }, "basic");
+    } else {
+      console.error("DEBUG: testServerConnection - Google Apps Script not available");
+      showToast("error", "Google Apps Script not available");
+    }
+  };
+  window.fallbackValidation = function(data) {
+    var _a, _b, _c, _d, _e, _f;
+    debugLog("DEBUG: fallbackValidation - Running client-side validation fallback");
+    const errors = [];
+    const warnings = [];
+    if (!((_a = data.mission) == null ? void 0 : _a.missionId) || data.mission.missionId.trim() === "") {
+      errors.push({
+        message: "Mission ID is required",
+        details: { field: "missionId" }
+      });
+    }
+    if (!((_b = data.mission) == null ? void 0 : _b.missionTitle) || data.mission.missionTitle.trim() === "") {
+      errors.push({
+        message: "Mission Title is required",
+        details: { field: "missionTitle" }
+      });
+    }
+    if (!((_c = data.mission) == null ? void 0 : _c.abstract) || data.mission.abstract.trim() === "") {
+      errors.push({
+        message: "Mission Abstract is required",
+        details: { field: "abstract" }
+      });
+    }
+    if (!((_d = data.platform) == null ? void 0 : _d.platformName) || data.platform.platformName.trim() === "") {
+      errors.push({
+        message: "Platform name is required. Please provide a descriptive name for your platform.",
+        details: { field: "platformName" }
+      });
+    }
+    if (!((_e = data.platform) == null ? void 0 : _e.platformId) || data.platform.platformId.trim() === "") {
+      errors.push({
+        message: "Platform ID is required.",
+        details: { field: "platformId" }
+      });
+    }
+    const sensors = data.sensors || [];
+    const sensorIssues = [];
+    sensors.forEach((sensor, index) => {
+      if (!sensor.id || !String(sensor.id).trim()) {
+        sensorIssues.push("Sensor " + (index + 1) + " is missing an ID");
+      }
+      if (!sensor.type || !String(sensor.type).trim()) {
+        sensorIssues.push("Sensor " + (index + 1) + " (" + (sensor.id || "unnamed") + ") is missing a type");
+      }
+    });
+    if (sensorIssues.length > 0) {
+      errors.push({
+        message: "Sensor validation issues: " + sensorIssues.join(", "),
+        details: { issues: sensorIssues, sensorCount: sensors.length }
+      });
+    }
+    if (!((_f = data.mission) == null ? void 0 : _f.contactEmail) || data.mission.contactEmail.trim() === "") {
+      errors.push({
+        message: "Contact Email is required",
+        details: { field: "contactEmail" }
+      });
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(data.mission.contactEmail.trim())) {
+        errors.push({
+          message: "Contact Email must be a valid email address",
+          details: { field: "contactEmail" }
+        });
+      }
+    }
+    const result = {
+      valid: errors.length === 0,
+      errors,
+      warnings,
+      results: [...errors.map((e) => ({ ...e, passed: false, level: "error" })), ...warnings.map((w) => ({ ...w, passed: false, level: "warning" }))],
+      summary: errors.length === 0 ? "All validations passed" : "".concat(errors.length, " error").concat(errors.length !== 1 ? "s" : "", " found")
+    };
+    debugLog("DEBUG: fallbackValidation - Result:", result);
+    return result;
+  };
+  window.testFallbackValidation = function() {
+    debugLog("DEBUG: testFallbackValidation - Starting manual fallback validation test");
+    const data = collectFormData();
+    debugLog("DEBUG: testFallbackValidation - Current form data:", JSON.stringify(data));
+    const result = window.fallbackValidation(data);
+    updateValidationUI(result);
+    showToast("info", "Fallback validation completed");
+    return result;
+  };
+  window.forceValidation = function() {
+    var _a;
+    debugLog("DEBUG: forceValidation - Starting forced validation");
+    $(".form-control, .form-select").removeClass("is-invalid is-warning fix-suggested");
+    $(".invalid-feedback, .warning-feedback").remove();
+    const data = collectFormData();
+    debugLog("DEBUG: forceValidation - Fresh form data:", JSON.stringify(data));
+    debugLog("DEBUG: forceValidation - Contact email value:", JSON.stringify((_a = data.mission) == null ? void 0 : _a.contactEmail));
+    debugLog("DEBUG: forceValidation - Contact email field value:", $("#contactEmail").val());
+    const result = window.fallbackValidation(data);
+    debugLog("DEBUG: forceValidation - Validation result:", JSON.stringify(result));
+    updateValidationUI(result);
+    showToast("info", "Forced validation completed - check console for details");
+    return result;
+  };
+  window.testValidationDisplay = function() {
+    debugLog("DEBUG: testValidationDisplay - Testing validation results display");
+    const testValidation = {
+      valid: false,
+      errors: [
+        { message: "Contact Email is required" },
+        { message: "Mission ID is required" }
+      ],
+      warnings: [
+        { message: "Platform name should be more descriptive" }
+      ],
+      summary: "2 error(s) and 1 warning(s) found"
+    };
+    debugLog("DEBUG: testValidationDisplay - Test validation object:", JSON.stringify(testValidation));
+    updateValidationResults(testValidation);
+    const validationModal = document.getElementById("validationResultsModal");
+    if (validationModal) {
+      debugLog("DEBUG: testValidationDisplay - Found Bootstrap validation modal, showing it");
+      const bsModal = new bootstrap.Modal(validationModal, {
+        backdrop: "static",
+        keyboard: false
+      });
+      bsModal.show();
+    } else {
+      debugLog("DEBUG: testValidationDisplay - Bootstrap validation modal not found");
+    }
+    const snippet = $("#validationResultsSnippet");
+    const full = $("#validationResultsFull");
+    debugLog("DEBUG: testValidationDisplay - Elements found:");
+    console.log("  - Snippet element:", snippet.length > 0 ? "YES (" + snippet.attr("id") + ")" : "NO");
+    console.log("  - Full element:", full.length > 0 ? "YES (" + full.attr("id") + ")" : "NO");
+    if (snippet.length > 0) {
+      console.log("  - Snippet HTML length:", snippet.html().length);
+      console.log("  - Snippet visible:", snippet.is(":visible"));
+      console.log("  - Snippet content preview:", snippet.html().substring(0, 100) + "...");
+    }
+    if (full.length > 0) {
+      console.log("  - Full HTML length:", full.html().length);
+      console.log("  - Full visible:", full.is(":visible"));
+      console.log("  - Full content preview:", full.html().substring(0, 100) + "...");
+    }
+    showToast("success", "Validation display test completed - modal should be open now!");
+    return testValidation;
+  };
+  window.clearValidationCache = function() {
+    debugLog("DEBUG: clearValidationCache - Clearing all cached data");
+    localStorage.removeItem("uxsMetadataFormData");
+    sessionStorage.clear();
+    showToast("info", "All cached data cleared - refresh page to see clean state");
+  };
+  window.forceClearForms = function() {
+    debugLog("DEBUG: forceClearForms - Manually clearing all form fields");
+    $('input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="number"], input[type="date"], input[type="datetime-local"], textarea').val("");
+    $("select").prop("selectedIndex", 0);
+    $('input[type="checkbox"]').prop("checked", false);
+    $('input[type="radio"]').prop("checked", false);
+    localStorage.removeItem("uxsMetadataFormData");
+    sessionStorage.clear();
+    $("#validationResultsSnippet, #validationResultsFull").empty();
+    $(".form-control, .form-select").removeClass("is-invalid is-warning fix-suggested populated-field");
+    $(".invalid-feedback, .warning-feedback").text("");
+    window._cacheRestoreDisabled = true;
+    showToast("success", "All forms forcefully cleared - fields should now be empty!");
+    debugLog("DEBUG: forceClearForms - All fields cleared, cache disabled");
+  };
+  window.disableCacheRestore = function() {
+    debugLog("DEBUG: disableCacheRestore - Disabling cache restoration");
+    window._cacheRestoreDisabled = true;
+    showToast("info", "Cache restoration disabled for this session");
+  };
+  window.enableCacheRestore = function() {
+    debugLog("DEBUG: enableCacheRestore - Re-enabling cache restoration");
+    window._cacheRestoreDisabled = false;
+    showToast("info", "Cache restoration re-enabled");
+  };
+  window.testDirectValidation = function() {
+    debugLog("DEBUG: testDirectValidation - Testing validation with direct field reading");
+    const missionId = $("#missionId").val();
+    const missionTitle = $("#missionTitle").val();
+    const abstract = $("#abstract").val();
+    const contactEmail = $("#contactEmail").val();
+    const platformName = $("#platformName").val();
+    const platformId = $("#platformId").val();
+    debugLog("DEBUG: testDirectValidation - Field values:");
+    console.log("  missionId:", JSON.stringify(missionId));
+    console.log("  missionTitle:", JSON.stringify(missionTitle));
+    console.log("  abstract:", JSON.stringify(abstract));
+    console.log("  contactEmail:", JSON.stringify(contactEmail));
+    console.log("  platformName:", JSON.stringify(platformName));
+    console.log("  platformId:", JSON.stringify(platformId));
+    const errors = [];
+    if (!missionId || missionId.trim() === "") {
+      errors.push({ message: "Mission ID is required", details: { field: "missionId" } });
+    }
+    if (!missionTitle || missionTitle.trim() === "") {
+      errors.push({ message: "Mission Title is required", details: { field: "missionTitle" } });
+    }
+    if (!abstract || abstract.trim() === "") {
+      errors.push({ message: "Mission Abstract is required", details: { field: "abstract" } });
+    }
+    if (!contactEmail || contactEmail.trim() === "") {
+      errors.push({ message: "Contact Email is required", details: { field: "contactEmail" } });
+    }
+    if (!platformName || platformName.trim() === "") {
+      errors.push({
+        message: "Platform name is required. Please provide a descriptive name for your platform.",
+        details: { field: "platformName" }
+      });
+    }
+    if (!platformId || platformId.trim() === "") {
+      errors.push({ message: "Platform ID is required.", details: { field: "platformId" } });
+    }
+    const fd = typeof collectFormData === "function" ? collectFormData() : null;
+    const sens = (fd && fd.sensors) || [];
+    const sensorIssues = [];
+    sens.forEach((sensor, index) => {
+      if (!sensor.id || !String(sensor.id).trim()) {
+        sensorIssues.push("Sensor " + (index + 1) + " is missing an ID");
+      }
+      if (!sensor.type || !String(sensor.type).trim()) {
+        sensorIssues.push("Sensor " + (index + 1) + " (" + (sensor.id || "unnamed") + ") is missing a type");
+      }
+    });
+    if (sensorIssues.length > 0) {
+      errors.push({
+        message: "Sensor validation issues: " + sensorIssues.join(", "),
+        details: { issues: sensorIssues }
+      });
+    }
+    const result = {
+      valid: errors.length === 0,
+      errors,
+      warnings: [],
+      results: errors.map((e) => ({ ...e, passed: false, level: "error" })),
+      summary: errors.length === 0 ? "All validations passed" : errors.length + " error(s) found"
+    };
+    debugLog("DEBUG: testDirectValidation - Validation result:", JSON.stringify(result));
+    updateValidationUI(result);
+    showToast("info", "Direct validation completed - found " + errors.length + " errors");
+    return result;
+  };
+}
+class ErrorRecoverySystem {
+  constructor() {
+    this.recoveryActions = /* @__PURE__ */ new Map();
+    this.setupRecoveryActions();
+  }
+  setupRecoveryActions() {
+    this.recoveryActions.set("mission.id.required", () => ({
+      success: true,
+      message: "Generated default mission ID",
+      value: "PS_" + (/* @__PURE__ */ new Date()).toISOString().replace(/[-:.]/g, ""),
+      field: "missionId"
+    }));
+    this.recoveryActions.set("mission.title.required", () => ({
+      success: true,
+      message: "Set default mission title",
+      value: "Untitled Mission",
+      field: "missionTitle"
+    }));
+    this.recoveryActions.set("mission.contact.email", () => ({
+      success: true,
+      message: "Set placeholder email",
+      value: "contact@example.com",
+      field: "contactEmail"
+    }));
+    this.recoveryActions.set("platform.id.required", () => ({
+      success: true,
+      message: "Generated default platform ID",
+      value: "Platform_" + (/* @__PURE__ */ new Date()).toISOString().replace(/[-:.]/g, ""),
+      field: "platformId"
+    }));
+  }
+  attemptRecovery(errorResult) {
+    try {
+      const action = this.recoveryActions.get(errorResult.ruleId);
+      if (action) {
+        const recovery = action(errorResult);
+        debugLog("DEBUG: ErrorRecoverySystem - Recovery attempted:", recovery);
+        return recovery;
+      }
+      return {
+        success: false,
+        message: "No recovery action available for " + errorResult.ruleId
+      };
+    } catch (e) {
+      console.error("DEBUG: ErrorRecoverySystem - Recovery error:", e);
+      return {
+        success: false,
+        message: "Recovery failed: " + e.message
+      };
+    }
+  }
+}
+function ensureValidationSystemsInitialized() {
+  if (typeof window.liveValidator === "undefined" && typeof LiveValidator !== "undefined") {
+    window.liveValidator = new LiveValidator();
+    window.liveValidator.setupLiveValidation();
+  }
+  if (typeof window.errorRecovery === "undefined" && typeof ErrorRecoverySystem !== "undefined") {
+    window.errorRecovery = new ErrorRecoverySystem();
+  }
+  debugLog("DEBUG: Validation systems initialized");
+}
+function initNavigation() {
+  if (window.__NAV_INIT_DONE) {
+    debugLog("DEBUG: initNavigation - Already initialized, skipping");
+    return;
+  }
+  window.__NAV_INIT_DONE = true;
+  debugLog("DEBUG: initNavigation - Starting navigation initialization");
+  try {
+    $("#metadataTabs .nav-link")
+      .off("click.nav")
+      .on("click.nav", function(e) {
+        e.preventDefault();
+        const step = $(this).data("step");
+        debugLog("DEBUG: initNavigation - Tab clicked, navigating to step:", step);
+        navigateToStep(step);
+      });
+    $(".next-step").off("click.nav").on("click.nav", function(e) {
+      e.preventDefault();
+      const currentStep = parseInt($("#metadataTabs .nav-link.active").data("step") || "1", 10) || 1;
+      debugLog("DEBUG: initNavigation - Next button clicked, current step:", currentStep);
+      navigateToStep(currentStep + 1);
+    });
+    $(".prev-step").off("click.nav").on("click.nav", function(e) {
+      e.preventDefault();
+      const currentStep = parseInt($("#metadataTabs .nav-link.active").data("step") || "1", 10) || 1;
+      debugLog("DEBUG: initNavigation - Previous button clicked, current step:", currentStep);
+      navigateToStep(currentStep - 1);
+    });
+    $(".clear-btn").off("click.nav").on("click.nav", function(e) {
+      e.preventDefault();
+      const $form = $(this).closest("form");
+      const formId = $form.attr("id");
+      if (!formId) {
+        console.error("DEBUG: clear-btn - No form ID found");
+        showToast("error", "Invalid form ID");
+        return;
+      }
+      if (confirm("Are you sure you want to clear the ".concat(formId.replace("Form", ""), " form?"))) {
+        clearFormData(formId);
+        showToast("success", "".concat(formId.replace("Form", ""), " form cleared successfully."));
+      }
+    });
+    $("#clearBtnHeader").click(function(e) {
+      e.preventDefault();
+      if (confirm("Are you sure you want to clear all forms?")) {
+        clearFormData();
+        showToast("success", "All forms cleared successfully.");
+      }
+    });
+    debugLog("DEBUG: initNavigation - Navigation initialization complete");
+  } catch (e) {
+    console.error("DEBUG: initNavigation - Error:", e);
+    showToast("error", "Navigation initialization failed: " + e.message);
+  }
+}
+function navigateToStep(step, options) {
+  options = options || {};
+  try {
+    debugLog("DEBUG: navigateToStep - Navigating to step:", step);
+    $("#metadataTabs .nav-link").removeClass("active");
+    $(".step-form").removeClass("active").hide();
+    const $stepForm = $("#step".concat(step, "Form"));
+    if ($stepForm.length) {
+      $stepForm.addClass("active").show();
+    } else {
+      console.error("DEBUG: navigateToStep - Step form not found:", "#step".concat(step, "Form"));
+      showToast("error", "Step ".concat(step, " form not found"));
+      return;
+    }
+    $('#metadataTabs .nav-link[data-step="'.concat(step, '"]')).addClass("active");
+    updateTabStates(step);
+    if (step === 4) {
+      debugLog("DEBUG: navigateToStep - Spatial step accessed");
+      setTimeout(() => {
+        if (typeof ensureMapInitialized === "function") {
+          ensureMapInitialized();
+        } else if (!map || !map.getContainer()) {
+          debugLog("DEBUG: navigateToStep - Initializing map for first time");
+          initMap();
+        }
+        if (map && map.invalidateSize) {
+          debugLog("DEBUG: navigateToStep - Map exists, invalidating size and updating");
+          map.invalidateSize(true);
+          updateMap();
+          setTimeout(() => {
+            if (map && map.invalidateSize) {
+              map.invalidateSize(true);
+              updateMap();
+            }
+          }, 180);
+        }
+      }, 100);
+    }
+    if (!options.skipValidation) {
+      validateStepSync(step);
+    }
+    FormEvents.emit("changed");
+    debugLog("DEBUG: navigateToStep - Navigated to step:", step);
+  } catch (e) {
+    console.error("DEBUG: navigateToStep - Error:", e);
+    showToast("error", "Navigation error: " + e.message);
+  }
+}
+function updateTabStates(currentStep) {
+  try {
+    debugLog("DEBUG: updateTabStates - Updating tab states for step:", currentStep);
+    $("#metadataTabs .nav-link").removeClass("disabled");
+    $(".next-step").prop("disabled", false);
+    debugLog("DEBUG: updateTabStates - All tabs enabled");
+  } catch (e) {
+    console.error("DEBUG: updateTabStates - Error:", e);
+    showToast("error", "Failed to update tab states: " + e.message);
+  }
+}
+function syncXmlLiveSnippetToShell() {
+  try {
+    const sn = document.getElementById("xmlPreviewSnippet");
+    if (!sn) return;
+    /*
+      Earlier builds set height/minHeight from the shell's getBoundingClientRect().
+      When the shell was collapsed (~content height), that locked the editor to ~2 lines
+      and overrode CSS clamp(). Clear inline sizes so Index.html rules control height.
+    */
+    sn.style.removeProperty("height");
+    sn.style.removeProperty("min-height");
+  } catch (e) {}
+}
+function wireXmlLiveSnippetResizeObserver() {
+  const shell = document.querySelector("#liveXmlPanePreview .xml-live-snippet-shell");
+  const sn = document.getElementById("xmlPreviewSnippet");
+  if (!shell || !sn) return;
+  if (typeof ResizeObserver !== "undefined") {
+    const ro = new ResizeObserver(function() {
+      syncXmlLiveSnippetToShell();
+    });
+    ro.observe(shell);
+  }
+  $(window).on("resize.xmlLiveSnippet", syncXmlLiveSnippetToShell);
+  $("#liveXmlTabList button[data-bs-toggle='tab']").on("shown.bs.tab", function() {
+    setTimeout(syncXmlLiveSnippetToShell, 0);
+  });
+  setTimeout(syncXmlLiveSnippetToShell, 0);
+  setTimeout(syncXmlLiveSnippetToShell, 300);
+}
+window.syncXmlLiveSnippetToShell = syncXmlLiveSnippetToShell;
+function validateStepSync(step, options) {
+  options = options || {};
+  const queueServer = options.queueServer !== false;
+  try {
+    debugLog("DEBUG: validateStepSync - Validating step:", step);
+    const formId = "#step".concat(step, "Form form");
+    const $form = $(formId);
+    if (!$form.length) {
+      console.error("DEBUG: validateStepSync - Form not found:", formId);
+      return false;
+    }
+    let valid = true;
+    $form.find("[required]").each(function() {
+      const $input = $(this);
+      const value = $input.val();
+      const errorId = $input.attr("aria-describedby") || "".concat($input.attr("id"), "Error");
+      const $error = $("#".concat(errorId));
+      if (!value) {
+        $input.addClass("is-invalid");
+        if ($error.length) {
+          $error.text("This field is required.");
+        }
+        valid = false;
+      } else {
+        $input.removeClass("is-invalid");
+        if ($error.length) {
+          $error.text("");
+        }
+      }
+    });
+    if (step === 2) {
+      const platformId = ($("#platformId").val() || "").trim();
+      const platformName = ($("#platformName").val() || "").trim();
+      const $platformIdError = $("#platformIdError");
+      const $platformNameError = $("#platformNameError");
+      if (!platformId) {
+        $("#platformId").addClass("is-invalid");
+        if ($platformIdError.length) {
+          $platformIdError.text("Platform ID is required.");
+        }
+        valid = false;
+      } else {
+        $("#platformId").removeClass("is-invalid");
+        if ($platformIdError.length) {
+          $platformIdError.text("");
+        }
+      }
+      if (!platformName) {
+        $("#platformName").addClass("is-invalid");
+        if ($platformNameError.length) {
+          $platformNameError.text("Platform name is required. Please provide a descriptive name for your platform.");
+        }
+        valid = false;
+      } else {
+        $("#platformName").removeClass("is-invalid");
+        if ($platformNameError.length) {
+          $platformNameError.text("");
+        }
+      }
+    }
+    if (step === 3) {
+      $("#sensorsList .sensor-item").each(function(sensorIdx) {
+        const $card = $(this);
+        const sid = ($card.find('[name="sensorId"]').val() || "").trim();
+        const st = ($card.find('[name="sensorType"]').val() || "").trim();
+        const cardElId = $card.attr("id") || "";
+        const $sidErr = cardElId ? $("#sensorIdError-".concat(cardElId)) : $();
+        const $stInput = $card.find('[name="sensorType"]');
+        let $stErr = cardElId ? $("#sensorTypeError-".concat(cardElId)) : $();
+        if (!$stErr.length) {
+          $stErr = $stInput.siblings(".invalid-feedback").first();
+        }
+        const n = sensorIdx + 1;
+        if (!sid) {
+          $card.find('[name="sensorId"]').addClass("is-invalid");
+          if ($sidErr.length) {
+            $sidErr.text("Sensor " + n + " is missing an ID");
+          }
+          valid = false;
+        } else {
+          $card.find('[name="sensorId"]').removeClass("is-invalid");
+          if ($sidErr.length) {
+            $sidErr.text("");
+          }
+        }
+        if (!st) {
+          $stInput.addClass("is-invalid");
+          if ($stErr.length) {
+            $stErr.text("Sensor " + n + " (" + (sid || "unnamed") + ") is missing a type");
+          }
+          valid = false;
+        } else {
+          $stInput.removeClass("is-invalid");
+          if ($stErr.length) {
+            $stErr.text("");
+          }
+        }
+      });
+    }
+    if (step === 4) {
+      $form.find('input[name$="Lat"], input[name$="Lon"]').each(function() {
+        const $input = $(this);
+        const value = dmsToDecimal($input.val());
+        const errorId = $input.attr("aria-describedby") || "".concat($input.attr("id"), "Error");
+        const $error = $("#".concat(errorId));
+        if (isNaN(value) || value === 0) {
+          $input.addClass("is-invalid");
+          if ($error.length) {
+            $error.text("Invalid coordinate.");
+          }
+          valid = false;
+        } else if ($input.attr("name").includes("Lat") && (value < -90 || value > 90)) {
+          $input.addClass("is-invalid");
+          if ($error.length) {
+            $error.text("Latitude must be between -90 and 90 degrees.");
+          }
+          valid = false;
+        } else if ($input.attr("name").includes("Lon") && (value < -180 || value > 180)) {
+          $input.addClass("is-invalid");
+          if ($error.length) {
+            $error.text("Longitude must be between -180 and 180 degrees.");
+          }
+          valid = false;
+        } else {
+          $input.removeClass("is-invalid");
+          if ($error.length) {
+            $error.text("");
+          }
+        }
+      });
+    }
+    const nextBtnByStep = { 1: "nextMissionBtn", 2: "nextPlatformBtn", 3: "nextSensorsBtn", 4: "nextSpatialBtn" };
+    const nextBtnId = nextBtnByStep[step];
+    if (nextBtnId && $("#" + nextBtnId).length) {
+      $("#" + nextBtnId).prop("disabled", !valid);
+    }
+    if (queueServer && window.liveValidator && typeof window.liveValidator.queueServerValidation === "function") {
+      window.liveValidator.queueServerValidation(400);
+    }
+    debugLog("DEBUG: validateStepSync - Step validation result (local):", valid);
+    return valid;
+  } catch (e) {
+    console.error("DEBUG: validateStepSync - Error:", e);
+    showToast("error", "Validation error: " + e.message);
+    return false;
+  }
+}
+function updateValidationUI(validation) {
+  var _a, _b, _c;
+  try {
+    if (!validation) return;
+    debugLog("DEBUG: updateValidationUI - Updating validation UI");
+    const errN = ((_a = validation.errors) == null ? void 0 : _a.length) || 0;
+    const warnN = ((_b = validation.warnings) == null ? void 0 : _b.length) || 0;
+    const resN = ((_c = validation.results) == null ? void 0 : _c.length) || 0;
+    debugLog("DEBUG: updateValidationUI - valid:", validation.valid, "errors:", errN, "warnings:", warnN, "results:", resN);
+    const results = validation.results && validation.results.length ? validation.results : [
+      ...(validation.errors || []).map((e) => ({ ...e, passed: false, level: "error" })),
+      ...(validation.warnings || []).map((w) => ({ ...w, passed: false, level: "warning" }))
+    ];
+    $(".form-control, .form-select").removeClass("is-invalid is-warning fix-suggested");
+    $(".invalid-feedback, .warning-feedback").remove();
+    results.forEach((result) => {
+      var _a2;
+      if (!result.passed) {
+        const field = result.details.field || ((_a2 = result.context) == null ? void 0 : _a2.field);
+        if (field) {
+          const input = $('[name="'.concat(field, '"]'));
+          if (input.length > 0) {
+            input.addClass(result.level === "error" ? "is-invalid" : "is-warning");
+            if (result.fix) {
+              input.addClass("fix-suggested").attr("title", "Suggested fix available");
+            }
+            const feedback = $("<div></div>").addClass(result.level === "error" ? "invalid-feedback" : "warning-feedback").text(result.message);
+            input.after(feedback);
+          }
+        }
+      }
+    });
+    const summaryDiv = $("#validationSummary");
+    summaryDiv.empty();
+    if (validation.valid) {
+      summaryDiv.html('<span class="text-success">All validations passed</span>');
+    } else {
+      const alert = $('<div class="alert alert-warning alert-sm"></div>').text(validation.summary);
+      const details = $('<ul class="list-unstyled mb-0"></ul>');
+      [...validation.errors, ...validation.warnings].forEach((result) => {
+        const li = $('<li class="validation-section"></li>').text(result.message);
+        if (result.fix) {
+          const fixBtn = $('<a href="#" class="ms-2 text-decoration-underline">Fix</a>').click((e) => {
+            e.preventDefault();
+            applyFix(result);
+          });
+          li.append(fixBtn);
+        }
+        details.append(li);
+      });
+      alert.append(details);
+      summaryDiv.append(alert);
+    }
+    debugLog("DEBUG: updateValidationUI - Validation UI updated");
+    const st = parseInt($("#metadataTabs .nav-link.active").data("step") || "1", 10) || 1;
+    const nextBtnByStep = { 1: "nextMissionBtn", 2: "nextPlatformBtn", 3: "nextSensorsBtn", 4: "nextSpatialBtn" };
+    const nid = nextBtnByStep[st];
+    if (nid && $("#" + nid).length) {
+      $("#" + nid).prop("disabled", !validation.valid);
+    }
+    if (typeof updateValidationResults === "function") {
+      updateValidationResults(validation);
+    } else {
+      debugWarn("DEBUG: updateValidationUI - updateValidationResults function not available");
+    }
+  } catch (e) {
+    console.error("DEBUG: updateValidationUI - Error:", e);
+    showToast("error", "Failed to update validation UI: " + e.message);
+  }
+}
+function getMetadataDefaultsForSchema(schema) {
+  return {
+    standard: "ISO 19115-2",
+    version: "2009"
+  };
+}
+function syncMetadataFieldsWithSchema(selectedSchema) {
+  const defaults = getMetadataDefaultsForSchema(selectedSchema || $("#metadataSchema").val());
+  const $metadataStandard = $("#metadataStandard");
+  const $metadataVersion = $("#metadataVersion");
+  if ($metadataStandard.length) {
+    $metadataStandard.val(defaults.standard);
+  }
+  if ($metadataVersion.length) {
+    $metadataVersion.val(defaults.version);
+  }
+  debugLog("DEBUG: syncMetadataFieldsWithSchema - Updated metadata fields:", defaults);
+}
+function handleMetadataSchemaChange(selectedSchema, options = {}) {
+  const schema = selectedSchema || $("#metadataSchema").val() || "iso19115-2";
+  const shouldRefreshPreview = options.refreshPreview !== false;
+  const shouldValidateStep5 = options.validateStep5 !== false;
+  const previousSchema = window.__LAST_APPLIED_SCHEMA || schema;
+  debugLog("DEBUG: handleMetadataSchemaChange - Applying schema change:", schema);
+  syncMetadataFieldsWithSchema(schema);
+  applySchemaFieldVisibility(schema);
+  if (previousSchema !== schema) {
+    updateSchemaRiskSelectorsFromDiagnostics(previousSchema, schema);
+  }
+  window.__LAST_APPLIED_SCHEMA = schema;
+  if (shouldRefreshPreview && typeof refreshXMLPreview === "function") {
+    refreshXMLPreview();
+  }
+  if (shouldValidateStep5 && parseInt($("#metadataTabs .nav-link.active").data("step") || "1", 10) === 5) {
+    validateStepSync(5);
+  }
+}
+function initializeSchemaSupport() {
+  try {
+    debugLog("DEBUG: initializeSchemaSupport - Initializing schema support");
+    const $schema = $("#metadataSchema");
+    if ($schema.length === 0) {
+      debugWarn("DEBUG: initializeSchemaSupport - Metadata schema field not found");
+      return;
+    }
+    const fixedSchema = "iso19115-2";
+    $schema.val(fixedSchema);
+    handleMetadataSchemaChange(fixedSchema, { refreshPreview: false, validateStep5: false });
+    $("#runSchemaHealthBtn").off("click").on("click", function() {
+      runSchemaHealthChecksFromUI();
+    });
+    console.log("INFO: initializeSchemaSupport - Schema support initialized successfully");
+  } catch (error) {
+    console.error("ERROR: initializeSchemaSupport - Failed:", error);
+    showToast("error", "Failed to initialize schema support: " + error.message);
+  }
+}
+function runSchemaHealthChecksFromUI() {
+  try {
+    if (typeof google === "undefined" || !google.script || !google.script.run) {
+      showToast("error", "Google Apps Script is not available");
+      return;
+    }
+    showLoading(true);
+    google.script.run.withSuccessHandler(function(result) {
+      var _a, _b, _c;
+      const passed = !!(result == null ? void 0 : result.ok);
+      const testCount = ((_a = result == null ? void 0 : result.tests) == null ? void 0 : _a.length) || 0;
+      const failedCount = ((_b = result == null ? void 0 : result.tests) == null ? void 0 : _b.filter((t) => !t.ok).length) || 0;
+      const toastType = passed ? "success" : "error";
+      const summary = (result == null ? void 0 : result.summary) || (passed ? "Schema health checks passed" : "Schema health checks failed");
+      const firstFailure = (_c = result == null ? void 0 : result.tests) == null ? void 0 : _c.find((t) => !t.ok);
+      const detail = !passed && (firstFailure == null ? void 0 : firstFailure.message) ? " First failure: ".concat(firstFailure.message) : "";
+      showToast(toastType, "".concat(summary, " (").concat(testCount - failedCount, "/").concat(testCount, " passed).").concat(detail));
+      console.log("INFO: runSchemaHealthChecksFromUI - Health check result:", result);
+      showLoading(false);
+    }).withFailureHandler(function(e) {
+      console.error("ERROR: runSchemaHealthChecksFromUI - Failed:", e);
+      showToast("error", "Schema health checks failed: " + e.message);
+      showLoading(false);
+    }).runSchemaHealthChecks();
+  } catch (error) {
+    console.error("ERROR: runSchemaHealthChecksFromUI - Error:", error);
+    showToast("error", "Schema health checks failed: " + error.message);
+    showLoading(false);
+  }
+}
+function sanitizeXmlForImport(xmlString) {
+  let s = String(xmlString || "");
+  if (s.charCodeAt(0) === 65279) {
+    s = s.slice(1);
+  } else if (s.length >= 3 && s.charCodeAt(0) === 239 && s.charCodeAt(1) === 187 && s.charCodeAt(2) === 191) {
+    s = s.slice(3);
+  }
+  return s.trim();
+}
+function handleXMLImport(file) {
+  try {
+    if (!file) {
+      showToast("error", "Please select an XML file to import");
+      return;
+    }
+    if (!/\.xml$/i.test(file.name || "")) {
+      showToast("error", "Please select a valid .xml file");
+      return;
+    }
+    if (typeof FileReader === "undefined") {
+      showToast("error", "File import is not supported in this browser");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      var _a;
+      try {
+        const xmlContent = sanitizeXmlForImport(String(((_a = event == null ? void 0 : event.target) == null ? void 0 : _a.result) || ""));
+        if (!xmlContent) {
+          showToast("error", "Selected XML file is empty");
+          $("#importXml").val("");
+          return;
+        }
+        if (typeof google === "undefined" || !google.script || !google.script.run) {
+          showToast("error", "XML import requires Google Apps Script environment");
+          $("#importXml").val("");
+          return;
+        }
+        showLoading(true);
+        google.script.run.withSuccessHandler(function(formData) {
+          if (!formData || typeof formData !== "object" || Array.isArray(formData)) {
+            console.error("DEBUG: handleXMLImport - Invalid payload from parseXMLToFormData:", formData);
+            showToast("error", "Failed to parse XML into form data");
+            showLoading(false);
+            $("#importXml").val("");
+            return;
+          }
+          $("#metadataSchema").val("iso19115-2");
+          if (typeof syncMetadataFieldsWithSchema === "function") {
+            syncMetadataFieldsWithSchema("iso19115-2");
+          }
+          const clientData = sanitizeImportedFormPayload(normalizeDataForClientForm(formData));
+          populateForms(clientData, { importMode: true });
+          syncFormsAndStepsAfterBulkLoad(1);
+          showLoading(false);
+          $("#importXml").val("");
+          if (typeof showToast === "function") {
+            showToast("success", "XML imported — review fields on each step.");
+          }
+        }).withFailureHandler(function(e) {
+          console.error("DEBUG: handleXMLImport - Parse error:", e);
+          showToast("error", "Failed to import XML: " + ((e == null ? void 0 : e.message) || e));
+          showLoading(false);
+          $("#importXml").val("");
+        }).parseXMLToFormData(xmlContent);
+      } catch (e) {
+        console.error("DEBUG: handleXMLImport - Read handler error:", e);
+        showToast("error", "Failed to import XML: " + e.message);
+        showLoading(false);
+        $("#importXml").val("");
+      }
+    };
+    reader.onerror = function() {
+      showToast("error", "Failed to read selected XML file");
+      $("#importXml").val("");
+    };
+    reader.readAsText(file);
+  } catch (e) {
+    console.error("DEBUG: handleXMLImport - Error:", e);
+    showToast("error", "Failed to import XML: " + e.message);
+    showLoading(false);
+    $("#importXml").val("");
+  }
+}
+function collectFormData() {
+  try {
+    debugLog("DEBUG: collectFormData - Collecting form data");
+    const mission = {};
+    $("#missionForm").serializeArray().forEach((item) => {
+      const $field = $("#".concat(item.name));
+      const currentValue = $field.val() || "";
+      mission[item.name] = typeof currentValue === "string" ? currentValue.trim() : currentValue;
+      if (item.name === "contactEmail") {
+        debugLog("DEBUG: collectFormData - Contact email field:", {
+          itemValue: item.value,
+          currentValue,
+          fieldVal: $field.val(),
+          finalValue: mission[item.name]
+        });
+      }
+    });
+    (function syncMissionFromDom() {
+      const $sd = $("#startDate");
+      if ($sd.length) {
+        mission.startDate = String($sd.val() || "").trim();
+      }
+      const $ed = $("#endDate");
+      if ($ed.length) {
+        mission.endDate = String($ed.val() || "").trim();
+      }
+      const $ce = $("#contactEmail");
+      if ($ce.length) {
+        mission.contactEmail = String($ce.val() || "").trim();
+      }
+      const $mid = $("#missionId");
+      if ($mid.length) {
+        mission.missionId = String($mid.val() || "").trim();
+      }
+    })();
+    mission.organizationRor = mission.organizationRorId ? {
+      id: mission.organizationRorUri || "",
+      shortId: mission.organizationRorId || "",
+      displayName: mission.organizationRorDisplayName || "",
+      country: mission.organizationRorCountry || ""
+    } : null;
+    if (typeof mission.gcmdKeywordsJson === "string" && mission.gcmdKeywordsJson.trim()) {
+      try {
+        mission.gcmdKeywords = JSON.parse(mission.gcmdKeywordsJson);
+      } catch (e) {
+        mission.gcmdKeywords = metadataLookupState.selectedGcmdKeywords || [];
+      }
+    } else {
+      mission.gcmdKeywords = metadataLookupState.selectedGcmdKeywords || [];
+    }
+    const platform = {};
+    $("#platformForm").serializeArray().forEach((item) => {
+      const value = item.value || ($("#".concat(item.name)).attr("value") || "");
+      platform[item.name] = typeof value === "string" ? value.trim() : value;
+    });
+    if (!platform.platformId || String(platform.platformId).trim() === "") {
+      const selectedPlatformId = ($("#savedPlatforms").val() || "").trim();
+      if (selectedPlatformId) {
+        platform.platformId = selectedPlatformId;
+        debugWarn("DEBUG: collectFormData - platformId missing, using library dropdown selection:", selectedPlatformId);
+      }
+    }
+    if (!platform.platformId || String(platform.platformId).trim() === "") {
+      const fromSerial = String(platform.serialNumber || $("#serialNumber").val() || "").trim();
+      if (fromSerial) {
+        platform.platformId = fromSerial;
+        debugLog("DEBUG: collectFormData - platformId empty, using serial number as platform ID:", fromSerial);
+      }
+    }
+    const sensors = [];
+    $("#sensorsList .sensor-item").each(function() {
+      const sensor = {};
+      $(this).find("input, select, textarea").each(function() {
+        const name = $(this).attr("name");
+        if (name) {
+          const value = $(this).val() || "";
+          const trimmedValue = typeof value === "string" ? value.trim() : value;
+          if (name === "sensorId") {
+            sensor.id = trimmedValue;
+          } else if (name === "sensorType") {
+            sensor.type = trimmedValue;
+          } else if (name === "firmwareVersion") {
+            sensor.firmware = trimmedValue;
+          } else {
+            sensor[name] = trimmedValue;
+          }
+        }
+      });
+      debugLog("DEBUG: collectFormData - Sensor row:", {
+        id: sensor.id,
+        type: sensor.type,
+        allFields: Object.keys(sensor)
+      });
+      if (!sensor.type || String(sensor.type).trim() === "") {
+        const directType = $(this).find('[name="sensorType"]').val();
+        if (directType && String(directType).trim() !== "") {
+          sensor.type = String(directType).trim();
+        }
+      }
+      if (!sensor.id || String(sensor.id).trim() === "") {
+        const directId = $(this).find('[name="sensorId"]').val();
+        if (directId && String(directId).trim() !== "") {
+          sensor.id = String(directId).trim();
+        }
+      }
+      if (!sensor.id || String(sensor.id).trim() === "") {
+        const serialFallback = $(this).find('[name="serialNumber"]').val();
+        if (serialFallback && String(serialFallback).trim() !== "") {
+          sensor.id = String(serialFallback).trim();
+        }
+      }
+      const sid = sensor.id && String(sensor.id).trim();
+      const st = sensor.type && String(sensor.type).trim();
+      if (sid && st) {
+        sensors.push(sensor);
+      }
+    });
+    const spatial = { boundingBox: {} };
+    $("#spatialForm").serializeArray().forEach((item) => {
+      if (item.name.includes("Lat") || item.name.includes("Lon")) {
+        const corner = item.name.replace(/(Lat|Lon)$/, "");
+        spatial.boundingBox[corner] = spatial.boundingBox[corner] || {};
+        const fieldValue = item.value || $("#" + item.name).val() || $("#" + item.name).attr("value") || "";
+        const decimalValue = dmsToDecimal(fieldValue);
+        if (item.name.includes("Lat")) {
+          spatial.boundingBox[corner].lat = decimalValue;
+        } else {
+          spatial.boundingBox[corner].lon = decimalValue;
+        }
+      } else {
+        const fieldValue = item.value || $("#" + item.name).val() || $("#" + item.name).attr("value") || "";
+        spatial[item.name] = typeof fieldValue === "string" ? fieldValue.trim() : fieldValue;
+      }
+    });
+    spatial.hasTrajectory = $("#hasTrajectory").is(":checked");
+    if ($("#useGridRepresentation").is(":checked")) {
+      spatial.gridRepresentation = {
+        cellGeometry: ($("#gridCellGeometry").val() || "area").trim(),
+        axes: []
+      };
+      const pushGridAxis = (name, sizeId, resId) => {
+        const size = ($("#" + sizeId).val() || "").trim();
+        const res = ($("#" + resId).val() || "").trim();
+        if (size || res) {
+          spatial.gridRepresentation.axes.push({
+            name,
+            size: size || "0",
+            resolution: res || ""
+          });
+        }
+      };
+      pushGridAxis("column", "gridColumnSize", "gridColumnResolution");
+      pushGridAxis("row", "gridRowSize", "gridRowResolution");
+      pushGridAxis("vertical", "gridVerticalSize", "gridVerticalResolution");
+    }
+    const output = {};
+    $("#outputForm").serializeArray().forEach((item) => {
+      const value = item.value || ($("#".concat(item.name)).attr("value") || "");
+      output[item.name] = typeof value === "string" ? value.trim() : value;
+    });
+    output.saveAsTemplate = $("#saveAsTemplate").is(":checked");
+    output.useNceiMetadataContactXlink = $("#useNceiMetadataContactXlink").is(":checked");
+    output.omitRootReferenceSystemInfo = $("#omitRootReferenceSystemInfo").is(":checked");
+    output.metadataSchema = $("#metadataSchema").val() || "iso19115-2";
+    output.outputLocation = output.outputLocation || $("#outputLocation").val() || "download";
+    const formData = { mission, platform, sensors, spatial, output };
+    debugLog("DEBUG: collectFormData - Collected form data:", JSON.stringify(formData));
+    debugLog("=== FORM DATA DEBUG ===");
+    debugLog("Mission fields:", Object.keys(mission).length, "entries:");
+    Object.keys(mission).forEach((key) => {
+      const v = mission[key];
+      if (v == null || v === "") return;
+      if (typeof v === "object") {
+        debugLog("  " + key + ":", JSON.stringify(v));
+      } else {
+        debugLog("  " + key + ': "' + v + '"');
+      }
+    });
+    debugLog("Platform fields:", Object.keys(platform).length, "entries:");
+    Object.keys(platform).forEach((key) => {
+      const v = platform[key];
+      if (v == null || v === "") return;
+      if (typeof v === "object") {
+        debugLog("  " + key + ":", JSON.stringify(v));
+      } else {
+        debugLog("  " + key + ': "' + v + '"');
+      }
+    });
+    debugLog("Sensors:", sensors.length, "entries:");
+    sensors.forEach((sensor, index) => {
+      debugLog("  Sensor ".concat(index + 1, ":"), Object.keys(sensor).filter((k) => sensor[k]).length, "fields");
+      Object.keys(sensor).forEach((key) => {
+        if (sensor[key]) debugLog("    ".concat(key, ': "').concat(sensor[key], '"'));
+      });
+    });
+    debugLog("Spatial fields:", Object.keys(spatial).length, "entries:");
+    debugLog("Output fields:", Object.keys(output).length, "entries:");
+    debugLog("=== END DEBUG ===");
+    if (!window._cacheRestoreDisabled) {
+      saveToCache("uxsMetadataFormData", formData);
+    } else {
+      debugLog("DEBUG: collectFormData - Cache save disabled, skipping cache update");
+    }
+    return formData;
+  } catch (e) {
+    console.error("DEBUG: collectFormData - Error:", e);
+    showToast("error", "Failed to collect form data: " + e.message);
+    return {};
+  }
+}
+function cleanFormData(data) {
+  if (data == null) return data;
+  if (typeof data === "string") return data.trim();
+  if (typeof data !== "object") return data;
+  if (Array.isArray(data)) {
+    return data.map((item) => cleanFormData(item));
+  }
+  const cleaned = {};
+  for (const [key, value] of Object.entries(data)) {
+    cleaned[key] = cleanFormData(value);
+  }
+  return cleaned;
+}
+function normalizeDataForClientForm(sourceData) {
+  const data = sourceData || {};
+  const mission = data.mission || {};
+  const platform = data.platform || {};
+  return {
+    ...data,
+    mission: {
+      ...mission,
+      missionId: mission.missionId || mission.id || "",
+      missionTitle: mission.missionTitle || mission.title || ""
+    },
+    platform: {
+      ...platform,
+      platformId: platform.platformId || platform.id || "",
+      platformName: platform.platformName || platform.name || "",
+      platformType: platform.platformType || platform.type || ""
+    },
+    sensors: Array.isArray(data.sensors) ? data.sensors : [],
+    spatial: data.spatial || {},
+    output: data.output || {}
+  };
+}
+
+/**
+ * Navy / NCEI templates use {{placeholders}} and xlink-only metadata contacts with no email in XML.
+ * Strip {{ }} from every string in imported payloads, then normalize dates and required email.
+ */
+function unwrapTemplateBracesDeep(value) {
+  if (value == null) return value;
+  if (typeof value === "string") {
+    let s = value.trim();
+    if (!s) return "";
+    s = s.replace(/\{\{|\}\}/g, "").trim();
+    return s;
+  }
+  if (Array.isArray(value)) {
+    return value.map((item) => unwrapTemplateBracesDeep(item));
+  }
+  if (typeof value === "object") {
+    const out = {};
+    Object.keys(value).forEach((k) => {
+      out[k] = unwrapTemplateBracesDeep(value[k]);
+    });
+    return out;
+  }
+  return value;
+}
+
+function sanitizeImportedFormPayload(sourceData) {
+  const data = JSON.parse(JSON.stringify(sourceData || {}));
+  data.mission = unwrapTemplateBracesDeep(data.mission || {});
+  data.platform = unwrapTemplateBracesDeep(data.platform || {});
+  data.spatial = unwrapTemplateBracesDeep(data.spatial || {});
+  data.output = unwrapTemplateBracesDeep(data.output || {});
+  if (Array.isArray(data.sensors)) {
+    data.sensors = data.sensors.map((row) => unwrapTemplateBracesDeep(row || {}));
+  }
+
+  const toDatetimeLocal = (raw) => {
+    const u = raw == null ? "" : String(raw).trim();
+    if (!u) return "";
+    if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(u)) {
+      return u.slice(0, 16);
+    }
+    const m = u.match(/^(\d{4}-\d{2}-\d{2})(?:[T ](\d{2}):(\d{2})(?::(\d{2}))?)?/);
+    if (m) {
+      const hh = m[2] != null ? m[2] : "00";
+      const mm = m[3] != null ? m[3] : "00";
+      return "".concat(m[1], "T", hh, ":", mm);
+    }
+    return u;
+  };
+  const emailOk = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(e || "").trim());
+
+  const m = data.mission || {};
+  ["startDate", "endDate", "metadataRecordDate", "publicationDate"].forEach((k) => {
+    if (m[k] != null && m[k] !== "") {
+      m[k] = toDatetimeLocal(m[k]);
+    }
+  });
+
+  const out = data.output || {};
+  const xlinkContact = out.useNceiMetadataContactXlink === true || String(out.nceiMetadataContactHref || "").indexOf("docucomp") !== -1;
+  if (!emailOk(m.contactEmail)) {
+    if (xlinkContact) {
+      m.contactEmail = "ncei.metadata@noaa.gov";
+    } else {
+      m.contactEmail = "";
+    }
+  }
+  if (!m.startDate || !String(m.startDate).trim()) {
+    const fallback = toDatetimeLocal(m.metadataRecordDate || m.publicationDate || "");
+    if (fallback) {
+      m.startDate = fallback;
+    }
+  }
+  return data;
+}
+function syncFormsAndStepsAfterBulkLoad(startStep = 1) {
+  try {
+    collectFormData();
+    if (typeof navigateToStep === "function") {
+      navigateToStep(startStep, { skipValidation: true });
+    }
+    [1, 2, 3, 4, 5].forEach((step) => {
+      validateStepSync(step, { queueServer: false });
+    });
+    if (window.liveValidator && typeof window.liveValidator.queueServerValidation === "function") {
+      window.liveValidator.queueServerValidation(400);
+    }
+    FormEvents.emit("changed");
+  } catch (e) {
+    console.error("DEBUG: syncFormsAndStepsAfterBulkLoad - Error:", e);
+  }
+}
+function restoreFormData() {
+  try {
+    debugLog("DEBUG: restoreFormData - Starting form data restoration");
+    if (window._cacheRestoreDisabled) {
+      debugLog("DEBUG: restoreFormData - Cache restoration disabled, using defaults only");
+      populateForms({});
+      validateStepSync(1);
+      return false;
+    }
+    const cachedData = loadFromCache("uxsMetadataFormData");
+    if (cachedData) {
+      debugLog("DEBUG: restoreFormData - Cached data before cleaning:", JSON.stringify(cachedData));
+      const cleanedData = cleanFormData(cachedData);
+      debugLog("DEBUG: restoreFormData - Cached data after cleaning:", JSON.stringify(cleanedData));
+      populateForms(cleanedData);
+      saveToCache("uxsMetadataFormData", cleanedData);
+      validateStepSync(1);
+      return hasMeaningfulData(cleanedData);
+    } else {
+      debugLog("DEBUG: restoreFormData - No cached data, using HTML defaults");
+      populateForms({});
+    }
+    validateStepSync(1);
+    return false;
+  } catch (e) {
+    console.error("DEBUG: restoreFormData - Error:", e);
+    showToast("error", "Failed to restore form data: " + e.message);
+    return false;
+  }
+}
+function populateForms(data, options) {
+  var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _A, _B, _C, _D, _E, _F, _G;
+  try {
+    options = options || {};
+    const importMode = !!options.importMode;
+    debugLog("DEBUG: populateForms - Populating forms with data:", JSON.stringify(data));
+    data = data || {};
+    const populatedFields = [];
+    const emptyFields = [];
+    const setFieldValue = (selector, value, fieldName) => {
+      try {
+        const $field = $(selector);
+        if (!$field.length) {
+          debugWarn("DEBUG: populateForms - Field not found:", selector);
+          emptyFields.push(fieldName);
+          return;
+        }
+        const defaultValue = $field.attr("value") || "";
+        let finalValue;
+        if (importMode) {
+          finalValue = value === void 0 || value === null ? defaultValue : String(value);
+        } else {
+          finalValue = value != null && value !== "" ? value : defaultValue;
+        }
+        if (finalValue != null && finalValue !== "") {
+          $field.val(finalValue).addClass("populated-field");
+          populatedFields.push(fieldName);
+        } else {
+          $field.val("").removeClass("populated-field");
+          emptyFields.push(fieldName);
+        }
+      } catch (e) {
+        console.error("DEBUG: populateForms - Error setting field:", selector, e);
+        emptyFields.push(fieldName);
+      }
+    };
+    const skipMissionDomKeys = new Set(["organizationRor", "gcmdKeywords", "id", "title"]);
+    if (data.mission) {
+      if (data.mission.id && !data.mission.missionId) data.mission.missionId = data.mission.id;
+      if (data.mission.title && !data.mission.missionTitle) data.mission.missionTitle = data.mission.title;
+    }
+    Object.entries(data.mission || {}).forEach(([key, value]) => {
+      if (skipMissionDomKeys.has(key)) return;
+      setFieldValue("#".concat(key), value, "Mission ".concat(key));
+    });
+    hydrateLookupsFromMissionData(data.mission || {});
+    Object.entries(data.platform || {}).forEach(([key, value]) => {
+      setFieldValue("#".concat(key), value, "Platform ".concat(key));
+      if (key === "platformType" && value === "Other") {
+        const $customSection = $("#customPlatformTypeSection");
+        if ($customSection.length) {
+          $customSection.show();
+        }
+      }
+    });
+    const $sensorsList = $("#sensorsList");
+    if ($sensorsList.length) {
+      $sensorsList.empty();
+      if (data.sensors && Array.isArray(data.sensors) && data.sensors.length > 0) {
+        data.sensors.forEach((sensor) => {
+          try {
+            addSensor(sensor);
+            populatedFields.push("Sensor: ".concat(sensor.sensorId || "Unknown"));
+          } catch (e) {
+            console.error("DEBUG: populateForms - Error adding sensor:", sensor, e);
+            emptyFields.push("Sensor: ".concat(sensor.sensorId || "Unknown"));
+          }
+        });
+      } else {
+        $sensorsList.html('<div class="text-muted text-center">No sensors added yet. Select a sensor type to add.</div>');
+        emptyFields.push("Sensors");
+      }
+    }
+    setFieldValue("#referenceSystem", (_a = data.spatial) == null ? void 0 : _a.referenceSystem, "Reference System");
+    setFieldValue("#dimensions", (_b = data.spatial) == null ? void 0 : _b.dimensions, "Dimensions");
+    const spatialData = data.spatial || {};
+    setFieldValue("#verticalMinimum", spatialData.verticalMinimum, "Vertical minimum");
+    setFieldValue("#verticalMaximum", spatialData.verticalMaximum, "Vertical maximum");
+    setFieldValue("#verticalCrsUrl", spatialData.verticalCrsUrl, "Vertical CRS URL");
+    setFieldValue("#verticalCrsXlinkHref", spatialData.verticalCrsXlinkHref, "Vertical CRS xlink");
+    const gridRep = spatialData.gridRepresentation;
+    const useGridRep = !!(gridRep && Array.isArray(gridRep.axes) && gridRep.axes.length > 0);
+    const $useGridEl = $("#useGridRepresentation");
+    if ($useGridEl.length) {
+      $useGridEl.prop("checked", useGridRep);
+    }
+    $("#gridMetadataSection").toggle(useGridRep);
+    if (gridRep) {
+      setFieldValue("#gridCellGeometry", gridRep.cellGeometry, "Grid cell geometry");
+      (gridRep.axes || []).forEach((axis) => {
+        const n = (axis.name || "").toLowerCase();
+        if (n === "column") {
+          setFieldValue("#gridColumnSize", axis.size, "Grid column size");
+          setFieldValue("#gridColumnResolution", axis.resolution, "Grid column resolution");
+        } else if (n === "row") {
+          setFieldValue("#gridRowSize", axis.size, "Grid row size");
+          setFieldValue("#gridRowResolution", axis.resolution, "Grid row resolution");
+        } else if (n === "vertical") {
+          setFieldValue("#gridVerticalSize", axis.size, "Grid vertical size");
+          setFieldValue("#gridVerticalResolution", axis.resolution, "Grid vertical resolution");
+        }
+      });
+    }
+    setFieldValue("#extentDescription", spatialData.extentDescription != null ? spatialData.extentDescription : "", "Extent description");
+    setFieldValue("#geographicDescription", (_c = data.spatial) == null ? void 0 : _c.geographicDescription, "Geographic Description");
+    if ((_d = data.spatial) == null ? void 0 : _d.boundingBox) {
+      const setCoordinate = (selector, value, fieldName) => {
+        if (value != null && value !== 0 && value !== "" && !isNaN(value)) {
+          setFieldValue(selector, value, fieldName);
+        } else {
+          debugLog("DEBUG: populateForms - Skipping zero/invalid coordinate:", fieldName, "value:", value, "using HTML default");
+        }
+      };
+      setCoordinate("#upperLeftLat", (_e = data.spatial.boundingBox.upperLeft) == null ? void 0 : _e.lat, "Upper Left Latitude");
+      setCoordinate("#upperLeftLon", (_f = data.spatial.boundingBox.upperLeft) == null ? void 0 : _f.lon, "Upper Left Longitude");
+      setCoordinate("#upperRightLat", (_g = data.spatial.boundingBox.upperRight) == null ? void 0 : _g.lat, "Upper Right Latitude");
+      setCoordinate("#upperRightLon", (_h = data.spatial.boundingBox.upperRight) == null ? void 0 : _h.lon, "Upper Right Longitude");
+      setCoordinate("#lowerRightLat", (_i = data.spatial.boundingBox.lowerRight) == null ? void 0 : _i.lat, "Lower Right Latitude");
+      setCoordinate("#lowerRightLon", (_j = data.spatial.boundingBox.lowerRight) == null ? void 0 : _j.lon, "Lower Right Longitude");
+      setCoordinate("#lowerLeftLat", (_k = data.spatial.boundingBox.lowerLeft) == null ? void 0 : _k.lat, "Lower Left Latitude");
+      setCoordinate("#lowerLeftLon", (_l = data.spatial.boundingBox.lowerLeft) == null ? void 0 : _l.lon, "Lower Left Longitude");
+    }
+    setFieldValue("#accuracyStandard", (_m = data.spatial) == null ? void 0 : _m.accuracyStandard, "Accuracy Standard");
+    setFieldValue("#accuracyValue", (_n = data.spatial) == null ? void 0 : _n.accuracyValue, "Accuracy Value");
+    setFieldValue("#errorLevel", (_o = data.spatial) == null ? void 0 : _o.errorLevel, "Error Level");
+    setFieldValue("#errorValue", (_p = data.spatial) == null ? void 0 : _p.errorValue, "Error Value");
+    const hasTrajectory = ((_q = data.spatial) == null ? void 0 : _q.hasTrajectory) || false;
+    const $hasTrajectory = $("#hasTrajectory");
+    if ($hasTrajectory.length) {
+      $hasTrajectory.prop("checked", hasTrajectory);
+    }
+    setFieldValue("#trajectorySampling", (_r = data.spatial) == null ? void 0 : _r.trajectorySampling, "Trajectory Sampling");
+    const $trajectorySection = $("#trajectorySection");
+    if ($trajectorySection.length) {
+      $trajectorySection.toggle(hasTrajectory);
+    }
+    setFieldValue("#metadataSchema", "iso19115-2", "Metadata Schema");
+    setFieldValue("#metadataStandard", (_t = data.output) == null ? void 0 : _t.metadataStandard, "Metadata Standard");
+    setFieldValue("#metadataVersion", (_u = data.output) == null ? void 0 : _u.metadataVersion, "Metadata Version");
+    setFieldValue("#outputFormat", (_v = data.output) == null ? void 0 : _v.outputFormat, "Output Format");
+    setFieldValue("#outputValidationLevel", (_w = data.output) == null ? void 0 : _w.validationLevel, "Validation Level");
+    if ((_x = data.output) == null ? void 0 : _x.validationLevel) {
+      const $previewValidationLevel = $("#validationLevel");
+      if ($previewValidationLevel.length) {
+        $previewValidationLevel.val(data.output.validationLevel);
+      }
+    }
+    setFieldValue("#outputLocation", normalizeOutputLocation((_y = data.output) == null ? void 0 : _y.outputLocation), "Output Location");
+    const $outputLocation = $("#outputLocation");
+    if ($outputLocation.length) {
+      $outputLocation.val(normalizeOutputLocation($outputLocation.val()));
+    }
+    applySchemaFieldVisibility($("#metadataSchema").val() || ((_z = data.output) == null ? void 0 : _z.metadataSchema) || "iso19115-2");
+    syncMetadataFieldsWithSchema($("#metadataSchema").val());
+    setFieldValue("#awsBucket", (_A = data.output) == null ? void 0 : _A.awsBucket, "AWS Bucket");
+    setFieldValue("#awsPrefix", (_B = data.output) == null ? void 0 : _B.awsPrefix, "AWS Prefix");
+    setFieldValue("#doi", (_C = data.output) == null ? void 0 : _C.doi, "DOI");
+    const outData = data.output || {};
+    setFieldValue("#distributionFileFormat", outData.distributionFileFormat, "Distribution file format");
+    setFieldValue("#metadataLandingUrl", outData.metadataLandingUrl, "Metadata landing URL");
+    setFieldValue("#downloadUrl", outData.downloadUrl, "Download URL");
+    setFieldValue("#downloadProtocol", outData.downloadProtocol, "Download protocol");
+    setFieldValue("#downloadLinkName", outData.downloadLinkName, "Download link name");
+    setFieldValue("#downloadLinkDescription", outData.downloadLinkDescription, "Download link description");
+    const $useNceiMetadataContactXlink = $("#useNceiMetadataContactXlink");
+    if ($useNceiMetadataContactXlink.length) {
+      $useNceiMetadataContactXlink.prop("checked", outData.useNceiMetadataContactXlink === true);
+    }
+    const $omitRootReferenceSystemInfo = $("#omitRootReferenceSystemInfo");
+    if ($omitRootReferenceSystemInfo.length) {
+      $omitRootReferenceSystemInfo.prop("checked", outData.omitRootReferenceSystemInfo === true);
+    }
+    const saveAsTemplate = ((_D = data.output) == null ? void 0 : _D.saveAsTemplate) !== void 0 ? data.output.saveAsTemplate : true;
+    const $saveAsTemplate = $("#saveAsTemplate");
+    if ($saveAsTemplate.length) {
+      $saveAsTemplate.prop("checked", saveAsTemplate);
+    }
+    setFieldValue("#templateName", (_E = data.output) == null ? void 0 : _E.templateName, "Template Name");
+    setFieldValue("#templateCategory", (_F = data.output) == null ? void 0 : _F.templateCategory, "Template Category");
+    setFieldValue("#finalNotes", (_G = data.output) == null ? void 0 : _G.finalNotes, "Final Notes");
+    try {
+      setTimeout(() => {
+        updateMap();
+        debugLog("DEBUG: populateForms - Map updated after form population");
+      }, 100);
+    } catch (e) {
+      console.error("DEBUG: populateForms - Error updating map:", e);
+    }
+    const totalFields = populatedFields.length + emptyFields.length;
+    const percentPopulated = totalFields > 0 ? Math.round(populatedFields.length / totalFields * 100) : 0;
+    const feedbackHtml = '\n        <div class="alert alert-info">\n          <h6>Form Population Summary</h6>\n          <p>'.concat(populatedFields.length, " of ").concat(totalFields, " fields populated (").concat(percentPopulated, "%)</p>\n          ").concat(populatedFields.length > 0 ? "<p><strong>Populated:</strong> " + populatedFields.slice(0, 5).join(", ") + (populatedFields.length > 5 ? " and " + (populatedFields.length - 5) + " more..." : "") + "</p>" : "", "\n          ").concat(emptyFields.length > 0 ? "<p><strong>Empty:</strong> " + emptyFields.slice(0, 5).join(", ") + (emptyFields.length > 5 ? " and " + (emptyFields.length - 5) + " more..." : "") + "</p>" : "", "\n        </div>\n      ");
+    if (!importMode) {
+      const $wizardTabs = $("#metadataTabs");
+      if ($wizardTabs.length) {
+        const $feedback = $(feedbackHtml).insertAfter($wizardTabs);
+        setTimeout(() => {
+          $feedback.fadeOut("slow", function() {
+            $(this).remove();
+          });
+        }, 5e3);
+      }
+    }
+    debugLog("DEBUG: populateForms - Form population complete, populated:", populatedFields.length, "empty:", emptyFields.length);
+    if (!importMode) {
+      showToast("success", "Form populated successfully");
+    }
+    const wizardStep = parseInt($("#metadataTabs .nav-link.active").data("step") || "1", 10) || 1;
+    validateStepSync(wizardStep);
+  } catch (e) {
+    console.error("DEBUG: populateForms - Error:", e);
+    showToast("error", "Failed to populate forms: " + e.message);
+  }
+}
+window.debugXMLFunctionsStatus = function() {
+  console.log("=== XMLFunctions Debug Status ===");
+  console.log("XMLFunctionsLoadAttempt:", window.XMLFunctionsLoadAttempt);
+  console.log("XMLFunctionsLoaded:", window.XMLFunctionsLoaded);
+  console.log("XMLFunctionsScriptExecuted:", window.XMLFunctionsScriptExecuted);
+  console.log("XMLFunctionsLoadError:", window.XMLFunctionsLoadError);
+  console.log("refreshXMLPreview type:", typeof refreshXMLPreview);
+  console.log("Available functions:");
+  console.log("- formatXML:", typeof formatXML);
+  console.log("- syntaxHighlight:", typeof syntaxHighlight);
+  console.log("- validateXML:", typeof validateXML);
+  console.log("- exportXML:", typeof exportXML);
+  console.log("- handleXMLImport:", typeof handleXMLImport);
+  if (window.debugXMLFunctions) {
+    console.log("Debug functions object:", window.debugXMLFunctions);
+  }
+  if (window.testXMLFunctions) {
+    console.log("Running test function...");
+    window.testXMLFunctions();
+  }
+  console.log("=== End XMLFunctions Debug ===");
+};
+$(document).ready(function() {
+  try {
+    debugLog("DEBUG: document.ready - Initializing at:", (/* @__PURE__ */ new Date()).toISOString());
+    debugLog("DEBUG: document.ready - typeof generateXMLWithSchema:", typeof generateXMLWithSchema, "typeof refreshXMLPreview:", typeof refreshXMLPreview);
+    debugLog("DEBUG: document.ready - Scripts loaded from:", Object.keys(window).filter((k) => k.endsWith(".html")).join(", "));
+    if (typeof populateForms === "function") {
+      window.populateForms = populateForms;
+      debugLog("DEBUG: document.ready - populateForms made globally available");
+    } else {
+      debugWarn("DEBUG: document.ready - populateForms function not found");
+    }
+    debugLog("DEBUG: document.ready - Running XMLFunctions debug check...");
+    window.debugXMLFunctionsStatus();
+    initNavigation();
+    wireXmlLiveSnippetResizeObserver();
+    initPlatformHandlers([]);
+    google.script.run.withSuccessHandler(initSensorHandlers).getSensors();
+    ensureValidationSystemsInitialized();
+    const restoredSession = restoreFormData();
+    if (restoredSession) {
+      showRestoredSessionBanner();
+    }
+    initSessionAutoSave();
+    $("#searchRorBtn").on("click", performRorSearch);
+    $("#organization").on("input", function() {
+      renderCitationPreview();
+    });
+    $("#rorOrgSearch").on("keypress", function(e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        performRorSearch();
+      }
+    });
+    $("#rorOrgResults").on("click", ".ror-result-item", function() {
+      const idx = parseInt($(this).data("ror-index"), 10);
+      const result = metadataLookupState.rorResults[idx];
+      selectRorOrganization(result);
+    });
+    $(document).on("click", ".gcmd-facet-search-btn", function() {
+      const scheme = String($(this).attr("data-gcmd-scheme") || "").trim();
+      performGcmdFacetSearch(scheme);
+    });
+    $(document).on("keypress", ".gcmd-facet-search-input", function(e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const scheme = String($(this).attr("data-gcmd-scheme") || "").trim();
+        performGcmdFacetSearch(scheme);
+      }
+    });
+    $(document).on("click", ".gcmd-result-item", function() {
+      const idx = parseInt($(this).attr("data-gcmd-index"), 10);
+      const ctx = String($(this).attr("data-gcmd-context") || "sciencekeywords");
+      const pool = GCMD_FACET_SCHEMES.includes(ctx) ? metadataLookupState.gcmdFacetResults[ctx] || [] : [];
+      const result = pool[idx];
+      addGcmdKeyword(result);
+    });
+    $("#suggestGcmdFromAbstractBtn").on("click", suggestGcmdFromAbstract);
+    $(document).on("click", ".suggest-sensor-gcmd-btn", function() {
+      const sid = String($(this).attr("data-sensor-dom-id") || "").trim();
+      if (!sid) return;
+      suggestGcmdFromSensorCard(sid);
+    });
+    $(document).on("click", ".sensor-gcmd-result-item", function() {
+      const sid = String($(this).attr("data-sensor-dom-id") || "").trim();
+      const idx = parseInt($(this).attr("data-gcmd-index"), 10);
+      const pool = metadataLookupState.sensorCardGcmdResults[sid];
+      if (!pool || !pool[idx]) return;
+      addGcmdKeyword(pool[idx]);
+      showToast("success", "Added: ".concat(pool[idx].prefLabel || "GCMD keyword"));
+    });
+    $("#selectedGcmdKeywords").on("click", ".remove-gcmd-keyword", function() {
+      const uuid = String($(this).data("gcmd-uuid") || "");
+      removeGcmdKeyword(uuid);
+    });
+    renderSelectedRor();
+    renderSelectedGcmdKeywords();
+    renderCitationPreview();
+    if (window.liveValidator) {
+      debugLog("DEBUG: document.ready - LiveValidator initialized");
+    }
+    if (window.errorRecovery) {
+      debugLog("DEBUG: document.ready - ErrorRecoverySystem initialized");
+    }
+    if (typeof initializeSchemaSupport !== "undefined") {
+      initializeSchemaSupport();
+      debugLog("DEBUG: document.ready - initializeSchemaSupport completed");
+    }
+    if (!$("#validationSummary").length) {
+      $(".header").append('<div id="validationSummary" class="ms-3"></div>');
+    }
+    const debouncedSave = debounce(collectFormData, 500);
+    $("#missionForm, #platformForm, #sensorsForm, #spatialForm, #outputForm").on("input change", function() {
+      debouncedSave();
+    });
+    showLoading(true);
+    if (isOnline()) {
+      google.script.run.withSuccessHandler(function(platforms) {
+        saveToCache("platforms", platforms);
+        initPlatformHandlers(platforms || []);
+        updatePlatformOptions(platforms);
+      }).withFailureHandler(function(e) {
+        const cachedPlatforms = loadFromCache("platforms");
+        if (cachedPlatforms) {
+          initPlatformHandlers(cachedPlatforms);
+          updatePlatformOptions(cachedPlatforms);
+          showToast("warning", "Offline: Loaded cached platforms");
+        } else {
+          initPlatformHandlers([]);
+          showToast("error", "Failed to load platforms: " + e.message);
+        }
+      }).getPlatforms();
+      google.script.run.withSuccessHandler(function(sensors) {
+        saveToCache("sensors", sensors);
+        updateSensorOptions(sensors);
+      }).withFailureHandler(function(e) {
+        const cachedSensors = loadFromCache("sensors");
+        if (cachedSensors) {
+          updateSensorOptions(cachedSensors);
+          showToast("warning", "Offline: Loaded cached sensors");
+        } else {
+          showToast("error", "Failed to load sensors: " + e.message);
+        }
+      }).getSensors();
+      google.script.run.withSuccessHandler(function(templates) {
+        debugLog("DEBUG: document.ready - Templates loaded:", templates);
+        saveToCache("templates", templates);
+        const $select = $("#templateSelect");
+        if ($select.length) {
+          $select.empty().append('<option value="">-- Select Template --</option>');
+          if (templates && Array.isArray(templates)) {
+            templates.forEach((template) => {
+              if (template && template.name) {
+                $select.append('<option value="'.concat(escapeXml(template.name), '">').concat(escapeXml(template.name), " (").concat(escapeXml(template.category || "custom"), ")</option>"));
+              }
+            });
+          }
+        }
+        showLoading(false);
+      }).withFailureHandler(function(e) {
+        console.error("DEBUG: document.ready - Template load error:", e);
+        const cachedTemplates = loadFromCache("templates");
+        if (cachedTemplates && Array.isArray(cachedTemplates)) {
+          const $select = $("#templateSelect");
+          if ($select.length) {
+            $select.empty().append('<option value="">-- Select Template --</option>');
+            cachedTemplates.forEach((template) => {
+              if (template && template.name) {
+                $select.append('<option value="'.concat(escapeXml(template.name), '">').concat(escapeXml(template.name), " (").concat(escapeXml(template.category || "custom"), ")</option>"));
+              }
+            });
+            showToast("warning", "Offline: Loaded cached templates");
+          }
+        } else {
+          showToast("error", "Failed to load templates: " + e.message);
+        }
+        showLoading(false);
+      }).getTemplates();
+    } else {
+      const cachedPlatforms = loadFromCache("platforms");
+      if (cachedPlatforms) {
+        updatePlatformOptions(cachedPlatforms);
+      }
+      const cachedSensors = loadFromCache("sensors");
+      if (cachedSensors) {
+        updateSensorOptions(cachedSensors);
+      }
+      const cachedTemplates = loadFromCache("templates");
+      if (cachedTemplates && Array.isArray(cachedTemplates)) {
+        const $select = $("#templateSelect");
+        if ($select.length) {
+          $select.empty().append('<option value="">-- Select Template --</option>');
+          cachedTemplates.forEach((template) => {
+            if (template && template.name) {
+              $select.append('<option value="'.concat(escapeXml(template.name), '">').concat(escapeXml(template.name), " (").concat(escapeXml(template.category || "custom"), ")</option>"));
+            }
+          });
+        }
+      }
+      showToast("warning", "Offline: Loaded cached data");
+      showLoading(false);
+    }
+    $("#spatialForm input").on("change input keyup", function() {
+      debugLog("DEBUG: document.ready - Spatial form input changed:", this.id, "value:", this.value);
+      clearTimeout(window.mapUpdateTimeout);
+      window.mapUpdateTimeout = setTimeout(() => {
+        updateMap();
+        debugLog("DEBUG: document.ready - Map updated after spatial input change");
+      }, 300);
+    });
+    $("#hasTrajectory").change(function() {
+      debugLog("DEBUG: document.ready - hasTrajectory changed, checked:", this.checked);
+      const $trajectorySection = $("#trajectorySection");
+      if ($trajectorySection.length) {
+        $trajectorySection.toggle(this.checked);
+      }
+      validateStepSync(4);
+    });
+    $("#useGridRepresentation").change(function() {
+      const $sec = $("#gridMetadataSection");
+      if ($sec.length) {
+        $sec.toggle(this.checked);
+      }
+      validateStepSync(4);
+    });
+    $("#templateSelect").change(function() {
+      const templateName = $(this).val();
+      if (!templateName) return;
+      debugLog("DEBUG: document.ready - Loading template:", templateName);
+      showLoading(true);
+      google.script.run.withSuccessHandler(function(template) {
+        if (template && template.data) {
+          const clientFormData = normalizeDataForClientForm(template.data);
+          debugLog("DEBUG: document.ready - Template data mapped for client form:", {
+            missionId: clientFormData.mission.missionId,
+            missionTitle: clientFormData.mission.missionTitle,
+            platformId: clientFormData.platform.platformId
+          });
+          populateForms(clientFormData);
+          syncFormsAndStepsAfterBulkLoad(1);
+          showToast("success", "Template loaded successfully");
+        } else {
+          showToast("error", "Template data not found");
+        }
+        showLoading(false);
+      }).withFailureHandler(function(e) {
+        console.error("DEBUG: document.ready - Template load error:", e);
+        const cachedTemplates = loadFromCache("templates");
+        if (cachedTemplates) {
+          const template = cachedTemplates.find((t) => t.name === templateName);
+          if (template && template.data) {
+            const clientFormData = normalizeDataForClientForm(template.data);
+            populateForms(clientFormData);
+            syncFormsAndStepsAfterBulkLoad(1);
+            showToast("warning", "Offline: Loaded cached template");
+          } else {
+            showToast("error", "Offline: Template not found in cache");
+          }
+        } else {
+          showToast("error", "Failed to load template: " + e.message);
+        }
+        showLoading(false);
+      }).getTemplate(templateName);
+    });
+    $("#importXml").on("change", function(e) {
+      var _a, _b;
+      const file = (_b = (_a = e == null ? void 0 : e.target) == null ? void 0 : _a.files) == null ? void 0 : _b[0];
+      handleXMLImport(file);
+      $(this).val("");
+    });
+    window.addEventListener("online", function() {
+      showToast("success", "Back online! Refreshing data...");
+      location.reload();
+    });
+    window.addEventListener("offline", function() {
+      showToast("warning", "You are now offline. Working with cached data.");
+    });
+    $("#confirmSaveTemplate").click(function() {
+      const templateName = $("#newTemplateName").val().trim();
+      const templateCategory = $("#newTemplateCategory").val();
+      if (!templateName) {
+        showToast("error", "Please enter a template name");
+        $("#newTemplateName").addClass("is-invalid");
+        $("#newTemplateNameError").text("Template name is required");
+        return;
+      }
+      if (templateName.length < 3) {
+        showToast("error", "Template name must be at least 3 characters long");
+        $("#newTemplateName").addClass("is-invalid");
+        $("#newTemplateNameError").text("Template name must be at least 3 characters long");
+        return;
+      }
+      $("#newTemplateName").removeClass("is-invalid");
+      $("#newTemplateNameError").text("");
+      debugLog("DEBUG: document.ready - Saving template:", templateName);
+      const rawFormData = collectFormData();
+      const mappedFormData = {
+        mission: {
+          ...rawFormData.mission,
+          id: rawFormData.mission.missionId,
+          // Map missionId to id
+          title: rawFormData.mission.missionTitle
+          // Map missionTitle to title
+        },
+        platform: {
+          ...rawFormData.platform,
+          id: rawFormData.platform.platformId
+          // Map platformId to id
+        },
+        sensors: rawFormData.sensors,
+        spatial: rawFormData.spatial,
+        output: rawFormData.output
+      };
+      const template = {
+        name: templateName,
+        category: templateCategory || "custom",
+        data: mappedFormData
+      };
+      debugLog("DEBUG: document.ready - Template data mapped for server storage:", {
+        missionId: mappedFormData.mission.missionId,
+        missionTitle: mappedFormData.mission.title,
+        platformId: mappedFormData.platform.id
+      });
+      showLoading(true);
+      google.script.run.withSuccessHandler(function(templates) {
+        saveToCache("templates", templates);
+        const $select = $("#templateSelect");
+        if ($select.length) {
+          $select.empty().append('<option value="">-- Select Template --</option>');
+          templates.forEach((t) => {
+            if (t && t.name) {
+              $select.append('<option value="'.concat(escapeXml(t.name), '">').concat(escapeXml(t.name), " (").concat(escapeXml(t.category || "custom"), ")</option>"));
+            }
+          });
+        }
+        showToast("success", "Template saved successfully");
+        showLoading(false);
+      }).withFailureHandler(function(e) {
+        console.error("DEBUG: document.ready - Save template error:", e);
+        showToast("error", "Failed to save template: " + e.message);
+        showLoading(false);
+      }).saveTemplate(template);
+    });
+    $("#deleteTemplateBtn").click(function() {
+      const templateName = $("#templateSelect").val();
+      if (!templateName) {
+        showToast("error", "Please select a template to delete");
+        return;
+      }
+      debugLog("DEBUG: document.ready - Deleting template:", templateName);
+      showLoading(true);
+      google.script.run.withSuccessHandler(function(templates) {
+        saveToCache("templates", templates);
+        const $select = $("#templateSelect");
+        if ($select.length) {
+          $select.empty().append('<option value="">-- Select Template --</option>');
+          templates.forEach((t) => {
+            if (t && t.name) {
+              $select.append('<option value="'.concat(escapeXml(t.name), '">').concat(escapeXml(t.name), " (").concat(escapeXml(t.category || "custom"), ")</option>"));
+            }
+          });
+        }
+        showToast("success", "Template deleted successfully");
+        showLoading(false);
+      }).withFailureHandler(function(e) {
+        console.error("DEBUG: document.ready - Delete template error:", e);
+        showToast("error", "Failed to delete template: " + e.message);
+        showLoading(false);
+      }).deleteTemplate(templateName);
+    });
+    $("#generateBtn").off("click.generate").on("click.generate", async function() {
+      debugLog("DEBUG: document.ready - Generate button clicked");
+      try {
+        if (typeof google === "undefined" || !google.script || !google.script.run) {
+          console.error("DEBUG: Not running in Google Apps Script environment");
+          showToast("error", "Export only works in Google Apps Script environment");
+          return;
+        }
+        const data = collectFormData();
+        debugLog("DEBUG: Form data collected:", data);
+        showLoading(true);
+        const validationLevel = $("#validationLevel").val() || $("#outputValidationLevel").val() || "strict";
+        const validation = await runAppsScript("validateFormDataWithRules", data, validationLevel);
+        if (!validation.valid) {
+          showToast("error", "Cannot generate metadata: ".concat(validation.errors.length, " validation error").concat(validation.errors.length !== 1 ? "s" : ""));
+          updateValidationUI(validation);
+          return;
+        }
+        const outputFormat = $("#outputFormat").val() || "xml";
+        const schema = $("#metadataSchema").val() || "iso19115-2";
+        const outputLocation = normalizeOutputLocation($("#outputLocation").val());
+        const filenameBase = data.mission.missionId ? String(data.mission.missionId).replace(/[^a-z0-9_.-]/gi, "_") : "metadata";
+        let content;
+        let filename;
+        let mimeType;
+        let saveFunctionName;
+        let successMessage;
+        if (outputFormat === "xml") {
+          content = await runAppsScript("generateXML", data, schema);
+          const schemaPrefix = "ISO2_";
+          filename = "".concat(schemaPrefix).concat(filenameBase, ".xml");
+          mimeType = "application/xml";
+          saveFunctionName = "saveXmlToDrive";
+          successMessage = "XML";
+        } else if (outputFormat === "json") {
+          content = await runAppsScript("generateJSON", data);
+          filename = "".concat(filenameBase, ".json");
+          mimeType = "application/json";
+          saveFunctionName = "saveJsonToDrive";
+          successMessage = "JSON";
+        } else if (outputFormat === "geojson") {
+          content = await runAppsScript("generateGeoJSON", data);
+          filename = "".concat(filenameBase, ".geojson");
+          mimeType = "application/geo+json";
+          saveFunctionName = "saveJsonToDrive";
+          successMessage = "GeoJSON";
+        } else if (outputFormat === "dcat-jsonld") {
+          content = await runAppsScript("generateDCATJsonLd", data);
+          filename = "".concat(filenameBase, ".jsonld");
+          mimeType = "application/ld+json";
+          saveFunctionName = "saveJsonToDrive";
+          successMessage = "DCAT JSON-LD";
+        } else if (outputFormat === "csv") {
+          content = await runAppsScript("generateCSV", data);
+          filename = "".concat(filenameBase, ".csv");
+          mimeType = "text/csv";
+          saveFunctionName = "saveCsvToDrive";
+          successMessage = "CSV";
+        } else {
+          showToast("error", "Unsupported output format: " + outputFormat);
+          return;
+        }
+        if (outputLocation === "download") {
+          downloadContent(content, mimeType, filename);
+          showToast("success", "".concat(successMessage, " downloaded successfully"));
+        } else {
+          const response = await runAppsScript(saveFunctionName, content, filename);
+          showToast("success", "".concat(successMessage, " saved to Google Drive. File ID: ").concat(response.fileId));
+        }
+      } catch (e) {
+        console.error("DEBUG: document.ready - Generate button error:", e);
+        showToast("error", "Failed to generate metadata: " + e.message);
+      } finally {
+        showLoading(false);
+      }
+    });
+    $("#validationLevel").on("change", function() {
+      const level = $(this).val() || "basic";
+      const $outputValidationLevel = $("#outputValidationLevel");
+      if ($outputValidationLevel.length) {
+        $outputValidationLevel.val(level);
+      }
+      debugLog("DEBUG: document.ready - Validation level changed, refreshing preview");
+      FormEvents.emit("changed");
+    });
+    $("#outputValidationLevel").on("change", function() {
+      const level = $(this).val() || "basic";
+      const $previewValidationLevel = $("#validationLevel");
+      if ($previewValidationLevel.length) {
+        $previewValidationLevel.val(level);
+      }
+      debugLog("DEBUG: document.ready - Output validation level changed, refreshing preview");
+      FormEvents.emit("changed");
+    });
+    handleMetadataSchemaChange($("#metadataSchema").val(), { refreshPreview: false, validateStep5: false });
+    const $outputLocation = $("#outputLocation");
+    if ($outputLocation.length) {
+      $outputLocation.val(normalizeOutputLocation($outputLocation.val()));
+    }
+    $("#exportXml").click(() => {
+      debugLog("DEBUG: Scripts - Export button clicked");
+      debugLog("DEBUG: Export - jQuery version:", $.fn.jquery);
+      debugLog("DEBUG: Export - Generate button exists:", $("#generateBtn").length > 0);
+      debugLog("DEBUG: Export - collectFormData exists:", typeof collectFormData);
+      debugLog("DEBUG: Export - showToast exists:", typeof showToast);
+      debugLog("DEBUG: Export - Google Script available:", typeof google !== "undefined" && typeof google.script !== "undefined");
+      try {
+        if (typeof collectFormData === "function") {
+          const testData = collectFormData();
+          debugLog("DEBUG: Export - Form data collected successfully:", !!testData);
+          if (!testData || !testData.mission || !testData.mission.missionId || testData.mission.missionId.trim() === "") {
+            debugLog("DEBUG: Export - Mission data check failed:", {
+              hasTestData: !!testData,
+              hasMission: !!(testData && testData.mission),
+              missionIdValue: testData && testData.mission && testData.mission.missionId,
+              missionIdTrimmed: testData && testData.mission && testData.mission.missionId ? testData.mission.missionId.trim() : "no value",
+              allMissionKeys: testData && testData.mission ? Object.keys(testData.mission) : "no mission"
+            });
+            showToast("error", "Please fill in the Mission ID before exporting");
+            return;
+          }
+          debugLog("DEBUG: Export - Mission ID validation passed:", testData.mission.missionId);
+        } else {
+          showToast("error", "Export failed: Form data collection not available");
+          return;
+        }
+      } catch (e) {
+        showToast("error", "Export failed: Error collecting form data - " + e.message);
+        return;
+      }
+      const generateBtn = $("#generateBtn");
+      if (generateBtn.length === 0) {
+        console.error("DEBUG: Scripts - Generate button not found!");
+        showToast("error", "Export failed: Generate button not found");
+        return;
+      }
+      debugLog("DEBUG: Scripts - All checks passed, triggering generate button");
+      generateBtn.click();
+    });
+    window.debugExport = function() {
+      console.log("=== EXPORT DEBUG ===");
+      console.log("jQuery available:", typeof $ !== "undefined");
+      console.log("collectFormData function:", typeof collectFormData);
+      console.log("showToast function:", typeof showToast);
+      console.log("Google Apps Script:", typeof google !== "undefined" && typeof google.script !== "undefined");
+      console.log("Generate button found:", $("#generateBtn").length > 0);
+      console.log("Export button found:", $("#exportXml").length > 0);
+      try {
+        const testData = collectFormData();
+        console.log("Form data collection test:", !!testData);
+        console.log("Mission ID present:", !!(testData && testData.mission && testData.mission.missionId));
+        if (testData && testData.mission) {
+          console.log("Mission ID value:", testData.mission.missionId);
+          console.log("All mission fields:", Object.keys(testData.mission));
+        }
+      } catch (e) {
+        console.error("Form data collection error:", e);
+      }
+      console.log("=== END DEBUG ===");
+      return "Debug complete - check console output above";
+    };
+    debugLog("DEBUG: document.ready - Initialization complete at:", (/* @__PURE__ */ new Date()).toISOString());
+    console.log("INFO: To debug export issues, run: debugExport() in the console");
+    initFormEventBus();
+    if (!window._postInitDiagnosticsRan) {
+      window._postInitDiagnosticsRan = true;
+      setTimeout(function() {
+        diagnoseXMLFunctions();
+        initRealTimeXMLUpdates();
+        FormEvents.emit("changed");
+      }, 2e3);
+    }
+  } catch (e) {
+    console.error("DEBUG: document.ready - Error:", e);
+    showToast("error", "Initialization error: " + e.message);
+  }
+});
+function diagnoseXMLFunctions() {
+  console.log("=== XMLFunctions DIAGNOSTIC ===");
+  console.log("XMLFunctions.html loaded:", typeof generateXMLWithSchema !== "undefined" && typeof refreshXMLPreview !== "undefined");
+  console.log("generateXMLWithSchema available:", typeof generateXMLWithSchema);
+  console.log("refreshXMLPreview available:", typeof refreshXMLPreview);
+  console.log("formatXML available:", typeof formatXML);
+  console.log("syntaxHighlight available:", typeof syntaxHighlight);
+  console.log("validateXML available:", typeof validateXML);
+  if (window.XMLFunctionsLoaded === true) {
+    console.log("\u2705 XMLFunctions.html loaded successfully");
+  } else {
+    console.log("\u274C XMLFunctions.html loading indicator not found");
+  }
+  if (typeof generateXMLWithSchema === "undefined" || typeof refreshXMLPreview === "undefined") {
+    console.error("CRITICAL: XMLFunctions.html is not loading properly!");
+    console.log("Possible causes:");
+    console.log("1. XMLFunctions.html not uploaded to Google Apps Script project");
+    console.log("2. Syntax error in XMLFunctions.html preventing loading");
+    console.log("3. Include statement issue in Index.html");
+    console.log("4. File uploaded but functions not exposed globally");
+    console.log("Creating fallback functions...");
+    createFallbackXMLFunctions();
+  } else {
+    console.log("\u2705 All XMLFunctions available - binding events");
+    const formData = collectFormData();
+    if (formData && formData.mission && formData.mission.missionId) {
+      debugLog("DEBUG: Form has data, triggering initial XML preview");
+      FormEvents.emit("changed");
+    }
+  }
+}
+function createFallbackXMLFunctions() {
+  if (typeof generateXMLWithSchema === "undefined") {
+    window.generateXMLWithSchema = function(data, schema) {
+      debugLog("DEBUG: Fallback generateXMLWithSchema called");
+      return new Promise((resolve, reject) => {
+        google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).generateXMLWithSchema(data, schema);
+      });
+    };
+  }
+  if (typeof refreshXMLPreview === "undefined") {
+    window.refreshXMLPreview = function(options) {
+      const opts = options && typeof options === "object" ? options : {};
+      const quiet = !!opts.quiet;
+      debugLog("DEBUG: Fallback refreshXMLPreview called");
+      const data = collectFormData();
+      const schema = $("#metadataSchema").val() || "iso19115-2";
+
+      const validationLevel =
+        typeof window.getValidationLevel === "function"
+          ? window.getValidationLevel()
+          : $("#validationLevel").val() || "strict";
+
+      window.__xmlPreviewEpoch = (window.__xmlPreviewEpoch || 0) + 1;
+      const previewEpoch = window.__xmlPreviewEpoch;
+
+      if (!quiet) {
+        showLoading(true);
+      } else if ($("#xmlPreviewSnippet").length) {
+        $("#xmlPreviewSnippet").attr("aria-busy", "true");
+      }
+      window.__xmlPreviewRequestInFlight = true;
+      google.script.run.withSuccessHandler(function(result) {
+        window.__xmlPreviewRequestInFlight = false;
+        if (!quiet) {
+          showLoading(false);
+        } else if ($("#xmlPreviewSnippet").length) {
+          $("#xmlPreviewSnippet").attr("aria-busy", "false");
+        }
+        if (previewEpoch !== window.__xmlPreviewEpoch) {
+          return;
+        }
+        result = result || {};
+        if (result && result.success && result.xml) {
+          const formattedXml = formatXMLBasic(result.xml);
+          if (typeof window.finalizeXmlPreviewFromServer === "function") {
+            window.finalizeXmlPreviewFromServer(
+              formattedXml,
+              result.validation,
+              validationLevel,
+              previewEpoch,
+              result.xmlValidation
+            );
+          } else {
+            const xmlLines = formattedXml.split("\n").filter((line) => line.trim() !== "");
+            const snippetLines = xmlLines.slice(0, 15);
+            renderXmlPreviewSafe(snippetLines.join("\n"), formattedXml);
+          }
+          debugLog("DEBUG: Fallback refreshXMLPreview - XML preview updated");
+        } else if (!result.success) {
+          if (typeof updateValidationResults === "function" && result.validation) {
+            updateValidationResults(result.validation);
+          }
+          const $sn = $("#xmlPreviewSnippet");
+          const $fu = $("#xmlPreviewFull");
+          if ($sn.length) {
+            $sn.removeClass("xml-preview-lines xml-preview-glass-inner").html(
+              '<div class="xml-preview-placeholder px-3 py-2 text-muted small">' +
+                '<p class="mb-1">Form validation must pass before a new XML preview is generated.</p>' +
+                '<p class="mb-0">Use the <strong>Issues</strong> tab for details. After fixing required fields, the preview updates automatically.</p>' +
+                "</div>"
+            );
+          }
+          if ($fu.length) {
+            const lastFull = typeof window.__lastFullXmlForView === "string" ? window.__lastFullXmlForView : "";
+            if (lastFull && lastFull.length > 0) {
+              window.__xmlFullPreviewStale = true;
+            } else {
+              $fu.empty().removeClass("xml-preview-lines xml-preview-glass-inner");
+            }
+          }
+        }
+      }).withFailureHandler(function(e) {
+        window.__xmlPreviewRequestInFlight = false;
+        console.error("DEBUG: Fallback refreshXMLPreview - Error:", e);
+        if (!quiet) {
+          showLoading(false);
+        } else if ($("#xmlPreviewSnippet").length) {
+          $("#xmlPreviewSnippet").attr("aria-busy", "false");
+        }
+        if (previewEpoch !== window.__xmlPreviewEpoch) {
+          return;
+        }
+        const safeMessage = "Failed to generate XML preview: " + ((e == null ? void 0 : e.message) || e);
+        renderXmlPreviewSafe(safeMessage, safeMessage, { isError: true });
+      }).refreshXMLPreviewWithValidation(data, validationLevel);
+    };
+  }
+  if (typeof formatXML === "undefined") {
+    window.formatXML = function(xml) {
+      return String(xml || "").replace(/></g, ">\n<").replace(/^\s+|\s+$/g, "");
+    };
+    window.formatXMLBasic = window.formatXML;
+  } else {
+    window.formatXMLBasic = formatXML;
+  }
+  if (typeof syntaxHighlight === "undefined") {
+    window.syntaxHighlight = function(xml) {
+      return typeof escapeXml === "function" ? escapeXml(xml) : String(xml || "");
+    };
+    window.syntaxHighlightBasic = window.syntaxHighlight;
+  } else {
+    window.syntaxHighlightBasic = syntaxHighlight;
+  }
+  window.populateForms = populateForms;
+  console.log("Fallback functions created successfully");
+}
+function initRealTimeXMLUpdates() {
+  debugLog("DEBUG: initRealTimeXMLUpdates - Setting up real-time XML updates");
+  if (window._realTimeXmlUpdatesInitialized) {
+    debugLog("DEBUG: initRealTimeXMLUpdates - Already initialized, skipping duplicate bind");
+    return;
+  }
+  $(document).off("input.realtimeXml change.realtimeXml", "input, select, textarea");
+  $(document).on("input.realtimeXml change.realtimeXml", "input, select, textarea", function() {
+    const fieldName = $(this).attr("name") || $(this).attr("id");
+    debugLog("DEBUG: Form field changed:", fieldName);
+    FormEvents.emit("changed");
+  });
+  window._realTimeXmlUpdatesInitialized = true;
+  debugLog("DEBUG: initRealTimeXMLUpdates - Real-time XML updates initialized");
+}
+
+</script>
