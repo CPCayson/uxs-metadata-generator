@@ -14,6 +14,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { pilotModeToValidationEngineLevel, pilotStateToLegacyFormData } from '../../lib/pilotToLegacyFormData.js'
 import { mapPlatformRowToPilotPatch, mapPilotPlatformToSavePlatform, platformRowKey } from '../../lib/platformSheetMapping.js'
 import { pushPilotDebug } from '../../lib/pilotDebugLog.js'
+import { emitPilotAuditEvent } from '../../lib/pilotAuditEvents.js'
 
 const PILOT_DRAFT_TEMPLATE = 'react-pilot-mission-draft'
 
@@ -71,6 +72,12 @@ export function useMissionActions({
       setDraftStatus({ timestamp: new Date().toISOString(), source: 'saved' })
       setStatusMessage('Full pilot draft saved to the database.')
       pushPilotDebug({ kind: 'saveDraft', ok: true })
+      emitPilotAuditEvent({
+        profileId: profile.id,
+        action: 'saveDraft',
+        result: 'ok',
+        mode: pilotState?.mode,
+      })
     } catch (error) {
       const msg = error instanceof Error ? error.message : String(error)
       setStatusMessage(`Draft save failed: ${msg}`)
@@ -108,6 +115,12 @@ export function useMissionActions({
       })
       setStatusMessage('Pilot draft loaded from the database.')
       pushPilotDebug({ kind: 'loadDraft', ok: true })
+      emitPilotAuditEvent({
+        profileId: profile.id,
+        action: 'loadDraft',
+        result: 'ok',
+        mode: cleanState?.mode,
+      })
     } catch (error) {
       const msg = error instanceof Error ? error.message : String(error)
       setStatusMessage(`Draft load failed: ${msg}`)

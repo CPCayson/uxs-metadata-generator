@@ -33,9 +33,8 @@ export default function StepSpatial({
   return (
     <>
       <p className="card-intro">
-        CRS, geographic extent, vertical range, grid representation, trajectory, and positional accuracy — same
-        step as the classic <code>#spatialForm</code> (see <code>METADATA_FIELD_MAP.md</code> §7). W/E/S/N and vertical
-        min/max are stored on <code>mission.*</code> for generator parity.
+        <strong>Where and how the data are georeferenced</strong>: bbox and vertical range on <code>mission.*</code>;
+        CRS, grid, trajectory, and quality on <code>spatial.*</code>.
       </p>
 
       <section className="panel">

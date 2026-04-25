@@ -29,8 +29,8 @@ export default function StepDistribution({
   return (
     <>
       <p className="card-intro">
-        Distribution and export settings — canonical paths live on <code>distribution.*</code>, in the same scope as
-        the historical HTML wizard <code>#outputForm</code> (see §5 of <code>METADATA_FIELD_MAP.md</code>).
+        <strong>How the dataset is distributed</strong>: format, license, download and landing links, NCEI contact
+        defaults, and optional save-as-template.
       </p>
 
       <section className="panel">

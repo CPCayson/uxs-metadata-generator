@@ -9,6 +9,7 @@ import { useCallback } from 'react'
  *   touched: Record<string, boolean>,
  *   showAllErrors: boolean,
  * }} params
+ * When `showAllErrors` is true, every field with an issue shows its message (same issues as the validator list).
  *
  * @returns {{
  *   show: (field: string) => string,

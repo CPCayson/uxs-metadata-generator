@@ -21,7 +21,7 @@
  * @module core/registry/FieldRegistry
  */
 
-import { scrollToPilotField } from '../../lib/pilotFieldAnchors.js'
+import { scrollToPilotField, selectorForPilotField } from '../../lib/pilotFieldAnchors.js'
 
 /**
  * @typedef {{
@@ -103,26 +103,48 @@ export function clearFields() {
  * @param {string} fieldPath  e.g. 'mission.fileId' or 'identification.title'
  * @returns {boolean}  true if an element was found and scrolled to
  */
-export function scrollToField(fieldPath) {
-  if (!fieldPath) return false
+/**
+ * Return the first DOM node associated with a pilot field (for focus rings / lens).
+ * Resolution order matches {@link scrollToField}.
+ *
+ * @param {string} fieldPath
+ * @returns {HTMLElement | null}
+ */
+export function getFieldElementForPilot(fieldPath) {
+  if (!fieldPath) return null
 
-  // 1. Try data-attribute selector (works for any profile/step that sets it)
   const dataAttr = `[data-pilot-field="${cssEscape(fieldPath)}"]`
   const byData = document.querySelector(dataAttr)
-  if (byData instanceof HTMLElement) {
-    return focusAndScroll(byData)
-  }
+  if (byData instanceof HTMLElement) return byData
 
-  // 2. Try explicit elementId from registered descriptor
   const desc = registry.get(fieldPath)
   if (desc?.elementId) {
     const byId = document.getElementById(desc.elementId)
-    if (byId instanceof HTMLElement) {
-      return focusAndScroll(byId)
-    }
+    if (byId instanceof HTMLElement) return byId
   }
 
-  // 3. Fallback: pilotFieldAnchors.js legacy lookup
+  const sel = selectorForPilotField(fieldPath)
+  if (!sel) return null
+  for (const part of sel.split(',')) {
+    try {
+      const p = part.trim()
+      if (!p) continue
+      const el = document.querySelector(p)
+      if (el instanceof HTMLElement) return el
+    } catch {
+      // invalid selector fragment
+    }
+  }
+  return null
+}
+
+export function scrollToField(fieldPath) {
+  if (!fieldPath) return false
+
+  const el = getFieldElementForPilot(fieldPath)
+  if (el) return focusAndScroll(el)
+
+  // Last resort: legacy scan may use multi-part logic not duplicated above
   return scrollToPilotField(fieldPath)
 }
 

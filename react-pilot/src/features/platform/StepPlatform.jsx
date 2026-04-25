@@ -42,8 +42,8 @@ export default function StepPlatform({
   return (
     <>
       <p className="card-intro">
-        Platform record — canonical <code>platform.*</code> (identification, dimensions, power, deployment), aligned with the
-        historical HTML wizard <code>#platformForm</code> field map for XML parity.
+        <strong>Platform identity and specs</strong> (type, ID, description, physical and operational attributes). Drives
+        platform keywords and acquisition XML.
       </p>
 
       <section className="panel">

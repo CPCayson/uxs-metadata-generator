@@ -936,6 +936,7 @@ function otherConstraintsHasAnchor(oc) {
  *   citeAs: string,
  *   otherCiteAs: string,
  *   accessConstraints: string,
+ *   accessConstraintsCode: string,
  *   distributionLiability: string,
  *   dataLicensePreset: string,
  *   licenseUrl: string,
@@ -946,6 +947,7 @@ function parseResourceConstraintsForMission(dataId) {
     citeAs: '',
     otherCiteAs: '',
     accessConstraints: '',
+    accessConstraintsCode: '',
     distributionLiability: '',
     dataLicensePreset: '',
     licenseUrl: '',
@@ -958,7 +960,10 @@ function parseResourceConstraintsForMission(dataId) {
       const ac = childNS(legal, NS.gmd, 'accessConstraints')
       if (ac) {
         const code = childNS(ac, NS.gmd, 'MD_RestrictionCode')
-        out.accessConstraints = txt(code) || gcoCharacterString(ac)
+        if (code) {
+          out.accessConstraintsCode = code.getAttribute('codeListValue') || ''
+          out.accessConstraints = txt(code) || ''
+        }
       }
       out.citeAs = gcoCharacterString(childNS(legal, NS.gmd, 'useLimitation'))
       const proseOthers = []
@@ -1304,6 +1309,7 @@ export function importPilotPartialStateFromXml(xmlString) {
     citeAs: legal.citeAs,
     otherCiteAs: legal.otherCiteAs,
     accessConstraints: legal.accessConstraints,
+    ...(legal.accessConstraintsCode ? { accessConstraintsCode: legal.accessConstraintsCode } : {}),
     distributionLiability: legal.distributionLiability,
     ...ag,
     ...citeParties,

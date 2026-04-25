@@ -14,7 +14,7 @@
  */
 
 import { normalizeMissionInstantString } from '../../lib/datetimeLocal.js'
-import { normalizeNceiAccessionToken, sensorRowIsInactive } from '../../lib/pilotValidation.js'
+import { collectGcmdKeywordUuidWarnings, normalizeNceiAccessionToken, sensorRowIsInactive } from '../../lib/pilotValidation.js'
 
 // ---- primitive validators (mirrored from pilotValidation.js) ----
 
@@ -83,6 +83,57 @@ const KW_LABELS = {
 const KW_FACETS = ['sciencekeywords', 'datacenters', 'platforms', 'instruments', 'locations', 'projects', 'providers']
 
 const KW_XPATH = '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords'
+const ABSTRACT_XPATH = '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract'
+const COMMON_ABSTRACT_ACRONYMS = new Set(['ADCP', 'AUV', 'CTD', 'GCMD', 'ISO', 'NCEI', 'NOAA', 'REMUS', 'ROV', 'UUV'])
+
+function abstractQualityIssues(state) {
+  const m = state?.mission || {}
+  const p = state?.platform || {}
+  const sensors = Array.isArray(state?.sensors) ? state.sensors : []
+  const abstract = String(m.abstract || '').trim()
+  if (!abstract) return []
+  const issues = []
+  if (abstract.length < 120) {
+    issues.push({
+      severity: 'w',
+      field:    'mission.abstract',
+      message:  'Abstract is short; include objective, platform/sensor, area, dates, and data product.',
+      xpath:    ABSTRACT_XPATH,
+    })
+  }
+  const lower = abstract.toLowerCase()
+  const contextTokens = [
+    p.platformId,
+    p.platformName,
+    p.model,
+    ...sensors.flatMap((s) => [s?.sensorId, s?.modelId, s?.variable]),
+  ]
+    .map((v) => String(v || '').trim())
+    .filter((v) => v.length >= 3)
+  if (contextTokens.length && !contextTokens.some((v) => lower.includes(v.toLowerCase()))) {
+    issues.push({
+      severity: 'w',
+      field:    'mission.abstract',
+      message:  'Abstract should mention the relevant platform, sensor, or observed variable.',
+      xpath:    ABSTRACT_XPATH,
+    })
+  }
+  const acronyms = [...new Set(abstract.match(/\b[A-Z]{2,8}\b/g) || [])]
+    .filter((token) => !COMMON_ABSTRACT_ACRONYMS.has(token))
+  const unexplained = acronyms.find((token) => {
+    const escaped = token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    return !new RegExp(`\\([^)]*\\b${escaped}\\b[^)]*\\)`).test(abstract)
+  })
+  if (unexplained) {
+    issues.push({
+      severity: 'w',
+      field:    'mission.abstract',
+      message:  `Abstract uses acronym "${unexplained}"; expand it on first use when possible.`,
+      xpath:    ABSTRACT_XPATH,
+    })
+  }
+  return issues
+}
 
 // ---- core rule set (all modes) ----
 
@@ -109,8 +160,15 @@ const coreRules = [
     field: 'mission.abstract',
     severity: 'e',
     message: 'Abstract is required',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract',
+    xpath: ABSTRACT_XPATH,
     check: (s) => isBlank(s?.mission?.abstract),
+  },
+  {
+    field: 'mission.abstract',
+    severity: 'w',
+    message: 'Abstract quality warnings',
+    xpath: ABSTRACT_XPATH,
+    check: (s) => abstractQualityIssues(s),
   },
   {
     field: 'mission.startDate',
@@ -439,6 +497,16 @@ const coreRules = [
           message: `${KW_LABELS[f] || f}: at least one keyword is required`,
           xpath: KW_XPATH,
         }))
+      return issues.length ? issues : false
+    },
+  },
+  {
+    field: 'keywords',
+    severity: 'w',
+    message: 'GCMD keyword chip UUID quality',
+    xpath: KW_XPATH,
+    check: (s) => {
+      const issues = collectGcmdKeywordUuidWarnings(s?.keywords || {})
       return issues.length ? issues : false
     },
   },

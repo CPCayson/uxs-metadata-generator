@@ -1,5 +1,6 @@
 import { SENSOR_XML_OPTIONAL_DEFAULTS } from './sensorInstrumentDescription.js'
 import { canonicalMissionInstantForStorage, normalizeMissionInstantString } from './datetimeLocal.js'
+import { previewMetadataXPath } from './metadataXPath.js'
 
 /** @typedef {'e'|'w'} Severity */
 
@@ -19,6 +20,14 @@ const KW_LABELS = {
   projects: 'Projects',
   providers: 'Providers',
 }
+
+/** Facets stored as keyword chip rows under `keywords.*` (mission pilot). */
+const KW_KEYWORD_CHIP_FACETS = ['sciencekeywords', 'datacenters', 'platforms', 'instruments', 'locations', 'projects', 'providers']
+
+const KW_CHIP_UUID_XPATH =
+  '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords'
+
+const KMS_CONCEPT_UUID_RE = /^[a-f0-9-]{36}$/i
 
 const UXS_CONTEXT_DEFAULT = {
   primaryLayer:     'datasetProduct',
@@ -322,6 +331,104 @@ function checkSensorKwMismatch(type, variable, keywords) {
   return !list.some((k) => String(k?.label || '').toLowerCase().includes(v))
 }
 
+const COMMON_ABSTRACT_ACRONYMS = new Set(['ADCP', 'AUV', 'CTD', 'GCMD', 'ISO', 'NCEI', 'NOAA', 'REMUS', 'ROV', 'UUV'])
+
+/**
+ * @param {object} state
+ * @returns {Array<{ severity: Severity, field: string, message: string, xpath?: string }>}
+ */
+function abstractQualityIssues(state) {
+  const m = state?.mission || {}
+  const p = state?.platform || {}
+  const sensors = Array.isArray(state?.sensors) ? state.sensors : []
+  const abstract = String(m.abstract || '').trim()
+  if (!abstract) return []
+  const issues = []
+  const xpath = '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract'
+  if (abstract.length < 120) {
+    issues.push({
+      severity: 'w',
+      field:    'mission.abstract',
+      message:  'Abstract is short; include objective, platform/sensor, area, dates, and data product.',
+      xpath,
+    })
+  }
+  const lower = abstract.toLowerCase()
+  const contextTokens = [
+    p.platformId,
+    p.platformName,
+    p.model,
+    ...sensors.flatMap((s) => [s?.sensorId, s?.modelId, s?.variable]),
+  ]
+    .map((v) => String(v || '').trim())
+    .filter((v) => v.length >= 3)
+  if (contextTokens.length && !contextTokens.some((v) => lower.includes(v.toLowerCase()))) {
+    issues.push({
+      severity: 'w',
+      field:    'mission.abstract',
+      message:  'Abstract should mention the relevant platform, sensor, or observed variable.',
+      xpath,
+    })
+  }
+  const acronyms = [...new Set(abstract.match(/\b[A-Z]{2,8}\b/g) || [])]
+    .filter((token) => !COMMON_ABSTRACT_ACRONYMS.has(token))
+  const unexplained = acronyms.find((token) => {
+    const escaped = token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    return !new RegExp(`\\([^)]*\\b${escaped}\\b[^)]*\\)`).test(abstract)
+  })
+  if (unexplained) {
+    issues.push({
+      severity: 'w',
+      field:    'mission.abstract',
+      message:  `Abstract uses acronym "${unexplained}"; expand it on first use when possible.`,
+      xpath,
+    })
+  }
+  return issues
+}
+
+/**
+ * Lenient warnings for GCMD keyword chips whose UUID may not round-trip to KMS links.
+ *
+ * @param {Record<string, unknown>} keywords - `state.keywords`
+ * @returns {Array<{ severity: Severity, field: string, message: string, xpath?: string }>}
+ */
+export function collectGcmdKeywordUuidWarnings(keywords) {
+  const kw = keywords && typeof keywords === 'object' ? keywords : {}
+  /** @type {Array<{ severity: Severity, field: string, message: string, xpath?: string }>} */
+  const out = []
+  KW_KEYWORD_CHIP_FACETS.forEach((f) => {
+    const arr = Array.isArray(kw[f]) ? kw[f] : []
+    arr.forEach((row, i) => {
+      const label = String(row?.label ?? '').trim()
+      const uuid = String(row?.uuid ?? '').trim()
+      if (label && !uuid) {
+        out.push({
+          severity: 'w',
+          field: `keywords.${f}[${i}].uuid`,
+          message: 'Add concept UUID for best KMS href',
+          xpath: KW_CHIP_UUID_XPATH,
+        })
+        return
+      }
+      if (!uuid) return
+      const plausible =
+        KMS_CONCEPT_UUID_RE.test(uuid) ||
+        uuid.toLowerCase().startsWith('http') ||
+        /gcmd\.earthdata\.nasa\.gov/i.test(uuid)
+      if (!plausible) {
+        out.push({
+          severity: 'w',
+          field: `keywords.${f}[${i}].uuid`,
+          message: 'UUID may not look like a KMS concept id',
+          xpath: KW_CHIP_UUID_XPATH,
+        })
+      }
+    })
+  })
+  return out
+}
+
 /**
  * @param {string} mode lenient | strict | catalog
  * @param {object} state
@@ -340,7 +447,7 @@ export function validatePilotState(mode, state) {
   const catalog = mode === 'catalog'
 
   const add = (severity, field, message, xpath) => {
-    issues.push({ severity, field, message, xpath })
+    issues.push({ severity, field, message, xpath: previewMetadataXPath(xpath) })
   }
 
   // Mission
@@ -353,6 +460,9 @@ export function validatePilotState(mode, state) {
   if (isBlank(m.abstract)) {
     add('e', 'mission.abstract', 'Abstract is required', '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract')
   }
+  issues.push(
+    ...abstractQualityIssues(state).map((i) => ({ ...i, xpath: previewMetadataXPath(i.xpath) })),
+  )
   if (isBlank(m.startDate)) {
     add('e', 'mission.startDate', 'Creation / Start date is required', '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement')
   }
@@ -554,13 +664,15 @@ export function validatePilotState(mode, state) {
   })
 
   // Keywords
-  const facets = ['sciencekeywords', 'datacenters', 'platforms', 'instruments', 'locations', 'projects', 'providers']
-  facets.forEach((f) => {
+  KW_KEYWORD_CHIP_FACETS.forEach((f) => {
     const arr = Array.isArray(kw[f]) ? kw[f] : []
     if (!arr.length) {
-      add('e', `keywords.${f}`, `${KW_LABELS[f] || f}: at least one keyword is required`, '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords')
+      add('e', `keywords.${f}`, `${KW_LABELS[f] || f}: at least one keyword is required`, KW_CHIP_UUID_XPATH)
     }
   })
+  issues.push(
+    ...collectGcmdKeywordUuidWarnings(kw).map((i) => ({ ...i, xpath: previewMetadataXPath(i.xpath) })),
+  )
 
   // Distribution
   if (isBlank(dist.format)) {
@@ -693,6 +805,8 @@ export function defaultPilotState() {
       dataLicensePreset: 'custom',
       licenseUrl: '',
       accessConstraints: '',
+      /** ISO `MD_RestrictionCode` value for XML preview; empty = infer from `accessConstraints` text only. */
+      accessConstraintsCode: '',
       distributionLiability: '',
       parentProjectTitle: '',
       parentProjectDate: '',

@@ -11,6 +11,7 @@
 import { lazy } from 'react'
 import { buildBediGranuleXmlPreview } from '../../lib/bediGranuleXmlPreview.js'
 import { readPilotSessionPayload } from '../../lib/pilotSessionStorage.js'
+import { getPilotFieldLabelFallback } from '../../lib/pilotFieldLabelFallback.js'
 import { bediGranuleRuleSets } from './bediGranuleRules.js'
 import { bediGranuleImportParser } from './bediGranuleImportParser.js'
 import { BEDI_DEMO_COLLECTION_FILE_ID } from './bediCollectionProfile.js'
@@ -235,6 +236,8 @@ export const bediGranuleProfile = {
         .replace(/[^\w.-]+/g, '_') || 'bedi-granule'
     )
   },
+
+  getFieldLabel: getPilotFieldLabelFallback,
 
   steps: [
     {

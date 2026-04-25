@@ -27,9 +27,16 @@ const STEP_NAV_POSTER =
   )
 
 const STEP_STATUS_LABELS = {
-  ok: 'No issues',
+  ok: 'No issues on this step',
   warn: 'Warnings on this step',
   err: 'Errors on this step',
+}
+
+/** Sighted, compact; screen readers get full `STEP_STATUS_LABELS` on the tab. */
+const STEP_STATUS_VISIBLE = {
+  ok: 'No issues',
+  warn: 'Warnings',
+  err: 'Errors',
 }
 
 export default function StepNav({ steps, activeStep, onSelect, stepStatus = {} }) {
@@ -52,6 +59,9 @@ export default function StepNav({ steps, activeStep, onSelect, stepStatus = {} }
                   onClick={() => onSelect(step.id)}
                 >
                   <span className="pilot-step-nav__label">{step.label}</span>
+                  <span className="pilot-step-nav__status" title={statusLabel} aria-hidden="true">
+                    {STEP_STATUS_VISIBLE[st] ?? '—'}
+                  </span>
                   <span className="pilot-step-nav__dot" aria-hidden="true" />
                 </button>
               </li>

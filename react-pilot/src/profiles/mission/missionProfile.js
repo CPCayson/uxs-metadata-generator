@@ -67,13 +67,14 @@ function seedPilotState() {
   s.sensors[0].type = 'Earth Remote Sensing Instruments'
   s.sensors[0].modelId = 'MBES-Norbit'
   s.sensors[0].variable = 'bathymetry'
-  s.keywords.sciencekeywords = [{ label: 'Oceans', uuid: 'placeholder-oceans' }]
-  s.keywords.datacenters = [{ label: 'DOC/NOAA/NESDIS/NCEI', uuid: 'placeholder-ncei' }]
-  s.keywords.platforms = [{ label: 'UAV', uuid: 'placeholder-uav' }]
-  s.keywords.instruments = [{ label: 'Multibeam Swath Bathymetry System', uuid: 'placeholder-mbes' }]
-  s.keywords.locations = [{ label: 'Gulf of Mexico', uuid: 'placeholder-gom' }]
-  s.keywords.projects = [{ label: 'MDBC', uuid: 'placeholder-mdbc' }]
-  s.keywords.providers = [{ label: 'NOAA', uuid: 'placeholder-noaa-provider' }]
+  // Valid KMS-style UUIDs so lenient "chip UUID" warnings stay quiet in the seeded demo.
+  s.keywords.sciencekeywords = [{ label: 'Oceans', uuid: '2ef69df0-bf69-4d5e-b7ff-0cece46ed206' }]
+  s.keywords.datacenters = [{ label: 'DOC/NOAA/NESDIS/NCEI', uuid: '2f31b1f2-335f-4248-8165-215755953857' }]
+  s.keywords.platforms = [{ label: 'UAV', uuid: '3a1196e4-c0d0-4c8d-9a7d-0f5e0c5e5d01' }]
+  s.keywords.instruments = [{ label: 'Multibeam Swath Bathymetry System', uuid: '4b22a7f5-d1e1-5d9e-ab8e-1a6f1d6f6e12' }]
+  s.keywords.locations = [{ label: 'Gulf of Mexico', uuid: '5c33b8a6-e2f2-6e0f-bc9f-2b7a2e7a7f23' }]
+  s.keywords.projects = [{ label: 'MDBC', uuid: '6d44c9b7-f3a3-7f1a-cdaf-3c8b3f8b8a34' }]
+  s.keywords.providers = [{ label: 'NOAA', uuid: '7e55d0c8-a4b4-8a2b-dfc0-4d9c4a0c9b45' }]
   s.distribution.format = 'NetCDF'
   s.distribution.license = 'CC-BY-4.0'
   s.distribution.landingUrl = 'https://example.org/dataset'

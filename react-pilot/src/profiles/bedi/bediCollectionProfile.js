@@ -15,6 +15,7 @@ import { readPilotSessionPayload } from '../../lib/pilotSessionStorage.js'
 import { bediCollectionRuleSets } from './bediCollectionRules.js'
 import { bediCollectionImportParser } from './bediCollectionImportParser.js'
 import { sessionLooksLikeBediCollection } from './bediSessionGuards.js'
+import { getPilotFieldLabelFallback } from '../../lib/pilotFieldLabelFallback.js'
 
 const StepBediCollectionIdentification = lazy(() =>
   import('../../features/bedi/StepBediCollectionIdentification.jsx'),
@@ -239,6 +240,8 @@ export const bediCollectionProfile = {
         .replace(/[^\w.-]+/g, '_') || 'bedi-collection'
     )
   },
+
+  getFieldLabel: getPilotFieldLabelFallback,
 
   steps: [
     {

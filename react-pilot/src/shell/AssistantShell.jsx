@@ -14,7 +14,8 @@
  */
 
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react'
-import { createPortal } from 'react-dom'
+import MantaScannerFrame from '../components/MantaScannerFrame.jsx'
+import { getFieldElementForPilot } from '../core/registry/FieldRegistry.js'
 import { useMetadataEngine } from './context.js'
 import { defaultPilotState } from '../lib/pilotValidation.js'
 import { readPilotSessionPayload } from '../lib/pilotSessionStorage.js'
@@ -27,6 +28,8 @@ import {
 } from './metadataKnowledgeBase.js'
 import { fetchCometRecord, detectGaps, extractUuid } from '../lib/cometClient.js'
 import { buildPilotPayloadFromCometXml } from '../lib/cometProfileImport.js'
+import { getLensChipsForIssue } from '../lib/lensIssueChips.js'
+import { buildFixGuideQueue, countFixableIssues, getCoachingPrompts } from '../lib/lensFixGuide.js'
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -321,7 +324,7 @@ function SectionBar({ label, pct, errors, warnings, onClick, active }) {
       type={onClick ? 'button' : undefined}
       className={`manta-section-bar${active ? ' manta-section-bar--active' : ''}${onClick ? ' manta-section-bar--clickable' : ''}`}
       onClick={onClick}
-      title={onClick ? `Click to highlight ${label} in XML` : undefined}
+      title={onClick ? 'Section scope' : undefined}
     >
       <span className="manta-section-bar__label">{label}</span>
       <div className="manta-section-bar__track">
@@ -364,8 +367,20 @@ function IssueRow({ issue, isNew, isDefActive, onToggleDef }) {
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-export default function AssistantShell({ onClose, onOpenEditor, onToggleLens, lensMode = false, recentRecords }) {
-  const { enrichmentService, validationEngine, hostBridge, profile, onCometLoad } = useMetadataEngine()
+export default function AssistantShell({
+  onClose,
+  onOpenEditor,
+  onToggleLens,
+  lensMode = false,
+  recentRecords,
+  lensTarget: lensTargetProp = 'split',
+  onLensTargetChange,
+}) {
+  const [lensTargetLocal, setLensTargetLocal] = useState('split')
+  const isLensTargetControlled = onLensTargetChange != null
+  const lensTarget = isLensTargetControlled ? lensTargetProp : lensTargetLocal
+  const setLensTarget = isLensTargetControlled ? onLensTargetChange : setLensTargetLocal
+  const { enrichmentService, validationEngine, hostBridge, profile, onCometLoad, workflowEngine } = useMetadataEngine()
 
   // ── Tab ───────────────────────────────────────────────────────────────────
   const [activeTab, setActiveTab] = useState('validate')
@@ -586,29 +601,76 @@ export default function AssistantShell({ onClose, onOpenEditor, onToggleLens, le
   const [lensHitCount, setLensHitCount] = useState(0)
   const [lensHitFocus, setLensHitFocus] = useState(0)
   const [lensIssueFilter, setLensIssueFilter] = useState('all') // 'all' | 'errors' | 'warnings'
+  const [lensIssueScope, setLensIssueScope] = useState(() => {
+    try {
+      const v = sessionStorage.getItem('manta-lens-issue-scope')
+      if (v === 'all' || v === 'active') return v
+    } catch { /* sessionStorage may be blocked */ }
+    return 'active'
+  })
+  const [wizardActiveStepId, setWizardActiveStepId] = useState(/** @type {string | null} */ (null))
+  const [lensFixGuide, setLensFixGuide] = useState(/** @type {null | { queue: Array<{ field?: string, message: string, severity: string }>, index: number }} */ (null))
   const [lensCopiedKey, setLensCopiedKey]     = useState(null) // last copied pilot field path
   const lensSearchInputRef = useRef(null)
   const lensHitCountRef    = useRef(0)
   const lensHitFocusRef    = useRef(0)
   const lensHighlightTargetRef = useRef({ target: null, isSearch: false })
   const lensIssueNavIdxRef = useRef(0)
+  const fieldNavTimeoutRef   = useRef(0)
+  const [lensHelpOpen, setLensHelpOpen] = useState(false)
+  const lensQuickChipQcTimeoutRef = useRef(0)
+  /** Where the live issues tray sits: above the through-glass work area (default) or below. */
+  const [lensValidatorWrap, setLensValidatorWrap] = useState(() => {
+    try {
+      const v = sessionStorage.getItem('manta-lens-wrap')
+      if (v === 'tuck-high' || v === 'tuck-low') return v
+    } catch { /* */ }
+    return 'tuck-high'
+  })
+  useEffect(() => {
+    try {
+      sessionStorage.setItem('manta-lens-wrap', lensValidatorWrap)
+    } catch { /* */ }
+  }, [lensValidatorWrap])
+
+  useEffect(() => {
+    try {
+      sessionStorage.setItem('manta-lens-issue-scope', lensIssueScope)
+    } catch { /* */ }
+  }, [lensIssueScope])
+
+  useEffect(() => {
+    return () => {
+      if (lensQuickChipQcTimeoutRef.current) {
+        clearTimeout(lensQuickChipQcTimeoutRef.current)
+        lensQuickChipQcTimeoutRef.current = 0
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    function onWizardStep(/** @type {CustomEvent<{ stepId?: string }>} */ e) {
+      const id = e?.detail?.stepId
+      if (typeof id === 'string' && id.trim()) setWizardActiveStepId(id.trim())
+    }
+    window.addEventListener('manta:wizard-active-step', onWizardStep)
+    return () => window.removeEventListener('manta:wizard-active-step', onWizardStep)
+  }, [])
 
   const clearLensDomHighlights = useCallback(() => {
+    if (fieldNavTimeoutRef.current) {
+      clearTimeout(fieldNavTimeoutRef.current)
+      fieldNavTimeoutRef.current = 0
+    }
     document.querySelectorAll('.fx-xml-line.manta-lens-hl').forEach((el) => {
       el.classList.remove('manta-lens-hl', 'manta-lens-hl--focus')
     })
+    document.querySelectorAll('.manta-lens-field-hl').forEach((el) => {
+      el.classList.remove('manta-lens-field-hl')
+    })
   }, [])
 
-  const applyLensHighlight = useCallback((target, isSearch, focusIdx = 0) => {
-    clearLensDomHighlights()
-    if (!target) {
-      lensHitCountRef.current = 0
-      lensHitFocusRef.current = 0
-      setLensHitCount(0)
-      setLensHitFocus(0)
-      return
-    }
-
+  const applyLensXmlHighlight = useCallback((target, isSearch, focusIdx = 0) => {
     const matches = []
     const rx = isSearch ? tryLensSearchRegex(target) : null
 
@@ -648,39 +710,148 @@ export default function AssistantShell({ onClose, onOpenEditor, onToggleLens, le
     lensHitFocusRef.current = fi
     setLensHitCount(n)
     setLensHitFocus(fi)
-  }, [clearLensDomHighlights])
+  }, [])
+
+  const applyLensFormHighlight = useCallback((fieldPath) => {
+    if (fieldNavTimeoutRef.current) {
+      clearTimeout(fieldNavTimeoutRef.current)
+    }
+    window.dispatchEvent(new CustomEvent('manta:lens-goto-field', { detail: { field: fieldPath } }))
+    fieldNavTimeoutRef.current = window.setTimeout(() => {
+      fieldNavTimeoutRef.current = 0
+      document.querySelectorAll('.manta-lens-field-hl').forEach((el) => {
+        el.classList.remove('manta-lens-field-hl')
+      })
+      const fieldEl = getFieldElementForPilot(fieldPath)
+      if (fieldEl) {
+        fieldEl.classList.add('manta-lens-field-hl')
+        fieldEl.scrollIntoView({ block: 'center', behavior: 'smooth' })
+      }
+    }, 220)
+  }, [])
+
+  const applyLensHighlights = useCallback((target, isSearch, focusIdx = 0) => {
+    if (fieldNavTimeoutRef.current && focusIdx === 0) {
+      clearTimeout(fieldNavTimeoutRef.current)
+      fieldNavTimeoutRef.current = 0
+    }
+    document.querySelectorAll('.fx-xml-line.manta-lens-hl').forEach((el) => {
+      el.classList.remove('manta-lens-hl', 'manta-lens-hl--focus')
+    })
+    if (focusIdx === 0) {
+      document.querySelectorAll('.manta-lens-field-hl').forEach((el) => {
+        el.classList.remove('manta-lens-field-hl')
+      })
+    }
+    if (!target) {
+      if (fieldNavTimeoutRef.current) {
+        clearTimeout(fieldNavTimeoutRef.current)
+        fieldNavTimeoutRef.current = 0
+      }
+      document.querySelectorAll('.manta-lens-field-hl').forEach((el) => {
+        el.classList.remove('manta-lens-field-hl')
+      })
+      lensHitCountRef.current = 0
+      lensHitFocusRef.current = 0
+      setLensHitCount(0)
+      setLensHitFocus(0)
+      return
+    }
+
+    const doXml  = lensTarget === 'xml'  || lensTarget === 'split'
+    const doForm = lensTarget === 'form' || lensTarget === 'split'
+
+    if (doXml) {
+      applyLensXmlHighlight(target, isSearch, focusIdx)
+    } else {
+      lensHitCountRef.current = 0
+      lensHitFocusRef.current = 0
+      setLensHitCount(0)
+      setLensHitFocus(0)
+    }
+
+    if (doForm && !isSearch && typeof target === 'string' && target.includes('.') && focusIdx === 0) {
+      applyLensFormHighlight(target)
+    } else if (!doForm && focusIdx === 0) {
+      if (fieldNavTimeoutRef.current) {
+        clearTimeout(fieldNavTimeoutRef.current)
+        fieldNavTimeoutRef.current = 0
+      }
+    }
+  }, [lensTarget, applyLensFormHighlight, applyLensXmlHighlight])
 
   const bumpLensHits = useCallback((delta) => {
+    if (lensTarget === 'form') return
     const { target, isSearch } = lensHighlightTargetRef.current
     const n = lensHitCountRef.current
     if (!target || n < 2) return
     const fi = (lensHitFocusRef.current + delta + n) % n
-    applyLensHighlight(target, isSearch, fi)
-  }, [applyLensHighlight])
+    applyLensHighlights(target, isSearch, fi)
+  }, [applyLensHighlights, lensTarget])
+
+  /** Form-only: XML search is not used. */
+  useEffect(() => {
+    if (lensMode && lensTarget === 'form') setLensSearch('')
+  }, [lensMode, lensTarget])
 
   /** Drive highlights from field / section / free search (debounced for typing). */
   useEffect(() => {
     if (!lensMode) {
+      setLensHelpOpen(false)
       clearLensDomHighlights()
       lensHighlightTargetRef.current = { target: null, isSearch: false }
       setLensHitCount(0)
       setLensHitFocus(0)
       return
     }
+    if (lensTarget === 'form' && !lensHlField) {
+      applyLensHighlights(null, false, 0)
+      lensHighlightTargetRef.current = { target: null, isSearch: false }
+      return
+    }
     const trimmed = lensSearch.trim()
-    const isSearch = Boolean(trimmed) && lensHlField == null
+    const isSearch = Boolean(trimmed) && lensHlField == null && lensTarget !== 'form'
     const target   = isSearch ? lensSearch : lensHlField
     if (!target) {
-      applyLensHighlight(null, false, 0)
+      applyLensHighlights(null, false, 0)
       lensHighlightTargetRef.current = { target: null, isSearch: false }
       return
     }
     const t = window.setTimeout(() => {
       lensHighlightTargetRef.current = { target, isSearch }
-      applyLensHighlight(target, isSearch, 0)
+      applyLensHighlights(target, isSearch, 0)
     }, isSearch ? 220 : 0)
     return () => window.clearTimeout(t)
-  }, [lensMode, lensHlField, lensSearch, applyLensHighlight, clearLensDomHighlights])
+  }, [lensMode, lensHlField, lensSearch, applyLensHighlights, clearLensDomHighlights, lensTarget])
+
+  /** Validation severity rings on form controls (lens on): red = error, purple = warn. */
+  useEffect(() => {
+    function clearAllStatus() {
+      document.querySelectorAll('.manta-lens-field-status').forEach((el) => {
+        el.classList.remove('manta-lens-field-status', 'manta-lens-field-status--e', 'manta-lens-field-status--w', 'manta-lens-field-status--ok')
+        el.removeAttribute('data-manta-lens-status')
+      })
+    }
+    if (!lensMode || !qualityResult?.issues?.length) {
+      clearAllStatus()
+      return () => { clearAllStatus() }
+    }
+    const rankByField = new Map()
+    for (const i of qualityResult.issues) {
+      if (!i.field) continue
+      const r = i.severity === 'e' ? 2 : 1
+      const p = rankByField.get(i.field) ?? 0
+      if (r > p) rankByField.set(i.field, r)
+    }
+    clearAllStatus()
+    for (const [path, r] of rankByField) {
+      const el = getFieldElementForPilot(path)
+      if (!el) continue
+      el.classList.add('manta-lens-field-status', r === 2 ? 'manta-lens-field-status--e' : 'manta-lens-field-status--w')
+      el.setAttribute('data-manta-lens-status', '1')
+    }
+    return () => { clearAllStatus() }
+  }, [lensMode, qualityResult])
 
   // ── COMET ─────────────────────────────────────────────────────────────────
   const [cometInput,   setCometInput]   = useState('')   // raw UUID/URL text
@@ -737,12 +908,14 @@ export default function AssistantShell({ onClose, onOpenEditor, onToggleLens, le
   function handleCometLoad() {
     if (!cometMeta) return
     const dataToLoad = (cometParsed && typeof cometParsed === 'object') ? cometParsed : {}
-    // Dispatch a cross-context window event so WizardShell (in a separate
-    // EmbeddableShell instance) can receive the load without shared context.
+    // Primary path in the pilot: WizardShell and this widget now share
+    // MetadataEngineCtx when `includeFloatingManta` is used. The window event
+    // still notifies any legacy dual-shell embeds or code that is not under
+    // the same provider.
     window.dispatchEvent(new CustomEvent('manta:comet-load', {
       detail: { parsed: dataToLoad, uuid: cometMeta.uuid, gaps: cometGaps ?? [] },
     }))
-    // Also call context path for non-App.jsx embeddings where both shells share a context.
+    // onCometLoad updates the shared context (and optional host callback).
     onCometLoad?.(dataToLoad, cometMeta.uuid, cometGaps ?? [])
     setCometLoaded(true)
   }
@@ -774,9 +947,96 @@ export default function AssistantShell({ onClose, onOpenEditor, onToggleLens, le
     return list
   }, [errors, warnings, lensIssueFilter])
 
+  const lensIssuesScoped = useMemo(() => {
+    if (lensIssueScope !== 'active' || !wizardActiveStepId || !workflowEngine) return lensIssuesFiltered
+    return lensIssuesFiltered.filter((i) => {
+      if (!i.field) return false
+      return workflowEngine.stepForField(i.field) === wizardActiveStepId
+    })
+  }, [lensIssueScope, wizardActiveStepId, lensIssuesFiltered, workflowEngine])
+
+  const fixWalkFieldCount = useMemo(
+    () => countFixableIssues(lensIssuesScoped),
+    [lensIssuesScoped],
+  )
+
+  const startOrStopFixGuide = useCallback(() => {
+    setLensFixGuide((prev) => {
+      if (prev) return null
+      const queue = buildFixGuideQueue(lensIssuesScoped)
+      if (!queue.length) return null
+      if (lensTarget === 'xml') {
+        window.queueMicrotask(() => { setLensTarget('split') })
+      }
+      window.queueMicrotask(() => { setLensHelpOpen(true) })
+      return { queue, index: 0 }
+    })
+  }, [lensIssuesScoped, lensTarget, setLensTarget])
+
+  const stepFixGuide = useCallback((delta) => {
+    setLensFixGuide((g) => {
+      if (!g) return g
+      const n = g.index + delta
+      if (n < 0) return g
+      if (n >= g.queue.length) return null
+      return { ...g, index: n }
+    })
+  }, [])
+
+  useEffect(() => {
+    if (!lensMode) setLensFixGuide(null)
+  }, [lensMode])
+
+  useEffect(() => {
+    if (!lensMode || !lensFixGuide) return
+    const issue = lensFixGuide.queue[lensFixGuide.index]
+    if (!issue?.field) return
+    setLensHlField(issue.field)
+    if (workflowEngine) {
+      const stepId = workflowEngine.stepForField(issue.field)
+      try {
+        window.dispatchEvent(new CustomEvent('manta:goto-step', { detail: { stepId } }))
+      } catch { /* */ }
+    }
+  }, [lensMode, lensFixGuide, workflowEngine])
+
+  const lensChipPilot = useMemo(
+    () => readPilotSessionPayload()?.pilot ?? defaultPilotState(),
+    [qualityResult, lensMode, liveUpdatedAt],
+  )
+
+  const onLensQuickChip = useCallback((chip, forIssue) => {
+    const maybeScheduleTrayRefresh = () => {
+      if (!lensFixGuide) return
+      if (lensQuickChipQcTimeoutRef.current) {
+        clearTimeout(lensQuickChipQcTimeoutRef.current)
+      }
+      lensQuickChipQcTimeoutRef.current = window.setTimeout(() => {
+        lensQuickChipQcTimeoutRef.current = 0
+        runQualityCheck(qualityMode)
+      }, 400)
+    }
+
+    if (chip.kind === 'action' && chip.action === 'autofix') {
+      window.dispatchEvent(new CustomEvent('manta:pilot-auto-fix-request', { detail: { mode: qualityMode } }))
+      maybeScheduleTrayRefresh()
+      return
+    }
+    if (chip.kind === 'fill' && chip.fieldPath) {
+      window.dispatchEvent(
+        new CustomEvent('manta:set-pilot-field', { detail: { field: chip.fieldPath, value: chip.value } }),
+      )
+      maybeScheduleTrayRefresh()
+      return
+    }
+    if (chip.kind === 'help' && chip.helpText) {
+      setLensAsk({ issue: forIssue, answer: chip.helpText })
+    }
+  }, [qualityMode, lensFixGuide, runQualityCheck])
+
   useEffect(() => {
     lensIssueNavIdxRef.current = 0
-  }, [lensIssueFilter, errors.length, warnings.length])
+  }, [lensIssueFilter, lensIssueScope, wizardActiveStepId, errors.length, warnings.length])
 
   /** Lens keyboard: Esc exit, / focus search, j/k cycle issues, [ ] cycle XML hits */
   useEffect(() => {
@@ -795,11 +1055,20 @@ export default function AssistantShell({ onClose, onOpenEditor, onToggleLens, le
           }
           return
         }
+        if (lensFixGuide) {
+          e.preventDefault()
+          setLensFixGuide(null)
+          return
+        }
         e.preventDefault()
         onToggleLens?.()
         return
       }
       if (e.key === '/' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        if (lensTarget === 'form') {
+          e.preventDefault()
+          return
+        }
         if (inText(e.target) && e.target !== lensSearchInputRef.current) return
         e.preventDefault()
         lensSearchInputRef.current?.focus()
@@ -807,23 +1076,40 @@ export default function AssistantShell({ onClose, onOpenEditor, onToggleLens, le
       }
       if (inText(e.target)) return
 
-      if ((e.key === 'j' || e.key === 'k') && lensIssuesFiltered.length) {
+      if (lensFixGuide && (e.key === 'j' || e.key === 'k')) {
+        e.preventDefault()
+        stepFixGuide(e.key === 'j' ? 1 : -1)
+        return
+      }
+      if (lensFixGuide && (e.key === 'n' || e.key === 'N')) {
+        e.preventDefault()
+        stepFixGuide(1)
+        return
+      }
+      if (lensFixGuide && (e.key === 'p' || e.key === 'P')) {
+        e.preventDefault()
+        stepFixGuide(-1)
+        return
+      }
+
+      if ((e.key === 'j' || e.key === 'k') && lensIssuesScoped.length) {
         e.preventDefault()
         const dir = e.key === 'j' ? 1 : -1
-        lensIssueNavIdxRef.current = (lensIssueNavIdxRef.current + dir + lensIssuesFiltered.length) % lensIssuesFiltered.length
-        const iss = lensIssuesFiltered[lensIssueNavIdxRef.current]
+        lensIssueNavIdxRef.current = (lensIssueNavIdxRef.current + dir + lensIssuesScoped.length) % lensIssuesScoped.length
+        const iss = lensIssuesScoped[lensIssueNavIdxRef.current]
         setLensSearch('')
         setLensHlField(iss.field)
         return
       }
       if (e.key === ']' || e.key === '[') {
+        if (lensTarget === 'form') return
         e.preventDefault()
         bumpLensHits(e.key === ']' ? 1 : -1)
       }
     }
     window.addEventListener('keydown', onKey, true)
     return () => window.removeEventListener('keydown', onKey, true)
-  }, [lensMode, onToggleLens, lensIssuesFiltered, bumpLensHits, lensSearch])
+  }, [lensMode, onToggleLens, lensIssuesScoped, lensFixGuide, stepFixGuide, bumpLensHits, lensSearch, lensTarget])
 
   const hasErrors     = errors.length > 0
   const hasWarnings   = warnings.length > 0
@@ -840,10 +1126,15 @@ export default function AssistantShell({ onClose, onOpenEditor, onToggleLens, le
   // ── Lens overlay render (portals into the XML validator panel) ──────────
 
   if (lensMode) {
-    const portalTarget = document.querySelector('.workspace-side-stack') ?? document.body
+    const lensRootClass = [
+      'manta-lens',
+      'manta-lens--viewport',
+      lensValidatorWrap === 'tuck-high' ? 'manta-lens--tuck-high' : 'manta-lens--tuck-low',
+      (lensTarget === 'form' || lensTarget === 'split') && 'manta-lens--form-readable',
+    ].filter(Boolean).join(' ')
 
     const lensContent = (
-      <div className="manta-lens" role="dialog" aria-label="Manta Ray Lens Mode">
+      <div className={lensRootClass} role="dialog" aria-label="Manta Ray Lens Mode">
         {/* Corner brackets framing the panel */}
         <div className="manta-lens-corner manta-lens-corner--tl" aria-hidden="true" />
         <div className="manta-lens-corner manta-lens-corner--tr" aria-hidden="true" />
@@ -864,7 +1155,72 @@ export default function AssistantShell({ onClose, onOpenEditor, onToggleLens, le
             {!hasErrors && !hasWarnings && qualityResult && <span className="manta-lens-tag manta-lens-tag--ok">✓</span>}
           </div>
 
+          <div className="manta-lens-bar__lens-target" role="group" aria-label="Lens target">
+            {(
+              [
+                { id: 'xml',   label: 'XML' },
+                { id: 'form',  label: 'Form' },
+                { id: 'split', label: 'Both' },
+              ]
+            ).map((opt) => (
+              <button
+                key={opt.id}
+                type="button"
+                className={`manta-lens-target-btn${lensTarget === opt.id ? ' manta-lens-target-btn--active' : ''}`}
+                aria-pressed={lensTarget === opt.id}
+                onClick={() => setLensTarget(/** @type {'xml'|'form'|'split'} */ (opt.id))}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="manta-lens-bar__val-wrap" role="group" aria-label="Where to show live issues list">
+            <span className="manta-lens-bar__val-label" title="Validation list vs. through-glass work area">Issues</span>
+            <button
+              type="button"
+              className={`manta-lens-valwrap-btn${lensValidatorWrap === 'tuck-high' ? ' manta-lens-valwrap-btn--active' : ''}`}
+              aria-pressed={lensValidatorWrap === 'tuck-high'}
+              onClick={() => setLensValidatorWrap('tuck-high')}
+              title="Show the live issues list just above the form (recommended)"
+            >
+              Wrap ↑
+            </button>
+            <button
+              type="button"
+              className={`manta-lens-valwrap-btn${lensValidatorWrap === 'tuck-low' ? ' manta-lens-valwrap-btn--active' : ''}`}
+              aria-pressed={lensValidatorWrap === 'tuck-low'}
+              onClick={() => setLensValidatorWrap('tuck-low')}
+              title="Show issues at the bottom of the lens (older layout)"
+            >
+              Dock ↓
+            </button>
+          </div>
+
           <div className="manta-lens-bar__right">
+            <button
+              type="button"
+              className="manta-lens-bar__fixwalk"
+              disabled={fixWalkFieldCount === 0}
+              aria-pressed={Boolean(lensFixGuide)}
+              onClick={startOrStopFixGuide}
+              title={
+                lensFixGuide
+                  ? 'Exit guided fix walk (Esc)'
+                  : 'Guided walk: jump to each field, coaching, quick chips, wizard step sync (j/k n/p, uses the tray list & STEP/ERR filters)'
+              }
+            >
+              {lensFixGuide ? 'Exit walk' : 'Fix walk'}
+            </button>
+            <button
+              type="button"
+              className="manta-lens-bar__help"
+              aria-pressed={lensHelpOpen}
+              onClick={() => setLensHelpOpen((v) => !v)}
+              title="Keyboard shortcuts"
+            >
+              ?
+            </button>
             <button
               type="button"
               className="manta-lens-bar__refresh"
@@ -879,6 +1235,92 @@ export default function AssistantShell({ onClose, onOpenEditor, onToggleLens, le
             </button>
           </div>
         </header>
+
+        {lensFixGuide && lensFixGuide.queue.length > 0 && (() => {
+          const fwIssue   = lensFixGuide.queue[lensFixGuide.index]
+          const atLast   = lensFixGuide.index >= lensFixGuide.queue.length - 1
+          const coaching  = getCoachingPrompts(fwIssue)
+          const walkChips = getLensChipsForIssue(fwIssue, lensChipPilot)
+          return (
+            <div className="manta-lens-fixguide" role="region" aria-label="Guided fix walk">
+              <div className="manta-lens-fixguide__head">
+                <span className="manta-lens-fixguide__title">Fix walk</span>
+                <span className="manta-lens-fixguide__step">
+                  {lensFixGuide.index + 1}
+                  {' / '}
+                  {lensFixGuide.queue.length}
+                </span>
+                {fwIssue.field
+                  ? (
+                    <code className="manta-lens-fixguide__path">{fwIssue.field}</code>
+                    )
+                  : null}
+                <span
+                  className={
+                    fwIssue.severity === 'e'
+                      ? 'manta-lens-fixguide__sev manta-lens-fixguide__sev--e'
+                      : 'manta-lens-fixguide__sev manta-lens-fixguide__sev--w'
+                  }
+                >
+                  {fwIssue.severity === 'e' ? 'Error' : 'Warning'}
+                </span>
+              </div>
+              <ul className="manta-lens-fixguide__prompts">
+                {coaching.map((line, i) => (
+                  <li key={i}>{line}</li>
+                ))}
+              </ul>
+              {walkChips.length > 0 && (
+                <div className="manta-lens-fixguide__chips" role="group" aria-label="Quick actions for this field">
+                  {walkChips.map((chip) => (
+                    <button
+                      key={chip.id}
+                      type="button"
+                      className={`manta-lens-chip manta-lens-chip--${chip.kind}`}
+                      onClick={() => onLensQuickChip(chip, fwIssue)}
+                    >
+                      {chip.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+              <div className="manta-lens-fixguide__row">
+                <div className="manta-lens-fixguide__kbd">
+                  <kbd>j</kbd>
+                  <kbd>k</kbd>
+                  {' '}
+                  next / back ·
+                  {' '}
+                  <kbd>n</kbd>
+                  <kbd>p</kbd>
+                  {' '}
+                  next / back ·
+                  {' '}
+                  <kbd>Esc</kbd>
+                  {' '}
+                  exit walk
+                </div>
+                <div className="manta-lens-fixguide__actions">
+                  <button
+                    type="button"
+                    className="manta-lens-fixguide__btn"
+                    disabled={lensFixGuide.index === 0}
+                    onClick={() => { stepFixGuide(-1) }}
+                  >
+                    ← Back
+                  </button>
+                  <button
+                    type="button"
+                    className="manta-lens-fixguide__btn manta-lens-fixguide__btn--primary"
+                    onClick={() => { stepFixGuide(1) }}
+                  >
+                    {atLast ? 'Finish' : 'Next →'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )
+        })()}
 
         <div className="manta-lens-readiness-row">
           <ReadinessStrip
@@ -916,6 +1358,15 @@ export default function AssistantShell({ onClose, onOpenEditor, onToggleLens, le
                 active={lensHlField === sec.id}
                 onClick={() => {
                   setLensSearch('')
+                  if (lensTarget === 'form') {
+                    setLensHlField((prev) => (prev === sec.id ? null : sec.id))
+                    try {
+                      window.dispatchEvent(
+                        new CustomEvent('manta:goto-step', { detail: { stepId: sec.id } }),
+                      )
+                    } catch { /* */ }
+                    return
+                  }
                   setLensHlField((prev) => (prev === sec.id ? null : sec.id))
                 }}
               />
@@ -933,8 +1384,9 @@ export default function AssistantShell({ onClose, onOpenEditor, onToggleLens, le
               ref={lensSearchInputRef}
               className="manta-lens-glass__search-input"
               type="text"
-              placeholder="Tags, text, or /regex/ …"
+              placeholder={lensTarget === 'form' ? 'XML search — set target to XML or Both' : 'Tags, text, or /regex/ …'}
               value={lensSearch}
+              disabled={lensTarget === 'form'}
               onChange={(e) => {
                 setLensSearch(e.target.value)
                 setLensHlField(null)
@@ -963,15 +1415,17 @@ export default function AssistantShell({ onClose, onOpenEditor, onToggleLens, le
               <div className="manta-lens-glass__meta">
                 <div className="manta-lens-glass__hits">
                   <span>
-                    {lensHitCount === 0
-                      ? 'no XML line matches'
-                      : `${lensHitCount} hit${lensHitCount === 1 ? '' : 's'} · focus ${lensHitFocus + 1}/${lensHitCount}`}
+                    {lensTarget === 'form'
+                      ? 'Form mode — j/k to jump issues, fields ring in the wizard'
+                      : lensHitCount === 0
+                        ? 'no XML line matches'
+                        : `${lensHitCount} hit${lensHitCount === 1 ? '' : 's'} · focus ${lensHitFocus + 1}/${lensHitCount}`}
                   </span>
                   <div className="manta-lens-glass__hit-nav">
                     <button
                       type="button"
                       className="manta-lens-glass__hit-btn"
-                      disabled={lensHitCount < 2}
+                      disabled={lensHitCount < 2 || lensTarget === 'form'}
                       onClick={() => bumpLensHits(-1)}
                       aria-label="Previous XML highlight"
                       title="Previous match"
@@ -979,16 +1433,50 @@ export default function AssistantShell({ onClose, onOpenEditor, onToggleLens, le
                     <button
                       type="button"
                       className="manta-lens-glass__hit-btn"
-                      disabled={lensHitCount < 2}
+                      disabled={lensHitCount < 2 || lensTarget === 'form'}
                       onClick={() => bumpLensHits(1)}
                       aria-label="Next XML highlight"
                       title="Next match"
                     >›</button>
                   </div>
                 </div>
-                <div className="manta-lens-glass__kbd-hint">
-                  <kbd>Esc</kbd> exit · <kbd>/</kbd> search · <kbd>j</kbd><kbd>k</kbd> issues · <kbd>[</kbd><kbd>]</kbd> hits
-                </div>
+                {lensHelpOpen && (
+                  <div className="manta-lens-glass__kbd-hint">
+                    {lensFixGuide ? (
+                      <>
+                        <kbd>Esc</kbd> end fix walk
+                        {' · '}
+                        <kbd>j</kbd>
+                        <kbd>k</kbd>
+                        {' or '}
+                        <kbd>n</kbd>
+                        <kbd>p</kbd> next / back
+                      </>
+                    ) : (
+                      <>
+                        <kbd>Esc</kbd> exit lens
+                        {lensTarget !== 'form' && (
+                          <span>
+                            {' · '}
+                            <kbd>/</kbd> search
+                          </span>
+                        )}
+                        {' · '}
+                        <kbd>j</kbd>
+                        <kbd>k</kbd> issues
+                        {lensTarget !== 'form' && (
+                          <span>
+                            {' · '}
+                            <kbd>[</kbd>
+                            <kbd>]</kbd> XML
+                          </span>
+                        )}
+                        {' · '}
+                        Bar: Fix walk — guided fields, coaching, chips
+                      </>
+                    )}
+                  </div>
+                )}
               </div>
             </>
           )}
@@ -1000,10 +1488,28 @@ export default function AssistantShell({ onClose, onOpenEditor, onToggleLens, le
             <>
               <div className="manta-lens-tray__header manta-lens-tray__header--row">
                 <span className="manta-lens-tray__header-title">
-                  ISSUES ({lensIssuesFiltered.length}
-                  {lensIssueFilter !== 'all' ? ` / ${errors.length + warnings.length}` : ''})
+                  ISSUES (
+                  {lensIssuesScoped.length}
+                  {lensIssueScope === 'active' && wizardActiveStepId && lensIssuesScoped.length < lensIssuesFiltered.length
+                    ? ` of ${lensIssuesFiltered.length}`
+                    : ''}
+                  {lensIssueFilter !== 'all' ? ` / ${errors.length + warnings.length}` : ''}
+                  )
                 </span>
-                <div className="manta-lens-tray__filters" role="group" aria-label="Filter issues">
+                <div className="manta-lens-tray__filters" role="group" aria-label="Issue list scope">
+                  {[
+                    { id: 'active', label: 'STEP' },
+                    { id: 'all', label: 'ALL' },
+                  ].map((s) => (
+                    <button
+                      key={s.id}
+                      type="button"
+                      className={`manta-lens-filter-chip${lensIssueScope === s.id ? ' manta-lens-filter-chip--active' : ''}`}
+                      onClick={() => setLensIssueScope(s.id)}
+                    >{s.label}</button>
+                  ))}
+                </div>
+                <div className="manta-lens-tray__filters" role="group" aria-label="Filter issues by severity">
                   {[
                     { id: 'all', label: 'ALL' },
                     { id: 'errors', label: 'ERR' },
@@ -1030,11 +1536,16 @@ export default function AssistantShell({ onClose, onOpenEditor, onToggleLens, le
               </div>
               {lensIssuesFiltered.length === 0 ? (
                 <div className="manta-lens-tray__filter-empty">
-                  No issues in this filter. Choose ALL, or switch between ERR / WRN.
+                  Nothing in this filter.
+                </div>
+              ) : lensIssuesScoped.length === 0 ? (
+                <div className="manta-lens-tray__filter-empty">
+                  No issues for this wizard step{wizardActiveStepId ? ` (“${wizardActiveStepId}”)` : ''} in the current
+                  filter. Use ALL in the first chip row to see every step, or change severity (ALL / ERR / WRN).
                 </div>
               ) : (
                 <div className="manta-lens-tray__list">
-                  {lensIssuesFiltered.map((issue, idx) => {
+                  {lensIssuesScoped.map((issue, idx) => {
                     const key     = `${issue.field}:${issue.message}`
                     const isNew   = newIssueKeys.has(key)
                     const isHl    = lensHlField === issue.field
@@ -1050,10 +1561,10 @@ export default function AssistantShell({ onClose, onOpenEditor, onToggleLens, le
                           role="button"
                           tabIndex={0}
                           aria-pressed={isHl}
-                          title={`Click to highlight "${issue.field?.split('.').pop() ?? ''}" in XML`}
+                          title="Focus in form & XML"
                           onClick={() => {
                             setLensSearch('')
-                            lensIssueNavIdxRef.current = lensIssuesFiltered.findIndex(
+                            lensIssueNavIdxRef.current = lensIssuesScoped.findIndex(
                               (i) => i.field === issue.field && i.message === issue.message,
                             )
                             if (lensIssueNavIdxRef.current < 0) lensIssueNavIdxRef.current = idx
@@ -1110,6 +1621,24 @@ export default function AssistantShell({ onClose, onOpenEditor, onToggleLens, le
                           </button>
                         </div>
 
+                        <div
+                          className="manta-lens-chips"
+                          onClick={(e) => e.stopPropagation()}
+                          role="group"
+                          aria-label="Quick actions and field help"
+                        >
+                          {getLensChipsForIssue(issue, lensChipPilot).map((chip) => (
+                            <button
+                              key={chip.id}
+                              type="button"
+                              className={`manta-lens-chip manta-lens-chip--${chip.kind}`}
+                              onClick={() => onLensQuickChip(chip, issue)}
+                            >
+                              {chip.label}
+                            </button>
+                          ))}
+                        </div>
+
                         {isAsk && (
                           <div className="manta-lens-ask-answer">
                             <div className="manta-lens-ask-answer__label">
@@ -1152,7 +1681,7 @@ export default function AssistantShell({ onClose, onOpenEditor, onToggleLens, le
       </div>
     )
 
-    return createPortal(lensContent, portalTarget)
+    return <MantaScannerFrame>{lensContent}</MantaScannerFrame>
   }
 
   // ── Normal widget render ──────────────────────────────────────────────────
@@ -1193,8 +1722,8 @@ export default function AssistantShell({ onClose, onOpenEditor, onToggleLens, le
               type="button"
               className="manta-lens-toggle-btn"
               onClick={onToggleLens}
-              title="Enter Lens Mode — overlay the validator"
-              aria-label="Enter lens mode"
+              title="Scanner: frame workspace and step through issues"
+              aria-label="Open scanner (lens) mode"
             >
               ⬡ LENS
             </button>

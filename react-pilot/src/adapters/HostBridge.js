@@ -87,7 +87,7 @@
  *   validateOnServer(formData: object, level: string): Promise<ServerValidationResult>,
  *   generateGeoJSON(formData: object): Promise<string>,
  *   generateDCAT(formData: object): Promise<string>,
- *   lensScan?: (payload: { title?: string, abstract?: string, xmlSnippet?: string, profileId?: string }) => Promise<{
+ *   lensScan?: (payload: { title?: string, abstract?: string, xmlSnippet?: string, profileId?: string, uxsContext?: unknown }) => Promise<{
  *     runId?: string,
  *     profileId?: string,
  *     suggestions: Array<Record<string, unknown>>,

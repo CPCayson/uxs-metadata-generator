@@ -9,7 +9,17 @@
  */
 
 import { validatePilotState } from '../../lib/pilotValidation.js'
+import { previewMetadataXPath } from '../../lib/metadataXPath.js'
 import { canonicalToPilotState } from '../mappers/pilotStateMapper.js'
+
+/**
+ * @param {import('../entities/types.js').ValidationIssue} issue
+ * @returns {import('../entities/types.js').ValidationIssue}
+ */
+function withPreviewXPath(issue) {
+  if (!issue || issue.xpath == null) return issue
+  return { ...issue, xpath: previewMetadataXPath(issue.xpath) }
+}
 
 export class ValidationEngine {
   /**
@@ -60,14 +70,16 @@ export class ValidationEngine {
         const result = rule.check(state, mode)
         if (!result) continue
         if (result === true) {
-          issues.push({
-            severity: rule.severity,
-            field: rule.field,
-            message: rule.message,
-            xpath: rule.xpath,
-          })
+          issues.push(
+            withPreviewXPath({
+              severity: rule.severity,
+              field: rule.field,
+              message: rule.message,
+              xpath: rule.xpath,
+            }),
+          )
         } else if (Array.isArray(result)) {
-          issues.push(...result)
+          issues.push(...result.map((i) => withPreviewXPath(i)))
         }
       }
     }

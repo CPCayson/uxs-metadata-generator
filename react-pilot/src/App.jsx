@@ -6,6 +6,8 @@ import EmbeddableShell from './shell/EmbeddableShell'
 import WizardShell from './shell/WizardShell'
 import FieldXmlTether from './components/FieldXmlTether'
 import MissionStatusFooter from './components/MissionStatusFooter'
+import MantaVoiceBar from './components/MantaVoiceBar'
+import MantaTutorialDropdown from './components/MantaTutorialDropdown'
 import { createHttpHostAdapter } from './adapters/http/HttpHostAdapter'
 import { missionProfile } from './profiles/mission/missionProfile'
 import { collectionProfile } from './profiles/collection/collectionProfile'
@@ -97,6 +99,7 @@ function App() {
                 Dark mode
               </label>
             </div>
+            <MantaTutorialDropdown />
           </div>
         </div>
         {/* XmlToolsBar portals its buttons into this slot so every profile
@@ -108,18 +111,22 @@ function App() {
           role="toolbar"
           aria-label="XML tools"
         />
+        <MantaVoiceBar profileId={profileId} />
       </header>
 
       <main id="pilot-main" tabIndex={-1} className="pilot-shell">
-        <EmbeddableShell key={profileId} mode="full" profileId={profileId} hostBridge={hostBridge}>
+        <EmbeddableShell
+          key={profileId}
+          mode="full"
+          includeFloatingManta
+          profileId={profileId}
+          hostBridge={hostBridge}
+        >
           <WizardShell onDirtyChange={setIsDirty} />
         </EmbeddableShell>
       </main>
 
       <MissionStatusFooter isDirty={isDirty} appVersion={appVersion} />
-
-      {/* Manta Ray widget — fixed overlay, independent of the main wizard */}
-      <EmbeddableShell mode="widget" profileId={profileId} hostBridge={hostBridge} />
 
       {/* HUD tether: draws a neon line from the focused field to its XML line */}
       <FieldXmlTether />

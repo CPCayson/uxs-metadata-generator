@@ -110,7 +110,10 @@ export default function StepSensors({ sensors, onSetSensors, touched, onTouched,
 
   return (
     <>
-      <p className="card-intro">Add or remove sensor cards. At least one sensor is required.</p>
+      <p className="card-intro">
+        <strong>Acquisition instruments and observed variables</strong> — at least one active sensor is required. Empty
+        rows are ignored.
+      </p>
       {showField('sensors') ? <p className="field-error">{showField('sensors')}</p> : null}
 
       {/* ── Sensor library panel (mirrors Platform pattern) ─────────── */}

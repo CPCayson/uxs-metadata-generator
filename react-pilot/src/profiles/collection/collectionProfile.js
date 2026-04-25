@@ -11,6 +11,7 @@
 
 import { lazy } from 'react'
 import { collectionValidationRuleSets } from './collectionValidationRules.js'
+import { getPilotFieldLabelFallback } from '../../lib/pilotFieldLabelFallback.js'
 
 const StepCollectionIdentification = lazy(() =>
   import('../../features/collection/StepCollectionIdentification.jsx'),
@@ -105,6 +106,8 @@ export const collectionProfile = {
       'collection'
     )
   },
+
+  getFieldLabel: getPilotFieldLabelFallback,
 
   steps: [
     {

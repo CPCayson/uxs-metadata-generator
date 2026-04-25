@@ -20,7 +20,7 @@
  *   generateGeoJSON       → args [formData] — legacy collectFormData shape
  *   generateDCAT          → args [formData] — DCAT JSON-LD string
  *   validateOnServer      → args [formData, level] — `basic`|`strict` (from pilot) → React engine
- *   lensScan              → args [{ title?, abstract?, xmlSnippet? }] — heuristic ScannerSuggestionEnvelope (no DB)
+ *   lensScan              → args [{ title?, abstract?, xmlSnippet?, profileId?, uxsContext? }] — heuristic ScannerSuggestionEnvelope (no DB)
  */
 
 import { neon } from '@neondatabase/serverless'
@@ -331,6 +331,8 @@ async function lensScan(_sql, args) {
     title:      typeof p.title === 'string' ? p.title : '',
     abstract:   typeof p.abstract === 'string' ? p.abstract : '',
     xmlSnippet: typeof p.xmlSnippet === 'string' ? p.xmlSnippet : '',
+    profileId:  typeof p.profileId === 'string' ? p.profileId : '',
+    uxsContext: p.uxsContext,
   })
 }
 
@@ -367,8 +369,12 @@ export default async (req) => {
   }
 
   const handler = ROUTES[fn]
-  if (!handler) return json({ ok: false, error: `Unknown function: ${fn}` }, 404)
+  if (!handler) {
+    console.warn('[db] unknown fn:', String(fn))
+    return json({ ok: false, error: `Unknown function: ${fn}` }, 404)
+  }
 
+  const started = Date.now()
   try {
     let result
     if (NO_DATABASE_FNS.has(fn)) {
@@ -377,10 +383,19 @@ export default async (req) => {
       const sql = getDb()
       result = await handler(sql, args)
     }
+    const ms = Date.now() - started
+    // Netlify UI → Site → Functions → `db` → real-time / historical logs
+    const tag = NO_DATABASE_FNS.has(fn) ? 'ok stateless' : 'ok'
+    console.log(`[db] ${fn} ${tag} ${ms}ms`)
     return json({ ok: true, result })
   } catch (err) {
-    console.error(`[db] ${fn} failed:`, err.message)
-    return json({ ok: false, error: err.message }, 500)
+    const ms = Date.now() - started
+    const msg = err instanceof Error ? err.message : String(err)
+    console.error(`[db] ${fn} error ${ms}ms:`, msg)
+    if (err instanceof Error && err.stack) {
+      console.error(err.stack)
+    }
+    return json({ ok: false, error: msg }, 500)
   }
 }
 

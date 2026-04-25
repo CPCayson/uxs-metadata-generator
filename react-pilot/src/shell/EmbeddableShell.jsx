@@ -9,11 +9,18 @@
  *   'full'    → full-page WizardShell (current App.jsx behavior)
  *   'sidebar' → WizardShell in a fixed-width sidebar panel
  *   'panel'   → WizardShell embedded inline with no outer chrome
- *   'widget'  → AssistantShell (Manta Ray floating card)
+ *   'widget'  → AssistantShell (Manta Ray floating card) only — e.g. standalone embeds
+ *
+ * When `includeFloatingManta` is true with `mode="full"`, the wizard and the
+ * Manta FAB share one MetadataEngineContext (host bridge, validation engine,
+ * CoMET state, profile). Validation / forms / tutorial still sync via
+ * `sessionStorage` + `manta:*` window events as before.
  *
  * Usage:
  *   import { createHttpHostAdapter } from '../adapters/http/HttpHostAdapter.js'
- *   <EmbeddableShell mode="full" profileId="mission" hostBridge={createHttpHostAdapter()} />
+ *   <EmbeddableShell mode="full" includeFloatingManta profileId="mission" hostBridge={createHttpHostAdapter()}>
+ *     <WizardShell />
+ *   </EmbeddableShell>
  */
 
 import { useMemo, useState, useEffect, useCallback, Suspense } from 'react'
@@ -41,6 +48,7 @@ import { defaultPilotState } from '../lib/pilotValidation.js'
  *   initialEntity?: object,
  *   readOnly?: boolean,
  *   theme?: 'light'|'dark'|'system',
+ *   includeFloatingManta?: boolean,
  *   children?: import('react').ReactNode,
  * }} props
  */
@@ -53,10 +61,13 @@ export default function EmbeddableShell({
   onPublish,
   onCometLoad,
   readOnly = false,
+  includeFloatingManta = false,
   children,
 }) {
+  const mantaFloatActive = mode === 'widget' || (mode === 'full' && includeFloatingManta)
   const [widgetOpen,     setWidgetOpen]     = useState(false)
   const [lensMode,       setLensMode]       = useState(false)
+  const [lensTarget,     setLensTarget]     = useState('split')
   const [triggerScore,   setTriggerScore]   = useState(null)   // null | number
   const [triggerPulse,   setTriggerPulse]   = useState(false)  // brief highlight on score update
   const [cometUuid,      setCometUuid]      = useState('')     // UUID of the CoMET record being edited
@@ -89,9 +100,27 @@ export default function EmbeddableShell({
 
   const exportEngine = useMemo(() => new ExportEngine([isoXmlAdapter]), [])
 
+  // Voice / custom events: open scanner lens without the floating card expanded
+  useEffect(() => {
+    if (!mantaFloatActive) return
+    function onOpen() {
+      setWidgetOpen(false)
+      setLensMode(true)
+    }
+    function onClose() {
+      setLensMode(false)
+    }
+    window.addEventListener('manta:open-lens', onOpen)
+    window.addEventListener('manta:close-lens', onClose)
+    return () => {
+      window.removeEventListener('manta:open-lens', onOpen)
+      window.removeEventListener('manta:close-lens', onClose)
+    }
+  }, [mantaFloatActive])
+
   // ── Keyboard shortcut: Cmd/Ctrl+Shift+M toggles widget ──────────────────
   useEffect(() => {
-    if (mode !== 'widget') return
+    if (!mantaFloatActive) return
     function onKey(e) {
       if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'M') {
         e.preventDefault()
@@ -100,19 +129,18 @@ export default function EmbeddableShell({
     }
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
-  }, [mode])
+  }, [mantaFloatActive])
 
   // ── Live score on trigger button ────────────────────────────────────────
   // Reads sessionStorage on mount, on wizard persist (`manta:pilot-session-updated`), and every 12s.
   useEffect(() => {
-    if (mode !== 'widget') return
+    if (!mantaFloatActive) return
 
     function refresh() {
       try {
         const payload = readPilotSessionPayload()
         const state   = payload?.pilot ?? defaultPilotState()
-        const engine  = new ValidationEngine()
-        const result  = engine.runForPilotState(state, 'lenient')
+        const result  = validationEngine.runForPilotState(state, 'lenient')
         setTriggerScore((prev) => {
           if (prev !== result.score) {
             setTriggerPulse(true)
@@ -132,7 +160,7 @@ export default function EmbeddableShell({
       window.removeEventListener('manta:pilot-session-updated', refresh)
       clearInterval(id)
     }
-  }, [mode])
+  }, [mantaFloatActive, validationEngine])
 
   // onCometLoad is called by AssistantShell's COMET tab when the user clicks
   // "Load into Wizard". It stores the pending load so WizardShell can react.
@@ -191,59 +219,86 @@ export default function EmbeddableShell({
     )
   }
 
+  const mantaWidgetSurface = (
+    <>
+      {!widgetOpen && !lensMode && (
+        <button
+          type="button"
+          className={`manta-widget-trigger manta-widget-trigger--arc${triggerPulse ? ' manta-widget-trigger--pulse' : ''}`}
+          onClick={() => setWidgetOpen(true)}
+          aria-label="Open Manta — metadata and scanner"
+          title="Manta — metadata and scanner"
+        >
+          {triggerScore !== null && (
+            <span
+              className="manta-widget-trigger__score manta-widget-trigger__score--arc"
+              style={{
+                color: triggerScore >= 80
+                  ? 'var(--manta-success,#4ade80)'
+                  : triggerScore >= 50
+                    ? 'var(--manta-warning,#fbbf24)'
+                    : 'var(--manta-error,#f87171)',
+              }}
+            >
+              {triggerScore}
+            </span>
+          )}
+        </button>
+      )}
+      {(widgetOpen || lensMode) && (
+        <AssistantShell
+          onClose={() => { setWidgetOpen(false); setLensMode(false) }}
+          onOpenEditor={() => { setWidgetOpen(false); setLensMode(false) }}
+          onToggleLens={toggleLens}
+          lensMode={lensMode}
+          lensTarget={lensTarget}
+          onLensTargetChange={setLensTarget}
+        />
+      )}
+    </>
+  )
+
   return (
     <MetadataEngineCtx.Provider value={ctx}>
-      <div
-        className={`embeddable-shell embeddable-shell--${mode}`}
-        data-shell-mode={mode}
-        data-profile={profileId}
-      >
-        {mode === 'widget' ? (
-          <>
-            {!widgetOpen && !lensMode && (
-              <button
-                type="button"
-                className={`manta-widget-trigger${triggerPulse ? ' manta-widget-trigger--pulse' : ''}`}
-                onClick={() => setWidgetOpen(true)}
-                aria-label="Open Manta Ray Metadata Builder"
-                title="Manta Ray Metadata Builder"
-              >
-                <span className="manta-widget-trigger__icon">🦈</span>
-                <span className="manta-widget-trigger__label">Metadata</span>
-                {triggerScore !== null && (
-                  <span
-                    className="manta-widget-trigger__score"
-                    style={{
-                      color: triggerScore >= 80
-                        ? 'var(--manta-success,#16a34a)'
-                        : triggerScore >= 50
-                          ? 'var(--manta-warning,#d97706)'
-                          : 'var(--manta-error,#dc2626)',
-                    }}
-                  >
-                    {triggerScore}
-                  </span>
-                )}
-              </button>
-            )}
-            {(widgetOpen || lensMode) && (
-              <AssistantShell
-                onClose={() => { setWidgetOpen(false); setLensMode(false) }}
-                onOpenEditor={() => { setWidgetOpen(false); setLensMode(false) }}
-                onToggleLens={toggleLens}
-                lensMode={lensMode}
-              />
-            )}
-          </>
-        ) : (
-          // 'full', 'sidebar', 'panel' — render the wizard via children or
-          // a WizardShell import. children allows App.jsx to remain the wizard
-          // during Phase 1/2 without a full extraction.
+      {mode === 'full' && includeFloatingManta ? (
+        <>
+          <div
+            className="embeddable-shell embeddable-shell--full"
+            data-shell-mode="full"
+            data-profile={profileId}
+          >
+            <Suspense fallback={<div className="embeddable-shell__loading">Loading…</div>}>
+              {children}
+            </Suspense>
+          </div>
+          <div
+            className="embeddable-shell embeddable-shell--widget"
+            data-shell-mode="widget"
+            data-manta-bridged="true"
+            data-profile={profileId}
+          >
+            {mantaWidgetSurface}
+          </div>
+        </>
+      ) : mode === 'widget' ? (
+        <div
+          className="embeddable-shell embeddable-shell--widget"
+          data-shell-mode="widget"
+          data-profile={profileId}
+        >
+          {mantaWidgetSurface}
+        </div>
+      ) : (
+        <div
+          className={`embeddable-shell embeddable-shell--${mode}`}
+          data-shell-mode={mode}
+          data-profile={profileId}
+        >
           <Suspense fallback={<div className="embeddable-shell__loading">Loading…</div>}>
             {children}
           </Suspense>
-        )}
-      </div>
+        </div>
+      )}
     </MetadataEngineCtx.Provider>
   )
 }

@@ -118,10 +118,9 @@ export default function StepMission({
   return (
     <>
       <p className="card-intro">
-        Identification, citation dates, dataset purpose and status, responsible party, constraints, and aggregation
-        — same scope as the historical HTML wizard <code>#missionForm</code>. CRS, bbox, grid, and quality are on the{' '}
-        <strong>Spatial</strong> step (<code>#spatialForm</code> in the classic wizard; see <code>METADATA_FIELD_MAP.md</code>{' '}
-        §7).
+        <strong>Required for export</strong> in the current mode: identifiers, title, abstract, purpose, period, contact,
+        status, and language. <strong>Optional</strong> below: UxS operational context, supplemental text, and aggregation.
+        Bbox, CRS, and data-quality detail live on the <strong>Spatial</strong> step.
       </p>
 
       <section className="panel" aria-labelledby="uxs-context-heading">
@@ -136,6 +135,7 @@ export default function StepMission({
             <select
               id="uxsPrimaryLayer"
               className="form-control"
+              data-pilot-field="mission.uxsContext.primaryLayer"
               value={uxsContext.primaryLayer || 'datasetProduct'}
               onChange={(e) => patchUxsContext({ primaryLayer: e.target.value })}
               onBlur={() => onTouched('mission.uxsContext.primaryLayer')}
@@ -154,6 +154,7 @@ export default function StepMission({
             <select
               id="uxsOperationOutcome"
               className="form-control"
+              data-pilot-field="mission.uxsContext.operationOutcome"
               value={uxsContext.operationOutcome || ''}
               onChange={(e) => patchUxsContext({ operationOutcome: e.target.value })}
               onBlur={() => onTouched('mission.uxsContext.operationOutcome')}
@@ -180,6 +181,7 @@ export default function StepMission({
               <input
                 id="uxsDeploymentName"
                 className="form-control"
+                data-pilot-field="mission.uxsContext.deploymentName"
                 value={uxsContext.deploymentName || ''}
                 onChange={(e) => patchUxsContext({ deploymentName: e.target.value })}
                 onBlur={() => onTouched('mission.uxsContext.deploymentName')}
@@ -190,6 +192,7 @@ export default function StepMission({
               <input
                 id="uxsDeploymentId"
                 className="form-control"
+                data-pilot-field="mission.uxsContext.deploymentId"
                 value={uxsContext.deploymentId || ''}
                 onChange={(e) => patchUxsContext({ deploymentId: e.target.value })}
                 onBlur={() => onTouched('mission.uxsContext.deploymentId')}
@@ -202,6 +205,7 @@ export default function StepMission({
               <input
                 id="uxsRunName"
                 className="form-control"
+                data-pilot-field="mission.uxsContext.runName"
                 value={uxsContext.runName || ''}
                 onChange={(e) => patchUxsContext({ runName: e.target.value })}
                 onBlur={() => onTouched('mission.uxsContext.runName')}
@@ -212,6 +216,7 @@ export default function StepMission({
               <input
                 id="uxsRunId"
                 className="form-control"
+                data-pilot-field="mission.uxsContext.runId"
                 value={uxsContext.runId || ''}
                 onChange={(e) => patchUxsContext({ runId: e.target.value })}
                 onBlur={() => onTouched('mission.uxsContext.runId')}
@@ -224,6 +229,7 @@ export default function StepMission({
               <input
                 id="uxsSortieName"
                 className="form-control"
+                data-pilot-field="mission.uxsContext.sortieName"
                 value={uxsContext.sortieName || ''}
                 onChange={(e) => patchUxsContext({ sortieName: e.target.value })}
                 onBlur={() => onTouched('mission.uxsContext.sortieName')}
@@ -234,6 +240,7 @@ export default function StepMission({
               <input
                 id="uxsSortieId"
                 className="form-control"
+                data-pilot-field="mission.uxsContext.sortieId"
                 value={uxsContext.sortieId || ''}
                 onChange={(e) => patchUxsContext({ sortieId: e.target.value })}
                 onBlur={() => onTouched('mission.uxsContext.sortieId')}
@@ -246,6 +253,7 @@ export default function StepMission({
               <input
                 id="uxsDiveName"
                 className="form-control"
+                data-pilot-field="mission.uxsContext.diveName"
                 value={uxsContext.diveName || ''}
                 onChange={(e) => patchUxsContext({ diveName: e.target.value })}
                 onBlur={() => onTouched('mission.uxsContext.diveName')}
@@ -256,6 +264,7 @@ export default function StepMission({
               <input
                 id="uxsDiveId"
                 className="form-control"
+                data-pilot-field="mission.uxsContext.diveId"
                 value={uxsContext.diveId || ''}
                 onChange={(e) => patchUxsContext({ diveId: e.target.value })}
                 onBlur={() => onTouched('mission.uxsContext.diveId')}
@@ -267,6 +276,7 @@ export default function StepMission({
             id="uxsContextNarrative"
             rows={2}
             className="form-control"
+            data-pilot-field="mission.uxsContext.narrative"
             value={uxsContext.narrative || ''}
             onChange={(e) => patchUxsContext({ narrative: e.target.value })}
             onBlur={() => onTouched('mission.uxsContext.narrative')}
@@ -280,6 +290,7 @@ export default function StepMission({
         <input
           id="fileId"
           className={`form-control${invalid('mission.fileId') ? ' form-control--invalid' : ''}`}
+          data-pilot-field="mission.fileId"
           value={mission.fileId}
           onChange={(e) => onMissionPatch({ fileId: e.target.value })}
           onBlur={() => onTouched('mission.fileId')}
@@ -287,9 +298,8 @@ export default function StepMission({
           aria-required
         />
         <p className="hint">
-          Canonical field for the NCEI UxS template <code>gmd:fileIdentifier</code> (optional{' '}
-          <code>gov.noaa.ncei.uxs:</code> prefix from the Distribution step). Older legacy payloads used the
-          name <code>missionId</code> for the same value; merge copies that here when <code>fileId</code> is empty.
+          NCEI file identifier; optional <code>gov.noaa.ncei.uxs:</code> prefix. Legacy <code>missionId</code> maps here when
+          empty.
         </p>
         {show('mission.fileId') ? <p className="field-error">{show('mission.fileId')}</p> : null}
 
@@ -297,6 +307,7 @@ export default function StepMission({
         <input
           id="title"
           className={`form-control${invalid('mission.title') ? ' form-control--invalid' : ''}`}
+          data-pilot-field="mission.title"
           value={mission.title}
           onChange={(e) => onMissionPatch({ title: e.target.value })}
           onBlur={() => onTouched('mission.title')}
@@ -308,6 +319,7 @@ export default function StepMission({
         <input
           id="alternateTitle"
           className="form-control"
+          data-pilot-field="mission.alternateTitle"
           value={mission.alternateTitle || ''}
           onChange={(e) => onMissionPatch({ alternateTitle: e.target.value })}
         />
@@ -317,6 +329,7 @@ export default function StepMission({
           id="abstract"
           rows={4}
           className={`form-control${invalid('mission.abstract') ? ' form-control--invalid' : ''}`}
+          data-pilot-field="mission.abstract"
           value={mission.abstract}
           onChange={(e) => onMissionPatch({ abstract: e.target.value })}
           onBlur={() => onTouched('mission.abstract')}
@@ -329,6 +342,7 @@ export default function StepMission({
           id="purpose"
           rows={2}
           className={`form-control${invalid('mission.purpose') ? ' form-control--invalid' : ''}`}
+          data-pilot-field="mission.purpose"
           value={mission.purpose || ''}
           onChange={(e) => onMissionPatch({ purpose: e.target.value })}
           onBlur={() => onTouched('mission.purpose')}
@@ -341,6 +355,7 @@ export default function StepMission({
           id="supplementalInformation"
           rows={2}
           className="form-control"
+          data-pilot-field="mission.supplementalInformation"
           value={mission.supplementalInformation || ''}
           onChange={(e) => onMissionPatch({ supplementalInformation: e.target.value })}
         />
@@ -352,6 +367,7 @@ export default function StepMission({
               id="startDate"
               type="datetime-local"
               className={`form-control${invalid('mission.startDate') ? ' form-control--invalid' : ''}`}
+              data-pilot-field="mission.startDate"
               value={toDatetimeLocalValue(mission.startDate)}
               onChange={(e) => onMissionPatch({ startDate: fromDatetimeLocalValue(e.target.value) })}
               onBlur={() => onTouched('mission.startDate')}
@@ -365,6 +381,7 @@ export default function StepMission({
               id="endDate"
               type="datetime-local"
               className={`form-control${invalid('mission.endDate') ? ' form-control--invalid' : ''}`}
+              data-pilot-field="mission.endDate"
               value={toDatetimeLocalValue(mission.endDate)}
               onChange={(e) => onMissionPatch({ endDate: fromDatetimeLocalValue(e.target.value) })}
               onBlur={() => onTouched('mission.endDate')}
@@ -387,6 +404,7 @@ export default function StepMission({
             <input
               id="temporalExtentIntervalUnit"
               className="form-control"
+              data-pilot-field="mission.temporalExtentIntervalUnit"
               placeholder="e.g., day, hour, or UOM URI"
               value={mission.temporalExtentIntervalUnit || ''}
               onChange={(e) => onMissionPatch({ temporalExtentIntervalUnit: e.target.value })}
@@ -400,6 +418,7 @@ export default function StepMission({
             <input
               id="temporalExtentIntervalValue"
               className="form-control"
+              data-pilot-field="mission.temporalExtentIntervalValue"
               placeholder="e.g., 1"
               value={mission.temporalExtentIntervalValue || ''}
               onChange={(e) => onMissionPatch({ temporalExtentIntervalValue: e.target.value })}
@@ -417,6 +436,7 @@ export default function StepMission({
               id="metadataRecordDate"
               type="datetime-local"
               className={`form-control${invalid('mission.metadataRecordDate') ? ' form-control--invalid' : ''}`}
+              data-pilot-field="mission.metadataRecordDate"
               value={toDatetimeLocalValue(mission.metadataRecordDate)}
               onChange={(e) => onMissionPatch({ metadataRecordDate: fromDatetimeLocalValue(e.target.value) })}
               onBlur={() => onTouched('mission.metadataRecordDate')}
@@ -438,6 +458,7 @@ export default function StepMission({
               id="publicationDate"
               type="datetime-local"
               className={`form-control${invalid('mission.publicationDate') ? ' form-control--invalid' : ''}`}
+              data-pilot-field="mission.publicationDate"
               value={toDatetimeLocalValue(mission.publicationDate)}
               onChange={(e) => onMissionPatch({ publicationDate: fromDatetimeLocalValue(e.target.value) })}
               onBlur={() => onTouched('mission.publicationDate')}
@@ -455,6 +476,7 @@ export default function StepMission({
             <input
               id="language"
               className={`form-control${invalid('mission.language') ? ' form-control--invalid' : ''}`}
+              data-pilot-field="mission.language"
               placeholder="e.g., eng"
               value={mission.language || ''}
               onChange={(e) => onMissionPatch({ language: e.target.value })}
@@ -468,6 +490,7 @@ export default function StepMission({
             <input
               id="characterSet"
               className="form-control"
+              data-pilot-field="mission.characterSet"
               placeholder="e.g., utf8"
               value={mission.characterSet || ''}
               onChange={(e) => onMissionPatch({ characterSet: e.target.value })}
@@ -480,6 +503,7 @@ export default function StepMission({
         <textarea
           id="topicCategories"
           className="form-control"
+          data-pilot-field="mission.topicCategories"
           rows={3}
           placeholder={`e.g.
 oceans
@@ -500,6 +524,7 @@ geoscientificInformation`}
             <input
               id="graphicOverviewHref"
               className="form-control"
+              data-pilot-field="mission.graphicOverviewHref"
               placeholder="https://data.noaa.gov/docucomp/…"
               value={mission.graphicOverviewHref || ''}
               onChange={(e) => onMissionPatch({ graphicOverviewHref: e.target.value })}
@@ -510,6 +535,7 @@ geoscientificInformation`}
             <input
               id="graphicOverviewTitle"
               className="form-control"
+              data-pilot-field="mission.graphicOverviewTitle"
               placeholder="e.g. Default NOAA logo"
               value={mission.graphicOverviewTitle || ''}
               onChange={(e) => onMissionPatch({ graphicOverviewTitle: e.target.value })}
@@ -528,6 +554,7 @@ geoscientificInformation`}
             <input
               id="citationAuthorIndividualName"
               className="form-control"
+              data-pilot-field="mission.citationAuthorIndividualName"
               value={mission.citationAuthorIndividualName || ''}
               onChange={(e) => onMissionPatch({ citationAuthorIndividualName: e.target.value })}
             />
@@ -537,6 +564,7 @@ geoscientificInformation`}
             <input
               id="citationAuthorOrganisationName"
               className="form-control"
+              data-pilot-field="mission.citationAuthorOrganisationName"
               value={mission.citationAuthorOrganisationName || ''}
               onChange={(e) => onMissionPatch({ citationAuthorOrganisationName: e.target.value })}
             />
@@ -548,6 +576,7 @@ geoscientificInformation`}
             <input
               id="citationPublisherOrganisationName"
               className="form-control"
+              data-pilot-field="mission.citationPublisherOrganisationName"
               value={mission.citationPublisherOrganisationName || ''}
               onChange={(e) => onMissionPatch({ citationPublisherOrganisationName: e.target.value })}
             />
@@ -557,6 +586,7 @@ geoscientificInformation`}
             <input
               id="citationOriginatorIndividualName"
               className="form-control"
+              data-pilot-field="mission.citationOriginatorIndividualName"
               value={mission.citationOriginatorIndividualName || ''}
               onChange={(e) => onMissionPatch({ citationOriginatorIndividualName: e.target.value })}
             />
@@ -566,6 +596,7 @@ geoscientificInformation`}
         <input
           id="citationOriginatorOrganisationName"
           className="form-control"
+          data-pilot-field="mission.citationOriginatorOrganisationName"
           value={mission.citationOriginatorOrganisationName || ''}
           onChange={(e) => onMissionPatch({ citationOriginatorOrganisationName: e.target.value })}
         />
@@ -574,6 +605,7 @@ geoscientificInformation`}
         <select
           id="scopeCode"
           className="form-control form-select"
+          data-pilot-field="mission.scopeCode"
           value={mission.scopeCode || ''}
           onChange={(e) => onMissionPatch({ scopeCode: e.target.value })}
         >
@@ -589,6 +621,7 @@ geoscientificInformation`}
             <select
               id="missionStatus"
               className={`form-control form-select${invalid('mission.status') ? ' form-control--invalid' : ''}`}
+              data-pilot-field="mission.status"
               value={mission.status || ''}
               onChange={(e) => onMissionPatch({ status: e.target.value })}
               onBlur={() => onTouched('mission.status')}
@@ -611,6 +644,7 @@ geoscientificInformation`}
             <input
               id="org"
               className={`form-control${invalid('mission.org') ? ' form-control--invalid' : ''}`}
+              data-pilot-field="mission.org"
               placeholder="e.g., NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT"
               value={mission.org}
               onChange={(e) => onMissionPatch({ org: e.target.value })}
@@ -626,6 +660,7 @@ geoscientificInformation`}
             <input
               id="individualName"
               className={`form-control${invalid('mission.individualName') ? ' form-control--invalid' : ''}`}
+              data-pilot-field="mission.individualName"
               placeholder="e.g., point of contact for citation / author block"
               value={mission.individualName}
               onChange={(e) => onMissionPatch({ individualName: e.target.value })}
@@ -643,6 +678,7 @@ geoscientificInformation`}
               id="email"
               type="email"
               className={`form-control${invalid('mission.email') ? ' form-control--invalid' : ''}`}
+              data-pilot-field="mission.email"
               placeholder="e.g., name@noaa.gov"
               value={mission.email}
               onChange={(e) => onMissionPatch({ email: e.target.value })}
@@ -656,6 +692,7 @@ geoscientificInformation`}
             <input
               id="contactPhone"
               className="form-control"
+              data-pilot-field="mission.contactPhone"
               placeholder="e.g., (555) 555-5555"
               value={mission.contactPhone || ''}
               onChange={(e) => onMissionPatch({ contactPhone: e.target.value })}
@@ -667,6 +704,7 @@ geoscientificInformation`}
         <input
           id="contactUrl"
           className={`form-control${invalid('mission.contactUrl') ? ' form-control--invalid' : ''}`}
+          data-pilot-field="mission.contactUrl"
           value={mission.contactUrl || ''}
           onChange={(e) => onMissionPatch({ contactUrl: e.target.value })}
           onBlur={() => onTouched('mission.contactUrl')}
@@ -678,6 +716,7 @@ geoscientificInformation`}
           id="contactAddress"
           rows={2}
           className="form-control"
+          data-pilot-field="mission.contactAddress"
           value={mission.contactAddress || ''}
           onChange={(e) => onMissionPatch({ contactAddress: e.target.value })}
         />
@@ -688,6 +727,7 @@ geoscientificInformation`}
             <input
               id="rorSearch"
               className="form-control"
+              data-pilot-field="mission.ror"
               placeholder="Search ROR…"
               value={rorQuery}
               onChange={(e) => setRorQuery(e.target.value)}
@@ -731,6 +771,7 @@ geoscientificInformation`}
             <input
               id="doi"
               className={`form-control${invalid('mission.doi') ? ' form-control--invalid' : ''}`}
+              data-pilot-field="mission.doi"
               value={mission.doi}
               onChange={(e) => onMissionPatch({ doi: e.target.value })}
               onBlur={() => onTouched('mission.doi')}
@@ -742,6 +783,7 @@ geoscientificInformation`}
             <input
               id="accession"
               className={`form-control${invalid('mission.accession') ? ' form-control--invalid' : ''}`}
+              data-pilot-field="mission.accession"
               value={mission.accession}
               onChange={(e) => onMissionPatch({ accession: e.target.value })}
               onBlur={() => onTouched('mission.accession')}
@@ -762,6 +804,7 @@ geoscientificInformation`}
           id="citeAs"
           rows={2}
           className="form-control"
+          data-pilot-field="mission.citeAs"
           value={mission.citeAs || ''}
           onChange={(e) => onMissionPatch({ citeAs: e.target.value })}
         />
@@ -770,6 +813,7 @@ geoscientificInformation`}
           id="otherCiteAs"
           rows={2}
           className="form-control"
+          data-pilot-field="mission.otherCiteAs"
           value={mission.otherCiteAs || ''}
           onChange={(e) => onMissionPatch({ otherCiteAs: e.target.value })}
         />
@@ -777,6 +821,7 @@ geoscientificInformation`}
         <select
           id="dataLicensePreset"
           className="form-control form-select"
+          data-pilot-field="mission.dataLicensePreset"
           value={mission.dataLicensePreset || 'custom'}
           onChange={(e) => onMissionPatch({ dataLicensePreset: e.target.value })}
         >
@@ -792,25 +837,49 @@ geoscientificInformation`}
           id="licenseUrl"
           type="url"
           className={`form-control${invalid('mission.licenseUrl') ? ' form-control--invalid' : ''}`}
+          data-pilot-field="mission.licenseUrl"
           value={mission.licenseUrl || ''}
           onChange={(e) => onMissionPatch({ licenseUrl: e.target.value })}
           onBlur={() => onTouched('mission.licenseUrl')}
           aria-required={mission.dataLicensePreset === 'custom'}
         />
         {show('mission.licenseUrl') ? <p className="field-error">{show('mission.licenseUrl')}</p> : null}
-        <label htmlFor="accessConstraints">Access constraints</label>
+        <label htmlFor="accessConstraintsCode">Access restriction (ISO MD_RestrictionCode)</label>
+        <select
+          id="accessConstraintsCode"
+          className="form-control form-select"
+          data-pilot-field="mission.accessConstraintsCode"
+          value={mission.accessConstraintsCode || ''}
+          onChange={(e) => onMissionPatch({ accessConstraintsCode: e.target.value })}
+        >
+          <option value="">— Not set (notes only, or otherRestrictions if you only type text) —</option>
+          <option value="unrestricted">unrestricted</option>
+          <option value="limited">limited</option>
+          <option value="restricted">restricted</option>
+          <option value="confidential">confidential</option>
+          <option value="otherRestrictions">otherRestrictions (see notes)</option>
+        </select>
+        <p className="hint">
+          The live XML preview emits a proper <code>gmd:MD_RestrictionCode</code> with codelist when a value is chosen;
+          notes add <code>gmd:otherConstraints</code> for details. Text without a code maps to{' '}
+          <code>otherRestrictions</code> + your text (legacy free-text shape is normalized).
+        </p>
+        <label htmlFor="accessConstraints">Access notes / narrative</label>
         <textarea
           id="accessConstraints"
           rows={2}
           className="form-control"
+          data-pilot-field="mission.accessConstraints"
           value={mission.accessConstraints || ''}
           onChange={(e) => onMissionPatch({ accessConstraints: e.target.value })}
+          onBlur={() => onTouched('mission.accessConstraints')}
         />
         <label htmlFor="distributionLiability">Distribution liability</label>
         <textarea
           id="distributionLiability"
           rows={2}
           className="form-control"
+          data-pilot-field="mission.distributionLiability"
           value={mission.distributionLiability || ''}
           onChange={(e) => onMissionPatch({ distributionLiability: e.target.value })}
         />
@@ -831,6 +900,7 @@ geoscientificInformation`}
             <input
               id="parentProjectTitle"
               className={`form-control${invalid('mission.parentProjectTitle') ? ' form-control--invalid' : ''}`}
+              data-pilot-field="mission.parentProjectTitle"
               value={mission.parentProjectTitle || ''}
               onChange={(e) => onMissionPatch({ parentProjectTitle: e.target.value })}
               onBlur={() => onTouched('mission.parentProjectTitle')}
@@ -844,6 +914,7 @@ geoscientificInformation`}
             <input
               id="parentProjectDate"
               className="form-control"
+              data-pilot-field="mission.parentProjectDate"
               value={mission.parentProjectDate || ''}
               onChange={(e) => onMissionPatch({ parentProjectDate: e.target.value })}
             />
@@ -853,6 +924,7 @@ geoscientificInformation`}
             <input
               id="parentProjectCode"
               className="form-control"
+              data-pilot-field="mission.parentProjectCode"
               value={mission.parentProjectCode || ''}
               onChange={(e) => onMissionPatch({ parentProjectCode: e.target.value })}
             />
@@ -866,6 +938,7 @@ geoscientificInformation`}
             <input
               id="relatedDatasetTitle"
               className="form-control"
+              data-pilot-field="mission.relatedDatasetTitle"
               value={mission.relatedDatasetTitle || ''}
               onChange={(e) => onMissionPatch({ relatedDatasetTitle: e.target.value })}
             />
@@ -875,6 +948,7 @@ geoscientificInformation`}
             <input
               id="relatedDatasetDate"
               className="form-control"
+              data-pilot-field="mission.relatedDatasetDate"
               value={mission.relatedDatasetDate || ''}
               onChange={(e) => onMissionPatch({ relatedDatasetDate: e.target.value })}
             />
@@ -886,6 +960,7 @@ geoscientificInformation`}
             <input
               id="relatedDatasetCode"
               className="form-control"
+              data-pilot-field="mission.relatedDatasetCode"
               value={mission.relatedDatasetCode || ''}
               onChange={(e) => onMissionPatch({ relatedDatasetCode: e.target.value })}
             />
@@ -895,6 +970,7 @@ geoscientificInformation`}
             <input
               id="relatedDatasetOrg"
               className="form-control"
+              data-pilot-field="mission.relatedDatasetOrg"
               value={mission.relatedDatasetOrg || ''}
               onChange={(e) => onMissionPatch({ relatedDatasetOrg: e.target.value })}
             />
@@ -905,6 +981,7 @@ geoscientificInformation`}
           id="relatedDataUrl"
           type="url"
           className={`form-control${invalid('mission.relatedDataUrl') ? ' form-control--invalid' : ''}`}
+          data-pilot-field="mission.relatedDataUrl"
           value={mission.relatedDataUrl || ''}
           onChange={(e) => onMissionPatch({ relatedDataUrl: e.target.value })}
           onBlur={() => onTouched('mission.relatedDataUrl')}
@@ -916,6 +993,7 @@ geoscientificInformation`}
             <input
               id="relatedDataUrlTitle"
               className="form-control"
+              data-pilot-field="mission.relatedDataUrlTitle"
               value={mission.relatedDataUrlTitle || ''}
               onChange={(e) => onMissionPatch({ relatedDataUrlTitle: e.target.value })}
             />
@@ -925,6 +1003,7 @@ geoscientificInformation`}
             <input
               id="relatedDataUrlDescription"
               className="form-control"
+              data-pilot-field="mission.relatedDataUrlDescription"
               value={mission.relatedDataUrlDescription || ''}
               onChange={(e) => onMissionPatch({ relatedDataUrlDescription: e.target.value })}
             />
@@ -938,6 +1017,7 @@ geoscientificInformation`}
             <input
               id="associatedPublicationTitle"
               className="form-control"
+              data-pilot-field="mission.associatedPublicationTitle"
               value={mission.associatedPublicationTitle || ''}
               onChange={(e) => onMissionPatch({ associatedPublicationTitle: e.target.value })}
             />
@@ -947,6 +1027,7 @@ geoscientificInformation`}
             <input
               id="associatedPublicationDate"
               className="form-control"
+              data-pilot-field="mission.associatedPublicationDate"
               value={mission.associatedPublicationDate || ''}
               onChange={(e) => onMissionPatch({ associatedPublicationDate: e.target.value })}
             />
@@ -956,6 +1037,7 @@ geoscientificInformation`}
             <input
               id="associatedPublicationCode"
               className="form-control"
+              data-pilot-field="mission.associatedPublicationCode"
               value={mission.associatedPublicationCode || ''}
               onChange={(e) => onMissionPatch({ associatedPublicationCode: e.target.value })}
             />

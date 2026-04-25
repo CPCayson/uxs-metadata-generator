@@ -1,6 +1,7 @@
 import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { strFromU8, unzipSync } from 'fflate'
+import { emitPilotAuditEvent } from '../lib/pilotAuditEvents.js'
 import ScannerSuggestionsDialog from './ScannerSuggestionsDialog.jsx'
 
 /**
@@ -210,6 +211,13 @@ function XmlToolsBar({
       pendingImportMetaRef.current = {}
       clearZipImportUi()
       onPilotImport(merged)
+      emitPilotAuditEvent({
+        profileId: profile.id,
+        action: 'pilotImport',
+        result: 'ok',
+        sourceType: result.provenance?.sourceType ?? 'unknown',
+        originalFilename: meta.originalFilename || null,
+      })
       const w = result.warnings?.length ? ` (${result.warnings.join(' ')})` : ''
       onStatus?.(`Imported fields from XML.${w}`)
       setImportOpen(false)

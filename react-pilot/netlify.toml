@@ -1,3 +1,5 @@
+# Logs: Netlify → your site → Functions → `db` (or Deploys → a deploy → Function logs).
+# The `db` handler logs each call as `[db] <fn> ok|stateless …ms` and errors with timing + stack.
 [build]
   command   = "npm run build"
   publish   = "dist"

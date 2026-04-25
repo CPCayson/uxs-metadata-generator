@@ -19,6 +19,7 @@ import {
   validateIsoXml,
 } from '../../lib/cometClient.js'
 import { buildPilotPayloadFromCometXml } from '../../lib/cometProfileImport.js'
+import { emitPilotAuditEvent } from '../../lib/pilotAuditEvents.js'
 
 /**
  * Human-readable CoMET push description for the active profile (not mission-only).
@@ -118,6 +119,13 @@ export function useMissionCometActions({
       onStatus(
         `CoMET record ${uuid.slice(0, 8)}… loaded — ${(gaps ?? []).length} gap(s) detected. Validation in catalog mode.`,
       )
+      emitPilotAuditEvent({
+        profileId: profile.id,
+        action: 'cometPull',
+        result: 'ok',
+        recordUuid: uuid,
+        gapCount: (gaps ?? []).length,
+      })
     },
     [
       profile,
@@ -226,17 +234,17 @@ export function useMissionCometActions({
         const count = cometErrorCount(linkResult)
         if (count == null) {
           steps.push({ id: 'linkcheck', label: 'Link check', ok: false, detail: 'Unparseable CoMET link-check response' })
-          if (overall === 'PASS') overall = 'WARN'
+          overall = 'BLOCK'
         } else if (count > 0) {
           steps.push({ id: 'linkcheck', label: 'Link check', ok: false, detail: `${count} link issue(s)` })
-          if (overall === 'PASS') overall = 'WARN'
+          overall = 'BLOCK'
         } else {
           steps.push({ id: 'linkcheck', label: 'Link check', ok: true, detail: '0 link issues' })
         }
       } catch (e) {
         const d = e instanceof Error ? e.message : String(e)
         steps.push({ id: 'linkcheck', label: 'Link check', ok: false, detail: d })
-        if (overall === 'PASS') overall = 'WARN'
+        overall = 'BLOCK'
       }
 
       try {
@@ -244,28 +252,33 @@ export function useMissionCometActions({
         const count = Number.parseInt(String(rubric?.errorCount ?? '0'), 10)
         if (Number.isFinite(count) && count > 0) {
           steps.push({ id: 'rubric', label: 'Rubric V2', ok: false, detail: `${count} rubric error(s); score ${rubric.totalScore}` })
-          if (overall === 'PASS') overall = 'WARN'
+          overall = 'BLOCK'
         } else {
-          steps.push({ id: 'rubric', label: 'Rubric V2', ok: true, detail: `Score ${rubric.totalScore}` })
+          steps.push({ id: 'rubric', label: 'Rubric V2', ok: true, detail: `Score ${rubric?.totalScore ?? '—'}` })
         }
       } catch (e) {
         const d = e instanceof Error ? e.message : String(e)
         steps.push({ id: 'rubric', label: 'Rubric V2', ok: false, detail: d })
-        if (overall === 'PASS') overall = 'WARN'
+        overall = 'BLOCK'
       }
 
       setPreflightSummary({ overall, steps })
+      emitPilotAuditEvent({
+        profileId: profile.id,
+        action: 'cometPreflight',
+        result: overall,
+        stepCount: steps.length,
+        cometUuid: cometUuid || null,
+      })
       onStatus(
         overall === 'BLOCK'
-          ? 'Preflight: BLOCK — fix issues before push.'
-          : overall === 'WARN'
-            ? 'Preflight: PASS with warnings — review link/rubric steps.'
-            : 'Preflight: PASS — CoMET validate/link/rubric checks reported no issues.',
+          ? 'Preflight: BLOCK — fix validate, link, or rubric issues before push.'
+          : 'Preflight: PASS — CoMET validate, link check, and rubric reported no blocking issues.',
       )
     } finally {
       setPreflightBusy(false)
     }
-  }, [capPreflight, buildXml, pilotState, cometUuid, onStatus])
+  }, [capPreflight, buildXml, pilotState, cometUuid, onStatus, profile.id])
 
   const pushDraftToComet = useCallback(async () => {
     if (!capPush || !cometUuid || pushBusy) return
@@ -276,6 +289,12 @@ export function useMissionCometActions({
       const description = cometPushDescriptionForProfile(profile, pilotState)
       const result = await pushCometRecord(cometUuid, xml, { description })
       onStatus(`Pushed to CoMET. ${result.message}`)
+      emitPilotAuditEvent({
+        profileId: profile.id,
+        action: 'cometPush',
+        result: 'ok',
+        cometUuid: result.uuid || cometUuid,
+      })
       onPublish?.({ uuid: result.uuid || cometUuid, cometUrl: result.cometUrl, message: result.message })
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err)

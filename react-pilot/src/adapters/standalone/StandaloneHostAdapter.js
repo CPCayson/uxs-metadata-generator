@@ -63,13 +63,15 @@ export function createStandaloneHostAdapter() {
 
     /**
      * Stateless heuristic (GCMD) — same contract as HttpHostAdapter `lensScan` for local demos.
-     * @param {{ title?: string, abstract?: string, xmlSnippet?: string }} payload
+     * @param {{ title?: string, abstract?: string, xmlSnippet?: string, profileId?: string, uxsContext?: unknown }} payload
      */
     async lensScan(payload) {
       return runLensScanHeuristic({
         title:      typeof payload?.title === 'string' ? payload.title : '',
         abstract:   typeof payload?.abstract === 'string' ? payload.abstract : '',
         xmlSnippet: typeof payload?.xmlSnippet === 'string' ? payload.xmlSnippet : '',
+        profileId:  typeof payload?.profileId === 'string' ? payload.profileId : '',
+        uxsContext: payload && typeof payload === 'object' ? payload.uxsContext : undefined,
       })
     },
   }

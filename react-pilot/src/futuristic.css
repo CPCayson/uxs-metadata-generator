@@ -942,8 +942,8 @@ label {
   box-shadow: 0 0 24px rgba(34, 211, 238, 0.06);
 }
 
-/* ── Manta widget: holographic FAB + card ─────────────────────────── */
-.manta-widget-trigger {
+/* ── Manta widget: holographic FAB (legacy pill) + Arc core circle ─ */
+.manta-widget-trigger:not(.manta-widget-trigger--arc) {
   background: linear-gradient(120deg, var(--fx-cyan), var(--fx-blue) 55%, var(--fx-violet)) !important;
   background-size: 200% 100%;
   color: #020617 !important;
@@ -958,13 +958,121 @@ label {
   transition: background-position 0.5s ease, transform 0.1s ease, box-shadow 0.25s ease;
 }
 
-.manta-widget-trigger:hover {
+.manta-widget-trigger:not(.manta-widget-trigger--arc):hover {
   background-position: 100% 50%;
   transform: translateY(-2px);
   box-shadow:
     0 0 0 1px rgba(34, 211, 238, 0.6),
     0 14px 36px rgba(34, 211, 238, 0.45),
     0 0 50px rgba(168, 85, 247, 0.5) !important;
+}
+
+/* Arc reactor: circular image trigger + glassmorphic rim */
+.manta-widget-trigger.manta-widget-trigger--arc {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 72px;
+  height: 72px;
+  min-width: 72px !important;
+  min-height: 72px;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  color: transparent !important;
+  font: 0/0 a !important;
+  border: none !important;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  background-color: #020617 !important;
+  background-image:
+    linear-gradient(155deg, rgba(255, 255, 255, 0.1) 0%, transparent 42%, rgba(0, 0, 0, 0.25) 100%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.15) 0%, rgba(2, 6, 23, 0.05) 100%),
+    url("/manta-core-trigger.png");
+  background-size: cover, cover, 118% 118%;
+  background-position: center, center, center;
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.55),
+    0 0 0 4px rgba(2, 8, 24, 0.92),
+    0 10px 36px rgba(0, 0, 0, 0.55),
+    0 0 48px rgba(34, 211, 238, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -6px 18px rgba(0, 0, 0, 0.35) !important;
+  transition: transform 0.2s ease, box-shadow 0.25s ease, filter 0.2s ease;
+}
+
+.manta-widget-trigger--arc::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 35%, rgba(0, 0, 0, 0.15) 100%);
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.manta-widget-trigger--arc::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  box-shadow:
+    inset 0 0 20px rgba(34, 211, 238, 0.12),
+    inset 0 0 2px rgba(255, 255, 255, 0.06);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.manta-widget-trigger--arc:hover {
+  transform: translateY(-3px) scale(1.04);
+  filter: brightness(1.05) saturate(1.08);
+  box-shadow:
+    0 0 0 1px rgba(103, 232, 249, 0.75),
+    0 0 0 4px rgba(2, 8, 24, 0.95),
+    0 14px 44px rgba(0, 0, 0, 0.5),
+    0 0 64px rgba(34, 211, 238, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -6px 20px rgba(0, 0, 0, 0.28) !important;
+}
+
+.manta-widget-trigger--arc:active {
+  transform: translateY(-1px) scale(1.01);
+  filter: brightness(0.98);
+}
+
+.manta-widget-trigger--arc:focus-visible {
+  outline: 2px solid rgba(103, 232, 249, 0.85);
+  outline-offset: 4px;
+}
+
+.manta-widget-trigger__score--arc {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  z-index: 2;
+  min-width: 1.5rem;
+  height: 1.35rem;
+  padding: 0 0.3rem;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 6px currentColor, 0 0 1px rgba(0, 0, 0, 0.9);
+  background: linear-gradient(160deg, rgba(2, 8, 25, 0.96) 0%, rgba(4, 12, 32, 0.94) 100%) !important;
+  border: 1px solid rgba(34, 211, 238, 0.45) !important;
+  border-radius: 999px !important;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.5),
+    0 2px 10px rgba(0, 0, 0, 0.45),
+    0 0 16px rgba(34, 211, 238, 0.2) !important;
 }
 
 /* ── Widget card: full HUD overhaul ──────────────────────────────── */
@@ -3386,10 +3494,44 @@ li.manta-widget__result-item:hover {
 }
 
 /* ════════════════════════════════════════════════════════════════════
-   Manta Ray LENS MODE — wraps the XML validator panel via portal
+   Manta Ray LENS MODE — portaled; fills [data-manta-scanner-host] (full grid)
+   or legacy .workspace-side-stack
    ════════════════════════════════════════════════════════════════════ */
 
-/* ── Lens root: absolutely fills .workspace-side-stack ───────────── */
+.manta-lens-field-hl {
+  outline: 2px solid rgba(34, 211, 238, 0.95) !important;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.22);
+  border-radius: 3px;
+  transition: box-shadow 0.15s, outline 0.15s;
+  z-index: 2;
+  position: relative;
+}
+
+/* Validation heat on inputs while lens is open (from AssistantShell) */
+.manta-lens-field-status--e {
+  outline: 2px solid #f87171 !important;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.28);
+  border-radius: 4px;
+  z-index: 1;
+  position: relative;
+}
+.manta-lens-field-status--w {
+  outline: 2px solid #a78bfa !important;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.28);
+  border-radius: 4px;
+  z-index: 1;
+  position: relative;
+}
+.manta-lens-field-status.manta-lens-field-hl {
+  outline-color: #22d3ee !important;
+  box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.35);
+  z-index: 3;
+}
+
+/* ── Lens root: default absolute on scanner host; .manta-lens--viewport pins to the window. ─ */
 .manta-lens {
   position: absolute;
   inset: 0;
@@ -3401,6 +3543,38 @@ li.manta-widget__result-item:hover {
   animation: manta-lens-in 0.28s ease-out;
   /* Let the bar/tray/glass layers provide their own bg; root is transparent */
   background: transparent;
+}
+
+.manta-lens.manta-lens--viewport {
+  position: fixed;
+  inset: 0;
+  z-index: 10050;
+  max-height: 100dvh;
+  width: 100%;
+  /* Clicks pass through to the form except on HUD children with pointer-events: auto */
+  pointer-events: none;
+  /* Flex order: bar 1, readiness 2, progress 3, section 4, then tray+glass 5/6 (wrap toggle). */
+}
+
+.manta-lens--viewport .manta-lens-bar { order: 1; pointer-events: auto; }
+.manta-lens--viewport .manta-lens-fixguide { order: 2; pointer-events: auto; }
+.manta-lens--viewport .manta-lens-readiness-row { order: 3; pointer-events: auto; }
+.manta-lens--viewport .manta-lens-progress-bar { order: 4; pointer-events: none; }
+.manta-lens--viewport .manta-lens-section-bars { order: 5; pointer-events: auto; }
+.manta-lens--viewport.manta-lens--tuck-high .manta-lens-tray { order: 6; pointer-events: auto; }
+.manta-lens--viewport.manta-lens--tuck-high .manta-lens-glass { order: 7; flex: 1; min-height: 0; }
+.manta-lens--viewport.manta-lens--tuck-low .manta-lens-glass { order: 6; flex: 1; min-height: 0; }
+.manta-lens--viewport.manta-lens--tuck-low .manta-lens-tray { order: 7; pointer-events: auto; }
+
+/* Form / both: make the through-glass work area easier to read */
+.manta-lens--form-readable .manta-lens-glass {
+  background: rgba(2, 6, 16, 0.12) !important;
+}
+.manta-lens--form-readable .manta-lens-scanline {
+  opacity: 0.2;
+}
+.manta-lens--form-readable .manta-lens-glass::before {
+  opacity: 0.35;
 }
 
 @keyframes manta-lens-in {
@@ -3431,13 +3605,14 @@ li.manta-widget__result-item:hover {
 /* ── HUD header bar ──────────────────────────────────────────────── */
 .manta-lens-bar {
   flex-shrink: 0;
-  height: 42px;
+  min-height: 42px;
   background: rgb(3, 5, 14);
   border-bottom: 1px solid rgba(34, 211, 238, 0.4);
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
-  padding: 0 10px 0 12px;
+  padding: 6px 10px 6px 12px;
   position: relative;
   overflow: hidden;
   z-index: 52;
@@ -3474,6 +3649,78 @@ li.manta-widget__result-item:hover {
   gap: 4px;
   align-items: center;
   flex-shrink: 0;
+}
+
+.manta-lens-bar__lens-target {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-wrap: wrap;
+  margin-left: 2px;
+}
+.manta-lens-target-btn {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  border-radius: 4px;
+  border: 1px solid rgba(100, 116, 139, 0.45);
+  background: rgba(15, 23, 42, 0.75);
+  color: #94a3b8;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+.manta-lens-target-btn:hover {
+  border-color: rgba(34, 211, 238, 0.45);
+  color: #e2e8f0;
+}
+.manta-lens-target-btn--active {
+  background: rgba(34, 211, 238, 0.16);
+  border-color: rgba(34, 211, 238, 0.55);
+  color: #a5f3fc;
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.15);
+}
+
+.manta-lens-bar__val-wrap {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-wrap: wrap;
+  border-left: 1px solid rgba(34, 211, 238, 0.2);
+  padding-left: 6px;
+  margin-left: 2px;
+}
+.manta-lens-bar__val-label {
+  font-size: 0.52rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(100, 116, 139, 0.95);
+  margin-right: 1px;
+}
+.manta-lens-valwrap-btn {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(100, 116, 139, 0.45);
+  background: rgba(15, 23, 42, 0.75);
+  color: #94a3b8;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.manta-lens-valwrap-btn:hover {
+  border-color: rgba(34, 211, 238, 0.4);
+  color: #e2e8f0;
+}
+.manta-lens-valwrap-btn--active {
+  background: rgba(100, 116, 139, 0.28);
+  border-color: rgba(34, 211, 238, 0.45);
+  color: #a5f3fc;
 }
 
 .manta-lens-tag {
@@ -3548,6 +3795,57 @@ li.manta-widget__result-item:hover {
   flex-shrink: 0;
 }
 
+.manta-lens-bar__fixwalk {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 5px;
+  border: 1px solid rgba(34, 211, 238, 0.45);
+  background: rgba(6, 78, 59, 0.35);
+  color: #a5f3fc;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.manta-lens-bar__fixwalk:hover:not(:disabled) {
+  background: rgba(34, 211, 238, 0.14);
+  border-color: rgba(34, 211, 238, 0.75);
+}
+.manta-lens-bar__fixwalk:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.manta-lens-bar__fixwalk[aria-pressed="true"] {
+  background: rgba(34, 211, 238, 0.22);
+  box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.5);
+}
+
+.manta-lens-bar__help {
+  background: rgba(148, 163, 184, 0.1);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 5px;
+  color: rgba(226, 232, 240, 0.85);
+  width: 26px; height: 26px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 0.8rem; font-weight: 700;
+  padding: 0;
+  line-height: 1;
+}
+
+.manta-lens-bar__help[aria-pressed="true"] {
+  background: rgba(34, 211, 238, 0.18);
+  border-color: rgba(34, 211, 238, 0.45);
+  color: #a5f3fc;
+}
+
+.manta-lens-bar__help:hover {
+  background: rgba(34, 211, 238, 0.12);
+  border-color: rgba(34, 211, 238, 0.35);
+}
+
 .manta-lens-bar__refresh {
   background: rgba(34, 211, 238, 0.07);
   border: 1px solid rgba(34, 211, 238, 0.25);
@@ -3586,6 +3884,148 @@ li.manta-widget__result-item:hover {
     rgba(34, 211, 238, 0.24),
     rgba(168, 85, 247, 0.24));
   box-shadow: 0 0 14px rgba(34, 211, 238, 0.35);
+}
+
+@keyframes manta-lens-fixguide-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-0.3rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.manta-lens-fixguide {
+  flex-shrink: 0;
+  z-index: 51;
+  padding: 8px 12px 10px;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(2, 6, 16, 0.96));
+  border-bottom: 1px solid rgba(34, 211, 238, 0.35);
+  max-height: 42vh;
+  overflow: auto;
+  pointer-events: auto;
+  animation: manta-lens-fixguide-enter 240ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .manta-lens-fixguide {
+    animation: none;
+  }
+}
+.manta-lens-fixguide__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  margin-bottom: 6px;
+}
+.manta-lens-fixguide__title {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #7dd3fc;
+}
+.manta-lens-fixguide__step {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+.manta-lens-fixguide__path {
+  font-size: 0.68rem;
+  color: #a5b4fc;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  border-radius: 4px;
+  padding: 2px 6px;
+  max-width: 100%;
+  word-break: break-all;
+}
+.manta-lens-fixguide__sev {
+  font-size: 0.6rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.manta-lens-fixguide__sev--e {
+  background: rgba(248, 113, 113, 0.16);
+  color: #fecaca;
+  border: 1px solid rgba(248, 113, 113, 0.45);
+}
+.manta-lens-fixguide__sev--w {
+  background: rgba(192, 132, 252, 0.14);
+  color: #e9d5ff;
+  border: 1px solid rgba(192, 132, 252, 0.4);
+}
+.manta-lens-fixguide__prompts {
+  margin: 0 0 8px;
+  padding: 0 0 0 1.1rem;
+  color: #cbd5e1;
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+.manta-lens-fixguide__prompts li { margin: 0 0 4px; }
+.manta-lens-fixguide__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  margin-bottom: 8px;
+}
+.manta-lens-fixguide__chips .manta-lens-chip {
+  font-size: 0.62rem;
+  padding: 3px 8px;
+}
+.manta-lens-fixguide__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.manta-lens-fixguide__kbd {
+  font-size: 0.6rem;
+  color: #64748b;
+  line-height: 1.3;
+  flex: 1 1 12rem;
+}
+.manta-lens-fixguide__kbd kbd {
+  font-size: 0.58rem;
+  padding: 1px 4px;
+  border-radius: 3px;
+  border: 1px solid rgba(100, 116, 139, 0.45);
+  background: rgba(2, 6, 16, 0.65);
+  color: #94a3b8;
+  margin: 0 1px;
+}
+.manta-lens-fixguide__actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.manta-lens-fixguide__btn {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(100, 116, 139, 0.45);
+  background: rgba(15, 23, 42, 0.85);
+  color: #cbd5e1;
+  cursor: pointer;
+}
+.manta-lens-fixguide__btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.manta-lens-fixguide__btn--primary {
+  border-color: rgba(34, 211, 238, 0.5);
+  background: rgba(34, 211, 238, 0.12);
+  color: #a5f3fc;
+}
+.manta-lens-fixguide__btn--primary:hover {
+  background: rgba(34, 211, 238, 0.2);
 }
 
 /* Cross-mode readiness under lens HUD (syncs wizard mode like widget VALIDATE) */
@@ -3665,6 +4105,13 @@ li.manta-widget__result-item:hover {
   gap: 3px;
   z-index: 52;
 }
+.manta-lens--viewport .manta-lens-section-bars {
+  max-height: min(20vh, 200px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(34, 211, 238, 0.18) transparent;
+}
 
 /* ── Glass zone — XML panel is visible through the tinted glass ───── */
 .manta-lens-glass {
@@ -3675,7 +4122,10 @@ li.manta-widget__result-item:hover {
   background: rgba(3, 5, 14, 0.42);
   position: relative;
   overflow: hidden;
-  /* clicks and scroll pass through to the XML panel beneath */
+  /* clicks and scroll pass through to the form / XML beneath */
+  pointer-events: none;
+}
+.manta-lens--viewport .manta-lens-glass {
   pointer-events: none;
 }
 
@@ -3719,6 +4169,18 @@ li.manta-widget__result-item:hover {
   flex-direction: column;
   z-index: 52;
   overflow: hidden;
+  pointer-events: auto;
+}
+.manta-lens--viewport .manta-lens-tray {
+  max-height: min(36vh, 300px);
+}
+.manta-lens--viewport.manta-lens--tuck-high .manta-lens-tray {
+  border-top: 1px solid rgba(34, 211, 238, 0.18);
+  border-bottom: 2px solid rgba(34, 211, 238, 0.2);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+.manta-lens--viewport.manta-lens--tuck-low .manta-lens-tray {
+  border-top: 2px solid rgba(34, 211, 238, 0.28);
 }
 
 .manta-lens-tray__header {
@@ -4098,6 +4560,49 @@ li.manta-widget__result-item:hover {
 .manta-lens-issue-wrap--active {
   background: rgba(34, 211, 238, 0.07);
   border-left: 2px solid rgba(34, 211, 238, 0.6);
+}
+
+.manta-lens-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 6px;
+  padding: 4px 10px 6px 12px;
+  border-top: 1px solid rgba(34, 211, 238, 0.08);
+  background: rgba(0, 0, 0, 0.2);
+  pointer-events: auto;
+}
+.manta-lens-chip {
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.62rem;
+  font-weight: 600;
+  line-height: 1.2;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(100, 116, 139, 0.45);
+  background: rgba(15, 23, 42, 0.88);
+  color: #cbd5e1;
+  cursor: pointer;
+  text-align: left;
+  max-width: 100%;
+  transition: border-color 0.12s, background 0.12s, color 0.12s;
+}
+.manta-lens-chip:hover {
+  border-color: rgba(34, 211, 238, 0.45);
+  color: #f1f5f9;
+  background: rgba(30, 41, 59, 0.95);
+}
+.manta-lens-chip--fill {
+  border-color: rgba(52, 211, 153, 0.4);
+  color: #a7f3d0;
+}
+.manta-lens-chip--action {
+  border-color: rgba(34, 211, 238, 0.38);
+  color: #7dd3fc;
+}
+.manta-lens-chip--help {
+  border-color: rgba(167, 139, 250, 0.45);
+  color: #ddd6fe;
+  font-weight: 500;
 }
 
 .manta-lens-issue-row {

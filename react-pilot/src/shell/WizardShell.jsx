@@ -29,6 +29,9 @@ import { useMissionActions } from './hooks/useMissionActions.js'
 import { useMissionCometActions } from '../profiles/mission/useMissionCometActions.js'
 import CometPushPanel from '../features/comet/CometPushPanel.jsx'
 import { isoXmlAdapter } from '../core/export/adapters/isoXmlAdapter.js'
+import { getPilotFieldLabelFallback } from '../lib/pilotFieldLabelFallback.js'
+import { emitPilotAuditEvent } from '../lib/pilotAuditEvents.js'
+import { setPilotFieldPath } from '../lib/pilotStateFieldSet.js'
 
 /**
  * @param {{
@@ -61,6 +64,13 @@ export default function WizardShell({ onDirtyChange }) {
 
   const baselineSerialized = useRef('')
   const [activeStep, setActiveStep] = useState(() => profile.steps[0]?.id ?? 'mission')
+
+  useEffect(() => {
+    window.dispatchEvent(
+      new CustomEvent('manta:wizard-active-step', { detail: { stepId: activeStep } }),
+    )
+  }, [activeStep])
+
   const [pilotState, setPilotState] = useState(() => {
     // Profiles that declare initState() get seeded + session-restored state.
     // All others start from a clean defaultState().
@@ -69,15 +79,24 @@ export default function WizardShell({ onDirtyChange }) {
     return s
   })
 
-  const setMode = useCallback((mode) => {
-    setPilotState((p) => ({ ...p, mode }))
-  }, [])
+  const setMode = useCallback(
+    (mode) => {
+      setPilotState((p) => ({ ...p, mode }))
+      emitPilotAuditEvent({
+        profileId: profile.id,
+        action: 'validationMode',
+        result: 'set',
+        mode,
+      })
+    },
+    [profile.id],
+  )
 
   const [isDirty, setIsDirty] = useState(false)
   const [lastSavedXmlPreview, setLastSavedXmlPreview] = useState('')
   const [touched, setTouched] = useState({})
-  const [showAllErrors, setShowAllErrors] = useState(false)
-  const [sidePanelTab, setSidePanelTab] = useState('xml')
+  const [showAllErrors, setShowAllErrors] = useState(true)
+  const [sidePanelTab, setSidePanelTab] = useState('validator')
   const [xmlExpanded, setXmlExpanded] = useState(false)
   const [statusMessage, setStatusMessage] = useState('Ready')
   const [loading, setLoading] = useState(false)
@@ -127,7 +146,7 @@ export default function WizardShell({ onDirtyChange }) {
   })
 
   useEffect(() => {
-    if (!showCometPanel && sidePanelTab === 'comet') setSidePanelTab('xml')
+    if (!showCometPanel && sidePanelTab === 'comet') setSidePanelTab('validator')
   }, [showCometPanel, sidePanelTab])
 
   // Defer validation (and step-status) off the keystroke hot path. React
@@ -211,6 +230,28 @@ export default function WizardShell({ onDirtyChange }) {
     return () => window.removeEventListener('manta:pilot-auto-fix-request', onAutoFixRequest)
   }, [profile, validationEngine])
 
+  // Lens chip "apply value" / quick set — merges into live wizard state
+  useEffect(() => {
+    function onSetField(/** @type {CustomEvent} */ e) {
+      const field = e?.detail?.field
+      const { value } = e.detail ?? {}
+      if (typeof field !== 'string' || !field.trim()) return
+      try {
+        const next = setPilotFieldPath(pilotRef.current, field, value)
+        const san = profile.sanitize(next)
+        setPilotState(san)
+        writePilotSessionPayloadNow(san)
+        setShowAllErrors(true)
+        setStatusMessage(`Updated ${field} from Manta lens quick action.`)
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err)
+        setStatusMessage(`Could not set ${field}: ${msg}`)
+      }
+    }
+    window.addEventListener('manta:set-pilot-field', onSetField)
+    return () => window.removeEventListener('manta:set-pilot-field', onSetField)
+  }, [profile, setPilotState, setStatusMessage])
+
   // Metadata widget — sync validation mode when user taps Readiness / mode controls there
   useEffect(() => {
     function onSetValidationMode(/** @type {CustomEvent} */ e) {
@@ -259,11 +300,6 @@ export default function WizardShell({ onDirtyChange }) {
     setTouched((prev) => ({ ...prev, [key]: true }))
   }
 
-  function onValidateAll() {
-    setShowAllErrors(true)
-    setStatusMessage('All fields marked for validation display. Review issues list.')
-  }
-
   const navigateToPilotField = useCallback((field) => {
     const step = workflowEngine.stepForField(field)
     setActiveStep(step)
@@ -274,6 +310,27 @@ export default function WizardShell({ onDirtyChange }) {
       })
     })
   }, [workflowEngine])
+
+  useEffect(() => {
+    function onLensGoto(/** @type {CustomEvent} */ e) {
+      const field = e?.detail?.field
+      if (typeof field !== 'string' || !field.trim()) return
+      navigateToPilotField(field)
+    }
+    window.addEventListener('manta:lens-goto-field', onLensGoto)
+    return () => window.removeEventListener('manta:lens-goto-field', onLensGoto)
+  }, [navigateToPilotField])
+
+  useEffect(() => {
+    function onGotoStep(/** @type {CustomEvent} */ e) {
+      const id = e?.detail?.stepId
+      if (typeof id !== 'string' || !id.trim()) return
+      const ok = profile.steps?.some((s) => s.id === id)
+      if (ok) setActiveStep(id)
+    }
+    window.addEventListener('manta:goto-step', onGotoStep)
+    return () => window.removeEventListener('manta:goto-step', onGotoStep)
+  }, [profile.steps])
 
   async function runServerCheck() {
     setLoading(true)
@@ -327,7 +384,12 @@ export default function WizardShell({ onDirtyChange }) {
         validationEngine={validationEngine}
       />
 
-      <section className="workspace-grid">
+      <div
+        id="manta-scanner-host"
+        className="manta-scanner-host"
+        data-manta-scanner-host
+      >
+        <section className="workspace-grid">
         <article className={`card workspace-main pilot-step pilot-step--${activeStep}`}>
           <h2>{activeStepMeta.label}</h2>
 
@@ -492,13 +554,16 @@ export default function WizardShell({ onDirtyChange }) {
                   summary={summary}
                   loading={loading}
                   onBridgeCheck={runServerCheck}
-                  onValidateAll={onValidateAll}
+                  inlineEverywhere={showAllErrors}
+                  onInlineEverywhereChange={setShowAllErrors}
                   onServerRulesValidate={cap.serverValidate ? ma.runServerRulesValidation : null}
                   serverRulesBusy={ma.serverRulesBusy}
                   serverRulesSummary={ma.serverRulesSummary}
                   statusMessage={statusMessage}
                   onIssueNavigate={navigateToPilotField}
-                  getFieldLabel={profile.getFieldLabel}
+                  getFieldLabel={
+                    typeof profile.getFieldLabel === 'function' ? profile.getFieldLabel.bind(profile) : getPilotFieldLabelFallback
+                  }
                 />
               </div>
             )}
@@ -530,7 +595,8 @@ export default function WizardShell({ onDirtyChange }) {
             ) : null}
           </div>
         </aside>
-      </section>
+        </section>
+      </div>
 
       <section className="card pilot-notes">
         <h2>Pilot notes</h2>

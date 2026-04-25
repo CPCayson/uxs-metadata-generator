@@ -9,16 +9,25 @@ import { DOMParser } from '@xmldom/xmldom'
 
 import { mapPlatformRowToPilotPatch, mapPilotPlatformToSavePlatform } from '../src/lib/platformSheetMapping.js'
 import { pilotModeToValidationEngineLevel, pilotStateToLegacyFormData } from '../src/lib/pilotToLegacyFormData.js'
-import { defaultPilotState, mergeLoadedPilotState, sanitizePilotState, validatePilotState } from '../src/lib/pilotValidation.js'
+import {
+  collectGcmdKeywordUuidWarnings,
+  defaultPilotState,
+  mergeLoadedPilotState,
+  sanitizePilotState,
+  validatePilotState,
+} from '../src/lib/pilotValidation.js'
 import { applyPilotAutoFixes } from '../src/lib/pilotAutoFix.js'
 import { computeReadinessBundles, computeReadinessSnapshot } from '../src/lib/readinessSummary.js'
+import { searchGcmdSchemeClient } from '../src/lib/gcmdClient.js'
 import { runLensScanHeuristic } from '../src/lib/lensScanHeuristic.js'
+import { parseMantaCommands } from '../src/lib/mantaCommandParse.js'
 import { NCEI_UXS_FILE_ID_PREFIX } from '../src/lib/nceiUxsFileId.js'
 import { buildXmlPreview } from '../src/lib/xmlPreviewBuilder.js'
 import { importPilotPartialStateFromXml } from '../src/lib/xmlPilotImport.js'
 import { ValidationEngine } from '../src/core/validation/ValidationEngine.js'
 import { missionValidationRuleSets } from '../src/profiles/mission/missionValidationRules.js'
 import { missionProfile } from '../src/profiles/mission/missionProfile.js'
+import { getMissionFieldLabel } from '../src/profiles/mission/missionFieldLabels.js'
 import { pilotStateToCanonical, canonicalToPilotState } from '../src/core/mappers/pilotStateMapper.js'
 import {
   canonicalToLegacyFormData,
@@ -999,6 +1008,14 @@ async function main() {
   step('Legacy-shaped merge + sanitize', () => {
     checkLegacySpreadsheetShapedMerge()
   })
+  step('Manta text command parser', () => {
+    const a = parseMantaCommands('Manta, make it simple and check the forms')
+    assert.ok(a.some((c) => c.type === 'simple' && c.on))
+    assert.ok(a.some((c) => c.type === 'lens' && c.open))
+    const b = parseMantaCommands('go to spatial then zoom in on the map')
+    assert.ok(b.some((c) => c.type === 'step' && c.id === 'spatial'))
+    assert.ok(b.some((c) => c.type === 'map' && c.action === 'zoomIn'))
+  })
   step('xmllint well-formed check', () => {
     maybeValidateXml(seededXml)
   })
@@ -1199,6 +1216,72 @@ async function main() {
     assert.equal(roundTrip.mission.uxsContext.primaryLayer, 'dive')
     assert.equal(roundTrip.mission.uxsContext.diveId, 'DIVE-007')
   })
+  step('mission abstract quality warnings', () => {
+    const base = defaultPilotState()
+    const state = sanitizePilotState({
+      ...base,
+      mission: {
+        ...base.mission,
+        abstract: 'ABC survey.',
+      },
+      platform: {
+        ...base.platform,
+        platformId: 'REMUS-600',
+      },
+      sensors: [
+        {
+          ...base.sensors[0],
+          sensorId: 'CTD-1',
+          modelId: 'CTD-1',
+          variable: 'conductivity',
+        },
+      ],
+    })
+    const result = validatePilotState('lenient', state)
+    const abstractWarnings = result.issues.filter((i) => i.field === 'mission.abstract' && i.severity === 'w')
+    assert.ok(abstractWarnings.some((i) => i.message.includes('short')), 'thin abstract should warn on length')
+    assert.ok(abstractWarnings.some((i) => i.message.includes('platform')), 'abstract should warn on missing platform/sensor context')
+    assert.ok(abstractWarnings.some((i) => i.message.includes('ABC')), 'abstract should warn on unexplained acronym')
+  })
+  step('GCMD keyword chip UUID quality warnings', () => {
+    assert.ok(
+      getMissionFieldLabel('keywords.sciencekeywords[0].uuid').includes('Science keywords'),
+      'chip UUID fields get a readable validator label',
+    )
+    const missingUuid = collectGcmdKeywordUuidWarnings({
+      sciencekeywords: [{ label: 'Labeled but no id', uuid: '   ' }],
+    })
+    assert.equal(missingUuid.length, 1)
+    assert.equal(missingUuid[0].field, 'keywords.sciencekeywords[0].uuid')
+    assert.ok(missingUuid[0].message.includes('KMS') || missingUuid[0].message.toLowerCase().includes('uuid'))
+
+    const badUuid = collectGcmdKeywordUuidWarnings({
+      sciencekeywords: [{ label: 'L', uuid: 'not-a-kms-uuid' }],
+    })
+    assert.equal(badUuid.length, 1)
+    assert.equal(badUuid[0].field, 'keywords.sciencekeywords[0].uuid')
+    assert.ok(
+      badUuid[0].message.toLowerCase().includes('kms') || badUuid[0].message.toLowerCase().includes('look'),
+    )
+
+    const ok = collectGcmdKeywordUuidWarnings({
+      sciencekeywords: [{ label: 'Oceans', uuid: 'a1b2c3d4-e5f6-4a0b-8c0d-ef1234567890' }],
+    })
+    assert.equal(ok.length, 0)
+
+    const withBadChip = {
+      ...defaultPilotState(),
+      keywords: {
+        ...defaultPilotState().keywords,
+        sciencekeywords: [{ label: 'Needs uuid', uuid: '   ' }],
+      },
+    }
+    const vr = validatePilotState('lenient', withBadChip)
+    const fromValidate = vr.issues.find(
+      (i) => i.field === 'keywords.sciencekeywords[0].uuid' && i.severity === 'w',
+    )
+    assert.ok(fromValidate, 'validatePilotState should include chip-level uuid quality warnings')
+  })
   step('readinessSummary computeReadinessSnapshot', () => {
     const engine = new ValidationEngine()
     const snap = computeReadinessSnapshot(defaultPilotState(), engine, missionProfile)
@@ -1230,6 +1313,160 @@ async function main() {
     const dirty = computeReadinessBundles(passing, { preflightSummary: { overall: 'PASS' }, isDirty: true })
     assert.equal(dirty.find((b) => b.id === 'archive-handoff')?.ready, false)
   })
+  await asyncStep('GCMD client ranks stronger local matches first', async () => {
+    const originalFetch = globalThis.fetch
+    globalThis.fetch = async (url) => {
+      const u = String(url)
+      // Fast path: pattern search. In this test we force a fallback to the full scheme scan
+      // so the ranking behavior stays explicit and stable.
+      const isSchemePattern = u.includes('/concepts/concept_scheme/') && u.includes('/pattern/')
+      const isGlobalPattern = u.includes('/concepts/pattern/')
+      if (isSchemePattern || isGlobalPattern) {
+        return {
+          ok: true,
+          status: 200,
+          async json() {
+            return { concepts: [] }
+          },
+        }
+      }
+      return {
+        ok: true,
+        status: 200,
+        async json() {
+          return {
+            concepts: [
+              { uuid: 'weak', prefLabel: 'Earth Science > Oceans > Ocean Temperature > Hydrographic Sounding Products Archive' },
+              { uuid: 'exact', prefLabel: 'Hydrographic Sounding' },
+              { uuid: 'prefix', prefLabel: 'Hydrographic Sounding Profiles' },
+            ],
+          }
+        },
+      }
+    }
+    try {
+      const rows = await searchGcmdSchemeClient('sciencekeywords', 'hydrographic sounding', { maxMatches: 3 })
+      assert.equal(rows[0].uuid, 'exact')
+      assert.equal(rows[0].matchType, 'exact')
+      assert.ok(rows[0].score > rows[1].score)
+    } finally {
+      globalThis.fetch = originalFetch
+    }
+  })
+  await asyncStep('GCMD client can scan bounded additional pages', async () => {
+    const originalFetch = globalThis.fetch
+    /** @type {number[]} */
+    const pages = []
+    globalThis.fetch = async (url) => {
+      const u = String(url)
+      const isSchemePattern = u.includes('/concepts/concept_scheme/') && u.includes('/pattern/')
+      const isGlobalPattern = u.includes('/concepts/pattern/')
+      if (isSchemePattern || isGlobalPattern) {
+        return {
+          ok: true,
+          status: 200,
+          async json() {
+            return { concepts: [] }
+          },
+        }
+      }
+      const page = Number(new URL(String(url)).searchParams.get('page_num') || '1')
+      pages.push(page)
+      return {
+        ok: true,
+        status: 200,
+        async json() {
+          return {
+            concepts: page === 1
+              ? [{ uuid: 'page-one-miss', prefLabel: 'Ocean Temperature' }]
+              : [{ uuid: 'page-two-hit', prefLabel: 'Hydrographic Sounding' }],
+          }
+        },
+      }
+    }
+    try {
+      const rows = await searchGcmdSchemeClient('sciencekeywords', 'hydrographic sounding', {
+        pageSize:   1,
+        maxMatches: 5,
+        maxPages:   2,
+      })
+      assert.deepEqual(pages, [1, 2])
+      assert.equal(rows[0]?.uuid, 'page-two-hit')
+    } finally {
+      globalThis.fetch = originalFetch
+    }
+  })
+  await asyncStep('GCMD client global pattern fallback filters by scheme', async () => {
+    const originalFetch = globalThis.fetch
+    /** @type {string[]} */
+    const globalPatternUrls = []
+    globalThis.fetch = async (url) => {
+      const u = String(url)
+      const isSchemePattern = u.includes('/concepts/concept_scheme/') && u.includes('/pattern/')
+      const isGlobalPattern = u.includes('/concepts/pattern/') && !u.includes('concept_scheme')
+      if (isSchemePattern) {
+        return {
+          ok: true,
+          status: 200,
+          async json() {
+            return { concepts: [] }
+          },
+        }
+      }
+      if (isGlobalPattern) {
+        globalPatternUrls.push(u)
+        return {
+          ok: true,
+          status: 200,
+          async json() {
+            return {
+              concepts: [
+                {
+                  uuid:        'from-global-skw',
+                  prefLabel:   'Earth Science > Oceans > Global Pattern Test Term',
+                  scheme:      { shortName: 'sciencekeywords' },
+                },
+                {
+                  uuid:        'wrong-scheme',
+                  prefLabel:   'Earth Science > Global Pattern Test Term (platform)',
+                  scheme:      { shortName: 'platforms' },
+                },
+              ],
+            }
+          },
+        }
+      }
+      if (u.includes('/concepts/concept_scheme/') && u.includes('format=json') && !u.includes('/pattern/')) {
+        return {
+          ok: true,
+          status: 200,
+          async json() {
+            return { concepts: [] }
+          },
+        }
+      }
+      return {
+        ok: true,
+        status: 200,
+        async json() {
+          return { concepts: [] }
+        },
+      }
+    }
+    try {
+      const rows = await searchGcmdSchemeClient('sciencekeywords', 'global pattern test term', { maxMatches: 5 })
+      assert.ok(globalPatternUrls.length >= 1, 'global /concepts/pattern/... should be requested when scheme pattern is empty')
+      assert.ok(
+        globalPatternUrls.some((u) => u.includes('/concepts/pattern/') && !u.includes('concept_scheme')),
+        'at least one global pattern URL should not use concept_scheme',
+      )
+      const hit = rows.find((r) => r.uuid === 'from-global-skw')
+      assert.ok(hit, 'expected match from global pattern response for shortName=sciencekeywords')
+      assert.equal(rows.find((r) => r.uuid === 'wrong-scheme'), undefined, 'platforms scheme should be filtered out')
+    } finally {
+      globalThis.fetch = originalFetch
+    }
+  })
   await asyncStep('Lens scanner uses xmlSnippet and filtered phrase seeds', async () => {
     const originalFetch = globalThis.fetch
     /** @type {string[]} */
@@ -1253,12 +1490,15 @@ async function main() {
     try {
       const env = await runLensScanHeuristic({
         title:      'Using data from the mission',
-        abstract:   'This dataset is based on survey results.',
+        abstract:   'This NOAA NCEI dataset is based on survey results.',
         xmlSnippet: '<gmd:abstract><gco:CharacterString>Hydrographic sounding profiles</gco:CharacterString></gmd:abstract>',
         profileId:  'mission',
       })
       assert.equal(env.profileId, 'mission')
-      assert.ok(seenUrls.some((u) => u.includes('/sciencekeywords/')), 'sciencekeywords scheme should be queried')
+      assert.ok(
+        seenUrls.some((u) => u.includes('sciencekeywords') && u.includes('pattern/')),
+        'sciencekeywords pattern search should be attempted',
+      )
       const science = env.suggestions.find((s) => s.fieldPath === 'keywords.sciencekeywords')
       assert.ok(science, 'xmlSnippet-only science keyword should produce a suggestion')
       assert.ok(
@@ -1266,8 +1506,18 @@ async function main() {
         'xmlSnippet text should be part of scanner seed generation',
       )
       assert.ok(
-        String(science.evidence || '').includes('Hydrographic sounding profiles'),
-        'suggestion evidence should include stripped XML text',
+        String(science.evidence || '').includes('sourceText='),
+        'merge suggestion evidence should include source text',
+      )
+      assert.ok(
+        science.value.some((v) => v.uuid === 'science-hydrographic-sounding'),
+        'science keyword value should include hydrographic sounding UUID',
+      )
+      const datacenters = env.suggestions.find((s) => s.fieldPath === 'keywords.datacenters')
+      assert.ok(datacenters, 'NOAA/NCEI text should produce a data center suggestion')
+      assert.ok(
+        JSON.stringify(datacenters.value).includes('2f31b1f2-335f-4248-8165-215755953857'),
+        'NCEI data center suggestion should use the GCMD NCEI concept UUID',
       )
     } finally {
       globalThis.fetch = originalFetch

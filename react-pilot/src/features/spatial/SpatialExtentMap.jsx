@@ -11,6 +11,20 @@ function fmtCoord(v, axis) {
   return `${abs.padStart(5, '0')}°${dir}`
 }
 
+/** @param {string} west @param {string} east @param {string} south @param {string} north */
+function bboxBounds(west, east, south, north) {
+  const w = Number.parseFloat(String(west ?? '').trim())
+  const e = Number.parseFloat(String(east ?? '').trim())
+  const s = Number.parseFloat(String(south ?? '').trim())
+  const n = Number.parseFloat(String(north ?? '').trim())
+  if (![w, e, s, n].every((x) => Number.isFinite(x))) return null
+  const southN = Math.min(s, n)
+  const northN = Math.max(s, n)
+  const westN = Math.min(w, e)
+  const eastN = Math.max(w, e)
+  return L.latLngBounds(L.latLng(southN, westN), L.latLng(northN, eastN))
+}
+
 /**
  * Cyberpunk-styled map preview for the spatial step bounding box.
  * Uses CartoDB Dark Matter tiles + neon cyan rectangle + HUD overlay chrome.
@@ -78,19 +92,8 @@ export default function SpatialExtentMap({ west, east, south, north }) {
       glowRectRef.current = null
     }
 
-    const w = Number.parseFloat(String(west ?? '').trim())
-    const e = Number.parseFloat(String(east ?? '').trim())
-    const s = Number.parseFloat(String(south ?? '').trim())
-    const n = Number.parseFloat(String(north ?? '').trim())
-    const ready = [w, e, s, n].every((x) => Number.isFinite(x))
-
-    if (!ready) return
-
-    const southN = Math.min(s, n)
-    const northN = Math.max(s, n)
-    const westN = Math.min(w, e)
-    const eastN = Math.max(w, e)
-    const bounds = L.latLngBounds(L.latLng(southN, westN), L.latLng(northN, eastN))
+    const bounds = bboxBounds(west, east, south, north)
+    if (!bounds) return
 
     // Soft outer glow (wider, translucent).
     const glow = L.rectangle(bounds, {
@@ -117,6 +120,29 @@ export default function SpatialExtentMap({ west, east, south, north }) {
     rectRef.current = rect
 
     map.fitBounds(bounds.pad(0.08))
+  }, [west, east, south, north])
+
+  useEffect(() => {
+    function onMapCmd(/** @type {CustomEvent} */ e) {
+      const action = e?.detail?.action
+      const map = mapRef.current
+      if (!map || !action) return
+      if (action === 'zoomIn') {
+        map.zoomIn(1)
+        return
+      }
+      if (action === 'zoomOut') {
+        map.zoomOut(1)
+        return
+      }
+      if (action === 'fit') {
+        const b = bboxBounds(west, east, south, north)
+        if (b) map.fitBounds(b.pad(0.08))
+        else map.setView([20, 0], 2)
+      }
+    }
+    window.addEventListener('manta:map-command', onMapCmd)
+    return () => window.removeEventListener('manta:map-command', onMapCmd)
   }, [west, east, south, north])
 
   return (

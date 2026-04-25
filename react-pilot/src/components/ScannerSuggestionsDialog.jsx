@@ -4,7 +4,29 @@ import {
   mergeScannerPartialIntoPilotState,
   parseScannerSuggestionsToMissionPartial,
 } from '../adapters/sources/ScannerSuggestionAdapter.js'
+import { gcmdConceptUrlFromUuid } from '../lib/gcmdKmsUrl.js'
 import { runLensScanHeuristic } from '../lib/lensScanHeuristic.js'
+
+/** @type {Record<string, string>} */
+const KEYWORD_FACET_LABELS = {
+  sciencekeywords: 'Science keywords',
+  datacenters:     'Data centers',
+  platforms:       'Platforms',
+  instruments:     'Instruments',
+  locations:       'Locations',
+  projects:        'Projects',
+  providers:       'Providers',
+}
+
+/**
+ * @param {string} fieldPath
+ */
+function keywordFacetLabel(fieldPath) {
+  const fp = String(fieldPath || '')
+  if (!fp.startsWith('keywords.')) return fp
+  const k = fp.slice('keywords.'.length)
+  return KEYWORD_FACET_LABELS[k] || k
+}
 
 /**
  * @param {import('../core/registry/types.js').ScannerSuggestionEnvelope} env
@@ -14,6 +36,7 @@ import { runLensScanHeuristic } from '../lib/lensScanHeuristic.js'
  *   sliceIndex: number | null,
  *   suggestion: import('../core/registry/types.js').ScannerSuggestionItem,
  *   valueSlice: unknown,
+ *   lensItemMeta: { seedWord?: string, evidence?: string, confidence?: number, matchType?: string, score?: number } | null,
  * }>}
  */
 function flattenSuggestionsForUi(env) {
@@ -22,6 +45,7 @@ function flattenSuggestionsForUi(env) {
   env.suggestions.forEach((s, si) => {
     const fp = String(s.fieldPath || '')
     const val = s.value
+    const lens = Array.isArray(s.lensPerItem) ? s.lensPerItem : null
     const isKeywordFacetArray =
       fp.startsWith('keywords.') &&
       Array.isArray(val) &&
@@ -29,12 +53,23 @@ function flattenSuggestionsForUi(env) {
       val.every((v) => v && typeof v === 'object' && !Array.isArray(v))
     if (isKeywordFacetArray) {
       val.forEach((item, vi) => {
+        const lm = lens?.[vi]
         rows.push({
           key:         `${si}:${vi}`,
           parentIndex: si,
           sliceIndex:  vi,
           suggestion:  s,
           valueSlice:  item,
+          lensItemMeta:
+            lm && typeof lm === 'object' && !Array.isArray(lm)
+              ? {
+                  seedWord:   typeof lm.seedWord === 'string' ? lm.seedWord : undefined,
+                  evidence:   typeof lm.evidence === 'string' ? lm.evidence : undefined,
+                  confidence: typeof lm.confidence === 'number' ? lm.confidence : undefined,
+                  matchType:  typeof lm.matchType === 'string' ? lm.matchType : undefined,
+                  score:      typeof lm.score === 'number' ? lm.score : undefined,
+                }
+              : null,
         })
       })
     } else {
@@ -44,10 +79,119 @@ function flattenSuggestionsForUi(env) {
         sliceIndex:  null,
         suggestion:  s,
         valueSlice:  val,
+        lensItemMeta: null,
       })
     }
   })
   return rows
+}
+
+/**
+ * One evidence line per row (lens per-item else parent), matching the suggestion table.
+ * @param {ReturnType<typeof flattenSuggestionsForUi>[number]} row
+ */
+function singleEvidenceForFlatRow(row) {
+  const s = row.suggestion
+  if (row.lensItemMeta && typeof row.lensItemMeta.evidence === 'string' && row.lensItemMeta.evidence) {
+    return row.lensItemMeta.evidence.trim()
+  }
+  if (typeof s.evidence === 'string' && s.evidence) return s.evidence.trim()
+  return ''
+}
+
+/**
+ * @param {ReturnType<typeof flattenSuggestionsForUi>[number]} row
+ */
+function confidenceForFlatRow(row) {
+  if (row.lensItemMeta && typeof row.lensItemMeta.confidence === 'number') {
+    return row.lensItemMeta.confidence
+  }
+  const c = row.suggestion.confidence
+  return typeof c === 'number' ? c : null
+}
+
+/**
+ * Collapse keyword-facet slice rows with the same `fieldPath` + GCMD `uuid` (e.g. merge parents or duplicates).
+ * Merged rows use key `dedupe-${fieldPath}-${uuid}` and `mergedFrom` for filter/apply. Non-keyword rows unchanged.
+ * @param {ReturnType<typeof flattenSuggestionsForUi>} rows
+ */
+function dedupeKeywordFacetFlatRows(rows) {
+  const out = []
+  /** @type {Map<string, { merged: object, outIndex: number }>} */
+  const byKey = new Map()
+  for (const row of rows) {
+    const s = row.suggestion
+    const fp = String(s.fieldPath || '')
+    const vs = row.valueSlice
+    if (
+      !fp.startsWith('keywords.') ||
+      row.sliceIndex == null ||
+      !vs ||
+      typeof vs !== 'object' ||
+      Array.isArray(vs)
+    ) {
+      out.push(row)
+      continue
+    }
+    const uuid = String(/** @type {{ uuid?: unknown }} */ (vs).uuid || '').trim()
+    if (!uuid) {
+      out.push(row)
+      continue
+    }
+    const dk = `dedupe-${fp}-${uuid}`
+    const existing = byKey.get(dk)
+    if (!existing) {
+      const merged = {
+        ...row,
+        key:        dk,
+        mergedFrom: [row],
+      }
+      byKey.set(dk, { merged, outIndex: out.length })
+      out.push(merged)
+      continue
+    }
+    const { merged: cur, outIndex } = existing
+    const mergedFrom = [...(Array.isArray(cur.mergedFrom) ? cur.mergedFrom : []), row]
+    const evParts = mergedFrom.map((r) => singleEvidenceForFlatRow(r)).filter(Boolean)
+    const mergedEvidence = [...new Set(evParts)].join('; ')
+    const confs = mergedFrom
+      .map((r) => confidenceForFlatRow(r))
+      .filter((c) => typeof c === 'number')
+    const maxC = confs.length ? Math.max(...confs) : undefined
+    const li = {
+      ...(cur.lensItemMeta && typeof cur.lensItemMeta === 'object' ? cur.lensItemMeta : {}),
+      evidence: mergedEvidence,
+    }
+    if (typeof maxC === 'number') {
+      li.confidence = maxC
+    }
+    for (const r of mergedFrom) {
+      const sw = r.lensItemMeta && typeof r.lensItemMeta.seedWord === 'string' ? r.lensItemMeta.seedWord : ''
+      if (sw) {
+        li.seedWord = sw
+        break
+      }
+    }
+    if (!li.matchType) {
+      for (const r of mergedFrom) {
+        const mt =
+          r.lensItemMeta && typeof r.lensItemMeta.matchType === 'string' ? r.lensItemMeta.matchType.trim() : ''
+        if (mt) {
+          li.matchType = mt
+          break
+        }
+      }
+    }
+    const next = {
+      ...cur,
+      key:          dk,
+      lensItemMeta: li,
+      mergedFrom,
+    }
+    byKey.set(dk, { merged: next, outIndex })
+    out[outIndex] = next
+  }
+  return out
 }
 
 /**
@@ -58,23 +202,47 @@ function flattenSuggestionsForUi(env) {
 function filterEnvelopeByAccepted(env, flatRows, accepted) {
   /** @type {Map<number, unknown[]>} */
   const grouped = new Map()
+  /** @type {Map<number, unknown[]>} */
+  const groupedLens = new Map()
   for (const row of flatRows) {
     if (!accepted.has(row.key)) continue
-    if (row.sliceIndex != null) {
-      if (!grouped.has(row.parentIndex)) grouped.set(row.parentIndex, [])
-      grouped.get(row.parentIndex)?.push(row.valueSlice)
+    const contributions = Array.isArray(row.mergedFrom) && row.mergedFrom.length ? row.mergedFrom : [row]
+    for (const c of contributions) {
+      if (c.sliceIndex != null) {
+        if (!grouped.has(c.parentIndex)) grouped.set(c.parentIndex, [])
+        grouped.get(c.parentIndex)?.push(c.valueSlice)
+        const origS = env.suggestions[c.parentIndex]
+        if (origS && Array.isArray(origS.lensPerItem)) {
+          if (!groupedLens.has(c.parentIndex)) groupedLens.set(c.parentIndex, [])
+          groupedLens.get(c.parentIndex)?.push(c.lensItemMeta ?? null)
+        }
+      }
     }
   }
   const atomic = new Set()
   for (const row of flatRows) {
     if (!accepted.has(row.key)) continue
-    if (row.sliceIndex == null) atomic.add(row.parentIndex)
+    const contributions = Array.isArray(row.mergedFrom) && row.mergedFrom.length ? row.mergedFrom : [row]
+    for (const c of contributions) {
+      if (c.sliceIndex == null) atomic.add(c.parentIndex)
+    }
   }
   const out = []
   for (let pi = 0; pi < env.suggestions.length; pi++) {
     if (grouped.has(pi)) {
       const orig = env.suggestions[pi]
-      out.push({ ...orig, value: grouped.get(pi) })
+      const next = { ...orig, value: grouped.get(pi) }
+      if (groupedLens.has(pi)) {
+        const gl = groupedLens.get(pi) || []
+        if (Array.isArray(gl) && gl.length) {
+          next.lensPerItem = gl
+        } else {
+          delete next.lensPerItem
+        }
+      } else {
+        delete next.lensPerItem
+      }
+      out.push(next)
     } else if (atomic.has(pi)) {
       out.push(env.suggestions[pi])
     }
@@ -180,11 +348,14 @@ export default function ScannerSuggestionsDialog({
     return () => window.removeEventListener('keydown', onKey)
   }, [open, onClose])
 
-  const flatRows = useMemo(() => (envelope ? flattenSuggestionsForUi(envelope) : []), [envelope])
+  const flatRows = useMemo(
+    () => (envelope ? dedupeKeywordFacetFlatRows(flattenSuggestionsForUi(envelope)) : []),
+    [envelope],
+  )
 
   useEffect(() => {
     if (!envelope) return
-    const rows = flattenSuggestionsForUi(envelope)
+    const rows = dedupeKeywordFacetFlatRows(flattenSuggestionsForUi(envelope))
     setAcceptedKeys(new Set(rows.map((r) => r.key)))
   }, [envelope])
 
@@ -234,6 +405,7 @@ export default function ScannerSuggestionsDialog({
         title:     String(pilotState?.mission?.title || pilotState?.title || ''),
         abstract:  String(pilotState?.mission?.abstract || pilotState?.abstract || ''),
         profileId: scannerProfileId,
+        uxsContext: pilotState?.mission?.uxsContext,
       })
       setJsonText(JSON.stringify(env, null, 2))
       await ingestEnvelopeFromObject(env, 'scanner-dialog-heuristic')
@@ -254,6 +426,7 @@ export default function ScannerSuggestionsDialog({
         title:     String(pilotState?.mission?.title || pilotState?.title || ''),
         abstract:  String(pilotState?.mission?.abstract || pilotState?.abstract || ''),
         profileId: scannerProfileId,
+        uxsContext: pilotState?.mission?.uxsContext,
       })
       setJsonText(JSON.stringify(env, null, 2))
       await ingestEnvelopeFromObject(env, 'scanner-dialog-host')
@@ -359,8 +532,8 @@ export default function ScannerSuggestionsDialog({
         </div>
         <p className="form-text" id="scanner-dialog-description">
           Paste a <code>ScannerSuggestionEnvelope</code>, pick a JSON file (parsed automatically), or run the heuristic /
-          host scan from the current mission title and abstract. Toggle rows before merging; validation below only lists
-          issues on fields touched by the merge.
+          host scan from the current mission title, abstract, UxS operational context, and XML snippet. Toggle rows
+          before merging; validation below only lists issues on fields touched by the merge.
         </p>
 
         <div className="scanner-dialog__actions">
@@ -423,9 +596,12 @@ export default function ScannerSuggestionsDialog({
               <thead>
                 <tr>
                   <th scope="col">Use</th>
+                  <th scope="col">Facet</th>
                   <th scope="col">Field</th>
-                  <th scope="col">Value</th>
+                  <th scope="col">Keyword / value</th>
                   <th scope="col">Conf.</th>
+                  <th scope="col">Match</th>
+                  <th scope="col">KMS</th>
                   <th scope="col">Source / model</th>
                   <th scope="col">Evidence</th>
                 </tr>
@@ -433,16 +609,39 @@ export default function ScannerSuggestionsDialog({
               <tbody>
                 {flatRows.map((row) => {
                   const s = row.suggestion
-                  const conf = typeof s.confidence === 'number' ? s.confidence.toFixed(2) : '—'
+                  const fp = String(s.fieldPath || '')
+                  const perConf =
+                    row.lensItemMeta && typeof row.lensItemMeta.confidence === 'number'
+                      ? row.lensItemMeta.confidence
+                      : s.confidence
+                  const conf = typeof perConf === 'number' ? perConf.toFixed(2) : '—'
                   const sm = [s.source, s.model].filter(Boolean).join(' · ') || '—'
-                  const ev = typeof s.evidence === 'string' && s.evidence ? `${s.evidence.slice(0, 120)}${s.evidence.length > 120 ? '…' : ''}` : '—'
+                  const evRaw =
+                    row.lensItemMeta && typeof row.lensItemMeta.evidence === 'string' && row.lensItemMeta.evidence
+                      ? row.lensItemMeta.evidence
+                      : typeof s.evidence === 'string'
+                        ? s.evidence
+                        : ''
+                  const ev = evRaw ? `${evRaw.slice(0, 160)}${evRaw.length > 160 ? '…' : ''}` : '—'
                   const lbl = s.label ? String(s.label) : ''
                   let valueStr = ''
-                  if (row.valueSlice && typeof row.valueSlice === 'object') {
+                  let keywordLabel = ''
+                  let keywordUuid = ''
+                  if (row.valueSlice && typeof row.valueSlice === 'object' && !Array.isArray(row.valueSlice)) {
+                    const vs = /** @type {{ label?: unknown, prefLabel?: unknown, uuid?: unknown }} */ (row.valueSlice)
+                    keywordLabel = String(vs.label || vs.prefLabel || '').trim()
+                    keywordUuid = String(vs.uuid || '').trim()
                     valueStr = JSON.stringify(row.valueSlice)
                   } else if (row.valueSlice != null) {
                     valueStr = String(row.valueSlice)
                   }
+                  const isKeywordFacet = fp.startsWith('keywords.')
+                  const kmsHref = isKeywordFacet ? gcmdConceptUrlFromUuid(keywordUuid) : ''
+                  const matchDisplay = isKeywordFacet
+                    ? (row.lensItemMeta && typeof row.lensItemMeta.matchType === 'string'
+                        ? row.lensItemMeta.matchType.trim() || '—'
+                        : '—')
+                    : '—'
                   return (
                     <tr key={row.key}>
                       <td>
@@ -454,15 +653,46 @@ export default function ScannerSuggestionsDialog({
                         />
                       </td>
                       <td>
+                        {fp.startsWith('keywords.') ? <span>{keywordFacetLabel(fp)}</span> : <span className="form-text">—</span>}
+                      </td>
+                      <td>
                         <code>{s.fieldPath}</code>
                         {lbl ? <div className="form-text">{lbl}</div> : null}
                       </td>
                       <td>
-                        <code className="scanner-dialog__mono">{valueStr.slice(0, 160)}{valueStr.length > 160 ? '…' : ''}</code>
+                        {keywordLabel || keywordUuid ? (
+                          <>
+                            <code className="scanner-dialog__mono">{keywordLabel || '—'}</code>
+                            {keywordUuid ? <div className="form-text">{keywordUuid}</div> : null}
+                          </>
+                        ) : (
+                          <code className="scanner-dialog__mono">{valueStr.slice(0, 160)}{valueStr.length > 160 ? '…' : ''}</code>
+                        )}
                       </td>
                       <td>{conf}</td>
+                      <td>{matchDisplay}</td>
+                      <td>
+                        {kmsHref ? (
+                          <a
+                            className="linkish"
+                            href={kmsHref}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={`Open GCMD KMS concept for ${keywordLabel || keywordUuid}`}
+                          >
+                            Open
+                          </a>
+                        ) : (
+                          '—'
+                        )}
+                      </td>
                       <td><small>{sm}</small></td>
-                      <td><small title={typeof s.evidence === 'string' ? s.evidence : ''}>{ev}</small></td>
+                      <td>
+                        <small title={evRaw}>{ev}</small>
+                        {row.lensItemMeta?.seedWord ? (
+                          <div className="form-text">seed: {row.lensItemMeta.seedWord}</div>
+                        ) : null}
+                      </td>
                     </tr>
                   )
                 })}

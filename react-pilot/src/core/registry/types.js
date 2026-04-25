@@ -49,10 +49,14 @@
  * Origin of values merged into editor state after an external ingest.
  *
  * @typedef {'rawIso'|'comet'|'cruisepack'|'bediXml'|'lensScanner'|'manual'} SourceProvenanceType
+ * `cruisepack` is reserved for a future pack intake; not implemented in the app yet.
  */
 
 /**
  * One field-level hint from the Lens Scanner / CV pipeline.
+ *
+ * `lensPerItem` (optional) is parallel to `value` when that value is a keyword facet array, and stores per-keyword
+ * seed/evidence for review UIs. Mission merge reads only `value`.
  *
  * @typedef {{
  *   fieldPath: string,
@@ -62,6 +66,13 @@
  *   source?: string,
  *   model?: string,
  *   evidence?: string,
+ *   lensPerItem?: Array<{
+ *     seedWord: string,
+ *     evidence: string,
+ *     confidence?: number,
+ *     matchType?: string,
+ *     score?: number,
+ *   }>,
  * }} ScannerSuggestionItem
  */
 
@@ -195,6 +206,7 @@
  *   mergeLoaded: (loaded: object) => object,
  *   buildXmlPreview?: (state: object) => string,
  *   getExportId?: (state: object) => string,
+ *   getFieldLabel?: (fieldPath: string) => string,
  *   steps: StepDefinition[],
  *   validationRuleSets: ValidationRuleSet[],
  *   exportAdapters: ExportAdapter[],

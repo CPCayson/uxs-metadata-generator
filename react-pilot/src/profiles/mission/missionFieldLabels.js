@@ -1,3 +1,5 @@
+import { getPilotFieldLabelFallback } from '../../lib/pilotFieldLabelFallback.js'
+
 const FIELD_LABELS = {
   'mission.fileId': 'File identifier',
   'mission.title': 'Title',
@@ -15,6 +17,7 @@ const FIELD_LABELS = {
   'mission.publicationDate': 'Publication date',
   'mission.metadataRecordDate': 'Metadata record date',
   'mission.contactUrl': 'Contact URL',
+  'mission.accessConstraintsCode': 'Access restriction code',
   'mission.licenseUrl': 'License URL',
   'mission.relatedDataUrl': 'Related data URL',
   'mission.bbox': 'Geographic bounding box',
@@ -82,5 +85,12 @@ export function getMissionFieldLabel(fieldPath) {
     }[sensor[2]]
     return `Sensor ${n} - ${leaf}`
   }
-  return FIELD_LABELS[field] || field
+  const kwUuid = field.match(/^keywords\.([a-z]+)\[(\d+)\]\.uuid$/)
+  if (kwUuid) {
+    const facetKey = kwUuid[1]
+    const n = Number(kwUuid[2]) + 1
+    const facet = FIELD_LABELS[`keywords.${facetKey}`] || facetKey
+    return `${facet} · term ${n} — concept UUID`
+  }
+  return FIELD_LABELS[field] || getPilotFieldLabelFallback(field)
 }

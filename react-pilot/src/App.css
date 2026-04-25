@@ -4,6 +4,8 @@
   max-width: min(96vw, 1920px);
   margin: 0 auto;
   padding: 1.75rem clamp(1rem, 3vw, 2.75rem) 3rem;
+  /* Scanner portal can fall back to #pilot-main; absolute lens needs a positioned ancestor */
+  position: relative;
 }
 
 @media (min-width: 577px) and (max-width: 1199.98px) {
@@ -23,6 +25,263 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
   margin-bottom: 1rem;
+}
+
+/* Portaled Manta Lens anchors here so the HUD can frame the full form + XML rail. */
+.manta-scanner-host {
+  position: relative;
+  z-index: 0;
+  width: 100%;
+}
+
+/* Manta “simple” mode — less instructional chrome (toggle via Manta bar or “make it simple”) */
+:root[data-manta-simple="true"] .card-intro,
+:root[data-manta-simple="true"] .pilot-notes,
+:root[data-manta-simple="true"] .spatial-extent-map-hint {
+  display: none !important;
+}
+:root[data-manta-simple="true"] .pilot-step .panel .hint {
+  display: none !important;
+}
+
+/* Manta command bar (App header) */
+.manta-voice-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.5rem;
+  width: 100%;
+  max-width: 100%;
+  margin-top: 0.65rem;
+  padding: 0.5rem 0 0.15rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.22);
+}
+.manta-voice-bar__mark {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #0891b2;
+  white-space: nowrap;
+}
+.manta-voice-bar__input {
+  flex: 1 1 220px;
+  min-width: 0;
+  font-size: 0.82rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  background: rgba(255, 255, 255, 0.9);
+}
+:root[data-theme='dark'] .manta-voice-bar__input {
+  background: rgba(15, 23, 42, 0.92);
+  border-color: rgba(100, 116, 139, 0.55);
+  color: #e2e8f0;
+}
+.manta-voice-bar__go,
+.manta-voice-bar__mic {
+  font-size: 0.8rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid rgba(8, 145, 178, 0.45);
+  background: rgba(8, 145, 178, 0.1);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.manta-voice-bar__mic--on {
+  background: rgba(34, 211, 238, 0.2);
+  border-color: #22d3ee;
+  box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.25);
+}
+.manta-voice-bar__status {
+  flex: 1 0 100%;
+  font-size: 0.75rem;
+  color: rgba(100, 116, 139, 0.95);
+}
+@media (min-width: 900px) {
+  .manta-voice-bar__status {
+    flex: 0 1 auto;
+  }
+}
+
+/* Tutorial dropdown — sample text + optional lens host */
+.manta-tutorial-dd {
+  position: relative;
+}
+.manta-tutorial-dd__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.3rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid rgba(8, 145, 178, 0.45);
+  background: rgba(8, 145, 178, 0.08);
+  color: #0e7490;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.manta-tutorial-dd__chev {
+  font-size: 0.65rem;
+  opacity: 0.8;
+}
+.manta-tutorial-dd__panel {
+  position: absolute;
+  z-index: 200;
+  right: 0;
+  top: 100%;
+  margin-top: 0.4rem;
+  min-width: min(100vw - 2rem, 34rem);
+  max-width: min(100vw - 2rem, 42rem);
+  max-height: min(80vh, 32rem);
+  overflow: auto;
+  padding: 0.75rem 0.85rem 0.9rem;
+  background: var(--pilot-surface, #fff);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  border-radius: 10px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+}
+:root[data-theme='dark'] .manta-tutorial-dd__panel {
+  background: rgba(15, 23, 42, 0.98);
+  border-color: rgba(100, 116, 139, 0.45);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+}
+.manta-tutorial-scanner-host {
+  position: relative;
+  z-index: 0;
+  min-height: 120px;
+}
+.manta-tutorial-dd__row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.45rem;
+}
+.manta-tutorial-dd__label {
+  font-size: 0.75rem;
+  margin: 0;
+  white-space: nowrap;
+}
+.manta-tutorial-dd__select {
+  min-width: 12rem;
+}
+.manta-tutorial-dd__hint {
+  font-size: 0.7rem;
+  line-height: 1.4;
+  color: rgba(71, 85, 105, 0.95);
+  margin: 0 0 0.5rem;
+}
+:root[data-theme='dark'] .manta-tutorial-dd__hint {
+  color: rgba(203, 213, 225, 0.9);
+}
+.manta-tutorial-dd__pre {
+  font-size: 0.65rem;
+  line-height: 1.35;
+  max-height: 10rem;
+  overflow: auto;
+  margin: 0 0 0.6rem;
+  padding: 0.5rem 0.55rem;
+  border-radius: 6px;
+  background: rgba(241, 245, 249, 0.95);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+:root[data-theme='dark'] .manta-tutorial-dd__pre {
+  background: rgba(2, 6, 23, 0.65);
+  border-color: rgba(51, 65, 85, 0.7);
+  color: #e2e8f0;
+}
+.manta-tutorial-dd__pre--xml {
+  max-height: 12rem;
+  font-size: 0.6rem;
+}
+.manta-tutorial-dd__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.manta-tutorial-dd__ck {
+  font-size: 0.7rem;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin: 0;
+  cursor: pointer;
+}
+.manta-tutorial-dd__btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.manta-tutorial-dd__xml {
+  margin-top: 0.65rem;
+  font-size: 0.75rem;
+}
+.manta-tutorial-dd__xml summary {
+  cursor: pointer;
+  color: #0284c7;
+  font-weight: 600;
+}
+.manta-tutorial-dd__out {
+  margin-top: 0.5rem;
+}
+.manta-tutorial-dd__report {
+  font-size: 0.7rem;
+  line-height: 1.4;
+  margin-bottom: 0.55rem;
+  padding: 0.45rem 0.5rem;
+  border-radius: 6px;
+  background: rgba(8, 145, 178, 0.06);
+  border: 1px solid rgba(8, 145, 178, 0.2);
+}
+.manta-tutorial-dd__report-h {
+  font-weight: 700;
+  color: #0e7490;
+  margin: 0 0 0.2rem;
+  font-size: 0.68rem;
+}
+.manta-tutorial-dd__report-h--soft {
+  margin-top: 0.4rem;
+  color: #64748b;
+  font-weight: 600;
+}
+.manta-tutorial-dd__report-list {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+.manta-tutorial-dd__report-list code {
+  font-size: 0.64rem;
+  color: #0f766e;
+}
+.manta-tutorial-dd__report-defaults {
+  margin: 0.15rem 0 0;
+  font-size: 0.64rem;
+  color: #64748b;
+  word-break: break-word;
+}
+.manta-tutorial-dd__tips {
+  margin: 0.35rem 0 0;
+  padding-left: 1rem;
+  color: #475569;
+  font-size: 0.65rem;
+}
+.manta-tutorial-dd__val {
+  font-size: 0.64rem;
+  line-height: 1.4;
+  color: #334155;
+  margin: 0 0 0.45rem;
+  padding: 0.35rem 0.4rem;
+  background: rgba(251, 191, 36, 0.12);
+  border-radius: 4px;
+  border: 1px solid rgba(251, 191, 36, 0.35);
+}
+:root[data-theme='dark'] .manta-tutorial-dd__val {
+  color: #e2e8f0;
+  background: rgba(120, 53, 15, 0.25);
+  border-color: rgba(251, 191, 36, 0.3);
 }
 
 .workspace-grid {
@@ -759,6 +1018,10 @@
   cursor: pointer;
 }
 
+.kw-chip--uuid-warn {
+  box-shadow: 0 0 0 1px color-mix(in srgb, #c27803 45%, var(--border));
+}
+
 .count-badge {
   display: inline-block;
   margin-left: 0.25rem;
@@ -1294,6 +1557,30 @@ li + li {
   margin-inline-end: 0.35rem;
 }
 
+.pilot-step-nav__status {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  max-width: 6.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.92;
+}
+
+.nav-link--step-ok .pilot-step-nav__status {
+  color: color-mix(in srgb, #c8f5d0 88%, #fff);
+}
+
+.nav-link--step-warn .pilot-step-nav__status {
+  color: #fde68a;
+}
+
+.nav-link--step-err .pilot-step-nav__status {
+  color: #fecaca;
+}
+
 .pilot-step-nav__dot {
   display: inline-block;
   width: 0.45rem;
@@ -1444,21 +1731,23 @@ li + li {
 
 /* ─── Manta Ray Metadata Builder widget ──────────────────────────────────── */
 
-/* Position the widget shell as a fixed overlay, bottom-right */
+/* Position the widget shell as a fixed overlay, bottom-right (Arc core FAB) */
 .embeddable-shell--widget {
   position: fixed;
-  bottom: 28px;
-  right: 28px;
+  bottom: 24px;
+  right: 24px;
+  left: auto;
   z-index: 9000;
   /* Prevent the open widget from punching through the header */
-  max-height: calc(100dvh - 28px);
+  max-height: calc(100dvh - 24px);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;  /* trigger / widget anchors to bottom edge */
+  align-items: flex-end;
 }
 
-/* FAB trigger button */
-.manta-widget-trigger {
+/* Default FAB trigger (legacy pill — superseded by .manta-widget-trigger--arc in futuristic.css) */
+.manta-widget-trigger:not(.manta-widget-trigger--arc) {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1474,7 +1763,7 @@ li + li {
   box-shadow: 0 4px 18px rgba(26, 86, 219, 0.38);
   transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
 }
-.manta-widget-trigger:hover {
+.manta-widget-trigger:not(.manta-widget-trigger--arc):hover {
   background: #1740a0;
   box-shadow: 0 6px 24px rgba(26, 86, 219, 0.46);
   transform: translateY(-1px);
@@ -1878,8 +2167,8 @@ li + li {
   --manta-error:   #dc2626;
 }
 
-/* ── Trigger button — internal layout pieces ─────────────────────────────── */
-.manta-widget-trigger {
+/* ── Trigger button — internal layout (legacy text FAB; Arc core overrides below in futuristic) ── */
+.manta-widget-trigger:not(.manta-widget-trigger--arc) {
   flex-direction: column;
   gap: 2px;
   padding: 10px 18px;
@@ -1887,16 +2176,34 @@ li + li {
 }
 .manta-widget-trigger__icon  { font-size: 1.3rem; line-height: 1; }
 .manta-widget-trigger__label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; }
-.manta-widget-trigger__score {
+.manta-widget-trigger:not(.manta-widget-trigger--arc) .manta-widget-trigger__score {
   font-size: 0.7rem;
   font-weight: 900;
   line-height: 1;
 }
+@keyframes manta-trigger-pulse-arc {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px rgba(56, 189, 248, 0.5),
+      0 0 0 3px rgba(2, 8, 24, 0.95),
+      0 8px 32px rgba(0, 0, 0, 0.45),
+      0 0 40px rgba(34, 211, 238, 0.3);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(103, 232, 249, 0.85),
+      0 0 0 3px rgba(2, 8, 24, 0.95),
+      0 8px 36px rgba(0, 0, 0, 0.5),
+      0 0 56px rgba(34, 211, 238, 0.55),
+      0 0 0 5px rgba(34, 211, 238, 0.12);
+  }
+}
+.manta-widget-trigger--arc.manta-widget-trigger--pulse { animation: manta-trigger-pulse-arc 1.2s ease-in-out; }
+.manta-widget-trigger--pulse:not(.manta-widget-trigger--arc) { animation: manta-trigger-pulse 1.2s ease-in-out; }
 @keyframes manta-trigger-pulse {
   0%, 100% { box-shadow: 0 4px 18px rgba(26,86,219,0.38); }
   50%       { box-shadow: 0 4px 24px rgba(26,86,219,0.7), 0 0 0 4px rgba(59,130,246,0.22); }
 }
-.manta-widget-trigger--pulse { animation: manta-trigger-pulse 1.2s ease-in-out; }
 
 /* ── Header: title group + profile badge ─────────────────────────────────── */
 .manta-widget__title-group {

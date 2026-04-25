@@ -1,6 +1,7 @@
 import { getDataLicensePresetDef, normalizeDataLicensePresetKey } from './noaaLicensePresets.js'
 import { formatNceiUxsFileIdentifierForXml } from './nceiUxsFileId.js'
 import { buildAcquisitionInstrumentDescription } from './sensorInstrumentDescription.js'
+import { gcmdConceptUrlFromUuid as gcmdKeywordHrefFromStoredUuid } from './gcmdKmsUrl.js'
 
 /** @param {unknown} s */
 function esc(s) {
@@ -9,18 +10,6 @@ function esc(s) {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
-}
-
-/**
- * @param {string} uuid  KMS concept UUID, full GCMD URL, or empty
- * @returns {string} xlink target for `gmx:Anchor`, or '' when unset
- */
-function gcmdKeywordHrefFromStoredUuid(uuid) {
-  const u = String(uuid || '').trim()
-  if (!u) return ''
-  if (/^https?:\/\//i.test(u)) return u
-  if (/^[a-f0-9-]{36}$/i.test(u)) return `https://gcmd.earthdata.nasa.gov/kms/concepts/concept/${u}`
-  return `https://gcmd.earthdata.nasa.gov/kms/concepts/concept/${encodeURIComponent(u)}`
 }
 
 /**
@@ -724,13 +713,28 @@ ${platformSection}${instrumentSections.join('\n')}
   </gmi:acquisitionInformation>\n`
       : ''
 
+  const MD_RESTRICTION_CODELIST =
+    'https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#MD_RestrictionCode'
   const presetKey = normalizeDataLicensePresetKey(m.dataLicensePreset)
   const licensePresetDef = getDataLicensePresetDef(m.dataLicensePreset)
   const legalInner = []
-  const accessText = String(m.accessConstraints || '').trim()
-  if (accessText) {
+  const accessCode = String(m.accessConstraintsCode || '').trim()
+  const accessNarrative = String(m.accessConstraints || '').trim()
+  if (accessCode) {
     legalInner.push(
-      `<gmd:accessConstraints><gmd:MD_RestrictionCode>${esc(accessText)}</gmd:MD_RestrictionCode></gmd:accessConstraints>`,
+      `<gmd:accessConstraints><gmd:MD_RestrictionCode codeList="${esc(MD_RESTRICTION_CODELIST)}" codeListValue="${esc(accessCode)}">${esc(accessCode)}</gmd:MD_RestrictionCode></gmd:accessConstraints>`,
+    )
+    if (accessNarrative) {
+      legalInner.push(
+        `<gmd:otherConstraints><gco:CharacterString>${esc(accessNarrative)}</gco:CharacterString></gmd:otherConstraints>`,
+      )
+    }
+  } else if (accessNarrative) {
+    legalInner.push(
+      `<gmd:accessConstraints><gmd:MD_RestrictionCode codeList="${esc(MD_RESTRICTION_CODELIST)}" codeListValue="otherRestrictions">otherRestrictions</gmd:MD_RestrictionCode></gmd:accessConstraints>`,
+    )
+    legalInner.push(
+      `<gmd:otherConstraints><gco:CharacterString>${esc(accessNarrative)}</gco:CharacterString></gmd:otherConstraints>`,
     )
   }
   if (m.citeAs) {
