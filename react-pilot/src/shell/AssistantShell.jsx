@@ -988,6 +988,13 @@ export default function AssistantShell({
   }, [lensMode])
 
   useEffect(() => {
+    if (!lensMode) return
+    try {
+      window.dispatchEvent(new CustomEvent('manta:lens-opened'))
+    } catch { /* */ }
+  }, [lensMode])
+
+  useEffect(() => {
     if (!lensMode || !lensFixGuide) return
     const issue = lensFixGuide.queue[lensFixGuide.index]
     if (!issue?.field) return
@@ -1127,6 +1134,7 @@ export default function AssistantShell({
     const lensRootClass = [
       'manta-lens',
       'manta-lens--viewport',
+      'manta-lens--validator-wrap',
       lensValidatorWrap === 'tuck-high' ? 'manta-lens--tuck-high' : 'manta-lens--tuck-low',
       (lensTarget === 'form' || lensTarget === 'split') && 'manta-lens--form-readable',
     ].filter(Boolean).join(' ')

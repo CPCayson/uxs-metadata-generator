@@ -5,6 +5,7 @@
  *
  * Events (name → detail / notes):
  * - `manta:open-lens` — no detail; close floating card and enter lens
+ * - `manta:lens-opened` — lens UI mounted; WizardShell switches side panel to Validator
  * - `manta:close-lens` — close lens
  * - `manta:pilot-session-updated` — sessionStorage pilot payload written
  * - `manta:wizard-active-step` — { stepId: string }

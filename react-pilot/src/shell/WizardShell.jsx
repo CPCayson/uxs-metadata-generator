@@ -149,6 +149,16 @@ export default function WizardShell({ onDirtyChange }) {
     if (!showCometPanel && sidePanelTab === 'comet') setSidePanelTab('validator')
   }, [showCometPanel, sidePanelTab])
 
+  // Lens is anchored on the side rail: show Validator under the same chrome as Live XML preview.
+  useEffect(() => {
+    function onLensOpened() {
+      setXmlExpanded(false)
+      setSidePanelTab('validator')
+    }
+    window.addEventListener('manta:lens-opened', onLensOpened)
+    return () => window.removeEventListener('manta:lens-opened', onLensOpened)
+  }, [])
+
   // Defer validation (and step-status) off the keystroke hot path. React
   // renders the form inputs first, then reconciles the validator/XML tree
   // when idle, keeping typing snappy even with large rule sets.
