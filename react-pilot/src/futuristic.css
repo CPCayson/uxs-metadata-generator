@@ -3494,8 +3494,8 @@ li.manta-widget__result-item:hover {
 }
 
 /* ════════════════════════════════════════════════════════════════════
-   Manta Ray LENS MODE — portaled; fills [data-manta-scanner-host] (full grid)
-   or legacy .workspace-side-stack
+   Manta Ray LENS MODE — portaled into #manta-scanner-host (right rail tabbed card;
+   same box as .workspace-side.workspace-side--tabbed), not the full workspace grid.
    ════════════════════════════════════════════════════════════════════ */
 
 .manta-lens-field-hl {

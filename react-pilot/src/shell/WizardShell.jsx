@@ -384,13 +384,8 @@ export default function WizardShell({ onDirtyChange }) {
         validationEngine={validationEngine}
       />
 
-      <div
-        id="manta-scanner-host"
-        className="manta-scanner-host"
-        data-manta-scanner-host
-      >
-        {/* layout: left = step form, right = side stack (Validator + Live XML + optional CoMET) — see first GitHub layout commit */}
-        <section className="workspace-grid">
+      {/* layout: left = form, right = Validator / Live XML / CoMET tabbed card */}
+      <section className="workspace-grid">
         <article className={`card workspace-main pilot-step pilot-step--${activeStep}`}>
           <h2>{activeStepMeta.label}</h2>
 
@@ -452,6 +447,12 @@ export default function WizardShell({ onDirtyChange }) {
           className={`workspace-side-stack${xmlExpanded ? ' workspace-side-stack--xml-full' : ''}`}
           aria-label="Side panel"
         >
+          {/* Lens portals here so the HUD wraps this card only (same box as Validator / XML preview). */}
+          <div
+            id="manta-scanner-host"
+            className="manta-scanner-host manta-scanner-host--side-rail"
+            data-manta-scanner-host
+          >
           <div
             className={`card workspace-side workspace-side--tabbed${xmlExpanded ? ' workspace-side--xml-full' : ''}`}
           >
@@ -595,9 +596,9 @@ export default function WizardShell({ onDirtyChange }) {
               </div>
             ) : null}
           </div>
+          </div>
         </aside>
-        </section>
-      </div>
+      </section>
 
       <section className="card pilot-notes">
         <h2>Pilot notes</h2>

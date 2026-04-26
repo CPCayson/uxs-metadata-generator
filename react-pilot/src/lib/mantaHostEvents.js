@@ -16,7 +16,8 @@
  * - `manta:pilot-auto-fix-request` — { mode?: string }
  * - `manta:comet-load` — { parsed, uuid, gaps }
  *
- * Portals: lens mounts under `#manta-scanner-host` (see WizardShell) via MantaScannerFrame.
+ * Portals: lens mounts under `#manta-scanner-host` (wraps the side rail card next to
+ * the form; see WizardShell) via MantaScannerFrame.
  *
  * @module lib/mantaHostEvents
  */
