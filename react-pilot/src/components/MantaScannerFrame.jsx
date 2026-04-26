@@ -7,8 +7,8 @@ const SCANNER_HOST_ID = 'manta-scanner-host'
 /**
  * Lens canvas (product layout) — the HUD is a flex column; the “through-glass”
  * band must stay between the top chrome and the issues tray (see `.manta-lens--viewport`
- * in futuristic.css). Two surfaces: `workspace-main` (form) + `workspace-side-stack`
- * (Live XML / Validator). Portal here so the overlay is a child of the grid host, not
+ * in futuristic.css). Two surfaces: `workspace-main` (form, left) + `workspace-side-stack`
+ * (right: Validator, then Live XML). Portal here so the overlay is a child of the grid host, not
  * a stray node under the floating widget shell.
  *
  *   +-- HUD bar (targets, score, exit) ------------------------+

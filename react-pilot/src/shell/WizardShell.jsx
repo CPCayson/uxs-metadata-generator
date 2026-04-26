@@ -389,6 +389,7 @@ export default function WizardShell({ onDirtyChange }) {
         className="manta-scanner-host"
         data-manta-scanner-host
       >
+        {/* layout: left = step form, right = side stack (Validator + Live XML + optional CoMET) — see first GitHub layout commit */}
         <section className="workspace-grid">
         <article className={`card workspace-main pilot-step pilot-step--${activeStep}`}>
           <h2>{activeStepMeta.label}</h2>
@@ -464,20 +465,6 @@ export default function WizardShell({ onDirtyChange }) {
                   <button
                     type="button"
                     role="tab"
-                    id="side-tab-xml"
-                    aria-selected={sidePanelTab === 'xml'}
-                    aria-controls="side-panel-xml"
-                    tabIndex={sidePanelTab === 'xml' ? 0 : -1}
-                    className={`nav-link${sidePanelTab === 'xml' ? ' active' : ''}`}
-                    onClick={() => setSidePanelTab('xml')}
-                  >
-                    Live XML preview
-                  </button>
-                </li>
-                <li className="nav-item" role="presentation">
-                  <button
-                    type="button"
-                    role="tab"
                     id="side-tab-validator"
                     aria-selected={sidePanelTab === 'validator'}
                     aria-controls="side-panel-validator"
@@ -486,6 +473,20 @@ export default function WizardShell({ onDirtyChange }) {
                     onClick={() => setSidePanelTab('validator')}
                   >
                     Validator
+                  </button>
+                </li>
+                <li className="nav-item" role="presentation">
+                  <button
+                    type="button"
+                    role="tab"
+                    id="side-tab-xml"
+                    aria-selected={sidePanelTab === 'xml'}
+                    aria-controls="side-panel-xml"
+                    tabIndex={sidePanelTab === 'xml' ? 0 : -1}
+                    className={`nav-link${sidePanelTab === 'xml' ? ' active' : ''}`}
+                    onClick={() => setSidePanelTab('xml')}
+                  >
+                    Live XML preview
                   </button>
                 </li>
                 {showCometPanel ? (
