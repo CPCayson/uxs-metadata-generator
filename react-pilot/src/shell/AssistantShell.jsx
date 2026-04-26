@@ -627,11 +627,25 @@ export default function AssistantShell({
     } catch { /* */ }
     return 'tuck-high'
   })
+  /** When false (default), hide readiness + score strip + section bars so Validator/XML stays largest. */
+  const [lensHudExpanded, setLensHudExpanded] = useState(() => {
+    try {
+      const v = sessionStorage.getItem('manta-lens-hud-expanded')
+      if (v === '1' || v === 'true') return true
+    } catch { /* */ }
+    return false
+  })
   useEffect(() => {
     try {
       sessionStorage.setItem('manta-lens-wrap', lensValidatorWrap)
     } catch { /* */ }
   }, [lensValidatorWrap])
+
+  useEffect(() => {
+    try {
+      sessionStorage.setItem('manta-lens-hud-expanded', lensHudExpanded ? '1' : '0')
+    } catch { /* */ }
+  }, [lensHudExpanded])
 
   useEffect(() => {
     try {
@@ -1137,6 +1151,7 @@ export default function AssistantShell({
       'manta-lens--validator-wrap',
       lensValidatorWrap === 'tuck-high' ? 'manta-lens--tuck-high' : 'manta-lens--tuck-low',
       (lensTarget === 'form' || lensTarget === 'split') && 'manta-lens--form-readable',
+      !lensHudExpanded && 'manta-lens--hud-compact',
     ].filter(Boolean).join(' ')
 
     const lensContent = (
@@ -1200,6 +1215,19 @@ export default function AssistantShell({
               title="Show issues at the bottom of the lens (older layout)"
             >
               Dock ↓
+            </button>
+            <button
+              type="button"
+              className={`manta-lens-bar__hud-toggle${lensHudExpanded ? ' manta-lens-bar__hud-toggle--active' : ''}`}
+              aria-pressed={lensHudExpanded}
+              onClick={() => setLensHudExpanded((v) => !v)}
+              title={
+                lensHudExpanded
+                  ? 'Hide mode pills, score strip, and section bars — maximize Validator / XML'
+                  : 'Show validation modes, score strip, and section jump row'
+              }
+            >
+              {lensHudExpanded ? 'Less' : 'More'}
             </button>
           </div>
 
@@ -1328,17 +1356,19 @@ export default function AssistantShell({
           )
         })()}
 
-        <div className="manta-lens-readiness-row">
-          <ReadinessStrip
-            className="readiness-strip--compact readiness-strip--lens"
-            snapshot={widgetReadinessSnapshot}
-            activeMode={qualityMode}
-            onSelectMode={syncValidationModeToWizard}
-          />
-        </div>
+        {lensHudExpanded && (
+          <div className="manta-lens-readiness-row">
+            <ReadinessStrip
+              className="readiness-strip--compact readiness-strip--lens"
+              snapshot={widgetReadinessSnapshot}
+              activeMode={qualityMode}
+              onSelectMode={syncValidationModeToWizard}
+            />
+          </div>
+        )}
 
         {/* Score progress bar */}
-        {qualityResult && (
+        {lensHudExpanded && qualityResult && (
           <div className="manta-lens-progress-bar">
             <div
               className="manta-lens-progress-fill"
@@ -1352,7 +1382,7 @@ export default function AssistantShell({
         )}
 
         {/* ── Section bars — each is a clickable hot-spot ─────────── */}
-        {sectionBars.length > 0 && (
+        {lensHudExpanded && sectionBars.length > 0 && (
           <div className="manta-lens-section-bars">
             {sectionBars.map((sec) => (
               <SectionBar
@@ -1384,108 +1414,110 @@ export default function AssistantShell({
         <div className="manta-lens-glass">
           <div className="manta-lens-scanline" aria-hidden="true" />
 
-          <div className="manta-lens-glass__search">
-            <span className="manta-lens-glass__search-icon" aria-hidden="true">⌕</span>
-            <input
-              ref={lensSearchInputRef}
-              className="manta-lens-glass__search-input"
-              type="text"
-              placeholder={lensTarget === 'form' ? 'XML search — set target to XML or Both' : 'Tags, text, or /regex/ …'}
-              value={lensSearch}
-              disabled={lensTarget === 'form'}
-              onChange={(e) => {
-                setLensSearch(e.target.value)
-                setLensHlField(null)
-              }}
-              aria-label="Highlight XML terms or regular expression"
-              spellCheck={false}
-            />
-            {lensSearch && (
-              <button
-                type="button"
-                className="manta-lens-glass__search-clear"
-                onClick={() => setLensSearch('')}
-                aria-label="Clear search"
-              >✕</button>
+          <div className="manta-lens-glass__chrome">
+            <div className="manta-lens-glass__search">
+              <span className="manta-lens-glass__search-icon" aria-hidden="true">⌕</span>
+              <input
+                ref={lensSearchInputRef}
+                className="manta-lens-glass__search-input"
+                type="text"
+                placeholder={lensTarget === 'form' ? 'XML search — set target to XML or Both' : 'Tags, text, or /regex/ …'}
+                value={lensSearch}
+                disabled={lensTarget === 'form'}
+                onChange={(e) => {
+                  setLensSearch(e.target.value)
+                  setLensHlField(null)
+                }}
+                aria-label="Highlight XML terms or regular expression"
+                spellCheck={false}
+              />
+              {lensSearch && (
+                <button
+                  type="button"
+                  className="manta-lens-glass__search-clear"
+                  onClick={() => setLensSearch('')}
+                  aria-label="Clear search"
+                >✕</button>
+              )}
+            </div>
+
+            {(lensHlField || lensSearch.trim()) && (
+              <div className="manta-lens-glass__focus">
+                <div className="manta-lens-glass__hl-label" aria-live="polite">
+                  <span className="manta-lens-glass__hl-dot" aria-hidden="true" />
+                  {lensHlField
+                    ? `field: ${lensHlField}`
+                    : (tryLensSearchRegex(lensSearch) ? `regex: ${lensSearch.trim()}` : `search: "${lensSearch.trim()}"`)}
+                </div>
+                <div className="manta-lens-glass__meta">
+                  <div className="manta-lens-glass__hits">
+                    <span>
+                      {lensTarget === 'form'
+                        ? 'Form mode — j/k to jump issues, fields ring in the wizard'
+                        : lensHitCount === 0
+                          ? 'no XML line matches'
+                          : `${lensHitCount} hit${lensHitCount === 1 ? '' : 's'} · focus ${lensHitFocus + 1}/${lensHitCount}`}
+                    </span>
+                    <div className="manta-lens-glass__hit-nav">
+                      <button
+                        type="button"
+                        className="manta-lens-glass__hit-btn"
+                        disabled={lensHitCount < 2 || lensTarget === 'form'}
+                        onClick={() => bumpLensHits(-1)}
+                        aria-label="Previous XML highlight"
+                        title="Previous match"
+                      >‹</button>
+                      <button
+                        type="button"
+                        className="manta-lens-glass__hit-btn"
+                        disabled={lensHitCount < 2 || lensTarget === 'form'}
+                        onClick={() => bumpLensHits(1)}
+                        aria-label="Next XML highlight"
+                        title="Next match"
+                      >›</button>
+                    </div>
+                  </div>
+                  {lensHelpOpen && (
+                    <div className="manta-lens-glass__kbd-hint">
+                      {lensFixGuide ? (
+                        <>
+                          <kbd>Esc</kbd> end fix walk
+                          {' · '}
+                          <kbd>j</kbd>
+                          <kbd>k</kbd>
+                          {' or '}
+                          <kbd>n</kbd>
+                          <kbd>p</kbd> next / back
+                        </>
+                      ) : (
+                        <>
+                          <kbd>Esc</kbd> exit lens
+                          {lensTarget !== 'form' && (
+                            <span>
+                              {' · '}
+                              <kbd>/</kbd> search
+                            </span>
+                          )}
+                          {' · '}
+                          <kbd>j</kbd>
+                          <kbd>k</kbd> issues
+                          {lensTarget !== 'form' && (
+                            <span>
+                              {' · '}
+                              <kbd>[</kbd>
+                              <kbd>]</kbd> XML
+                            </span>
+                          )}
+                          {' · '}
+                          Bar: Fix walk — guided fields, coaching, chips
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
             )}
           </div>
-
-          {(lensHlField || lensSearch.trim()) && (
-            <>
-              <div className="manta-lens-glass__hl-label" aria-live="polite">
-                <span className="manta-lens-glass__hl-dot" aria-hidden="true" />
-                {lensHlField
-                  ? `field: ${lensHlField}`
-                  : (tryLensSearchRegex(lensSearch) ? `regex: ${lensSearch.trim()}` : `search: "${lensSearch.trim()}"`)}
-              </div>
-              <div className="manta-lens-glass__meta">
-                <div className="manta-lens-glass__hits">
-                  <span>
-                    {lensTarget === 'form'
-                      ? 'Form mode — j/k to jump issues, fields ring in the wizard'
-                      : lensHitCount === 0
-                        ? 'no XML line matches'
-                        : `${lensHitCount} hit${lensHitCount === 1 ? '' : 's'} · focus ${lensHitFocus + 1}/${lensHitCount}`}
-                  </span>
-                  <div className="manta-lens-glass__hit-nav">
-                    <button
-                      type="button"
-                      className="manta-lens-glass__hit-btn"
-                      disabled={lensHitCount < 2 || lensTarget === 'form'}
-                      onClick={() => bumpLensHits(-1)}
-                      aria-label="Previous XML highlight"
-                      title="Previous match"
-                    >‹</button>
-                    <button
-                      type="button"
-                      className="manta-lens-glass__hit-btn"
-                      disabled={lensHitCount < 2 || lensTarget === 'form'}
-                      onClick={() => bumpLensHits(1)}
-                      aria-label="Next XML highlight"
-                      title="Next match"
-                    >›</button>
-                  </div>
-                </div>
-                {lensHelpOpen && (
-                  <div className="manta-lens-glass__kbd-hint">
-                    {lensFixGuide ? (
-                      <>
-                        <kbd>Esc</kbd> end fix walk
-                        {' · '}
-                        <kbd>j</kbd>
-                        <kbd>k</kbd>
-                        {' or '}
-                        <kbd>n</kbd>
-                        <kbd>p</kbd> next / back
-                      </>
-                    ) : (
-                      <>
-                        <kbd>Esc</kbd> exit lens
-                        {lensTarget !== 'form' && (
-                          <span>
-                            {' · '}
-                            <kbd>/</kbd> search
-                          </span>
-                        )}
-                        {' · '}
-                        <kbd>j</kbd>
-                        <kbd>k</kbd> issues
-                        {lensTarget !== 'form' && (
-                          <span>
-                            {' · '}
-                            <kbd>[</kbd>
-                            <kbd>]</kbd> XML
-                          </span>
-                        )}
-                        {' · '}
-                        Bar: Fix walk — guided fields, coaching, chips
-                      </>
-                    )}
-                  </div>
-                )}
-              </div>
-            </>
-          )}
         </div>
 
         {/* ── Issues tray at bottom ────────────────────────────────── */}
