@@ -74,10 +74,12 @@ function XmlToolsBar({
   const [importError, setImportError] = useState('')
   const [importBusy, setImportBusy] = useState(false)
   const [scannerOpen, setScannerOpen] = useState(false)
+  const [extensionScannerCapture, setExtensionScannerCapture] = useState(null)
   /** When a zip contains multiple .xml files, list paths and let the user pick one. */
   const [zipXmlPaths, setZipXmlPaths] = useState(/** @type {string[] | null} */ (null))
   const [zipPickPath, setZipPickPath] = useState('')
   const fileInputRef = useRef(null)
+  const extensionCaptureKeyRef = useRef('')
   /** Map path → bytes while a multi-entry zip is open; cleared after Apply or non-zip load. */
   const zipBytesRef = useRef(/** @type {Record<string, Uint8Array> | null} */ (null))
   /** Filename from last file-picker load; cleared after a successful Apply. */
@@ -91,6 +93,10 @@ function XmlToolsBar({
     pendingZipArchiveNameRef.current = ''
     setZipXmlPaths(null)
     setZipPickPath('')
+  }
+
+  function textLooksLikeXml(text) {
+    return /<\?xml|<gmd:|<gmi:|<MD_Metadata|<MI_Metadata/i.test(String(text || ''))
   }
 
   /**
@@ -151,6 +157,53 @@ function XmlToolsBar({
     }, 50)
     return () => window.clearInterval(t)
   }, [])
+
+  useEffect(() => {
+    function handleCapture(capture) {
+      const text = String(capture?.text || '').trim()
+      if (!text) return
+      const captureKey = `${capture?.capturedAt || ''}:${capture?.kind || ''}:${text.length}`
+      if (extensionCaptureKeyRef.current === captureKey) return
+      extensionCaptureKeyRef.current = captureKey
+      const title = String(capture?.title || capture?.url || 'extension-capture').slice(0, 180)
+      if (textLooksLikeXml(text) && canImport) {
+        clearZipImportUi()
+        pendingImportMetaRef.current = {
+          originalFilename: title,
+          sourceId: capture?.url || 'manta-extension',
+        }
+        setImportText(text)
+        setImportOpen(true)
+        setImportError('')
+        onStatus?.(`Loaded XML capture from extension (${text.length} chars). Review and click Apply to form.`)
+        return
+      }
+      if (canScanner) {
+        setExtensionScannerCapture(capture)
+        setScannerOpen(true)
+        onStatus?.(`Loaded page capture from extension (${text.length} chars). Review scanner suggestions before merging.`)
+        return
+      }
+      setImportText(text)
+      setImportOpen(true)
+      onStatus?.(`Loaded extension capture (${text.length} chars).`)
+    }
+    function onExtensionCapture(/** @type {CustomEvent} */ event) {
+      handleCapture(event.detail && typeof event.detail === 'object' ? event.detail : null)
+    }
+    function onExtensionMessage(/** @type {MessageEvent} */ event) {
+      if (event.origin !== window.location.origin) return
+      const data = event.data && typeof event.data === 'object' ? event.data : null
+      if (data?.source !== 'manta-chrome-extension' || data?.type !== 'manta-extension-capture') return
+      handleCapture(data.capture && typeof data.capture === 'object' ? data.capture : null)
+    }
+    window.addEventListener('manta:extension-capture', onExtensionCapture)
+    window.addEventListener('message', onExtensionMessage)
+    return () => {
+      window.removeEventListener('manta:extension-capture', onExtensionCapture)
+      window.removeEventListener('message', onExtensionMessage)
+    }
+  }, [canImport, canScanner, onStatus])
 
   useEffect(() => {
     if (!importOpen) return undefined
@@ -556,6 +609,7 @@ function XmlToolsBar({
               hostBridge={hostBridge}
               validationEngine={validationEngine}
               onApply={onScannerApply}
+              initialCapture={extensionScannerCapture}
             />,
             document.body,
           )

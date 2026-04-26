@@ -459,7 +459,7 @@ function reportNoaaFixtureValidation() {
   const merged = missionProfile.mergeLoaded(parsed.partial ?? {})
   const state = missionProfile.sanitize(merged)
 
-  const engine = new ValidationEngine(missionValidationRuleSets)
+  const engine = new ValidationEngine()
   const modes = ['lenient', 'strict', 'catalog']
 
   process.stdout.write('\n  NOAA/Navy UxS template validation report\n')
@@ -467,7 +467,7 @@ function reportNoaaFixtureValidation() {
 
   // Engine uses single-char severities: 'e' = error, 'w' = warning.
   for (const mode of modes) {
-    const result = engine.runProfileRules(state, mode, missionProfile)
+    const result = engine.run({ profile: missionProfile, state, mode })
     const errs  = result.issues.filter(i => i.severity === 'e')
     const warns = result.issues.filter(i => i.severity === 'w')
     process.stdout.write(
@@ -480,8 +480,8 @@ function reportNoaaFixtureValidation() {
   process.stdout.write('\n')
 
   // Hard assertion: lenient mode must surface <= errors than strict.
-  const lenientErrs = engine.runProfileRules(state, 'lenient', missionProfile).errCount
-  const strictErrs  = engine.runProfileRules(state, 'strict',  missionProfile).errCount
+  const lenientErrs = engine.run({ profile: missionProfile, state, mode: 'lenient' }).errCount
+  const strictErrs  = engine.run({ profile: missionProfile, state, mode: 'strict' }).errCount
   assert.ok(
     strictErrs >= lenientErrs,
     `strict mode should surface >= errors than lenient (got strict=${strictErrs} lenient=${lenientErrs})`,
@@ -515,10 +515,10 @@ function sortIssues(issues) {
  */
 function assertValidationParity(label, state, mode) {
   const engine = new ValidationEngine()
-  const profileStub = { validationRuleSets: missionValidationRuleSets }
+  const profileStub = { id: 'mission', validationRuleSets: missionValidationRuleSets }
 
   const ref = validatePilotState(mode, state)
-  const cand = engine.runProfileRules(state, mode, profileStub)
+  const cand = engine.run({ profile: profileStub, state, mode })
 
   const refSorted = sortIssues(ref.issues)
   const candSorted = sortIssues(cand.issues)
@@ -751,7 +751,7 @@ function reportBediCollectionValidation() {
 
   process.stdout.write('\n')
   for (const mode of ['lenient', 'strict', 'catalog']) {
-    const result = engine.runProfileRules(merged, bediCollectionProfile.validationRuleSets, mode)
+    const result = engine.run({ profile: bediCollectionProfile, state: merged, mode })
     const errs  = result.issues.filter((i) => i.severity === 'e')
     const warns = result.issues.filter((i) => i.severity === 'w')
     process.stdout.write(
@@ -762,10 +762,10 @@ function reportBediCollectionValidation() {
   }
 
   // Assertions: score should be > 70 (real data, most fields present)
-  const lenient = engine.runProfileRules(merged, bediCollectionProfile.validationRuleSets, 'lenient')
+  const lenient = engine.run({ profile: bediCollectionProfile, state: merged, mode: 'lenient' })
   assert.ok(lenient.score > 70, `BEDI collection lenient score ${lenient.score} is too low — parser is not extracting required fields`)
   // Strict should have same or more errors than lenient
-  const strict = engine.runProfileRules(merged, bediCollectionProfile.validationRuleSets, 'strict')
+  const strict = engine.run({ profile: bediCollectionProfile, state: merged, mode: 'strict' })
   assert.ok(strict.errCount >= lenient.errCount, `strict errCount (${strict.errCount}) < lenient (${lenient.errCount})`)
 }
 
@@ -797,7 +797,7 @@ function reportBediGranuleValidation() {
 
   process.stdout.write('\n')
   for (const mode of ['lenient', 'strict', 'catalog']) {
-    const result = engine.runProfileRules(merged, bediGranuleProfile.validationRuleSets, mode)
+    const result = engine.run({ profile: bediGranuleProfile, state: merged, mode })
     const errs  = result.issues.filter((i) => i.severity === 'e')
     const warns = result.issues.filter((i) => i.severity === 'w')
     process.stdout.write(
@@ -807,9 +807,9 @@ function reportBediGranuleValidation() {
     if (warns.length) process.stdout.write(`    warnings: ${warns.map((i) => `${i.field} — ${i.message}`).join('\n              ')}\n`)
   }
 
-  const lenient = engine.runProfileRules(merged, bediGranuleProfile.validationRuleSets, 'lenient')
+  const lenient = engine.run({ profile: bediGranuleProfile, state: merged, mode: 'lenient' })
   assert.ok(lenient.score > 60, `BEDI granule lenient score ${lenient.score} is too low — parser is not extracting required fields`)
-  const strict = engine.runProfileRules(merged, bediGranuleProfile.validationRuleSets, 'strict')
+  const strict = engine.run({ profile: bediGranuleProfile, state: merged, mode: 'strict' })
   assert.ok(strict.errCount >= lenient.errCount, `strict errCount (${strict.errCount}) < lenient (${lenient.errCount})`)
 }
 
@@ -1292,26 +1292,30 @@ async function main() {
   })
   step('readinessSummary named readiness bundles', () => {
     const failing = {
+      lenient: { errCount: 1, warnCount: 0, score: 92, maxScore: 100 },
       strict:  { errCount: 2, warnCount: 0, score: 80, maxScore: 100 },
       catalog: { errCount: 1, warnCount: 0, score: 90, maxScore: 100 },
     }
     const blocked = computeReadinessBundles(failing, { preflightSummary: { overall: 'WARN' }, isDirty: false })
-    assert.equal(blocked.find((b) => b.id === 'iso')?.ready, false)
-    assert.equal(blocked.find((b) => b.id === 'discovery')?.ready, false)
+    assert.equal(blocked.find((b) => b.id === 'draft')?.ready, false)
+    assert.equal(blocked.find((b) => b.id === 'profile-valid')?.ready, false)
+    assert.equal(blocked.find((b) => b.id === 'iso-ready')?.ready, false)
+    assert.equal(blocked.find((b) => b.id === 'discovery-ready')?.ready, false)
     assert.equal(blocked.find((b) => b.id === 'comet-preflight')?.ready, false)
-    assert.equal(blocked.find((b) => b.id === 'archive-handoff')?.ready, false)
+    assert.equal(blocked.find((b) => b.id === 'handoff-ready')?.ready, false)
 
     const passing = {
+      lenient: { errCount: 0, warnCount: 0, score: 100, maxScore: 100 },
       strict:  { errCount: 0, warnCount: 0, score: 100, maxScore: 100 },
       catalog: { errCount: 0, warnCount: 0, score: 100, maxScore: 100 },
     }
     const ready = computeReadinessBundles(passing, { preflightSummary: { overall: 'PASS' }, isDirty: false })
     assert.deepEqual(
       Object.fromEntries(ready.map((b) => [b.id, b.ready])),
-      { iso: true, discovery: true, 'comet-preflight': true, 'archive-handoff': true },
+      { draft: true, 'profile-valid': true, 'iso-ready': true, 'discovery-ready': true, 'comet-preflight': true, 'handoff-ready': true },
     )
     const dirty = computeReadinessBundles(passing, { preflightSummary: { overall: 'PASS' }, isDirty: true })
-    assert.equal(dirty.find((b) => b.id === 'archive-handoff')?.ready, false)
+    assert.equal(dirty.find((b) => b.id === 'handoff-ready')?.ready, false)
   })
   await asyncStep('GCMD client ranks stronger local matches first', async () => {
     const originalFetch = globalThis.fetch
@@ -1572,7 +1576,7 @@ async function main() {
 
     const pilot = legacyFormDataToPilotState(fd)
     const engine = new ValidationEngine()
-    const r = engine.runForPilotState(pilot, 'lenient')
+    const r = engine.run({ profile: missionProfile, state: pilot, mode: 'lenient' })
     assert.ok(Array.isArray(r.issues))
   })
   process.stdout.write('\nverify-pilot: all checks passed\n')

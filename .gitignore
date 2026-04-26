@@ -13,6 +13,8 @@ pilot-share/
 .env
 .env.local
 .env.*.local
+mcp/noaa-metadata/config/oauth-client.json
+mcp/noaa-metadata/config/allowlist.json
 
 # Archives (local exports / backups — do not publish)
 *.zip

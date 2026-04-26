@@ -118,6 +118,36 @@ export default function EmbeddableShell({
     }
   }, [mantaFloatActive])
 
+  useEffect(() => {
+    if (!mantaFloatActive) return
+    function onWidgetEvent(/** @type {CustomEvent} */ e) {
+      const action = e?.detail?.action
+      if (action === 'open') {
+        setLensMode(false)
+        setWidgetOpen(true)
+      } else if (action === 'close') {
+        setWidgetOpen(false)
+        setLensMode(false)
+      } else if (action === 'toggle') {
+        setLensMode(false)
+        setWidgetOpen((v) => !v)
+      }
+    }
+    function onLensTarget(/** @type {CustomEvent} */ e) {
+      const target = e?.detail?.target
+      if (target !== 'xml' && target !== 'form' && target !== 'split') return
+      setLensTarget(target)
+      setWidgetOpen(false)
+      setLensMode(true)
+    }
+    window.addEventListener('manta:widget', onWidgetEvent)
+    window.addEventListener('manta:lens-target', onLensTarget)
+    return () => {
+      window.removeEventListener('manta:widget', onWidgetEvent)
+      window.removeEventListener('manta:lens-target', onLensTarget)
+    }
+  }, [mantaFloatActive])
+
   // ── Keyboard shortcut: Cmd/Ctrl+Shift+M toggles widget ──────────────────
   useEffect(() => {
     if (!mantaFloatActive) return
@@ -140,7 +170,7 @@ export default function EmbeddableShell({
       try {
         const payload = readPilotSessionPayload()
         const state   = payload?.pilot ?? defaultPilotState()
-        const result  = validationEngine.runForPilotState(state, 'lenient')
+        const result  = validationEngine.run({ profile, state, mode: 'lenient' })
         setTriggerScore((prev) => {
           if (prev !== result.score) {
             setTriggerPulse(true)
@@ -160,7 +190,7 @@ export default function EmbeddableShell({
       window.removeEventListener('manta:pilot-session-updated', refresh)
       clearInterval(id)
     }
-  }, [mantaFloatActive, validationEngine])
+  }, [mantaFloatActive, validationEngine, profile])
 
   // onCometLoad is called by AssistantShell's COMET tab when the user clicks
   // "Load into Wizard". It stores the pending load so WizardShell can react.

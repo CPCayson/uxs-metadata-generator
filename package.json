@@ -6,6 +6,9 @@
     "pilot:dev": "npm --prefix react-pilot run dev",
     "pilot:build": "npm --prefix react-pilot run build",
     "pilot:publish": "npm --prefix react-pilot run publish",
-    "pilot:verify": "npm --prefix react-pilot run verify:pilot"
+    "pilot:verify": "npm --prefix react-pilot run verify:pilot",
+    "mcp:noaa:start": "npm --prefix mcp/noaa-metadata run start",
+    "mcp:noaa:auth": "npm --prefix mcp/noaa-metadata run auth",
+    "mcp:noaa:check": "npm --prefix mcp/noaa-metadata run check"
   }
 }

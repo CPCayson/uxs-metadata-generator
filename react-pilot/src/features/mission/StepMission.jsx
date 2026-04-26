@@ -2,23 +2,7 @@ import { useState } from 'react'
 import { searchRorOrganizationsClient } from '../../lib/rorClient'
 import { fromDatetimeLocalValue, toDatetimeLocalValue } from '../../lib/datetimeLocal'
 import { useFieldValidation } from '../../components/fields/useFieldValidation'
-
-const UXS_LAYER_OPTIONS = [
-  { value: 'datasetProduct', label: 'Dataset or product' },
-  { value: 'deployment', label: 'Deployment / field effort' },
-  { value: 'run', label: 'Run / continuous operation' },
-  { value: 'sortie', label: 'Sortie' },
-  { value: 'dive', label: 'Dive / submerged operation' },
-  { value: 'other', label: 'Other / mixed' },
-]
-
-const UXS_OUTCOME_OPTIONS = [
-  { value: '', label: 'Not specified' },
-  { value: 'completed', label: 'Completed' },
-  { value: 'partial', label: 'Partial' },
-  { value: 'aborted', label: 'Aborted' },
-  { value: 'unknown', label: 'Unknown' },
-]
+import { UXS_LAYER_OPTIONS, UXS_OUTCOME_OPTIONS, getUxsLayerDefinition } from '../../lib/uxsOperationalModel.js'
 
 /**
  * @param {{
@@ -105,6 +89,7 @@ export default function StepMission({
     draftLabel = Number.isNaN(parsed.getTime()) ? draftStatus.timestamp : parsed.toLocaleString()
   }
   const uxsContext = mission.uxsContext && typeof mission.uxsContext === 'object' ? mission.uxsContext : {}
+  const uxsLayer = getUxsLayerDefinition(uxsContext)
 
   function patchUxsContext(patch) {
     onMissionPatch({
@@ -147,6 +132,7 @@ export default function StepMission({
             </select>
             <p className="hint">
               Parent project below is the program citation; this block is the operational unit the data came from.
+              {uxsLayer.idField ? ` Catalog mode expects ${uxsLayer.label.toLowerCase()} ID/name fields when this layer is selected.` : ''}
             </p>
           </div>
           <div>

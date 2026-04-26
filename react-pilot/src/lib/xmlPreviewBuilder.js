@@ -2,6 +2,7 @@ import { getDataLicensePresetDef, normalizeDataLicensePresetKey } from './noaaLi
 import { formatNceiUxsFileIdentifierForXml } from './nceiUxsFileId.js'
 import { buildAcquisitionInstrumentDescription } from './sensorInstrumentDescription.js'
 import { gcmdConceptUrlFromUuid as gcmdKeywordHrefFromStoredUuid } from './gcmdKmsUrl.js'
+import { summarizeUxsOperationalRelationship } from './uxsOperationalModel.js'
 
 /** @param {unknown} s */
 function esc(s) {
@@ -952,7 +953,7 @@ ${metaStdXml}${refSystemXml}${contactRootXml}  <gmd:identificationInfo>
       </gmd:citation>
       <gmd:abstract><gco:CharacterString>${esc(m.abstract)}</gco:CharacterString></gmd:abstract>
       <gmd:purpose><gco:CharacterString>${esc(m.purpose)}</gco:CharacterString></gmd:purpose>
-      ${m.supplementalInformation ? `<gmd:supplementalInformation><gco:CharacterString>${esc(m.supplementalInformation)}</gco:CharacterString></gmd:supplementalInformation>` : ''}
+      ${(m.supplementalInformation || m.uxsContext) ? `<gmd:supplementalInformation><gco:CharacterString>${esc([m.supplementalInformation, m.uxsContext ? summarizeUxsOperationalRelationship(m.uxsContext) : ''].filter(Boolean).join('\n'))}</gco:CharacterString></gmd:supplementalInformation>` : ''}
       <gmd:extent>
         <gmd:EX_Extent>
 ${extentDescXml}          <gmd:geographicElement>

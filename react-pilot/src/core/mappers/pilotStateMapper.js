@@ -10,6 +10,8 @@
  * @module core/mappers/pilotStateMapper
  */
 
+import { buildUxsOperationalRelationship } from '../../lib/uxsOperationalModel.js'
+
 /**
  * Convert an existing pilotState object to a CanonicalMetadataEntity.
  *
@@ -150,6 +152,9 @@ export function pilotStateToCanonical(state) {
       associatedPublicationCode: m.associatedPublicationCode ?? undefined,
       uxsContext: m.uxsContext && typeof m.uxsContext === 'object'
         ? { ...m.uxsContext }
+        : undefined,
+      uxsOperationalRelationship: m.uxsContext && typeof m.uxsContext === 'object'
+        ? buildUxsOperationalRelationship(m.uxsContext)
         : undefined,
     },
 

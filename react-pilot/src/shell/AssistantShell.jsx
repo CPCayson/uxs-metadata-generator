@@ -404,10 +404,7 @@ export default function AssistantShell({
     try {
       const payload = readPilotSessionPayload()
       const state   = payload?.pilot ?? defaultPilotState()
-      const result =
-        profile.validationRuleSets?.length
-          ? validationEngine.runProfileRules(state, mode, profile)
-          : validationEngine.runForPilotState(state, mode)
+      const result = validationEngine.run({ profile, state, mode })
       // Detect newly-appeared issues
       const currentKeys = new Set(result.issues.map((i) => `${i.field}:${i.message}`))
       const fresh       = new Set([...currentKeys].filter((k) => !prevIssueKeysRef.current.has(k)))
@@ -460,6 +457,24 @@ export default function AssistantShell({
     }
     window.addEventListener('manta:pilot-session-updated', onSessionWrite)
     return () => window.removeEventListener('manta:pilot-session-updated', onSessionWrite)
+  }, [runQualityCheck, qualityMode])
+
+  useEffect(() => {
+    function onAssistantTab(/** @type {CustomEvent} */ e) {
+      const tab = e?.detail?.tab
+      if (tab !== 'validate' && tab !== 'ask' && tab !== 'search' && tab !== 'live' && tab !== 'comet') return
+      setActiveTab(tab)
+    }
+    function onRunQualityCheck() {
+      setActiveTab('validate')
+      runQualityCheck(qualityMode)
+    }
+    window.addEventListener('manta:assistant-tab', onAssistantTab)
+    window.addEventListener('manta:assistant-run-quality-check', onRunQualityCheck)
+    return () => {
+      window.removeEventListener('manta:assistant-tab', onAssistantTab)
+      window.removeEventListener('manta:assistant-run-quality-check', onRunQualityCheck)
+    }
   }, [runQualityCheck, qualityMode])
 
   function toggleDef(issue) {

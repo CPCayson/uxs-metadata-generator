@@ -124,6 +124,39 @@
  */
 
 /**
+ * UxS operational context stored in editable mission state.
+ *
+ * @typedef {{
+ *   primaryLayer: 'datasetProduct'|'deployment'|'run'|'sortie'|'dive'|'other',
+ *   deploymentName: string,
+ *   deploymentId: string,
+ *   runName: string,
+ *   runId: string,
+ *   sortieName: string,
+ *   sortieId: string,
+ *   diveName: string,
+ *   diveId: string,
+ *   operationOutcome: ''|'completed'|'partial'|'aborted'|'unknown',
+ *   narrative: string,
+ * }} UxsContext
+ */
+
+/**
+ * Derived read model for UxS operational relationships.
+ * This should be built from `UxsContext`, not edited independently.
+ *
+ * @typedef {{
+ *   kind: string,
+ *   label: string,
+ *   id: string,
+ *   name: string,
+ *   parentId: string,
+ *   outcome: string,
+ *   narrative: string,
+ * }} UxsOperationalRelationship
+ */
+
+/**
  * @typedef {{
  *   parentProjectTitle?: string,
  *   parentProjectDate?: string,
@@ -138,6 +171,8 @@
  *   associatedPublicationTitle?: string,
  *   associatedPublicationDate?: string,
  *   associatedPublicationCode?: string,
+ *   uxsContext?: UxsContext,
+ *   uxsOperationalRelationship?: UxsOperationalRelationship,
  * }} MetadataAggregations
  */
 
@@ -254,10 +289,15 @@
 
 /**
  * @typedef {{
+ *   id?: string,
  *   severity: IssueSeverity,
  *   field: string,
+ *   path?: string,
+ *   source?: 'profile'|'legacy'|'server'|'comet'|'linkcheck'|'xsd'|'schematron'|'scanner',
  *   message: string,
+ *   detail?: string,
  *   xpath?: string,
+ *   readinessBundleIds?: string[],
  * }} ValidationIssue
  */
 

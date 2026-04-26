@@ -20,6 +20,7 @@ import {
 } from '../../lib/cometClient.js'
 import { buildPilotPayloadFromCometXml } from '../../lib/cometProfileImport.js'
 import { emitPilotAuditEvent } from '../../lib/pilotAuditEvents.js'
+import { normalizeValidationIssue } from '../../core/validation/ValidationEngine.js'
 
 /**
  * Human-readable CoMET push description for the active profile (not mission-only).
@@ -59,6 +60,28 @@ function cometErrorCount(payload) {
   if (o.raw != null && o.error_count == null) return null
   const n = Number.parseInt(String(o.error_count ?? '0'), 10)
   return Number.isFinite(n) ? n : null
+}
+
+/**
+ * @param {string} overall
+ * @param {Array<{ id: string, label: string, ok: boolean, detail?: string }>} steps
+ */
+function buildPreflightSummary(overall, steps) {
+  return {
+    overall,
+    steps,
+    issues: steps
+      .filter((step) => !step.ok)
+      .map((step) => normalizeValidationIssue({
+        id: `comet.preflight.${step.id}`,
+        severity: overall === 'PASS' ? 'w' : 'e',
+        field: 'comet.preflight',
+        source: step.id === 'linkcheck' ? 'linkcheck' : 'comet',
+        message: `${step.label}: ${step.detail || 'failed'}`,
+        detail: step.detail || '',
+        readinessBundleIds: ['comet-preflight', 'handoff-ready'],
+      }, { source: step.id === 'linkcheck' ? 'linkcheck' : 'comet', mode: 'catalog' })),
+  }
 }
 
 /**
@@ -196,7 +219,7 @@ export function useMissionCometActions({
         const d = e instanceof Error ? e.message : String(e)
         steps.push({ id: 'resolver', label: 'Resolver (XLinks)', ok: false, detail: d })
         overall = 'BLOCK'
-        setPreflightSummary({ overall: 'BLOCK', steps })
+        setPreflightSummary(buildPreflightSummary('BLOCK', steps))
         onStatus(`Preflight blocked at resolver: ${d}`)
         return
       }
@@ -208,14 +231,14 @@ export function useMissionCometActions({
         if (count == null) {
           steps.push({ id: 'validate', label: 'ISO validate', ok: false, detail: 'Unparseable CoMET validate response' })
           overall = 'BLOCK'
-          setPreflightSummary({ overall: 'BLOCK', steps })
+          setPreflightSummary(buildPreflightSummary('BLOCK', steps))
           onStatus('Preflight blocked at ISO validate: CoMET response did not include an error count.')
           return
         }
         if (count > 0) {
           steps.push({ id: 'validate', label: 'ISO validate', ok: false, detail: `${count} CoMET issue(s)` })
           overall = 'BLOCK'
-          setPreflightSummary({ overall: 'BLOCK', steps })
+          setPreflightSummary(buildPreflightSummary('BLOCK', steps))
           onStatus(`Preflight blocked at ISO validate: ${count} CoMET issue(s).`)
           return
         }
@@ -224,7 +247,7 @@ export function useMissionCometActions({
         const d = e instanceof Error ? e.message : String(e)
         steps.push({ id: 'validate', label: 'ISO validate', ok: false, detail: d })
         overall = 'BLOCK'
-        setPreflightSummary({ overall: 'BLOCK', steps })
+        setPreflightSummary(buildPreflightSummary('BLOCK', steps))
         onStatus(`Preflight blocked at ISO validate: ${d}`)
         return
       }
@@ -262,7 +285,7 @@ export function useMissionCometActions({
         overall = 'BLOCK'
       }
 
-      setPreflightSummary({ overall, steps })
+      setPreflightSummary(buildPreflightSummary(overall, steps))
       emitPilotAuditEvent({
         profileId: profile.id,
         action: 'cometPreflight',

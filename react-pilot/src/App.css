@@ -55,28 +55,45 @@
 /* Manta command bar (App header) */
 .manta-voice-bar {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
-  gap: 0.4rem 0.5rem;
+  gap: 0.32rem;
   width: 100%;
   max-width: 100%;
-  margin-top: 0.65rem;
-  padding: 0.5rem 0 0.15rem;
+  margin-top: 0.45rem;
+  padding: 0.32rem 0 0.1rem;
   border-top: 1px solid rgba(148, 163, 184, 0.22);
+  position: relative;
 }
 .manta-voice-bar__mark {
-  font-size: 0.68rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  font-size: 0.62rem;
   font-weight: 800;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #0891b2;
   white-space: nowrap;
 }
+.manta-voice-bar__wake-dot {
+  width: 0.38rem;
+  height: 0.38rem;
+  border-radius: 999px;
+  background: rgba(100, 116, 139, 0.5);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+.manta-voice-bar__wake-dot--on {
+  background: #22d3ee;
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.45),
+    0 0 8px rgba(34, 211, 238, 0.45);
+}
 .manta-voice-bar__input {
-  flex: 1 1 220px;
+  flex: 1 1 160px;
   min-width: 0;
-  font-size: 0.82rem;
-  padding: 0.3rem 0.5rem;
+  font-size: 0.76rem;
+  padding: 0.25rem 0.45rem;
   border-radius: 6px;
   border: 1px solid rgba(148, 163, 184, 0.45);
   background: rgba(255, 255, 255, 0.9);
@@ -87,14 +104,27 @@
   color: #e2e8f0;
 }
 .manta-voice-bar__go,
-.manta-voice-bar__mic {
+.manta-voice-bar__mic,
+.manta-voice-bar__toggle,
+.manta-voice-bar__wake-lock,
+.manta-voice-bar__help-btn {
   font-size: 0.8rem;
-  padding: 0.3rem 0.6rem;
+  padding: 0.24rem 0.5rem;
   border-radius: 6px;
   border: 1px solid rgba(8, 145, 178, 0.45);
   background: rgba(8, 145, 178, 0.1);
   cursor: pointer;
   white-space: nowrap;
+}
+.manta-voice-bar__toggle--on {
+  background: rgba(8, 145, 178, 0.2);
+}
+.manta-voice-bar__wake-lock--on {
+  background: rgba(34, 211, 238, 0.2);
+  border-color: #22d3ee;
+}
+.manta-voice-bar__help-btn--on {
+  background: rgba(8, 145, 178, 0.2);
 }
 .manta-voice-bar__mic--on {
   background: rgba(34, 211, 238, 0.2);
@@ -102,13 +132,59 @@
   box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.25);
 }
 .manta-voice-bar__status {
-  flex: 1 0 100%;
-  font-size: 0.75rem;
+  flex: 0 1 30ch;
+  min-width: 0;
+  font-size: 0.68rem;
   color: rgba(100, 116, 139, 0.95);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-@media (min-width: 900px) {
+.manta-voice-bar--collapsed .manta-voice-bar__input {
+  flex: 0 1 0;
+  width: 0;
+  min-width: 0;
+  padding-left: 0;
+  padding-right: 0;
+  border-width: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.manta-voice-bar--collapsed .manta-voice-bar__go {
+  display: none;
+}
+.manta-voice-bar--collapsed .manta-voice-bar__status {
+  display: none;
+}
+.manta-voice-bar--collapsed .manta-voice-bar__mark {
+  font-size: 0.58rem;
+}
+.manta-voice-bar__help-pop {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.3rem);
+  z-index: 220;
+  width: min(30rem, 96vw);
+  background: var(--pilot-surface, #fff);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+  padding: 0.45rem 0.55rem;
+}
+.manta-voice-bar__help-pop p {
+  margin: 0.2rem 0;
+  font-size: 0.68rem;
+  line-height: 1.35;
+}
+@media (max-width: 760px) {
+  .manta-voice-bar {
+    flex-wrap: wrap;
+  }
+  .manta-voice-bar--collapsed {
+    flex-wrap: nowrap;
+  }
   .manta-voice-bar__status {
-    flex: 0 1 auto;
+    flex: 1 0 100%;
   }
 }
 

@@ -12,10 +12,7 @@
  * @param {string} mode
  */
 export function runValidationForMode(engine, profile, pilotState, mode) {
-  if (profile?.validationRuleSets?.length) {
-    return engine.runProfileRules(pilotState, mode, profile)
-  }
-  return engine.runForPilotState(pilotState, mode)
+  return engine.run({ profile, state: pilotState, mode, includeExternal: false })
 }
 
 /**
@@ -39,46 +36,70 @@ export function computeReadinessSnapshot(pilotState, engine, profile) {
  * }} [ctx]
  */
 export function computeReadinessBundles(snapshot, ctx = {}) {
+  const draftReady = (snapshot.lenient?.errCount ?? 1) === 0
+  const profileReady = (snapshot.lenient?.errCount ?? 1) === 0
   const isoReady = (snapshot.strict?.errCount ?? 1) === 0
   const discoveryReady = (snapshot.catalog?.errCount ?? 1) === 0
   const preflightOverall = ctx.preflightSummary?.overall
   const cometReady = preflightOverall === 'PASS'
-  const archiveReady = isoReady && !ctx.isDirty
+  const archiveReady = isoReady && discoveryReady && (!preflightOverall || cometReady) && !ctx.isDirty
 
   return [
     {
-      id: 'iso',
-      label: 'ISO-ready',
-      ready: isoReady,
-      detail: isoReady
-        ? 'Strict editor validation has no errors.'
-        : `${snapshot.strict?.errCount ?? 0} strict validation error(s).`,
+      id: 'draft',
+      label: 'Draft',
+      scope: 'internal',
+      ready: draftReady,
+      detail: draftReady
+        ? 'Baseline editor checks pass for continued drafting.'
+        : `${snapshot.lenient?.errCount ?? 0} draft error(s).`,
     },
     {
-      id: 'discovery',
+      id: 'profile-valid',
+      label: 'Profile-valid',
+      scope: 'internal',
+      ready: profileReady,
+      detail: profileReady
+        ? 'Local profile rules have no blocking errors.'
+        : `${snapshot.lenient?.errCount ?? 0} profile validation error(s).`,
+    },
+    {
+      id: 'iso-ready',
+      label: 'ISO-ready',
+      scope: 'internal',
+      ready: isoReady,
+      detail: isoReady
+        ? 'Local ISO/export-oriented editor checks have no errors.'
+        : `${snapshot.strict?.errCount ?? 0} ISO/editor validation error(s).`,
+    },
+    {
+      id: 'discovery-ready',
       label: 'Discovery-ready',
+      scope: 'internal',
       ready: discoveryReady,
       detail: discoveryReady
-        ? 'Catalog validation has no errors.'
-        : `${snapshot.catalog?.errCount ?? 0} catalog validation error(s).`,
+        ? 'Local catalog/discovery editor checks have no errors.'
+        : `${snapshot.catalog?.errCount ?? 0} discovery validation error(s).`,
     },
     {
       id: 'comet-preflight',
-      label: 'CoMET preflight',
+      label: 'CoMET-verified',
+      scope: 'external',
       ready: cometReady,
       detail: preflightOverall
-        ? `Last preflight: ${preflightOverall}.`
-        : 'Preflight has not run yet.',
+        ? `External CoMET preflight: ${preflightOverall}.`
+        : 'External CoMET preflight has not run yet.',
     },
     {
-      id: 'archive-handoff',
+      id: 'handoff-ready',
       label: 'Handoff-ready',
+      scope: 'handoff',
       ready: archiveReady,
       detail: archiveReady
-        ? 'ISO-ready with no unsaved edits.'
+        ? 'Local readiness is clear, external preflight is clear when present, and no unsaved edits remain.'
         : isoReady
-          ? 'Save or stabilize edits before handoff.'
-          : 'Resolve strict validation errors first.',
+          ? 'Save/stabilize edits and clear discovery or external preflight blockers before handoff.'
+          : 'Resolve ISO/editor validation errors first.',
     },
   ]
 }

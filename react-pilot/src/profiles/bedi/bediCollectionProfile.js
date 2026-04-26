@@ -192,6 +192,22 @@ export const bediCollectionProfile = {
   id:          'bediCollection',
   entityType:  'bediCollection',
   label:       'BEDI Collection (fieldSession)',
+  family:      'bedi',
+  variants: [
+    { id: 'bedi-collection', label: 'BEDI collection', description: 'Collection/fieldSession-level BEDI/OER metadata.' },
+  ],
+  lifecycleStates: ['draft', 'post-ingest', 'catalog-ready', 'comet-verified', 'handoff-ready', 'maintenance'],
+  readinessBundles: [
+    { id: 'draft', label: 'Draft', scope: 'internal', mode: 'lenient' },
+    { id: 'profile-valid', label: 'Profile-valid', scope: 'internal', mode: 'lenient' },
+    { id: 'iso-ready', label: 'ISO-ready', scope: 'internal', mode: 'strict' },
+    { id: 'discovery-ready', label: 'Discovery-ready', scope: 'internal', mode: 'catalog' },
+    { id: 'comet-preflight', label: 'CoMET-verified', scope: 'external' },
+    { id: 'handoff-ready', label: 'Handoff-ready', scope: 'handoff' },
+  ],
+  relationshipTypes: [
+    { id: 'collection-granule', label: 'Collection contains granule', parent: 'bediCollection', child: 'bediGranule' },
+  ],
 
   /** @type {import('../../core/registry/types.js').ProfileCapabilities} */
   capabilities: {

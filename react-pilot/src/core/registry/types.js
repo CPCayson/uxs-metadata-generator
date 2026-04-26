@@ -29,6 +29,7 @@
 /**
  * @typedef {{
  *   field: string,
+ *   id?: string,
  *   severity: import('../entities/types.js').IssueSeverity,
  *   message: string,
  *   check: (state: object, mode: string) => boolean,
@@ -199,6 +200,12 @@
  *   id: string,
  *   entityType: import('../entities/types.js').EntityType,
  *   label: string,
+ *   family?: string,
+ *   variants?: Array<{ id: string, label: string, description?: string }>,
+ *   lifecycleStates?: string[],
+ *   readinessBundles?: Array<{ id: string, label: string, scope?: 'internal'|'external'|'handoff', mode?: string }>,
+ *   relationshipTypes?: Array<{ id: string, label: string, parent?: string, child?: string }>,
+ *   generatedFormSchema?: object,
  *   capabilities: ProfileCapabilities,
  *   defaultState: () => object,
  *   sanitize: (state: object) => object,

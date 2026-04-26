@@ -8,7 +8,7 @@ import { memo } from 'react'
 /**
  * @param {{
  *   snapshot: Record<'lenient'|'strict'|'catalog', ReadinessModeResult>,
- *   bundles?: Array<{ id: string, label: string, ready: boolean, detail: string }>,
+ *   bundles?: Array<{ id: string, label: string, ready: boolean, detail: string, scope?: string }>,
  *   activeMode: string,
  *   onSelectMode: (mode: string) => void,
  *   className?: string,
@@ -25,8 +25,8 @@ function ReadinessStrip({ snapshot, bundles = [], activeMode, onSelectMode, clas
     <section className={`readiness-strip${className ? ` ${className}` : ''}`} aria-label="Readiness across validation modes">
       <div className="readiness-strip__head">
         <h3 className="readiness-strip__title">Readiness</h3>
-        <p className="readiness-strip__hint" title="Errors block that editor lane; CoMET preflight is shown separately.">
-          Editor rules — tap to switch validator mode
+        <p className="readiness-strip__hint" title="Mode pills are local editor checks; named goals distinguish internal and external readiness.">
+          Local editor rules — tap to switch validator mode
         </p>
       </div>
       <div className="readiness-strip__pills" role="group">
@@ -59,7 +59,7 @@ function ReadinessStrip({ snapshot, bundles = [], activeMode, onSelectMode, clas
               key={bundle.id}
               role="listitem"
               className={`readiness-pill${bundle.ready ? ' readiness-pill--ok' : ' readiness-pill--err'}`}
-              title={bundle.detail}
+              title={`${bundle.scope ? `${bundle.scope}: ` : ''}${bundle.detail}`}
             >
               <span className="readiness-pill__label">{bundle.label}</span>
               <span className="readiness-pill__badge" aria-hidden="true">

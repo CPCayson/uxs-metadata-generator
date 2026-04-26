@@ -130,5 +130,6 @@ export function pilotStateToLegacyFormData(state) {
 export function pilotModeToValidationEngineLevel(mode) {
   const m = String(mode || '').trim().toLowerCase()
   if (m === 'lenient') return 'basic'
+  if (m === 'catalog') return 'catalog'
   return 'strict'
 }

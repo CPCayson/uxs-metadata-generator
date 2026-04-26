@@ -278,6 +278,7 @@ function partialRoots(partial) {
  *   hostBridge: import('../adapters/HostBridge.js').HostBridge,
  *   validationEngine: import('../core/validation/ValidationEngine.js').ValidationEngine,
  *   onApply: (nextState: object) => void,
+ *   initialCapture?: { kind?: string, text?: string, title?: string, url?: string, contentType?: string, capturedAt?: string } | null,
  * }} props
  */
 export default function ScannerSuggestionsDialog({
@@ -288,6 +289,7 @@ export default function ScannerSuggestionsDialog({
   hostBridge,
   validationEngine,
   onApply,
+  initialCapture = null,
 }) {
   const [jsonText, setJsonText] = useState('')
   const [panelError, setPanelError] = useState('')
@@ -305,6 +307,7 @@ export default function ScannerSuggestionsDialog({
   )
   const scannerProfileId = useMemo(() => String(profile.entityType || profile.id || 'mission'), [profile.entityType, profile.id])
   const canServerScan = typeof hostBridge?.lensScan === 'function'
+  const lastCaptureKeyRef = useRef('')
 
   useEffect(() => {
     if (!open) return
@@ -397,6 +400,46 @@ export default function ScannerSuggestionsDialog({
 
   const parseJsonToEnvelope = useCallback(() => void ingestJsonText(jsonText.trim()), [jsonText, ingestJsonText])
 
+  const ingestCapturedText = useCallback(
+    async (capture) => {
+      const text = String(capture?.text || '').trim()
+      if (!text) return
+      const key = `${capture?.capturedAt || ''}:${capture?.kind || ''}:${text.length}`
+      if (lastCaptureKeyRef.current === key) return
+      lastCaptureKeyRef.current = key
+      setPanelError('')
+      setBusy(true)
+      try {
+        if (/^\s*\{[\s\S]*"suggestions"\s*:/.test(text)) {
+          setJsonText(text)
+          await ingestJsonText(text)
+          return
+        }
+        const xmlish = /<\?xml|<gmd:|<gmi:|<MD_Metadata|<MI_Metadata/i.test(text)
+        const env = await runLensScanHeuristic({
+          title:      String(capture?.title || pilotState?.mission?.title || pilotState?.title || ''),
+          abstract:   xmlish ? String(pilotState?.mission?.abstract || pilotState?.abstract || '') : text.slice(0, 20000),
+          xmlSnippet: xmlish ? text.slice(0, 200000) : '',
+          profileId:  scannerProfileId,
+          uxsContext: pilotState?.mission?.uxsContext,
+        })
+        setJsonText(JSON.stringify(env, null, 2))
+        await ingestEnvelopeFromObject(env, `extension-${capture?.kind || 'capture'}`)
+      } catch (e) {
+        setPanelError(e instanceof Error ? e.message : String(e))
+        setEnvelope(null)
+      } finally {
+        setBusy(false)
+      }
+    },
+    [ingestEnvelopeFromObject, ingestJsonText, pilotState, scannerProfileId],
+  )
+
+  useEffect(() => {
+    if (!open || !initialCapture?.text) return
+    void ingestCapturedText(initialCapture)
+  }, [open, initialCapture, ingestCapturedText])
+
   const runHeuristic = useCallback(async () => {
     setBusy(true)
     setPanelError('')
@@ -457,9 +500,7 @@ export default function ScannerSuggestionsDialog({
     if (!previewMerged || !parsePreview?.ok) return []
     const mode = String(previewMerged.mode || 'lenient')
     const roots = partialRoots(/** @type {Record<string, unknown>} */ (parsePreview.partial))
-    const r = profile.validationRuleSets?.length
-      ? validationEngine.runProfileRules(previewMerged, mode, profile)
-      : validationEngine.runForPilotState(previewMerged, mode)
+    const r = validationEngine.run({ profile, state: previewMerged, mode })
     return (r.issues || []).filter((i) => issueTouchesRoots(i.field, roots))
   }, [previewMerged, parsePreview, validationEngine, profile])
 

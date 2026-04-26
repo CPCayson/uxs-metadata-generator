@@ -18,6 +18,7 @@ import { missionValidationRuleSets } from './missionValidationRules.js'
 import { getMissionFieldLabel } from './missionFieldLabels.js'
 import { buildXmlPreview as buildXmlPreviewXml } from '../../lib/xmlPreviewBuilder.js'
 import { readPilotSessionPayload } from '../../lib/pilotSessionStorage.js'
+import { UXS_OPERATION_RELATIONSHIP_TYPES } from '../../lib/uxsOperationalModel.js'
 
 // Step components loaded lazily so the profile can be imported before React renders.
 // Source of truth lives in features/; components/ copies were deleted after migration.
@@ -162,6 +163,20 @@ export const missionProfile = {
   id: 'mission',
   entityType: 'mission',
   label: 'Mission / Dataset',
+  family: 'uxs',
+  variants: [
+    { id: 'uxs-mission', label: 'UxS mission / dataset', description: 'Mission, deployment, run, sortie/dive, and dataset/product metadata.' },
+  ],
+  lifecycleStates: ['draft', 'post-ingest', 'catalog-ready', 'comet-verified', 'handoff-ready', 'maintenance'],
+  readinessBundles: [
+    { id: 'draft', label: 'Draft', scope: 'internal', mode: 'lenient' },
+    { id: 'profile-valid', label: 'Profile-valid', scope: 'internal', mode: 'lenient' },
+    { id: 'iso-ready', label: 'ISO-ready', scope: 'internal', mode: 'strict' },
+    { id: 'discovery-ready', label: 'Discovery-ready', scope: 'internal', mode: 'catalog' },
+    { id: 'comet-preflight', label: 'CoMET-verified', scope: 'external' },
+    { id: 'handoff-ready', label: 'Handoff-ready', scope: 'handoff' },
+  ],
+  relationshipTypes: UXS_OPERATION_RELATIONSHIP_TYPES,
 
   /** @type {import('../../core/registry/types.js').ProfileCapabilities} */
   capabilities: {

@@ -15,6 +15,7 @@
 
 import { normalizeMissionInstantString } from '../../lib/datetimeLocal.js'
 import { collectGcmdKeywordUuidWarnings, normalizeNceiAccessionToken, sensorRowIsInactive } from '../../lib/pilotValidation.js'
+import { buildUxsOperationalRelationship, getUxsLayerDefinition } from '../../lib/uxsOperationalModel.js'
 
 // ---- primitive validators (mirrored from pilotValidation.js) ----
 
@@ -647,6 +648,41 @@ const strictExtraRules = [
 
 /** @type {import('../../core/registry/types.js').ValidationRule[]} */
 const catalogExtraRules = [
+  {
+    field: 'mission.uxsContext.primaryLayer',
+    severity: 'w',
+    message: 'Catalog mode: confirm what operational layer this UxS record primarily describes',
+    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation',
+    check: (s) => {
+      const layer = String(s?.mission?.uxsContext?.primaryLayer || 'datasetProduct')
+      return !['datasetProduct', 'deployment', 'run', 'sortie', 'dive', 'other'].includes(layer)
+    },
+  },
+  {
+    field: 'mission.uxsContext',
+    severity: 'w',
+    message: 'Catalog mode: add structured UxS operational ID/name for the selected layer instead of only title or abstract text',
+    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation',
+    check: (s) => {
+      const ctx = s?.mission?.uxsContext || {}
+      const def = getUxsLayerDefinition(ctx)
+      if (!def.idField && !def.nameField) return false
+      return isBlank(ctx?.[def.idField]) && isBlank(ctx?.[def.nameField])
+    },
+  },
+  {
+    field: 'mission.uxsContext.runId',
+    severity: 'w',
+    message: 'Catalog mode: run, sortie, and dive records should include the parent run/deployment identifier when available',
+    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo',
+    check: (s) => {
+      const rel = buildUxsOperationalRelationship(s?.mission?.uxsContext)
+      if (rel.kind === 'run' || rel.kind === 'sortie' || rel.kind === 'dive') {
+        return isBlank(rel.parentId)
+      }
+      return false
+    },
+  },
   {
     field: 'mission.licenseUrl',
     severity: 'e',

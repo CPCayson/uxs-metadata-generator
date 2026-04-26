@@ -1,5 +1,5 @@
 /**
- * useMissionActions — encapsulates every host-backed mission-specific action
+ * useMissionActions — legacy name for profile-backed host actions
  * (HTTP `POST /api/db` → Postgres): draft save/load, named templates,
  * platform library, server-side validation, and server-side exports (GeoJSON / DCAT).
  *
@@ -23,7 +23,7 @@ const PILOT_DRAFT_TEMPLATE = 'react-pilot-mission-draft'
  *   profile:              import('../../core/registry/types.js').EntityProfile,
  *   pilotState:           object,
  *   setPilotState:        (fn: (prev: object) => object) => void,
- *   hostBridge:           import('../../core/host/HostBridge.js').HostBridge,
+ *   hostBridge:           import('../../adapters/HostBridge.js').HostBridge,
  *   hostBridgeReady: boolean,
  *   activeStep:           string,
  *   setStatusMessage:     (msg: string) => void,

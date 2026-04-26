@@ -2,9 +2,8 @@
  * WizardShell — the multi-step metadata wizard UI.
  *
  * Profile-agnostic: all rendering and navigation decisions derive from
- * `profile` (steps, capabilities, methods). Mission-specific host-backed actions
- * live in `useMissionActions`; they are unavailable for profiles that
- * declare the corresponding capability as `false`.
+ * `profile` (steps, capabilities, methods). Host-backed actions are exposed
+ * through profile-neutral hooks and gated by profile capabilities.
  *
  * Props:
  *   onDirtyChange  — callback(isDirty: boolean) to lift dirty state up to App.jsx
@@ -25,8 +24,8 @@ import { computeReadinessBundles, computeReadinessSnapshot } from '../lib/readin
 import { scrollToField } from '../core/registry/FieldRegistry.js'
 import { pushPilotDebug } from '../lib/pilotDebugLog'
 import { useMetadataEngine } from './context.js'
-import { useMissionActions } from './hooks/useMissionActions.js'
-import { useMissionCometActions } from '../profiles/mission/useMissionCometActions.js'
+import { useProfileHostActions } from './hooks/useProfileHostActions.js'
+import { useCometActionsForProfile } from '../features/comet/useCometActionsForProfile.js'
 import CometPushPanel from '../features/comet/CometPushPanel.jsx'
 import { isoXmlAdapter } from '../core/export/adapters/isoXmlAdapter.js'
 import { getPilotFieldLabelFallback } from '../lib/pilotFieldLabelFallback.js'
@@ -108,14 +107,14 @@ export default function WizardShell({ onDirtyChange }) {
   const hostBridgeReady = hostBridge.isAvailable()
   const hostRuntimeLabel = hostBridgeReady ? 'Postgres API (HTTP /api/db)' : 'Host bridge not connected'
 
-  // Called by useMissionActions after any save/load that should reset dirty state.
+  // Called by profile host actions after any save/load that should reset dirty state.
   const onStateLoaded = useCallback((cleanState) => {
     baselineSerialized.current = JSON.stringify(cleanState)
     setIsDirty(false)
     onDirtyChange(false)
   }, [onDirtyChange])
 
-  const ma = useMissionActions({
+  const ma = useProfileHostActions({
     profile,
     pilotState,
     setPilotState,
@@ -129,7 +128,7 @@ export default function WizardShell({ onDirtyChange }) {
     onXmlPreviewUpdate: setLastSavedXmlPreview,
   })
 
-  const comet = useMissionCometActions({
+  const comet = useCometActionsForProfile({
     profile,
     pilotState,
     buildXml,
@@ -165,10 +164,11 @@ export default function WizardShell({ onDirtyChange }) {
   const deferredPilotState = useDeferredValue(pilotState)
 
   const validation = useMemo(
-    () =>
-      profile.validationRuleSets?.length
-        ? validationEngine.runProfileRules(deferredPilotState, deferredPilotState.mode || 'lenient', profile)
-        : validationEngine.runForPilotState(deferredPilotState, deferredPilotState.mode || 'lenient'),
+    () => validationEngine.run({
+      profile,
+      state: deferredPilotState,
+      mode: deferredPilotState.mode || 'lenient',
+    }),
     [validationEngine, profile, deferredPilotState],
   )
 
@@ -214,9 +214,7 @@ export default function WizardShell({ onDirtyChange }) {
   // Manta widget / Lens "Fix Issues" — apply safe auto-fixes to live wizard state
   useEffect(() => {
     function runValidationCount(state, mode) {
-      return profile.validationRuleSets?.length
-        ? validationEngine.runProfileRules(state, mode, profile).issues.length
-        : validationEngine.runForPilotState(state, mode).issues.length
+      return validationEngine.run({ profile, state, mode }).issues.length
     }
     function onAutoFixRequest(/** @type {CustomEvent} */ e) {
       const raw = e?.detail?.mode
@@ -338,9 +336,22 @@ export default function WizardShell({ onDirtyChange }) {
       const ok = profile.steps?.some((s) => s.id === id)
       if (ok) setActiveStep(id)
     }
+    function onRelativeStep(/** @type {CustomEvent} */ e) {
+      const delta = e?.detail?.delta
+      if (delta !== -1 && delta !== 1) return
+      const steps = profile.steps ?? []
+      if (!steps.length) return
+      const idx = Math.max(0, steps.findIndex((s) => s.id === activeStep))
+      const next = Math.min(steps.length - 1, Math.max(0, idx + delta))
+      setActiveStep(steps[next]?.id ?? activeStep)
+    }
     window.addEventListener('manta:goto-step', onGotoStep)
-    return () => window.removeEventListener('manta:goto-step', onGotoStep)
-  }, [profile.steps])
+    window.addEventListener('manta:step-relative', onRelativeStep)
+    return () => {
+      window.removeEventListener('manta:goto-step', onGotoStep)
+      window.removeEventListener('manta:step-relative', onRelativeStep)
+    }
+  }, [profile.steps, activeStep])
 
   async function runServerCheck() {
     setLoading(true)

@@ -59,7 +59,17 @@
 
 /**
  * @typedef {{
- *   issues: Array<{ severity: string, field: string, message: string }>,
+ *   issues: Array<{
+ *     id?: string,
+ *     severity: string,
+ *     field: string,
+ *     path?: string,
+ *     source?: string,
+ *     message: string,
+ *     detail?: string,
+ *     xpath?: string,
+ *     readinessBundleIds?: string[],
+ *   }>,
  *   summary?: string,
  * }} ServerValidationResult
  */

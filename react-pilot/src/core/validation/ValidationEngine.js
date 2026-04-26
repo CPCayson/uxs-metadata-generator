@@ -1,9 +1,10 @@
 /**
  * ValidationEngine — profile-driven validation runner.
  *
- * Wraps the existing validatePilotState so the existing rules continue to work
- * during migration. In Phase 3+ the engine will call profile rule sets directly
- * on the canonical entity; for now it translates to/from pilotState internally.
+ * `run({ profile, state, mode })` is the canonical local/editor validation path.
+ * Profile rule sets are the source of truth for registered profiles. Legacy
+ * pilot validation is retained only behind compatibility helpers for migration
+ * and parity tests.
  *
  * @module core/validation/ValidationEngine
  */
@@ -11,6 +12,29 @@
 import { validatePilotState } from '../../lib/pilotValidation.js'
 import { previewMetadataXPath } from '../../lib/metadataXPath.js'
 import { canonicalToPilotState } from '../mappers/pilotStateMapper.js'
+
+const VALIDATION_SOURCES = new Set(['profile', 'legacy', 'server', 'comet', 'linkcheck', 'xsd', 'schematron', 'scanner'])
+
+function slugPart(value) {
+  return String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '.')
+    .replace(/^\.+|\.+$/g, '')
+    .slice(0, 80) || 'issue'
+}
+
+/**
+ * @param {string} mode
+ * @returns {string[]}
+ */
+function readinessBundleIdsForMode(mode) {
+  const m = mode === 'strict' || mode === 'catalog' ? mode : 'lenient'
+  const ids = ['draft', 'profile-valid']
+  if (m === 'strict') ids.push('iso-ready')
+  if (m === 'catalog') ids.push('iso-ready', 'discovery-ready')
+  return ids
+}
 
 /**
  * @param {import('../entities/types.js').ValidationIssue} issue
@@ -21,10 +45,86 @@ function withPreviewXPath(issue) {
   return { ...issue, xpath: previewMetadataXPath(issue.xpath) }
 }
 
+/**
+ * @param {unknown} issue
+ * @param {{
+ *   profile?: import('../registry/types.js').EntityProfile | null,
+ *   mode?: string,
+ *   source?: string,
+ *   rule?: import('../registry/types.js').ValidationRule,
+ *   ruleSetId?: string,
+ * }} ctx
+ * @returns {import('../entities/types.js').ValidationIssue}
+ */
+export function normalizeValidationIssue(issue, ctx = {}) {
+  const raw = issue && typeof issue === 'object' ? /** @type {Record<string, unknown>} */ (issue) : {}
+  const field = String(raw.field ?? raw.path ?? ctx.rule?.field ?? '').trim()
+  const message = String(raw.message ?? ctx.rule?.message ?? 'Validation issue').trim()
+  const source = VALIDATION_SOURCES.has(String(raw.source || ctx.source)) ? String(raw.source || ctx.source) : 'profile'
+  const severityRaw = raw.severity ?? ctx.rule?.severity ?? 'w'
+  const severity = severityRaw === 'error' ? 'e' : severityRaw === 'warning' ? 'w' : String(severityRaw || 'w')
+  const id = String(
+    raw.id
+    ?? ctx.rule?.id
+    ?? [
+      ctx.profile?.id || 'metadata',
+      source,
+      ctx.ruleSetId || 'validation',
+      slugPart(field),
+      slugPart(message),
+    ].join('.'),
+  )
+  return withPreviewXPath({
+    ...raw,
+    id,
+    field,
+    path: String(raw.path ?? field),
+    severity: severity === 'e' || severity === 'w' ? severity : 'w',
+    source,
+    message,
+    detail: typeof raw.detail === 'string' ? raw.detail : undefined,
+    xpath: raw.xpath != null ? String(raw.xpath) : ctx.rule?.xpath,
+    readinessBundleIds: Array.isArray(raw.readinessBundleIds)
+      ? raw.readinessBundleIds.map((v) => String(v))
+      : readinessBundleIdsForMode(ctx.mode || 'lenient'),
+  })
+}
+
+/**
+ * @param {import('../entities/types.js').ValidationIssue[]} issues
+ */
+function summarizeIssues(issues) {
+  const errCount = issues.filter((i) => i.severity === 'e').length
+  const warnCount = issues.filter((i) => i.severity === 'w').length
+  const score = Math.max(0, 100 - errCount * 8 - warnCount * 3)
+  return { issues, score, maxScore: 100, errCount, warnCount }
+}
+
 export class ValidationEngine {
   /**
-   * Run validation for a pilotState object using the existing engine.
-   * This is the Phase 1/2 path — the engine delegates to validatePilotState.
+   * Unified validation entry point for local/editor rules.
+   *
+   * @param {{
+   *   profile?: import('../registry/types.js').EntityProfile | null,
+   *   state: object,
+   *   mode?: string,
+   *   includeExternal?: boolean,
+   * }} args
+   * @returns {import('../entities/types.js').ValidationResult}
+   */
+  run({ profile = null, state, mode, includeExternal = false }) {
+    void includeExternal
+    const resolvedMode = mode || state?.mode || 'lenient'
+    if (profile?.validationRuleSets?.length) {
+      return this.runLocalProfileRules(state, resolvedMode, profile)
+    }
+    return summarizeIssues([])
+  }
+
+  /**
+   * Compatibility path for old pilotState callers and parity checks.
+   * New code should call `run({ profile, state, mode })` so profile rule sets
+   * remain the local/editor source of truth.
    *
    * @param {object} pilotState
    * @param {string} [mode] - 'lenient' | 'strict' | 'catalog'
@@ -32,7 +132,13 @@ export class ValidationEngine {
    */
   runForPilotState(pilotState, mode) {
     const resolvedMode = mode || pilotState?.mode || 'lenient'
-    return validatePilotState(resolvedMode, pilotState)
+    const result = validatePilotState(resolvedMode, pilotState)
+    const issues = (result.issues ?? []).map((issue) =>
+      normalizeValidationIssue(issue, {
+        mode: resolvedMode,
+        source: 'legacy',
+      }))
+    return { ...result, issues }
   }
 
   /**
@@ -48,6 +154,18 @@ export class ValidationEngine {
   }
 
   /**
+   * Backwards-compatible alias for older tests/tools.
+   *
+   * @param {object} state - pilotState
+   * @param {string} mode
+   * @param {import('../registry/types.js').EntityProfile} profile
+   * @returns {import('../entities/types.js').ValidationResult}
+   */
+  runProfileRules(state, mode, profile) {
+    return this.runLocalProfileRules(state, mode, profile)
+  }
+
+  /**
    * Run a profile's explicit rule sets against a pilotState object.
    *
    * `rule.check(state, mode)` may return:
@@ -60,7 +178,7 @@ export class ValidationEngine {
    * @param {import('../registry/types.js').EntityProfile} profile
    * @returns {import('../entities/types.js').ValidationResult}
    */
-  runProfileRules(state, mode, profile) {
+  runLocalProfileRules(state, mode, profile) {
     /** @type {import('../entities/types.js').ValidationIssue[]} */
     const issues = []
 
@@ -71,23 +189,31 @@ export class ValidationEngine {
         if (!result) continue
         if (result === true) {
           issues.push(
-            withPreviewXPath({
+            normalizeValidationIssue({
               severity: rule.severity,
               field: rule.field,
               message: rule.message,
               xpath: rule.xpath,
+            }, {
+              profile,
+              mode,
+              source: 'profile',
+              rule,
+              ruleSetId: ruleSet.id,
             }),
           )
         } else if (Array.isArray(result)) {
-          issues.push(...result.map((i) => withPreviewXPath(i)))
+          issues.push(...result.map((i) => normalizeValidationIssue(i, {
+            profile,
+            mode,
+            source: 'profile',
+            rule,
+            ruleSetId: ruleSet.id,
+          })))
         }
       }
     }
 
-    const errCount = issues.filter((i) => i.severity === 'e').length
-    const warnCount = issues.filter((i) => i.severity === 'w').length
-    const score = Math.max(0, 100 - errCount * 8 - warnCount * 3)
-
-    return { issues, score, maxScore: 100, errCount, warnCount }
+    return summarizeIssues(issues)
   }
 }

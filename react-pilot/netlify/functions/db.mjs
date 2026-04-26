@@ -27,6 +27,7 @@ import { neon } from '@neondatabase/serverless'
 import { generateDCATString, generateGeoJSONString } from './lib/legacyGeoDcat.mjs'
 import { legacyFormDataToPilotState } from '../../src/core/mappers/legacyFormDataMapper.js'
 import { ValidationEngine } from '../../src/core/validation/ValidationEngine.js'
+import { missionValidationRuleSets } from '../../src/profiles/mission/missionValidationRules.js'
 import { runLensScanHeuristic } from '../../src/lib/lensScanHeuristic.js'
 
 const cors = {
@@ -295,6 +296,7 @@ function parseJsonMaybe(value) {
 function gasValidationLevelToMode(level) {
   const l = String(level ?? 'basic').toLowerCase()
   if (l === 'basic' || l === 'lenient') return 'lenient'
+  if (l === 'catalog') return 'catalog'
   return 'strict'
 }
 
@@ -314,11 +316,21 @@ async function validateOnServer(_sql, args) {
   const pilotState = legacyFormDataToPilotState(formData)
   const mode       = gasValidationLevelToMode(level)
   const engine     = new ValidationEngine()
-  const result     = engine.runForPilotState(pilotState, mode)
+  const result     = engine.run({
+    profile: { id: 'mission', validationRuleSets: missionValidationRuleSets },
+    state: pilotState,
+    mode,
+  })
   const issues = (result.issues ?? []).map((i) => ({
+    id:       i.id,
     severity: i.severity,
     field:    i.field,
+    path:     i.path || i.field,
+    source:   'server',
     message:  i.message,
+    detail:   i.detail,
+    xpath:    i.xpath,
+    readinessBundleIds: i.readinessBundleIds,
   }))
   const summary = `Score ${result.score}/100 — ${result.errCount} error(s), ${result.warnCount} warning(s).`
   return { issues, summary }
