@@ -1120,7 +1120,8 @@ export default function AssistantShell({
     { id: 'comet',    label: 'CoMET',    dot: cometLoaded ? 'ok' : cometGaps?.length ? 'warn' : null },
   ]
 
-  // ── Lens overlay render (portals into the XML validator panel) ──────────
+  // ── Lens overlay (portaled to #manta-scanner-host): Form/Split use
+  // manta-lens--form-readable so HUD + glass read as one “smart form” surface.
 
   if (lensMode) {
     const lensRootClass = [
