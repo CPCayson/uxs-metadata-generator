@@ -3499,10 +3499,12 @@ li.manta-widget__result-item:hover {
    ════════════════════════════════════════════════════════════════════ */
 
 .manta-lens-field-hl {
-  outline: 2px solid rgba(34, 211, 238, 0.95) !important;
-  outline-offset: 2px;
-  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.22);
-  border-radius: 3px;
+  outline: 3px solid rgba(34, 211, 238, 0.98) !important;
+  outline-offset: 3px;
+  box-shadow:
+    0 0 0 2px rgba(2, 6, 16, 0.85),
+    0 0 22px rgba(34, 211, 238, 0.55);
+  border-radius: 4px;
   transition: box-shadow 0.15s, outline 0.15s;
   z-index: 2;
   position: relative;
@@ -3510,28 +3512,34 @@ li.manta-widget__result-item:hover {
 
 /* Validation heat on inputs while lens is open (from AssistantShell) */
 .manta-lens-field-status--e {
-  outline: 2px solid #f87171 !important;
-  outline-offset: 2px;
-  box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.28);
+  outline: 3px solid #f87171 !important;
+  outline-offset: 3px;
+  box-shadow:
+    0 0 0 2px rgba(2, 6, 16, 0.75),
+    0 0 20px rgba(248, 113, 113, 0.45);
   border-radius: 4px;
   z-index: 1;
   position: relative;
 }
 .manta-lens-field-status--w {
-  outline: 2px solid #a78bfa !important;
-  outline-offset: 2px;
-  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.28);
+  outline: 3px solid #a78bfa !important;
+  outline-offset: 3px;
+  box-shadow:
+    0 0 0 2px rgba(2, 6, 16, 0.75),
+    0 0 20px rgba(167, 139, 250, 0.4);
   border-radius: 4px;
   z-index: 1;
   position: relative;
 }
 .manta-lens-field-status.manta-lens-field-hl {
   outline-color: #22d3ee !important;
-  box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.35);
+  box-shadow:
+    0 0 0 2px rgba(2, 6, 16, 0.85),
+    0 0 24px rgba(34, 211, 238, 0.55);
   z-index: 3;
 }
 
-/* ── Lens root: default absolute on scanner host; .manta-lens--viewport pins to the window. ─ */
+/* Lens root: absolute within #manta-scanner-host (or fixed fallback in MantaScannerFrame). */
 .manta-lens {
   position: absolute;
   inset: 0;
@@ -3546,14 +3554,27 @@ li.manta-widget__result-item:hover {
 }
 
 .manta-lens.manta-lens--viewport {
-  position: fixed;
+  /* Framed by #manta-scanner-host when portaled; fills that host (not the whole window). */
+  position: absolute;
   inset: 0;
   z-index: 10050;
-  max-height: 100dvh;
+  max-height: none;
+  height: 100%;
+  min-height: 0;
   width: 100%;
   /* Clicks pass through to the form except on HUD children with pointer-events: auto */
   pointer-events: none;
-  /* Flex order: bar 1, readiness 2, progress 3, section 4, then tray+glass 5/6 (wrap toggle). */
+}
+.manta-lens-fallback-host {
+  position: fixed;
+  inset: 0;
+  z-index: 10050;
+  pointer-events: none;
+}
+.manta-lens-fallback-host > .manta-lens {
+  position: absolute;
+  inset: 0;
+  max-height: 100dvh;
 }
 
 .manta-lens--viewport .manta-lens-bar { order: 1; pointer-events: auto; }
@@ -3561,9 +3582,10 @@ li.manta-widget__result-item:hover {
 .manta-lens--viewport .manta-lens-readiness-row { order: 3; pointer-events: auto; }
 .manta-lens--viewport .manta-lens-progress-bar { order: 4; pointer-events: none; }
 .manta-lens--viewport .manta-lens-section-bars { order: 5; pointer-events: auto; }
-.manta-lens--viewport.manta-lens--tuck-high .manta-lens-tray { order: 6; pointer-events: auto; }
-.manta-lens--viewport.manta-lens--tuck-high .manta-lens-glass { order: 7; flex: 1; min-height: 0; }
-.manta-lens--viewport.manta-lens--tuck-low .manta-lens-glass { order: 6; flex: 1; min-height: 0; }
+/* Tuck-high: issues list above the through-glass band (not below the viewport). */
+.manta-lens--viewport.manta-lens--tuck-high .manta-lens-glass { order: 6; flex: 1 1 auto; min-height: 0; }
+.manta-lens--viewport.manta-lens--tuck-high .manta-lens-tray { order: 7; pointer-events: auto; }
+.manta-lens--viewport.manta-lens--tuck-low .manta-lens-glass { order: 6; flex: 1 1 auto; min-height: 0; }
 .manta-lens--viewport.manta-lens--tuck-low .manta-lens-tray { order: 7; pointer-events: auto; }
 
 /* Form / both: make the through-glass work area easier to read */
@@ -4172,7 +4194,12 @@ li.manta-widget__result-item:hover {
   pointer-events: auto;
 }
 .manta-lens--viewport .manta-lens-tray {
-  max-height: min(36vh, 300px);
+  max-height: min(32vh, 280px);
+}
+@media (max-width: 900px) {
+  .manta-lens--viewport .manta-lens-tray {
+    max-height: min(28vh, 220px);
+  }
 }
 .manta-lens--viewport.manta-lens--tuck-high .manta-lens-tray {
   border-top: 1px solid rgba(34, 211, 238, 0.18);

@@ -138,6 +138,36 @@ export function getFieldElementForPilot(fieldPath) {
   return null
 }
 
+/**
+ * DOM nodes to outline for lens / “jump to field” (control + label + local group).
+ * Keeps focus rings on both the input and its visible label/panel.
+ *
+ * @param {string} fieldPath
+ * @returns {HTMLElement[]}
+ */
+export function getFieldElementsForLensHighlight(fieldPath) {
+  const el = getFieldElementForPilot(fieldPath)
+  if (!el) return []
+
+  const out = /** @type {Set<HTMLElement>} */ (new Set())
+  out.add(el)
+
+  const inLabel = el.closest('label')
+  if (inLabel instanceof HTMLElement) out.add(inLabel)
+
+  if (el.id) {
+    try {
+      const forLab = document.querySelector(`label[for="${cssEscapeForFor(el.id)}"]`)
+      if (forLab instanceof HTMLElement) out.add(forLab)
+    } catch { /* invalid id for selector */ }
+  }
+
+  const group = el.closest('.form-group, .form-row, .form-row-2, .keyword-facet, .sensor-card')
+  if (group instanceof HTMLElement) out.add(group)
+
+  return [...out]
+}
+
 export function scrollToField(fieldPath) {
   if (!fieldPath) return false
 
@@ -171,4 +201,11 @@ function focusAndScroll(el) {
 /** Escape a string for use inside a CSS attribute selector value. */
 function cssEscape(s) {
   return s.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+}
+
+/** Escape for `label[for="..."]` when the id is not trivially alphanumeric. */
+function cssEscapeForFor(id) {
+  return String(id)
+    .replace(/\\/g, '\\\\')
+    .replace(/"/g, '\\"')
 }

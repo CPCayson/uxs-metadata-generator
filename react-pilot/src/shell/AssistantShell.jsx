@@ -15,7 +15,7 @@
 
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react'
 import MantaScannerFrame from '../components/MantaScannerFrame.jsx'
-import { getFieldElementForPilot } from '../core/registry/FieldRegistry.js'
+import { getFieldElementForPilot, getFieldElementsForLensHighlight } from '../core/registry/FieldRegistry.js'
 import { useMetadataEngine } from './context.js'
 import { defaultPilotState } from '../lib/pilotValidation.js'
 import { readPilotSessionPayload } from '../lib/pilotSessionStorage.js'
@@ -657,6 +657,12 @@ export default function AssistantShell({
     return () => window.removeEventListener('manta:wizard-active-step', onWizardStep)
   }, [])
 
+  const clearLensFieldHl = useCallback(() => {
+    document.querySelectorAll('.manta-lens-field-hl').forEach((el) => {
+      el.classList.remove('manta-lens-field-hl')
+    })
+  }, [])
+
   const clearLensDomHighlights = useCallback(() => {
     if (fieldNavTimeoutRef.current) {
       clearTimeout(fieldNavTimeoutRef.current)
@@ -665,10 +671,8 @@ export default function AssistantShell({
     document.querySelectorAll('.fx-xml-line.manta-lens-hl').forEach((el) => {
       el.classList.remove('manta-lens-hl', 'manta-lens-hl--focus')
     })
-    document.querySelectorAll('.manta-lens-field-hl').forEach((el) => {
-      el.classList.remove('manta-lens-field-hl')
-    })
-  }, [])
+    clearLensFieldHl()
+  }, [clearLensFieldHl])
 
   const applyLensXmlHighlight = useCallback((target, isSearch, focusIdx = 0) => {
     const matches = []
@@ -719,16 +723,15 @@ export default function AssistantShell({
     window.dispatchEvent(new CustomEvent('manta:lens-goto-field', { detail: { field: fieldPath } }))
     fieldNavTimeoutRef.current = window.setTimeout(() => {
       fieldNavTimeoutRef.current = 0
-      document.querySelectorAll('.manta-lens-field-hl').forEach((el) => {
-        el.classList.remove('manta-lens-field-hl')
-      })
-      const fieldEl = getFieldElementForPilot(fieldPath)
-      if (fieldEl) {
+      clearLensFieldHl()
+      const targets = getFieldElementsForLensHighlight(fieldPath)
+      for (const fieldEl of targets) {
         fieldEl.classList.add('manta-lens-field-hl')
-        fieldEl.scrollIntoView({ block: 'center', behavior: 'smooth' })
       }
+      const primary = getFieldElementForPilot(fieldPath)
+      primary?.scrollIntoView({ block: 'center', behavior: 'smooth' })
     }, 220)
-  }, [])
+  }, [clearLensFieldHl])
 
   const applyLensHighlights = useCallback((target, isSearch, focusIdx = 0) => {
     if (fieldNavTimeoutRef.current && focusIdx === 0) {
@@ -739,18 +742,14 @@ export default function AssistantShell({
       el.classList.remove('manta-lens-hl', 'manta-lens-hl--focus')
     })
     if (focusIdx === 0) {
-      document.querySelectorAll('.manta-lens-field-hl').forEach((el) => {
-        el.classList.remove('manta-lens-field-hl')
-      })
+      clearLensFieldHl()
     }
     if (!target) {
       if (fieldNavTimeoutRef.current) {
         clearTimeout(fieldNavTimeoutRef.current)
         fieldNavTimeoutRef.current = 0
       }
-      document.querySelectorAll('.manta-lens-field-hl').forEach((el) => {
-        el.classList.remove('manta-lens-field-hl')
-      })
+      clearLensFieldHl()
       lensHitCountRef.current = 0
       lensHitFocusRef.current = 0
       setLensHitCount(0)
@@ -778,7 +777,7 @@ export default function AssistantShell({
         fieldNavTimeoutRef.current = 0
       }
     }
-  }, [lensTarget, applyLensFormHighlight, applyLensXmlHighlight])
+  }, [lensTarget, applyLensFormHighlight, applyLensXmlHighlight, clearLensFieldHl])
 
   const bumpLensHits = useCallback((delta) => {
     if (lensTarget === 'form') return
@@ -845,10 +844,11 @@ export default function AssistantShell({
     }
     clearAllStatus()
     for (const [path, r] of rankByField) {
-      const el = getFieldElementForPilot(path)
-      if (!el) continue
-      el.classList.add('manta-lens-field-status', r === 2 ? 'manta-lens-field-status--e' : 'manta-lens-field-status--w')
-      el.setAttribute('data-manta-lens-status', '1')
+      const sev = r === 2 ? 'manta-lens-field-status--e' : 'manta-lens-field-status--w'
+      for (const el of getFieldElementsForLensHighlight(path)) {
+        el.classList.add('manta-lens-field-status', sev)
+        el.setAttribute('data-manta-lens-status', '1')
+      }
     }
     return () => { clearAllStatus() }
   }, [lensMode, qualityResult])
@@ -1000,10 +1000,7 @@ export default function AssistantShell({
     }
   }, [lensMode, lensFixGuide, workflowEngine])
 
-  const lensChipPilot = useMemo(
-    () => readPilotSessionPayload()?.pilot ?? defaultPilotState(),
-    [qualityResult, lensMode, liveUpdatedAt],
-  )
+  const lensChipPilot = readPilotSessionPayload()?.pilot ?? defaultPilotState()
 
   const onLensQuickChip = useCallback((chip, forIssue) => {
     const maybeScheduleTrayRefresh = () => {
