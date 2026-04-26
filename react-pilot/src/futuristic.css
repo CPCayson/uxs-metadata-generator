@@ -3860,6 +3860,30 @@ li.manta-widget__result-item:hover {
   color: #a5f3fc;
 }
 
+.manta-lens-bar__hud-toggle {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(100, 116, 139, 0.45);
+  background: rgba(15, 23, 42, 0.55);
+  color: #94a3b8;
+  cursor: pointer;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+.manta-lens-bar__hud-toggle:hover {
+  border-color: rgba(34, 211, 238, 0.4);
+  color: #e2e8f0;
+}
+.manta-lens-bar__hud-toggle--active {
+  background: rgba(34, 211, 238, 0.14);
+  border-color: rgba(34, 211, 238, 0.5);
+  color: #a5f3fc;
+}
+
 .manta-lens-tag {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 0.65rem;
@@ -4254,6 +4278,8 @@ li.manta-widget__result-item:hover {
 .manta-lens-glass {
   flex: 1;
   min-height: 0;
+  display: flex;
+  flex-direction: column;
   /* tinted but readable — bump opacity so XML stays visible but doesn't
      bleed up into the solid sections above */
   background: rgba(3, 5, 14, 0.42);
@@ -4264,6 +4290,22 @@ li.manta-widget__result-item:hover {
 }
 .manta-lens--viewport .manta-lens-glass {
   pointer-events: none;
+}
+
+/* Search + focus row stack at top of glass so they never float over section bars */
+.manta-lens-glass__chrome {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 10px 6px;
+  z-index: 2;
+  pointer-events: none;
+}
+.manta-lens-glass__focus {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 /* Subtle grid overlay in the glass zone */
@@ -4311,9 +4353,16 @@ li.manta-widget__result-item:hover {
 .manta-lens--viewport .manta-lens-tray {
   max-height: min(32vh, 280px);
 }
+/* Default “max canvas”: slimmer tray + taller through-glass for Validator / XML */
+.manta-lens--viewport.manta-lens--hud-compact .manta-lens-tray {
+  max-height: min(24vh, 200px);
+}
 @media (max-width: 900px) {
   .manta-lens--viewport .manta-lens-tray {
     max-height: min(28vh, 220px);
+  }
+  .manta-lens--viewport.manta-lens--hud-compact .manta-lens-tray {
+    max-height: min(22vh, 168px);
   }
 }
 .manta-lens--viewport.manta-lens--tuck-high .manta-lens-tray {
@@ -4442,8 +4491,6 @@ li.manta-widget__result-item:hover {
 
 /* ── Glass zone search bar ────────────────────────────────────────── */
 .manta-lens-glass__search {
-  position: absolute;
-  top: 10px; left: 10px; right: 10px;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -4451,8 +4498,7 @@ li.manta-widget__result-item:hover {
   border: 1px solid rgba(34, 211, 238, 0.35);
   border-radius: 7px;
   padding: 5px 10px;
-  z-index: 2;
-  pointer-events: all;
+  pointer-events: auto;
   backdrop-filter: blur(6px) saturate(1.3);
   box-shadow: 0 0 14px rgba(34, 211, 238, 0.12);
   transition: border-color 0.15s, box-shadow 0.15s;
@@ -4499,8 +4545,6 @@ li.manta-widget__result-item:hover {
 
 /* Active highlight label in the glass zone */
 .manta-lens-glass__hl-label {
-  position: absolute;
-  bottom: 8px; left: 10px; right: 10px;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -4511,7 +4555,11 @@ li.manta-widget__result-item:hover {
   color: rgba(34, 211, 238, 0.7);
   text-transform: lowercase;
   pointer-events: none;
-  z-index: 2;
+  padding: 5px 8px;
+  border-radius: 6px;
+  background: rgba(3, 5, 14, 0.72);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  box-shadow: 0 0 12px rgba(251, 191, 36, 0.08);
 }
 
 .manta-lens-glass__hl-dot {
@@ -4570,11 +4618,12 @@ li.manta-widget__result-item:hover {
   justify-content: space-between;
   gap: 8px;
   flex-wrap: wrap;
-  padding: 4px 10px 6px;
+  padding: 4px 2px 2px;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 0.58rem;
   letter-spacing: 0.04em;
   color: rgba(148, 163, 184, 0.75);
+  pointer-events: auto;
 }
 
 .manta-lens-glass__hits {
