@@ -650,11 +650,24 @@ export default function AssistantShell({
     } catch { /* */ }
     return false
   })
+  /** Collapsed = small glass manta tab sitting over the form/scanner host. */
+  const [lensCollapsed, setLensCollapsed] = useState(() => {
+    try {
+      return sessionStorage.getItem('manta-lens-collapsed') === '1'
+    } catch {
+      return false
+    }
+  })
   useEffect(() => {
     try {
       sessionStorage.setItem('manta-lens-wrap', lensValidatorWrap)
     } catch { /* */ }
   }, [lensValidatorWrap])
+  useEffect(() => {
+    try {
+      sessionStorage.setItem('manta-lens-collapsed', lensCollapsed ? '1' : '0')
+    } catch { /* */ }
+  }, [lensCollapsed])
 
   useEffect(() => {
     try {
@@ -1013,15 +1026,23 @@ export default function AssistantShell({
   }, [])
 
   useEffect(() => {
-    if (!lensMode) setLensFixGuide(null)
+    if (!lensMode) {
+      setLensFixGuide(null)
+      setLensCollapsed(false)
+    }
   }, [lensMode])
 
   useEffect(() => {
     if (!lensMode) return
+    if (lensCollapsed) {
+      setLensHelpOpen(false)
+      setLensFixGuide(null)
+      clearLensDomHighlights()
+    }
     try {
       window.dispatchEvent(new CustomEvent('manta:lens-opened'))
     } catch { /* */ }
-  }, [lensMode])
+  }, [lensMode, lensCollapsed, clearLensDomHighlights])
 
   useEffect(() => {
     if (!lensMode || !lensFixGuide) return
@@ -1093,8 +1114,18 @@ export default function AssistantShell({
           setLensFixGuide(null)
           return
         }
+        if (!lensCollapsed) {
+          e.preventDefault()
+          setLensCollapsed(true)
+          return
+        }
         e.preventDefault()
         onToggleLens?.()
+        return
+      }
+      if (lensCollapsed && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault()
+        setLensCollapsed(false)
         return
       }
       if (e.key === '/' && !e.metaKey && !e.ctrlKey && !e.altKey) {
@@ -1142,7 +1173,7 @@ export default function AssistantShell({
     }
     window.addEventListener('keydown', onKey, true)
     return () => window.removeEventListener('keydown', onKey, true)
-  }, [lensMode, onToggleLens, lensIssuesScoped, lensFixGuide, stepFixGuide, bumpLensHits, lensSearch, lensTarget])
+  }, [lensMode, onToggleLens, lensIssuesScoped, lensFixGuide, stepFixGuide, bumpLensHits, lensSearch, lensTarget, lensCollapsed])
 
   const hasErrors     = errors.length > 0
   const hasWarnings   = warnings.length > 0
@@ -1164,10 +1195,47 @@ export default function AssistantShell({
       'manta-lens',
       'manta-lens--viewport',
       'manta-lens--validator-wrap',
+      lensCollapsed && 'manta-lens--collapsed',
       lensValidatorWrap === 'tuck-high' ? 'manta-lens--tuck-high' : 'manta-lens--tuck-low',
       (lensTarget === 'form' || lensTarget === 'split') && 'manta-lens--form-readable',
       !lensHudExpanded && 'manta-lens--hud-compact',
     ].filter(Boolean).join(' ')
+
+    if (lensCollapsed) {
+      const collapsedContent = (
+        <div className={lensRootClass} role="dialog" aria-label="Manta Lens collapsed">
+          <button
+            type="button"
+            className="manta-lens-collapsed-tab"
+            onClick={() => setLensCollapsed(false)}
+            title="Expand Manta Lens"
+          >
+            <span className="manta-lens-collapsed-tab__wing" aria-hidden="true" />
+            <span className="manta-lens-collapsed-tab__brand">MANTA LENS</span>
+            {qualityResult ? (
+              <span className="manta-lens-collapsed-tab__score">{qualityResult.score}</span>
+            ) : null}
+            {hasErrors ? <span className="manta-lens-collapsed-tab__err">{errors.length} errors</span> : null}
+            {hasWarnings ? <span className="manta-lens-collapsed-tab__warn">{warnings.length} warnings</span> : null}
+            {!hasErrors && !hasWarnings && qualityResult ? (
+              <span className="manta-lens-collapsed-tab__ok">clear</span>
+            ) : null}
+            <span className="manta-lens-collapsed-tab__hint">expand</span>
+          </button>
+          <button
+            type="button"
+            className="manta-lens-collapsed-tab__exit"
+            onClick={onToggleLens}
+            title="Close Manta Lens"
+            aria-label="Close Manta Lens"
+          >
+            ×
+          </button>
+        </div>
+      )
+
+      return <MantaScannerFrame>{collapsedContent}</MantaScannerFrame>
+    }
 
     const lensContent = (
       <div className={lensRootClass} role="dialog" aria-label="Manta Ray Lens Mode">
@@ -1247,6 +1315,14 @@ export default function AssistantShell({
           </div>
 
           <div className="manta-lens-bar__right">
+            <button
+              type="button"
+              className="manta-lens-bar__collapse"
+              onClick={() => setLensCollapsed(true)}
+              title="Collapse into glass manta tab"
+            >
+              Collapse
+            </button>
             <button
               type="button"
               className="manta-lens-bar__fixwalk"

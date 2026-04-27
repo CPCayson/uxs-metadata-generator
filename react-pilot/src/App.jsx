@@ -5,6 +5,7 @@ import './futuristic.css'
 import EmbeddableShell from './shell/EmbeddableShell'
 import WizardShell from './shell/WizardShell'
 import FieldXmlTether from './components/FieldXmlTether'
+import MantaProfileWizardTest from './testing/MantaProfileWizardTest'
 import MissionStatusFooter from './components/MissionStatusFooter'
 import MantaVoiceBar from './components/MantaVoiceBar'
 import MantaTutorialDropdown from './components/MantaTutorialDropdown'
@@ -84,6 +85,7 @@ function App() {
                 <option value="collection">Collection</option>
                 <option value="bediCollection">BEDI Collection</option>
                 <option value="bediGranule">BEDI Granule</option>
+                <option value="mantaProfileWizardTest">[TEST] Manta profile wizard</option>
               </select>
             </div>
             <div className="form-check form-switch mb-0 d-flex align-items-center">
@@ -115,15 +117,19 @@ function App() {
       </header>
 
       <main id="pilot-main" tabIndex={-1} className="pilot-shell">
-        <EmbeddableShell
-          key={profileId}
-          mode="full"
-          includeFloatingManta
-          profileId={profileId}
-          hostBridge={hostBridge}
-        >
-          <WizardShell onDirtyChange={setIsDirty} />
-        </EmbeddableShell>
+        {profileId === 'mantaProfileWizardTest' ? (
+          <MantaProfileWizardTest />
+        ) : (
+          <EmbeddableShell
+            key={profileId}
+            mode="full"
+            includeFloatingManta
+            profileId={profileId}
+            hostBridge={hostBridge}
+          >
+            <WizardShell onDirtyChange={setIsDirty} />
+          </EmbeddableShell>
+        )}
       </main>
 
       <MissionStatusFooter isDirty={isDirty} appVersion={appVersion} />

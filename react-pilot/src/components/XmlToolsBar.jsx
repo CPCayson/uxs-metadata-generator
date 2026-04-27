@@ -166,27 +166,28 @@ function XmlToolsBar({
       if (extensionCaptureKeyRef.current === captureKey) return
       extensionCaptureKeyRef.current = captureKey
       const title = String(capture?.title || capture?.url || 'extension-capture').slice(0, 180)
+      const sourceLabel = capture?.source === 'manta-desktop' ? 'desktop' : 'extension'
       if (textLooksLikeXml(text) && canImport) {
         clearZipImportUi()
         pendingImportMetaRef.current = {
           originalFilename: title,
-          sourceId: capture?.url || 'manta-extension',
+          sourceId: capture?.url || `manta-${sourceLabel}`,
         }
         setImportText(text)
         setImportOpen(true)
         setImportError('')
-        onStatus?.(`Loaded XML capture from extension (${text.length} chars). Review and click Apply to form.`)
+        onStatus?.(`Loaded XML capture from ${sourceLabel} (${text.length} chars). Review and click Apply to form.`)
         return
       }
       if (canScanner) {
         setExtensionScannerCapture(capture)
         setScannerOpen(true)
-        onStatus?.(`Loaded page capture from extension (${text.length} chars). Review scanner suggestions before merging.`)
+        onStatus?.(`Loaded page capture from ${sourceLabel} (${text.length} chars). Review scanner suggestions before merging.`)
         return
       }
       setImportText(text)
       setImportOpen(true)
-      onStatus?.(`Loaded extension capture (${text.length} chars).`)
+      onStatus?.(`Loaded ${sourceLabel} capture (${text.length} chars).`)
     }
     function onExtensionCapture(/** @type {CustomEvent} */ event) {
       handleCapture(event.detail && typeof event.detail === 'object' ? event.detail : null)
@@ -194,7 +195,8 @@ function XmlToolsBar({
     function onExtensionMessage(/** @type {MessageEvent} */ event) {
       if (event.origin !== window.location.origin) return
       const data = event.data && typeof event.data === 'object' ? event.data : null
-      if (data?.source !== 'manta-chrome-extension' || data?.type !== 'manta-extension-capture') return
+      if (!['manta-chrome-extension', 'manta-desktop'].includes(String(data?.source || ''))) return
+      if (data?.type !== 'manta-extension-capture') return
       handleCapture(data.capture && typeof data.capture === 'object' ? data.capture : null)
     }
     window.addEventListener('manta:extension-capture', onExtensionCapture)

@@ -3565,6 +3565,140 @@ li.manta-widget__result-item:hover {
   /* Clicks pass through to the form except on HUD children with pointer-events: auto */
   pointer-events: none;
 }
+
+.manta-lens.manta-lens--viewport.manta-lens--collapsed {
+  inset: 0;
+  display: block;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  animation: manta-lens-collapse-in 0.22s ease-out;
+  overflow: visible;
+}
+
+@keyframes manta-lens-collapse-in {
+  from { opacity: 0; transform: translateY(-6px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.manta-lens-collapsed-tab {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  z-index: 80;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: min(92%, 520px);
+  min-height: 42px;
+  padding: 7px 12px 7px 10px;
+  border-radius: 999px 999px 999px 18px;
+  border: 1px solid rgba(34, 211, 238, 0.38);
+  background:
+    linear-gradient(135deg, rgba(3, 7, 18, 0.9), rgba(8, 47, 73, 0.72));
+  color: #e0faff;
+  box-shadow:
+    0 10px 30px rgba(2, 6, 23, 0.36),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  cursor: pointer;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.manta-lens-collapsed-tab:hover {
+  transform: translateY(-1px);
+  border-color: rgba(103, 232, 249, 0.82);
+  box-shadow:
+    0 12px 34px rgba(2, 6, 23, 0.42),
+    0 0 22px rgba(34, 211, 238, 0.2),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.manta-lens-collapsed-tab__wing {
+  width: 28px;
+  height: 18px;
+  flex: 0 0 auto;
+  border-radius: 50% 50% 45% 45%;
+  border: 1px solid rgba(103, 232, 249, 0.68);
+  background:
+    radial-gradient(circle at 50% 45%, rgba(103, 232, 249, 0.55), transparent 34%),
+    linear-gradient(90deg, transparent 0 20%, rgba(34, 211, 238, 0.28) 50%, transparent 80% 100%);
+  clip-path: polygon(0 55%, 18% 10%, 50% 35%, 82% 10%, 100% 55%, 72% 100%, 50% 70%, 28% 100%);
+}
+
+.manta-lens-collapsed-tab__brand {
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  color: #67e8f9;
+  white-space: nowrap;
+}
+
+.manta-lens-collapsed-tab__score,
+.manta-lens-collapsed-tab__err,
+.manta-lens-collapsed-tab__warn,
+.manta-lens-collapsed-tab__ok {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 0.66rem;
+  font-weight: 800;
+  white-space: nowrap;
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.manta-lens-collapsed-tab__score { color: #67e8f9; }
+.manta-lens-collapsed-tab__err   { color: #fecaca; border-color: rgba(248, 113, 113, 0.32); }
+.manta-lens-collapsed-tab__warn  { color: #fde68a; border-color: rgba(251, 191, 36, 0.32); }
+.manta-lens-collapsed-tab__ok    { color: #bbf7d0; border-color: rgba(52, 211, 153, 0.32); }
+
+.manta-lens-collapsed-tab__hint {
+  font-size: 0.62rem;
+  color: rgba(203, 213, 225, 0.72);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.manta-lens-collapsed-tab__exit {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 82;
+  pointer-events: auto;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: rgba(2, 6, 23, 0.72);
+  color: rgba(226, 232, 240, 0.86);
+  cursor: pointer;
+  line-height: 1;
+  transform: translate(35%, -35%);
+}
+
+.manta-lens-collapsed-tab__exit:hover {
+  color: #fff;
+  border-color: rgba(248, 113, 113, 0.52);
+  background: rgba(127, 29, 29, 0.75);
+}
+
+@media (max-width: 720px) {
+  .manta-lens-collapsed-tab {
+    left: 10px;
+    right: 10px;
+    justify-content: center;
+  }
+  .manta-lens-collapsed-tab__hint {
+    display: none;
+  }
+}
 .manta-lens-fallback-host {
   position: fixed;
   inset: 0;
@@ -3981,6 +4115,26 @@ li.manta-widget__result-item:hover {
 .manta-lens-bar__fixwalk[aria-pressed="true"] {
   background: rgba(34, 211, 238, 0.22);
   box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.5);
+}
+
+.manta-lens-bar__collapse {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 5px;
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  background: rgba(15, 23, 42, 0.68);
+  color: #7dd3fc;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.manta-lens-bar__collapse:hover {
+  background: rgba(34, 211, 238, 0.14);
+  border-color: rgba(34, 211, 238, 0.62);
 }
 
 .manta-lens-bar__help {

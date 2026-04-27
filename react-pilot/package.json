@@ -2,10 +2,17 @@
   "name": "react-pilot",
   "private": true,
   "version": "0.0.0",
+  "description": "Manta metadata pilot and desktop shell for NOAA UxS workflows.",
+  "author": "CPCayson",
   "type": "module",
+  "main": "electron/main.cjs",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "desktop:dev": "ELECTRON_START_URL=http://127.0.0.1:5173 electron .",
+    "desktop:start": "npm run build && electron .",
+    "desktop:pack": "npm run build && electron-builder --dir",
+    "desktop:dist": "npm run build && electron-builder",
     "publish": "npm run build && node scripts/publish-dist.mjs",
     "publish:zip": "npm run publish && node scripts/package-share.mjs",
     "lint": "eslint .",
@@ -15,6 +22,25 @@
     "verify:pilot": "npm run lint && npm run build && npm run test:bedi && node scripts/verify-pilot.mjs",
     "docs:placeholders": "node scripts/extract-ncei-uxs-placeholder-xlsx.mjs > docs/uxs-ncei-placeholder-xlsx-crosswalk.md",
     "preview": "vite preview"
+  },
+  "build": {
+    "appId": "gov.noaa.uxs.manta",
+    "productName": "Manta Metadata Desktop",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    }
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
@@ -29,6 +55,8 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
     "@xmldom/xmldom": "^0.8.13",
+    "electron": "^41.3.0",
+    "electron-builder": "^26.8.1",
     "eslint": "^9.39.4",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",

@@ -5,6 +5,9 @@
   "scripts": {
     "pilot:dev": "npm --prefix react-pilot run dev",
     "pilot:build": "npm --prefix react-pilot run build",
+    "pilot:desktop": "npm --prefix react-pilot run desktop:start",
+    "pilot:desktop:dev": "npm --prefix react-pilot run desktop:dev",
+    "pilot:desktop:pack": "npm --prefix react-pilot run desktop:pack",
     "pilot:publish": "npm --prefix react-pilot run publish",
     "pilot:verify": "npm --prefix react-pilot run verify:pilot",
     "mcp:noaa:start": "npm --prefix mcp/noaa-metadata run start",

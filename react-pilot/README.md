@@ -31,6 +31,34 @@ The dev server defaults to **port 5173**. Set `VITE_OPEN=0` to skip opening a br
 
 Use **`netlify dev`** (or a proxy) so **`/api/db`** is on the **same origin** as the Vite app; otherwise host-backed actions fail at the network layer.
 
+## Desktop app (Electron MVP)
+
+The desktop shell wraps this same React pilot in Electron. It is useful when you want a real app window and native file-open handoff without fighting browser extension permissions.
+
+Development mode uses Vite in one terminal and Electron in another:
+
+```bash
+cd react-pilot
+VITE_OPEN=0 npm run dev -- --host 127.0.0.1
+npm run desktop:dev
+```
+
+Pack a local macOS app directory:
+
+```bash
+cd react-pilot
+npm run desktop:pack
+```
+
+Build distributable artifacts:
+
+```bash
+cd react-pilot
+npm run desktop:dist
+```
+
+In the desktop app, use **File → Open Metadata File...** to load XML/JSON/text into the same import/scanner flow used by browser capture.
+
 ## Publish static share (`../pilot-share/`)
 
 From repository root:
