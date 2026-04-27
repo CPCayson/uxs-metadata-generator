@@ -3,6 +3,7 @@
   "private": true,
   "description": "Convenience scripts for the React pilot (see react-pilot/README.md)",
   "scripts": {
+    "dev": "npm --prefix react-pilot run dev",
     "pilot:dev": "npm --prefix react-pilot run dev",
     "pilot:build": "npm --prefix react-pilot run build",
     "pilot:publish": "npm --prefix react-pilot run publish",
