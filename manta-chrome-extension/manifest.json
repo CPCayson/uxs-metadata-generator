@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "Manta Pilot Bridge",
+  "version": "1.0.0",
+  "description": "Capture page text, XML, and local files into the Manta metadata pilot.",
+  "action": {
+    "default_title": "Manta Pilot Bridge",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "service-worker.js"
+  },
+  "permissions": ["storage", "activeTab", "scripting", "tabs"],
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}

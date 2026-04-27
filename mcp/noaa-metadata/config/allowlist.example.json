@@ -1,0 +1,33 @@
+{
+  "mode": "allowlist",
+  "maxSearchResults": 25,
+  "maxExtractBytes": 500000,
+  "allowedFolders": [
+    {
+      "id": "REPLACE_WITH_GOOGLE_DRIVE_FOLDER_ID",
+      "label": "NOAA metadata working folder"
+    }
+  ],
+  "allowedSharedDrives": [
+    {
+      "id": "REPLACE_WITH_SHARED_DRIVE_ID",
+      "label": "Team shared drive"
+    }
+  ],
+  "metadataKeywords": [
+    "metadata",
+    "cruisepack",
+    "cruise pack",
+    "oer",
+    "ncei",
+    "uxs",
+    "gcmd",
+    "iso 19115",
+    "19115-2",
+    "comet",
+    "onestop",
+    "bedi",
+    "granule",
+    "collection"
+  ]
+}

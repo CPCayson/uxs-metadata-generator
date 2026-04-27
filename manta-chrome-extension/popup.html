@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Manta Bridge</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="panel">
+      <h1 class="title">Manta Pilot Bridge</h1>
+      <p class="lede">Capture page text/XML into Manta, or open your React pilot.</p>
+
+      <label class="field">
+        <span class="field__label">Pilot base URL</span>
+        <input
+          type="url"
+          id="pilotBaseUrl"
+          class="field__input"
+          placeholder="http://localhost:5173"
+          spellcheck="false"
+          autocomplete="off"
+        />
+      </label>
+
+      <label class="check">
+        <input type="checkbox" id="showFab" />
+        <span>Show floating “M” launcher on web pages</span>
+      </label>
+
+      <div class="row">
+        <button type="button" id="save" class="btn btn--primary">Save</button>
+        <button type="button" id="openPilot" class="btn">Open pilot</button>
+      </div>
+
+      <div class="row">
+        <button type="button" id="captureSelection" class="btn btn--ghost">Capture selection → Manta</button>
+        <button type="button" id="capturePage" class="btn btn--ghost">Capture page → Manta</button>
+      </div>
+
+      <div class="row">
+        <button type="button" id="captureXml" class="btn btn--ghost">Capture XML/source → Manta</button>
+      </div>
+
+      <label class="drop" id="dropZone">
+        <span class="drop__title">Drop metadata file</span>
+        <span class="drop__hint">XML, JSON, CSV, TXT, or scanner envelope</span>
+        <input type="file" id="fileInput" class="drop__input" />
+      </label>
+
+      <div class="row">
+        <button type="button" id="copySelection" class="btn btn--ghost">Copy selection only</button>
+      </div>
+
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>

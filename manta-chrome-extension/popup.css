@@ -1,0 +1,133 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  min-width: 300px;
+  font: 13px/1.45 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  color: #e0e7ff;
+  background: linear-gradient(165deg, #020617 0%, #0b1224 100%);
+}
+.panel {
+  padding: 14px 16px 16px;
+}
+.title {
+  margin: 0 0 6px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f8fafc;
+  letter-spacing: 0.02em;
+}
+.lede {
+  margin: 0 0 12px;
+  color: #94a3b8;
+  font-size: 0.78rem;
+}
+.field {
+  display: block;
+  margin-bottom: 10px;
+}
+.field__label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  margin-bottom: 4px;
+}
+.field__input {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(34, 211, 238, 0.28);
+  background: rgba(2, 8, 23, 0.85);
+  color: #f1f5f9;
+  font-size: 0.88rem;
+}
+.field__input:focus {
+  outline: 2px solid rgba(34, 211, 238, 0.45);
+  outline-offset: 1px;
+}
+.check {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+.check input {
+  margin-top: 2px;
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.btn {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(100, 116, 139, 0.45);
+  background: rgba(15, 23, 42, 0.8);
+  color: #e2e8f0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn:hover {
+  background: rgba(30, 41, 59, 0.95);
+  border-color: rgba(34, 211, 238, 0.35);
+}
+.btn--primary {
+  border-color: rgba(34, 211, 238, 0.45);
+  background: linear-gradient(135deg, rgba(8, 70, 90, 0.9) 0%, rgba(6, 40, 60, 0.95) 100%);
+  color: #ecfeff;
+}
+.btn--primary:hover {
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
+}
+.btn--ghost {
+  flex: 1 1 0;
+  border-style: dashed;
+  font-weight: 500;
+}
+.drop {
+  display: block;
+  margin: 8px 0;
+  padding: 12px;
+  border: 1px dashed rgba(34, 211, 238, 0.38);
+  border-radius: 10px;
+  background: rgba(2, 8, 23, 0.55);
+  cursor: pointer;
+}
+.drop--active {
+  border-color: rgba(103, 232, 249, 0.85);
+  background: rgba(8, 47, 73, 0.45);
+}
+.drop__title {
+  display: block;
+  font-weight: 700;
+  color: #e0f2fe;
+}
+.drop__hint {
+  display: block;
+  font-size: 0.72rem;
+  color: #94a3b8;
+}
+.drop__input {
+  display: none;
+}
+.status {
+  margin: 8px 0 0;
+  min-height: 1.2em;
+  font-size: 0.75rem;
+  color: #67d4a4;
+}
+.status.err {
+  color: #f87171;
+}

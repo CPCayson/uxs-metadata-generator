@@ -1,0 +1,66 @@
+/* Manta extension FAB — high z-index, cyan arc vibe; isolated from page CSS */
+#manta-pilot-fab-host {
+  all: initial;
+  position: fixed !important;
+  right: 20px !important;
+  bottom: 20px !important;
+  z-index: 2147483646 !important;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif !important;
+  pointer-events: auto !important;
+}
+
+#manta-pilot-fab-host * {
+  box-sizing: border-box;
+}
+
+#manta-pilot-fab-host .manta-ext-fab {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border: none;
+  border-radius: 50%;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  background: linear-gradient(160deg, rgba(8, 18, 40, 0.95) 0%, rgba(2, 6, 20, 0.98) 100%);
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.5),
+    0 0 0 3px rgba(2, 8, 20, 0.95),
+    0 8px 28px rgba(0, 0, 0, 0.45),
+    0 0 40px rgba(34, 211, 238, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.16s ease, box-shadow 0.2s ease, filter 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#manta-pilot-fab-host .manta-ext-fab:hover {
+  transform: scale(1.05) translateY(-1px);
+  filter: brightness(1.05);
+  box-shadow:
+    0 0 0 1px rgba(103, 232, 249, 0.75),
+    0 0 0 3px rgba(2, 8, 20, 0.95),
+    0 12px 36px rgba(0, 0, 0, 0.5),
+    0 0 52px rgba(34, 211, 238, 0.35);
+}
+
+#manta-pilot-fab-host .manta-ext-fab__ring {
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 14px rgba(34, 211, 238, 0.12);
+  pointer-events: none;
+}
+
+#manta-pilot-fab-host .manta-ext-fab__core {
+  position: relative;
+  z-index: 1;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #67e8f9;
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.6);
+  line-height: 1;
+  pointer-events: none;
+  letter-spacing: -0.02em;
+}
