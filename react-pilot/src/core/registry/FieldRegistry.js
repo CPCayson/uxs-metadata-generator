@@ -162,8 +162,13 @@ export function getFieldElementsForLensHighlight(fieldPath) {
     } catch { /* invalid id for selector */ }
   }
 
-  const group = el.closest('.form-group, .form-row, .form-row-2, .keyword-facet, .sensor-card')
+  const group = el.closest(
+    '.form-group, .form-row, .form-row-2, .keyword-facet, .sensor-card, .input-group, .pilot-multivalue, .field-help, fieldset.pilot-fieldset',
+  )
   if (group instanceof HTMLElement) out.add(group)
+
+  const legend = el.closest('fieldset')?.querySelector('legend')
+  if (legend instanceof HTMLElement) out.add(legend)
 
   return [...out]
 }

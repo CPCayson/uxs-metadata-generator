@@ -27,19 +27,28 @@
   margin-bottom: 1rem;
 }
 
-/* Portaled Manta Lens: host wraps the right tabbed card only (Validator / Live XML). */
-.manta-scanner-host {
+/* Wizard grid that carries the lens overlay (dual surface: form + side rail). */
+.workspace-grid.manta-workspace-lens-anchor {
   position: relative;
   z-index: 0;
-  width: 100%;
-  min-height: 0;
-  align-self: stretch;
 }
 
-.manta-scanner-host--side-rail {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
+/* Portaled Manta Lens: host fills the grid section (sibling to main + aside). */
+.manta-scanner-host {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  min-height: 0;
+}
+
+.manta-scanner-host--workspace-grid {
+  width: 100%;
+  height: 100%;
+  /* Third grid child: span both columns on row 1 so we don’t push a second row */
+  grid-column: 1 / -1;
+  grid-row: 1;
+  align-self: stretch;
 }
 
 /* Manta “simple” mode — less instructional chrome (toggle via Manta bar or “make it simple”) */

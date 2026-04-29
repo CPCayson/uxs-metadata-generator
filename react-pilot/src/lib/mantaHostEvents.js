@@ -16,9 +16,11 @@
  * - `manta:wizard-validation-mode-changed` — from wizard, same as above
  * - `manta:pilot-auto-fix-request` — { mode?: string }
  * - `manta:comet-load` — { parsed, uuid, gaps }
+ * - `manta:pilot-audit` — host-defined audit payload
+ * - `manta:map-command` — map UI integration (see SpatialExtentMap)
  *
- * Portals: lens mounts under `#manta-scanner-host` (wraps the side rail card next to
- * the form; see WizardShell) via MantaScannerFrame.
+ * Portals: lens mounts under `#manta-scanner-host` (overlays the full `workspace-grid`
+ * in WizardShell — form + side rail) via MantaScannerFrame.
  *
  * @module lib/mantaHostEvents
  */

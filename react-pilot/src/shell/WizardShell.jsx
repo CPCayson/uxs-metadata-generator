@@ -149,7 +149,7 @@ export default function WizardShell({ onDirtyChange }) {
     if (!showCometPanel && sidePanelTab === 'comet') setSidePanelTab('validator')
   }, [showCometPanel, sidePanelTab])
 
-  // Lens is anchored on the side rail: show Validator under the same chrome as Live XML preview.
+  // Lens opens over the full workspace grid: keep Validator visible (same chrome as XML tab).
   useEffect(() => {
     function onLensOpened() {
       setXmlExpanded(false)
@@ -394,8 +394,8 @@ export default function WizardShell({ onDirtyChange }) {
         validationEngine={validationEngine}
       />
 
-      {/* layout: left = form, right = Validator / Live XML / CoMET tabbed card */}
-      <section className="workspace-grid">
+      {/* Dual-surface lens: #manta-scanner-host overlays this grid (form + side rail); see MANTA_ROADMAP. */}
+      <section className="workspace-grid manta-workspace-lens-anchor">
         <article className={`card workspace-main pilot-step pilot-step--${activeStep}`}>
           <h2>{activeStepMeta.label}</h2>
 
@@ -457,12 +457,6 @@ export default function WizardShell({ onDirtyChange }) {
           className={`workspace-side-stack${xmlExpanded ? ' workspace-side-stack--xml-full' : ''}`}
           aria-label="Side panel"
         >
-          {/* Lens portals here so the HUD wraps this card only (same box as Validator / XML preview). */}
-          <div
-            id="manta-scanner-host"
-            className="manta-scanner-host manta-scanner-host--side-rail"
-            data-manta-scanner-host
-          >
           <div
             className={`card workspace-side workspace-side--tabbed${xmlExpanded ? ' workspace-side--xml-full' : ''}`}
           >
@@ -606,8 +600,13 @@ export default function WizardShell({ onDirtyChange }) {
               </div>
             ) : null}
           </div>
-          </div>
         </aside>
+        <div
+          id="manta-scanner-host"
+          className="manta-scanner-host manta-scanner-host--workspace-grid"
+          data-manta-scanner-host
+          aria-hidden="true"
+        />
       </section>
 
       <section className="card pilot-notes">

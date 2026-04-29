@@ -15,6 +15,20 @@ This document connects the **metadata operations layer** vision (intake → stru
 
 **One-line pitch:** *Turn pipeline diagrams into a working app — one shared metadata engine, many workflow packs.*
 
+### Lens canvas (dual surface)
+
+The Manta Lens HUD portals into `#manta-scanner-host`, which overlays the full **`workspace-grid`** (left form + right Validator / Live XML / CoMET) so both surfaces stay visible through the glass band. Stacking: HUD chrome → optional issues tray (**Wrap ↑**) → **through-glass** (`flex: 1`, pointer-events pass-through) → tray (**Dock ↓**). Host wiring: `WizardShell.jsx` + `MantaScannerFrame.jsx`; extension-oriented APIs: `mantaHostEvents.js`, `scannerEngine.js`.
+
+```text
++------------------------------------------------------------------+
+| Lens HUD (bar, readiness, section bars, fix walk…)             |
+| +---------------------------+ +-----------------------------+   |
+| | workspace-main (form)     | | workspace-side (tabs)       |   |
+| | visible through glass       | | XML / Validator / CoMET   |   |
++---------------------------+ +-----------------------------+   |
++------------------------------------------------------------------+
+```
+
 ---
 
 ## Where we are now (baseline)
