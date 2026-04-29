@@ -85,6 +85,7 @@ This table is produced from \`missionValidationRuleSets\` in [\`src/profiles/mis
 
 ## Related docs
 
+- [mission-validation-by-area.md](../mission-validation-by-area.md) — tables by **GCMD facet**, sensors, wizard area, and mode extras.
 - [uxs-ncei-template-mission-pilot-matrix.md](./uxs-ncei-template-mission-pilot-matrix.md) — NCEI template ↔ \`pilotState\` ↔ XML **import** matrix (not every row has a validation rule here).
 - [\`pilotValidation.js\`](../src/lib/pilotValidation.js) — \`validatePilotState(mode, state)\` must stay aligned with these rules (parity test).
 `

@@ -7,6 +7,7 @@ This document maps the [NCEI Uncrewed Systems (UxS) Metadata Templates](https://
 **Sources**
 
 - **Validation rules (generated table):** [generated/mission-validation-rules.generated.md](./generated/mission-validation-rules.generated.md) — every `missionValidationRules.js` rule with modes, `pilotState` field, severity, message, XPath. Regenerate: `npm run docs:mission-validation-rules` from `react-pilot/`.
+- **Validation by area (human table):** [mission-validation-by-area.md](./mission-validation-by-area.md) — GCMD facets → required/UUID rules; sensors ↔ keywords; mission/platform/spatial/distribution summaries; lenient/strict/catalog extras.
 - Runtime / hosting: [DEPLOYMENT.md](./DEPLOYMENT.md) (HTTP `/api/db`).
 - Human-readable walkthrough of the same GMI XML sections (root → acquisition): [uxs-ncei-gmi-xml-narrative-overview.md](./uxs-ncei-gmi-xml-narrative-overview.md).
 - USX V4 Excel / classic wizard field names vs canonical `pilotState` + gaps: [uxs-v4-excel-pilot-field-map.md](./uxs-v4-excel-pilot-field-map.md).
