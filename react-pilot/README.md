@@ -98,6 +98,18 @@ Runs `lint`, `build`, BEDI parser tests, and `scripts/verify-pilot.mjs` (XML rou
 4. **XML alignment:** [OVERVIEW_TEMPLATE_ALIGNMENT.csv](../OVERVIEW_TEMPLATE_ALIGNMENT.csv).
 5. **Program tracking:** [NOAA_UXS_MIGRATION_TRACKER.csv](../NOAA_UXS_MIGRATION_TRACKER.csv).
 
+## Validation matrix (mission profile)
+
+Generated from `src/profiles/mission/missionValidationRules.js` — **not** shown in the running app; open these files in the repo or on GitHub:
+
+| File | What it is |
+| ---- | ----------- |
+| [docs/generated/mission-validation-by-field.generated.md](./docs/generated/mission-validation-by-field.generated.md) | **Field × rules:** one section per `pilotState` path, tables of every check. |
+| [docs/generated/mission-validation-rules.generated.md](./docs/generated/mission-validation-rules.generated.md) | **Flat list** of all rules (good for search / diffs). |
+| [docs/mission-validation-by-area.md](./docs/mission-validation-by-area.md) | Curated tables: GCMD facets, sensors, modes. |
+
+Regenerate after changing rules: `npm run docs:mission-validation-rules`
+
 ## Suggested next increments
 
 1. **METADATA_FIELD_MAP.md §7** — optional in-repo XSD for `validate:xml`.
