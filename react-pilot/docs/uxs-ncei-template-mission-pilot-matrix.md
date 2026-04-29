@@ -14,6 +14,7 @@ This document maps the [NCEI Uncrewed Systems (UxS) Metadata Templates](https://
 - NCEI product page (beta templates, contacts, legislation).
 - [UxS Metadata Template Overview (PDF)](https://www.ncei.noaa.gov/sites/default/files/2026-03/UxS%20Metatdata%20Template%20Overview.pdf) — section headings used in the first column below.
 - Local fixture: `NOAANavyUxSAcquisition_MetadataTempate_19115-2-GMI_2026-2 (1).xml` (same lineage as the published `…2026-2.xml`).
+- **Exemplar (same matrix, different filled record):** *UxS METADATA TEMPLATE, 2025 BETA* — e.g. **Saildrone PMEL TPOS 2021** (`gmi:MI_Metadata` with Saildrone/PMEL narrative, TPOS aggregations, GCMD facets, acquisition `MI_Platform` / `MI_Instrument`). It is **not** a second matrix: each XML block maps to **one row** in the [section matrix](#section-matrix) (root & header, grid, citation, description, keywords, constraints, aggregations, extent, POC, contentInfo, distribution, data quality, maintenance, topic category, graphic overview, acquisition). After import, validation is exactly the rules in [generated/mission-validation-rules.generated.md](./generated/mission-validation-rules.generated.md). Typical beta issues: unreplaced `{{…}}` tokens, invalid calendar dates, and `gmd:URL` values that are not yet http(s) — those import as literals and fail the corresponding checks.
 
 **Wizard steps** (mission profile): `1. Mission` → `2. Platform` → `3. Sensors` → `4. Spatial` → `5. Keywords` → `6. Distribution`.
 
@@ -30,6 +31,21 @@ This document maps the [NCEI Uncrewed Systems (UxS) Metadata Templates](https://
 | **Partial** | Some subfields map; others are dropped, merged into one field, or depend on element order / encoding.   |
 | **None**    | Not read by `importPilotPartialStateFromXml` today.                                                     |
 
+
+---
+
+## Exemplar vs matrix (2025 beta Saildrone / PMEL TPOS)
+
+Stakeholders sometimes ship a **fully filled** 2025 beta template (Saildrone, PMEL TPOS, etc.) as the “gold” example. That file uses the **same ISO element groups** as the table below; the matrix describes **mapping + import depth**, not a separate checklist per vendor.
+
+| Your XML block (exemplar) | Section matrix row(s) | After import, validate with |
+| ------------------------- | ------------------------ | ---------------------------- |
+| `fileIdentifier`, `dateStamp`, root `contact`, `language`, `hierarchyLevel`, `spatialRepresentationInfo` (grid) | **1. Root & header**, **2. Spatial representation (grid)** | `mission.*`, `spatial.*`, `distribution.*` rules in [generated/mission-validation-rules.generated.md](./generated/mission-validation-rules.generated.md) |
+| `identificationInfo` / citation, abstract, purpose, status, POC, maintenance, graphicOverview, keywords, constraints, aggregations, extent, topicCategory, supplemental | **3.A–3.F**, **3 (POC)**, **Topic category**, **Graphic overview** | Same generated table (`mission.*`, `keywords.*`, etc.) |
+| `contentInfo` / `MI_CoverageDescription` | **4. Content information** | Sensor-related rules if content fills `sensors[]`; acquisition may supersede |
+| `distributionInfo` | **5. Distribution** | `distribution.*` rules (URLs, format, license, fees text, …) |
+| `dataQualityInfo`, `metadataMaintenance` | **6. Data quality**, **6. Maintenance** | `spatial.*` partial lineage rules; `distribution.metadataMaintenanceFrequency` |
+| `acquisitionInformation` / platform & instruments | **7. Acquisition (UxS)** | `platform.*`, `sensors[]` rules |
 
 ---
 
