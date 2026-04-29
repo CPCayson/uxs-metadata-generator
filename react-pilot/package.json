@@ -14,6 +14,7 @@
     "test:bedi": "node scripts/test-bedi-xml-parsers.mjs",
     "verify:pilot": "npm run lint && npm run build && npm run test:bedi && node scripts/verify-pilot.mjs",
     "docs:placeholders": "node scripts/extract-ncei-uxs-placeholder-xlsx.mjs > docs/uxs-ncei-placeholder-xlsx-crosswalk.md",
+    "docs:mission-validation-rules": "node scripts/export-mission-validation-rules.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
