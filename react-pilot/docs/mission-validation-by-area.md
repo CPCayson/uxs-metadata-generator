@@ -1,6 +1,9 @@
 # Mission validation by area — GCMD facets, wizard steps, and rules
 
-This document maps **where data lives in `pilotState`**, **which wizard step** edits it, and **what the validator enforces** (all modes unless noted). The machine-readable rule list is always [generated/mission-validation-rules.generated.md](./generated/mission-validation-rules.generated.md) (`npm run docs:mission-validation-rules`).
+This document maps **where data lives in `pilotState`**, **which wizard step** edits it, and **what the validator enforces** (all modes unless noted).
+
+- **Every field × every rule (matrix):** [generated/mission-validation-by-field.generated.md](./generated/mission-validation-by-field.generated.md) — one section per `pilotState` path; regenerate with `npm run docs:mission-validation-rules`.
+- **Flat rule list:** [generated/mission-validation-rules.generated.md](./generated/mission-validation-rules.generated.md).
 
 **Modes:** **Lenient** (default), **Strict**, **Catalog** — extra rows apply only in that mode (see §4).
 
