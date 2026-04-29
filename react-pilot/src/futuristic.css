@@ -3494,8 +3494,9 @@ li.manta-widget__result-item:hover {
 }
 
 /* ════════════════════════════════════════════════════════════════════
-   Manta Ray LENS MODE — portaled into #manta-scanner-host (right rail tabbed card;
-   same box as .workspace-side.workspace-side--tabbed), not the full workspace grid.
+   Manta Ray LENS MODE — portaled into #manta-scanner-host (dual-surface: overlays
+   .workspace-grid inside .manta-workspace-lens-root; see WizardShell + futuristic
+   comments on .manta-lens--viewport). Root pointer-events: none; HUD regions auto.
    ════════════════════════════════════════════════════════════════════ */
 
 .manta-lens-field-hl {
@@ -3554,7 +3555,7 @@ li.manta-widget__result-item:hover {
 }
 
 .manta-lens.manta-lens--viewport {
-  /* Framed by #manta-scanner-host when portaled; fills that host (not the whole window). */
+  /* Framed by #manta-scanner-host when portaled; fills workspace grid overlay (dual surface). */
   position: absolute;
   inset: 0;
   z-index: 10050;
@@ -3562,6 +3563,7 @@ li.manta-widget__result-item:hover {
   height: 100%;
   min-height: 0;
   width: 100%;
+  /* Flex column: bar → … → glass flex:1 (through-glass); tray order varies by tuck mode */
   /* Clicks pass through to the form except on HUD children with pointer-events: auto */
   pointer-events: none;
 }
@@ -3716,9 +3718,10 @@ li.manta-widget__result-item:hover {
 .manta-lens--viewport .manta-lens-readiness-row { order: 3; pointer-events: auto; }
 .manta-lens--viewport .manta-lens-progress-bar { order: 4; pointer-events: none; }
 .manta-lens--viewport .manta-lens-section-bars { order: 5; pointer-events: auto; }
-/* Tuck-high: issues list above the through-glass band (not below the viewport). */
-.manta-lens--viewport.manta-lens--tuck-high .manta-lens-glass { order: 6; flex: 1 1 auto; min-height: 0; }
-.manta-lens--viewport.manta-lens--tuck-high .manta-lens-tray { order: 7; pointer-events: auto; }
+/* Tuck-high: issues tray sits above the through-glass band (between HUD chrome and XML/form). */
+.manta-lens--viewport.manta-lens--tuck-high .manta-lens-tray { order: 6; flex-shrink: 0; pointer-events: auto; }
+.manta-lens--viewport.manta-lens--tuck-high .manta-lens-glass { order: 7; flex: 1 1 auto; min-height: 0; }
+/* Tuck-low: classic layout — big glass band, tray pinned to the bottom. */
 .manta-lens--viewport.manta-lens--tuck-low .manta-lens-glass { order: 6; flex: 1 1 auto; min-height: 0; }
 .manta-lens--viewport.manta-lens--tuck-low .manta-lens-tray { order: 7; pointer-events: auto; }
 

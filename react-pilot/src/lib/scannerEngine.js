@@ -7,6 +7,7 @@
  */
 
 import { runLensScanHeuristic } from './lensScanHeuristic.js'
+import { validatePilotState } from './pilotValidation.js'
 import {
   isScannerSuggestionEnvelope,
   mergeScannerPartialIntoPilotState,
@@ -14,6 +15,34 @@ import {
 } from '../adapters/sources/ScannerSuggestionAdapter.js'
 // Re-export merge for callers that only need the merge step
 export { mergeScannerPartialIntoPilotState } from '../adapters/sources/ScannerSuggestionAdapter.js'
+
+/**
+ * Run built-in pilot validation (same path as ValidationEngine Phase 1/2).
+ *
+ * @param {object} pilotState
+ * @param {string} [mode] lenient | strict | catalog
+ * @returns {import('../core/entities/types.js').ValidationResult}
+ */
+export function validatePilotStateAfterMerge(pilotState, mode) {
+  const m = mode || pilotState?.mode || 'lenient'
+  return validatePilotState(m, pilotState)
+}
+
+/**
+ * When a ValidationEngine + profile are available (wizard), run profile rule sets.
+ *
+ * @param {import('../core/validation/ValidationEngine.js').ValidationEngine | null | undefined} engine
+ * @param {import('../core/registry/types.js').EntityProfile | null | undefined} profile
+ * @param {object} pilotState
+ * @param {string} [mode]
+ */
+export function validatePilotStateWithProfile(engine, profile, pilotState, mode) {
+  const m = mode || pilotState?.mode || 'lenient'
+  if (engine && profile?.validationRuleSets?.length) {
+    return engine.runProfileRules(pilotState, m, profile)
+  }
+  return validatePilotState(m, pilotState)
+}
 
 /**
  * @param {string} profileId
@@ -62,6 +91,7 @@ export function applyEnvelopeToPilotState(envelope, basePilotState, parseMeta) {
  *   parseEnvelope: typeof parseScannerSuggestionsToMissionPartial
  *   mergePartial: typeof mergeScannerPartialIntoPilotState
  *   applyEnvelope: typeof applyEnvelopeToPilotState
+ *   validate: typeof validatePilotStateAfterMerge
  * }}
  */
 export function createScannerController(opts = {}) {
@@ -71,5 +101,6 @@ export function createScannerController(opts = {}) {
     parseEnvelope: (env, meta) => parseScannerSuggestionsToMissionPartial(env, meta || parseMeta || {}),
     mergePartial: mergeScannerPartialIntoPilotState,
     applyEnvelope: (envelope, base) => applyEnvelopeToPilotState(envelope, base, parseMeta),
+    validate: validatePilotStateAfterMerge,
   }
 }

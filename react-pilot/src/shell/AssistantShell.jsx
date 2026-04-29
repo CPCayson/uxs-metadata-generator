@@ -1187,8 +1187,8 @@ export default function AssistantShell({
     { id: 'comet',    label: 'CoMET',    dot: cometLoaded ? 'ok' : cometGaps?.length ? 'warn' : null },
   ]
 
-  // ── Lens overlay (portaled to #manta-scanner-host): Form/Split use
-  // manta-lens--form-readable so HUD + glass read as one “smart form” surface.
+  // ── Lens overlay (portaled to #manta-scanner-host over full workspace grid).
+  // Form/Split: manta-lens--form-readable so through-glass stays legible on both surfaces.
 
   if (lensMode) {
     const lensRootClass = [
@@ -1286,7 +1286,7 @@ export default function AssistantShell({
               className={`manta-lens-valwrap-btn${lensValidatorWrap === 'tuck-high' ? ' manta-lens-valwrap-btn--active' : ''}`}
               aria-pressed={lensValidatorWrap === 'tuck-high'}
               onClick={() => setLensValidatorWrap('tuck-high')}
-              title="Show the live issues list just above the form (recommended)"
+              title="Show the live issues list above the through-glass band (recommended)"
             >
               Wrap ↑
             </button>
