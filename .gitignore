@@ -18,6 +18,7 @@ mcp/noaa-metadata/config/allowlist.json
 
 # Archives (local exports / backups — do not publish)
 *.zip
+cruisepack_extracted/
 
 # Logs and OS noise
 *.log

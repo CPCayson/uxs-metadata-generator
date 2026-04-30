@@ -1,0 +1,104 @@
+map_id,source_system,source_file,source_tab,source_field,source_xpath,record_type,normalized_field_key,transform,default_value,datatype_hint,confidence,notes,active
+map_bedi_filename_to_fileidentifier,db_export,bedi_videos_export.csv,,FILENAME,,granule,ident.fileIdentifier,prefix_gov_noaa_ncei_oer,,string,1,,true
+map_onestop_collection_title,excel,OneStop Regeneration - Bulk Metadata Records - EX (1).xlsx,Rules,title,//gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:title,collection,citation.title,trim,,string,1,,true
+map_mission_mission_abstract,matrix,mission_validation_full_field_matrix.csv,,mission.abstract,,mission,mission.abstract,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_mission_accession,matrix,mission_validation_full_field_matrix.csv,,mission.accession,,mission,mission.accession,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_mission_bbox,matrix,mission_validation_full_field_matrix.csv,,mission.bbox,,mission,mission.bbox,identity,,decimal,0.9,auto-generated from mission matrix field list,true
+map_mission_mission_contacturl,matrix,mission_validation_full_field_matrix.csv,,mission.contactUrl,,mission,mission.contactUrl,identity,,url,0.9,auto-generated from mission matrix field list,true
+map_mission_mission_doi,matrix,mission_validation_full_field_matrix.csv,,mission.doi,,mission,mission.doi,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_mission_email,matrix,mission_validation_full_field_matrix.csv,,mission.email,,mission,mission.email,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_mission_enddate,matrix,mission_validation_full_field_matrix.csv,,mission.endDate,,mission,mission.endDate,identity,,date,0.9,auto-generated from mission matrix field list,true
+map_mission_mission_fileid,matrix,mission_validation_full_field_matrix.csv,,mission.fileId,,mission,mission.fileId,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_mission_individualname,matrix,mission_validation_full_field_matrix.csv,,mission.individualName,,mission,mission.individualName,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_mission_language,matrix,mission_validation_full_field_matrix.csv,,mission.language,,mission,mission.language,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_mission_licenseurl,matrix,mission_validation_full_field_matrix.csv,,mission.licenseUrl,,mission,mission.licenseUrl,identity,,url,0.9,auto-generated from mission matrix field list,true
+map_mission_mission_metadatarecorddate,matrix,mission_validation_full_field_matrix.csv,,mission.metadataRecordDate,,mission,mission.metadataRecordDate,identity,,date,0.9,auto-generated from mission matrix field list,true
+map_mission_mission_org,matrix,mission_validation_full_field_matrix.csv,,mission.org,,mission,mission.org,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_mission_parentprojecttitle,matrix,mission_validation_full_field_matrix.csv,,mission.parentProjectTitle,,mission,mission.parentProjectTitle,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_mission_publicationdate,matrix,mission_validation_full_field_matrix.csv,,mission.publicationDate,,mission,mission.publicationDate,identity,,date,0.9,auto-generated from mission matrix field list,true
+map_mission_mission_purpose,matrix,mission_validation_full_field_matrix.csv,,mission.purpose,,mission,mission.purpose,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_mission_relateddataurl,matrix,mission_validation_full_field_matrix.csv,,mission.relatedDataUrl,,mission,mission.relatedDataUrl,identity,,url,0.9,auto-generated from mission matrix field list,true
+map_mission_mission_ror,matrix,mission_validation_full_field_matrix.csv,,mission.ror,,mission,mission.ror,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_mission_startdate,matrix,mission_validation_full_field_matrix.csv,,mission.startDate,,mission,mission.startDate,identity,,date,0.9,auto-generated from mission matrix field list,true
+map_mission_mission_status,matrix,mission_validation_full_field_matrix.csv,,mission.status,,mission,mission.status,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_mission_title,matrix,mission_validation_full_field_matrix.csv,,mission.title,,mission,mission.title,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_mission_uxscontext,matrix,mission_validation_full_field_matrix.csv,,mission.uxsContext,,mission,mission.uxsContext,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_mission_uxscontext_primarylayer,matrix,mission_validation_full_field_matrix.csv,,mission.uxsContext.primaryLayer,,mission,mission.uxsContext.primaryLayer,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_mission_uxscontext_runid,matrix,mission_validation_full_field_matrix.csv,,mission.uxsContext.runId,,mission,mission.uxsContext.runId,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_mission_vertical,matrix,mission_validation_full_field_matrix.csv,,mission.vertical,,mission,mission.vertical,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_mission_vmax,matrix,mission_validation_full_field_matrix.csv,,mission.vmax,,mission,mission.vmax,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_mission_vmin,matrix,mission_validation_full_field_matrix.csv,,mission.vmin,,mission,mission.vmin,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_platform_platformdesc,matrix,mission_validation_full_field_matrix.csv,,platform.platformDesc,,mission,platform.platformDesc,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_platform_platformid,matrix,mission_validation_full_field_matrix.csv,,platform.platformId,,mission,platform.platformId,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_platform_platformtype,matrix,mission_validation_full_field_matrix.csv,,platform.platformType,,mission,platform.platformType,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_sensors,matrix,mission_validation_full_field_matrix.csv,,sensors,,mission,sensors,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_keywords,matrix,mission_validation_full_field_matrix.csv,,keywords,,mission,keywords,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_spatial_accuracyvalue,matrix,mission_validation_full_field_matrix.csv,,spatial.accuracyValue,,mission,spatial.accuracyValue,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_spatial_errorvalue,matrix,mission_validation_full_field_matrix.csv,,spatial.errorValue,,mission,spatial.errorValue,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_spatial_gridcolumnsize,matrix,mission_validation_full_field_matrix.csv,,spatial.gridColumnSize,,mission,spatial.gridColumnSize,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_spatial_gridrepresentation,matrix,mission_validation_full_field_matrix.csv,,spatial.gridRepresentation,,mission,spatial.gridRepresentation,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_spatial_gridrowsize,matrix,mission_validation_full_field_matrix.csv,,spatial.gridRowSize,,mission,spatial.gridRowSize,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_spatial_gridverticalsize,matrix,mission_validation_full_field_matrix.csv,,spatial.gridVerticalSize,,mission,spatial.gridVerticalSize,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_spatial_trajectorysampling,matrix,mission_validation_full_field_matrix.csv,,spatial.trajectorySampling,,mission,spatial.trajectorySampling,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_spatial_verticalcrsurl,matrix,mission_validation_full_field_matrix.csv,,spatial.verticalCrsUrl,,mission,spatial.verticalCrsUrl,identity,,url,0.9,auto-generated from mission matrix field list,true
+map_mission_distribution_downloadurl,matrix,mission_validation_full_field_matrix.csv,,distribution.downloadUrl,,mission,distribution.downloadUrl,identity,,url,0.9,auto-generated from mission matrix field list,true
+map_mission_distribution_format,matrix,mission_validation_full_field_matrix.csv,,distribution.format,,mission,distribution.format,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_distribution_landingurl,matrix,mission_validation_full_field_matrix.csv,,distribution.landingUrl,,mission,distribution.landingUrl,identity,,url,0.9,auto-generated from mission matrix field list,true
+map_mission_distribution_license,matrix,mission_validation_full_field_matrix.csv,,distribution.license,,mission,distribution.license,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_distribution_metadatalandingurl,matrix,mission_validation_full_field_matrix.csv,,distribution.metadataLandingUrl,,mission,distribution.metadataLandingUrl,identity,,url,0.9,auto-generated from mission matrix field list,true
+map_mission_distribution_nceidistributorcontacthref,matrix,mission_validation_full_field_matrix.csv,,distribution.nceiDistributorContactHref,,mission,distribution.nceiDistributorContactHref,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_distribution_nceimetadatacontacthref,matrix,mission_validation_full_field_matrix.csv,,distribution.nceiMetadataContactHref,,mission,distribution.nceiMetadataContactHref,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_distribution_parentproject,matrix,mission_validation_full_field_matrix.csv,,distribution.parentProject,,mission,distribution.parentProject,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_mission_distribution_publication,matrix,mission_validation_full_field_matrix.csv,,distribution.publication,,mission,distribution.publication,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_granule_parentcollectionid,profile_rules,src/profiles/bedi/bediGranuleRules.js,,parentCollectionId,,granule,parentCollectionId,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_granule_fileid,profile_rules,src/profiles/bedi/bediCollectionRules.js,,fileId,,granule,fileId,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_granule_granuleid,profile_rules,src/profiles/bedi/bediGranuleRules.js,,granuleId,,granule,granuleId,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_granule_hierarchylevel,profile_rules,src/profiles/bedi/bediCollectionRules.js,,hierarchyLevel,,granule,hierarchyLevel,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_granule_title,profile_rules,src/profiles/bedi/bediCollectionRules.js,,title,,granule,title,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_granule_presentationform,profile_rules,src/profiles/bedi/bediGranuleRules.js,,presentationForm,,granule,presentationForm,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_granule_creationdate,profile_rules,src/profiles/bedi/bediCollectionRules.js,,creationDate,,granule,creationDate,identity,,date,0.9,auto-generated from mission matrix field list,true
+map_granule_abstract,profile_rules,src/profiles/bedi/bediCollectionRules.js,,abstract,,granule,abstract,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_granule_status,profile_rules,src/profiles/bedi/bediCollectionRules.js,,status,,granule,status,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_granule_diveid,profile_rules,src/profiles/bedi/bediGranuleRules.js,,diveId,,granule,diveId,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_granule_west,profile_rules,src/profiles/bedi/bediCollectionRules.js,,west,,granule,west,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_granule_startdate,profile_rules,src/profiles/bedi/bediCollectionRules.js,,startDate,,granule,startDate,identity,,date,0.9,auto-generated from mission matrix field list,true
+map_granule_enddate,profile_rules,src/profiles/bedi/bediCollectionRules.js,,endDate,,granule,endDate,identity,,date,0.9,auto-generated from mission matrix field list,true
+map_granule_maxdepth,profile_rules,src/profiles/bedi/bediGranuleRules.js,,maxDepth,,granule,maxDepth,identity,,decimal,0.9,auto-generated from mission matrix field list,true
+map_collection_fileid,profile_rules,src/profiles/bedi/bediCollectionRules.js,,fileId,,collection,fileId,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_collection_hierarchylevel,profile_rules,src/profiles/bedi/bediCollectionRules.js,,hierarchyLevel,,collection,hierarchyLevel,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_collection_collectionid,profile_rules,src/profiles/bedi/bediCollectionRules.js,,collectionId,,collection,collectionId,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_collection_nceiaccessionid,profile_rules,src/profiles/bedi/bediCollectionRules.js,,nceiAccessionId,,collection,nceiAccessionId,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_collection_title,profile_rules,src/profiles/bedi/bediCollectionRules.js,,title,,collection,title,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_collection_creationdate,profile_rules,src/profiles/bedi/bediCollectionRules.js,,creationDate,,collection,creationDate,identity,,date,0.9,auto-generated from mission matrix field list,true
+map_collection_abstract,profile_rules,src/profiles/bedi/bediCollectionRules.js,,abstract,,collection,abstract,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_collection_status,profile_rules,src/profiles/bedi/bediCollectionRules.js,,status,,collection,status,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_collection_sciencekeywords,profile_rules,src/profiles/bedi/bediCollectionRules.js,,scienceKeywords,,collection,scienceKeywords,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_collection_datacenters,profile_rules,src/profiles/bedi/bediCollectionRules.js,,datacenters,,collection,datacenters,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_collection_west,profile_rules,src/profiles/bedi/bediCollectionRules.js,,west,,collection,west,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_collection_startdate,profile_rules,src/profiles/bedi/bediCollectionRules.js,,startDate,,collection,startDate,identity,,date,0.9,auto-generated from mission matrix field list,true
+map_collection_enddate,profile_rules,src/profiles/bedi/bediCollectionRules.js,,endDate,,collection,endDate,identity,,date,0.9,auto-generated from mission matrix field list,true
+map_collection_platforms,profile_rules,src/profiles/bedi/bediCollectionRules.js,,platforms,,collection,platforms,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_collection_citation_title,matrix,mission_validation_full_field_matrix.csv,,citation.title,,collection,citation.title,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_any_ident_fileidentifier,matrix,mission_validation_full_field_matrix.csv,,ident.fileIdentifier,,any,ident.fileIdentifier,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_collection_ident_collectionuuid,matrix,mission_validation_full_field_matrix.csv,,ident.collectionUuid,,collection,ident.collectionUuid,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_granule_ident_archiveobjectuuid,matrix,mission_validation_full_field_matrix.csv,,ident.archiveObjectUuid,,granule,ident.archiveObjectUuid,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_granule_ident_parentcollectionuuid,matrix,mission_validation_full_field_matrix.csv,,ident.parentCollectionUuid,,granule,ident.parentCollectionUuid,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_collection_distribution_onlineresources,matrix,mission_validation_full_field_matrix.csv,,distribution.onlineResources,,collection,distribution.onlineResources,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_collection_mission_datalicensepreset,matrix,mission_validation_full_field_matrix.csv,,mission.dataLicensePreset,,collection,mission.dataLicensePreset,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_collection_mission_licenseurl,matrix,mission_validation_full_field_matrix.csv,,mission.licenseUrl,,collection,mission.licenseUrl,identity,,url,0.9,auto-generated from mission matrix field list,true
+map_collection_keywords_theme,matrix,mission_validation_full_field_matrix.csv,,keywords.theme,,collection,keywords.theme,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_collection_keywords_place,matrix,mission_validation_full_field_matrix.csv,,keywords.place,,collection,keywords.place,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_collection_keywords_instrument,matrix,mission_validation_full_field_matrix.csv,,keywords.instrument,,collection,keywords.instrument,identity,,string,0.9,auto-generated from mission matrix field list,true
+map_tmf_tmf_uuid_extract_fileidentifier,tmf_scripts,xml-uuid-scraper-nct478-main/uuidscraper.py,,fileId,,collection,fileId,identity,,string,0.8,Derived from UUID scraper assumptions,true
+map_tmf_tmf_uuid_extract_uuid_attr,tmf_scripts,xml-uuid-scraper-nct478-main/uuidscraper.py,,ident.collectionUuid,,collection,ident.collectionUuid,identity,,string,0.8,Promote to block when upstream UUID policy is finalized,true
+map_tmf_tmf_linkcheck_url_nodes,tmf_scripts,xml-link-checker-nct470-main/linkchecker.py,,distribution.onlineResources,,collection,distribution.onlineResources,identity,,string,0.8,TMF checker extracts gmd:URL and gmx:Anchor @xlink:href,true
+map_tmf_tmf_linkcheck_anchor_href,tmf_scripts,xml-link-checker-nct470-main/linkchecker.py,,distribution.onlineResources,,collection,distribution.onlineResources,identity,,url,0.8,Aligns with linkcheck lane expectations,true
+map_tmf_tmf_license_docucomp_statement,tmf_scripts,add-data-licensing-information-main/datalicensing.py,,mission.dataLicensePreset,,collection,mission.dataLicensePreset,identity,,string,0.8,Derived from TMF automation that inserts Docucomp license component,true
+map_tmf_tmf_license_docucomp_href,tmf_scripts,add-data-licensing-information-main/datalicensing.py,,mission.licenseUrl,,collection,mission.licenseUrl,identity,,url,0.8,Matches Docucomp-centric licensing practice,true
+map_tmf_tmf_keywords_anchor_upgrade,tmf_scripts,gulf-of-america-keywords-main/goakeywords_updated.py,,keywords.theme,,collection,keywords.theme,identity,,string,0.8,TMF script upgrades CharacterString keywords to Anchor+href,true
+map_tmf_tmf_keywords_theme_presence,tmf_scripts,iso-keyword-automation-nct412-main/insert_iso_keywords.py,,keywords.theme,,collection,keywords.theme,identity,,string,0.8,Backs existing NCEI/OER required-field gates,true
+map_tmf_tmf_keywords_place_presence,tmf_scripts,iso-keyword-automation-nct412-main/insert_iso_keywords.py,,keywords.place,,collection,keywords.place,identity,,string,0.8,Complements theme keyword requirement,true
+map_tmf_tmf_keywords_instrument_presence,tmf_scripts,iso-keyword-automation-nct412-main/insert_iso_keywords.py,,keywords.instrument,,collection,keywords.instrument,identity,,string,0.8,Promote to block for instrument-heavy domains,true
+map_tmf_tmf_goes_variant_keyword_consistency,tmf_scripts,updated-goes-19-keywords-main/goeskeywords_updated.py,,keywords.theme,,collection,keywords.theme,identity,,string,0.8,Domain-specific TMF campaign rule,true
+map_tmf_tmf_image_id_mapping_fileidentifier,tmf_scripts,image-url-and-metadata-id-finder-nct-472-main/idimagescraper.py,,fileId,,collection,fileId,identity,,string,0.8,Supports downstream asset-link enrichment,true
+map_tmf_tmf_image_access_link_presence,tmf_scripts,image-url-and-metadata-id-finder-nct-472-main/updateimage.py,,distribution.onlineResources,,collection,distribution.onlineResources,identity,,string,0.8,Can feed advisory lane until strict policy set,true

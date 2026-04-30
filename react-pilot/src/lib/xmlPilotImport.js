@@ -60,6 +60,144 @@ function txt(el) {
 }
 
 /**
+ * UxS templates wrap instructional text in `{{ … }}`. Peel one layer at a time until stable.
+ * @param {unknown} raw
+ * @returns {string}
+ */
+function stripUxTemplateBraces(raw) {
+  let s = String(raw ?? '')
+  let prev
+  do {
+    prev = s
+    s = s
+      .replace(/\{\{\s*([^}{]*?)\s*\}\}/g, (_, inner) => String(inner).trim())
+      .trim()
+  } while (s !== prev)
+  return s
+}
+
+/**
+ * Replace UxS `{{fileIdentifier}}` tokens once `fileId` is known (after `fileIdentifier` parse).
+ * @param {string} url
+ * @param {string} fileId
+ * @param {string} fileIdRaw
+ */
+function expandImportFileIdTokens(url, fileId, fileIdRaw) {
+  let u = String(url || '')
+  const fid = String(fileId || '').trim()
+  const raw = String(fileIdRaw || '').trim()
+  if (!u) return u
+  const repl = [
+    ['{{fileIdentifier}}', fid],
+    ['{{fileidentifier}}', fid],
+    ['{{Unique Identifier Assigned to Metadata Record}}', fid],
+    ['gov.noaa.ncei.uxs:{{Unique Identifier Assigned to Metadata Record}}', raw || (fid ? `gov.noaa.ncei.uxs:${fid}` : '')],
+  ]
+  for (const [needle, val] of repl) {
+    if (needle && u.includes(needle) && val) u = u.split(needle).join(val)
+  }
+  return u
+}
+
+/**
+ * @param {Element | null | undefined} codeParent `gmd:code`
+ * @returns {string}
+ */
+function mdIdentifierCodeString(codeParent) {
+  if (!codeParent) return ''
+  for (const c of codeParent.children) {
+    if (c.localName === 'Anchor' && (c.namespaceURI === NS.gmx || !c.namespaceURI)) {
+      const t = txt(c)
+      const href = c.getAttributeNS(NS.xlink, 'href') || c.getAttribute('xlink:href') || ''
+      if (/^10\.\d{4,9}\//.test(t)) return t.replace(/^https?:\/\/doi\.org\//i, '')
+      const hm = href.match(/doi\.org\/(10\.\d{4,9}\/[^?\s#]+)/i)
+      if (hm) return decodeURIComponent(hm[1])
+      return t
+    }
+  }
+  return gcoCharacterString(codeParent)
+}
+
+/**
+ * @param {Element} mk `gmd:MD_Keywords`
+ */
+function keywordThesaurusTitleLower(mk) {
+  const thesWrap = childNS(mk, NS.gmd, 'thesaurusName')
+  if (!thesWrap) return ''
+  const cite = childNS(thesWrap, NS.gmd, 'CI_Citation')
+  if (cite) return gcoCharacterString(childNS(cite, NS.gmd, 'title')).toLowerCase()
+  return (
+    thesWrap.getAttributeNS(NS.xlink, 'title') ||
+    thesWrap.getAttribute('xlink:title') ||
+    ''
+  ).toLowerCase()
+}
+
+/**
+ * @param {Element | null | undefined} numWrap e.g. `gmd:westBoundLongitude`
+ */
+function gcoDecimalFromWrapper(numWrap) {
+  if (!numWrap) return ''
+  const gco = childNS(numWrap, NS.gco, 'Decimal')
+  if (gco) return txt(gco)
+  const loc = childLocal(numWrap, 'Decimal')
+  return loc ? txt(loc) : ''
+}
+
+/**
+ * @param {Element | null | undefined} numWrap e.g. `gmd:minimumValue`
+ */
+function gcoRealFromWrapper(numWrap) {
+  if (!numWrap) return ''
+  const gco = childNS(numWrap, NS.gco, 'Real')
+  if (gco) return txt(gco)
+  const loc = childLocal(numWrap, 'Real')
+  return loc ? txt(loc) : ''
+}
+
+/**
+ * @param {Element | null | undefined} intWrap e.g. under `dimensionSize`
+ */
+function gcoIntegerFromWrapper(intWrap) {
+  if (!intWrap) return ''
+  const gco = childNS(intWrap, NS.gco, 'Integer')
+  if (gco) return txt(gco)
+  const loc = childLocal(intWrap, 'Integer')
+  return loc ? txt(loc) : ''
+}
+
+/**
+ * @param {Element | null | undefined} cite
+ * @returns {string}
+ */
+function citationPublicationLine(cite) {
+  if (!cite) return ''
+  return stripUxTemplateBraces(gcoCharacterString(childNS(cite, NS.gmd, 'otherCitationDetails')))
+}
+
+/**
+ * @param {unknown} partial
+ */
+function deepStripUxTemplatePlaceholders(partial) {
+  if (!partial || typeof partial !== 'object') return
+  if (Array.isArray(partial)) {
+    for (let i = 0; i < partial.length; i += 1) {
+      const it = partial[i]
+      if (typeof it === 'string') partial[i] = stripUxTemplateBraces(it)
+      else deepStripUxTemplatePlaceholders(it)
+    }
+    return
+  }
+  for (const [k, v] of Object.entries(partial)) {
+    if (typeof v === 'string') {
+      /** @type {Record<string, unknown>} */ (partial)[k] = stripUxTemplateBraces(v)
+    } else {
+      deepStripUxTemplatePlaceholders(v)
+    }
+  }
+}
+
+/**
  * @param {Element | null | undefined} parent
  * @param {string} ns
  * @param {string} localName
@@ -145,7 +283,7 @@ function citationDates(cite) {
     if (!ci) continue
     const dt = childNS(ci, NS.gmd, 'date')
     const dateEl = dt ? childLocal(dt, 'Date') || childLocal(dt, 'DateTime') : null
-    const dateStr = dateEl ? txt(dateEl) : ''
+    const dateStr = dateEl ? stripUxTemplateBraces(txt(dateEl)).trim() : ''
     const dtt = childNS(ci, NS.gmd, 'dateType')
     const code = dtt ? childNS(dtt, NS.gmd, 'CI_DateTypeCode') : null
     const typeVal = (code?.getAttribute('codeListValue') || txt(code)).toLowerCase()
@@ -165,10 +303,20 @@ function citationIdentifiers(cite) {
   if (!cite) return doi
   for (const idw of childrenNS(cite, NS.gmd, 'identifier')) {
     const mid = childNS(idw, NS.gmd, 'MD_Identifier')
-    const code = mid ? gcoCharacterString(childNS(mid, NS.gmd, 'code')) : ''
+    if (!mid) continue
+    const codeRaw = mdIdentifierCodeString(childNS(mid, NS.gmd, 'code'))
+    if (!codeRaw) continue
+    const code = stripUxTemplateBraces(codeRaw).trim()
     if (!code) continue
-    if (/^10\.\d{4,9}\//.test(code)) doi.doi = code
-    else if (!doi.accession) doi.accession = code
+    const doiNorm = code.replace(/^https?:\/\/doi\.org\//i, '')
+    if (/^10\.\d{4,9}\//.test(doiNorm)) {
+      doi.doi = doiNorm
+    } else if (!doi.accession) {
+      let acc = code
+      const m = acc.match(/^NCEI\s*Accession\s*ID\s*:\s*(.+)$/i)
+      if (m) acc = m[1].trim()
+      doi.accession = stripUxTemplateBraces(acc).trim()
+    }
   }
   return doi
 }
@@ -219,17 +367,17 @@ function parseExtent(exExtent) {
 
   const box = childNS(childNS(exExtent, NS.gmd, 'geographicElement'), NS.gmd, 'EX_GeographicBoundingBox')
   if (box) {
-    out.west = txt(childNS(childNS(box, NS.gmd, 'westBoundLongitude'), NS.gco, 'Decimal'))
-    out.east = txt(childNS(childNS(box, NS.gmd, 'eastBoundLongitude'), NS.gco, 'Decimal'))
-    out.south = txt(childNS(childNS(box, NS.gmd, 'southBoundLatitude'), NS.gco, 'Decimal'))
-    out.north = txt(childNS(childNS(box, NS.gmd, 'northBoundLatitude'), NS.gco, 'Decimal'))
+    out.west = gcoDecimalFromWrapper(childNS(box, NS.gmd, 'westBoundLongitude'))
+    out.east = gcoDecimalFromWrapper(childNS(box, NS.gmd, 'eastBoundLongitude'))
+    out.south = gcoDecimalFromWrapper(childNS(box, NS.gmd, 'southBoundLatitude'))
+    out.north = gcoDecimalFromWrapper(childNS(box, NS.gmd, 'northBoundLatitude'))
   }
 
   for (const ve of childrenNS(exExtent, NS.gmd, 'verticalElement')) {
     const vx = childNS(ve, NS.gmd, 'EX_VerticalExtent')
     if (!vx) continue
-    const lo = txt(childNS(childNS(vx, NS.gmd, 'minimumValue'), NS.gco, 'Real'))
-    const hi = txt(childNS(childNS(vx, NS.gmd, 'maximumValue'), NS.gco, 'Real'))
+    const lo = gcoRealFromWrapper(childNS(vx, NS.gmd, 'minimumValue'))
+    const hi = gcoRealFromWrapper(childNS(vx, NS.gmd, 'maximumValue'))
     if (lo || hi) {
       out.vmin = lo
       out.vmax = hi
@@ -244,11 +392,13 @@ function parseExtent(exExtent) {
     out.startDate =
       txt(childNS(tp, NS.gml, 'begin')) ||
       txt(childNS(tp, NS.gml, 'beginPosition')) ||
-      txt(childLocal(tp, 'begin'))
+      txt(childLocal(tp, 'begin')) ||
+      txt(childLocal(tp, 'beginPosition'))
     out.endDate =
       txt(childNS(tp, NS.gml, 'end')) ||
       txt(childNS(tp, NS.gml, 'endPosition')) ||
-      txt(childLocal(tp, 'end'))
+      txt(childLocal(tp, 'end')) ||
+      txt(childLocal(tp, 'endPosition'))
     const ti = childNS(tp, NS.gml, 'timeInterval') || childLocal(tp, 'timeInterval')
     if (ti) {
       out.temporalExtentIntervalUnit = ti.getAttribute('unit') || ti.getAttributeNS(NS.gml, 'unit') || ''
@@ -270,8 +420,7 @@ function parseKeywords(dataId) {
   for (const dk of childrenNS(dataId, NS.gmd, 'descriptiveKeywords')) {
     const mk = childNS(dk, NS.gmd, 'MD_Keywords')
     if (!mk) continue
-    const thes = childNS(childNS(mk, NS.gmd, 'thesaurusName'), NS.gmd, 'CI_Citation')
-    const thesTitle = (thes ? gcoCharacterString(childNS(thes, NS.gmd, 'title')) : '').toLowerCase()
+    const thesTitle = keywordThesaurusTitleLower(mk)
     if (thesTitle.includes('platform instance')) continue
 
     let facet = ''
@@ -287,7 +436,9 @@ function parseKeywords(dataId) {
     const labels = []
     for (const kw of childrenNS(mk, NS.gmd, 'keyword')) {
       const { label, uuid } = keywordLabelAndUuidFromKeywordElement(kw)
-      if (label) labels.push({ label, uuid })
+      const lab = stripUxTemplateBraces(label).trim()
+      if (!lab) continue
+      labels.push({ label: lab, uuid })
     }
     if (labels.length) {
       if (!facets[facet]) facets[facet] = []
@@ -652,8 +803,8 @@ function parseSpatialRepresentation(root) {
         if (!dim) continue
         const nameCode = childNS(childNS(dim, NS.gmd, 'dimensionName'), NS.gmd, 'MD_DimensionNameTypeCode')
         const axis = (nameCode?.getAttribute('codeListValue') || txt(nameCode)).toLowerCase()
-        const size = txt(childNS(childNS(dim, NS.gmd, 'dimensionSize'), NS.gco, 'Integer'))
-        const res = gcoCharacterString(childNS(dim, NS.gmd, 'resolution'))
+        const size = stripUxTemplateBraces(gcoIntegerFromWrapper(childNS(dim, NS.gmd, 'dimensionSize'))).trim()
+        const res = stripUxTemplateBraces(gcoCharacterString(childNS(dim, NS.gmd, 'resolution'))).trim()
         if (axis === 'column') {
           out.gridColumnSize = size
           out.gridColumnResolution = res
@@ -669,7 +820,7 @@ function parseSpatialRepresentation(root) {
     }
     const geo = childNS(sri, NS.gmd, 'MD_Georectified')
     if (geo) {
-      out.dimensions = txt(childNS(childNS(geo, NS.gmd, 'numberOfDimensions'), NS.gco, 'Integer'))
+      out.dimensions = stripUxTemplateBraces(gcoIntegerFromWrapper(childNS(geo, NS.gmd, 'numberOfDimensions'))).trim()
     }
   }
   return out
@@ -721,9 +872,10 @@ function sortOnlineResourcesForSlots(urls) {
 
 /**
  * @param {Element} root
- * @returns {Record<string, string>}
+ * @param {string} fileId normalized file id (may omit uxs prefix)
+ * @param {string} fileIdRaw raw `gmd:fileIdentifier` text
  */
-function parseDistribution(root) {
+function parseDistribution(root, fileId, fileIdRaw) {
   const dist = {
     distributionFormatName: '',
     distributionFileFormat: '',
@@ -749,6 +901,14 @@ function parseDistribution(root) {
   if (!md) return dist
 
   let fmt = childNS(childNS(md, NS.gmd, 'distributionFormat'), NS.gmd, 'MD_Format')
+
+  const distBlock = childNS(md, NS.gmd, 'distributor')
+  const mdDist = distBlock ? childNS(distBlock, NS.gmd, 'MD_Distributor') : null
+
+  if (!fmt && mdDist) {
+    const dfw = childNS(mdDist, NS.gmd, 'distributorFormat')
+    fmt = dfw ? childNS(dfw, NS.gmd, 'MD_Format') : null
+  }
   if (!fmt) {
     const dfw = childNS(md, NS.gmd, 'distributorFormat')
     fmt = dfw ? childNS(dfw, NS.gmd, 'MD_Format') : null
@@ -758,8 +918,6 @@ function parseDistribution(root) {
     dist.distributionFileFormat = gcoCharacterString(childNS(fmt, NS.gmd, 'version'))
   }
 
-  const distBlock = childNS(md, NS.gmd, 'distributor')
-  const mdDist = distBlock ? childNS(distBlock, NS.gmd, 'MD_Distributor') : null
   if (mdDist) {
     const orderWrap =
       childNS(mdDist, NS.gmd, 'distributionOrderProcess') || childNS(md, NS.gmd, 'distributionOrderProcess')
@@ -809,7 +967,8 @@ function parseDistribution(root) {
       const ci = childNS(ol, NS.gmd, 'CI_OnlineResource')
       if (!ci) continue
       const link = childNS(ci, NS.gmd, 'linkage')
-      const url = link ? txt(childNS(link, NS.gmd, 'URL')) : ''
+      const rawUrl = link ? txt(childNS(link, NS.gmd, 'URL')) : ''
+      const url = stripUxTemplateBraces(expandImportFileIdTokens(rawUrl, fileId, fileIdRaw)).trim()
       if (!isImportableOnlineUrl(url)) continue
       if (seenUrls.has(url)) continue
       seenUrls.add(url)
@@ -845,11 +1004,21 @@ function parseDistribution(root) {
       dist.downloadProtocol = u.proto || 'HTTPS'
     }
   } else if (sorted.length === 2) {
-    dist.metadataLandingUrl = sorted[0].url
-    dist.metadataLandingLinkName = sorted[0].name
-    dist.metadataLandingDescription = sorted[0].description
-    dist.landingUrl = sorted[1].url
-    dist.downloadProtocol = sorted[1].proto || 'HTTPS'
+    const u0 = sorted[0]
+    const u1 = sorted[1]
+    dist.metadataLandingUrl = u0.url
+    dist.metadataLandingLinkName = u0.name
+    dist.metadataLandingDescription = u0.description
+    dist.landingUrl = u0.url
+    if (onlineResourceSlotKind(u1) === 2) {
+      dist.downloadUrl = u1.url
+      dist.downloadProtocol = u1.proto || 'HTTPS'
+      dist.downloadLinkName = u1.name
+      dist.downloadLinkDescription = u1.description
+    } else {
+      dist.landingUrl = u1.url
+      dist.downloadProtocol = u1.proto || 'HTTPS'
+    }
   } else {
     dist.metadataLandingUrl = sorted[0].url
     dist.metadataLandingLinkName = sorted[0].name
@@ -897,8 +1066,32 @@ function parseResponsibleParty(rp) {
 }
 
 /**
+ * Walk `CI_ResponsibleParty` for a `gmx:Anchor` ROR href.
+ * @param {Element | null | undefined} rp
+ */
+function parseRorFromResponsibleParty(rp) {
+  if (!rp) return null
+  const stack = [rp]
+  for (let i = 0; i < stack.length; i += 1) {
+    const el = stack[i]
+    for (const c of el.children) {
+      if (c.localName === 'Anchor' && (c.namespaceURI === NS.gmx || !c.namespaceURI)) {
+        const href = (c.getAttributeNS(NS.xlink, 'href') || c.getAttribute('xlink:href') || '').trim()
+        const m = href.match(/https?:\/\/ror\.org\/([a-z0-9]{9})/i)
+        if (m) {
+          const id = `https://ror.org/${m[1].toLowerCase()}`
+          return { id, label: stripUxTemplateBraces(txt(c)).trim() || id }
+        }
+      }
+      stack.push(c)
+    }
+  }
+  return null
+}
+
+/**
  * @param {Element | null} dataId
- * @returns {{ individualName: string, organisationName: string, email: string, contactPhone: string, contactUrl: string, contactAddress: string }}
+ * @returns {{ individualName: string, organisationName: string, email: string, contactPhone: string, contactUrl: string, contactAddress: string, ror?: { id: string, label: string } | null }}
  */
 function parsePointOfContact(dataId) {
   const empty = {
@@ -913,7 +1106,11 @@ function parsePointOfContact(dataId) {
   /** Prefer first `pointOfContact` that embeds CI_ResponsibleParty (UxS template puts DocuComp xlink-only first). */
   for (const poc of childrenNS(dataId, NS.gmd, 'pointOfContact')) {
     const party = childNS(poc, NS.gmd, 'CI_ResponsibleParty')
-    if (party) return parseResponsibleParty(party)
+    if (party) {
+      const parsed = parseResponsibleParty(party)
+      const ror = parseRorFromResponsibleParty(party)
+      return ror ? { ...parsed, ror } : parsed
+    }
   }
   return empty
 }
@@ -965,7 +1162,10 @@ function parseResourceConstraintsForMission(dataId) {
           out.accessConstraints = txt(code) || ''
         }
       }
-      out.citeAs = gcoCharacterString(childNS(legal, NS.gmd, 'useLimitation'))
+      const useLimRaw = gcoCharacterString(childNS(legal, NS.gmd, 'useLimitation'))
+      if (useLimRaw && !/^(otherrestrictions|other restrictions)$/i.test(useLimRaw.trim())) {
+        out.citeAs = useLimRaw
+      }
       const proseOthers = []
       for (const c of legal.children) {
         if (c.namespaceURI === NS.gmd && c.localName === 'otherConstraints') {
@@ -1013,11 +1213,11 @@ function parseMetadataStandard(root) {
  * @returns {Record<string, string> | null}
  */
 function parseOneAcquisitionInstrument(mi) {
-  const idw = childNS(mi, NS.gmd, 'identifier')
+  const idw = childNS(mi, NS.gmd, 'identifier') || childNS(mi, NS.gmi, 'identifier')
   const mid = idw ? childNS(idw, NS.gmd, 'MD_Identifier') : null
   const sid = mid ? gcoCharacterString(childNS(mid, NS.gmd, 'code')) : ''
   const stype = gcoCharacterString(childNS(mi, NS.gmi, 'type'))
-  const descr = gcoCharacterString(childNS(mi, NS.gmd, 'description'))
+  const descr = gcoCharacterString(childNS(mi, NS.gmd, 'description') || childNS(mi, NS.gmi, 'description'))
   const parsed = parseInstrumentDescriptionBlock(descr)
   const row = {
     sensorId: sid,
@@ -1113,13 +1313,15 @@ function parseAcquisitionInfo(root) {
   const platWrap = childNS(mia, NS.gmi, 'platform')
   const miPlat = platWrap ? childNS(platWrap, NS.gmi, 'MI_Platform') : null
   if (miPlat) {
-    const idw = childNS(miPlat, NS.gmd, 'identifier')
+    const idw = childNS(miPlat, NS.gmd, 'identifier') || childNS(miPlat, NS.gmi, 'identifier')
     const mid = idw ? childNS(idw, NS.gmd, 'MD_Identifier') : null
     const pid = mid ? gcoCharacterString(childNS(mid, NS.gmd, 'code')) : ''
     if (pid) {
       platformOut.platformId = pid
     }
-    const descRaw = gcoCharacterString(childNS(miPlat, NS.gmd, 'description'))
+    const descRaw = gcoCharacterString(
+      childNS(miPlat, NS.gmd, 'description') || childNS(miPlat, NS.gmi, 'description'),
+    )
     if (descRaw) {
       const lines = descRaw.split('\n').map((l) => l.trim()).filter(Boolean)
       const modelLines = lines.filter((l) => l.toLowerCase().startsWith('model:'))
@@ -1195,6 +1397,180 @@ function pruneObject(obj) {
   return out
 }
 
+/** Provisional values so placeholder-heavy Navy UxS beta XML still populates catalog-bound fields. */
+const UXS_TEMPLATE_PENDING_DOI = '10.25923/ncei.uxs.template.pending'
+const UXS_TEMPLATE_PENDING_ACCESSION = 'UXSTEMPLATE0001'
+const UXS_TEMPLATE_NCEI_ROR = Object.freeze({
+  id: 'https://ror.org/04r0wrp59',
+  label: 'NOAA National Centers for Environmental Information',
+})
+const UXS_TEMPLATE_HELP_EMAIL = 'metadata.help@noaa.gov'
+const UXS_TEMPLATE_HELP_URL = 'https://www.ncei.noaa.gov'
+const UXS_TEMPLATE_DOWNLOAD_STUB = 'https://www.ncei.noaa.gov/access/uxs-template-pending-file'
+
+/**
+ * `{{…}}` Navy/UxS beta templates: comment banner, NCEI UxS file id prefix, or explicit wording.
+ * Ignores `<!-- ... -->` so fixture/template docs with "{{example}}" in comments do not trigger alone.
+ * @param {string} rawXml
+ * @returns {boolean}
+ */
+function isNavyUxPlaceholderTemplateImport(rawXml) {
+  const full = String(rawXml || '')
+  const x = full.replace(/<!--[\s\S]*?-->/g, '')
+  if (!x.includes('{{')) return false
+  return (
+    /UxS\s+METADATA\s+TEMPLATE/i.test(full) ||
+    /gov\.noaa\.ncei\.uxs:/i.test(full) ||
+    /NOAA\/Navy\s+UxS/i.test(full) ||
+    /NOAANavyUxS/i.test(full)
+  )
+}
+
+/**
+ * @param {string} s
+ */
+function looksLikeProseEmail(s) {
+  const t = String(s || '').trim()
+  if (!t) return false
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(t)
+}
+
+/**
+ * @param {string} s
+ */
+function looksLikeHttpUrl(s) {
+  const t = String(s || '').trim()
+  if (!t) return false
+  try {
+    const u = new URL(t)
+    return u.protocol === 'http:' || u.protocol === 'https:'
+  } catch {
+    return false
+  }
+}
+
+/**
+ * @param {string} s
+ */
+function looksLikeDoi(s) {
+  const t = String(s || '').trim()
+  return /^10\.\d{4,9}\//.test(t)
+}
+
+/**
+ * @param {string} s
+ */
+function looksLikeInstructionalPlaceholderName(s) {
+  return /\b(AT LEAST ONE OF|POC for Dataset|POC Email|Contact Email for Responsible|placeholder)\b/i.test(
+    String(s || ''),
+  )
+}
+
+/**
+ * @param {Record<string, unknown>} partial
+ * @param {string} rawXml
+ * @param {string[]} warnings
+ */
+function enrichNavyUxPlaceholderImport(partial, rawXml, warnings) {
+  if (!partial || typeof partial !== 'object') return
+  if (!isNavyUxPlaceholderTemplateImport(rawXml)) return
+
+  warnings.push(
+    'Navy UxS template placeholders detected: provisional values were applied for empty/invalid catalog fields (DOI, ROR, email, URLs, accession, provider keyword, download URL, platform type). Replace with real metadata before publication.',
+  )
+
+  const mission = /** @type {Record<string, unknown>} */ (
+    partial.mission && typeof partial.mission === 'object' ? { ...partial.mission } : {}
+  )
+  const dist = /** @type {Record<string, unknown>} */ (
+    partial.distribution && typeof partial.distribution === 'object' ? { ...partial.distribution } : {}
+  )
+  let kw = /** @type {Record<string, unknown>} */ (
+    partial.keywords && typeof partial.keywords === 'object' ? { ...partial.keywords } : {}
+  )
+
+  if (!looksLikeProseEmail(String(mission.email || ''))) {
+    mission.email = UXS_TEMPLATE_HELP_EMAIL
+  }
+  if (!looksLikeHttpUrl(String(mission.contactUrl || '').trim())) {
+    mission.contactUrl = UXS_TEMPLATE_HELP_URL
+  }
+  if (looksLikeInstructionalPlaceholderName(String(mission.individualName || ''))) {
+    mission.individualName = 'Metadata contact (replace with responsible party)'
+  }
+  if (
+    !String(mission.org || '').trim() ||
+    looksLikeInstructionalPlaceholderName(String(mission.org || ''))
+  ) {
+    mission.org = UXS_TEMPLATE_NCEI_ROR.label
+  }
+  if (!looksLikeDoi(String(mission.doi || ''))) {
+    mission.doi = UXS_TEMPLATE_PENDING_DOI
+  }
+  const ror = mission.ror && typeof mission.ror === 'object' ? /** @type {{ id?: string }} */ (mission.ror) : {}
+  if (!String(ror.id || '').trim()) {
+    mission.ror = { ...UXS_TEMPLATE_NCEI_ROR }
+  }
+  let accRaw = String(mission.accession ?? '')
+    .replace(/\u00a0/g, ' ')
+    .trim()
+  const accPref = accRaw.match(/^NCEI\s*Accession\s*ID\s*:\s*(.+)$/i)
+  if (accPref) accRaw = accPref[1].trim()
+  const accNorm = accRaw.replace(/\s/g, '').replace(/^gov\.noaa\.ncei\.uxs:/i, '')
+  if (!accNorm || !/^[A-Za-z0-9._-]+$/.test(accNorm)) {
+    mission.accession = UXS_TEMPLATE_PENDING_ACCESSION
+  }
+
+  const facetKeys = [
+    'sciencekeywords',
+    'datacenters',
+    'platforms',
+    'instruments',
+    'locations',
+    'projects',
+    'providers',
+  ]
+  for (const f of facetKeys) {
+    if (!Array.isArray(kw[f])) kw[f] = []
+  }
+  if (!(/** @type {unknown[]} */ (kw.providers)).length) {
+    ;(/** @type {Array<{ label: string, uuid: string }>} */ (kw.providers)).push({
+      label: 'U.S. Navy > United States Department of Defense > Department of the Navy',
+      uuid: '',
+    })
+  }
+
+  let plat = /** @type {Record<string, unknown>} */ (
+    partial.platform && typeof partial.platform === 'object' ? { ...partial.platform } : {}
+  )
+  if (!String(plat.platformType || '').trim()) {
+    const p0 = Array.isArray(kw.platforms) && kw.platforms[0] && typeof kw.platforms[0] === 'object'
+      ? String((/** @type {{ label?: string }} */ (kw.platforms[0])).label || '').trim()
+      : ''
+    plat.platformType = p0 ? (p0.split('>')[0] || p0).trim() || 'Unmanned Underwater Vehicle' : 'Unmanned Underwater Vehicle'
+  }
+
+  if (!String(dist.downloadUrl || '').trim()) {
+    dist.downloadUrl = UXS_TEMPLATE_DOWNLOAD_STUB
+    if (!dist.downloadProtocol) dist.downloadProtocol = 'HTTPS'
+  }
+  if (!String(dist.landingUrl || '').trim()) {
+    const meta = String(dist.metadataLandingUrl || '').trim()
+    const land = meta && looksLikeHttpUrl(meta) ? meta : UXS_TEMPLATE_HELP_URL
+    dist.landingUrl = land
+  }
+  if (!String(dist.publication || '').trim()) {
+    const t = String(mission.title || '').trim()
+    const ap = String(mission.associatedPublicationTitle || '').trim()
+    dist.publication = ap || (t ? `${t} — add publication reference for catalog` : 'Add publication reference for catalog')
+  }
+
+  partial.mission = mission
+  partial.distribution = dist
+  partial.keywords = kw
+  partial.platform = plat
+}
+
 /**
  * Parse ISO 19115-ish XML into a partial pilot state for `mergeLoadedPilotState`.
  * Best effort: matches pilot XML preview and common UniversalXMLGenerator output.
@@ -1257,7 +1633,8 @@ export function importPilotPartialStateFromXml(xmlString) {
 
   const fi = childNS(root, NS.gmd, 'fileIdentifier')
   const fiRaw = fi ? gcoCharacterString(fi) : ''
-  const { fileId, hadNceiUxsPrefix } = parseNceiUxsFileIdentifier(fiRaw)
+  const fiStripped = stripUxTemplateBraces(fiRaw).trim()
+  const { fileId, hadNceiUxsPrefix } = parseNceiUxsFileIdentifier(fiStripped)
 
   const dsEl = childNS(root, NS.gmd, 'dateStamp')
   let metadataRecordDate = ''
@@ -1300,6 +1677,7 @@ export function importPilotPartialStateFromXml(xmlString) {
     contactPhone: poc.contactPhone,
     contactUrl: poc.contactUrl,
     contactAddress: poc.contactAddress,
+    ...(poc.ror ? { ror: poc.ror } : {}),
     west: ext.west,
     east: ext.east,
     south: ext.south,
@@ -1353,7 +1731,7 @@ export function importPilotPartialStateFromXml(xmlString) {
   const kw = parseKeywords(dataId)
   const sensorsFromContent = parseSensors(root)
   const sensors = acqParsed.sensors?.length ? acqParsed.sensors : sensorsFromContent
-  const distRaw = parseDistribution(root)
+  const distRaw = parseDistribution(root, fileId, fiStripped)
   /** @type {Record<string, unknown>} */
   const distInput = {
     format: distRaw.distributionFormatName,
@@ -1388,6 +1766,13 @@ export function importPilotPartialStateFromXml(xmlString) {
   if (metaStd.metadataVersion) distInput.metadataVersion = metaStd.metadataVersion
   if (mission.parentProjectTitle) distInput.parentProject = mission.parentProjectTitle
   if (hadNceiUxsPrefix) distInput.nceiFileIdPrefix = true
+  const citePub = citationPublicationLine(cite)
+  const agPub = [ag.associatedPublicationTitle, ag.associatedPublicationDate, ag.associatedPublicationCode]
+    .map((x) => stripUxTemplateBraces(String(x || '')).trim())
+    .filter(Boolean)
+    .join('; ')
+  if (citePub) distInput.publication = citePub
+  else if (agPub) distInput.publication = agPub
   const distribution = pruneObject(distInput)
 
   /** @type {Record<string, unknown>} */
@@ -1404,6 +1789,9 @@ export function importPilotPartialStateFromXml(xmlString) {
   if (!Object.keys(partial).length) {
     return { ok: false, error: 'No recognizable pilot fields in XML.', warnings }
   }
+
+  deepStripUxTemplatePlaceholders(partial)
+  enrichNavyUxPlaceholderImport(partial, raw, warnings)
 
   return { ok: true, partial, warnings }
 }

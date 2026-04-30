@@ -1,0 +1,1039 @@
+{
+  "recordType": "collection",
+  "generatedAt": "2026-04-30T11:54:10.811Z",
+  "unresolvedTies": [
+    {
+      "fieldKey": "distribution.onlineResources",
+      "candidates": [
+        "tmf_linkcheck_url_nodes",
+        "tmf_linkcheck_anchor_href"
+      ]
+    }
+  ],
+  "fields": {
+    "fileId": {
+      "winner": {
+        "rule_id": "bedi_collection_fileid_1",
+        "rule_set": "bedi-collection-core",
+        "version": "1",
+        "record_type": "collection",
+        "field_key": "fileId",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "File identifier is required (e.g. gov.noaa.ncei.oer:COLLECTION_ID)",
+        "source_file": "src/profiles/bedi/bediCollectionRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-collection-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [
+        "bedi_collection_fileid_2",
+        "tmf_uuid_extract_fileidentifier",
+        "tmf_image_id_mapping_fileidentifier"
+      ],
+      "trace": [
+        {
+          "rule_id": "bedi_collection_fileid_1",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "bedi_collection_fileid_2",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "tmf_uuid_extract_fileidentifier",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "tmf_image_id_mapping_fileidentifier",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "hierarchyLevel": {
+      "winner": {
+        "rule_id": "bedi_collection_hierarchylevel_3",
+        "rule_set": "bedi-collection-core",
+        "version": "1",
+        "record_type": "collection",
+        "field_key": "hierarchyLevel",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "BEDI collections must have hierarchyLevel = fieldSession",
+        "source_file": "src/profiles/bedi/bediCollectionRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-collection-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "bedi_collection_hierarchylevel_3",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "collectionId": {
+      "winner": {
+        "rule_id": "bedi_collection_collectionid_4",
+        "rule_set": "bedi-collection-core",
+        "version": "1",
+        "record_type": "collection",
+        "field_key": "collectionId",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Short collection identifier is required (e.g. Biolum2009)",
+        "source_file": "src/profiles/bedi/bediCollectionRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-collection-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "bedi_collection_collectionid_4",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "nceiAccessionId": {
+      "winner": {
+        "rule_id": "bedi_collection_nceiaccessionid_5",
+        "rule_set": "bedi-collection-core",
+        "version": "1",
+        "record_type": "collection",
+        "field_key": "nceiAccessionId",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "decimal",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "NCEI Accession ID is required (numeric, from NCEI AMS authority identifier)",
+        "source_file": "src/profiles/bedi/bediCollectionRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-collection-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [
+        "bedi_collection_nceiaccessionid_6"
+      ],
+      "trace": [
+        {
+          "rule_id": "bedi_collection_nceiaccessionid_5",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "bedi_collection_nceiaccessionid_6",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "title": {
+      "winner": {
+        "rule_id": "bedi_collection_title_7",
+        "rule_set": "bedi-collection-core",
+        "version": "1",
+        "record_type": "collection",
+        "field_key": "title",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Title is required",
+        "source_file": "src/profiles/bedi/bediCollectionRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-collection-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "bedi_collection_title_7",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "creationDate": {
+      "winner": {
+        "rule_id": "bedi_collection_creationdate_8",
+        "rule_set": "bedi-collection-core",
+        "version": "1",
+        "record_type": "collection",
+        "field_key": "creationDate",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "date",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Creation date is required",
+        "source_file": "src/profiles/bedi/bediCollectionRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-collection-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "bedi_collection_creationdate_8",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "abstract": {
+      "winner": {
+        "rule_id": "bedi_collection_abstract_9",
+        "rule_set": "bedi-collection-core",
+        "version": "1",
+        "record_type": "collection",
+        "field_key": "abstract",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Abstract is required",
+        "source_file": "src/profiles/bedi/bediCollectionRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-collection-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "bedi_collection_abstract_9",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "status": {
+      "winner": {
+        "rule_id": "bedi_collection_status_10",
+        "rule_set": "bedi-collection-core",
+        "version": "1",
+        "record_type": "collection",
+        "field_key": "status",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Status is required (e.g. completed, historicalArchive)",
+        "source_file": "src/profiles/bedi/bediCollectionRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-collection-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "bedi_collection_status_10",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "scienceKeywords": {
+      "winner": {
+        "rule_id": "bedi_collection_sciencekeywords_11",
+        "rule_set": "bedi-collection-core",
+        "version": "1",
+        "record_type": "collection",
+        "field_key": "scienceKeywords",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "At least one GCMD Science Keyword is required",
+        "source_file": "src/profiles/bedi/bediCollectionRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-collection-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "bedi_collection_sciencekeywords_11",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "datacenters": {
+      "winner": {
+        "rule_id": "bedi_collection_datacenters_12",
+        "rule_set": "bedi-collection-core",
+        "version": "1",
+        "record_type": "collection",
+        "field_key": "datacenters",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "At least one data center keyword is required",
+        "source_file": "src/profiles/bedi/bediCollectionRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-collection-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "bedi_collection_datacenters_12",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "west": {
+      "winner": {
+        "rule_id": "bedi_collection_west_13",
+        "rule_set": "bedi-collection-core",
+        "version": "1",
+        "record_type": "collection",
+        "field_key": "west",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Bounding box W/E/S/N is required",
+        "source_file": "src/profiles/bedi/bediCollectionRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-collection-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "bedi_collection_west_13",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "startDate": {
+      "winner": {
+        "rule_id": "bedi_collection_startdate_14",
+        "rule_set": "bedi-collection-core",
+        "version": "1",
+        "record_type": "collection",
+        "field_key": "startDate",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "date",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Start date is required",
+        "source_file": "src/profiles/bedi/bediCollectionRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-collection-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "bedi_collection_startdate_14",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "endDate": {
+      "winner": {
+        "rule_id": "bedi_collection_enddate_15",
+        "rule_set": "bedi-collection-core",
+        "version": "1",
+        "record_type": "collection",
+        "field_key": "endDate",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "date",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "End date is required",
+        "source_file": "src/profiles/bedi/bediCollectionRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-collection-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "bedi_collection_enddate_15",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "platforms": {
+      "winner": {
+        "rule_id": "bedi_collection_platforms_16",
+        "rule_set": "bedi-collection-core",
+        "version": "1",
+        "record_type": "collection",
+        "field_key": "platforms",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "At least one platform reference is required (ship or submersible)",
+        "source_file": "src/profiles/bedi/bediCollectionRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-collection-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "bedi_collection_platforms_16",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "citation.title": {
+      "winner": {
+        "rule_id": "onestop_title_required_v1",
+        "rule_set": "onestop",
+        "version": "1",
+        "record_type": "collection",
+        "field_key": "citation.title",
+        "xpath": "//gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:title",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "1",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Title is required and must appear exactly once",
+        "source_file": "OneStop Regeneration - Bulk Metadata Records - EX (1).xlsx",
+        "source_tab": "Rules",
+        "source_row": "12",
+        "source_ref": "TitleCheck",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "onestop_title_required_v1",
+          "score": [
+            900,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "ident.fileIdentifier": {
+      "winner": {
+        "rule_id": "onestop_fileidentifier_single_v1",
+        "rule_set": "onestop",
+        "version": "1",
+        "record_type": "any",
+        "field_key": "ident.fileIdentifier",
+        "xpath": "//gmd:fileIdentifier",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "1",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "fileIdentifier must appear exactly once",
+        "source_file": "WAF metadata.xlsx",
+        "source_tab": "Checks",
+        "source_row": "7",
+        "source_ref": "FileIdentifierCheck",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "onestop_fileidentifier_single_v1",
+          "score": [
+            900,
+            1,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "ident.collectionUuid": {
+      "winner": {
+        "rule_id": "onestop_collection_uuid_format_v1",
+        "rule_set": "onestop",
+        "version": "1",
+        "record_type": "collection",
+        "field_key": "ident.collectionUuid",
+        "xpath": "",
+        "requirement": "recommended",
+        "cardinality_min": "0",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+        "condition_expr": "",
+        "severity": "warn",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Collection UUID should be a random UUID v4 when ingesting from OneStop segment exports",
+        "source_file": "OneStop ingest notes",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "UUID collection guidance",
+        "notes": "Starter rule; promote to block once convention is confirmed",
+        "active": "true"
+      },
+      "losers": [
+        "tmf_uuid_extract_uuid_attr"
+      ],
+      "trace": [
+        {
+          "rule_id": "onestop_collection_uuid_format_v1",
+          "score": [
+            900,
+            2,
+            2,
+            1,
+            1
+          ]
+        },
+        {
+          "rule_id": "tmf_uuid_extract_uuid_attr",
+          "score": [
+            0,
+            2,
+            2,
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    "distribution.onlineResources": {
+      "winner": {
+        "rule_id": "tmf_linkcheck_url_nodes",
+        "rule_set": "tmf-candidates",
+        "version": "1",
+        "record_type": "collection",
+        "field_key": "distribution.onlineResources",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Record should include at least one URL-bearing online resource",
+        "source_file": "xml-link-checker-nct470-main/linkchecker.py",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "tmf-scripts-MCD001_Abiola",
+        "notes": "TMF checker extracts gmd:URL and gmx:Anchor @xlink:href",
+        "active": "true"
+      },
+      "losers": [
+        "tmf_linkcheck_anchor_href",
+        "tmf_image_access_link_presence"
+      ],
+      "trace": [
+        {
+          "rule_id": "tmf_linkcheck_url_nodes",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "tmf_linkcheck_anchor_href",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "tmf_image_access_link_presence",
+          "score": [
+            0,
+            2,
+            2,
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.dataLicensePreset": {
+      "winner": {
+        "rule_id": "tmf_license_docucomp_statement",
+        "rule_set": "tmf-candidates",
+        "version": "1",
+        "record_type": "collection",
+        "field_key": "mission.dataLicensePreset",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Record should include data license resourceConstraints statement",
+        "source_file": "add-data-licensing-information-main/datalicensing.py",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "tmf-scripts-MCD001_Abiola",
+        "notes": "Derived from TMF automation that inserts Docucomp license component",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "tmf_license_docucomp_statement",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.licenseUrl": {
+      "winner": {
+        "rule_id": "tmf_license_docucomp_href",
+        "rule_set": "tmf-candidates",
+        "version": "1",
+        "record_type": "collection",
+        "field_key": "mission.licenseUrl",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "url",
+        "enum_values_json": "",
+        "pattern_regex": "^https://data\\\\.noaa\\\\.gov/docucomp/[0-9a-fA-F-]{36}$",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "License URL should reference valid Docucomp component UUID",
+        "source_file": "add-data-licensing-information-main/datalicensing.py",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "tmf-scripts-MCD001_Abiola",
+        "notes": "Matches Docucomp-centric licensing practice",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "tmf_license_docucomp_href",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "keywords.theme": {
+      "winner": {
+        "rule_id": "tmf_keywords_theme_presence",
+        "rule_set": "tmf-candidates",
+        "version": "1",
+        "record_type": "collection",
+        "field_key": "keywords.theme",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Theme keywords should be present for discovery",
+        "source_file": "iso-keyword-automation-nct412-main/insert_iso_keywords.py",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "tmf-scripts-MCD001_Abiola",
+        "notes": "Backs existing NCEI/OER required-field gates",
+        "active": "true"
+      },
+      "losers": [
+        "tmf_keywords_anchor_upgrade",
+        "tmf_goes_variant_keyword_consistency"
+      ],
+      "trace": [
+        {
+          "rule_id": "tmf_keywords_theme_presence",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "tmf_keywords_anchor_upgrade",
+          "score": [
+            0,
+            2,
+            2,
+            1,
+            1
+          ]
+        },
+        {
+          "rule_id": "tmf_goes_variant_keyword_consistency",
+          "score": [
+            0,
+            2,
+            2,
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    "keywords.place": {
+      "winner": {
+        "rule_id": "tmf_keywords_place_presence",
+        "rule_set": "tmf-candidates",
+        "version": "1",
+        "record_type": "collection",
+        "field_key": "keywords.place",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Place keywords should be present for geographic discovery",
+        "source_file": "iso-keyword-automation-nct412-main/insert_iso_keywords.py",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "tmf-scripts-MCD001_Abiola",
+        "notes": "Complements theme keyword requirement",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "tmf_keywords_place_presence",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "keywords.instrument": {
+      "winner": {
+        "rule_id": "tmf_keywords_instrument_presence",
+        "rule_set": "tmf-candidates",
+        "version": "1",
+        "record_type": "collection",
+        "field_key": "keywords.instrument",
+        "xpath": "",
+        "requirement": "recommended",
+        "cardinality_min": "0",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "warn",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Instrument keywords should be present when instrumentation is known",
+        "source_file": "iso-keyword-automation-nct412-main/insert_iso_keywords.py",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "tmf-scripts-MCD001_Abiola",
+        "notes": "Promote to block for instrument-heavy domains",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "tmf_keywords_instrument_presence",
+          "score": [
+            0,
+            2,
+            2,
+            1,
+            1
+          ]
+        }
+      ]
+    }
+  }
+}

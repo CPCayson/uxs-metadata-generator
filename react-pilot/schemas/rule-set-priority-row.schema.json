@@ -1,0 +1,11 @@
+{
+  "$id": "https://uxs.local/schemas/rule-set-priority-row.schema.json",
+  "type": "object",
+  "required": ["rule_set", "priority", "active"],
+  "properties": {
+    "rule_set": { "type": "string", "minLength": 1 },
+    "priority": { "type": "integer" },
+    "description": { "type": "string" },
+    "active": { "type": "boolean" }
+  }
+}

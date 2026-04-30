@@ -1,0 +1,711 @@
+{
+  "recordType": "granule",
+  "generatedAt": "2026-04-30T11:54:10.812Z",
+  "unresolvedTies": [],
+  "fields": {
+    "parentCollectionId": {
+      "winner": {
+        "rule_id": "bedi_granule_parentcollectionid_1",
+        "rule_set": "bedi-granule-core",
+        "version": "1",
+        "record_type": "granule",
+        "field_key": "parentCollectionId",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Parent collection identifier is required — granules MUST link to a collection via gmd:parentIdentifier",
+        "source_file": "src/profiles/bedi/bediGranuleRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-granule-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [
+        "bedi_granule_parentcollectionid_2"
+      ],
+      "trace": [
+        {
+          "rule_id": "bedi_granule_parentcollectionid_1",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "bedi_granule_parentcollectionid_2",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "fileId": {
+      "winner": {
+        "rule_id": "bedi_granule_fileid_3",
+        "rule_set": "bedi-granule-core",
+        "version": "1",
+        "record_type": "granule",
+        "field_key": "fileId",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "File identifier is required",
+        "source_file": "src/profiles/bedi/bediGranuleRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-granule-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [
+        "bedi_granule_fileid_4"
+      ],
+      "trace": [
+        {
+          "rule_id": "bedi_granule_fileid_3",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "bedi_granule_fileid_4",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "granuleId": {
+      "winner": {
+        "rule_id": "bedi_granule_granuleid_5",
+        "rule_set": "bedi-granule-core",
+        "version": "1",
+        "record_type": "granule",
+        "field_key": "granuleId",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Granule identifier (short ID) is required",
+        "source_file": "src/profiles/bedi/bediGranuleRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-granule-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "bedi_granule_granuleid_5",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "hierarchyLevel": {
+      "winner": {
+        "rule_id": "bedi_granule_hierarchylevel_6",
+        "rule_set": "bedi-granule-core",
+        "version": "1",
+        "record_type": "granule",
+        "field_key": "hierarchyLevel",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "BEDI granules must have hierarchyLevel = dataset",
+        "source_file": "src/profiles/bedi/bediGranuleRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-granule-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "bedi_granule_hierarchylevel_6",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "title": {
+      "winner": {
+        "rule_id": "bedi_granule_title_7",
+        "rule_set": "bedi-granule-core",
+        "version": "1",
+        "record_type": "granule",
+        "field_key": "title",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Title is required",
+        "source_file": "src/profiles/bedi/bediGranuleRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-granule-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "bedi_granule_title_7",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "presentationForm": {
+      "winner": {
+        "rule_id": "bedi_granule_presentationform_8",
+        "rule_set": "bedi-granule-core",
+        "version": "1",
+        "record_type": "granule",
+        "field_key": "presentationForm",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Presentation form is required for BEDI granules (expected: videoDigital)",
+        "source_file": "src/profiles/bedi/bediGranuleRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-granule-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "bedi_granule_presentationform_8",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "creationDate": {
+      "winner": {
+        "rule_id": "bedi_granule_creationdate_9",
+        "rule_set": "bedi-granule-core",
+        "version": "1",
+        "record_type": "granule",
+        "field_key": "creationDate",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "date",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Creation date is required",
+        "source_file": "src/profiles/bedi/bediGranuleRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-granule-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "bedi_granule_creationdate_9",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "abstract": {
+      "winner": {
+        "rule_id": "bedi_granule_abstract_10",
+        "rule_set": "bedi-granule-core",
+        "version": "1",
+        "record_type": "granule",
+        "field_key": "abstract",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Abstract is required",
+        "source_file": "src/profiles/bedi/bediGranuleRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-granule-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "bedi_granule_abstract_10",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "status": {
+      "winner": {
+        "rule_id": "bedi_granule_status_11",
+        "rule_set": "bedi-granule-core",
+        "version": "1",
+        "record_type": "granule",
+        "field_key": "status",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Status is required",
+        "source_file": "src/profiles/bedi/bediGranuleRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-granule-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "bedi_granule_status_11",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "diveId": {
+      "winner": {
+        "rule_id": "bedi_granule_diveid_12",
+        "rule_set": "bedi-granule-core",
+        "version": "1",
+        "record_type": "granule",
+        "field_key": "diveId",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Dive identifier is required (e.g. JSL2-3699, parsed from file ID)",
+        "source_file": "src/profiles/bedi/bediGranuleRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-granule-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "bedi_granule_diveid_12",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "west": {
+      "winner": {
+        "rule_id": "bedi_granule_west_13",
+        "rule_set": "bedi-granule-core",
+        "version": "1",
+        "record_type": "granule",
+        "field_key": "west",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Bounding box W/E/S/N is required",
+        "source_file": "src/profiles/bedi/bediGranuleRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-granule-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "bedi_granule_west_13",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "startDate": {
+      "winner": {
+        "rule_id": "bedi_granule_startdate_14",
+        "rule_set": "bedi-granule-core",
+        "version": "1",
+        "record_type": "granule",
+        "field_key": "startDate",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "date",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Observation start date/time is required",
+        "source_file": "src/profiles/bedi/bediGranuleRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-granule-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "bedi_granule_startdate_14",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "endDate": {
+      "winner": {
+        "rule_id": "bedi_granule_enddate_15",
+        "rule_set": "bedi-granule-core",
+        "version": "1",
+        "record_type": "granule",
+        "field_key": "endDate",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "date",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Observation end date/time is required",
+        "source_file": "src/profiles/bedi/bediGranuleRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-granule-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "bedi_granule_enddate_15",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "maxDepth": {
+      "winner": {
+        "rule_id": "bedi_granule_maxdepth_16",
+        "rule_set": "bedi-granule-core",
+        "version": "1",
+        "record_type": "granule",
+        "field_key": "maxDepth",
+        "xpath": "",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "decimal",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Maximum dive depth (meters) is required for BEDI granules",
+        "source_file": "src/profiles/bedi/bediGranuleRules.js",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "bedi-granule-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "bedi_granule_maxdepth_16",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "ident.fileIdentifier": {
+      "winner": {
+        "rule_id": "onestop_fileidentifier_single_v1",
+        "rule_set": "onestop",
+        "version": "1",
+        "record_type": "any",
+        "field_key": "ident.fileIdentifier",
+        "xpath": "//gmd:fileIdentifier",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "1",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "fileIdentifier must appear exactly once",
+        "source_file": "WAF metadata.xlsx",
+        "source_tab": "Checks",
+        "source_row": "7",
+        "source_ref": "FileIdentifierCheck",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "onestop_fileidentifier_single_v1",
+          "score": [
+            900,
+            1,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "ident.archiveObjectUuid": {
+      "winner": {
+        "rule_id": "onestop_granule_archive_uuid_format_v1",
+        "rule_set": "onestop",
+        "version": "1",
+        "record_type": "granule",
+        "field_key": "ident.archiveObjectUuid",
+        "xpath": "",
+        "requirement": "recommended",
+        "cardinality_min": "0",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+        "condition_expr": "",
+        "severity": "warn",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Granule archive-class UUID should be UUID v4 for OneStop segment ingest",
+        "source_file": "OneStop ingest notes",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "UUID granule guidance",
+        "notes": "Starter rule; archive-class mapping details pending confirmation",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "onestop_granule_archive_uuid_format_v1",
+          "score": [
+            900,
+            2,
+            2,
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    "ident.parentCollectionUuid": {
+      "winner": {
+        "rule_id": "onestop_granule_parent_collection_uuid_format_v1",
+        "rule_set": "onestop",
+        "version": "1",
+        "record_type": "granule",
+        "field_key": "ident.parentCollectionUuid",
+        "xpath": "",
+        "requirement": "recommended",
+        "cardinality_min": "0",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+        "condition_expr": "",
+        "severity": "warn",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Granule parent collection UUID should be UUID v4 and match collection linkage when provided",
+        "source_file": "OneStop ingest notes",
+        "source_tab": "",
+        "source_row": "",
+        "source_ref": "UUID parent linkage guidance",
+        "notes": "Starter rule; cross-record match check to be added in ingest join step",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "onestop_granule_parent_collection_uuid_format_v1",
+          "score": [
+            900,
+            2,
+            2,
+            1,
+            1
+          ]
+        }
+      ]
+    }
+  }
+}

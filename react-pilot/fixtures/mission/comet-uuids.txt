@@ -1,0 +1,3 @@
+# Put CoMET mission UUIDs here, one per line.
+# Example:
+# 2d5bd2e0-3fd1-11ef-b1be-0800200c9a66

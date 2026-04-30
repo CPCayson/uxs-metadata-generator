@@ -1,0 +1,5 @@
+# Optional: use with `npm run swarm:export:comet:missions -- --record-groups-file fixtures/mission/comet-record-groups.txt --count 10`
+# Paste CoMET Search → record group dropdown labels here, one per line (exact spelling).
+# Example lines (replace with yours):
+# Manta
+# connor.cayson@noaa.gov | Personal Repository

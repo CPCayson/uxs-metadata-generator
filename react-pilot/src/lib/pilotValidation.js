@@ -1,5 +1,6 @@
 import { SENSOR_XML_OPTIONAL_DEFAULTS } from './sensorInstrumentDescription.js'
 import { canonicalMissionInstantForStorage, normalizeMissionInstantString } from './datetimeLocal.js'
+import { normalizeDataLicensePresetKey } from './noaaLicensePresets.js'
 import { previewMetadataXPath } from './metadataXPath.js'
 
 /** @typedef {'e'|'w'} Severity */
@@ -91,7 +92,9 @@ export function normalizeNceiAccessionToken(raw) {
   let acc = String(raw ?? '')
     .replace(/\u00a0/g, ' ')
     .trim()
-    .replace(/\s/g, '')
+  const accPref = acc.match(/^NCEI\s*Accession\s*ID\s*:\s*(.+)$/i)
+  if (accPref) acc = accPref[1].trim()
+  acc = acc.replace(/\s/g, '')
   acc = acc.replace(/^gov\.noaa\.ncei\.uxs:/i, '')
   return acc
 }
@@ -277,6 +280,18 @@ export function sanitizePilotState(state) {
       const t = String(d.nceiFileIdPrefix).trim()
       if (t === '') delete d.nceiFileIdPrefix
       else d.nceiFileIdPrefix = truthyFlag(d.nceiFileIdPrefix)
+    }
+    const preset = normalizeDataLicensePresetKey(out.mission?.dataLicensePreset)
+    if (!String(d.license || '').trim()) {
+      if (preset === 'ncei_cc_by_4') d.license = 'CC-BY-4.0'
+      else if (
+        preset === 'ncei_cc0' ||
+        preset === 'ncei_cc0_internal_noaa' ||
+        preset === 'cc0_acdo' ||
+        preset === 'cc0_acdo_and_ncei'
+      ) {
+        d.license = 'CC0-1.0'
+      }
     }
   }
 

@@ -1,0 +1,413 @@
+{
+  "generatedAt": "2026-04-30T12:32:01.650Z",
+  "sourceFile": "fixtures/mission/navy-uxs-swarm-clean.xml",
+  "import": {
+    "ok": true,
+    "warnings": []
+  },
+  "mappedSummary": {
+    "mission": [
+      "fileId",
+      "title",
+      "abstract",
+      "purpose",
+      "supplementalInformation",
+      "startDate",
+      "endDate",
+      "publicationDate",
+      "metadataRecordDate",
+      "temporalExtentIntervalUnit",
+      "temporalExtentIntervalValue",
+      "language",
+      "characterSet",
+      "scopeCode",
+      "status",
+      "doi",
+      "accession",
+      "org",
+      "individualName",
+      "email",
+      "contactUrl",
+      "west",
+      "east",
+      "south",
+      "north",
+      "vmin",
+      "vmax",
+      "ror",
+      "otherCiteAs",
+      "dataLicensePreset",
+      "distributionLiability",
+      "parentProjectTitle",
+      "parentProjectDate",
+      "parentProjectCode",
+      "relatedDatasetTitle",
+      "relatedDatasetDate",
+      "relatedDatasetCode",
+      "associatedPublicationTitle",
+      "associatedPublicationDate",
+      "topicCategories",
+      "citationAuthorIndividualName",
+      "citationAuthorOrganisationName",
+      "citationPublisherOrganisationName",
+      "citationOriginatorIndividualName",
+      "citationOriginatorOrganisationName",
+      "graphicOverviewHref",
+      "graphicOverviewTitle",
+      "uxsContext"
+    ],
+    "platform": [
+      "platformType",
+      "platformId",
+      "platformDesc"
+    ],
+    "spatial": [
+      "referenceSystem",
+      "geographicDescription",
+      "useGridRepresentation",
+      "gridCellGeometry",
+      "gridColumnSize",
+      "gridColumnResolution",
+      "gridRowSize",
+      "gridRowResolution",
+      "gridVerticalSize",
+      "gridVerticalResolution",
+      "hasTrajectory"
+    ],
+    "keywordFacetCounts": {
+      "sciencekeywords": 1,
+      "datacenters": 2,
+      "platforms": 1,
+      "instruments": 1,
+      "locations": 1,
+      "projects": 1,
+      "providers": 1
+    },
+    "sensorRows": 3,
+    "distribution": [
+      "format",
+      "distributionFormatName",
+      "metadataStandard",
+      "metadataVersion",
+      "license",
+      "landingUrl",
+      "downloadUrl",
+      "metadataLandingUrl",
+      "metadataLandingLinkName",
+      "downloadProtocol",
+      "downloadLinkName",
+      "downloadLinkDescription",
+      "distributionFeesText",
+      "distributionOrderingInstructions",
+      "metadataMaintenanceFrequency",
+      "useNceiMetadataContactXlink",
+      "omitRootReferenceSystemInfo",
+      "nceiFileIdPrefix",
+      "nceiMetadataContactHref",
+      "nceiMetadataContactTitle",
+      "nceiDistributorContactHref",
+      "nceiDistributorContactTitle",
+      "outputLocation",
+      "parentProject",
+      "publication"
+    ]
+  },
+  "validation": {
+    "lenient": {
+      "errCount": 0,
+      "warnCount": 11,
+      "byStep": {
+        "mission": {
+          "label": "1. Mission",
+          "errors": []
+        },
+        "platform": {
+          "label": "2. Platform",
+          "errors": []
+        },
+        "sensors": {
+          "label": "3. Sensors",
+          "errors": []
+        },
+        "spatial": {
+          "label": "4. Spatial",
+          "errors": []
+        },
+        "keywords": {
+          "label": "5. Keywords",
+          "errors": []
+        },
+        "distribution": {
+          "label": "6. Distribution",
+          "errors": []
+        }
+      },
+      "issues": [
+        {
+          "severity": "w",
+          "field": "mission.abstract",
+          "message": "Abstract is short; include objective, platform/sensor, area, dates, and data product.",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "severity": "w",
+          "field": "mission.abstract",
+          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "severity": "w",
+          "field": "mission.abstract",
+          "message": "Abstract uses acronym \"QA\"; expand it on first use when possible.",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "severity": "w",
+          "field": "keywords.sciencekeywords[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "severity": "w",
+          "field": "keywords.datacenters[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "severity": "w",
+          "field": "keywords.datacenters[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "severity": "w",
+          "field": "keywords.platforms[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "severity": "w",
+          "field": "keywords.instruments[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "severity": "w",
+          "field": "keywords.locations[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "severity": "w",
+          "field": "keywords.projects[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "severity": "w",
+          "field": "keywords.providers[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ]
+    },
+    "strict": {
+      "errCount": 0,
+      "warnCount": 11,
+      "byStep": {
+        "mission": {
+          "label": "1. Mission",
+          "errors": []
+        },
+        "platform": {
+          "label": "2. Platform",
+          "errors": []
+        },
+        "sensors": {
+          "label": "3. Sensors",
+          "errors": []
+        },
+        "spatial": {
+          "label": "4. Spatial",
+          "errors": []
+        },
+        "keywords": {
+          "label": "5. Keywords",
+          "errors": []
+        },
+        "distribution": {
+          "label": "6. Distribution",
+          "errors": []
+        }
+      },
+      "issues": [
+        {
+          "severity": "w",
+          "field": "mission.abstract",
+          "message": "Abstract is short; include objective, platform/sensor, area, dates, and data product.",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "severity": "w",
+          "field": "mission.abstract",
+          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "severity": "w",
+          "field": "mission.abstract",
+          "message": "Abstract uses acronym \"QA\"; expand it on first use when possible.",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "severity": "w",
+          "field": "keywords.sciencekeywords[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "severity": "w",
+          "field": "keywords.datacenters[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "severity": "w",
+          "field": "keywords.datacenters[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "severity": "w",
+          "field": "keywords.platforms[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "severity": "w",
+          "field": "keywords.instruments[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "severity": "w",
+          "field": "keywords.locations[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "severity": "w",
+          "field": "keywords.projects[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "severity": "w",
+          "field": "keywords.providers[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ]
+    },
+    "catalog": {
+      "errCount": 0,
+      "warnCount": 11,
+      "byStep": {
+        "mission": {
+          "label": "1. Mission",
+          "errors": []
+        },
+        "platform": {
+          "label": "2. Platform",
+          "errors": []
+        },
+        "sensors": {
+          "label": "3. Sensors",
+          "errors": []
+        },
+        "spatial": {
+          "label": "4. Spatial",
+          "errors": []
+        },
+        "keywords": {
+          "label": "5. Keywords",
+          "errors": []
+        },
+        "distribution": {
+          "label": "6. Distribution",
+          "errors": []
+        }
+      },
+      "issues": [
+        {
+          "severity": "w",
+          "field": "mission.abstract",
+          "message": "Abstract is short; include objective, platform/sensor, area, dates, and data product.",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "severity": "w",
+          "field": "mission.abstract",
+          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "severity": "w",
+          "field": "mission.abstract",
+          "message": "Abstract uses acronym \"QA\"; expand it on first use when possible.",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "severity": "w",
+          "field": "keywords.sciencekeywords[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "severity": "w",
+          "field": "keywords.datacenters[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "severity": "w",
+          "field": "keywords.datacenters[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "severity": "w",
+          "field": "keywords.platforms[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "severity": "w",
+          "field": "keywords.instruments[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "severity": "w",
+          "field": "keywords.locations[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "severity": "w",
+          "field": "keywords.projects[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "severity": "w",
+          "field": "keywords.providers[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ]
+    }
+  },
+  "fixChecklist": [],
+  "catalogReady": true
+}

@@ -1,0 +1,2241 @@
+{
+  "recordType": "mission",
+  "generatedAt": "2026-04-30T11:54:10.808Z",
+  "unresolvedTies": [],
+  "fields": {
+    "mission.abstract": {
+      "winner": {
+        "rule_id": "mission_core_mission_abstract_abstract_is_required_1",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "mission.abstract",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Abstract is required",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "2",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [
+        "mission_core_mission_abstract_abstract_quality_warnings_2"
+      ],
+      "trace": [
+        {
+          "rule_id": "mission_core_mission_abstract_abstract_is_required_1",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "mission_core_mission_abstract_abstract_quality_warnings_2",
+          "score": [
+            0,
+            2,
+            2,
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.accession": {
+      "winner": {
+        "rule_id": "mission_core_mission_accession_ncei_accession_must_be_alphanumeric_3",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "mission.accession",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "decimal",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "NCEI Accession must be alphanumeric",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "4",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [
+        "mission_strict_mission_accession_strict_mode_ncei_accession_is_requir_4",
+        "mission_catalog_mission_accession_catalog_mode_ncei_accession_is_requi_5"
+      ],
+      "trace": [
+        {
+          "rule_id": "mission_core_mission_accession_ncei_accession_must_be_alphanumeric_3",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "mission_strict_mission_accession_strict_mode_ncei_accession_is_requir_4",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "mission_catalog_mission_accession_catalog_mode_ncei_accession_is_requi_5",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.bbox": {
+      "winner": {
+        "rule_id": "mission_core_mission_bbox_bounding_box_must_be_numeric_w_e_s_n_6",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "mission.bbox",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_GeographicBoundingBox",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "decimal",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Bounding box must be numeric W/E/S/N",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "7",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [
+        "mission_core_mission_bbox_bounding_box_invalid_west_east_south_7"
+      ],
+      "trace": [
+        {
+          "rule_id": "mission_core_mission_bbox_bounding_box_must_be_numeric_w_e_s_n_6",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "mission_core_mission_bbox_bounding_box_invalid_west_east_south_7",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.contactUrl": {
+      "winner": {
+        "rule_id": "mission_core_mission_contacturl_contact_url_must_be_http_s_8",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "mission.contactUrl",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:onlineResource/gmd:CI_OnlineResource/gmd:linkage",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "url",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Contact URL must be http(s)",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "9",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_mission_contacturl_contact_url_must_be_http_s_8",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.doi": {
+      "winner": {
+        "rule_id": "mission_core_mission_doi_doi_must_look_like_10_xxxx_9",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "mission.doi",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "DOI must look like 10.xxxx/...",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "10",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [
+        "mission_strict_mission_doi_strict_mode_doi_is_required_10",
+        "mission_catalog_mission_doi_catalog_mode_doi_is_required_11"
+      ],
+      "trace": [
+        {
+          "rule_id": "mission_core_mission_doi_doi_must_look_like_10_xxxx_9",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "mission_strict_mission_doi_strict_mode_doi_is_required_10",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "mission_catalog_mission_doi_catalog_mode_doi_is_required_11",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.email": {
+      "winner": {
+        "rule_id": "mission_core_mission_email_email_is_required_12",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "mission.email",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:electronicMailAddress",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Email is required",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "13",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [
+        "mission_core_mission_email_email_format_looks_invalid_13"
+      ],
+      "trace": [
+        {
+          "rule_id": "mission_core_mission_email_email_is_required_12",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "mission_core_mission_email_email_format_looks_invalid_13",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.endDate": {
+      "winner": {
+        "rule_id": "mission_core_mission_enddate_end_date_is_required_14",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "mission.endDate",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "date",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "End date is required",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "15",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [
+        "mission_core_mission_enddate_end_date_must_be_yyyy_mm_dd_or_datet_15",
+        "mission_core_mission_enddate_end_date_must_be_on_or_after_start_d_16"
+      ],
+      "trace": [
+        {
+          "rule_id": "mission_core_mission_enddate_end_date_is_required_14",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "mission_core_mission_enddate_end_date_must_be_yyyy_mm_dd_or_datet_15",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "mission_core_mission_enddate_end_date_must_be_on_or_after_start_d_16",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.fileId": {
+      "winner": {
+        "rule_id": "mission_core_mission_fileid_file_identifier_is_required_17",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "mission.fileId",
+        "xpath": "/gmd:MD_Metadata/gmd:fileIdentifier",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "File Identifier is required",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "18",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_mission_fileid_file_identifier_is_required_17",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.individualName": {
+      "winner": {
+        "rule_id": "mission_core_mission_individualname_individual_name_is_required_18",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "mission.individualName",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Individual name is required",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "19",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_mission_individualname_individual_name_is_required_18",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.language": {
+      "winner": {
+        "rule_id": "mission_core_mission_language_metadata_language_is_required_19",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "mission.language",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:language/gmd:LanguageCode",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Metadata language is required",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "20",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_mission_language_metadata_language_is_required_19",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.licenseUrl": {
+      "winner": {
+        "rule_id": "mission_core_mission_licenseurl_license_url_must_be_http_s_20",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "mission.licenseUrl",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "url",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "License URL must be http(s)",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "21",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [
+        "mission_strict_mission_licenseurl_license_url_is_required_when_data_li_22",
+        "mission_catalog_mission_licenseurl_license_url_is_required_when_data_li_23",
+        "mission_lenient_only_mission_licenseurl_license_url_recommended_when_preset__21"
+      ],
+      "trace": [
+        {
+          "rule_id": "mission_core_mission_licenseurl_license_url_must_be_http_s_20",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "mission_strict_mission_licenseurl_license_url_is_required_when_data_li_22",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "mission_catalog_mission_licenseurl_license_url_is_required_when_data_li_23",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "mission_lenient_only_mission_licenseurl_license_url_recommended_when_preset__21",
+          "score": [
+            0,
+            2,
+            2,
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.metadataRecordDate": {
+      "winner": {
+        "rule_id": "mission_core_mission_metadatarecorddate_metadata_record_date_must_be_yyyy_mm_24",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "mission.metadataRecordDate",
+        "xpath": "/gmd:MD_Metadata/gmd:dateStamp",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "date",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Metadata record date must be YYYY-MM-DD or datetime-local",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "25",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_mission_metadatarecorddate_metadata_record_date_must_be_yyyy_mm_24",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.org": {
+      "winner": {
+        "rule_id": "mission_core_mission_org_organization_name_is_required_25",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "mission.org",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:organisationName",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Organization name is required",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "26",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_mission_org_organization_name_is_required_25",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.parentProjectTitle": {
+      "winner": {
+        "rule_id": "mission_catalog_mission_parentprojecttitle_catalog_mode_enter_parent_project_on_26",
+        "rule_set": "mission-catalog",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "mission.parentProjectTitle",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "27",
+        "source_ref": "mission-catalog",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_catalog_mission_parentprojecttitle_catalog_mode_enter_parent_project_on_26",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.publicationDate": {
+      "winner": {
+        "rule_id": "mission_core_mission_publicationdate_publication_date_must_be_yyyy_mm_dd__27",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "mission.publicationDate",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:date",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "date",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Publication date must be YYYY-MM-DD or datetime-local",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "28",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_mission_publicationdate_publication_date_must_be_yyyy_mm_dd__27",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.purpose": {
+      "winner": {
+        "rule_id": "mission_core_mission_purpose_purpose_dataset_is_required_28",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "mission.purpose",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:purpose",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Purpose (dataset) is required",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "29",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_mission_purpose_purpose_dataset_is_required_28",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.relatedDataUrl": {
+      "winner": {
+        "rule_id": "mission_core_mission_relateddataurl_related_data_url_must_be_http_s_29",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "mission.relatedDataUrl",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "url",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Related data URL must be http(s)",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "30",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_mission_relateddataurl_related_data_url_must_be_http_s_29",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.ror": {
+      "winner": {
+        "rule_id": "mission_strict_mission_ror_strict_mode_ror_is_required_31",
+        "rule_set": "mission-strict",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "mission.ror",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Strict mode: ROR is required",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "32",
+        "source_ref": "mission-strict",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [
+        "mission_catalog_mission_ror_catalog_mode_ror_is_required_32",
+        "mission_lenient_only_mission_ror_no_ror_selected_recommended_for_orga_30"
+      ],
+      "trace": [
+        {
+          "rule_id": "mission_strict_mission_ror_strict_mode_ror_is_required_31",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "mission_catalog_mission_ror_catalog_mode_ror_is_required_32",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "mission_lenient_only_mission_ror_no_ror_selected_recommended_for_orga_30",
+          "score": [
+            0,
+            2,
+            2,
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.startDate": {
+      "winner": {
+        "rule_id": "mission_core_mission_startdate_creation_start_date_is_required_33",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "mission.startDate",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "date",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Creation / Start date is required",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "34",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [
+        "mission_core_mission_startdate_start_date_must_be_yyyy_mm_dd_or_dat_34"
+      ],
+      "trace": [
+        {
+          "rule_id": "mission_core_mission_startdate_creation_start_date_is_required_33",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "mission_core_mission_startdate_start_date_must_be_yyyy_mm_dd_or_dat_34",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.status": {
+      "winner": {
+        "rule_id": "mission_core_mission_status_status_is_required_35",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "mission.status",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:status/gmd:MD_ProgressCode",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Status is required",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "36",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_mission_status_status_is_required_35",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.title": {
+      "winner": {
+        "rule_id": "mission_core_mission_title_title_is_required_36",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "mission.title",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:title",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Title is required",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "37",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_mission_title_title_is_required_36",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.uxsContext": {
+      "winner": {
+        "rule_id": "mission_catalog_mission_uxscontext_catalog_mode_add_structured_uxs_oper_37",
+        "rule_set": "mission-catalog",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "mission.uxsContext",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation",
+        "requirement": "recommended",
+        "cardinality_min": "0",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "warn",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Catalog mode: add structured UxS operational ID/name for the selected layer instead of only title or abstract text",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "38",
+        "source_ref": "mission-catalog",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_catalog_mission_uxscontext_catalog_mode_add_structured_uxs_oper_37",
+          "score": [
+            0,
+            2,
+            2,
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.uxsContext.primaryLayer": {
+      "winner": {
+        "rule_id": "mission_catalog_mission_uxscontext_primarylayer_catalog_mode_confirm_what_operationa_38",
+        "rule_set": "mission-catalog",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "mission.uxsContext.primaryLayer",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation",
+        "requirement": "recommended",
+        "cardinality_min": "0",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "warn",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Catalog mode: confirm what operational layer this UxS record primarily describes",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "39",
+        "source_ref": "mission-catalog",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_catalog_mission_uxscontext_primarylayer_catalog_mode_confirm_what_operationa_38",
+          "score": [
+            0,
+            2,
+            2,
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.uxsContext.runId": {
+      "winner": {
+        "rule_id": "mission_catalog_mission_uxscontext_runid_catalog_mode_run_sortie_and_dive_rec_39",
+        "rule_set": "mission-catalog",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "mission.uxsContext.runId",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo",
+        "requirement": "recommended",
+        "cardinality_min": "0",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "warn",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Catalog mode: run, sortie, and dive records should include the parent run/deployment identifier when available",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "40",
+        "source_ref": "mission-catalog",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_catalog_mission_uxscontext_runid_catalog_mode_run_sortie_and_dive_rec_39",
+          "score": [
+            0,
+            2,
+            2,
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.vertical": {
+      "winner": {
+        "rule_id": "mission_core_mission_vertical_vertical_min_must_be_max_40",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "mission.vertical",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:verticalElement",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Vertical min must be ≤ max",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "41",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_mission_vertical_vertical_min_must_be_max_40",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.vmax": {
+      "winner": {
+        "rule_id": "mission_core_mission_vmax_vertical_max_must_be_numeric_41",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "mission.vmax",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:verticalElement",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "decimal",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Vertical max must be numeric",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "42",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_mission_vmax_vertical_max_must_be_numeric_41",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "mission.vmin": {
+      "winner": {
+        "rule_id": "mission_core_mission_vmin_vertical_min_must_be_numeric_42",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "mission.vmin",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:verticalElement",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "decimal",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Vertical min must be numeric",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "43",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_mission_vmin_vertical_min_must_be_numeric_42",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "platform.platformDesc": {
+      "winner": {
+        "rule_id": "mission_core_platform_platformdesc_platform_description_is_required_43",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "platform.platformDesc",
+        "xpath": "/gmi:MI_Metadata/gmi:acquisitionInformation/gmi:MI_AcquisitionInformation/gmi:platform/gmi:MI_Platform/gmd:description",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Platform description is required",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "44",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_platform_platformdesc_platform_description_is_required_43",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "platform.platformId": {
+      "winner": {
+        "rule_id": "mission_core_platform_platformid_platform_id_is_required_44",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "platform.platformId",
+        "xpath": "/gmi:MI_Metadata/gmi:acquisitionInformation/gmi:MI_AcquisitionInformation/gmi:platform/gmi:MI_Platform/gmd:identifier/gmd:MD_Identifier/gmd:code",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Platform ID is required",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "45",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_platform_platformid_platform_id_is_required_44",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "platform.platformType": {
+      "winner": {
+        "rule_id": "mission_core_platform_platformtype_platform_type_is_required_45",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "platform.platformType",
+        "xpath": "/gmi:MI_Metadata/gmi:acquisitionInformation/gmi:MI_AcquisitionInformation/gmi:platform/gmi:MI_Platform/gmi:type",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Platform type is required",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "46",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_platform_platformtype_platform_type_is_required_45",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "sensors": {
+      "winner": {
+        "rule_id": "mission_core_sensors_at_least_one_sensor_is_required_46",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "sensors",
+        "xpath": "/gmd:MD_Metadata/gmd:contentInfo/gmi:MI_CoverageDescription",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "At least one sensor is required",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "47",
+        "source_ref": "mission-core",
+        "notes": "Per active sensor row: type, modelId/sensorId, variable; optional GCMD alignment warning.",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_sensors_at_least_one_sensor_is_required_46",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "keywords": {
+      "winner": {
+        "rule_id": "mission_core_keywords_keyword_facets_required_47",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "keywords",
+        "xpath": "/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Keyword facets required",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "48",
+        "source_ref": "mission-core",
+        "notes": "One error row per empty GCMD facet (sciencekeywords, datacenters, …).",
+        "active": "true"
+      },
+      "losers": [
+        "mission_core_keywords_gcmd_keyword_chip_uuid_quality_48"
+      ],
+      "trace": [
+        {
+          "rule_id": "mission_core_keywords_keyword_facets_required_47",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "mission_core_keywords_gcmd_keyword_chip_uuid_quality_48",
+          "score": [
+            0,
+            2,
+            2,
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    "spatial.accuracyValue": {
+      "winner": {
+        "rule_id": "mission_core_spatial_accuracyvalue_positional_accuracy_value_must_be_nu_49",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "spatial.accuracyValue",
+        "xpath": "/gmd:MD_Metadata/gmd:dataQualityInfo",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "decimal",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Positional accuracy value must be numeric",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "50",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_spatial_accuracyvalue_positional_accuracy_value_must_be_nu_49",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "spatial.errorValue": {
+      "winner": {
+        "rule_id": "mission_core_spatial_errorvalue_error_value_must_be_numeric_50",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "spatial.errorValue",
+        "xpath": "/gmd:MD_Metadata/gmd:dataQualityInfo",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "decimal",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Error value must be numeric",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "51",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_spatial_errorvalue_error_value_must_be_numeric_50",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "spatial.gridColumnSize": {
+      "winner": {
+        "rule_id": "mission_core_spatial_gridcolumnsize_gridcolumnsize_must_be_numeric_51",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "spatial.gridColumnSize",
+        "xpath": "/gmd:MD_Metadata/gmd:spatialRepresentationInfo",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "decimal",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "gridColumnSize: must be numeric",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "52",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_spatial_gridcolumnsize_gridcolumnsize_must_be_numeric_51",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "spatial.gridRepresentation": {
+      "winner": {
+        "rule_id": "mission_strict_spatial_gridrepresentation_strict_mode_grid_column_size_and_row_52",
+        "rule_set": "mission-strict",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "spatial.gridRepresentation",
+        "xpath": "/gmd:MD_Metadata/gmd:spatialRepresentationInfo",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Strict mode: grid column size and row size are required when grid representation is enabled",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "53",
+        "source_ref": "mission-strict",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_strict_spatial_gridrepresentation_strict_mode_grid_column_size_and_row_52",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "spatial.gridRowSize": {
+      "winner": {
+        "rule_id": "mission_core_spatial_gridrowsize_gridrowsize_must_be_numeric_53",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "spatial.gridRowSize",
+        "xpath": "/gmd:MD_Metadata/gmd:spatialRepresentationInfo",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "decimal",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "gridRowSize: must be numeric",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "54",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_spatial_gridrowsize_gridrowsize_must_be_numeric_53",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "spatial.gridVerticalSize": {
+      "winner": {
+        "rule_id": "mission_core_spatial_gridverticalsize_gridverticalsize_must_be_numeric_54",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "spatial.gridVerticalSize",
+        "xpath": "/gmd:MD_Metadata/gmd:spatialRepresentationInfo",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "decimal",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "gridVerticalSize: must be numeric",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "55",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_spatial_gridverticalsize_gridverticalsize_must_be_numeric_54",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "spatial.trajectorySampling": {
+      "winner": {
+        "rule_id": "mission_strict_spatial_trajectorysampling_trajectory_sampling_is_required_when_55",
+        "rule_set": "mission-strict",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "spatial.trajectorySampling",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Trajectory sampling is required when trajectory is enabled",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "56",
+        "source_ref": "mission-strict",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [
+        "mission_catalog_spatial_trajectorysampling_trajectory_sampling_is_required_when_56"
+      ],
+      "trace": [
+        {
+          "rule_id": "mission_strict_spatial_trajectorysampling_trajectory_sampling_is_required_when_55",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "mission_catalog_spatial_trajectorysampling_trajectory_sampling_is_required_when_56",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "spatial.verticalCrsUrl": {
+      "winner": {
+        "rule_id": "mission_core_spatial_verticalcrsurl_vertical_crs_url_must_be_http_s_57",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "spatial.verticalCrsUrl",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "url",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Vertical CRS URL must be http(s)",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "58",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_spatial_verticalcrsurl_vertical_crs_url_must_be_http_s_57",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "distribution.downloadUrl": {
+      "winner": {
+        "rule_id": "mission_core_distribution_downloadurl_download_url_must_be_http_s_58",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "distribution.downloadUrl",
+        "xpath": "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "url",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Download URL must be http(s)",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "59",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [
+        "mission_catalog_distribution_downloadurl_catalog_mode_download_url_is_require_59"
+      ],
+      "trace": [
+        {
+          "rule_id": "mission_core_distribution_downloadurl_download_url_must_be_http_s_58",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "mission_catalog_distribution_downloadurl_catalog_mode_download_url_is_require_59",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "distribution.format": {
+      "winner": {
+        "rule_id": "mission_core_distribution_format_distribution_format_is_required_60",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "distribution.format",
+        "xpath": "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:distributionFormat/gmd:MD_Format/gmd:name",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Distribution format is required",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "61",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_distribution_format_distribution_format_is_required_60",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "distribution.landingUrl": {
+      "winner": {
+        "rule_id": "mission_core_distribution_landingurl_landing_page_url_must_be_http_s_61",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "distribution.landingUrl",
+        "xpath": "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "url",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Landing page URL must be http(s)",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "62",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [
+        "mission_catalog_distribution_landingurl_catalog_mode_landing_page_url_is_req_62"
+      ],
+      "trace": [
+        {
+          "rule_id": "mission_core_distribution_landingurl_landing_page_url_must_be_http_s_61",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "mission_catalog_distribution_landingurl_catalog_mode_landing_page_url_is_req_62",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "distribution.license": {
+      "winner": {
+        "rule_id": "mission_core_distribution_license_use_license_is_required_63",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "distribution.license",
+        "xpath": "/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_LegalConstraints",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Use/License is required",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "64",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_distribution_license_use_license_is_required_63",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "distribution.metadataLandingUrl": {
+      "winner": {
+        "rule_id": "mission_core_distribution_metadatalandingurl_metadata_landing_url_must_be_http_s_64",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "distribution.metadataLandingUrl",
+        "xpath": "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "url",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Metadata landing URL must be http(s)",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "65",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_distribution_metadatalandingurl_metadata_landing_url_must_be_http_s_64",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "distribution.nceiDistributorContactHref": {
+      "winner": {
+        "rule_id": "mission_core_distribution_nceidistributorcontacthref_ncei_distributor_contact_href_must_b_65",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "distribution.nceiDistributorContactHref",
+        "xpath": "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:distributor",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "url",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "NCEI distributor contact href must be http(s)",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "66",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_core_distribution_nceidistributorcontacthref_ncei_distributor_contact_href_must_b_65",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "distribution.nceiMetadataContactHref": {
+      "winner": {
+        "rule_id": "mission_core_distribution_nceimetadatacontacthref_ncei_metadata_contact_href_must_be_h_67",
+        "rule_set": "mission-core",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "distribution.nceiMetadataContactHref",
+        "xpath": "/gmd:MD_Metadata/gmd:contact",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "url",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "NCEI metadata contact href must be http(s)",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "68",
+        "source_ref": "mission-core",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [
+        "mission_core_distribution_nceimetadatacontacthref_ncei_metadata_contact_xlink_is_enabl_66"
+      ],
+      "trace": [
+        {
+          "rule_id": "mission_core_distribution_nceimetadatacontacthref_ncei_metadata_contact_href_must_be_h_67",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "rule_id": "mission_core_distribution_nceimetadatacontacthref_ncei_metadata_contact_xlink_is_enabl_66",
+          "score": [
+            0,
+            2,
+            2,
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    "distribution.parentProject": {
+      "winner": {
+        "rule_id": "mission_catalog_distribution_parentproject_catalog_mode_enter_parent_project_on_68",
+        "rule_set": "mission-catalog",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "distribution.parentProject",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "69",
+        "source_ref": "mission-catalog",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_catalog_distribution_parentproject_catalog_mode_enter_parent_project_on_68",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "distribution.publication": {
+      "winner": {
+        "rule_id": "mission_catalog_distribution_publication_catalog_mode_publication_reference_i_69",
+        "rule_set": "mission-catalog",
+        "version": "1",
+        "record_type": "mission",
+        "field_key": "distribution.publication",
+        "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:otherCitationDetails",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "Catalog mode: publication reference is required",
+        "source_file": "mission_validation_full_field_matrix.csv",
+        "source_tab": "",
+        "source_row": "70",
+        "source_ref": "mission-catalog",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "mission_catalog_distribution_publication_catalog_mode_publication_reference_i_69",
+          "score": [
+            0,
+            2,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    },
+    "ident.fileIdentifier": {
+      "winner": {
+        "rule_id": "onestop_fileidentifier_single_v1",
+        "rule_set": "onestop",
+        "version": "1",
+        "record_type": "any",
+        "field_key": "ident.fileIdentifier",
+        "xpath": "//gmd:fileIdentifier",
+        "requirement": "required",
+        "cardinality_min": "1",
+        "cardinality_max": "1",
+        "datatype": "string",
+        "enum_values_json": "",
+        "pattern_regex": "",
+        "condition_expr": "",
+        "severity": "block",
+        "auto_fixable": "false",
+        "auto_fix_strategy": "",
+        "message": "fileIdentifier must appear exactly once",
+        "source_file": "WAF metadata.xlsx",
+        "source_tab": "Checks",
+        "source_row": "7",
+        "source_ref": "FileIdentifierCheck",
+        "notes": "",
+        "active": "true"
+      },
+      "losers": [],
+      "trace": [
+        {
+          "rule_id": "onestop_fileidentifier_single_v1",
+          "score": [
+            900,
+            1,
+            3,
+            3,
+            1
+          ]
+        }
+      ]
+    }
+  }
+}

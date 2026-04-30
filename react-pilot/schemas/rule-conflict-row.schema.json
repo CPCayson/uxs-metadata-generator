@@ -1,0 +1,22 @@
+{
+  "$id": "https://uxs.local/schemas/rule-conflict-row.schema.json",
+  "type": "object",
+  "required": [
+    "conflict_id",
+    "record_type",
+    "field_key",
+    "winner_rule_set",
+    "strategy",
+    "active"
+  ],
+  "properties": {
+    "conflict_id": { "type": "string", "pattern": "^[a-z0-9_\\-.]+$" },
+    "record_type": { "enum": ["mission", "collection", "granule", "segment", "any"] },
+    "field_key": { "type": "string", "pattern": "^[a-z][A-Za-z0-9_]*(\\.[A-Za-z0-9_]+)*$" },
+    "winner_rule_set": { "type": "string", "minLength": 1 },
+    "strategy": { "enum": ["priority", "strictest", "custom"] },
+    "justification": { "type": "string" },
+    "effective_from": { "type": "string" },
+    "active": { "type": "boolean" }
+  }
+}

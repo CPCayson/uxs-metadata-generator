@@ -90,6 +90,21 @@ export default function StepMission({
   }
   const uxsContext = mission.uxsContext && typeof mission.uxsContext === 'object' ? mission.uxsContext : {}
   const uxsLayer = getUxsLayerDefinition(uxsContext)
+  const stepErrorSummary = (() => {
+    /** @type {Array<{ id: string, label: string, match: (field: string) => boolean }>} */
+    const stepMatchers = [
+      { id: 'mission', label: '1. Mission', match: (field) => field === 'mission' || field.startsWith('mission.') },
+      { id: 'platform', label: '2. Platform', match: (field) => field.startsWith('platform.') },
+      { id: 'sensors', label: '3. Sensors', match: (field) => field === 'sensors' || field.startsWith('sensors[') },
+      { id: 'spatial', label: '4. Spatial', match: (field) => field.startsWith('spatial.') },
+      { id: 'keywords', label: '5. Keywords', match: (field) => field === 'keywords' || field.startsWith('keywords.') },
+      { id: 'distribution', label: '6. Distribution', match: (field) => field.startsWith('distribution.') },
+    ]
+    const withErrors = stepMatchers
+      .filter((step) => issues.some((iss) => iss.severity === 'e' && step.match(String(iss.field || ''))))
+      .map((step) => step.label)
+    return withErrors.length ? `${withErrors.join(' · ')}: Errors` : ''
+  })()
 
   function patchUxsContext(patch) {
     onMissionPatch({
@@ -107,6 +122,7 @@ export default function StepMission({
         status, and language. <strong>Optional</strong> below: UxS operational context, supplemental text, and aggregation.
         Bbox, CRS, and data-quality detail live on the <strong>Spatial</strong> step.
       </p>
+      {stepErrorSummary ? <p className="hint"><strong>Current step blockers:</strong> {stepErrorSummary}</p> : null}
 
       <section className="panel" aria-labelledby="uxs-context-heading">
         <h3 className="panel-title" id="uxs-context-heading">UxS collection context</h3>

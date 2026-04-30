@@ -1,0 +1,16 @@
+conflict_id,record_type,field_key,winner_rule_set,strategy,justification,effective_from,active
+conflict_mission_accession,mission,mission.accession,mission-core,priority,Prefer baseline core rule over mode-specific required variants for merged compile,2026-04-30,true
+conflict_mission_bbox,mission,mission.bbox,mission-core,priority,Prefer first core bbox constraint in compiled winner; secondary still retained as profile rule,2026-04-30,true
+conflict_mission_doi,mission,mission.doi,mission-core,priority,Prefer baseline DOI rule for merged compile,2026-04-30,true
+conflict_mission_email,mission,mission.email,mission-core,priority,Prefer primary email required rule over format variant at compile winner layer,2026-04-30,true
+conflict_mission_enddate,mission,mission.endDate,mission-core,priority,Prefer base endDate required rule over sibling temporal variants at compile winner layer,2026-04-30,true
+conflict_mission_licenseurl,mission,mission.licenseUrl,mission-core,priority,Prefer baseline license URL rule over mode-specific duplicates for merged compile,2026-04-30,true
+conflict_mission_ror,mission,mission.ror,mission-strict,priority,Prefer strict ROR winner where strict and catalog are tied,2026-04-30,true
+conflict_mission_startdate,mission,mission.startDate,mission-core,priority,Prefer startDate required rule over format variant at compile winner layer,2026-04-30,true
+conflict_spatial_trajectory,mission,spatial.trajectorySampling,mission-strict,priority,Prefer strict trajectory requirement winner where strict and catalog are tied,2026-04-30,true
+conflict_distribution_download,mission,distribution.downloadUrl,mission-core,priority,Prefer baseline download URL rule over catalog duplicate,2026-04-30,true
+conflict_distribution_landing,mission,distribution.landingUrl,mission-core,priority,Prefer baseline landing URL rule over catalog duplicate,2026-04-30,true
+conflict_bedi_collection_fileid,collection,fileId,bedi-collection-core,priority,Prefer first collection fileId rule in compiled winner and retain secondary profile check in UI rule sets,2026-04-30,true
+conflict_bedi_collection_accession,collection,nceiAccessionId,bedi-collection-core,priority,Prefer first collection accession rule in compiled winner and retain numeric sibling in profile runtime,2026-04-30,true
+conflict_bedi_granule_parent,granule,parentCollectionId,bedi-granule-core,priority,Prefer first granule parent linkage rule in compiled winner and retain namespace sibling in profile runtime,2026-04-30,true
+conflict_bedi_granule_fileid,granule,fileId,bedi-granule-core,priority,Prefer first granule fileId rule in compiled winner and retain namespace sibling in profile runtime,2026-04-30,true

@@ -1,0 +1,32 @@
+{
+  "generatedAt": "2026-04-30T13:05:52.822Z",
+  "recordGroups": [
+    "connor.cayson@noaa.gov | Personal Repository",
+    "Manta"
+  ],
+  "searchPerRecordGroup": [
+    {
+      "recordGroup": "connor.cayson@noaa.gov | Personal Repository",
+      "totalCount": 1,
+      "added": 1
+    },
+    {
+      "recordGroup": "Manta",
+      "totalCount": 0,
+      "added": 0
+    }
+  ],
+  "cometBase": "https://data.noaa.gov/cedit",
+  "requestedCount": 10,
+  "files": [
+    {
+      "uuid": "9f21ce1a-1e11-4461-bc84-81939f73cfc2",
+      "name": "Manta Ray Test",
+      "fileIdentifier": "gov.noaa.ncei:951220936016734",
+      "editState": "DRAFT",
+      "sourceRecordGroup": "connor.cayson@noaa.gov | Personal Repository",
+      "path": "fixtures/mission/comet-export-2026-04-30T13-05-51/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml"
+    }
+  ],
+  "failures": []
+}

@@ -1,0 +1,8 @@
+rule_set,priority,description,active
+manual_override,1000,Human-approved explicit override,true
+onestop,900,Publish-gating parity checks,true
+metaserver,850,Legacy validation gate,true
+bedi,800,BEDI profile constraints,true
+uxs_matrix,750,UxS mission matrix constraints,true
+waf,700,WAF harvesting checks,true
+common_metadata,600,Discovery and recommendation rules,true

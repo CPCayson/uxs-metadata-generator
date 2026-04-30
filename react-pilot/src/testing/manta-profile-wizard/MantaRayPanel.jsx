@@ -78,7 +78,19 @@ export default function MantaRayPanel({
                     ? "#BA7517"
                     : "#E24B4A";
                 return (
-                  <div key={s.key} className="step-bar-row">
+                  <div
+                    key={s.key}
+                    className="step-bar-row"
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => onGoStep(s.key)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        onGoStep(s.key);
+                      }
+                    }}
+                  >
                     <span className="step-bar-name">{s.label.slice(0, 8)}</span>
                     <div className="step-bar-track">
                       <div

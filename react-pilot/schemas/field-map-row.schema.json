@@ -1,0 +1,29 @@
+{
+  "$id": "https://uxs.local/schemas/field-map-row.schema.json",
+  "type": "object",
+  "required": [
+    "map_id",
+    "source_system",
+    "source_field",
+    "record_type",
+    "normalized_field_key",
+    "confidence",
+    "active"
+  ],
+  "properties": {
+    "map_id": { "type": "string", "pattern": "^[a-z0-9_\\-.]+$" },
+    "source_system": { "enum": ["excel", "csv", "xml_template", "db_export", "matrix", "manual"] },
+    "source_file": { "type": "string" },
+    "source_tab": { "type": "string" },
+    "source_field": { "type": "string" },
+    "source_xpath": { "type": "string" },
+    "record_type": { "enum": ["mission", "collection", "granule", "segment", "any"] },
+    "normalized_field_key": { "type": "string", "pattern": "^[a-z][A-Za-z0-9_]*(\\.[A-Za-z0-9_]+)*$" },
+    "transform": { "type": "string" },
+    "default_value": { "type": "string" },
+    "datatype_hint": { "type": "string" },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "notes": { "type": "string" },
+    "active": { "type": "boolean" }
+  }
+}

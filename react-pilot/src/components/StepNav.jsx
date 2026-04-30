@@ -3,7 +3,7 @@
  *   steps: Array<{ id: string, label: string }>,
  *   activeStep: string,
  *   onSelect: (id: string) => void,
- *   stepStatus?: Record<string, 'ok'|'warn'|'err'>,
+ *   stepStatus?: Record<string, 'ok'|'warn'|'err'|'pending'>,
  * }} props
  */
 const STEP_NAV_GRAPHIC_SRC = `${import.meta.env.BASE_URL}aitubo.mp4`
@@ -27,6 +27,7 @@ const STEP_NAV_POSTER =
   )
 
 const STEP_STATUS_LABELS = {
+  pending: 'Step not reviewed yet',
   ok: 'No issues on this step',
   warn: 'Warnings on this step',
   err: 'Errors on this step',
@@ -34,12 +35,26 @@ const STEP_STATUS_LABELS = {
 
 /** Sighted, compact; screen readers get full `STEP_STATUS_LABELS` on the tab. */
 const STEP_STATUS_VISIBLE = {
+  pending: 'Not reviewed',
   ok: 'No issues',
   warn: 'Warnings',
   err: 'Errors',
 }
 
 export default function StepNav({ steps, activeStep, onSelect, stepStatus = {} }) {
+  const openLens = () => {
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('manta:open-lens'))
+    }
+  }
+
+  const onLensKeyDown = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      openLens()
+    }
+  }
+
   return (
     <nav className="header-nav metadata-nav-wrap pilot-step-nav" aria-label="Pilot steps">
       <div className="metadata-nav-inner pilot-step-nav__row w-100">
@@ -68,28 +83,41 @@ export default function StepNav({ steps, activeStep, onSelect, stepStatus = {} }
             )
           })}
         </ul>
-        <div className="pilot-step-nav__stream" aria-hidden="true">
-          <video
-            className="pilot-step-nav__graphic"
-            src={STEP_NAV_GRAPHIC_SRC}
-            poster={STEP_NAV_POSTER}
-            width={720}
-            height={390}
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
-            tabIndex={-1}
-            onError={(e) => {
-              // Hide the whole stream if the video can't load (e.g. Apps
-              // Script single-file deploy where relative mp4 has no host).
-              const wrap = e.currentTarget.closest('.pilot-step-nav__stream')
-              if (wrap) wrap.style.display = 'none'
-            }}
-          />
-          <span className="pilot-step-nav__stream-scan" />
-          <span className="pilot-step-nav__stream-grid" />
+        <div
+          className="pilot-step-nav__stream-wrap"
+          role="button"
+          tabIndex={0}
+          onClick={openLens}
+          onKeyDown={onLensKeyDown}
+          aria-label="Open Manta Lens — validation scanner over the workspace"
+          title="Lens — open validation scanner (form + XML)"
+        >
+          <div className="pilot-step-nav__stream" aria-hidden="true">
+            <video
+              className="pilot-step-nav__graphic"
+              src={STEP_NAV_GRAPHIC_SRC}
+              poster={STEP_NAV_POSTER}
+              width={720}
+              height={390}
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              tabIndex={-1}
+              onError={(e) => {
+                // Hide the whole stream if the video can't load (e.g. Apps
+                // Script single-file deploy where relative mp4 has no host).
+                const wrap = e.currentTarget.closest('.pilot-step-nav__stream-wrap')
+                if (wrap) wrap.style.display = 'none'
+              }}
+            />
+            <span className="pilot-step-nav__stream-scan" />
+            <span className="pilot-step-nav__stream-grid" />
+          </div>
+          <span className="pilot-step-nav__stream-lens-hint" aria-hidden="true">
+            Lens
+          </span>
         </div>
       </div>
     </nav>

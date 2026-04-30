@@ -13,7 +13,6 @@ import { ScannerBar, LookupRow, StepNavBar } from "../ProfileWizard";
 export default function StepPlatform({
   profile,
   pilotState,
-  prefill,
   stepIdx,
   onFieldChange,
   onNext,

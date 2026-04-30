@@ -26,7 +26,17 @@ import {
   getFieldDefinition,
   SUGGESTED_QUESTIONS,
 } from './metadataKnowledgeBase.js'
-import { fetchCometRecord, detectGaps, extractUuid } from '../lib/cometClient.js'
+import {
+  detectGaps,
+  extractUuid,
+  fetchCometRecord,
+  getSimilarKnownCometUuids,
+  rankCometRowsByQuery,
+  readCometRecordGroup,
+  rememberCometUuid,
+  searchCometMetadata,
+  writeCometRecordGroup,
+} from '../lib/cometClient.js'
 import { buildPilotPayloadFromCometXml } from '../lib/cometProfileImport.js'
 import { getLensChipsForIssue } from '../lib/lensIssueChips.js'
 import { buildFixGuideQueue, countFixableIssues, getCoachingPrompts } from '../lib/lensFixGuide.js'
@@ -904,8 +914,14 @@ export default function AssistantShell({
   const [cometParsed,  setCometParsed]  = useState(null) // null | pilotState partial
   const [cometLoaded,  setCometLoaded]  = useState(false)
 
-  const runCometScan = useCallback(async () => {
-    const uuid = extractUuid(cometInput)
+  const [cometRecordGroup, setCometRecordGroup] = useState(() => readCometRecordGroup())
+  const [cometSearchFilter, setCometSearchFilter] = useState('')
+  const [cometSearchBusy, setCometSearchBusy] = useState(false)
+  const [cometSearchErr, setCometSearchErr] = useState('')
+  const [cometSearchRows, setCometSearchRows] = useState(null)
+
+  const runCometScanFor = useCallback(async (rawText) => {
+    const uuid = extractUuid(String(rawText ?? '').trim())
     if (!uuid) {
       setCometError('Enter a valid CoMET UUID (e.g. a1b2c3d4-…) or full CoMET URL.')
       return
@@ -940,12 +956,48 @@ export default function AssistantShell({
       setCometGaps(gaps)
       // For skeleton records, pass empty object so wizard loads defaults + all gaps show
       setCometParsed(parsed ?? {})
+      rememberCometUuid(uuid)
     } catch (err) {
       setCometError(err instanceof Error ? err.message : 'Scan failed.')
     } finally {
       setCometLoading(false)
     }
-  }, [cometInput, profile])
+  }, [profile])
+
+  const runCometScan = useCallback(() => runCometScanFor(cometInput), [cometInput, runCometScanFor])
+
+  const runCometGroupSearch = useCallback(async () => {
+    const rg = cometRecordGroup.trim()
+    if (!rg) {
+      setCometSearchErr('Enter your CoMET record group name.')
+      return
+    }
+    setCometSearchBusy(true)
+    setCometSearchErr('')
+    setCometSearchRows(null)
+    writeCometRecordGroup(rg)
+    try {
+      const { rows } = await searchCometMetadata({ recordGroup: rg, max: 200 })
+      const q = cometSearchFilter.trim()
+      const shown = q ? rankCometRowsByQuery(rows, q, 40) : rows.slice(0, 40)
+      setCometSearchRows(shown)
+    } catch (err) {
+      setCometSearchErr(err instanceof Error ? err.message : 'CoMET list failed.')
+    } finally {
+      setCometSearchBusy(false)
+    }
+  }, [cometRecordGroup, cometSearchFilter])
+
+  const pickCometUuidFromSearch = useCallback((uuid) => {
+    rememberCometUuid(uuid)
+    setCometInput(uuid)
+    void runCometScanFor(uuid)
+  }, [runCometScanFor])
+
+  const cometRecentUuids = useMemo(
+    () => getSimilarKnownCometUuids('', 8),
+    [cometLoaded, cometMeta?.uuid],
+  )
 
   function handleCometLoad() {
     if (!cometMeta) return
@@ -1245,6 +1297,7 @@ export default function AssistantShell({
         <div className="manta-lens-corner manta-lens-corner--bl" aria-hidden="true" />
         <div className="manta-lens-corner manta-lens-corner--br" aria-hidden="true" />
 
+        <div className="manta-lens-top-chrome">
         {/* ── HUD header bar ──────────────────────────────────────────── */}
         <header className="manta-lens-bar">
           <span className="manta-lens-bar__brand">⬡ MANTA LENS</span>
@@ -1446,6 +1499,7 @@ export default function AssistantShell({
             </div>
           )
         })()}
+        </div>
 
         {lensHudExpanded && (
           <div className="manta-lens-readiness-row">
@@ -2188,8 +2242,84 @@ export default function AssistantShell({
         {activeTab === 'comet' && (
           <div className="manta-widget__comet">
             <p className="manta-widget__comet-desc">
-              Paste a CoMET collection UUID or URL to scan it for gaps, then load it into the wizard.
+              Paste a CoMET UUID or URL, or <strong>list your record group</strong> to pick a sibling record (same practice as finding similar UUIDs in CoMET).
             </p>
+
+            <div className="manta-widget__comet-rg-panel">
+              <div className="manta-widget__comet-rg-row">
+                <input
+                  className="manta-widget__comet-input manta-widget__comet-input--rg"
+                  placeholder="Record group…"
+                  value={cometRecordGroup}
+                  onChange={(e) => { setCometRecordGroup(e.target.value); setCometSearchErr('') }}
+                  aria-label="CoMET record group"
+                  spellCheck={false}
+                />
+                <input
+                  className="manta-widget__comet-input manta-widget__comet-input--filter"
+                  placeholder="Filter title / fileIdentifier / UUID…"
+                  value={cometSearchFilter}
+                  onChange={(e) => setCometSearchFilter(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && !cometSearchBusy && void runCometGroupSearch()}
+                  aria-label="Filter CoMET list"
+                  spellCheck={false}
+                />
+                <button
+                  type="button"
+                  className="manta-widget__comet-scan-btn"
+                  onClick={() => void runCometGroupSearch()}
+                  disabled={cometSearchBusy || !cometRecordGroup.trim()}
+                >
+                  {cometSearchBusy ? '…' : 'List'}
+                </button>
+              </div>
+              {cometSearchErr && (
+                <p className="manta-widget__comet-error manta-widget__comet-error--tight" role="alert">{cometSearchErr}</p>
+              )}
+              {Array.isArray(cometSearchRows) && cometSearchRows.length > 0 && (
+                <ul className="manta-widget__comet-hit-list" aria-label="CoMET records in group">
+                  {cometSearchRows.map((r) => (
+                    <li key={r.uuid} className="manta-widget__comet-hit">
+                      <div className="manta-widget__comet-hit-main">
+                        <span className="manta-widget__comet-hit-name" title={`${r.name}\n${r.fileIdentifier}`}>
+                          {(r.name || r.fileIdentifier || r.uuid).length > 48
+                            ? `${(r.name || r.fileIdentifier || r.uuid).slice(0, 48)}…`
+                            : (r.name || r.fileIdentifier || r.uuid)}
+                        </span>
+                        <span className="manta-widget__comet-hit-id" title={r.uuid}>{r.uuid.slice(0, 8)}…</span>
+                        {r.editState ? (
+                          <span className="manta-widget__comet-hit-state">{r.editState}</span>
+                        ) : null}
+                      </div>
+                      <button type="button" className="manta-widget__comet-hit-use" onClick={() => pickCometUuidFromSearch(r.uuid)}>
+                        Use
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {Array.isArray(cometSearchRows) && cometSearchRows.length === 0 && !cometSearchBusy && (
+                <p className="manta-widget__comet-search-empty">No rows — check record group, session, or filter.</p>
+              )}
+              {cometRecentUuids.length > 0 && (
+                <div className="manta-widget__comet-recent">
+                  <span className="manta-widget__comet-recent-label">Recent UUIDs</span>
+                  <div className="manta-widget__comet-recent-chips">
+                    {cometRecentUuids.map((r) => (
+                      <button
+                        key={r.uuid}
+                        type="button"
+                        className="manta-widget__comet-chip"
+                        title={r.uuid}
+                        onClick={() => pickCometUuidFromSearch(r.uuid)}
+                      >
+                        {r.uuid.slice(0, 8)}…
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* UUID input + scan */}
             <div className="manta-widget__comet-scan-row">

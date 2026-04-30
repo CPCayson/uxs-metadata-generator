@@ -10,17 +10,28 @@
  *
  * Exports
  *   loginToComet(username, password)          → { ok, jsessionid }
+ *   loginToMetaserver(username, password)     → { ok, jsessionid }
  *   fetchCometRecord(uuid)                    → ISO 19115-2 XML string
  *   pushCometRecord(uuid, xml, opts)          → { ok, uuid, cometUrl, message }
  *   getRubricScore(uuid, xml)                 → { totalScore, categories }
  *   resolveXlinks(isoXml)                     → resolved XML string        [preflight step 1]
  *   validateIsoXml(isoXml, filename?)         → CoMET validate response    [preflight step 2]
+ *   validateIsoXmlViaMetaserver(isoXml, filename?) → metaserver response body
  *   checkLinks(isoXml)                        → CoMET link-check response  [preflight step 3]
  *   detectGaps(pilotState, profile?)          → string[]  (profile.entityType routes BEDI vs mission)
  *   extractUuid(input)                        → string
+ *   searchCometMetadata(opts)                 → { rows } (GET /metadata/search via proxy)
+ *   rankCometRowsByQuery(rows, query, top?)   → client-side similarity filter / sort
+ *   readCometRecordGroup / writeCometRecordGroup → session persistence for widget
  */
 
+import { metadataListFromCometSearchJson } from './cometSearchPayload.js'
+
 const PROXY = '/api/comet-proxy'
+const KNOWN_UUIDS_KEY = 'manta.comet.knownUuids'
+const COMET_RG_SESSION_KEY = 'manta.comet.recordGroup'
+const COMET_AUTH_KEY = 'manta.comet.auth.v1'
+const COMET_AUTH_TTL_MS = 1000 * 60 * 90 // 90 minutes
 
 const PROXY_MISSING_HINT =
   `CoMET proxy not found (404) at ${PROXY}. Use Netlify Dev / deploy functions, or route /api/comet-proxy to the comet-proxy function.`
@@ -31,8 +42,14 @@ const PROXY_MISSING_HINT =
  * @returns {Promise<Response>}
  */
 async function _fetchCometProxy(url, init) {
+  const auth = readCometAuth()
+  const mergedHeaders = {
+    ...(init?.headers || {}),
+  }
+  if (auth.cometSessionId) mergedHeaders['X-Comet-JSessionId'] = auth.cometSessionId
+  if (auth.metaserverSessionId) mergedHeaders['X-Metaserver-JSessionId'] = auth.metaserverSessionId
   try {
-    return await fetch(url, init)
+    return await fetch(url, { ...init, headers: mergedHeaders })
   } catch (err) {
     const why = err instanceof Error ? err.message : String(err)
     throw new Error(`CoMET request failed (network). Check that ${PROXY} is reachable. ${why}`)
@@ -78,7 +95,62 @@ export async function loginToComet(username, password) {
     body,
   })
   const data = await res.json().catch(() => ({ ok: false }))
-  return { ok: !!data.ok, jsessionid: data.jsessionid ?? null }
+  const out = { ok: !!data.ok, jsessionid: data.jsessionid ?? null }
+  if (out.ok && out.jsessionid) {
+    const cur = readCometAuth()
+    writeCometAuth({ ...cur, cometSessionId: out.jsessionid })
+  }
+  return out
+}
+
+/**
+ * Authenticate with NOAA metaserver legacy validation endpoint.
+ *
+ * @param {string} username
+ * @param {string} password
+ * @returns {Promise<{ ok: boolean, jsessionid: string|null }>}
+ */
+export async function loginToMetaserver(username, password) {
+  const body = new URLSearchParams({ username, password }).toString()
+  const res = await _fetchCometProxy(`${PROXY}?action=metaservLogin`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body,
+  })
+  const data = await res.json().catch(() => ({ ok: false }))
+  const out = { ok: !!data.ok, jsessionid: data.jsessionid ?? null }
+  if (out.ok && out.jsessionid) {
+    const cur = readCometAuth()
+    writeCometAuth({ ...cur, metaserverSessionId: out.jsessionid })
+  }
+  return out
+}
+
+/**
+ * Query proxy for effective auth status (header vs env source).
+ *
+ * @returns {Promise<{
+ *   ok: boolean,
+ *   hasCometSession: boolean,
+ *   cometSessionSource: 'header'|'env'|'none',
+ *   hasMetaserverSession: boolean,
+ *   metaserverSessionSource: 'header'|'env'|'none',
+ * }>}
+ */
+export async function getCometAuthStatus() {
+  const res = await _fetchCometProxy(`${PROXY}?action=sessionStatus`, { method: 'GET' })
+  const body = await res.text().catch(() => '{}')
+  if (!res.ok) {
+    throw new Error(`CoMET auth status failed (${res.status}): ${_detailForFailedResponse(res.status, body)}`)
+  }
+  try { return JSON.parse(body) } catch { return { ok: false, hasCometSession: false, cometSessionSource: 'none', hasMetaserverSession: false, metaserverSessionSource: 'none' } }
+}
+
+/**
+ * Clear locally stored proxy header sessions.
+ */
+export function clearCometAuth() {
+  writeCometAuth({ cometSessionId: '', metaserverSessionId: '' })
 }
 
 // ── Fetch ─────────────────────────────────────────────────────────────────────
@@ -113,6 +185,119 @@ export async function fetchCometRecord(uuidOrUrl) {
     throw new Error('CoMET returned a non-XML response. Your session may have expired — refresh COMET_SESSION_ID in Netlify.')
   }
   return text
+}
+
+// ── Metadata search (record group → UUIDs) ────────────────────────────────────
+
+/**
+ * @param {{ recordGroup: string, max?: number, offset?: number, since?: string, editState?: string }} opts
+ * @returns {Promise<{ rows: Array<{ uuid: string, fileIdentifier: string, name: string, editState: string }>, raw: object }>}
+ */
+export async function searchCometMetadata(opts) {
+  const recordGroup = String(opts?.recordGroup || '').trim()
+  if (!recordGroup) throw new Error('recordGroup is required for CoMET search.')
+
+  const params = new URLSearchParams({
+    action: 'search',
+    recordGroup,
+    format: 'json',
+  })
+  const max = opts.max ?? 200
+  params.set('max', String(max))
+  if (opts.offset != null && opts.offset !== '') params.set('offset', String(opts.offset))
+  if (opts.since) params.set('since', opts.since)
+  if (opts.editState) params.set('editState', opts.editState)
+
+  const res = await _fetchCometProxy(`${PROXY}?${params}`, {
+    method: 'GET',
+    headers: { Accept: 'application/json' },
+  })
+  const body = await res.text().catch(() => '')
+  if (!res.ok) {
+    throw new Error(`CoMET search failed (${res.status}): ${_detailForFailedResponse(res.status, body)}`)
+  }
+  let parsed = null
+  try {
+    parsed = JSON.parse(body)
+  } catch {
+    throw new Error('CoMET search returned non-JSON (session expired or proxy error).')
+  }
+  const rawList = metadataListFromCometSearchJson(parsed)
+  const rows = rawList
+    .map((r) => ({
+      uuid: String(r.uuid || '').trim(),
+      fileIdentifier: String(r.fileIdentifier || '').trim(),
+      name: String(r.name || '').trim(),
+      editState: String(r.editState || '').trim(),
+    }))
+    .filter((r) => r.uuid)
+  return { rows, raw: parsed }
+}
+
+/**
+ * Match helper — same behavior as `scripts/swarm/search-comet-similar.mjs`.
+ *
+ * @param {string} query
+ * @param {string} value
+ */
+function _cometTextSimilarity(query, value) {
+  const q = String(query || '').trim().toLowerCase()
+  const v = String(value || '').trim().toLowerCase()
+  if (!q || !v) return 0
+  if (v === q) return 1
+  if (v.includes(q)) return 0.93
+  const qParts = q.split(/[^a-z0-9]+/).filter(Boolean)
+  if (!qParts.length) return 0
+  const hits = qParts.filter((p) => v.includes(p)).length
+  return Math.min(0.9, hits / qParts.length)
+}
+
+/**
+ * Rank search rows by fuzzy match on fileIdentifier, name, or uuid substring.
+ *
+ * @param {Array<{ uuid: string, fileIdentifier: string, name: string, editState: string }>} rows
+ * @param {string} query
+ * @param {number} [top]
+ */
+export function rankCometRowsByQuery(rows, query, top = 50) {
+  const q = String(query || '').trim()
+  if (!q) return rows.slice(0, Math.max(1, top))
+  const ranked = rows
+    .map((r) => ({
+      ...r,
+      score: Math.max(
+        _cometTextSimilarity(q, r.fileIdentifier),
+        _cometTextSimilarity(q, r.name),
+        _cometTextSimilarity(q, r.uuid),
+      ),
+    }))
+    .filter((r) => r.score >= 0.25)
+    .sort((a, b) => (b.score - a.score) || a.fileIdentifier.localeCompare(b.fileIdentifier))
+  return ranked.slice(0, Math.max(1, top))
+}
+
+/**
+ * @returns {string}
+ */
+export function readCometRecordGroup() {
+  try {
+    return String(window.sessionStorage.getItem(COMET_RG_SESSION_KEY) || '').trim()
+  } catch {
+    return ''
+  }
+}
+
+/**
+ * @param {string} recordGroup
+ */
+export function writeCometRecordGroup(recordGroup) {
+  try {
+    const s = String(recordGroup || '').trim()
+    if (s) window.sessionStorage.setItem(COMET_RG_SESSION_KEY, s)
+    else window.sessionStorage.removeItem(COMET_RG_SESSION_KEY)
+  } catch {
+    /* ignore */
+  }
 }
 
 // ── Push ──────────────────────────────────────────────────────────────────────
@@ -275,6 +460,29 @@ export async function validateIsoXml(isoXml, filename = 'record.xml') {
   }
 
   try { return JSON.parse(body) } catch { return { raw: body } }
+}
+
+/**
+ * Validate ISO XML via NOAA metaserver legacy form-based endpoint.
+ * Returns raw response text (often HTML/plain text), which callers can parse.
+ *
+ * @param {string} isoXml
+ * @param {string} [filename]
+ * @returns {Promise<string>}
+ */
+export async function validateIsoXmlViaMetaserver(isoXml, filename = 'record.xml') {
+  if (!isoXml?.trim()) throw new Error('validateIsoXmlViaMetaserver: no XML supplied.')
+  const params = new URLSearchParams({ action: 'metaservValidate', filename })
+  const res = await _fetchCometProxy(`${PROXY}?${params}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/xml', Accept: '*/*' },
+    body: isoXml,
+  })
+  const body = await res.text().catch(() => '')
+  if (!res.ok) {
+    throw new Error(`Metaserver validate failed (${res.status}): ${_detailForFailedResponse(res.status, body)}`)
+  }
+  return body
 }
 
 /**
@@ -445,4 +653,133 @@ export function extractUuid(input) {
   const uuidRe  = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i
   const match   = trimmed.match(uuidRe)
   return match ? match[0] : ''
+}
+
+/**
+ * @returns {Array<{ uuid: string, count: number, lastUsedAt: string }>}
+ */
+function readKnownCometUuids() {
+  try {
+    const raw = window.localStorage.getItem(KNOWN_UUIDS_KEY)
+    if (!raw) return []
+    const parsed = JSON.parse(raw)
+    if (!Array.isArray(parsed)) return []
+    return parsed
+      .filter((r) => r && typeof r === 'object' && typeof r.uuid === 'string')
+      .map((r) => ({
+        uuid: String(r.uuid),
+        count: Number.isFinite(Number(r.count)) ? Number(r.count) : 1,
+        lastUsedAt: typeof r.lastUsedAt === 'string' ? r.lastUsedAt : new Date(0).toISOString(),
+      }))
+  } catch {
+    return []
+  }
+}
+
+/**
+ * @returns {{ cometSessionId: string, metaserverSessionId: string }}
+ */
+function readCometAuth() {
+  try {
+    const raw = window.sessionStorage.getItem(COMET_AUTH_KEY)
+    if (!raw) return { cometSessionId: '', metaserverSessionId: '' }
+    const parsed = JSON.parse(raw)
+    const storedAt = Number(parsed?.storedAt || 0)
+    if (!Number.isFinite(storedAt) || Date.now() - storedAt > COMET_AUTH_TTL_MS) {
+      window.sessionStorage.removeItem(COMET_AUTH_KEY)
+      return { cometSessionId: '', metaserverSessionId: '' }
+    }
+    return {
+      cometSessionId: typeof parsed?.cometSessionId === 'string' ? parsed.cometSessionId : '',
+      metaserverSessionId: typeof parsed?.metaserverSessionId === 'string' ? parsed.metaserverSessionId : '',
+    }
+  } catch {
+    return { cometSessionId: '', metaserverSessionId: '' }
+  }
+}
+
+/**
+ * @param {{ cometSessionId?: string, metaserverSessionId?: string }} auth
+ */
+function writeCometAuth(auth) {
+  try {
+    window.sessionStorage.setItem(
+      COMET_AUTH_KEY,
+      JSON.stringify({
+        cometSessionId: String(auth?.cometSessionId || ''),
+        metaserverSessionId: String(auth?.metaserverSessionId || ''),
+        storedAt: Date.now(),
+      }),
+    )
+  } catch {
+    // ignore storage failures
+  }
+}
+
+/**
+ * @param {Array<{ uuid: string, count: number, lastUsedAt: string }>} rows
+ */
+function writeKnownCometUuids(rows) {
+  try {
+    window.localStorage.setItem(KNOWN_UUIDS_KEY, JSON.stringify(rows.slice(0, 50)))
+  } catch {
+    // ignore storage failures
+  }
+}
+
+/**
+ * Persist a UUID in local recent-history so the UI can suggest likely records.
+ *
+ * @param {string} uuidOrUrl
+ */
+export function rememberCometUuid(uuidOrUrl) {
+  const uuid = extractUuid(uuidOrUrl)
+  if (!uuid) return
+  const now = new Date().toISOString()
+  const rows = readKnownCometUuids()
+  const idx = rows.findIndex((r) => r.uuid.toLowerCase() === uuid.toLowerCase())
+  if (idx >= 0) {
+    rows[idx] = { ...rows[idx], uuid, count: rows[idx].count + 1, lastUsedAt: now }
+  } else {
+    rows.unshift({ uuid, count: 1, lastUsedAt: now })
+  }
+  rows.sort((a, b) => (a.lastUsedAt < b.lastUsedAt ? 1 : -1))
+  writeKnownCometUuids(rows)
+}
+
+/**
+ * @param {string} query
+ * @param {string} uuid
+ * @returns {number}
+ */
+function uuidSimilarityScore(query, uuid) {
+  const q = String(query || '').toLowerCase()
+  const u = String(uuid || '').toLowerCase()
+  if (!q || !u) return 0
+  if (u === q) return 1
+  if (u.includes(q)) return 0.92
+  let prefix = 0
+  while (prefix < q.length && prefix < u.length && q[prefix] === u[prefix]) prefix += 1
+  return Math.min(0.9, prefix / 8)
+}
+
+/**
+ * Return local UUID candidates ranked by text similarity + recency.
+ *
+ * @param {string} query
+ * @param {number} [limit]
+ * @returns {Array<{ uuid: string, score: number, count: number, lastUsedAt: string }>}
+ */
+export function getSimilarKnownCometUuids(query, limit = 5) {
+  const rows = readKnownCometUuids()
+  const q = extractUuid(query) || String(query || '').trim()
+  return rows
+    .map((r) => {
+      const textScore = q ? uuidSimilarityScore(q, r.uuid) : 0.3
+      const recencyBoost = r.count >= 3 ? 0.05 : 0
+      return { ...r, score: Math.min(1, textScore + recencyBoost) }
+    })
+    .filter((r) => (q ? r.score >= 0.25 : true))
+    .sort((a, b) => (b.score - a.score) || (a.lastUsedAt < b.lastUsedAt ? 1 : -1))
+    .slice(0, Math.max(1, limit))
 }

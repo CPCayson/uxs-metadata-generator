@@ -27,20 +27,20 @@ const STEP_COMPONENTS = {
  */
 export default function ProfileWizard({ profileId, prefill = {}, onBack }) {
   const profile = PROFILES[profileId];
-  if (!profile) return null;
 
-  const [stepIdx, setStepIdx]         = useState(0);
-  const [score, setScore]             = useState(30);
-  const [fixed, setFixed]             = useState(false);
-  const [stepPctMap, setStepPctMap]   = useState({ ...profile.stepPct });
-  // pilotState — canonical form data, shared with all step components
-  const [pilotState, setPilotState]   = useState({ ...prefill });
+  const [stepIdx, setStepIdx] = useState(0);
+  const [score, setScore] = useState(30);
+  const [fixed, setFixed] = useState(false);
+  const [stepPctMap] = useState(() => {
+    const p = PROFILES[profileId];
+    return p ? { ...p.stepPct } : {};
+  });
+  const [pilotState, setPilotState] = useState(() => ({ ...prefill }));
 
-  const currentStep = profile.steps[stepIdx];
+  const currentStep = profile?.steps[stepIdx];
 
   const handleFieldChange = useCallback((updates) => {
     setPilotState((prev) => ({ ...prev, ...updates }));
-    // Nudge score on any field change — real app would run ValidationEngine
     setScore((s) => Math.min(s + 2, fixed ? 85 : 65));
   }, [fixed]);
 
@@ -50,13 +50,17 @@ export default function ProfileWizard({ profileId, prefill = {}, onBack }) {
   }, []);
 
   const goStep = useCallback((idx) => {
+    if (!profile) return;
     if (idx >= 0 && idx < profile.steps.length) setStepIdx(idx);
-  }, [profile.steps.length]);
+  }, [profile]);
 
   const goStepByKey = useCallback((key) => {
+    if (!profile) return;
     const idx = profile.steps.findIndex((s) => s.key === key);
     if (idx >= 0) setStepIdx(idx);
-  }, [profile.steps]);
+  }, [profile]);
+
+  if (!profile || !currentStep) return null;
 
   // Score color
   const scoreColor =
@@ -122,7 +126,6 @@ export default function ProfileWizard({ profileId, prefill = {}, onBack }) {
                 <StepDot
                   pct={stepPctMap[step.key] ?? 0}
                   done={isDone}
-                  active={isActive}
                 />
               </button>
             );
@@ -165,7 +168,7 @@ export default function ProfileWizard({ profileId, prefill = {}, onBack }) {
 }
 
 /** Dot indicator for sidenav step */
-function StepDot({ pct, done, active }) {
+function StepDot({ pct, done }) {
   const color = done
     ? "var(--color-text-success)"
     : pct >= 80

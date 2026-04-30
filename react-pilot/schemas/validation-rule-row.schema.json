@@ -1,0 +1,40 @@
+{
+  "$id": "https://uxs.local/schemas/validation-rule-row.schema.json",
+  "type": "object",
+  "required": [
+    "rule_id",
+    "rule_set",
+    "version",
+    "record_type",
+    "field_key",
+    "requirement",
+    "severity",
+    "auto_fixable",
+    "active"
+  ],
+  "properties": {
+    "rule_id": { "type": "string", "pattern": "^[a-z0-9_\\-.]+$" },
+    "rule_set": { "type": "string", "minLength": 1 },
+    "version": { "type": "integer", "minimum": 1 },
+    "record_type": { "enum": ["mission", "collection", "granule", "segment", "any"] },
+    "field_key": { "type": "string", "pattern": "^[a-z][A-Za-z0-9_]*(\\.[A-Za-z0-9_]+)*$" },
+    "xpath": { "type": "string" },
+    "requirement": { "enum": ["required", "recommended", "forbidden", "conditional"] },
+    "cardinality_min": { "type": "integer", "minimum": 0 },
+    "cardinality_max": { "type": ["integer", "null"], "minimum": 0 },
+    "datatype": { "enum": ["string", "date", "uuid", "url", "decimal", "integer", "xml_fragment", "enum"] },
+    "enum_values_json": { "type": "string" },
+    "pattern_regex": { "type": "string" },
+    "condition_expr": { "type": "string" },
+    "severity": { "enum": ["block", "warn", "info"] },
+    "auto_fixable": { "type": "boolean" },
+    "auto_fix_strategy": { "type": "string" },
+    "message": { "type": "string" },
+    "source_file": { "type": "string" },
+    "source_tab": { "type": "string" },
+    "source_row": { "type": ["integer", "null"], "minimum": 1 },
+    "source_ref": { "type": "string" },
+    "notes": { "type": "string" },
+    "active": { "type": "boolean" }
+  }
+}

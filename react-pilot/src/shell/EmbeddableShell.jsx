@@ -80,6 +80,12 @@ export default function EmbeddableShell({
     })
   }
 
+  /** Open the workspace lens directly (no Manta card) — FAB + StepNav stream. */
+  function openLensOnly() {
+    setWidgetOpen(false)
+    setLensMode(true)
+  }
+
   const profile = useMemo(() => {
     try {
       return getProfile(profileId)
@@ -252,28 +258,41 @@ export default function EmbeddableShell({
   const mantaWidgetSurface = (
     <>
       {!widgetOpen && !lensMode && (
-        <button
-          type="button"
-          className={`manta-widget-trigger manta-widget-trigger--arc${triggerPulse ? ' manta-widget-trigger--pulse' : ''}`}
-          onClick={() => setWidgetOpen(true)}
-          aria-label="Open Manta — metadata and scanner"
-          title="Manta — metadata and scanner"
-        >
-          {triggerScore !== null && (
-            <span
-              className="manta-widget-trigger__score manta-widget-trigger__score--arc"
-              style={{
-                color: triggerScore >= 80
-                  ? 'var(--manta-success,#4ade80)'
-                  : triggerScore >= 50
-                    ? 'var(--manta-warning,#fbbf24)'
-                    : 'var(--manta-error,#f87171)',
-              }}
-            >
-              {triggerScore}
+        <div className="manta-fab-cluster" role="group" aria-label="Manta Lens and assistant">
+          <button
+            type="button"
+            className="manta-lens-fab"
+            onClick={openLensOnly}
+            aria-label="Open Manta Lens — validation scanner over workspace"
+            title="Lens — scan form and XML for issues (Esc to close)"
+          >
+            <span className="manta-lens-fab__glyph" aria-hidden="true">
+              ⌕
             </span>
-          )}
-        </button>
+          </button>
+          <button
+            type="button"
+            className={`manta-widget-trigger manta-widget-trigger--arc${triggerPulse ? ' manta-widget-trigger--pulse' : ''}`}
+            onClick={() => setWidgetOpen(true)}
+            aria-label="Open Manta — metadata assistant"
+            title="Manta — metadata assistant and tools"
+          >
+            {triggerScore !== null && (
+              <span
+                className="manta-widget-trigger__score manta-widget-trigger__score--arc"
+                style={{
+                  color: triggerScore >= 80
+                    ? 'var(--manta-success,#4ade80)'
+                    : triggerScore >= 50
+                      ? 'var(--manta-warning,#fbbf24)'
+                      : 'var(--manta-error,#f87171)',
+                }}
+              >
+                {triggerScore}
+              </span>
+            )}
+          </button>
+        </div>
       )}
       {(widgetOpen || lensMode) && (
         <AssistantShell

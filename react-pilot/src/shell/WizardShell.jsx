@@ -11,7 +11,7 @@
  * @module shell/WizardShell
  */
 
-import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState, Suspense } from 'react'
+import { useCallback, useDeferredValue, useEffect, useLayoutEffect, useMemo, useRef, useState, Suspense } from 'react'
 import StepNav from '../components/StepNav'
 import ValidationPanel from '../components/ValidationPanel'
 import ReadinessStrip from '../components/ReadinessStrip.jsx'
@@ -158,6 +158,22 @@ export default function WizardShell({ onDirtyChange }) {
     return () => window.removeEventListener('manta:lens-opened', onLensOpened)
   }, [])
 
+  /** Lens portal sits below step nav so HUD + fix walk aren’t stacked over the tabs. */
+  const lensStackRef = useRef(/** @type {HTMLDivElement | null} */ (null))
+  useLayoutEffect(() => {
+    const root = lensStackRef.current
+    if (!root) return
+    const nav = root.querySelector('.pilot-step-nav')
+    function measure() {
+      const h = nav?.getBoundingClientRect().height ?? 0
+      root.style.setProperty('--pilot-lens-inset-top', `${Math.round(h)}px`)
+    }
+    measure()
+    const ro = new ResizeObserver(measure)
+    if (nav) ro.observe(nav)
+    return () => ro.disconnect()
+  }, [])
+
   // Defer validation (and step-status) off the keystroke hot path. React
   // renders the form inputs first, then reconciles the validator/XML tree
   // when idle, keeping typing snappy even with large rule sets.
@@ -185,10 +201,22 @@ export default function WizardShell({ onDirtyChange }) {
     [readinessSnapshot, comet.preflightSummary, isDirty],
   )
 
-  const stepStatuses = useMemo(
-    () => workflowEngine.stepCompletionFromIssues(validation.issues),
-    [workflowEngine, validation.issues],
-  )
+  const stepStatuses = useMemo(() => {
+    const fromIssues = workflowEngine.stepCompletionFromIssues(validation.issues)
+    /** @type {Record<string, 'ok'|'warn'|'err'|'pending'>} */
+    const out = { ...fromIssues }
+    const touchedKeys = Object.keys(touched)
+
+    for (const step of profile.steps) {
+      const hasTouched = touchedKeys.some((key) =>
+        (step.ownedFieldPrefixes || []).some((prefix) => key === prefix || key.startsWith(prefix)),
+      )
+      // Keep untouched steps as "Not reviewed" to avoid flashing red status
+      // before the user has interacted with that section.
+      if (!hasTouched) out[step.id] = 'pending'
+    }
+    return out
+  }, [workflowEngine, validation.issues, touched, profile.steps])
 
   const activeStepMeta = profile.steps.find((s) => s.id === activeStep) ?? profile.steps[0]
   const ActiveStep = activeStepMeta?.component ?? null
@@ -375,38 +403,39 @@ export default function WizardShell({ onDirtyChange }) {
 
   return (
     <>
-      <StepNav steps={profile.steps} activeStep={activeStep} onSelect={setActiveStep} stepStatus={stepStatuses} />
+      <div ref={lensStackRef} className="pilot-wizard-lens-stack manta-workspace-lens-anchor">
+        <StepNav steps={profile.steps} activeStep={activeStep} onSelect={setActiveStep} stepStatus={stepStatuses} />
 
-      <XmlToolsBar
-        profile={profile}
-        pilotState={pilotState}
-        onPilotImport={(next) => {
-          const s = profile.sanitize(next)
-          setPilotState(s)
-          setTouched({})
-          setShowAllErrors(false)
-        }}
-        onScannerApply={(next) => {
-          const s = profile.sanitize(next)
-          setPilotState(s)
-          setTouched({})
-          setShowAllErrors(true)
-          setStatusMessage('Scanner suggestions merged. Review the validation panel for any new issues.')
-        }}
-        onStatus={setStatusMessage}
-        hostBridgeReady={hostBridgeReady}
-        exportBusy={ma.exportBusy}
-        onExportGeoJSON={cap.geoJsonExport ? ma.exportGeoJSONFromServer : null}
-        onExportDCAT={cap.dcatExport ? ma.exportDCATFromServer : null}
-        cometUuid={cometUuid}
-        onPushToComet={comet.pushDraftToComet}
-        pushBusy={comet.pushBusy}
-        hostBridge={hostBridge}
-        validationEngine={validationEngine}
-      />
+        <XmlToolsBar
+          profile={profile}
+          pilotState={pilotState}
+          onPilotImport={(next) => {
+            const s = profile.sanitize(next)
+            setPilotState(s)
+            setTouched({})
+            setShowAllErrors(false)
+          }}
+          onScannerApply={(next) => {
+            const s = profile.sanitize(next)
+            setPilotState(s)
+            setTouched({})
+            setShowAllErrors(true)
+            setStatusMessage('Scanner suggestions merged. Review the validation panel for any new issues.')
+          }}
+          onStatus={setStatusMessage}
+          hostBridgeReady={hostBridgeReady}
+          exportBusy={ma.exportBusy}
+          onExportGeoJSON={cap.geoJsonExport ? ma.exportGeoJSONFromServer : null}
+          onExportDCAT={cap.dcatExport ? ma.exportDCATFromServer : null}
+          cometUuid={cometUuid}
+          onPushToComet={comet.pushDraftToComet}
+          pushBusy={comet.pushBusy}
+          hostBridge={hostBridge}
+          validationEngine={validationEngine}
+        />
 
-      {/* Dual-surface lens: #manta-scanner-host overlays this grid (form + side rail); see MANTA_ROADMAP. */}
-      <section className="workspace-grid manta-workspace-lens-anchor">
+        {/* Dual-surface lens: host below step nav, spans workspace grid only; see MANTA_ROADMAP. */}
+        <section className="workspace-grid">
         <article className={`card workspace-main pilot-step pilot-step--${activeStep}`}>
           <h2>{activeStepMeta.label}</h2>
 
@@ -597,28 +626,43 @@ export default function WizardShell({ onDirtyChange }) {
                   cometUuid={cometUuid}
                   localUuidInput={comet.localUuidInput}
                   setLocalUuidInput={comet.setLocalUuidInput}
+                  similarUuidCandidates={comet.similarUuidCandidates}
                   capPull={comet.capPull}
                   capPreflight={comet.capPreflight}
                   capPush={comet.capPush}
                   pullBusy={comet.pullBusy}
                   pushBusy={comet.pushBusy}
                   preflightBusy={comet.preflightBusy}
+                  metaserverBusy={comet.metaserverBusy}
                   preflightSummary={comet.preflightSummary}
+                  metaserverSummary={comet.metaserverSummary}
                   onPull={comet.pullFromComet}
                   onPreflight={comet.runPreflightChain}
+                  onMetaserverValidate={comet.runMetaserverValidate}
                   onPush={comet.pushDraftToComet}
+                  cometUsername={comet.cometUsername}
+                  setCometUsername={comet.setCometUsername}
+                  cometPassword={comet.cometPassword}
+                  setCometPassword={comet.setCometPassword}
+                  authBusy={comet.authBusy}
+                  authStatus={comet.authStatus}
+                  onRefreshAuthStatus={comet.refreshAuthStatus}
+                  onCometLogin={comet.runCometLogin}
+                  onMetaserverLogin={comet.runMetaserverLogin}
+                  onClearAuth={comet.clearAuthSessions}
                 />
               </div>
             ) : null}
           </div>
         </aside>
+      </section>
         <div
           id="manta-scanner-host"
-          className="manta-scanner-host manta-scanner-host--workspace-grid"
+          className="manta-scanner-host manta-scanner-host--lens-stack"
           data-manta-scanner-host
           aria-hidden="true"
         />
-      </section>
+      </div>
 
       <section className="card pilot-notes">
         <h2>Pilot notes</h2>

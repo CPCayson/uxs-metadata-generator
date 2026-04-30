@@ -37,6 +37,7 @@ export default function StepValidation({
     <div>
       <h3 className="step-title">Validation — lenient mode</h3>
       <p className="step-subtitle">
+        Readiness {score}% ·{" "}
         {fixed
           ? `Auto-fix applied · ${wrnCount} warning${wrnCount !== 1 ? "s" : ""} remain`
           : `${errCount} error${errCount !== 1 ? "s" : ""} · ${wrnCount} warning${wrnCount !== 1 ? "s" : ""} · switch to Strict or Catalog for full check`}

@@ -1,0 +1,185 @@
+{
+  "generatedAt": "2026-04-30T11:45:41.206Z",
+  "fixtureDir": "fixtures/mission",
+  "includeProxy": false,
+  "includeRoundtrip": false,
+  "totalFiles": 2,
+  "files": [
+    {
+      "file": "9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml",
+      "localIssues": [
+        "Found unresolved {{token}} placeholder(s)",
+        "Found malformed brace token(s) like {TOKEN}}"
+      ],
+      "nceiCore": {
+        "block": [
+          "Missing temporal begin position (gml:beginPosition)."
+        ],
+        "check": [
+          "Missing detectable data license constraint statement/xlink."
+        ]
+      },
+      "docucomp": {
+        "block": [],
+        "check": [
+          "XLinks exist but no Docucomp references were detected.",
+          "NOAA logo Docucomp component not detected (recommended).",
+          "Known Docucomp license component not detected (CC0/CC BY set)."
+        ],
+        "docucompRefCount": 0
+      },
+      "oerDbRequired": {
+        "block": [
+          {
+            "ruleId": "oer_req_divebegin",
+            "message": "Missing dive begin time (gml:beginPosition)."
+          },
+          {
+            "ruleId": "oer_req_diveend",
+            "message": "Missing dive end time (gml:endPosition)."
+          },
+          {
+            "ruleId": "oer_req_instruments",
+            "message": "Missing instrument snippet(s)."
+          },
+          {
+            "ruleId": "oer_req_platform",
+            "message": "Missing platform snippet(s)."
+          }
+        ]
+      },
+      "standardsAdvisory": {
+        "check": [
+          "No reference system block detected; some standards profiles expect CRS clarity."
+        ]
+      },
+      "dsmqAdvisory": {
+        "check": [],
+        "hasDsmqSignal": true
+      },
+      "proxy": {},
+      "roundtrip": null,
+      "pass": false,
+      "publishReadiness": {
+        "status": "BLOCK",
+        "blockers": [
+          "template_hygiene",
+          "ncei_core",
+          "oer_db_required"
+        ],
+        "checks": [
+          "ncei_recommended",
+          "docucomp_recommended",
+          "standards_interop"
+        ]
+      }
+    },
+    {
+      "file": "sample-mission.xml",
+      "localIssues": [],
+      "nceiCore": {
+        "block": [
+          "Missing dataset title (gmd:title).",
+          "Missing abstract (gmd:abstract).",
+          "Missing geographic bounding box (gmd:EX_GeographicBoundingBox).",
+          "Missing temporal begin position (gml:beginPosition).",
+          "Missing citation identifier block (gmd:identifier).",
+          "Missing citation responsible party (gmd:citedResponsibleParty)."
+        ],
+        "check": [
+          "Missing descriptive keywords (gmd:descriptiveKeywords).",
+          "Missing detectable data license constraint statement/xlink."
+        ]
+      },
+      "docucomp": {
+        "block": [],
+        "check": [
+          "NOAA logo Docucomp component not detected (recommended).",
+          "Known Docucomp license component not detected (CC0/CC BY set)."
+        ],
+        "docucompRefCount": 0
+      },
+      "oerDbRequired": {
+        "block": [
+          {
+            "ruleId": "oer_req_cruisename",
+            "message": "Missing cruise/record title (gmd:title)."
+          },
+          {
+            "ruleId": "oer_req_diveabstract",
+            "message": "Missing dive/project abstract (gmd:abstract)."
+          },
+          {
+            "ruleId": "oer_req_keywords_theme",
+            "message": "Missing theme/GCMD keyword signal."
+          },
+          {
+            "ruleId": "oer_req_keywords_place",
+            "message": "Missing place keyword signal."
+          },
+          {
+            "ruleId": "oer_req_bbox",
+            "message": "Missing min/max lat/long bounding box."
+          },
+          {
+            "ruleId": "oer_req_divebegin",
+            "message": "Missing dive begin time (gml:beginPosition)."
+          },
+          {
+            "ruleId": "oer_req_diveend",
+            "message": "Missing dive end time (gml:endPosition)."
+          },
+          {
+            "ruleId": "oer_req_depth_minmax",
+            "message": "Missing min/max depth values."
+          },
+          {
+            "ruleId": "oer_req_principals",
+            "message": "Missing principal/contact party block."
+          },
+          {
+            "ruleId": "oer_req_instruments",
+            "message": "Missing instrument snippet(s)."
+          },
+          {
+            "ruleId": "oer_req_platform",
+            "message": "Missing platform snippet(s)."
+          }
+        ]
+      },
+      "standardsAdvisory": {
+        "check": [
+          "No MD_Keywords blocks detected for keyworded discovery profiles.",
+          "No reference system block detected; some standards profiles expect CRS clarity.",
+          "No distributionInfo block detected for access/interoperability expectations."
+        ]
+      },
+      "dsmqAdvisory": {
+        "check": [
+          "No DSMQ/DSMM stewardship maturity signal detected (advisory for discovery ranking)."
+        ],
+        "hasDsmqSignal": false
+      },
+      "proxy": {},
+      "roundtrip": null,
+      "pass": false,
+      "publishReadiness": {
+        "status": "BLOCK",
+        "blockers": [
+          "ncei_core",
+          "oer_db_required"
+        ],
+        "checks": [
+          "ncei_recommended",
+          "docucomp_recommended",
+          "standards_interop",
+          "dsmq_signal"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "pass": 0,
+    "fail": 2
+  }
+}

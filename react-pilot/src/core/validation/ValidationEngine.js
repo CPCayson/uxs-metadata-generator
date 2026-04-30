@@ -12,8 +12,9 @@
 import { validatePilotState } from '../../lib/pilotValidation.js'
 import { previewMetadataXPath } from '../../lib/metadataXPath.js'
 import { canonicalToPilotState } from '../mappers/pilotStateMapper.js'
+import { getCompiledRuleIssues } from './compiledRuleRuntime.js'
 
-const VALIDATION_SOURCES = new Set(['profile', 'legacy', 'server', 'comet', 'linkcheck', 'xsd', 'schematron', 'scanner'])
+const VALIDATION_SOURCES = new Set(['profile', 'legacy', 'server', 'comet', 'linkcheck', 'xsd', 'schematron', 'scanner', 'compiled'])
 
 function slugPart(value) {
   return String(value || '')
@@ -212,6 +213,17 @@ export class ValidationEngine {
           })))
         }
       }
+    }
+
+    // Append compiled swarm rules (if a compiled bundle exists for this profile type).
+    const compiledIssues = getCompiledRuleIssues(profile?.id, state)
+    if (compiledIssues.length) {
+      issues.push(...compiledIssues.map((i) => normalizeValidationIssue(i, {
+        profile,
+        mode,
+        source: 'compiled',
+        ruleSetId: 'compiled-rules',
+      })))
     }
 
     return summarizeIssues(issues)
