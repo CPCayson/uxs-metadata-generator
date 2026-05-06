@@ -55,6 +55,11 @@ async function searchComet({ cometBase, sessionId, recordGroup, max }) {
     redirect: 'manual',
   })
   const body = await res.text()
+  if (res.status >= 300 && res.status < 400) {
+    throw new Error(
+      `CoMET search redirected (${res.status}) — session likely expired or not logged in. Refresh JSESSIONID.`,
+    )
+  }
   if (!res.ok) {
     throw new Error(`CoMET search failed (${res.status}): ${body.slice(0, 300)}`)
   }

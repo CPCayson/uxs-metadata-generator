@@ -16,7 +16,8 @@ export default defineConfig({
   },
   server: {
     port: 5173,
-    strictPort: false,
+    // Keep fixed so `netlify dev` `targetPort` in netlify.toml stays valid.
+    strictPort: true,
     host: true,
     open: process.env.VITE_OPEN === '0' ? false : true,
   },

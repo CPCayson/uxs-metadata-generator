@@ -21,14 +21,16 @@ export function getLensChipsForIssue(issue, pilotState) {
     {
       id:         `${idBase}:hint`,
       kind:       'help',
-      label:      'What’s wrong?',
+      label:      'Why?',
       helpText:   issue.message + (issue.field ? `\n\nPath: ${issue.field}` : ''),
     },
     {
       id:        `${idBase}:autofix`,
       kind:      'action',
       action:    'autofix',
-      label:     'Run auto-fixes',
+      label:     'Safe defaults',
+      /** Whole-record mechanical fixes — secondary to field-level fixes. */
+      secondary: true,
     },
   ]
 }

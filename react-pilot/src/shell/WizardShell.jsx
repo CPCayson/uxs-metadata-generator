@@ -491,6 +491,13 @@ export default function WizardShell({ onDirtyChange }) {
               />
             </Suspense>
           )}
+
+          {/* Manta Lens: optional portal host (issues are inline on fields; keep for layout grid hooks). */}
+          <div
+            id="manta-lens-step-footer-host"
+            className="manta-lens-step-footer-host"
+            data-manta-lens-step-footer-host
+          />
         </article>
 
         <aside

@@ -1,5 +1,16 @@
 # Logs: Netlify → your site → Functions → `db` (or Deploys → a deploy → Function logs).
 # The `db` handler logs each call as `[db] <fn> ok|stateless …ms` and errors with timing + stack.
+
+# Local dev: same-origin `/api/*` → functions (run from `react-pilot/`).
+# App URL: http://localhost:8888 (proxy). Vite alone: http://localhost:5173 (`npm run dev`).
+# Usage: `npm run dev:netlify` — use the URL Netlify prints if 8888 is taken.
+[dev]
+  command = "npm run dev"
+  port = 8888
+  targetPort = 5173
+  publish = "dist"
+  autoLaunch = false
+
 [build]
   command   = "npm run build"
   publish   = "dist"

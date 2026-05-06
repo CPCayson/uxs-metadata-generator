@@ -86,6 +86,10 @@ async function main() {
       failures.push({ uuid, status, error: 'Received HTML response (likely expired session)' })
       continue
     }
+    if (!trimmed.startsWith('<')) {
+      failures.push({ uuid, status, error: `Non-XML response: ${body.slice(0, 120)}` })
+      continue
+    }
     const fileName = `${sanitizeName(uuid)}.xml`
     const outPath = path.join(args.outDir, fileName)
     fs.writeFileSync(outPath, body, 'utf8')

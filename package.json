@@ -4,6 +4,7 @@
   "description": "Convenience scripts for the React pilot (see react-pilot/README.md)",
   "scripts": {
     "pilot:dev": "npm --prefix react-pilot run dev",
+    "pilot:dev:netlify": "npm --prefix react-pilot run dev:netlify",
     "pilot:build": "npm --prefix react-pilot run build",
     "pilot:desktop": "npm --prefix react-pilot run desktop:start",
     "pilot:desktop:dev": "npm --prefix react-pilot run desktop:dev",

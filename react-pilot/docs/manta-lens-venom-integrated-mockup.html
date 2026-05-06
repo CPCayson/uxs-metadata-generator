@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Manta Lens — wrap + laser glass fields</title>
+  <style>
+    :root {
+      --cyan: #22d3ee;
+      --cyan-bright: #67e8f9;
+      --violet-glow: rgba(168, 85, 247, 0.35);
+      --text: #ecfeff;
+      --muted: #94a3b8;
+      --ok: #34d399;
+      --font-ui: system-ui, "Segoe UI", sans-serif;
+      --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-ui);
+      background: #020617;
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(34, 211, 238, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34, 211, 238, 0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .banner {
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 40;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: rgba(5, 8, 22, 0.88);
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(34, 211, 238, 0.22);
+      backdrop-filter: blur(8px);
+    }
+
+    .stage {
+      position: relative;
+      min-height: 100vh;
+      padding: 52px 18px 130px;
+      max-width: 920px;
+      margin: 0 auto;
+      z-index: 1;
+    }
+
+    .intro {
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .intro h1 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin: 0 0 6px;
+      text-shadow: 0 0 20px rgba(34, 211, 238, 0.15);
+    }
+
+    .intro p {
+      margin: 0;
+      font-size: 12px;
+      color: var(--muted);
+      max-width: 50ch;
+      line-height: 1.45;
+    }
+
+    /* ── Wrap shell: symbiote hugs the whole form + XML stack ───────── */
+    .wrap-shell {
+      position: relative;
+      padding: 28px 8px 8px;
+      margin: 0 -8px;
+    }
+
+    .symbiote {
+      position: absolute;
+      inset: -12px -14px -28px -14px;
+      pointer-events: none;
+      z-index: 0;
+      overflow: visible;
+    }
+
+    .blob {
+      position: absolute;
+      opacity: 0.95;
+    }
+
+    /* Crown — curls over the top of the form */
+    .blob--crown {
+      width: 104%;
+      height: 42%;
+      left: -2%;
+      top: -8%;
+      border-radius: 48% 52% 42% 58% / 55% 45% 52% 48%;
+      background:
+        radial-gradient(ellipse 90% 65% at 50% 100%, rgba(88, 28, 135, 0.35) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 20% 60%, rgba(34, 211, 238, 0.12) 0%, transparent 50%),
+        linear-gradient(175deg, rgba(4, 4, 14, 0.97) 0%, rgba(18, 8, 40, 0.55) 100%);
+      box-shadow:
+        inset 0 -2px 20px rgba(34, 211, 238, 0.08),
+        0 16px 48px rgba(0, 0, 0, 0.45);
+      animation: morph-crown 16s ease-in-out infinite alternate;
+    }
+
+    /* Left arm — wraps around form edge */
+    .blob--left {
+      width: 42%;
+      height: 78%;
+      left: -18%;
+      top: 8%;
+      border-radius: 58% 42% 48% 52% / 42% 58% 52% 48%;
+      background: radial-gradient(ellipse 70% 80% at 80% 45%, rgba(168, 85, 247, 0.18) 0%, transparent 62%);
+      animation: morph-side 12s ease-in-out infinite alternate;
+    }
+
+    /* Right arm */
+    .blob--right {
+      width: 38%;
+      height: 72%;
+      right: -16%;
+      top: 14%;
+      border-radius: 42% 58% 52% 48% / 58% 42% 48% 52%;
+      background: radial-gradient(ellipse 65% 75% at 15% 50%, rgba(34, 211, 238, 0.12) 0%, transparent 58%);
+      animation: morph-side 14s ease-in-out infinite alternate-reverse;
+    }
+
+    /* Floor — rises through bbox + XML */
+    .blob--floor {
+      width: 118%;
+      height: 58%;
+      left: -9%;
+      bottom: -14%;
+      border-radius: 52% 48% 55% 45% / 42% 58% 48% 52%;
+      background:
+        radial-gradient(ellipse 85% 55% at 45% 25%, rgba(88, 28, 135, 0.28) 0%, transparent 55%),
+        linear-gradient(8deg, rgba(3, 3, 12, 0.96) 0%, rgba(10, 6, 28, 0.88) 100%);
+      box-shadow: inset 0 2px 0 rgba(34, 211, 238, 0.1);
+      animation: morph-floor 18s ease-in-out infinite alternate;
+    }
+
+    @keyframes morph-crown {
+      0% {
+        border-radius: 48% 52% 42% 58% / 55% 45% 52% 48%;
+        transform: translate(0, 0);
+      }
+      100% {
+        border-radius: 54% 46% 48% 52% / 48% 52% 46% 54%;
+        transform: translate(1%, -1%);
+      }
+    }
+
+    @keyframes morph-side {
+      0% {
+        transform: translate(0, 0) scale(1);
+      }
+      100% {
+        transform: translate(2%, 1%) scale(1.03);
+      }
+    }
+
+    @keyframes morph-floor {
+      0% {
+        border-radius: 52% 48% 55% 45% / 42% 58% 48% 52%;
+      }
+      100% {
+        border-radius: 46% 54% 48% 52% / 52% 48% 54% 46%;
+        transform: translate(-1%, 0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .blob--crown,
+      .blob--left,
+      .blob--right,
+      .blob--floor {
+        animation: none;
+      }
+      .glass-field input,
+      .glass-field textarea {
+        animation: none;
+      }
+    }
+
+    /* Content sits ON the wrap */
+    .glass-stack {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Form card — thin glass; fields are laser glass */
+    .form-surface {
+      padding: 22px 20px 18px;
+      border-radius: 18px;
+      background: rgba(8, 10, 24, 0.25);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(34, 211, 238, 0.18);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.06),
+        0 4px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .field {
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .field label {
+      display: block;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: rgba(165, 243, 252, 0.65);
+      margin-bottom: 8px;
+      text-shadow: 0 0 12px rgba(34, 211, 238, 0.25);
+    }
+
+    /* Laser-on-glass inputs */
+    .field-input-wrap {
+      position: relative;
+      border-radius: 12px;
+      padding: 1px;
+      background: linear-gradient(
+        135deg,
+        rgba(34, 211, 238, 0.55),
+        rgba(168, 85, 247, 0.35),
+        rgba(34, 211, 238, 0.4)
+      );
+      box-shadow:
+        0 0 20px rgba(34, 211, 238, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    .field-input-wrap::after {
+      content: "";
+      position: absolute;
+      inset: 1px;
+      border-radius: 11px;
+      background: linear-gradient(
+        165deg,
+        rgba(12, 18, 35, 0.45) 0%,
+        rgba(6, 12, 28, 0.65) 100%
+      );
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 0;
+    }
+
+    .glass-field input,
+    .glass-field textarea {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      padding: 11px 13px;
+      border: none;
+      border-radius: 11px;
+      background: transparent !important;
+      color: #f0fdfa;
+      font-size: 14px;
+      font-weight: 500;
+      outline: none;
+      letter-spacing: 0.01em;
+      text-shadow:
+        0 0 6px rgba(34, 211, 238, 0.95),
+        0 0 14px rgba(34, 211, 238, 0.55),
+        0 0 22px rgba(103, 232, 249, 0.35),
+        0 1px 0 rgba(0, 0, 0, 0.4);
+      animation: laser-pulse 4.5s ease-in-out infinite;
+    }
+
+    .glass-field textarea {
+      min-height: 78px;
+      resize: vertical;
+      line-height: 1.5;
+      font-family: var(--font-ui);
+    }
+
+    @keyframes laser-pulse {
+      0%,
+      100% {
+        text-shadow:
+          0 0 6px rgba(34, 211, 238, 0.9),
+          0 0 14px rgba(34, 211, 238, 0.5),
+          0 0 24px rgba(168, 85, 247, 0.2);
+      }
+      50% {
+        text-shadow:
+          0 0 10px rgba(103, 232, 249, 1),
+          0 0 20px rgba(34, 211, 238, 0.65),
+          0 0 32px rgba(34, 211, 238, 0.35);
+      }
+    }
+
+    /* Scan shimmer across glass (decorative) */
+    .field-input-wrap::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      background: linear-gradient(
+        105deg,
+        transparent 0%,
+        transparent 40%,
+        rgba(255, 255, 255, 0.07) 50%,
+        transparent 60%,
+        transparent 100%
+      );
+      background-size: 200% 100%;
+      animation: scan-shine 5s linear infinite;
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0.85;
+    }
+
+    @keyframes scan-shine {
+      0% {
+        background-position: 100% 0;
+      }
+      100% {
+        background-position: -100% 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .field-input-wrap::before {
+        animation: none;
+        opacity: 0;
+      }
+    }
+
+    .row4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    @media (max-width: 640px) {
+      .row4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* XML — same membrane */
+    .xml-integrated {
+      margin-top: 14px;
+      padding: 16px 16px 18px;
+      border-radius: 16px 20px 22px 14px;
+      background: rgba(4, 8, 20, 0.35);
+      border: 1px solid rgba(34, 211, 238, 0.22);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.05),
+        0 12px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .xml-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(34, 211, 238, 0.14);
+    }
+
+    .xml-head strong {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--cyan-bright);
+      font-weight: 600;
+      text-shadow: 0 0 14px rgba(34, 211, 238, 0.35);
+    }
+
+    .xml-head span {
+      font-size: 10px;
+      color: var(--muted);
+      font-family: var(--font-mono);
+    }
+
+    .xml-panel {
+      max-height: min(34vh, 260px);
+      overflow: auto;
+    }
+
+    .xml-panel pre {
+      margin: 0;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      line-height: 1.52;
+      color: #cbd5e1;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .xm {
+      color: #64748b;
+    }
+    .el {
+      color: #67e8f9;
+    }
+    .at {
+      color: #c4b5fd;
+    }
+    .val {
+      color: #fde68a;
+    }
+
+    .hl {
+      background: rgba(34, 211, 238, 0.14);
+      box-shadow: 0 0 12px rgba(34, 211, 238, 0.2);
+      border-radius: 2px;
+    }
+
+    /* Laser tethers — crisp beams */
+    .tethers {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 3;
+      overflow: visible;
+    }
+
+    .tethers path {
+      fill: none;
+      stroke: url(#beam);
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 4px rgba(34, 211, 238, 0.9));
+      opacity: 0.85;
+    }
+
+    .footnote {
+      margin-top: 22px;
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.5;
+      max-width: 54ch;
+      position: relative;
+      z-index: 2;
+    }
+
+    .footnote code {
+      color: var(--cyan);
+      font-size: 10px;
+    }
+
+    /* ── Footer HUD (unchanged vibe — you liked this) ───────────────── */
+    .hud-float {
+      position: fixed;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 8px 12px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: rgba(5, 6, 16, 0.88);
+      border: 1px solid rgba(34, 211, 238, 0.32);
+      box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.55),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      max-width: calc(100vw - 28px);
+    }
+
+    .hud-float .brand {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--cyan);
+      text-shadow: 0 0 12px rgba(34, 211, 238, 0.45);
+    }
+
+    .score-ring {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid rgba(34, 211, 238, 0.3);
+      border-top-color: var(--cyan);
+      display: grid;
+      place-items: center;
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--cyan);
+    }
+
+    .pill {
+      font-size: 10px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(52, 211, 153, 0.4);
+      color: var(--ok);
+    }
+
+    .seg {
+      display: flex;
+      gap: 4px;
+    }
+
+    .seg button {
+      font-size: 10px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      background: rgba(15, 23, 42, 0.55);
+      color: var(--muted);
+      cursor: default;
+      font-family: inherit;
+    }
+
+    .seg button.on {
+      border-color: var(--cyan);
+      color: var(--cyan);
+      background: rgba(34, 211, 238, 0.12);
+      box-shadow: 0 0 14px rgba(34, 211, 238, 0.25);
+    }
+
+    .mini {
+      font-size: 10px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(168, 85, 247, 0.38);
+      background: transparent;
+      color: #c4b5fd;
+      cursor: default;
+      font-family: inherit;
+    }
+  </style>
+</head>
+<body>
+  <p class="banner">Wrap · laser glass fields · tether beams</p>
+
+  <div class="stage">
+    <div class="intro">
+      <h1>Identification — mission draft</h1>
+      <p>
+        Symbiote surfaces wrap the whole card (crown + sides + floor). Inputs are glass with etched cyan laser text — same membrane continues into XML.
+      </p>
+    </div>
+
+    <div class="wrap-shell">
+      <div class="symbiote" aria-hidden="true">
+        <div class="blob blob--crown"></div>
+        <div class="blob blob--left"></div>
+        <div class="blob blob--right"></div>
+        <div class="blob blob--floor"></div>
+      </div>
+
+      <svg class="tethers" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="beam" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color: #22d3ee" />
+            <stop offset="100%" style="stop-color: #a855f7" />
+          </linearGradient>
+        </defs>
+        <path d="M 18 22 Q 35 48 52 62 T 78 78" vector-effect="non-scaling-stroke" />
+        <path d="M 18 38 Q 38 52 48 68 T 72 82" vector-effect="non-scaling-stroke" />
+        <path d="M 22 88 Q 48 72 62 58 T 82 42" vector-effect="non-scaling-stroke" />
+      </svg>
+
+      <div class="glass-stack">
+        <div class="form-surface">
+          <div class="field glass-field field--focus">
+            <label for="title">Dataset title</label>
+            <div class="field-input-wrap">
+              <input
+                id="title"
+                type="text"
+                value="Okeanos Explorer (EX1904): 2019 Technology Demonstrations"
+                readonly
+                tabindex="-1"
+              />
+            </div>
+          </div>
+
+          <div class="field glass-field">
+            <label for="abs">Abstract</label>
+            <div class="field-input-wrap">
+              <textarea id="abs" readonly tabindex="-1">Operations will include multibeam mapping, ROV operations, and ship-to-shore telepresence…</textarea>
+            </div>
+          </div>
+
+          <div class="field glass-field">
+            <label>Bounding box</label>
+            <div class="row4">
+              <div class="field-input-wrap">
+                <input type="text" value="−74.07" readonly tabindex="-1" aria-label="West" />
+              </div>
+              <div class="field-input-wrap">
+                <input type="text" value="−66.82" readonly tabindex="-1" aria-label="East" />
+              </div>
+              <div class="field-input-wrap">
+                <input type="text" value="36.72" readonly tabindex="-1" aria-label="South" />
+              </div>
+              <div class="field-input-wrap">
+                <input type="text" value="41.30" readonly tabindex="-1" aria-label="North" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="xml-integrated">
+          <div class="xml-head">
+            <strong>Live XML — same wrap</strong>
+            <span>&lt;!-- ISO 19115-2 · tethered rows --&gt;</span>
+          </div>
+          <div class="xml-panel">
+            <pre><span class="xm">&lt;?</span><span class="el">xml</span> <span class="at">version</span>=<span class="val">"1.0"</span><span class="xm">?&gt;</span>
+<span class="xm">&lt;</span><span class="el">gmi:MI_Metadata</span> <span class="at">uuid</span>=<span class="val">"e023a596-a61d-4a7c-98a4-22d03d1574a9"</span><span class="xm">&gt;</span>
+  <span class="xm">&lt;</span><span class="el">gmd:fileIdentifier</span><span class="xm">&gt;</span>
+    <span class="xm">&lt;</span><span class="el">gco:CharacterString</span><span class="xm">&gt;</span><span class="hl">gov.noaa.ncei.oer:EX1904_COLLECTION</span><span class="xm">&lt;/</span><span class="el">gco:CharacterString</span><span class="xm">&gt;</span>
+  <span class="xm">&lt;/</span><span class="el">gmd:fileIdentifier</span><span class="xm">&gt;</span>
+  <span class="xm">&lt;</span><span class="el">gmd:extent</span><span class="xm">&gt;</span> … <span class="hl">-74.07</span> … <span class="xm">&lt;/</span><span class="el">gmd:extent</span><span class="xm">&gt;</span>
+<span class="xm">&lt;/</span><span class="el">gmi:MI_Metadata</span><span class="xm">&gt;</span></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="footnote">
+      Static mockup: gradient border + blurred inner plate = glass; <code>text-shadow</code> stack + pulse = laser ink.
+      Footer HUD unchanged from prior iteration.
+    </p>
+  </div>
+
+  <nav class="hud-float" aria-label="Lens controls">
+    <span class="brand">⬡ MANTA</span>
+    <div class="score-ring">94</div>
+    <span class="pill">✓ clear</span>
+    <div class="seg" role="group">
+      <button type="button">XML</button>
+      <button type="button">Form</button>
+      <button type="button" class="on">Wrap</button>
+    </div>
+    <button type="button" class="mini">Fix walk</button>
+    <button type="button" class="mini" style="border-color: rgba(34,211,238,0.45); color: var(--cyan)">↻</button>
+    <button type="button" class="mini" style="border-color: rgba(248,113,113,0.35)">Exit</button>
+  </nav>
+</body>
+</html>

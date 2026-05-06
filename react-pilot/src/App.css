@@ -405,6 +405,14 @@
   min-width: 0;
 }
 
+/* When lens issues rail is mounted, breathe room above the sticky validator rail */
+#root .workspace-grid:has(.manta-lens-step-footer-host:not(:empty)) {
+  align-items: stretch;
+}
+#root .workspace-main.pilot-step.card:has(.manta-lens-step-footer-host:not(:empty)) {
+  padding-bottom: 0.25rem;
+}
+
 .workspace-side {
   min-width: 0;
 }

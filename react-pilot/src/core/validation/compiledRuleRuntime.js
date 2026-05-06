@@ -1,6 +1,6 @@
-import missionCompiled from '../../../compiled_rules/mission.json'
-import collectionCompiled from '../../../compiled_rules/collection.json'
-import granuleCompiled from '../../../compiled_rules/granule.json'
+import missionCompiled from '../../../compiled_rules/mission.json' with { type: 'json' }
+import collectionCompiled from '../../../compiled_rules/collection.json' with { type: 'json' }
+import granuleCompiled from '../../../compiled_rules/granule.json' with { type: 'json' }
 
 const BUNDLES = {
   mission: missionCompiled,
