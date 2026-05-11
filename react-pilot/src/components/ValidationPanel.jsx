@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 /**
  * @param {{
@@ -64,6 +64,7 @@ export default function ValidationPanel({
 }) {
   const [issueFilter, setIssueFilter] = useState(/** @type {'all' | 'e' | 'w'} */ ('all'))
   const [issueNavIndex, setIssueNavIndex] = useState(0)
+  const issueListRef = useRef(/** @type {HTMLUListElement | null} */ (null))
 
   const filteredIssues = useMemo(() => {
     if (issueFilter === 'all') return issues
@@ -76,6 +77,19 @@ export default function ValidationPanel({
       return Math.min(i, filteredIssues.length - 1)
     })
   }, [filteredIssues])
+
+  /** Keep the active issue row visible when stepping with Prev/Next or after filter changes */
+  useEffect(() => {
+    if (!filteredIssues.length) return
+    const root = issueListRef.current
+    if (!root) return
+    const btn = root.querySelector(`button.issue-jump[data-issue-nav-index="${issueNavIndex}"]`)
+    if (btn instanceof HTMLElement) {
+      btn.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+    }
+    // Intentionally omit `filteredIssues` reference — parent often passes a new array each render;
+    // we only need to re-scroll when index, filter, or list length changes.
+  }, [issueNavIndex, issueFilter, filteredIssues.length])
 
   function stepIssue(delta) {
     if (!filteredIssues.length || typeof onIssueNavigate !== 'function') return
@@ -220,10 +234,22 @@ export default function ValidationPanel({
           <strong id="validation-issues-heading">{listLabel}</strong>
           {filteredIssues.length && typeof onIssueNavigate === 'function' ? (
             <div className="issue-step-nav" role="group" aria-label="Step through issues">
-              <button type="button" className="button button-secondary button-tiny" onClick={() => stepIssue(-1)}>
+              <button
+                type="button"
+                className="button button-secondary button-tiny issue-step-nav__btn"
+                onClick={() => stepIssue(-1)}
+                aria-label="Previous validation issue"
+                title="Previous issue"
+              >
                 ← Prev
               </button>
-              <button type="button" className="button button-secondary button-tiny" onClick={() => stepIssue(1)}>
+              <button
+                type="button"
+                className="button button-secondary button-tiny issue-step-nav__btn"
+                onClick={() => stepIssue(1)}
+                aria-label="Next validation issue"
+                title="Next issue"
+              >
                 Next →
               </button>
               <span className="issue-step-nav__pos" aria-live="polite">
@@ -255,18 +281,24 @@ export default function ValidationPanel({
           <p className="hint">No issues match this filter.</p>
         ) : null}
         {filteredIssues.length ? (
-          <ul className="issue-list">
+          <ul className="issue-list" ref={issueListRef}>
             {filteredIssues.map((iss, i) => {
               const label = getFieldLabel(iss.field)
+              const navActive = i === issueNavIndex
               return (
                 <li key={`${iss.field}-${i}`} className={iss.severity === 'e' ? 'issue-err' : 'issue-warn'}>
                   <button
                     type="button"
-                    className="issue-jump"
+                    className={`issue-jump${navActive ? ' issue-jump--active' : ''}`}
                     disabled={typeof onIssueNavigate !== 'function'}
-                    onClick={() => onIssueNavigate?.(iss.field)}
+                    onClick={() => {
+                      setIssueNavIndex(i)
+                      onIssueNavigate?.(iss.field)
+                    }}
                     data-pilot-issue-field={iss.field}
                     data-pilot-issue-sev={iss.severity}
+                    data-issue-nav-index={i}
+                    aria-current={navActive ? 'true' : undefined}
                   >
                     <span className="issue-sev">{iss.severity === 'e' ? 'Error' : 'Warn'}</span>
                     <span className="issue-field">{label}</span>

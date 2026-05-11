@@ -39,6 +39,7 @@ import MissionWizardStepPills from '../components/MissionWizardStepPills.jsx'
 import ImportReviewPanel from '../components/ImportReviewPanel.jsx'
 import WizardStartChoiceModal from '../components/WizardStartChoiceModal.jsx'
 import { diffPilotStates, applyDecisions } from '../core/fragments/diffPilotStates.js'
+import { summarizePilotImportPopulation } from '../lib/importMergeSummary.js'
 import { useWorkbenchChrome } from './useWorkbenchChrome.js'
 import { defaultPilotState } from '../lib/pilotValidation.js'
 
@@ -155,6 +156,9 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
   const [importSampleContext, setImportSampleContext] = useState(
     /** @type {{ rawXml: string, filename?: string, warnings?: string[] } | null} */ (null),
   )
+
+  /** Bumping remounts XmlToolsBar so paste/import textarea + zip UI reset when clearing the form */
+  const [xmlToolsBarResetKey, setXmlToolsBarResetKey] = useState(0)
 
   const pilotRef = useRef(pilotState)
   pilotRef.current = pilotState
@@ -354,6 +358,10 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     () => [...readinessBundles, ...certificationBundles],
     [readinessBundles, certificationBundles],
   )
+
+  /** Suppress Draft / ISO-ready / CoMET cert lanes while tuning XML→form import (see .env.example). */
+  const hideReadinessGoalBundles =
+    typeof import.meta !== 'undefined' && import.meta.env?.VITE_HIDE_READINESS_BUNDLES === 'true'
 
   const stepStatuses = useMemo(() => {
     const fromIssues = workflowEngine.stepCompletionFromIssues(validation.issues)
@@ -559,14 +567,33 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
       window.setTimeout(() => {
         wizardNavSuppressObserverRef.current = false
       }, 700)
-      if (scrollToField(field)) return
+
+      const tryFocus = () => scrollToField(field)
+      if (tryFocus()) return
+
       let attempts = 0
-      const maxAttempts = 50
+      /** ~2s of animation frames — enough for most paints; Suspense steps may need longer */
+      const maxAttempts = 120
       const tick = () => {
-        if (scrollToField(field)) return
+        if (tryFocus()) return
         attempts += 1
         if (attempts >= maxAttempts) {
-          setStatusMessage(`Could not find a control for "${field}". Open the matching step manually if needed.`)
+          const gapsMs = [80, 200, 550, 1400]
+          let gi = 0
+          const delayed = () => {
+            if (tryFocus()) return
+            if (gi >= gapsMs.length) {
+              setStatusMessage(`Could not find a control for "${field}". Open the matching step manually if needed.`)
+              return
+            }
+            const wait = gapsMs[gi]
+            gi += 1
+            window.setTimeout(() => {
+              if (tryFocus()) return
+              delayed()
+            }, wait)
+          }
+          delayed()
           return
         }
         requestAnimationFrame(tick)
@@ -661,6 +688,7 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     setShowAllErrors(false)
     setPendingImport(null)
     setImportSampleContext(null)
+    setXmlToolsBarResetKey((k) => k + 1)
     setActiveStep(profile.steps[0]?.id ?? 'mission')
     setIsDirty(false)
     onDirtyChange(false)
@@ -696,7 +724,12 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     }
   }
 
-  function handlePilotImport(next) {
+  /**
+   * @param {object} next Merged pilot state from XML import
+   * @param {{ importWarnings?: string[] }} [meta] Parser warnings from {@link parseProfileXmlImport}
+   */
+  function handlePilotImport(next, meta = {}) {
+    const importWarnings = Array.isArray(meta.importWarnings) ? meta.importWarnings : []
     const changes = diffPilotStates(pilotState, next, next.sourceProvenance?.sourceType ?? 'rawIso')
     if (changes.length === 0) {
       const clean = profile.sanitize(next)
@@ -704,9 +737,18 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
       syncBaselineAfterExternalMerge(clean)
       setTouched({})
       setShowAllErrors(true)
+      const pop = summarizePilotImportPopulation(clean)
+      const w = importWarnings.length ? ` Parser notes: ${importWarnings.join(' · ')}` : ''
+      setStatusMessage(`${pop.summary}${w ? `.${w}` : ''}`)
       window.dispatchEvent(new CustomEvent('manta:metadata-import-merged'))
       return
     }
+    const conflicts = changes.filter((c) => c.isConflict).length
+    setStatusMessage(
+      conflicts > 0
+        ? `Import parsed (${changes.length} updates, ${conflicts} conflict${conflicts !== 1 ? 's' : ''}). Finish in the Review import overlay — resolve each conflict, then click Apply.`
+        : `Import parsed (${changes.length} update${changes.length !== 1 ? 's' : ''}). Confirm in the Review import overlay, then click Apply.`,
+    )
     setPendingImport({
       changes,
       next,
@@ -726,9 +768,9 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
             setShowAllErrors(false)
             setTouched({})
           }}
-          onPilotImportMerged={(merged) => {
+          onPilotImportMerged={(merged, importMeta) => {
             setWizardStartOpen(false)
-            handlePilotImport(merged)
+            handlePilotImport(merged, importMeta)
           }}
           onImportSampleRecorded={(d) => {
             setImportSampleContext({
@@ -799,6 +841,7 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
 
         {/* XmlToolsBar portals into #pilot-header-tools-slot (mission + other profiles) */}
         <XmlToolsBar
+          key={xmlToolsBarResetKey}
           profile={profile}
           pilotState={pilotState}
           importSampleContext={importSampleContext}
@@ -925,7 +968,7 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
                   hideSectionHead
                   className="readiness-strip--rail-after-issues"
                   snapshot={readinessSnapshot}
-                  bundles={readinessAndCertificationBundles}
+                  bundles={hideReadinessGoalBundles ? [] : readinessAndCertificationBundles}
                   activeMode={pilotState.mode || 'lenient'}
                   onSelectMode={(m) => {
                     setMode(m)

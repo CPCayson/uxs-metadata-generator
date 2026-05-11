@@ -137,15 +137,19 @@ export default function StepMission({
 
       {guidedMissionIntro ? (
         <p className="card-intro">
-          <strong>Quick path:</strong> identifiers, title, abstract, period, contact, status, and language. Spatial bbox
-          and CRS are on the <strong>Spatial</strong> step. Use <strong>Detailed</strong> workspace density (tools FAB) for
-          full field-by-field guidance.
+          <strong>UxS acquisition data first:</strong> collection context (deployment, run, dive/sortie), then platform,
+          sensors, and spatial extent, describe the unmanned-systems collection — identifiers, title, abstract, period,
+          contact, status, and language round out the ISO record for export. Bbox and CRS are on the{' '}
+          <strong>Spatial</strong> step. Use <strong>Detailed</strong> workspace density (tools FAB) for full
+          field-by-field guidance.
         </p>
       ) : (
         <p className="card-intro">
-          <strong>Required for export</strong> in the current mode: identifiers, title, abstract, purpose, period, contact,
-          status, and language. <strong>Optional</strong> below: UxS operational context, supplemental text, and aggregation.
-          Bbox, CRS, and data-quality detail live on the <strong>Spatial</strong> step.
+          <strong>This pilot centers on UxS acquisition metadata:</strong> operational collection context (below), and the
+          Platform, Sensors, and Spatial steps, carry how the Navy/NOAA UxS mission produced the dataset.{' '}
+          <strong>Required for export</strong> in the current mode: ISO identifiers, title, abstract, purpose, period,
+          contact, status, and language. Supplemental citation and aggregation sections follow; bbox, CRS, and data-quality
+          detail are on the <strong>Spatial</strong> step.
         </p>
       )}
       {stepErrorSummary ? <p className="hint"><strong>Current step blockers:</strong> {stepErrorSummary}</p> : null}
@@ -160,7 +164,9 @@ export default function StepMission({
             </>
           </FieldHintTooltip>
         </h3>
-        <div className="form-row-2">
+        <fieldset className="pilot-fieldset mission-field-group">
+          <legend className="mission-fieldset-legend">Operational layer &amp; outcome</legend>
+          <div className="form-row-2">
           <div>
             <LabelWithHint
               htmlFor="uxsPrimaryLayer"
@@ -208,10 +214,11 @@ export default function StepMission({
             >
               {UXS_OUTCOME_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
-              ))}
-            </select>
+            ))}
+          </select>
           </div>
         </div>
+        </fieldset>
 
         <details>
           <summary>
@@ -221,6 +228,8 @@ export default function StepMission({
               search model before XML aggregation export is expanded.
             </FieldHintTooltip>
           </summary>
+          <fieldset className="pilot-fieldset mission-field-group">
+            <legend className="visually-hidden">Deployment, run, sortie, and dive identifiers</legend>
           <div className="form-row-2">
             <div>
               <label htmlFor="uxsDeploymentName">Deployment name</label>
@@ -327,6 +336,7 @@ export default function StepMission({
             onChange={(e) => patchUxsContext({ narrative: e.target.value })}
             onBlur={() => onTouched('mission.uxsContext.narrative')}
           />
+          </fieldset>
         </details>
       </section>
 
@@ -341,6 +351,8 @@ export default function StepMission({
             onMissionPatch({ [key]: value })
           }}
         />
+        <fieldset className="pilot-fieldset mission-field-group">
+          <legend className="mission-fieldset-legend">Core identification</legend>
         <MantaFieldGlass
           fieldPath="mission.fileId"
           value={mission.fileId}
@@ -449,7 +461,10 @@ export default function StepMission({
           value={mission.supplementalInformation || ''}
           onChange={(e) => onMissionPatch({ supplementalInformation: e.target.value })}
         />
+        </fieldset>
 
+        <fieldset className="pilot-fieldset mission-field-group">
+          <legend className="mission-fieldset-legend">Dataset period, dates &amp; language</legend>
         <div className="field-label-with-hint">
           <span className="field-label-with-hint__kicker">Dataset period</span>
           <FieldHintTooltip ariaLabel="About dataset period vs metadata record date">
@@ -611,8 +626,10 @@ export default function StepMission({
             />
           </div>
         </div>
+        </fieldset>
 
-        <h4 className="panel-subtitle panel-title-hint">
+        <fieldset className="pilot-fieldset mission-field-group">
+          <legend className="mission-fieldset-legend mission-fieldset-legend--hint">
           <span>Topic categories (ISO)</span>
           <FieldHintTooltip ariaLabel="About ISO topic categories">
             <>
@@ -620,7 +637,7 @@ export default function StepMission({
               UxS template pattern).
             </>
           </FieldHintTooltip>
-        </h4>
+          </legend>
         <label htmlFor="topicCategories">MD_TopicCategoryCode values (one per line, comma, or semicolon)</label>
         <textarea
           id="topicCategories"
@@ -638,7 +655,8 @@ geoscientificInformation`}
           }
         />
 
-        <h4 className="panel-subtitle">Graphic overview (optional)</h4>
+        <fieldset className="pilot-fieldset mission-field-group mission-field-group--nested">
+          <legend className="mission-fieldset-legend">Graphic overview (optional)</legend>
         <div className="form-row-2">
           <div>
             <label htmlFor="graphicOverviewHref">Browse graphic xlink href</label>
@@ -663,8 +681,11 @@ geoscientificInformation`}
             />
           </div>
         </div>
+        </fieldset>
+        </fieldset>
 
-        <h4 className="panel-subtitle panel-title-hint">
+        <fieldset className="pilot-fieldset mission-field-group">
+          <legend className="mission-fieldset-legend mission-fieldset-legend--hint">
           <span>
             Citation parties (<code>CI_Citation</code> / <code>citedResponsibleParty</code>)
           </span>
@@ -674,7 +695,7 @@ geoscientificInformation`}
               the dataset citation.
             </>
           </FieldHintTooltip>
-        </h4>
+          </legend>
         <div className="form-row-2">
           <div>
             <label htmlFor="citationAuthorIndividualName">Author — individual</label>
@@ -727,7 +748,10 @@ geoscientificInformation`}
           value={mission.citationOriginatorOrganisationName || ''}
           onChange={(e) => onMissionPatch({ citationOriginatorOrganisationName: e.target.value })}
         />
+        </fieldset>
 
+        <fieldset className="pilot-fieldset mission-field-group">
+          <legend className="mission-fieldset-legend">Scope &amp; dataset status</legend>
         <label htmlFor="scopeCode">Scope code</label>
         <select
           id="scopeCode"
@@ -756,14 +780,20 @@ geoscientificInformation`}
             >
               <option value="">Select…</option>
               <option value="completed">completed</option>
+              <option value="historicalArchive">historicalArchive</option>
               <option value="onGoing">onGoing</option>
               <option value="planned">planned</option>
-              <option value="historicalArchive">historicalArchive</option>
+              <option value="underDevelopment">underDevelopment</option>
+              <option value="obsolete">obsolete</option>
+              <option value="required">required</option>
             </select>
             {show('mission.status') ? <p className="field-error">{show('mission.status')}</p> : null}
           </div>
         </div>
+        </fieldset>
 
+        <fieldset className="pilot-fieldset mission-field-group">
+          <legend className="mission-fieldset-legend">Organization, contact &amp; identifiers</legend>
         <h4 className="panel-subtitle">Organization &amp; contact</h4>
         <div className="form-row-2">
           <div>
@@ -918,6 +948,7 @@ geoscientificInformation`}
             {show('mission.accession') ? <p className="field-error">{show('mission.accession')}</p> : null}
           </div>
         </div>
+        </fieldset>
       </section>
 
       <section className="panel">
@@ -930,6 +961,8 @@ geoscientificInformation`}
             </>
           </FieldHintTooltip>
         </h3>
+        <fieldset className="pilot-fieldset mission-field-group">
+          <legend className="visually-hidden">Constraints and legal fields</legend>
         <label htmlFor="citeAs">Cite as (use limitation)</label>
         <textarea
           id="citeAs"
@@ -1019,6 +1052,7 @@ geoscientificInformation`}
           value={mission.distributionLiability || ''}
           onChange={(e) => onMissionPatch({ distributionLiability: e.target.value })}
         />
+        </fieldset>
       </section>
 
       <section className="panel">
@@ -1032,7 +1066,8 @@ geoscientificInformation`}
           </FieldHintTooltip>
         </h3>
 
-        <h4 className="panel-subtitle">Parent project (larger work citation)</h4>
+        <fieldset className="pilot-fieldset mission-field-group">
+          <legend className="mission-fieldset-legend">Parent project (larger work citation)</legend>
         <div className="form-row-3">
           <div>
             <label htmlFor="parentProjectTitle">Title</label>
@@ -1069,8 +1104,10 @@ geoscientificInformation`}
             />
           </div>
         </div>
+        </fieldset>
 
-        <h4 className="panel-subtitle">Related dataset (cross reference)</h4>
+        <fieldset className="pilot-fieldset mission-field-group">
+          <legend className="mission-fieldset-legend">Related dataset &amp; links (cross reference)</legend>
         <div className="form-row-2">
           <div>
             <label htmlFor="relatedDatasetTitle">Title</label>
@@ -1148,8 +1185,10 @@ geoscientificInformation`}
             />
           </div>
         </div>
+        </fieldset>
 
-        <h4 className="panel-subtitle">Associated publication</h4>
+        <fieldset className="pilot-fieldset mission-field-group">
+          <legend className="mission-fieldset-legend">Associated publication</legend>
         <div className="form-row-3">
           <div>
             <label htmlFor="associatedPublicationTitle">Title</label>
@@ -1182,10 +1221,13 @@ geoscientificInformation`}
             />
           </div>
         </div>
+        </fieldset>
       </section>
 
       <section className="panel">
         <h3 className="panel-title">Mission templates</h3>
+        <fieldset className="pilot-fieldset mission-field-group">
+          <legend className="mission-fieldset-legend">Sheet template catalog</legend>
         <p className="card-intro platform-library-intro">
           Load a named template from your Postgres-backed catalog (<code>/api/db</code>). The list loads when you open
           this step; use Refresh after catalog edits. Pick a template in the dropdown, then <strong>Apply template</strong>.
@@ -1245,23 +1287,27 @@ geoscientificInformation`}
           </p>
         ) : null}
         {templateCatalogError ? <p className="field-error">{templateCatalogError}</p> : null}
-      </section>
+        </fieldset>
 
-      <div className="mission-actions">
-        <button type="button" className="button button-secondary" onClick={onLoadDraft} disabled={loadDisabled}>
-          Load full draft
-        </button>
-        <button type="button" className="button" onClick={onSaveDraft} disabled={saveDisabled}>
-          Save full draft
-        </button>
-      </div>
-      {hasDraftTimestamp ? (
-        <p className="draft-meta" aria-live="polite">
-          Last {draftStatus.source === 'loaded' ? 'loaded' : 'saved'}: {draftLabel}
-        </p>
-      ) : (
-        <p className="draft-meta" aria-live="polite">No draft timestamp yet.</p>
-      )}
+        <fieldset className="pilot-fieldset mission-field-group">
+          <legend className="mission-fieldset-legend">Local draft</legend>
+          <div className="mission-actions">
+            <button type="button" className="button button-secondary" onClick={onLoadDraft} disabled={loadDisabled}>
+              Load full draft
+            </button>
+            <button type="button" className="button" onClick={onSaveDraft} disabled={saveDisabled}>
+              Save full draft
+            </button>
+          </div>
+          {hasDraftTimestamp ? (
+            <p className="draft-meta" aria-live="polite">
+              Last {draftStatus.source === 'loaded' ? 'loaded' : 'saved'}: {draftLabel}
+            </p>
+          ) : (
+            <p className="draft-meta" aria-live="polite">No draft timestamp yet.</p>
+          )}
+        </fieldset>
+      </section>
     </>
   )
 }

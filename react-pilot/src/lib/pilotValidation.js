@@ -1015,6 +1015,14 @@ export function mergeLoadedPilotState(base, loaded) {
   if (loaded.mission) {
     const lm = loaded.mission
     out.mission = { ...out.mission, ...lm }
+    if (
+      (!Array.isArray(out.mission.topicCategories) || out.mission.topicCategories.length === 0) &&
+      Array.isArray(base.mission?.topicCategories) &&
+      base.mission.topicCategories.length > 0 &&
+      (lm.topicCategories === undefined || lm.topicCategories === null)
+    ) {
+      out.mission.topicCategories = [...base.mission.topicCategories]
+    }
     out.mission.uxsContext = normalizeUxsContext({
       ...(base.mission?.uxsContext || UXS_CONTEXT_DEFAULT),
       ...(lm.uxsContext && typeof lm.uxsContext === 'object' ? lm.uxsContext : {}),

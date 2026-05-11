@@ -5,13 +5,12 @@
 import { useState, useRef } from 'react'
 import { emitPilotAuditEvent } from '../lib/pilotAuditEvents.js'
 import { parseProfileXmlImport } from '../lib/parseProfileXmlImport.js'
-import { summarizePilotImportPopulation } from '../lib/importMergeSummary.js'
 
 /**
  * @param {{
  *   profile: import('../core/registry/types.js').EntityProfile,
  *   onStartFresh: () => void,
- *   onPilotImportMerged: (merged: object) => void,
+ *   onPilotImportMerged: (merged: object, meta?: { importWarnings?: string[] }) => void,
  *   onStatus?: (msg: string) => void,
  *   onImportSampleRecorded?: (detail: { rawXml: string, filename?: string, warnings?: string[] }) => void,
  * }} props
@@ -59,15 +58,12 @@ export default function WizardStartChoiceModal({
         sourceType: out.provenance?.sourceType ?? 'unknown',
         originalFilename: metaRef.current?.originalFilename || null,
       })
-      const pop = summarizePilotImportPopulation(out.merged)
-      const w = out.warnings?.length ? ` Notes: ${out.warnings.join(' · ')}` : ''
-      onStatus?.(`${pop.summary}${w}`)
       onImportSampleRecorded?.({
         rawXml: raw,
         filename: typeof metaRef.current?.originalFilename === 'string' ? metaRef.current.originalFilename : undefined,
         warnings: out.warnings,
       })
-      onPilotImportMerged(out.merged)
+      onPilotImportMerged(out.merged, { importWarnings: out.warnings })
     } finally {
       setImportBusy(false)
     }

@@ -10,6 +10,24 @@ This file orients **automated agents** (Cursor, CI bots, swarm lanes) on how to 
 | `react-pilot/` | **Canonical** Vite app: `pilotState`, validation, wizard steps, Manta widget, lens overlay. |
 | `react-pilot/netlify/functions/` | Same-origin `POST /api/db` when using Netlify / `netlify dev`. |
 | `schemas/`, `compiled_rules/`, `scripts/swarm/` | Rule pipeline (SWARM board); see `react-pilot/docs/SWARM_IMPLEMENTATION_BOARD.md`. |
+| `react-pilot/docs/EUT_LENIENT_SWARM.md` | **EUT lenient reduction** — parallel lanes (A–D) to drive down `audit:manta-samples` rollup via import/mapping; complements rule-pipeline SWARM. |
+
+### Metadata baseline — UxS / NCEI
+
+End-user testing, `MANTA End User Testing/samples/`, and **AGENTS** guidance target the **mission** profile: **Unmanned Systems (UxS)** and **NCEI-shaped** ISO 19115-2. The repo may register other metadata profiles for separate workflows; **do not** mix their steps, parsers, or validation into UxS/mission work unless the task explicitly says so.
+
+| Role | Path |
+|------|------|
+| **Structural reference (NCEI collection template, clean `gmi:MI_Metadata` skeleton)** | `MANTA End User Testing/reference/ncei-collection-metadata/ncei_template-clean.xml` — same content as `NCEI Template/ncei_template-clean.xml` and `react-pilot/public/demo-records/NCEI Template/ncei_template-clean.xml` |
+| **Authoritative guidance (PDF)** | `MANTA End User Testing/reference/ncei-collection-metadata/AB-GUID-02823_R1_Guidance for The NCEI Collection Level Metadata Template v1.2.pdf` |
+| **EUT import stress corpus** | `MANTA End User Testing/samples/*.xml` |
+
+The template is **collection-level**; mission records are **dataset / acquisition** — expect **block-level** alignment (contacts, identifiers, distribution patterns), not a byte-for-byte match to every collection placeholder.
+
+**External schema / rubric truth** (stricter than in-repo `buildXmlPreview` sanity + `pilotState` validation):
+
+- **`xmllint`:** `cd react-pilot && npm run validate:xml -- path/to.xml` — add `--schema <xsd-or-url>` when validating against XSD. For **offline** resolution of OGC/ISO includes, point libxml2 at a local **XML catalog** (e.g. `XML_CATALOG_FILES` / `SGML_CATALOG_FILES` — see your platform’s libxml2 docs).
+- **CoMET:** validate / score / transform endpoints used by `cometClient.js` and `netlify/functions/comet-proxy.mjs` when the environment has credentials and you need service-side rules.
 
 ### ISO metadata lineage (19115-3 → 19115-2)
 
@@ -21,6 +39,8 @@ The React pilot **does not** preserve −3 XML verbatim on export. **`importPilo
 cd react-pilot && npm install && npm run verify:pilot   # lint + build + parser checks
 cd react-pilot && npm run dev                          # UI only (port 5173)
 cd react-pilot && npm run dev:netlify                  # Vite + /api proxy (port 8888 → 5173)
+cd react-pilot && npm run audit:manta-samples          # EUT XML samples → import → validate → ISO-2 preview audit + lenient rollup JSON/MD/CSV (writes ../MANTA End User Testing/reports/)
+cd react-pilot && npm run verify:manta-eut-perfect    # same as verify:manta-pipeline **plus** exit 1 if any sample has lenient **errors** > 0 (UxS EUT “perfect” target)
 ```
 
 Do not instruct users to run commands you can run yourself unless blocked by secrets.
@@ -67,5 +87,8 @@ See `react-pilot/docs/SWARM_IMPLEMENTATION_BOARD.md` for SWARM-A … SWARM-F own
 | 2026-05 | **Mission step density:** long helper copy moved from under inputs into `FieldHintTooltip` / `LabelWithHint` (`FieldHintTooltip.jsx`); `StepMission.jsx` panel titles and UxS/temporal/constraints/aggregation blocks use ⓘ bubbles; `LabelWithHint` default `aria-label` avoids `[object Object]` when `label` is JSX. |
 | 2026-05 | **Import sample report:** After XML **Apply** (header `XmlToolsBar` or wizard-start import), **Import report** downloads Markdown (`*-import-report.md`): parser warnings, validation issues, unset tracked paths (`pilotImportReportPaths.js`), line-diff table upload vs `buildXmlPreview` output (`pilotImportSampleReport.js`). Cleared on **Clear form**. |
 | 2026-05 | **ISO 19115-3 → 19115-2:** Documented in Agents; import accepts −3 or −2 XML; preview/export is always −2 via `pilotState`. Import sample report clarifies this when provenance stamps −3 uploads. |
+| 2026-05 | **`audit:manta-samples`:** Batch-runs `MANTA End User Testing/samples/*.xml` through import → merge → lenient/strict/**catalog** validate → `buildXmlPreview`, preview→import round-trip, optional **xmllint**; writes `manta-samples-iso2-audit.{md,json}` with per-sample **`lenientIssues[]`**, plus **`manta-samples-lenient-rollup.{json,md}`** and **`manta-samples-lenient-patterns.csv`** (cross-sample frequency). Optional **`--fail-if-lenient-errors`** for CI when samples must be clean. |
+| 2026-05 | **EUT lenient swarm:** `react-pilot/docs/EUT_LENIENT_SWARM.md` — parallel lanes EUT-A (keywords) / EUT-B (mission) / EUT-C (platform id/desc) / EUT-D (sensors + distribution format) to continue rolling up import fixes against `manta-samples-lenient-rollup.*`. |
+| 2026-05 | **Metadata baseline (UxS):** NCEI collection template `MANTA End User Testing/reference/ncei-collection-metadata/ncei_template-clean.xml` (+ `NCEI Template/` copy) as structural reference; external truth via `xmllint` (+ catalog) / CoMET validate. |
 
 When closing a lens-related task, append one row if behavior or ports changed.

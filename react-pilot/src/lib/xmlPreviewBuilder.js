@@ -2,7 +2,10 @@ import { getDataLicensePresetDef, normalizeDataLicensePresetKey } from './noaaLi
 import { formatNceiUxsFileIdentifierForXml } from './nceiUxsFileId.js'
 import { buildAcquisitionInstrumentDescription } from './sensorInstrumentDescription.js'
 import { gcmdConceptUrlFromUuid as gcmdKeywordHrefFromStoredUuid } from './gcmdKmsUrl.js'
-import { summarizeUxsOperationalRelationship } from './uxsOperationalModel.js'
+import {
+  formatUxsPilotMachineBlock,
+  stripUxsPilotMachineBlock,
+} from './uxsOperationalModel.js'
 
 /** @param {unknown} s */
 function esc(s) {
@@ -14,7 +17,7 @@ function esc(s) {
 }
 
 /**
- * @param {string} roleCode  author | publisher | originator
+ * @param {string} roleCode  CI_RoleCode token (author | publisher | originator | principalInvestigator | resourceProvider)
  * @param {string} [individualName]
  * @param {string} [organisationName]
  * @returns {string}
@@ -75,6 +78,43 @@ function emitReal(value, tag) {
   const n = Number.parseFloat(String(value ?? '').trim())
   if (!Number.isFinite(n)) return ''
   return `<${tag}><gco:Real>${n}</gco:Real></${tag}>`
+}
+
+/** World extent defaults — aligned with `defaultPilotState` / bbox validation fallbacks. */
+const PREVIEW_BBOX_FALLBACK = { west: '-180', east: '180', south: '-90', north: '90' }
+
+/** @param {unknown} v */
+function normalizePreviewNumericToken(v) {
+  let s = String(v ?? '').trim()
+  s = s.replace(/\u2212|\u2013|\u2014/g, '-')
+  s = s.replace(/,/g, '')
+  return s
+}
+
+/**
+ * Numeric strings for `EX_GeographicBoundingBox` corners — never empty inside `<gco:Decimal>`.
+ * Keeps the same token shape as `sanitizePilotState` (e.g. `00.00`) so preview→import round-trips match merged state.
+ * @param {Record<string, unknown>} mission `state.mission`
+ */
+function previewMissionBoundingDecimals(mission) {
+  const m = mission || {}
+  /** @param {'west' | 'east' | 'south' | 'north'} ax */
+  function axis(ax) {
+    const fb = PREVIEW_BBOX_FALLBACK[ax]
+    const raw = m[ax]
+    if (raw == null || String(raw).trim() === '' || String(raw).trim() === 'null') return fb
+    const picked = String(raw).trim()
+    const normalized = normalizePreviewNumericToken(picked)
+    const n = Number.parseFloat(normalized)
+    if (!Number.isFinite(n)) return fb
+    return normalized
+  }
+  return {
+    west: axis('west'),
+    east: axis('east'),
+    south: axis('south'),
+    north: axis('north'),
+  }
 }
 
 /** @param {string} v */
@@ -293,6 +333,8 @@ ${pads.outer}</gmi:instrument>`
  */
 export function buildXmlPreview(state) {
   const m = state?.mission || {}
+  const bbox = previewMissionBoundingDecimals(m)
+  const progressCode = String(m.status || '').trim() || 'completed'
   const sp = state?.spatial || {}
   const p = state?.platform || {}
   const sensors = Array.isArray(state?.sensors) ? state.sensors : []
@@ -326,6 +368,8 @@ export function buildXmlPreview(state) {
     buildCitedResponsiblePartyXml('author', m.citationAuthorIndividualName, m.citationAuthorOrganisationName),
     buildCitedResponsiblePartyXml('publisher', '', m.citationPublisherOrganisationName),
     buildCitedResponsiblePartyXml('originator', m.citationOriginatorIndividualName, m.citationOriginatorOrganisationName),
+    buildCitedResponsiblePartyXml('principalInvestigator', m.citationPrincipalInvestigatorIndividualName, ''),
+    buildCitedResponsiblePartyXml('resourceProvider', m.citationResourceProviderIndividualName, ''),
   ]
     .filter(Boolean)
     .join('\n')
@@ -960,15 +1004,22 @@ ${metaStdXml}${refSystemXml}${contactRootXml}  <gmd:identificationInfo>
       </gmd:citation>
       <gmd:abstract><gco:CharacterString>${esc(m.abstract)}</gco:CharacterString></gmd:abstract>
       <gmd:purpose><gco:CharacterString>${esc(m.purpose)}</gco:CharacterString></gmd:purpose>
-      ${(m.supplementalInformation || m.uxsContext) ? `<gmd:supplementalInformation><gco:CharacterString>${esc([m.supplementalInformation, m.uxsContext ? summarizeUxsOperationalRelationship(m.uxsContext) : ''].filter(Boolean).join('\n'))}</gco:CharacterString></gmd:supplementalInformation>` : ''}
+      ${(() => {
+        const userSup = stripUxsPilotMachineBlock(String(m.supplementalInformation || '')).trim()
+        const machine = formatUxsPilotMachineBlock(m.uxsContext)
+        const combined = [userSup, machine].filter(Boolean).join('\n\n')
+        return combined
+          ? `<gmd:supplementalInformation><gco:CharacterString>${esc(combined)}</gco:CharacterString></gmd:supplementalInformation>`
+          : ''
+      })()}
       <gmd:extent>
         <gmd:EX_Extent>
 ${extentDescXml}          <gmd:geographicElement>
             <gmd:EX_GeographicBoundingBox>
-              <gmd:westBoundLongitude><gco:Decimal>${esc(m.west)}</gco:Decimal></gmd:westBoundLongitude>
-              <gmd:eastBoundLongitude><gco:Decimal>${esc(m.east)}</gco:Decimal></gmd:eastBoundLongitude>
-              <gmd:southBoundLatitude><gco:Decimal>${esc(m.south)}</gco:Decimal></gmd:southBoundLatitude>
-              <gmd:northBoundLatitude><gco:Decimal>${esc(m.north)}</gco:Decimal></gmd:northBoundLatitude>
+              <gmd:westBoundLongitude><gco:Decimal>${esc(bbox.west)}</gco:Decimal></gmd:westBoundLongitude>
+              <gmd:eastBoundLongitude><gco:Decimal>${esc(bbox.east)}</gco:Decimal></gmd:eastBoundLongitude>
+              <gmd:southBoundLatitude><gco:Decimal>${esc(bbox.south)}</gco:Decimal></gmd:southBoundLatitude>
+              <gmd:northBoundLatitude><gco:Decimal>${esc(bbox.north)}</gco:Decimal></gmd:northBoundLatitude>
             </gmd:EX_GeographicBoundingBox>
           </gmd:geographicElement>
           <gmd:temporalElement>
@@ -1017,7 +1068,7 @@ ${kwBlock('sciencekeywords')}${kwBlock('datacenters')}${kwBlock('platforms')}${k
         </gmd:MD_Keywords>
       </gmd:descriptiveKeywords>
       <gmd:status>
-        <gmd:MD_ProgressCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ProgressCode" codeListValue="${esc(m.status)}">${esc(m.status)}</gmd:MD_ProgressCode>
+        <gmd:MD_ProgressCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ProgressCode" codeListValue="${esc(progressCode)}">${esc(progressCode)}</gmd:MD_ProgressCode>
       </gmd:status>
       <gmd:language>
         <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/php/code_list.php" codeListValue="${esc(m.language)}">${esc(m.language)}</gmd:LanguageCode>

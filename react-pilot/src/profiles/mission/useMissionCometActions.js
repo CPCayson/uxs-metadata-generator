@@ -47,7 +47,7 @@ export function cometPushDescriptionForProfile(profile, pilotState) {
       String(pilotState?.title || '').trim()
       || String(pilotState?.collectionId || '').trim()
       || String(pilotState?.fileId || '').trim()
-      || 'BEDI collection'
+      || 'Collection record'
     )
   }
   if (et === 'bediGranule') {
@@ -55,7 +55,7 @@ export function cometPushDescriptionForProfile(profile, pilotState) {
       String(pilotState?.title || '').trim()
       || String(pilotState?.granuleId || '').trim()
       || String(pilotState?.fileId || '').trim()
-      || 'BEDI granule'
+      || 'Granule record'
     )
   }
   return String(pilotState?.mission?.title || '').trim() || 'Untitled Record'

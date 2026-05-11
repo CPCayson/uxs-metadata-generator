@@ -48,6 +48,53 @@
   border-bottom: 1px solid color-mix(in srgb, var(--border) 90%, var(--text-color));
 }
 
+/* Mission step — fieldset / legend groups (StepMission.jsx) */
+#root .workspace-main fieldset.pilot-fieldset.mission-field-group {
+  border: 1px solid color-mix(in srgb, var(--border) 88%, transparent);
+  border-radius: var(--radius-md, 10px);
+  padding: 0.65rem 0.9rem 0.95rem;
+  margin: 0 0 1rem;
+  min-width: 0;
+}
+#root .workspace-main fieldset.pilot-fieldset.mission-field-group > legend.mission-fieldset-legend {
+  padding: 0 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: color-mix(in srgb, var(--text-color) 88%, transparent);
+}
+#root .workspace-main details fieldset.pilot-fieldset.mission-field-group {
+  margin-bottom: 0;
+}
+
+#root .workspace-main fieldset.pilot-fieldset.mission-field-group > legend.mission-fieldset-legend--hint {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  max-width: 100%;
+  width: max-content;
+  padding: 0 0.35rem 0.35rem;
+  margin-bottom: 0.25rem;
+  border-bottom: none;
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: color-mix(in srgb, var(--text-color) 88%, transparent);
+}
+
+#root .workspace-main fieldset.pilot-fieldset.mission-field-group--nested {
+  margin-top: 0.85rem;
+  padding-top: 0.55rem;
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--border) 92%, transparent);
+}
+
+#root .workspace-main fieldset.pilot-fieldset.mission-field-group--nested > legend.mission-fieldset-legend {
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
 /* --- Side column cards (validator + XML) --- */
 #root .workspace-side-stack > .card {
   padding: 1.2rem 1.35rem 1.4rem;

@@ -84,7 +84,7 @@ const KW_LABELS = {
 const KW_FACETS = ['sciencekeywords', 'datacenters', 'platforms', 'instruments', 'locations', 'projects', 'providers']
 
 const KW_XPATH = '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords'
-const ABSTRACT_XPATH = '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract'
+const ABSTRACT_XPATH = '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract'
 const COMMON_ABSTRACT_ACRONYMS = new Set(['ADCP', 'AUV', 'CTD', 'GCMD', 'ISO', 'NCEI', 'NOAA', 'REMUS', 'ROV', 'UUV'])
 
 function abstractQualityIssues(state) {
@@ -147,14 +147,14 @@ const coreRules = [
     field: 'mission.fileId',
     severity: 'e',
     message: 'File Identifier is required',
-    xpath: '/gmd:MD_Metadata/gmd:fileIdentifier',
+    xpath: '/gmi:MI_Metadata/gmd:fileIdentifier',
     check: (s) => isBlank(s?.mission?.fileId),
   },
   {
     field: 'mission.title',
     severity: 'e',
     message: 'Title is required',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:title',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:title',
     check: (s) => isBlank(s?.mission?.title),
   },
   {
@@ -175,35 +175,35 @@ const coreRules = [
     field: 'mission.startDate',
     severity: 'e',
     message: 'Creation / Start date is required',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement',
     check: (s) => isBlank(s?.mission?.startDate),
   },
   {
     field: 'mission.endDate',
     severity: 'e',
     message: 'End date is required',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement',
     check: (s) => isBlank(s?.mission?.endDate),
   },
   {
     field: 'mission.startDate',
     severity: 'e',
     message: 'Start date must be YYYY-MM-DD or datetime-local',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement',
     check: (s) => !isBlank(s?.mission?.startDate) && !isValidMissionInstant(s.mission.startDate),
   },
   {
     field: 'mission.endDate',
     severity: 'e',
     message: 'End date must be YYYY-MM-DD or datetime-local',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement',
     check: (s) => !isBlank(s?.mission?.endDate) && !isValidMissionInstant(s.mission.endDate),
   },
   {
     field: 'mission.endDate',
     severity: 'e',
     message: 'End date must be on or after start date',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement',
     check: (s) => {
       const m = s?.mission || {}
       if (isBlank(m.startDate) || isBlank(m.endDate)) return false
@@ -219,14 +219,14 @@ const coreRules = [
     field: 'mission.doi',
     severity: 'e',
     message: 'DOI must look like 10.xxxx/...',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code',
     check: (s) => !isBlank(s?.mission?.doi) && !isValidDoi(s.mission.doi),
   },
   {
     field: 'mission.accession',
     severity: 'e',
     message: 'NCEI Accession must be alphanumeric',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code',
     check: (s) => {
       if (isBlank(s?.mission?.accession)) return false
       const acc = normalizeNceiAccessionToken(s.mission.accession)
@@ -237,77 +237,77 @@ const coreRules = [
     field: 'mission.org',
     severity: 'e',
     message: 'Organization name is required',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:organisationName',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:organisationName',
     check: (s) => isBlank(s?.mission?.org),
   },
   {
     field: 'mission.individualName',
     severity: 'e',
     message: 'Individual name is required',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName',
     check: (s) => isBlank(s?.mission?.individualName),
   },
   {
     field: 'mission.email',
     severity: 'e',
     message: 'Email is required',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:electronicMailAddress',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:electronicMailAddress',
     check: (s) => isBlank(s?.mission?.email),
   },
   {
     field: 'mission.email',
     severity: 'e',
     message: 'Email format looks invalid',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:electronicMailAddress',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:electronicMailAddress',
     check: (s) => !isBlank(s?.mission?.email) && !isValidEmail(s.mission.email),
   },
   {
     field: 'mission.purpose',
     severity: 'e',
     message: 'Purpose (dataset) is required',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:purpose',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:purpose',
     check: (s) => isBlank(s?.mission?.purpose),
   },
   {
     field: 'mission.status',
     severity: 'e',
     message: 'Status is required',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:status/gmd:MD_ProgressCode',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:status/gmd:MD_ProgressCode',
     check: (s) => isBlank(s?.mission?.status),
   },
   {
     field: 'mission.language',
     severity: 'e',
     message: 'Metadata language is required',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:language/gmd:LanguageCode',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:language/gmd:LanguageCode',
     check: (s) => isBlank(s?.mission?.language),
   },
   {
     field: 'mission.publicationDate',
     severity: 'e',
     message: 'Publication date must be YYYY-MM-DD or datetime-local',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:date',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:date',
     check: (s) => !isBlank(s?.mission?.publicationDate) && !isValidMissionInstant(s.mission.publicationDate),
   },
   {
     field: 'mission.metadataRecordDate',
     severity: 'e',
     message: 'Metadata record date must be YYYY-MM-DD or datetime-local',
-    xpath: '/gmd:MD_Metadata/gmd:dateStamp',
+    xpath: '/gmi:MI_Metadata/gmd:dateStamp',
     check: (s) => !isBlank(s?.mission?.metadataRecordDate) && !isValidMissionInstant(s.mission.metadataRecordDate),
   },
   {
     field: 'mission.contactUrl',
     severity: 'e',
     message: 'Contact URL must be http(s)',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:onlineResource/gmd:CI_OnlineResource/gmd:linkage',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:onlineResource/gmd:CI_OnlineResource/gmd:linkage',
     check: (s) => !isBlank(s?.mission?.contactUrl) && !isValidUrl(s.mission.contactUrl),
   },
   {
     field: 'mission.licenseUrl',
     severity: 'e',
     message: 'License URL must be http(s)',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints',
     check: (s) => {
       const preset = String(s?.mission?.dataLicensePreset || 'custom').trim()
       return !isBlank(s?.mission?.licenseUrl) && !isValidUrl(s.mission.licenseUrl)
@@ -318,7 +318,7 @@ const coreRules = [
     field: 'mission.relatedDataUrl',
     severity: 'e',
     message: 'Related data URL must be http(s)',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo',
     check: (s) => !isBlank(s?.mission?.relatedDataUrl) && !isValidUrl(s.mission.relatedDataUrl),
   },
   // bbox
@@ -326,7 +326,7 @@ const coreRules = [
     field: 'mission.bbox',
     severity: 'e',
     message: 'Bounding box must be numeric W/E/S/N',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_GeographicBoundingBox',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_GeographicBoundingBox',
     check: (s) => {
       const m = s?.mission || {}
       const axes = [
@@ -342,7 +342,7 @@ const coreRules = [
     field: 'mission.bbox',
     severity: 'e',
     message: 'Bounding box invalid (west≤east, south≤north)',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_GeographicBoundingBox',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_GeographicBoundingBox',
     check: (s) => {
       const m = s?.mission || {}
       const w = pickBboxAxis(m.west, BBOX_DEFAULT.west)
@@ -357,21 +357,21 @@ const coreRules = [
     field: 'mission.vmin',
     severity: 'e',
     message: 'Vertical min must be numeric',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:verticalElement',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:verticalElement',
     check: (s) => !isBlank(s?.mission?.vmin) && !isValidNumber(s.mission.vmin),
   },
   {
     field: 'mission.vmax',
     severity: 'e',
     message: 'Vertical max must be numeric',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:verticalElement',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:verticalElement',
     check: (s) => !isBlank(s?.mission?.vmax) && !isValidNumber(s.mission.vmax),
   },
   {
     field: 'mission.vertical',
     severity: 'e',
     message: 'Vertical min must be ≤ max',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:verticalElement',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:verticalElement',
     check: (s) => {
       const m = s?.mission || {}
       return isValidNumber(m.vmin) && isValidNumber(m.vmax) && Number(m.vmin) > Number(m.vmax)
@@ -404,21 +404,21 @@ const coreRules = [
     field: 'spatial.accuracyValue',
     severity: 'e',
     message: 'Positional accuracy value must be numeric',
-    xpath: '/gmd:MD_Metadata/gmd:dataQualityInfo',
+    xpath: '/gmi:MI_Metadata/gmd:dataQualityInfo',
     check: (s) => !isBlank(s?.spatial?.accuracyValue) && !isValidNumber(s.spatial.accuracyValue),
   },
   {
     field: 'spatial.errorValue',
     severity: 'e',
     message: 'Error value must be numeric',
-    xpath: '/gmd:MD_Metadata/gmd:dataQualityInfo',
+    xpath: '/gmi:MI_Metadata/gmd:dataQualityInfo',
     check: (s) => !isBlank(s?.spatial?.errorValue) && !isValidNumber(s.spatial.errorValue),
   },
   {
     field: 'spatial.verticalCrsUrl',
     severity: 'e',
     message: 'Vertical CRS URL must be http(s)',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent',
     check: (s) => !isBlank(s?.spatial?.verticalCrsUrl) && !isValidUrl(s.spatial.verticalCrsUrl),
   },
   // grid dimension numerics
@@ -426,7 +426,7 @@ const coreRules = [
     field: `spatial.${k}`,
     severity: /** @type {'e'} */ ('e'),
     message: `${k}: must be numeric`,
-    xpath: '/gmd:MD_Metadata/gmd:spatialRepresentationInfo',
+    xpath: '/gmi:MI_Metadata/gmd:spatialRepresentationInfo',
     check: (s) => truthyFlag(s?.spatial?.useGridRepresentation) && !isBlank(s?.spatial?.[k]) && !isValidNumber(s.spatial[k]),
   })),
   // --- Sensors (returns issue array) ---
@@ -434,7 +434,7 @@ const coreRules = [
     field: 'sensors',
     severity: 'e',
     message: 'At least one sensor is required',
-    xpath: '/gmd:MD_Metadata/gmd:contentInfo/gmi:MI_CoverageDescription',
+    xpath: '/gmi:MI_Metadata/gmd:contentInfo/gmi:MI_CoverageDescription',
     check: (s) => {
       const sensors = Array.isArray(s?.sensors) ? s.sensors : []
       if (!sensors.length) return true
@@ -446,7 +446,7 @@ const coreRules = [
             severity: /** @type {'e'} */ ('e'),
             field: 'sensors',
             message: 'At least one sensor is required',
-            xpath: '/gmd:MD_Metadata/gmd:contentInfo/gmi:MI_CoverageDescription',
+            xpath: '/gmi:MI_Metadata/gmd:contentInfo/gmi:MI_CoverageDescription',
           },
         ]
       }
@@ -456,7 +456,7 @@ const coreRules = [
       const kw = s?.keywords || {}
       active.forEach(({ sen, idx }) => {
         const pfx = `sensors[${idx}]`
-        const xpath = '/gmd:MD_Metadata/gmd:contentInfo/gmi:MI_CoverageDescription'
+        const xpath = '/gmi:MI_Metadata/gmd:contentInfo/gmi:MI_CoverageDescription'
         if (isBlank(sen.type)) {
           issues.push({ severity: 'e', field: `${pfx}.type`, message: `Sensor ${idx + 1}: type is required`, xpath: `${xpath}/gmd:attributeDescription` })
         }
@@ -516,7 +516,7 @@ const coreRules = [
     field: 'distribution.format',
     severity: 'e',
     message: 'Distribution format is required',
-    xpath: '/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:distributionFormat/gmd:MD_Format/gmd:name',
+    xpath: '/gmi:MI_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:distributionFormat/gmd:MD_Format/gmd:name',
     check: (s) => isBlank(s?.distribution?.format),
   },
   {
@@ -530,42 +530,42 @@ const coreRules = [
     field: 'distribution.landingUrl',
     severity: 'e',
     message: 'Landing page URL must be http(s)',
-    xpath: '/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage',
+    xpath: '/gmi:MI_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage',
     check: (s) => !isBlank(s?.distribution?.landingUrl) && !isValidUrl(s.distribution.landingUrl),
   },
   {
     field: 'distribution.downloadUrl',
     severity: 'e',
     message: 'Download URL must be http(s)',
-    xpath: '/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage',
+    xpath: '/gmi:MI_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage',
     check: (s) => !isBlank(s?.distribution?.downloadUrl) && !isValidUrl(s.distribution.downloadUrl),
   },
   {
     field: 'distribution.metadataLandingUrl',
     severity: 'e',
     message: 'Metadata landing URL must be http(s)',
-    xpath: '/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage',
+    xpath: '/gmi:MI_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage',
     check: (s) => !isBlank(s?.distribution?.metadataLandingUrl) && !isValidUrl(s.distribution.metadataLandingUrl),
   },
   {
     field: 'distribution.nceiMetadataContactHref',
     severity: 'w',
     message: 'NCEI metadata contact xlink is enabled but href is empty (generator may fall back to schema default)',
-    xpath: '/gmd:MD_Metadata/gmd:contact',
+    xpath: '/gmi:MI_Metadata/gmd:contact',
     check: (s) => Boolean(s?.distribution?.useNceiMetadataContactXlink) && isBlank(s?.distribution?.nceiMetadataContactHref),
   },
   {
     field: 'distribution.nceiMetadataContactHref',
     severity: 'e',
     message: 'NCEI metadata contact href must be http(s)',
-    xpath: '/gmd:MD_Metadata/gmd:contact',
+    xpath: '/gmi:MI_Metadata/gmd:contact',
     check: (s) => !isBlank(s?.distribution?.nceiMetadataContactHref) && !isValidUrl(s.distribution.nceiMetadataContactHref),
   },
   {
     field: 'distribution.nceiDistributorContactHref',
     severity: 'e',
     message: 'NCEI distributor contact href must be http(s)',
-    xpath: '/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:distributor',
+    xpath: '/gmi:MI_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:distributor',
     check: (s) => !isBlank(s?.distribution?.nceiDistributorContactHref) && !isValidUrl(s.distribution.nceiDistributorContactHref),
   },
 ]
@@ -578,7 +578,7 @@ const lenientOnlyRules = [
     field: 'mission.licenseUrl',
     severity: 'w',
     message: 'License URL recommended when preset is custom',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints',
     check: (s) => {
       const preset = String(s?.mission?.dataLicensePreset || 'custom').trim()
       return preset === 'custom' && isBlank(s?.mission?.licenseUrl)
@@ -588,7 +588,7 @@ const lenientOnlyRules = [
     field: 'mission.ror',
     severity: 'w',
     message: 'No ROR selected (recommended for organization linkage)',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier',
     check: (s) => isBlank(s?.mission?.ror?.id),
   },
 ]
@@ -601,7 +601,7 @@ const strictExtraRules = [
     field: 'mission.licenseUrl',
     severity: 'e',
     message: 'License URL is required when data license preset is custom',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints',
     check: (s) => {
       const preset = String(s?.mission?.dataLicensePreset || 'custom').trim()
       return preset === 'custom' && isBlank(s?.mission?.licenseUrl)
@@ -611,35 +611,35 @@ const strictExtraRules = [
     field: 'spatial.gridRepresentation',
     severity: 'e',
     message: 'Strict mode: grid column size and row size are required when grid representation is enabled',
-    xpath: '/gmd:MD_Metadata/gmd:spatialRepresentationInfo',
+    xpath: '/gmi:MI_Metadata/gmd:spatialRepresentationInfo',
     check: (s) => truthyFlag(s?.spatial?.useGridRepresentation) && (isBlank(s?.spatial?.gridColumnSize) || isBlank(s?.spatial?.gridRowSize)),
   },
   {
     field: 'spatial.trajectorySampling',
     severity: 'e',
     message: 'Trajectory sampling is required when trajectory is enabled',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent',
     check: (s) => truthyFlag(s?.spatial?.hasTrajectory) && isBlank(s?.spatial?.trajectorySampling),
   },
   {
     field: 'mission.doi',
     severity: 'e',
     message: 'Strict mode: DOI is required',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code',
     check: (s) => isBlank(s?.mission?.doi),
   },
   {
     field: 'mission.accession',
     severity: 'e',
     message: 'Strict mode: NCEI Accession is required',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code',
     check: (s) => isBlank(s?.mission?.accession),
   },
   {
     field: 'mission.ror',
     severity: 'e',
     message: 'Strict mode: ROR is required',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier',
     check: (s) => isBlank(s?.mission?.ror?.id),
   },
 ]
@@ -652,7 +652,7 @@ const catalogExtraRules = [
     field: 'mission.uxsContext.primaryLayer',
     severity: 'w',
     message: 'Catalog mode: confirm what operational layer this UxS record primarily describes',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation',
     check: (s) => {
       const layer = String(s?.mission?.uxsContext?.primaryLayer || 'datasetProduct')
       return !['datasetProduct', 'deployment', 'run', 'sortie', 'dive', 'other'].includes(layer)
@@ -662,7 +662,7 @@ const catalogExtraRules = [
     field: 'mission.uxsContext',
     severity: 'w',
     message: 'Catalog mode: add structured UxS operational ID/name for the selected layer instead of only title or abstract text',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation',
     check: (s) => {
       const ctx = s?.mission?.uxsContext || {}
       const def = getUxsLayerDefinition(ctx)
@@ -674,7 +674,7 @@ const catalogExtraRules = [
     field: 'mission.uxsContext.runId',
     severity: 'w',
     message: 'Catalog mode: run, sortie, and dive records should include the parent run/deployment identifier when available',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo',
     check: (s) => {
       const rel = buildUxsOperationalRelationship(s?.mission?.uxsContext)
       if (rel.kind === 'run' || rel.kind === 'sortie' || rel.kind === 'dive') {
@@ -687,7 +687,7 @@ const catalogExtraRules = [
     field: 'mission.licenseUrl',
     severity: 'e',
     message: 'License URL is required when data license preset is custom',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints',
     check: (s) => {
       const preset = String(s?.mission?.dataLicensePreset || 'custom').trim()
       return preset === 'custom' && isBlank(s?.mission?.licenseUrl)
@@ -697,28 +697,28 @@ const catalogExtraRules = [
     field: 'spatial.trajectorySampling',
     severity: 'e',
     message: 'Trajectory sampling is required when trajectory is enabled',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent',
     check: (s) => truthyFlag(s?.spatial?.hasTrajectory) && isBlank(s?.spatial?.trajectorySampling),
   },
   {
     field: 'mission.doi',
     severity: 'e',
     message: 'Catalog mode: DOI is required',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code',
     check: (s) => isBlank(s?.mission?.doi),
   },
   {
     field: 'mission.accession',
     severity: 'e',
     message: 'Catalog mode: NCEI Accession is required',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code',
     check: (s) => isBlank(s?.mission?.accession),
   },
   {
     field: 'mission.ror',
     severity: 'e',
     message: 'Catalog mode: ROR is required',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier',
     check: (s) => isBlank(s?.mission?.ror?.id),
   },
   // parent project (two fields)
@@ -726,7 +726,7 @@ const catalogExtraRules = [
     field: 'mission.parentProjectTitle',
     severity: 'e',
     message: 'Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title',
     check: (s) => {
       const d = s?.distribution || {}
       const m = s?.mission || {}
@@ -737,7 +737,7 @@ const catalogExtraRules = [
     field: 'distribution.parentProject',
     severity: 'e',
     message: 'Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title',
     check: (s) => {
       const d = s?.distribution || {}
       const m = s?.mission || {}
@@ -748,21 +748,21 @@ const catalogExtraRules = [
     field: 'distribution.publication',
     severity: 'e',
     message: 'Catalog mode: publication reference is required',
-    xpath: '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:otherCitationDetails',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:otherCitationDetails',
     check: (s) => isBlank(s?.distribution?.publication),
   },
   {
     field: 'distribution.landingUrl',
     severity: 'e',
     message: 'Catalog mode: landing page URL is required',
-    xpath: '/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage',
+    xpath: '/gmi:MI_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage',
     check: (s) => isBlank(s?.distribution?.landingUrl),
   },
   {
     field: 'distribution.downloadUrl',
     severity: 'e',
     message: 'Catalog mode: download URL is required',
-    xpath: '/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage',
+    xpath: '/gmi:MI_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage',
     check: (s) => isBlank(s?.distribution?.downloadUrl),
   },
 ]

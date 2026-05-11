@@ -4,6 +4,8 @@ This document ties together `**Metadata Placeholders and Script Generation.xlsx*
 
 **Important:** The app emits **ISO 19115-2** (`gmd` / `gmi` / `gco`) only, with root `**gmi:MI_Metadata`**, aligned structurally with the NOAA/Navy UxS reference `**NOAANavyUxSAcquisition_MetadataTempate_19115-2-GMI_2026-2 (1).xml`** (NCEI `schema.xsd` in `xsi:schemaLocation`, `MD_Distributor`, `MI_CoverageDescription`, root `metadataMaintenance`, etc.). Field mappings below are about **data**, not every optional XML branch.
 
+**Legacy HTML wizard ↔ React pilot:** The classic `{ mission, platform, sensors, spatial, output }` shape from `collectFormData()` is still the interchange contract for Apps Script (`mapClientDataToServer`, `UniversalXMLGenerator`). The React pilot keeps the same semantics under `pilotState` and bridges bidirectionally—see **§8**.
+
 ---
 
 ## 1. Payload shape
@@ -219,6 +221,34 @@ The pilot mirrors legacy **forms** in **six** steps: Mission, Platform, Sensors,
 **React pilot gaps (classic HTML–only or future work):** Bundled catalog **XSD** chains (ISO 19139/19115-2 schemas are not in this repo). Optional `**npm run validate:xml`** in `react-pilot` runs `**xmllint --noout`** on a file, with `**--schema <path-or-url>`** (or `**XML_SCHEMA**`) when you supply a schema locally. **Server parity:** React embed can call legacy `**validateFormDataWithRules`**, `**generateGeoJSON`**, and `**generateDCATJsonLd**` via `**pilotStateToLegacyFormData**` (`react-pilot/src/lib/pilotToLegacyFormData.js`). Done in pilot: slices 1–4 — legal constraints (incl. access + `**dataQualityInfo**`); **preset licenses** — preview emits `**gmx:Anchor`** blocks + **docucomp** `gmd:resourceConstraints` xlink (see `noaaLicensePresets.js`); `**gmd:metadataStandardName` / `metadataStandardVersion`** on the preview root; `**aggregationInfo`**; spatial step + grid / georectified / trajectory + vertical extent + CRS description; acquisitionInformation as `**gmi:MI_AcquisitionInformation`** (platform + sibling `**gmi:instrument`** / `MI_Instrument`, and the same instruments nested under `**MI_Platform`** when a platform is present); **MI_Platform** `**gmi:otherProperty`** / `**gmi:DataRecord`** fields (weight, L/W/H, casing material, speed, operational area) aligned with `**SchemaValidator.gs`** `addAcquisitionInfo`, plus matching **import**; **GCMD providers**; **browser XML → form** import (incl. docucomp preset hint, `**gmx:Anchor`** skipping for prose fields, `**metadataStandard*`**, acquisition platform + instruments when present); `collectFormData` **output** / **distribution** routing + NCEI xlink URLs on `**distribution.`*** (see rows above).
 
 **Artifacts:** `OVERVIEW_TEMPLATE_ALIGNMENT.csv` tracks XML section alignment; `NOAA_UXS_MIGRATION_TRACKER.csv` tracks program workstreams (not per-field). `**Metadata Placeholders and Script Generation.xlsx`** element rows should map through the JSON paths above via §2–§4.
+
+---
+
+## 8. Legacy formData ↔ pilotState ↔ ISO 19115-2 XML (React)
+
+Use this section when wiring **legacy form `name`s** (§2), **pilot JSON** (§7), and **ISO 19115-2** preview/import together.
+
+| Direction | Module | Role |
+| --------- | ------ | ---- |
+| Legacy `formData` → `pilotState` | [`react-pilot/src/core/mappers/legacyFormDataMapper.js`](react-pilot/src/core/mappers/legacyFormDataMapper.js) | Normalizes aliases (`missionId`→`fileId`, `missionTitle`→`title`, `organization`→`org`, `nceiAccessionId`→`accession`, merges `output` into `distribution`, optional ROR flatten/rehydrate), then `pilotStateToCanonical` / `canonicalToPilotState`. **`legacyFormDataToPilotState`** is what Netlify **`/api/db`** `validateOnServer` uses. |
+| `pilotState` → legacy-shaped payload | [`react-pilot/src/lib/pilotToLegacyFormData.js`](react-pilot/src/lib/pilotToLegacyFormData.js) | Builds a **`collectFormData()`-like** object for GAS helpers (`validateFormDataWithRules`, `generateGeoJSON`, `generateDCATJsonLd`)—includes `gcmdKeywords` from facet arrays and bbox corners from `mission.*`. |
+| Canonical round-trip | [`react-pilot/src/core/mappers/pilotStateMapper.js`](react-pilot/src/core/mappers/pilotStateMapper.js) | Shared canonical entity between legacy bridge and imports. |
+| **ISO 19115-2 / −3 XML → partial pilot state** | [`react-pilot/src/lib/xmlPilotImport.js`](react-pilot/src/lib/xmlPilotImport.js) | **`importPilotPartialStateFromXml`** reads **`gmd`/`gmi`** records (primary NOAA/NCEI path) and ISO 19115-3 when present; merges via `mergeLoadedPilotState`. Preview/download remain **19115-2-shaped**. |
+| **pilotState → ISO 19115-2 XML preview** | [`react-pilot/src/lib/xmlPreviewBuilder.js`](react-pilot/src/lib/xmlPreviewBuilder.js) | Matches generator-oriented paths aligned with §3 (`UniversalXMLGenerator` semantics). |
+
+Field-level parity for HTML **`name`** ↔ **`pilotState`** remains **§7**. §4’s “Gap” rows reflect an older spreadsheet audit; treat **§7 + §8** as authoritative for the React pilot.
+
+---
+
+## 9. Making forms match XML preview / download (workflow)
+
+Use this when a wizard value **does not appear** in downloaded XML, or re-import drops it.
+
+1. **Confirm state** — In devtools or a breakpoint, inspect **`pilotState`** after editing the step. If the value is missing here, fix the step component / `onMissionPatch` (or spatial/platform/sensors/distribution) first.
+2. **Trace preview** — Open [`react-pilot/src/lib/xmlPreviewBuilder.js`](react-pilot/src/lib/xmlPreviewBuilder.js) and search for **`buildXmlPreview`** usage of the field (e.g. `m.purpose`, `dist.metadataLandingUrl`). Preview only emits what this function reads from **`mission` / `spatial` / `platform` / `sensors` / `keywords` / `distribution`**.
+3. **Trace import** — If download looks right but **paste XML** loses the field, update [`react-pilot/src/lib/xmlPilotImport.js`](react-pilot/src/lib/xmlPilotImport.js) mapping into `partial.mission` (etc.) and ensure **`mergeLoadedPilotState`** in [`react-pilot/src/lib/pilotValidation.js`](react-pilot/src/lib/pilotValidation.js) merges nested keys you add.
+4. **Legacy payload** — If the bug appears only when posting **`collectFormData()`**-shaped JSON (e.g. `/api/db`), check **`legacyFormDataToPilotState`** / **`pilotToLegacyFormData`** (§8), not only preview.
+5. **Automated guard** — Run **`cd react-pilot && npm run verify:pilot`**. The script exercises **`buildXmlPreview` → `importPilotPartialStateFromXml` → merge** on `fixtures/mission/*.xml` (ISO 19115-2); expand the snapshot in **`scripts/verify-pilot.mjs`** (`iso2FixtureRoundtripSnapshot`) when you want CI to lock additional mission fields.
 
 ---
 

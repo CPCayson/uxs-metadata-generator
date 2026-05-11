@@ -5,6 +5,8 @@ import {
   parseInstrumentDescriptionBlock,
   sensorInstrumentDedupeKey,
 } from './sensorInstrumentDescription.js'
+import { parseUxsPilotMachineBlockFromSupplemental } from './uxsOperationalModel.js'
+import { normalizeNceiAccessionToken } from './pilotValidation.js'
 
 /** ISO / GML namespaces used by the pilot preview and UniversalXMLGenerator. */
 const NS = {
@@ -43,13 +45,19 @@ const NS3 = {
 function keywordUuidFromConceptHref(href) {
   const h = String(href || '').trim()
   if (!h) return ''
-  const concept = h.match(/\/concept\/([a-f0-9-]{8}-[a-f0-9-]{4}-[a-f0-9-]{4}-[a-f0-9-]{4}-[a-f0-9-]{12})/i)
+  const concept =
+    h.match(/\/concept\/([a-f0-9-]{8}-[a-f0-9-]{4}-[a-f0-9-]{4}-[a-f0-9-]{4}-[a-f0-9-]{12})/i) ||
+    h.match(/\/kms\/concept\/([a-f0-9-]{8}-[a-f0-9-]{4}-[a-f0-9-]{4}-[a-f0-9-]{4}-[a-f0-9-]{12})/i)
   if (concept) return concept[1]
   const qu = h.match(/[?&]uuid=([a-f0-9-]{36})/i)
   if (qu) return qu[1]
+  const gcmd = h.match(/gcmd\.earthdata\.nasa\.gov\/[^?\s#]*\/([a-f0-9-]{8}-[a-f0-9-]{4}-[a-f0-9-]{4}-[a-f0-9-]{4}-[a-f0-9-]{12})/i)
+  if (gcmd) return gcmd[1]
   if (/^https?:\/\//i.test(h)) return h
   return h
 }
+
+const KMS_UUID_INLINE_RE = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i
 
 /**
  * @param {Element} kw  `gmd:keyword`
@@ -67,6 +75,10 @@ function keywordLabelAndUuidFromKeywordElement(kw) {
     }
   }
   const lab = gcoCharacterString(kw)
+  const trimmed = stripUxTemplateBraces(lab).trim()
+  if (trimmed && KMS_UUID_INLINE_RE.test(trimmed)) {
+    return { label: trimmed, uuid: trimmed }
+  }
   return { label: lab, uuid: '' }
 }
 
@@ -167,12 +179,13 @@ function keywordThesaurusTitleLower(mk) {
 function keywordFacetFromIsoKeywordTypeCode(raw) {
   const v = String(raw || '').trim().toLowerCase().replace(/\s+/g, '')
   if (!v) return ''
-  if (v === 'theme') return 'sciencekeywords'
+  if (v === 'theme' || v === 'topic') return 'sciencekeywords'
   if (v === 'place') return 'locations'
   if (v === 'project') return 'projects'
   if (v === 'datacentre' || v === 'datacenter') return 'datacenters'
   if (v === 'platform') return 'platforms'
   if (v === 'instrument') return 'instruments'
+  if (v === 'provider') return 'providers'
   if (v === 'temporal') return ''
   return ''
 }
@@ -193,6 +206,12 @@ function facetFromMdKeywordsBlock(mk) {
   else if (thesTitle.includes('project')) facet = 'projects'
   else if (thesTitle.includes('provider')) facet = 'providers'
   if (!facet && thesTitle.includes('gcmd') && /science|earth/i.test(thesTitle)) facet = 'sciencekeywords'
+  if (!facet && /earth\s*science\s*keywords|global\s*change\s*master\s*directory|gcmd.*earth/i.test(thesTitle)) {
+    facet = 'sciencekeywords'
+  }
+  if (!facet && thesTitle.includes('inport') && /keyword|theme|place|topic/i.test(thesTitle)) {
+    facet = 'sciencekeywords'
+  }
 
   if (!facet) {
     const typeEl = childNS(mk, NS.gmd, 'type')
@@ -221,6 +240,9 @@ function facetFromMriKeywordsBlock(mk) {
   else if (thesTitle.includes('project')) facet = 'projects'
   else if (thesTitle.includes('provider')) facet = 'providers'
   if (!facet && thesTitle.includes('gcmd') && /science|earth/i.test(thesTitle)) facet = 'sciencekeywords'
+  if (!facet && /earth\s*science\s*keywords|global\s*change\s*master\s*directory|gcmd.*earth/i.test(thesTitle)) {
+    facet = 'sciencekeywords'
+  }
 
   if (!facet) {
     const typeEl = cn3(mk, NS3.mri, 'type')
@@ -374,6 +396,99 @@ function gmdAnchorOrCharacterString(el) {
 }
 
 /**
+ * ISO 19115-3 `mcc` free text or Anchor (format name/version).
+ * @param {Element | null | undefined} el
+ */
+function mccAnchorOrText(el) {
+  if (!el) return ''
+  const gcs = gcs3(el)
+  if (gcs) return stripUxTemplateBraces(gcs)
+  for (const c of el.children || []) {
+    if (c.localName === 'Anchor') {
+      const t = txt(c).trim()
+      if (t) return stripUxTemplateBraces(t)
+      const tit = (c.getAttributeNS(NS.xlink, 'title') || c.getAttribute('xlink:title') || '').trim()
+      if (tit) return stripUxTemplateBraces(tit)
+    }
+  }
+  return stripUxTemplateBraces(txt(el))
+}
+
+/**
+ * @param {Element | null} md `gmd:MD_Distribution`
+ * @returns {{ name: string, version: string }}
+ */
+function extractMdFormatFromDistributionGmd(md) {
+  const out = { name: '', version: '' }
+  if (!md) return out
+  let fmt = childNS(childNS(md, NS.gmd, 'distributionFormat'), NS.gmd, 'MD_Format')
+  const distBlock = childNS(md, NS.gmd, 'distributor')
+  const mdDist = distBlock ? childNS(distBlock, NS.gmd, 'MD_Distributor') : null
+  if (!fmt && mdDist) {
+    const dfw = childNS(mdDist, NS.gmd, 'distributorFormat')
+    fmt = dfw ? childNS(dfw, NS.gmd, 'MD_Format') : null
+  }
+  if (!fmt) {
+    const dfw = childNS(md, NS.gmd, 'distributorFormat')
+    fmt = dfw ? childNS(dfw, NS.gmd, 'MD_Format') : null
+  }
+  if (!fmt) return out
+  const nameEl = childNS(fmt, NS.gmd, 'name')
+  const verEl = childNS(fmt, NS.gmd, 'version')
+  out.name = gmdAnchorOrCharacterString(nameEl) || gcoCharacterString(nameEl)
+  out.version = gmdAnchorOrCharacterString(verEl) || gcoCharacterString(verEl)
+  return out
+}
+
+/**
+ * @param {Element | null} md `mrd:MD_Distribution`
+ */
+function extractMdFormatFromDistribution3(md) {
+  const out = { name: '', version: '' }
+  if (!md) return out
+  let fmt = cn3(cn3(md, NS3.mrd, 'distributionFormat'), NS3.mcc, 'MD_Format')
+  const distBlock = cn3(md, NS3.mrd, 'distributor')
+  const mdDist = distBlock ? cn3(distBlock, NS3.mrd, 'MD_Distributor') : null
+  if (!fmt && mdDist) {
+    const dfw = cn3(mdDist, NS3.mrd, 'distributorFormat')
+    fmt = dfw ? cn3(dfw, NS3.mcc, 'MD_Format') : null
+  }
+  if (!fmt) {
+    const dfw = cn3(md, NS3.mrd, 'distributorFormat')
+    fmt = dfw ? cn3(dfw, NS3.mcc, 'MD_Format') : null
+  }
+  if (!fmt) return out
+  out.name = mccAnchorOrText(cn3(fmt, NS3.mcc, 'name'))
+  out.version = mccAnchorOrText(cn3(fmt, NS3.mcc, 'version'))
+  return out
+}
+
+/**
+ * Derive sensor id/model when MI_Instrument identifier code is empty.
+ * @param {Record<string, string>} row
+ */
+function normalizeSensorInstrumentIds(row) {
+  let sid = String(row.sensorId || '').trim()
+  let mid = String(row.modelId || '').trim()
+  if (sid && mid) return { ...row, sensorId: sid, modelId: mid }
+  const type = String(row.type || '').trim()
+  const variable = String(row.variable || '').trim()
+  const fb =
+    sid ||
+    mid ||
+    (type ? type.replace(/\s+/g, ' ').trim() : '') ||
+    (variable ? variable.replace(/\s+/g, ' ').trim() : '') ||
+    String(row.operationMode || row.firmware || '').trim()
+  if (!fb) return row
+  const slug = fb.replace(/[^\w\-+.]+/g, '_').replace(/_+/g, '_').slice(0, 120)
+  return {
+    ...row,
+    sensorId: sid || slug,
+    modelId: mid || slug,
+  }
+}
+
+/**
  * HTTP(S) URL from `gmd:linkage` (`gmd:URL`, `gco:CharacterString`, or mixed content).
  * @param {Element | null | undefined} linkEl
  * @returns {string}
@@ -408,6 +523,45 @@ function dataIdentification(root) {
 }
 
 /**
+ * Strip URL wrappers and known NCEI path shapes so accession matches catalog ids.
+ * @param {string} raw
+ * @returns {string}
+ */
+function normalizeAccessionFromCitationCode(raw) {
+  let s = String(raw || '').trim()
+  if (!s) return ''
+  s = stripUxTemplateBraces(s).trim()
+  if (!s) return ''
+  s = s.replace(/^https?:\/\/doi\.org\//i, '')
+  if (/^10\.\d{4,9}\//.test(s)) return ''
+  const arch =
+    s.match(/\/archive\/accession\/([^/?#]+)/i) || s.match(/\/accession\/([^/?#]+)/i)
+  if (arch?.[1]) return arch[1].trim()
+  const nodc = s.match(/^gov\.noaa\.nodc:?\s*(.+)$/i)
+  if (nodc?.[1]) return nodc[1].trim().replace(/\s+/g, '')
+  if (/^https?:\/\//i.test(s)) {
+    try {
+      const u = new URL(s)
+      const last = u.pathname.split('/').filter(Boolean).pop() || ''
+      if (last && /^[A-Za-z0-9._-]+$/.test(last) && last.length < 200) return last
+    } catch {
+      /* ignore */
+    }
+  }
+  return s
+}
+
+/**
+ * Only assign `mission.accession` when the citation code matches lenient validation (`normalizeNceiAccessionToken` + alphanumeric).
+ * Skips DOI-like strings, URNs, and other identifiers that would raise **NCEI Accession must be alphanumeric**.
+ * @param {string} norm result of {@link normalizeAccessionFromCitationCode}
+ */
+function isPlausibleNceiAccessionImport(norm) {
+  const acc = normalizeNceiAccessionToken(norm)
+  return !!acc && /^[A-Za-z0-9._-]+$/.test(acc)
+}
+
+/**
  * @param {Element | null} cite
  * @returns {{ publicationDate: string, startDate: string, endDate: string }}
  */
@@ -423,9 +577,35 @@ function citationDates(cite) {
     const dtt = childNS(ci, NS.gmd, 'dateType')
     const code = dtt ? childNS(dtt, NS.gmd, 'CI_DateTypeCode') : null
     const typeVal = (code?.getAttribute('codeListValue') || txt(code)).toLowerCase()
-    if (typeVal.includes('publication')) out.publicationDate = dateStr
-    else if (typeVal.includes('creation')) out.startDate = dateStr
-    else if (typeVal.includes('completion')) out.endDate = dateStr
+    if (typeVal.includes('publication')) {
+      out.publicationDate = dateStr
+    } else if (
+      !out.publicationDate &&
+      (typeVal.includes('issue') || typeVal.includes('issued') || typeVal.includes('released'))
+    ) {
+      out.publicationDate = dateStr
+    } else if (typeVal.includes('creation')) {
+      out.startDate = dateStr
+    } else if (!out.startDate && typeVal.includes('available')) {
+      out.startDate = dateStr
+    } else if (typeVal.includes('completion')) {
+      out.endDate = dateStr
+    } else if (
+      !out.endDate &&
+      (typeVal.includes('revision') ||
+        typeVal.includes('last update') ||
+        typeVal.includes('last modified') ||
+        typeVal.includes('updated'))
+    ) {
+      out.endDate = dateStr
+    } else if (
+      !out.endDate &&
+      (typeVal.includes('validity') || typeVal.includes('expiry') || typeVal.includes('expires'))
+    ) {
+      out.endDate = dateStr
+    } else if (!out.endDate && (typeVal.includes('deprecated') || typeVal.includes('superseded'))) {
+      out.endDate = dateStr
+    }
   }
   return out
 }
@@ -451,7 +631,9 @@ function citationIdentifiers(cite) {
       let acc = code
       const m = acc.match(/^NCEI\s*Accession\s*ID\s*:\s*(.+)$/i)
       if (m) acc = m[1].trim()
-      doi.accession = stripUxTemplateBraces(acc).trim()
+      acc = stripUxTemplateBraces(acc).trim()
+      const norm = normalizeAccessionFromCitationCode(acc)
+      if (norm && isPlausibleNceiAccessionImport(norm)) doi.accession = norm
     }
   }
   return doi
@@ -501,12 +683,17 @@ function parseExtent(exExtent) {
   }
   if (geoLines.length) out.geographicDescription = geoLines.join('\n')
 
-  const box = childNS(childNS(exExtent, NS.gmd, 'geographicElement'), NS.gmd, 'EX_GeographicBoundingBox')
-  if (box) {
-    out.west = gcoDecimalFromWrapper(childNS(box, NS.gmd, 'westBoundLongitude'))
-    out.east = gcoDecimalFromWrapper(childNS(box, NS.gmd, 'eastBoundLongitude'))
-    out.south = gcoDecimalFromWrapper(childNS(box, NS.gmd, 'southBoundLatitude'))
-    out.north = gcoDecimalFromWrapper(childNS(box, NS.gmd, 'northBoundLatitude'))
+  for (const ge of childrenNS(exExtent, NS.gmd, 'geographicElement')) {
+    const box = childNS(ge, NS.gmd, 'EX_GeographicBoundingBox')
+    if (!box) continue
+    const w = gcoDecimalFromWrapper(childNS(box, NS.gmd, 'westBoundLongitude'))
+    const e = gcoDecimalFromWrapper(childNS(box, NS.gmd, 'eastBoundLongitude'))
+    const s = gcoDecimalFromWrapper(childNS(box, NS.gmd, 'southBoundLatitude'))
+    const n = gcoDecimalFromWrapper(childNS(box, NS.gmd, 'northBoundLatitude'))
+    if (!out.west && w) out.west = w
+    if (!out.east && e) out.east = e
+    if (!out.south && s) out.south = s
+    if (!out.north && n) out.north = n
   }
 
   for (const ve of childrenNS(exExtent, NS.gmd, 'verticalElement')) {
@@ -521,15 +708,17 @@ function parseExtent(exExtent) {
     }
   }
 
-  const temp = childNS(childNS(exExtent, NS.gmd, 'temporalElement'), NS.gmd, 'EX_TemporalExtent')
-  const inner = temp ? childNS(temp, NS.gmd, 'extent') : null
-  const tp = inner ? childLocal(inner, 'TimePeriod') : null
-  if (tp) {
-    out.startDate =
+  for (const tw of childrenNS(exExtent, NS.gmd, 'temporalElement')) {
+    const temp = childNS(tw, NS.gmd, 'EX_TemporalExtent')
+    const inner = temp ? childNS(temp, NS.gmd, 'extent') : null
+    const tp = inner ? childLocal(inner, 'TimePeriod') : null
+    if (!tp) continue
+    const begin =
       txt(childNS(tp, NS.gml, 'begin')) ||
       txt(childNS(tp, NS.gml, 'beginPosition')) ||
       txt(childLocal(tp, 'begin')) ||
       txt(childLocal(tp, 'beginPosition'))
+    if (begin && !out.startDate) out.startDate = begin
     let endTxt =
       txt(childNS(tp, NS.gml, 'end')) ||
       txt(childLocal(tp, 'end')) ||
@@ -545,14 +734,56 @@ function parseExtent(exExtent) {
         endTxt = new Date().toISOString().slice(0, 10)
       }
     }
-    out.endDate = endTxt
+    if (endTxt && !out.endDate) out.endDate = endTxt
     const ti = childNS(tp, NS.gml, 'timeInterval') || childLocal(tp, 'timeInterval')
-    if (ti) {
+    if (ti && !out.temporalExtentIntervalValue) {
       out.temporalExtentIntervalUnit = ti.getAttribute('unit') || ti.getAttributeNS(NS.gml, 'unit') || ''
       out.temporalExtentIntervalValue = txt(ti)
     }
   }
   return out
+}
+
+/**
+ * Merge multiple extent parse results (fills empty axes/dates from sibling blocks).
+ * @param {Array<Record<string, unknown>>} parts
+ * @param {Record<string, unknown>} emptyTemplate
+ */
+function mergeExtentPartials(parts, emptyTemplate) {
+  if (!parts.length) return /** @type {Record<string, unknown>} */ ({ ...emptyTemplate })
+  const merged = { ...parts[0] }
+  const keys = Object.keys(emptyTemplate)
+  for (let i = 1; i < parts.length; i++) {
+    const e = parts[i]
+    for (const k of keys) {
+      if (k === 'hasTrajectory') continue
+      const ek = e[k]
+      const mk = merged[k]
+      if (!String(mk || '').trim() && String(ek || '').trim()) {
+        merged[k] = ek
+      }
+    }
+    merged.hasTrajectory = Boolean(merged.hasTrajectory || e.hasTrajectory)
+  }
+  return merged
+}
+
+/**
+ * Merge all `gmd:extent` / `EX_Extent` blocks (records often split temporal vs geographic).
+ * @param {Element | null} dataId
+ * @returns {ReturnType<typeof parseExtent>}
+ */
+function mergeExtentsFromDataIdentification(dataId) {
+  const empty = parseExtent(null)
+  if (!dataId) return empty
+  const parts = []
+  for (const ew of childrenNS(dataId, NS.gmd, 'extent')) {
+    const ex = childNS(ew, NS.gmd, 'EX_Extent')
+    if (ex) parts.push(parseExtent(ex))
+  }
+  return /** @type {ReturnType<typeof parseExtent>} */ (
+    mergeExtentPartials(parts, empty)
+  )
 }
 
 /**
@@ -589,6 +820,52 @@ function parseKeywords(dataId) {
 }
 
 /**
+ * Resource language from identification (`MD_DataIdentification`).
+ * @param {Element | null} dataId
+ */
+function parseIdentificationLanguageGmd(dataId) {
+  if (!dataId) return ''
+  const langWrap = childNS(dataId, NS.gmd, 'language')
+  if (!langWrap) return ''
+  const langEl = childNS(langWrap, NS.gmd, 'LanguageCode')
+  const fromCode = (langEl?.getAttribute('codeListValue') || txt(langEl) || '').trim()
+  if (fromCode) return fromCode
+  return String(gcoCharacterString(langWrap) || '').trim()
+}
+
+/**
+ * Record-level language from metadata root (`gmd:language`).
+ * @param {Element | null} root
+ */
+function parseRootLanguageGmd(root) {
+  if (!root) return ''
+  const langWrap = childNS(root, NS.gmd, 'language')
+  if (!langWrap) return ''
+  const langEl = childNS(langWrap, NS.gmd, 'LanguageCode')
+  const fromCode = (langEl?.getAttribute('codeListValue') || txt(langEl) || '').trim()
+  if (fromCode) return fromCode
+  return String(gcoCharacterString(langWrap) || '').trim()
+}
+
+/**
+ * @param {Element | null} dataId
+ */
+function parseIdentificationCharacterSetGmd(dataId) {
+  if (!dataId) return ''
+  const csEl = childNS(childNS(dataId, NS.gmd, 'characterSet'), NS.gmd, 'MD_CharacterSetCode')
+  return (csEl?.getAttribute('codeListValue') || txt(csEl) || '').trim()
+}
+
+/**
+ * @param {Element | null} root
+ */
+function parseRootCharacterSetGmd(root) {
+  if (!root) return ''
+  const csEl = childNS(childNS(root, NS.gmd, 'characterSet'), NS.gmd, 'MD_CharacterSetCode')
+  return (csEl?.getAttribute('codeListValue') || txt(csEl) || '').trim()
+}
+
+/**
  * @param {Element | null} dataId
  * @returns {string[]}
  */
@@ -597,7 +874,10 @@ function parseTopicCategories(dataId) {
   const out = []
   for (const tc of childrenNS(dataId, NS.gmd, 'topicCategory')) {
     const code = childNS(tc, NS.gmd, 'MD_TopicCategoryCode')
-    const v = (code?.getAttribute('codeListValue') || txt(code) || gcoCharacterString(tc)).trim()
+    let v = (code?.getAttribute('codeListValue') || txt(code) || '').trim()
+    if (!v && code) v = String(gcoCharacterString(code) || '').trim()
+    if (!v) v = String(gcoCharacterString(tc) || '').trim()
+    if (!v) v = txt(tc).trim()
     if (v) out.push(v)
   }
   return out
@@ -951,7 +1231,7 @@ function parseSensors(root) {
     const variableFromName = gcoCharacterString(childNS(n, NS.gmd, 'name'))
     const desc = gcoCharacterString(childNS(n, NS.gmd, 'description'))
     const parsed = parseInstrumentDescriptionBlock(desc)
-    const row = {
+    let row = {
       sensorId: sid,
       type,
       modelId: sid,
@@ -964,6 +1244,7 @@ function parseSensors(root) {
       depthRating: parsed.depthRating,
       confidenceInterval: parsed.confidenceInterval,
     }
+    row = normalizeSensorInstrumentIds(row)
     if (acquisitionInstrumentHasContent(row)) out.push(row)
   }
   return out
@@ -981,6 +1262,28 @@ function lineageProcessStepDescription(ps) {
     childLocal(ps, 'LE_ProcessStep')
   if (!lip) return ''
   return gmdAnchorOrCharacterString(childNS(lip, NS.gmd, 'description'))
+}
+
+/**
+ * Label + value from legacy `gmd:DQ_*` → `DQ_QuantitativeResult` (`gmi:Quantity` / `gco:Decimal`).
+ * @param {Element | null} block
+ * @returns {{ label: string, value: string }}
+ */
+function legacyDqQuantitativeLabelValue(block) {
+  const empty = { label: '', value: '' }
+  if (!block) return empty
+  const res = childNS(block, NS.gmd, 'result')
+  const qr = res ? childNS(res, NS.gmd, 'DQ_QuantitativeResult') : null
+  if (!qr) return empty
+  const vtWrap = childLocal(qr, 'valueType')
+  const rt = vtWrap ? childNS(vtWrap, NS.gco, 'RecordType') || childLocal(vtWrap, 'RecordType') : null
+  const label = rt ? txt(rt) : ''
+  const valWrap = childLocal(qr, 'value')
+  const rec = valWrap ? childNS(valWrap, NS.gco, 'Record') || childLocal(valWrap, 'Record') : null
+  const qty = rec ? childNS(rec, NS.gmi, 'Quantity') : null
+  const decEl = qty ? childNS(qty, NS.gco, 'Decimal') : null
+  const dec = decEl ? txt(decEl) : ''
+  return { label, value: dec }
 }
 
 /**
@@ -1009,26 +1312,21 @@ function parseDataQuality(root) {
 
     for (const rep of childrenNS(dq, NS.gmd, 'report')) {
       const qaa = childNS(rep, NS.gmd, 'DQ_QuantitativeAttributeAccuracy')
+      const grid = childNS(rep, NS.gmd, 'DQ_GriddedDataPositionalAccuracy')
       const pos = childNS(rep, NS.gmd, 'DQ_AbsoluteExternalPositionalAccuracy')
-      const block = qaa || pos
-      if (!block) continue
-      const res = childNS(block, NS.gmd, 'result')
-      const qr = res ? childNS(res, NS.gmd, 'DQ_QuantitativeResult') : null
-      if (!qr) continue
-      const vtWrap = childLocal(qr, 'valueType')
-      const rt = vtWrap ? childNS(vtWrap, NS.gco, 'RecordType') || childLocal(vtWrap, 'RecordType') : null
-      const label = rt ? txt(rt) : ''
-      const valWrap = childLocal(qr, 'value')
-      const rec = valWrap ? childNS(valWrap, NS.gco, 'Record') || childLocal(valWrap, 'Record') : null
-      const qty = rec ? childNS(rec, NS.gmi, 'Quantity') : null
-      const decEl = qty ? childNS(qty, NS.gco, 'Decimal') : null
-      const dec = decEl ? txt(decEl) : ''
-      if (qaa) {
+      const rel = childNS(rep, NS.gmd, 'DQ_RelativeInternalPositionalAccuracy')
+
+      const accBlock = qaa || grid
+      if (accBlock) {
+        const { label, value } = legacyDqQuantitativeLabelValue(accBlock)
         if (!out.accuracyStandard) out.accuracyStandard = label
-        if (!out.accuracyValue) out.accuracyValue = dec
-      } else if (pos) {
+        if (!out.accuracyValue) out.accuracyValue = value
+      }
+      const errBlock = pos || rel
+      if (errBlock) {
+        const { label, value } = legacyDqQuantitativeLabelValue(errBlock)
         if (!out.errorLevel) out.errorLevel = label
-        if (!out.errorValue) out.errorValue = dec
+        if (!out.errorValue) out.errorValue = value
       }
     }
   }
@@ -1337,29 +1635,24 @@ function parseDistribution(root, fileId, fileIdRaw) {
     distributorEmail: '',
     distributorContactUrl: '',
   }
+  for (const dix of childrenNS(root, NS.gmd, 'distributionInfo')) {
+    const mdTry = childNS(dix, NS.gmd, 'MD_Distribution')
+    const fp = extractMdFormatFromDistributionGmd(mdTry)
+    if (fp.name) {
+      dist.distributionFormatName = fp.name
+      dist.distributionFileFormat = fp.version
+      break
+    }
+  }
+
   const di = childNS(root, NS.gmd, 'distributionInfo')
   const md = di ? childNS(di, NS.gmd, 'MD_Distribution') : null
   /** @type {Element | null} */
   let mdDist = null
 
   if (md) {
-    let fmt = childNS(childNS(md, NS.gmd, 'distributionFormat'), NS.gmd, 'MD_Format')
-
     const distBlock = childNS(md, NS.gmd, 'distributor')
     mdDist = distBlock ? childNS(distBlock, NS.gmd, 'MD_Distributor') : null
-
-    if (!fmt && mdDist) {
-      const dfw = childNS(mdDist, NS.gmd, 'distributorFormat')
-      fmt = dfw ? childNS(dfw, NS.gmd, 'MD_Format') : null
-    }
-    if (!fmt) {
-      const dfw = childNS(md, NS.gmd, 'distributorFormat')
-      fmt = dfw ? childNS(dfw, NS.gmd, 'MD_Format') : null
-    }
-    if (fmt) {
-      dist.distributionFormatName = gcoCharacterString(childNS(fmt, NS.gmd, 'name'))
-      dist.distributionFileFormat = gcoCharacterString(childNS(fmt, NS.gmd, 'version'))
-    }
 
     if (mdDist) {
       const orderWrap =
@@ -1522,28 +1815,24 @@ function parseDistribution3(root, fileId, fileIdRaw) {
     distributorEmail: '',
     distributorContactUrl: '',
   }
+  for (const dix of cns3(root, NS3.mdb, 'distributionInfo')) {
+    const mdTry = cn3(dix, NS3.mrd, 'MD_Distribution')
+    const fp = extractMdFormatFromDistribution3(mdTry)
+    if (fp.name) {
+      dist.distributionFormatName = fp.name
+      dist.distributionFileFormat = fp.version
+      break
+    }
+  }
+
   const di = cn3(root, NS3.mdb, 'distributionInfo')
   const md = di ? cn3(di, NS3.mrd, 'MD_Distribution') : null
   /** @type {Element | null} */
   let mdDist = null
 
   if (md) {
-    let fmt = cn3(cn3(md, NS3.mrd, 'distributionFormat'), NS3.mcc, 'MD_Format')
     const distBlock = cn3(md, NS3.mrd, 'distributor')
     mdDist = distBlock ? cn3(distBlock, NS3.mrd, 'MD_Distributor') : null
-
-    if (!fmt && mdDist) {
-      const dfw = cn3(mdDist, NS3.mrd, 'distributorFormat')
-      fmt = dfw ? cn3(dfw, NS3.mcc, 'MD_Format') : null
-    }
-    if (!fmt) {
-      const dfw = cn3(md, NS3.mrd, 'distributorFormat')
-      fmt = dfw ? cn3(dfw, NS3.mcc, 'MD_Format') : null
-    }
-    if (fmt) {
-      dist.distributionFormatName = gcs3(cn3(fmt, NS3.mcc, 'name'))
-      dist.distributionFileFormat = gcs3(cn3(fmt, NS3.mcc, 'version'))
-    }
 
     if (mdDist) {
       const orderWrap =
@@ -1785,6 +2074,169 @@ function otherConstraintsHasAnchor(oc) {
 }
 
 /**
+ * Infer GCMD-style platform type from keywords + mission text when acquisition omits `platformType`.
+ * @param {Record<string, unknown>} partial
+ */
+function inferPlatformTypeFromKeywordsAndMissionText(partial) {
+  if (!partial || typeof partial !== 'object') return
+  let plat =
+    partial.platform && typeof partial.platform === 'object'
+      ? /** @type {Record<string, unknown>} */ ({ ...partial.platform })
+      : {}
+  if (String(plat.platformType || '').trim()) {
+    partial.platform = plat
+    return
+  }
+
+  const chunks = []
+  const m = partial.mission && typeof partial.mission === 'object' ? partial.mission : {}
+  chunks.push(String(m.title || ''), String(m.abstract || ''))
+  const kw = partial.keywords && typeof partial.keywords === 'object' ? partial.keywords : {}
+  const platKw = Array.isArray(kw.platforms) ? kw.platforms : []
+  for (const row of platKw) {
+    if (row && typeof row === 'object') chunks.push(String(/** @type {{ label?: string }} */ (row).label || ''))
+  }
+  const hay = chunks.join('\n')
+  const h = hay.toLowerCase()
+
+  let pt = ''
+  if (/satellite|landsat|sentinel|modis|orbiting|spacecraft/i.test(h)) {
+    pt = 'Satellites'
+  } else if (
+    /submarine|\bauv\b|\buuv\b|autonomous underwater|remus|glider|underwater vehicle|\brov\b|remotely operated|submersible|hydroid|deep discoverer|ocean-based/i.test(
+      h,
+    )
+  ) {
+    pt = 'In Situ Ocean-based Platforms'
+  } else if (/aircraft|airplane|helicopter|\buav\b|\buas\b|drone/i.test(h)) {
+    pt = 'Aircraft'
+  } else if (/research vessel|okeanos|research ship|\bcruise\b|\bship\b|noaa ship|research\s+vessel/i.test(h)) {
+    pt = 'Ships'
+  } else if (/mooring|buoys?\b/i.test(h)) {
+    pt = 'Buoys'
+  } else if (/fixed observ|weather station|station\b/i.test(h)) {
+    pt = 'In Situ Land-based Platforms'
+  } else if (/socioeconomic|socio-economic|household survey|coastal resource|jurisdictional|human dimensions/i.test(h)) {
+    pt = 'Earth Science Services'
+  }
+
+  if (!pt && hay.trim()) {
+    pt = 'Multiple'
+  }
+
+  if (pt) plat.platformType = pt
+  if (Object.keys(plat).length) partial.platform = plat
+}
+
+/**
+ * Seed GCMD-style keyword facets from acquisition when ISO blocks omit them (lenient EUT).
+ * @param {Record<string, unknown>} partial
+ */
+function inferKeywordFacetsFromAcquisition(partial) {
+  if (!partial || typeof partial !== 'object') return
+  const prev =
+    partial.keywords && typeof partial.keywords === 'object'
+      ? /** @type {Record<string, unknown>} */ ({ ...partial.keywords })
+      : {}
+  const facetKeys = [
+    'sciencekeywords',
+    'datacenters',
+    'platforms',
+    'instruments',
+    'locations',
+    'projects',
+    'providers',
+  ]
+  for (const f of facetKeys) {
+    if (!Array.isArray(prev[f])) prev[f] = []
+  }
+  const kwInstr = /** @type {Array<{ label: string, uuid: string }>} */ (prev.instruments)
+  const kwPlat = /** @type {Array<{ label: string, uuid: string }>} */ (prev.platforms)
+
+  if (!kwInstr.length) {
+    const sensors = Array.isArray(partial.sensors) ? partial.sensors : []
+    const s0 = sensors[0] && typeof sensors[0] === 'object' ? sensors[0] : null
+    const label = s0
+      ? String(
+          /** @type {{ type?: string, variable?: string, modelId?: string }} */ (s0).type ||
+            /** @type {{ type?: string, variable?: string, modelId?: string }} */ (s0).variable ||
+            /** @type {{ type?: string, variable?: string, modelId?: string }} */ (s0).modelId ||
+            ''
+        ).trim()
+      : ''
+    if (label) kwInstr.push({ label, uuid: '' })
+  }
+  if (!kwPlat.length) {
+    const plat =
+      partial.platform && typeof partial.platform === 'object'
+        ? /** @type {Record<string, unknown>} */ (partial.platform)
+        : null
+    const label = plat
+      ? String(plat.platformType || plat.platformDesc || plat.platformId || '').trim()
+      : ''
+    if (label) kwPlat.push({ label, uuid: '' })
+  }
+  partial.keywords = prev
+}
+
+function inferPlatformIdDescFromKeywords(partial) {
+  let plat =
+    partial.platform && typeof partial.platform === 'object'
+      ? /** @type {Record<string, unknown>} */ ({ ...partial.platform })
+      : {}
+  const hasId = String(plat.platformId || '').trim()
+  const hasDesc = String(plat.platformDesc || '').trim()
+  if (hasId && hasDesc) {
+    partial.platform = plat
+    return
+  }
+
+  const kw = partial.keywords && typeof partial.keywords === 'object' ? partial.keywords : {}
+  const platKw = Array.isArray(kw.platforms) ? kw.platforms : []
+  const p0 =
+    platKw[0] && typeof platKw[0] === 'object'
+      ? String(/** @type {{ label?: string }} */ (platKw[0]).label || '').trim()
+      : ''
+
+  if (p0) {
+    if (!hasDesc) {
+      plat.platformDesc = p0.length > 800 ? `${p0.slice(0, 797)}…` : p0
+    }
+    if (!hasId) {
+      const leaf = (p0.split('>').pop() || p0).trim()
+      if (leaf) plat.platformId = leaf.replace(/[^\w\-+.]+/g, '_').replace(/_+/g, '_').slice(0, 128)
+    }
+  }
+
+  const stillNoId = !String(plat.platformId || '').trim()
+  const stillNoDesc = !String(plat.platformDesc || '').trim()
+  if (stillNoId || stillNoDesc) {
+    const m = partial.mission && typeof partial.mission === 'object' ? partial.mission : {}
+    const t = String(m.title || '').trim()
+    const abs0 = String(m.abstract || '').trim().slice(0, 600)
+    if (stillNoDesc && (t.length > 10 || abs0.length > 20)) {
+      plat.platformDesc =
+        (t.length > 10 ? t : abs0).length > 800 ? `${(t.length > 10 ? t : abs0).slice(0, 797)}…` : t.length > 10 ? t : abs0
+    }
+    if (stillNoId && t.length > 10) {
+      plat.platformId = t.replace(/[^\w\-+.]+/g, '_').replace(/_+/g, '_').slice(0, 128)
+    }
+  }
+  partial.platform = plat
+}
+
+/**
+ * Post-parse enrichment for legacy ISO records (not only Navy UxS templates).
+ * @param {Record<string, unknown>} partial
+ */
+function applyIsoImportHeuristics(partial) {
+  if (!partial || typeof partial !== 'object') return
+  inferKeywordFacetsFromAcquisition(partial)
+  inferPlatformTypeFromKeywordsAndMissionText(partial)
+  inferPlatformIdDescFromKeywords(partial)
+}
+
+/**
  * @param {Element | null} dataId
  * @returns {{
  *   citeAs: string,
@@ -1794,6 +2246,7 @@ function otherConstraintsHasAnchor(oc) {
  *   distributionLiability: string,
  *   dataLicensePreset: string,
  *   licenseUrl: string,
+ *   distributionLicense: string,
  * }}
  */
 function parseResourceConstraintsForMission(dataId) {
@@ -1805,6 +2258,7 @@ function parseResourceConstraintsForMission(dataId) {
     distributionLiability: '',
     dataLicensePreset: '',
     licenseUrl: '',
+    distributionLicense: '',
   }
   if (!dataId) return out
 
@@ -1849,6 +2303,7 @@ function parseResourceConstraintsForMission(dataId) {
       if (pk) out.dataLicensePreset = pk
     }
   }
+
   return out
 }
 
@@ -1876,7 +2331,7 @@ function parseOneAcquisitionInstrument(mi) {
   const stype = gcoCharacterString(childNS(mi, NS.gmi, 'type'))
   const descr = gcoCharacterString(childNS(mi, NS.gmd, 'description') || childNS(mi, NS.gmi, 'description'))
   const parsed = parseInstrumentDescriptionBlock(descr)
-  const row = {
+  let row = {
     sensorId: sid,
     modelId: sid,
     type: stype,
@@ -1889,6 +2344,7 @@ function parseOneAcquisitionInstrument(mi) {
     depthRating: parsed.depthRating,
     confidenceInterval: parsed.confidenceInterval,
   }
+  row = normalizeSensorInstrumentIds(row)
   if (!acquisitionInstrumentHasContent(row)) return null
   return row
 }
@@ -1967,8 +2423,18 @@ function parseAcquisitionInfo(root) {
 
   /** @type {Record<string, string>} */
   const platformOut = {}
-  const platWrap = childNS(mia, NS.gmi, 'platform')
-  const miPlat = platWrap ? childNS(platWrap, NS.gmi, 'MI_Platform') : null
+  /** @type {Element | null} */
+  let miPlat = null
+  const xlinkTitles = []
+  const xlinkHrefs = []
+  for (const platWrap of childrenNS(mia, NS.gmi, 'platform')) {
+    const mp = childNS(platWrap, NS.gmi, 'MI_Platform')
+    if (mp && !miPlat) miPlat = mp
+    const title = (platWrap.getAttributeNS(NS.xlink, 'title') || platWrap.getAttribute('xlink:title') || '').trim()
+    const href = (platWrap.getAttributeNS(NS.xlink, 'href') || platWrap.getAttribute('xlink:href') || '').trim()
+    if (title) xlinkTitles.push(title)
+    if (href) xlinkHrefs.push(href)
+  }
   if (miPlat) {
     const idw = childNS(miPlat, NS.gmd, 'identifier') || childNS(miPlat, NS.gmi, 'identifier')
     const mid = idw ? childNS(idw, NS.gmd, 'MD_Identifier') : null
@@ -1988,6 +2454,9 @@ function parseAcquisitionInfo(root) {
         if (m) platformOut.model = m
       }
       if (rest.length) platformOut.platformDesc = rest.join('\n')
+      else if (modelLines.length && !platformOut.platformDesc) {
+        platformOut.platformDesc = descRaw.trim()
+      }
     }
     const typ = gcoCharacterString(childNS(miPlat, NS.gmi, 'type'))
     if (typ) platformOut.platformType = typ
@@ -1996,6 +2465,18 @@ function parseAcquisitionInfo(root) {
     const org = rp ? gcoCharacterString(childNS(rp, NS.gmd, 'organisationName')) : ''
     if (org) platformOut.manufacturer = org
     parsePlatformOtherProperty(miPlat, platformOut)
+  }
+  if (!String(platformOut.platformDesc || '').trim() && xlinkTitles.length) {
+    platformOut.platformDesc = xlinkTitles[0]
+  }
+  if (!String(platformOut.platformId || '').trim()) {
+    const href0 = xlinkHrefs[0] || ''
+    const tail = href0.split('/').filter(Boolean).pop() || ''
+    const idFromHref = tail.replace(/[^A-Za-z0-9._-]/g, '').slice(0, 128)
+    if (idFromHref) platformOut.platformId = idFromHref
+    else if (xlinkTitles[0]) {
+      platformOut.platformId = xlinkTitles[0].replace(/[^\w\s-]+/g, '').replace(/\s+/g, '_').slice(0, 128)
+    }
   }
 
   const sensorRows = []
@@ -2063,7 +2544,8 @@ const UXS_TEMPLATE_NCEI_ROR = Object.freeze({
 })
 const UXS_TEMPLATE_HELP_EMAIL = 'metadata.help@noaa.gov'
 const UXS_TEMPLATE_HELP_URL = 'https://www.ncei.noaa.gov'
-const UXS_TEMPLATE_DOWNLOAD_STUB = 'https://www.ncei.noaa.gov/access/uxs-template-pending-file'
+/** Real NCEI page (200) — the old `…/uxs-template-pending-file` path 404s on ncei.noaa.gov. */
+const UXS_TEMPLATE_DOWNLOAD_STUB = 'https://www.ncei.noaa.gov/access'
 
 /**
  * `{{…}}` Navy/UxS beta templates: comment banner, NCEI UxS file id prefix, or explicit wording.
@@ -2382,9 +2864,35 @@ function citationDates3(cite) {
     const dtt = cn3(ci, NS3.cit, 'dateType')
     const code = dtt ? cn3(dtt, NS3.cit, 'CI_DateTypeCode') : null
     const typeVal = (code?.getAttribute('codeListValue') || txt(code)).toLowerCase()
-    if (typeVal.includes('publication')) out.publicationDate = dateStr
-    else if (typeVal.includes('creation')) out.startDate = dateStr
-    else if (typeVal.includes('completion')) out.endDate = dateStr
+    if (typeVal.includes('publication')) {
+      out.publicationDate = dateStr
+    } else if (
+      !out.publicationDate &&
+      (typeVal.includes('issue') || typeVal.includes('issued') || typeVal.includes('released'))
+    ) {
+      out.publicationDate = dateStr
+    } else if (typeVal.includes('creation')) {
+      out.startDate = dateStr
+    } else if (!out.startDate && typeVal.includes('available')) {
+      out.startDate = dateStr
+    } else if (typeVal.includes('completion')) {
+      out.endDate = dateStr
+    } else if (
+      !out.endDate &&
+      (typeVal.includes('revision') ||
+        typeVal.includes('last update') ||
+        typeVal.includes('last modified') ||
+        typeVal.includes('updated'))
+    ) {
+      out.endDate = dateStr
+    } else if (
+      !out.endDate &&
+      (typeVal.includes('validity') || typeVal.includes('expiry') || typeVal.includes('expires'))
+    ) {
+      out.endDate = dateStr
+    } else if (!out.endDate && (typeVal.includes('deprecated') || typeVal.includes('superseded'))) {
+      out.endDate = dateStr
+    }
   }
   return out
 }
@@ -2402,7 +2910,8 @@ function citationIdentifiers3(cite) {
     if (/^10\.\d{4,9}\//.test(doiNorm)) {
       out.doi = doiNorm
     } else if (!out.accession) {
-      out.accession = codeRaw
+      const norm = normalizeAccessionFromCitationCode(codeRaw)
+      if (norm && isPlausibleNceiAccessionImport(norm)) out.accession = norm
     }
   }
   return out
@@ -2480,11 +2989,28 @@ function parsePointOfContact3(dataId) {
 
 /** @param {Element | null} dataId */
 function parseConstraints3(dataId) {
-  const out = { citeAs: '', otherCiteAs: '', accessConstraints: '', accessConstraintsCode: '', distributionLiability: '', dataLicensePreset: '', licenseUrl: '' }
+  const out = {
+    citeAs: '',
+    otherCiteAs: '',
+    accessConstraints: '',
+    accessConstraintsCode: '',
+    distributionLiability: '',
+    dataLicensePreset: '',
+    licenseUrl: '',
+    distributionLicense: '',
+  }
   if (!dataId) return out
   for (const rc of cns3(dataId, NS3.mri, 'resourceConstraints')) {
     const legal = cn3(rc, NS3.mco, 'MD_LegalConstraints')
-    if (!legal) continue
+    if (!legal) {
+      const xlinkHref =
+        rc.getAttributeNS(NS.xlink, 'href') || rc.getAttribute('xlink:href') || rc.getAttribute('href') || ''
+      if (xlinkHref.trim()) {
+        const pk = inferLicensePresetFromDocucompHref(xlinkHref)
+        if (pk) out.dataLicensePreset = pk
+      }
+      continue
+    }
     const ac = cn3(legal, NS3.mco, 'accessConstraints')
     if (ac) {
       const code = cn3(ac, NS3.mco, 'MD_RestrictionCode')
@@ -2494,7 +3020,7 @@ function parseConstraints3(dataId) {
       }
     }
     const proseOthers = []
-    for (const c of (legal.children || [])) {
+    for (const c of legal.children || []) {
       if (c.localName !== 'otherConstraints') continue
       const s = gcs3(c)
       if (!s) continue
@@ -2508,100 +3034,162 @@ function parseConstraints3(dataId) {
     if (proseOthers[0]) out.distributionLiability = proseOthers[0]
     if (proseOthers[1]) out.otherCiteAs = proseOthers[1]
   }
+
+  return out
+}
+
+/** @param {Element} ex `gex:EX_Extent` */
+function parseExtentSingle3(ex) {
+  const out = {
+    west: '',
+    east: '',
+    south: '',
+    north: '',
+    vmin: '',
+    vmax: '',
+    geographicDescription: '',
+    verticalCrsUrl: '',
+    startDate: '',
+    endDate: '',
+    temporalExtentIntervalUnit: '',
+    temporalExtentIntervalValue: '',
+    hasTrajectory: false,
+    trajectorySampling: '',
+  }
+  for (const dw of cns3(ex, NS3.gex, 'description')) {
+    const s = gcs3(dw)
+    if (!s) continue
+    if (s.startsWith('Vertical CRS: ')) {
+      if (!out.verticalCrsUrl) out.verticalCrsUrl = s.slice('Vertical CRS: '.length).trim()
+    } else if (s.startsWith('Trajectory sampling: ')) {
+      out.hasTrajectory = true
+      if (!out.trajectorySampling) out.trajectorySampling = s.slice('Trajectory sampling: '.length).trim()
+    } else if (!out.geographicDescription) {
+      out.geographicDescription = s
+    }
+  }
+  for (const ge of cns3(ex, NS3.gex, 'geographicElement')) {
+    const bbox = cn3(ge, NS3.gex, 'EX_GeographicBoundingBox')
+    if (!bbox) continue
+    if (!out.west) out.west = gcoDecimal3(cn3(bbox, NS3.gex, 'westBoundLongitude'))
+    if (!out.east) out.east = gcoDecimal3(cn3(bbox, NS3.gex, 'eastBoundLongitude'))
+    if (!out.south) out.south = gcoDecimal3(cn3(bbox, NS3.gex, 'southBoundLatitude'))
+    if (!out.north) out.north = gcoDecimal3(cn3(bbox, NS3.gex, 'northBoundLatitude'))
+  }
+  for (const ve of cns3(ex, NS3.gex, 'verticalElement')) {
+    const vx = cn3(ve, NS3.gex, 'EX_VerticalExtent')
+    if (!vx) continue
+    const lo = gcoDecimal3(cn3(vx, NS3.gex, 'minimumValue'))
+    const hi = gcoDecimal3(cn3(vx, NS3.gex, 'maximumValue'))
+    if (lo || hi) {
+      out.vmin = lo
+      out.vmax = hi
+      break
+    }
+  }
+  for (const te of cns3(ex, NS3.gex, 'temporalElement')) {
+    const ext = cn3(te, NS3.gex, 'EX_TemporalExtent')
+    const inner = ext ? cn3(ext, NS3.gex, 'extent') : null
+    const tp = inner ? childLocal(inner, 'TimePeriod') : null
+    if (!tp) continue
+    const begin =
+      txt(childNS(tp, NS.gml, 'beginPosition')) ||
+      txt(childLocal(tp, 'beginPosition')) ||
+      txt(childNS(tp, NS.gml, 'begin')) ||
+      txt(childLocal(tp, 'begin'))
+    if (begin && !out.startDate) out.startDate = begin
+    let endTxt =
+      txt(childNS(tp, NS.gml, 'end')) ||
+      txt(childLocal(tp, 'end')) ||
+      ''
+    endTxt = String(endTxt).trim()
+    const endPosEl =
+      childNS(tp, NS.gml, 'endPosition') ||
+      childLocal(tp, 'endPosition')
+    if (!endTxt && endPosEl) {
+      endTxt = txt(endPosEl).trim()
+      const indet = String(endPosEl.getAttribute('indeterminatePosition') || '').trim().toLowerCase()
+      if (!endTxt && indet === 'now') {
+        endTxt = new Date().toISOString().slice(0, 10)
+      }
+    }
+    if (endTxt && !out.endDate) out.endDate = endTxt
+    const ti = childNS(tp, NS.gml, 'timeInterval') || childLocal(tp, 'timeInterval')
+    if (ti && !out.temporalExtentIntervalValue) {
+      out.temporalExtentIntervalUnit = ti.getAttribute('unit') || ti.getAttributeNS(NS.gml, 'unit') || ''
+      out.temporalExtentIntervalValue = txt(ti)
+    }
+  }
   return out
 }
 
 /** @param {Element | null} dataId */
 function parseExtent3(dataId) {
-  const out = {
-    west: '', east: '', south: '', north: '',
-    vmin: '', vmax: '',
-    geographicDescription: '', verticalCrsUrl: '',
-    startDate: '', endDate: '',
-    temporalExtentIntervalUnit: '', temporalExtentIntervalValue: '',
-    hasTrajectory: false, trajectorySampling: '',
+  const empty = {
+    west: '',
+    east: '',
+    south: '',
+    north: '',
+    vmin: '',
+    vmax: '',
+    geographicDescription: '',
+    verticalCrsUrl: '',
+    startDate: '',
+    endDate: '',
+    temporalExtentIntervalUnit: '',
+    temporalExtentIntervalValue: '',
+    hasTrajectory: false,
+    trajectorySampling: '',
   }
-  if (!dataId) return out
+  if (!dataId) return empty
+  const parts = []
   for (const ew of cns3(dataId, NS3.mri, 'extent')) {
     const ex = cn3(ew, NS3.gex, 'EX_Extent')
     if (!ex) continue
-    for (const dw of cns3(ex, NS3.gex, 'description')) {
-      const s = gcs3(dw)
-      if (!s) continue
-      if (s.startsWith('Vertical CRS: ')) out.verticalCrsUrl = s.slice('Vertical CRS: '.length).trim()
-      else if (s.startsWith('Trajectory sampling: ')) { out.hasTrajectory = true; out.trajectorySampling = s.slice('Trajectory sampling: '.length).trim() }
-      else if (!out.geographicDescription) out.geographicDescription = s
-    }
-    for (const ge of cns3(ex, NS3.gex, 'geographicElement')) {
-      const bbox = cn3(ge, NS3.gex, 'EX_GeographicBoundingBox')
-      if (!bbox) continue
-      out.west = gcoDecimal3(cn3(bbox, NS3.gex, 'westBoundLongitude'))
-      out.east = gcoDecimal3(cn3(bbox, NS3.gex, 'eastBoundLongitude'))
-      out.south = gcoDecimal3(cn3(bbox, NS3.gex, 'southBoundLatitude'))
-      out.north = gcoDecimal3(cn3(bbox, NS3.gex, 'northBoundLatitude'))
-    }
-    for (const ve of cns3(ex, NS3.gex, 'verticalElement')) {
-      const vx = cn3(ve, NS3.gex, 'EX_VerticalExtent')
-      if (!vx) continue
-      const lo = gcoDecimal3(cn3(vx, NS3.gex, 'minimumValue'))
-      const hi = gcoDecimal3(cn3(vx, NS3.gex, 'maximumValue'))
-      if (lo || hi) {
-        out.vmin = lo
-        out.vmax = hi
-        break
-      }
-    }
-    for (const te of cns3(ex, NS3.gex, 'temporalElement')) {
-      const ext = cn3(te, NS3.gex, 'EX_TemporalExtent')
-      const inner = ext ? cn3(ext, NS3.gex, 'extent') : null
-      const tp = inner ? childLocal(inner, 'TimePeriod') : null
-      if (!tp) continue
-      out.startDate = txt(childNS(tp, NS.gml, 'beginPosition')) || txt(childLocal(tp, 'beginPosition')) || txt(childNS(tp, NS.gml, 'begin')) || txt(childLocal(tp, 'begin'))
-      let endTxt =
-        txt(childNS(tp, NS.gml, 'end')) ||
-        txt(childLocal(tp, 'end')) ||
-        ''
-      endTxt = String(endTxt).trim()
-      const endPosEl =
-        childNS(tp, NS.gml, 'endPosition') ||
-        childLocal(tp, 'endPosition')
-      if (!endTxt && endPosEl) {
-        endTxt = txt(endPosEl).trim()
-        const indet = String(endPosEl.getAttribute('indeterminatePosition') || '').trim().toLowerCase()
-        if (!endTxt && indet === 'now') {
-          endTxt = new Date().toISOString().slice(0, 10)
-        }
-      }
-      out.endDate = endTxt
-    }
+    parts.push(parseExtentSingle3(ex))
   }
-  return out
+  return /** @type {typeof empty} */ (mergeExtentPartials(parts, empty))
 }
 
 /** @param {Element} root */
 function parseDataQuality3(root) {
   const out = { accuracyStandard: '', accuracyValue: '', errorLevel: '', errorValue: '', lineageStatement: '', lineageProcessSteps: '' }
   const SWE = 'http://www.opengis.net/swe/2.0'
+  /**
+   * @param {Element | null} block
+   * @returns {{ label: string, value: string }}
+   */
+  function sweQuantityFromMdqBlock(block) {
+    const empty = { label: '', value: '' }
+    if (!block) return empty
+    const qr = cn3(cn3(block, NS3.mdq, 'result'), NS3.mdq, 'DQ_QuantitativeResult')
+    if (!qr) return empty
+    const rec = cn3(cn3(qr, NS3.mdq, 'value'), NS3.gco, 'Record')
+    const qty = rec ? childNS(rec, SWE, 'Quantity') || childLocal(rec, 'Quantity') : null
+    const label = qty ? txt(childNS(qty, SWE, 'label') || childLocal(qty, 'label')) : ''
+    const val = qty ? txt(childNS(qty, SWE, 'value') || childLocal(qty, 'value')) : ''
+    return { label, value: val }
+  }
   for (const dqi of cns3(root, NS3.mdb, 'dataQualityInfo')) {
     const dq = cn3(dqi, NS3.mdq, 'DQ_DataQuality')
     if (!dq) continue
     for (const rep of cns3(dq, NS3.mdq, 'report')) {
+      const qAttr = cn3(rep, NS3.mdq, 'DQ_QuantitativeAttributeAccuracy')
       const gridAcc = cn3(rep, NS3.mdq, 'DQ_GriddedDataPositionalAccuracy')
       const posAcc = cn3(rep, NS3.mdq, 'DQ_AbsoluteExternalPositionalAccuracy')
-      const block = gridAcc || posAcc
-      if (!block) continue
-      const qr = cn3(cn3(block, NS3.mdq, 'result'), NS3.mdq, 'DQ_QuantitativeResult')
-      if (!qr) continue
-      const rec = cn3(cn3(qr, NS3.mdq, 'value'), NS3.gco, 'Record')
-      const qty = rec ? childNS(rec, SWE, 'Quantity') || childLocal(rec, 'Quantity') : null
-      const label = qty ? txt(childNS(qty, SWE, 'label') || childLocal(qty, 'label')) : ''
-      const val = qty ? txt(childNS(qty, SWE, 'value') || childLocal(qty, 'value')) : ''
-      if (gridAcc) {
+      const relAcc = cn3(rep, NS3.mdq, 'DQ_RelativeInternalPositionalAccuracy')
+
+      const accBlock = qAttr || gridAcc
+      if (accBlock) {
+        const { label, value } = sweQuantityFromMdqBlock(accBlock)
         if (!out.accuracyStandard) out.accuracyStandard = label
-        if (!out.accuracyValue) out.accuracyValue = val
-      } else {
+        if (!out.accuracyValue) out.accuracyValue = value
+      }
+      const errBlock = posAcc || relAcc
+      if (errBlock) {
+        const { label, value } = sweQuantityFromMdqBlock(errBlock)
         if (!out.errorLevel) out.errorLevel = label
-        if (!out.errorValue) out.errorValue = val
+        if (!out.errorValue) out.errorValue = value
       }
     }
   }
@@ -2692,13 +3280,39 @@ function keywordLabelUuidFromMriKeyword(kw) {
   return { label: lab, uuid: '' }
 }
 
+/**
+ * ISO 19115-3 `lan:PT_Locale` → language + character set strings.
+ * @param {Element | null} locale
+ */
+function parseLocaleLanguageCharsetFromPtLocale3(locale) {
+  if (!locale) return { language: '', characterSet: '' }
+  const langEl = cn3(cn3(locale, NS3.lan, 'language'), NS3.lan, 'LanguageCode')
+  let language = langEl ? langEl.getAttribute('codeListValue') || txt(langEl) : ''
+  language = String(language || '').trim()
+  const csEl = cn3(cn3(locale, NS3.lan, 'characterEncoding'), NS3.lan, 'MD_CharacterSetCode')
+  let characterSet = csEl ? csEl.getAttribute('codeListValue') || txt(csEl) : ''
+  characterSet = String(characterSet || '').trim()
+  return { language, characterSet }
+}
+
+/** Resource locale from identification when root `mdb:defaultLocale` is empty. */
+function parseIdentificationLocale3(dataId) {
+  if (!dataId) return { language: '', characterSet: '' }
+  const locWrap = cn3(dataId, NS3.mri, 'defaultLocale')
+  const locale = locWrap ? cn3(locWrap, NS3.lan, 'PT_Locale') : null
+  return parseLocaleLanguageCharsetFromPtLocale3(locale)
+}
+
 /** @param {Element | null} dataId */
 function parseTopicCategories3(dataId) {
   if (!dataId) return []
   const out = []
   for (const tc of cns3(dataId, NS3.mri, 'topicCategory')) {
     const code = cn3(tc, NS3.mcc, 'MD_TopicCategoryCode')
-    const v = (code?.getAttribute('codeListValue') || txt(code) || gcs3(tc)).trim()
+    let v = (code?.getAttribute('codeListValue') || txt(code) || '').trim()
+    if (!v && code) v = String(gcs3(code) || '').trim()
+    if (!v) v = String(gcs3(tc) || '').trim()
+    if (!v) v = txt(tc).trim()
     if (v) out.push(v)
   }
   return out
@@ -2838,8 +3452,18 @@ function parseAcquisition3(root) {
 
   /** @type {Record<string, string>} */
   const platformOut = {}
-  const platWrap = cn3(mia, NS3.mac, 'platform')
-  const miPlat = platWrap ? cn3(platWrap, NS3.mac, 'MI_Platform') : null
+  /** @type {Element | null} */
+  let miPlat = null
+  const xlinkTitles = []
+  const xlinkHrefs = []
+  for (const platWrap of cns3(mia, NS3.mac, 'platform')) {
+    const mp = cn3(platWrap, NS3.mac, 'MI_Platform')
+    if (mp && !miPlat) miPlat = mp
+    const title = (platWrap.getAttributeNS(NS.xlink, 'title') || platWrap.getAttribute('xlink:title') || '').trim()
+    const href = (platWrap.getAttributeNS(NS.xlink, 'href') || platWrap.getAttribute('xlink:href') || '').trim()
+    if (title) xlinkTitles.push(title)
+    if (href) xlinkHrefs.push(href)
+  }
   if (miPlat) {
     const idw = cn3(miPlat, NS3.mac, 'identifier')
     const mid = idw ? cn3(idw, NS3.mcc, 'MD_Identifier') : null
@@ -2854,6 +3478,18 @@ function parseAcquisition3(root) {
       if (p.organisationName) platformOut.manufacturer = p.organisationName
     }
   }
+  if (!String(platformOut.platformDesc || '').trim() && xlinkTitles.length) {
+    platformOut.platformDesc = xlinkTitles[0]
+  }
+  if (!String(platformOut.platformId || '').trim()) {
+    const href0 = xlinkHrefs[0] || ''
+    const tail = href0.split('/').filter(Boolean).pop() || ''
+    const idFromHref = tail.replace(/[^A-Za-z0-9._-]/g, '').slice(0, 128)
+    if (idFromHref) platformOut.platformId = idFromHref
+    else if (xlinkTitles[0]) {
+      platformOut.platformId = xlinkTitles[0].replace(/[^\w\s-]+/g, '').replace(/\s+/g, '_').slice(0, 128)
+    }
+  }
 
   /**
    * Parse one mac:MI_Instrument element into a sensor row.
@@ -2866,13 +3502,14 @@ function parseAcquisition3(root) {
     const stype = gcs3(cn3(mi, NS3.mac, 'type'))
     const descr = gcs3(cn3(mi, NS3.mac, 'description'))
     const parsed = parseInstrumentDescriptionBlock(descr)
-    return {
+    let row = {
       sensorId: sid, modelId: sid, type: stype,
       variable: parsed.variable, firmware: parsed.firmware,
       operationMode: parsed.operationMode, uncertainty: parsed.uncertainty,
       frequency: parsed.frequency, beamCount: parsed.beamCount,
       depthRating: parsed.depthRating, confidenceInterval: parsed.confidenceInterval,
     }
+    return normalizeSensorInstrumentIds(row)
   }
 
   const sensorRows = []
@@ -2936,12 +3573,14 @@ function extractFrom19115_3(root, raw, warnings) {
     }
   }
 
-  // Language / characterSet: mdb:defaultLocale/lan:PT_Locale
-  const locale = cn3(cn3(root, NS3.mdb, 'defaultLocale'), NS3.lan, 'PT_Locale')
-  const langEl = locale ? cn3(cn3(locale, NS3.lan, 'language'), NS3.lan, 'LanguageCode') : null
-  const language = langEl ? (langEl.getAttribute('codeListValue') || txt(langEl)) : ''
-  const csEl = locale ? cn3(cn3(locale, NS3.lan, 'characterEncoding'), NS3.lan, 'MD_CharacterSetCode') : null
-  const characterSet = csEl ? (csEl.getAttribute('codeListValue') || txt(csEl)) : ''
+  // Language / characterSet: mdb:defaultLocale/lan:PT_Locale; fill gaps from mri:defaultLocale on identification
+  const rootLocale = cn3(cn3(root, NS3.mdb, 'defaultLocale'), NS3.lan, 'PT_Locale')
+  let { language, characterSet } = parseLocaleLanguageCharsetFromPtLocale3(rootLocale)
+  if (!language || !characterSet) {
+    const idLoc = parseIdentificationLocale3(dataId)
+    if (!language && idLoc.language) language = idLoc.language
+    if (!characterSet && idLoc.characterSet) characterSet = idLoc.characterSet
+  }
 
   // Citation
   const citWrap = dataId ? cn3(dataId, NS3.mri, 'citation') : null
@@ -2953,7 +3592,10 @@ function extractFrom19115_3(root, raw, warnings) {
 
   // Description fields
   const abstract = dataId ? gcs3(cn3(dataId, NS3.mri, 'abstract')) : ''
-  const purpose = dataId ? gcs3(cn3(dataId, NS3.mri, 'purpose')) : ''
+  const purposeEl = dataId ? cn3(dataId, NS3.mri, 'purpose') : null
+  const purpose = purposeEl
+    ? stripUxTemplateBraces(mccAnchorOrText(purposeEl) || gcs3(purposeEl)).trim()
+    : ''
   const supplementalInformation = dataId ? gcs3(cn3(dataId, NS3.mri, 'supplementalInformation')) : ''
 
   // Status: try mri:status first, fall back to mac:MI_Operation/mac:status
@@ -3011,13 +3653,14 @@ function extractFrom19115_3(root, raw, warnings) {
     firstCitationOnlineLinkageUrl(cite) ||
     firstRootContactOnlineLinkageUrl(root)
 
+  const supParsed19115 = parseUxsPilotMachineBlockFromSupplemental(stripUxTemplateBraces(supplementalInformation))
   const missionFields = {
     fileId,
     title: stripUxTemplateBraces(title),
     alternateTitle: stripUxTemplateBraces(alternateTitle),
     abstract: stripUxTemplateBraces(abstract),
     purpose: stripUxTemplateBraces(purpose),
-    supplementalInformation: stripUxTemplateBraces(supplementalInformation),
+    supplementalInformation: supParsed19115.userSupplemental,
     startDate: ext.startDate || cdates.startDate || macStartDate,
     endDate: ext.endDate || cdates.endDate || macEndDate,
     publicationDate: cdates.publicationDate,
@@ -3076,6 +3719,7 @@ function extractFrom19115_3(root, raw, warnings) {
     const rootOrg = firstRootContactOrganisation3(root)
     if (rootOrg) missionFields.org = rootOrg
   }
+  if (supParsed19115.uxsPatch) missionFields.uxsContext = supParsed19115.uxsPatch
   const mission = pruneObject(missionFields)
 
   const spatial = pruneObject({
@@ -3143,6 +3787,7 @@ function extractFrom19115_3(root, raw, warnings) {
   if (citePub) distInput.publication = citePub
   else if (agPub) distInput.publication = agPub
   if (mission.parentProjectTitle) distInput.parentProject = mission.parentProjectTitle
+  if (legal.distributionLicense) distInput.license = legal.distributionLicense
   const distribution = pruneObject(distInput)
   const sensors = acqParsed.sensors || []
 
@@ -3163,6 +3808,7 @@ function extractFrom19115_3(root, raw, warnings) {
 
   deepStripUxTemplatePlaceholders(partial)
   enrichNavyUxPlaceholderImport(partial, raw, warnings)
+  applyIsoImportHeuristics(partial)
 
   return { ok: true, partial, warnings }
 }
@@ -3208,8 +3854,7 @@ export function importPilotPartialStateFromXml(xmlString) {
   const ids = citationIdentifiers(cite)
   const cdates = citationDates(cite)
 
-  const extentWrap = dataId ? childNS(childNS(dataId, NS.gmd, 'extent'), NS.gmd, 'EX_Extent') : null
-  const ext = parseExtent(extentWrap)
+  const ext = mergeExtentsFromDataIdentification(dataId)
 
   const poc = parsePointOfContact(dataId)
   const legal = parseResourceConstraintsForMission(dataId)
@@ -3221,14 +3866,11 @@ export function importPilotPartialStateFromXml(xmlString) {
   const metaStd = parseMetadataStandard(root)
   const acqParsed = parseAcquisitionInfo(root)
 
-  const langWrap = dataId ? childNS(dataId, NS.gmd, 'language') : null
-  const langEl = langWrap ? childNS(langWrap, NS.gmd, 'LanguageCode') : null
-  const language =
-    (langEl?.getAttribute('codeListValue') || txt(langEl)) ||
-    (langWrap ? gcoCharacterString(langWrap) : '')
+  let language = parseIdentificationLanguageGmd(dataId).trim()
+  if (!language) language = parseRootLanguageGmd(root).trim()
 
-  const csEl = dataId ? childNS(childNS(dataId, NS.gmd, 'characterSet'), NS.gmd, 'MD_CharacterSetCode') : null
-  const characterSet = csEl?.getAttribute('codeListValue') || txt(csEl)
+  let characterSet = parseIdentificationCharacterSetGmd(dataId).trim()
+  if (!characterSet) characterSet = parseRootCharacterSetGmd(root).trim()
 
   const stEl = dataId ? childNS(childNS(dataId, NS.gmd, 'status'), NS.gmd, 'MD_ProgressCode') : null
   const status = stEl?.getAttribute('codeListValue') || txt(stEl)
@@ -3258,14 +3900,17 @@ export function importPilotPartialStateFromXml(xmlString) {
     firstCitationOnlineLinkageUrl(cite) ||
     firstRootContactOnlineLinkageUrl(root)
 
+  const supParsedGmd = parseUxsPilotMachineBlockFromSupplemental(
+    dataId ? stripUxTemplateBraces(gcoCharacterString(childNS(dataId, NS.gmd, 'supplementalInformation'))) : '',
+  )
   /** @type {Record<string, unknown>} */
   const missionFields = {
     fileId,
     title: cite ? gmdAnchorOrCharacterString(childNS(cite, NS.gmd, 'title')) : '',
     alternateTitle: cite ? gmdAnchorOrCharacterString(childNS(cite, NS.gmd, 'alternateTitle')) : '',
     abstract: dataId ? gcoCharacterString(childNS(dataId, NS.gmd, 'abstract')) : '',
-    purpose: dataId ? gcoCharacterString(childNS(dataId, NS.gmd, 'purpose')) : '',
-    supplementalInformation: dataId ? gcoCharacterString(childNS(dataId, NS.gmd, 'supplementalInformation')) : '',
+    purpose: dataId ? gmdAnchorOrCharacterString(childNS(dataId, NS.gmd, 'purpose')) : '',
+    supplementalInformation: supParsedGmd.userSupplemental,
     startDate: ext.startDate || cdates.startDate,
     endDate: ext.endDate || cdates.endDate,
     publicationDate: cdates.publicationDate,
@@ -3327,6 +3972,7 @@ export function importPilotPartialStateFromXml(xmlString) {
     const rootOrg = firstRootContactOrganisationLegacy(root)
     if (rootOrg) missionFields.org = rootOrg
   }
+  if (supParsedGmd.uxsPatch) missionFields.uxsContext = supParsedGmd.uxsPatch
   const mission = pruneObject(missionFields)
 
   const dq = parseDataQuality(root)
@@ -3401,6 +4047,7 @@ export function importPilotPartialStateFromXml(xmlString) {
     .join('; ')
   if (citePub) distInput.publication = citePub
   else if (agPub) distInput.publication = agPub
+  if (legal.distributionLicense) distInput.license = legal.distributionLicense
   const distribution = pruneObject(distInput)
 
   /** @type {Record<string, unknown>} */
@@ -3420,6 +4067,7 @@ export function importPilotPartialStateFromXml(xmlString) {
 
   deepStripUxTemplatePlaceholders(partial)
   enrichNavyUxPlaceholderImport(partial, raw, warnings)
+  applyIsoImportHeuristics(partial)
 
   stampIsoImportProvenance(partial, root)
   return { ok: true, partial, warnings }

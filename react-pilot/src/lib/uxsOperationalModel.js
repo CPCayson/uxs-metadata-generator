@@ -23,6 +23,89 @@ export const UXS_OPERATION_RELATIONSHIP_TYPES = [
   { id: 'operation-dataset', label: 'Operation produces dataset/product', parent: 'operation', child: 'datasetProduct' },
 ]
 
+/** Keys persisted in `gmd:supplementalInformation` for preview ↔ import roundtrip (matches `UXS_CONTEXT_DEFAULT`). */
+export const UXS_PILOT_MACHINE_KEYS = [
+  'primaryLayer',
+  'deploymentName',
+  'deploymentId',
+  'runName',
+  'runId',
+  'sortieName',
+  'sortieId',
+  'diveName',
+  'diveId',
+  'operationOutcome',
+  'narrative',
+]
+
+export const UXS_PILOT_MACHINE_HEADER = 'UxS operational context (Manta pilot state)'
+
+/**
+ * True when non-default UxS context should be written into ISO supplemental text.
+ * @param {unknown} uxsContext
+ */
+export function shouldEmitUxsPilotMachineBlock(uxsContext) {
+  const ctx = uxsContext && typeof uxsContext === 'object' ? /** @type {Record<string, unknown>} */ (uxsContext) : {}
+  if (String(ctx.primaryLayer || '').trim() && String(ctx.primaryLayer) !== 'datasetProduct') return true
+  for (const k of UXS_PILOT_MACHINE_KEYS) {
+    if (k === 'primaryLayer') continue
+    if (String(ctx[k] ?? '').trim()) return true
+  }
+  return false
+}
+
+/**
+ * Strip the machine-readable UxS trailer from supplemental text (if present).
+ * @param {string} text
+ */
+export function stripUxsPilotMachineBlock(text) {
+  const s = String(text ?? '')
+  const idx = s.indexOf(UXS_PILOT_MACHINE_HEADER)
+  if (idx === -1) return s.trimEnd()
+  return s.slice(0, idx).trimEnd()
+}
+
+/**
+ * @param {unknown} uxsContext
+ * @returns {string}
+ */
+export function formatUxsPilotMachineBlock(uxsContext) {
+  if (!shouldEmitUxsPilotMachineBlock(uxsContext)) return ''
+  const ctx = uxsContext && typeof uxsContext === 'object' ? /** @type {Record<string, unknown>} */ (uxsContext) : {}
+  const lines = [UXS_PILOT_MACHINE_HEADER]
+  for (const k of UXS_PILOT_MACHINE_KEYS) {
+    lines.push(`${k}=${String(ctx[k] ?? '').trim()}`)
+  }
+  return lines.join('\n')
+}
+
+/**
+ * Split supplemental XML text into user-facing prose (minus machine block) + parsed key/value pairs for `uxsContext`.
+ * @param {string} fullText
+ * @returns {{ userSupplemental: string, uxsPatch: Record<string, string> | null }}
+ */
+export function parseUxsPilotMachineBlockFromSupplemental(fullText) {
+  const s = String(fullText ?? '')
+  const idx = s.indexOf(UXS_PILOT_MACHINE_HEADER)
+  if (idx === -1) return { userSupplemental: s.trim(), uxsPatch: null }
+  const userSupplemental = s.slice(0, idx).trimEnd()
+  const block = s.slice(idx)
+  const lines = block.split(/\r?\n/)
+  /** @type {Record<string, string>} */
+  const raw = {}
+  const allowed = new Set(UXS_PILOT_MACHINE_KEYS)
+  for (let i = 1; i < lines.length; i += 1) {
+    const line = lines[i]
+    const eq = line.indexOf('=')
+    if (eq === -1) continue
+    const k = line.slice(0, eq).trim()
+    if (!allowed.has(k)) continue
+    raw[k] = line.slice(eq + 1).trim()
+  }
+  if (!Object.keys(raw).length) return { userSupplemental, uxsPatch: null }
+  return { userSupplemental, uxsPatch: raw }
+}
+
 /**
  * @param {unknown} uxsContext
  */

@@ -5,7 +5,7 @@ This document finalizes the highest-value mission workflow enhancements after th
 ## Current implementation status
 
 - Shipped: human-readable validation labels, plain-language step status, corrected mission XML/XPath details, `MD_ProgressCode` codelist attributes, native title/abstract GCMD suggestions in the Keywords step, truthful CoMET preflight result handling, scanner `profileId` / `xmlSnippet` consistency, phrase/stopword seed filtering, named readiness bundles, scanner/keyword accessibility improvements, and first-pass UxS operational context fields for deployment/run/sortie/dive.
-- Verified in `scripts/verify-pilot.mjs`: readiness bundle predicates and XML-snippet scanner seed behavior are covered alongside the existing pilot, BEDI, scanner merge, XML roundtrip, and validation parity checks.
+- Verified in `scripts/verify-pilot.mjs`: readiness bundle predicates and XML-snippet scanner seed behavior are covered alongside the existing pilot, scanner merge, XML roundtrip, and validation parity checks.
 - Still deployment-blocking: HTTP API auth/CORS hardening, a structured audit event envelope plus persistence sink, and a documented CoMET operator/session model.
 
 ## Best enhancements to ship first
@@ -31,7 +31,7 @@ This document finalizes the highest-value mission workflow enhancements after th
 4. **Fix misleading XML/XPath details**
    - Align mission validation XPaths with the actual `gmi:MI_Metadata` preview output.
    - Fix platform and distribution/license rule paths that currently point at confusing or overly generic XML locations.
-   - Emit `gmd:MD_ProgressCode` with codelist attributes in mission XML, matching the stronger BEDI preview pattern.
+   - Emit `gmd:MD_ProgressCode` with codelist attributes in mission XML, matching NCEI/GMI expectations for catalog tools.
    - Primary targets: `src/profiles/mission/missionValidationRules.js`, `src/lib/xmlPreviewBuilder.js`.
    - Why first: makes Lens/validator/XML review more trustworthy.
 

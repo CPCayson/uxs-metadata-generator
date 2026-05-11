@@ -198,7 +198,7 @@ const BEDI_SCANNER_PATHS = new Set([
  */
 export function parseScannerSuggestionsToBediPartial(input, meta = {}) {
   if (!isBediScannerSuggestionEnvelope(input)) {
-    return { ok: false, error: 'Not a valid BEDI scanner suggestion envelope.', warnings: [] }
+    return { ok: false, error: 'Not a valid scanner suggestion envelope for this profile.', warnings: [] }
   }
   const env = /** @type {import('../../core/registry/types.js').ScannerSuggestionEnvelope} */ (input)
   const warnings = []
@@ -213,7 +213,7 @@ export function parseScannerSuggestionsToBediPartial(input, meta = {}) {
       continue
     }
     if (!BEDI_SCANNER_PATHS.has(fp)) {
-      warnings.push(`Skipped "${fp}": not a supported BEDI scanner field`)
+      warnings.push(`Skipped "${fp}": not a supported scanner field for this profile`)
       continue
     }
     if (minC > 0 && typeof s.confidence === 'number' && s.confidence < minC) {
@@ -244,7 +244,7 @@ export function parseScannerSuggestionsToBediPartial(input, meta = {}) {
   if (roots.length === 0) {
     return {
       ok:     false,
-      error:  'No suggestions could be merged into BEDI pilot state.',
+      error:  'No suggestions could be merged into the active pilot state.',
       warnings,
     }
   }
@@ -263,7 +263,7 @@ export function parseScannerSuggestionsToBediPartial(input, meta = {}) {
 /** @type {import('../../core/registry/types.js').ScannerSuggestionAdapter} */
 export const bediScannerSuggestionAdapter = {
   id:            'lensScannerBedi',
-  label:         'Lens Scanner suggestions (BEDI)',
+  label:         'Lens Scanner suggestions (linked profile)',
   canParse:      isBediScannerSuggestionEnvelope,
   parseExternal: async (input, meta) => parseScannerSuggestionsToBediPartial(input, meta),
 }

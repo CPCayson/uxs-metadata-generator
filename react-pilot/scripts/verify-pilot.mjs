@@ -23,12 +23,14 @@ import { runLensScanHeuristic } from '../src/lib/lensScanHeuristic.js'
 import { parseMantaCommands } from '../src/lib/mantaCommandParse.js'
 import { NCEI_UXS_FILE_ID_PREFIX } from '../src/lib/nceiUxsFileId.js'
 import { buildXmlPreview } from '../src/lib/xmlPreviewBuilder.js'
+import { missionPreviewIso191152SanityFailures } from '../src/lib/iso191152PreviewSanity.js'
 import { importPilotPartialStateFromXml } from '../src/lib/xmlPilotImport.js'
 import { normalizeValidationIssue, ValidationEngine } from '../src/core/validation/ValidationEngine.js'
 import { getCompiledRuleIssues } from '../src/core/validation/compiledRuleRuntime.js'
 import { missionValidationRuleSets } from '../src/profiles/mission/missionValidationRules.js'
 import { missionProfile } from '../src/profiles/mission/missionProfile.js'
 import { getMissionFieldLabel } from '../src/profiles/mission/missionFieldLabels.js'
+import { getPilotFieldLabelFallback } from '../src/lib/pilotFieldLabelFallback.js'
 import { pilotStateToCanonical, canonicalToPilotState } from '../src/core/mappers/pilotStateMapper.js'
 import {
   canonicalToLegacyFormData,
@@ -178,45 +180,13 @@ function checkSeededRoundtrip() {
 }
 
 /**
- * @param {string} xml
- * @param {string} localName
- */
-function xmlHasBoundingBoxDecimal_(xml, localName) {
-  const prefixed = new RegExp(`<\\w+:${localName}\\b[^>]*>\\s*<\\w+:Decimal\\b`, 'i')
-  const unprefixed = new RegExp(`<${localName}\\b[^>]*>\\s*<Decimal\\b`, 'i')
-  return prefixed.test(xml) || unprefixed.test(xml)
-}
-
-/**
  * Structural checks aligned with legacy SchemaValidator.gs runIso19115_2OutputSanityCheck
  * (gmi root, namespace, schemaLocation, bbox corners typed as gco:Decimal).
  *
  * @param {string} xml mission profile XML from {@link buildXmlPreview}
  */
 function assertMissionPreviewIso191152Sanity(xml) {
-  const checks = [
-    { id: 'root.prefixed', passed: /<gmi:MI_Metadata\b/.test(xml) },
-    {
-      id: 'root.namespace.gmi',
-      passed: /xmlns:gmi="http:\/\/www\.isotc211\.org\/2005\/gmi"/.test(xml),
-    },
-    {
-      id: 'schema.gmi',
-      passed:
-        /http:\/\/www\.isotc211\.org\/2005\/gmi\s+http:\/\/schemas\.opengis\.net\/iso\/19115\/-2\/gmi\/1\.0\/gmi\.xsd/.test(
-          xml,
-        ),
-    },
-    {
-      id: 'bbox.decimalTyped',
-      passed:
-        xmlHasBoundingBoxDecimal_(xml, 'westBoundLongitude') &&
-        xmlHasBoundingBoxDecimal_(xml, 'eastBoundLongitude') &&
-        xmlHasBoundingBoxDecimal_(xml, 'southBoundLatitude') &&
-        xmlHasBoundingBoxDecimal_(xml, 'northBoundLatitude'),
-    },
-  ]
-  const failed = checks.filter((c) => !c.passed).map((c) => c.id)
+  const failed = missionPreviewIso191152SanityFailures(xml)
   assert.equal(failed.length, 0, `ISO 19115-2 mission preview sanity failed: ${failed.join(', ')}`)
 }
 
@@ -340,8 +310,18 @@ function iso2FixtureRoundtripSnapshot(st) {
     fileId: String(m.fileId || '').trim(),
     title: String(m.title || '').trim(),
     abstract: norm(m.abstract),
+    purpose: norm(m.purpose),
+    doi: String(m.doi || '').trim(),
+    accession: String(m.accession || '').trim(),
+    publicationDate: String(m.publicationDate || '').trim(),
     startDate: String(m.startDate || '').trim(),
     endDate: String(m.endDate || '').trim(),
+    west: String(m.west || '').trim(),
+    east: String(m.east || '').trim(),
+    south: String(m.south || '').trim(),
+    north: String(m.north || '').trim(),
+    vmin: String(m.vmin || '').trim(),
+    vmax: String(m.vmax || '').trim(),
     lineageStatement: norm(sp.lineageStatement),
   }
 }
@@ -367,6 +347,21 @@ function collectFixtureMissionXmlFiles(absDir) {
  * `buildXmlPreview` → `importPilotPartialStateFromXml`. Preview is generator output (gmi root), not a byte mirror
  * of the original file; ISO 19115-3 sources are skipped here because preview normalizes to 19115-2.
  */
+/** Ensures every XML in `MANTA End User Testing/samples` imports cleanly and preview→import RT stays healthy. */
+function checkMantaEndUserSamplesPipeline() {
+  const samplesDir = path.resolve(process.cwd(), '..', 'MANTA End User Testing', 'samples')
+  if (!fs.existsSync(samplesDir)) {
+    process.stdout.write('  (skipped — MANTA End User Testing/samples not found)\n')
+    return
+  }
+  const script = path.join(process.cwd(), 'scripts', 'audit-manta-end-user-samples.mjs')
+  const r = spawnSync(process.execPath, [script, '--verify-pipeline'], {
+    cwd: process.cwd(),
+    encoding: 'utf8',
+  })
+  assert.equal(r.status, 0, r.stderr || r.stdout || 'MANTA samples pipeline verify failed')
+}
+
 function checkIso2MissionFixturePreviewStateRoundtrip() {
   const dir = path.join(process.cwd(), 'fixtures', 'mission')
   const files = collectFixtureMissionXmlFiles(dir)
@@ -396,6 +391,72 @@ function checkIso2MissionFixturePreviewStateRoundtrip() {
       `ISO 19115-2 preview round-trip mismatch for ${path.relative(process.cwd(), abs)}`,
     )
   }
+}
+
+/** UxS machine block in supplemental + PI/resource-provider cited parties survive preview → import. */
+function checkUxsContextAndCitationPreviewRoundtrip() {
+  const base = defaultPilotState()
+  const seeded = {
+    ...base,
+    mission: {
+      ...base.mission,
+      fileId: 'uxs-rt-file',
+      title: 'UxS roundtrip title',
+      abstract: 'Abstract for UxS import test.',
+      supplementalInformation: 'Cruise operations note (user text).',
+      citationPrincipalInvestigatorIndividualName: 'Dr. Pat Investigatorson',
+      citationResourceProviderIndividualName: 'OER Field Support',
+      uxsContext: {
+        primaryLayer: 'deployment',
+        deploymentName: 'EX Field Leg',
+        deploymentId: 'DEP-RT-1',
+        runName: '',
+        runId: '',
+        sortieName: '',
+        sortieId: '',
+        diveName: '',
+        diveId: '',
+        operationOutcome: 'completed',
+        narrative: 'Started on schedule.',
+      },
+    },
+  }
+  const xml = buildXmlPreview(seeded)
+  assert.ok(
+    xml.includes('UxS operational context (Manta pilot state)'),
+    'preview should embed machine-readable UxS block in supplemental',
+  )
+  assert.ok(
+    xml.includes('codeListValue="principalInvestigator"'),
+    'preview should emit citation principalInvestigator',
+  )
+  const parsed = importPilotPartialStateFromXml(xml)
+  assert.equal(parsed.ok, true, parsed.error || '')
+  const merged = sanitizePilotState(mergeLoadedPilotState(defaultPilotState(), parsed.partial))
+  assert.equal(
+    merged.mission.supplementalInformation?.trim(),
+    'Cruise operations note (user text).',
+    'user supplemental should exclude machine block after import',
+  )
+  assert.equal(merged.mission.citationPrincipalInvestigatorIndividualName, 'Dr. Pat Investigatorson')
+  assert.equal(merged.mission.citationResourceProviderIndividualName, 'OER Field Support')
+  assert.equal(merged.mission.uxsContext.primaryLayer, 'deployment')
+  assert.equal(merged.mission.uxsContext.deploymentId, 'DEP-RT-1')
+  assert.equal(merged.mission.uxsContext.operationOutcome, 'completed')
+  assert.equal(merged.mission.uxsContext.narrative, 'Started on schedule.')
+}
+
+function checkNamedReadinessBundleIds() {
+  const snap = {
+    lenient: { errCount: 0, warnCount: 0 },
+    strict: { errCount: 0, warnCount: 0 },
+    catalog: { errCount: 0, warnCount: 0 },
+  }
+  const bundles = computeReadinessBundles(snap, {})
+  const ids = bundles.map((b) => b.id).join(',')
+  assert.ok(ids.includes('draft'), 'named readiness should include draft')
+  assert.ok(ids.includes('iso-ready'), 'named readiness should include iso-ready')
+  assert.ok(ids.includes('discovery-ready'), 'named readiness should include discovery-ready')
 }
 
 function checkLegacySpreadsheetShapedMerge() {
@@ -1140,6 +1201,15 @@ async function main() {
   step('ISO 19115-2 fixtures: preview ↔ import state round-trip', () => {
     checkIso2MissionFixturePreviewStateRoundtrip()
   })
+  step('MANTA End User Testing samples — import + preview pipeline', () => {
+    checkMantaEndUserSamplesPipeline()
+  })
+  step('UxS context + citation parties: preview ↔ import', () => {
+    checkUxsContextAndCitationPreviewRoundtrip()
+  })
+  step('named readiness bundle ids', () => {
+    checkNamedReadinessBundleIds()
+  })
   step('NCEI fileIdentifier prefix (preview + import + off)', () => {
     checkNceiFileIdPrefixPreviewAndImport()
   })
@@ -1398,6 +1468,27 @@ async function main() {
     assert.ok(abstractWarnings.some((i) => i.message.includes('short')), 'thin abstract should warn on length')
     assert.ok(abstractWarnings.some((i) => i.message.includes('platform')), 'abstract should warn on missing platform/sensor context')
     assert.ok(abstractWarnings.some((i) => i.message.includes('ABC')), 'abstract should warn on unexplained acronym')
+  })
+  step('Human-readable validation field labels', () => {
+    assert.ok(
+      getMissionFieldLabel('mission.dataLicensePreset').includes('license'),
+      'explicit mission labels stay stable',
+    )
+    assert.match(
+      getPilotFieldLabelFallback('mission.citationPublisherOrganisationName'),
+      /^Mission · Citation Publisher Organisation Name$/,
+      'fallback prefixes wizard section for deep mission paths',
+    )
+    assert.match(
+      getPilotFieldLabelFallback('distribution.awsBucket'),
+      /^Distribution · Aws Bucket$/,
+      'fallback prefixes distribution paths',
+    )
+    assert.match(
+      getPilotFieldLabelFallback('sensors[2].modelId'),
+      /^Sensors · 3 · Model Id$/,
+      'indexed sensor paths read as section · row · leaf',
+    )
   })
   step('GCMD keyword chip UUID quality warnings', () => {
     assert.ok(

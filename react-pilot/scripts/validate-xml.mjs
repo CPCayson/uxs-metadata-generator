@@ -7,6 +7,8 @@
  *   npm run validate:xml -- path/to/file.xml --schema https://example.org/schema.xsd
  *
  * Env: XML_SCHEMA — used as default --schema when the flag is omitted (still need a file argument).
+ *
+ * Offline XSD chains: point libxml2 at a catalog so imports resolve (e.g. export XML_CATALOG_FILES=/path/to/catalog.xml).
  */
 
 import { spawnSync } from 'node:child_process'

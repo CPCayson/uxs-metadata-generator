@@ -26,7 +26,7 @@ import { GapPanel } from './UxsGapPanel.jsx'
  * @param {{
  *   profile: import('../core/registry/types.js').EntityProfile,
  *   pilotState: object,
- *   onPilotImport: (next: object) => void,
+ *   onPilotImport: (next: object, meta?: { importWarnings?: string[] }) => void,
  *   onStatus?: (message: string) => void,
  *   hostBridgeReady?: boolean,
  *   exportBusy?: boolean,
@@ -303,7 +303,7 @@ function XmlToolsBar({
         filename: meta.originalFilename,
         warnings: out.warnings,
       })
-      onPilotImport(out.merged)
+      onPilotImport(out.merged, { importWarnings: out.warnings })
       emitPilotAuditEvent({
         profileId: profile.id,
         action: 'pilotImport',
@@ -315,7 +315,6 @@ function XmlToolsBar({
       const w = out.warnings?.length ? ` Parser notes: ${out.warnings.join(' · ')}` : ''
       const detail = pop.detail ? ` ${pop.detail}` : ''
       setImportSummaryText(`${pop.summary}${detail}${w}`)
-      onStatus?.(`${pop.summary}${w ? `.${w}` : ''}`)
       setImportOpen(false)
       setImportText('')
     } finally {
@@ -734,6 +733,12 @@ function XmlToolsBar({
             placeholder="Paste XML here…"
             aria-label="XML to import"
           />
+          {importText.trim() && !importBusy ? (
+            <p className="xml-import-next-step hint" role="status">
+              Next: click <strong>Apply to form</strong> to merge this XML into the wizard (a review dialog opens when the
+              import would overwrite existing values).
+            </p>
+          ) : null}
           <div className="xml-import-actions">
             <button
               type="button"

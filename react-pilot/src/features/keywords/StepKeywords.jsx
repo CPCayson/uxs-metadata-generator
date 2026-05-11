@@ -411,19 +411,43 @@ export default function StepKeywords({ mission = {}, keywords, onKeywordsChange,
             </h3>
             {iss ? <p className="field-error">{iss.message}</p> : null}
             <div className="kw-search-row">
-              <input
-                className="form-control"
-                placeholder={`Search ${label}…`}
-                aria-label={`Search ${label}`}
-                value={queries[key] || ''}
-                onChange={(e) => setQueries((q) => ({ ...q, [key]: e.target.value }))}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault()
-                    searchFacet(key, scheme)
-                  }
-                }}
-              />
+              <div className="kw-token-field">
+                <div className="kw-token-field__inner chip-row">
+                  {chips.map((c, chipIndex) => {
+                    const isLeaving = leaving.has(`${key}:${c.uuid}`)
+                    const chipUuidIssue = issueForKeywordChip(key, chipIndex)
+                    const removeHint = `Remove ${c.label}`
+                    return (
+                      <button
+                        key={c.uuid}
+                        type="button"
+                        className={`kw-chip${isLeaving ? ' kw-chip--leaving' : ''}${chipUuidIssue ? ' kw-chip--uuid-warn' : ''}`}
+                        data-pilot-field={`keywords.${key}[${chipIndex}].uuid`}
+                        onClick={() => removeKw(key, c.uuid)}
+                        disabled={isLeaving}
+                        aria-label={chipUuidIssue ? `${c.label} — ${chipUuidIssue.message} — ${removeHint}` : removeHint}
+                        title={chipUuidIssue ? chipUuidIssue.message : removeHint}
+                      >
+                        <span className="kw-chip__label">{c.label}</span>
+                        <span className="kw-chip__x" aria-hidden>×</span>
+                      </button>
+                    )
+                  })}
+                  <input
+                    className="kw-token-field__input"
+                    placeholder={`Search ${label}…`}
+                    aria-label={`Search ${label}`}
+                    value={queries[key] || ''}
+                    onChange={(e) => setQueries((q) => ({ ...q, [key]: e.target.value }))}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault()
+                        searchFacet(key, scheme)
+                      }
+                    }}
+                  />
+                </div>
+              </div>
               <button
                 type="button"
                 className="button button-secondary"
@@ -443,28 +467,6 @@ export default function StepKeywords({ mission = {}, keywords, onKeywordsChange,
                 </li>
               ))}
             </ul>
-            <div className="chip-row">
-              {chips.map((c, chipIndex) => {
-                const isLeaving = leaving.has(`${key}:${c.uuid}`)
-                const chipUuidIssue = issueForKeywordChip(key, chipIndex)
-                const removeHint = `Remove ${c.label}`
-                return (
-                  <button
-                    key={c.uuid}
-                    type="button"
-                    className={`kw-chip${isLeaving ? ' kw-chip--leaving' : ''}${chipUuidIssue ? ' kw-chip--uuid-warn' : ''}`}
-                    data-pilot-field={`keywords.${key}[${chipIndex}].uuid`}
-                    onClick={() => removeKw(key, c.uuid)}
-                    disabled={isLeaving}
-                    aria-label={chipUuidIssue ? `${c.label} — ${chipUuidIssue.message} — ${removeHint}` : removeHint}
-                    title={chipUuidIssue ? chipUuidIssue.message : removeHint}
-                  >
-                    <span className="kw-chip__label">{c.label}</span>
-                    <span className="kw-chip__x" aria-hidden>×</span>
-                  </button>
-                )
-              })}
-            </div>
           </section>
         )
       })}

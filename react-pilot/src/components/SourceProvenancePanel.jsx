@@ -10,7 +10,7 @@ const SOURCE_LABELS = {
   rawIso:      'Imported from ISO XML',
   comet:       'Pulled from CoMET',
   cruisepack:  'Ingested from CruisePack',
-  bediXml:     'Imported from BEDI XML',
+  bediXml:     'Imported from ISO XML (linked profile)',
   lensScanner: 'Auto-filled by Lens scanner',
   unknown:     'Unknown source',
 }
@@ -43,6 +43,7 @@ const FALLBACK_COLORS = SOURCE_COLORS.unknown
  *     importedAt?: string,
  *     originalFilename?: string,
  *     originalUuid?: string,
+ *     importIsoXmlFamily?: string,
  *   } | null | undefined,
  *   onClear: () => void,
  * }} props
@@ -52,7 +53,14 @@ export default function SourceProvenancePanel({ sourceProvenance, onClear }) {
     return null
   }
 
-  const { sourceType, sourceId, importedAt, originalFilename, originalUuid } = sourceProvenance
+  const {
+    sourceType,
+    sourceId,
+    importedAt,
+    originalFilename,
+    originalUuid,
+    importIsoXmlFamily,
+  } = sourceProvenance
 
   const label  = SOURCE_LABELS[sourceType]  ?? `Source: ${sourceType}`
   const icon   = SOURCE_ICONS[sourceType]   ?? '?'
@@ -130,6 +138,27 @@ export default function SourceProvenancePanel({ sourceProvenance, onClear }) {
           Clear stamp
         </button>
       </div>
+
+      {(sourceType === 'rawIso' || sourceType === 'bediXml') && (
+        <div
+          role="note"
+          style={{
+            padding: '0.4rem 0.75rem 0.5rem',
+            borderTop: `1px solid ${colors.border}`,
+            fontSize: '0.69rem',
+            lineHeight: 1.45,
+            color: colors.text,
+          }}
+        >
+          <strong style={{ fontWeight: 800 }}>XML export lineage:</strong>{' '}
+          Preview and download follow ISO 19115-2 (GMI). Import accepts ISO 19115-2 or 19115-3;
+          values are normalized through the form, so the XML will not match your source file
+          byte-for-byte.
+          {importIsoXmlFamily === '19115-3' && (
+            <> This file was detected as <strong>ISO 19115-3</strong> on import.</>
+          )}
+        </div>
+      )}
 
       {/* Detail row — only when at least one detail field is populated */}
       {hasDetails && (

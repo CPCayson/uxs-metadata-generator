@@ -59,7 +59,7 @@ const SEARCH_SCHEMES = [
 const TIPS = [
   'Use full GCMD keyword paths — e.g. "Earth Science > Oceans > Marine Environment Monitoring."',
   'Every record needs a geographic bounding box (W / E / S / N) for spatial discovery.',
-  'BEDI granules require parentCollectionId linking to their parent collection record.',
+  'Hierarchy-linked granule profiles need parentCollectionId to match the parent collection fileIdentifier.',
   'ISO 8601 dates (YYYY-MM-DD or YYYY-MM-DDTHH:MM:SSZ) are required for interoperability.',
   'A browse graphic URL makes your record stand out visually in catalogs like OneStop.',
   'Include a DOI or NCEI Accession ID for reliable cross-system record lookup.',
@@ -75,7 +75,7 @@ const SAMPLE_RECENT = [
   { id: 'r3', title: 'Historical Storm Reports' },
 ]
 
-const SYSTEM_MSG = 'Metadata Assistant online. Ask me about ISO 19115, BEDI requirements, GCMD keywords, validation modes, or any metadata field.'
+const SYSTEM_MSG = 'Metadata Assistant online. Ask me about ISO 19115, UxS mission metadata, GCMD keywords, validation modes, or any metadata field.'
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -96,9 +96,9 @@ function lensCollapsedWorkflowLine(
     case 'collection':
       return 'Collection metadata detected'
     case 'bediCollection':
-      return 'BEDI collection detected'
+      return 'Collection profile detected'
     case 'bediGranule':
-      return 'BEDI granule detected'
+      return 'Granule profile detected'
     default:
       return `${p.label ?? p.id} · schema active`
   }
@@ -199,7 +199,7 @@ const SECTION_XML_TERMS = {
   spatial:      ['EX_GeographicBoundingBox', 'EX_TemporalExtent', 'westBound', 'eastBound', 'southBound', 'northBound', 'extent'],
   keywords:     ['MD_Keywords', 'keyword', 'thesaurusName', 'descriptiveKeywords'],
   distribution: ['MD_Distribution', 'distributionFormat', 'transferOptions', 'onlineResource'],
-  // BEDI (ISO 19115-2 / GMI + GCMD anchors in descriptiveKeywords)
+  // Alternate collection/granule profiles (ISO 19115-2 / GMI + GCMD anchors in descriptiveKeywords)
   bediCollection: [
     'identificationInfo',
     'MD_DataIdentification',
@@ -290,7 +290,7 @@ const FIELD_XML_HINTS = {
   keywords: ['MD_Keywords', 'keyword', 'thesaurusName', 'descriptiveKeywords', 'gmx:Anchor'],
   sensors: ['MI_Instrument', 'MI_CoverageDescription', 'sensor', 'instrument', 'MD_Band'],
 
-  // BEDI flat pilot keys → XML fragments (Lens search / tether)
+  // Alternate-profile flat pilot keys → XML fragments (Lens search / tether)
   title: ['gmd:title', 'CI_Citation', 'citation', 'CharacterString'],
   abstract: ['gmd:abstract', 'CharacterString'],
   alternateTitle: ['gmd:alternateTitle', 'CharacterString'],
@@ -625,7 +625,7 @@ export default function AssistantShell({
     const match = answerQuestion(q)
     const answer = match
       ? match.a
-      : "I don't have a specific answer for that. Try asking about: fileIdentifier, abstract length, bounding box, GCMD keywords, validation modes, BEDI parentCollectionId, or ISO 8601 dates."
+      : "I don't have a specific answer for that. Try asking about: fileIdentifier, abstract length, bounding box, GCMD keywords, validation modes, parentCollectionId (when linking to a parent collection), or ISO 8601 dates."
     setChatHistory((prev) => [
       ...prev,
       { type: 'user', text: q },

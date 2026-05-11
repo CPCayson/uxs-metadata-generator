@@ -32,23 +32,24 @@ export const FIELD_DEFINITIONS = {
   scienceKeywords: 'GCMD Science Keywords — hierarchical Earth science vocabulary maintained by NASA. Use the full path, e.g. "Earth Science > Oceans > Ocean Optics > Bioluminescence".',
   platforms: 'GCMD Platform keywords — the vehicle(s) used to collect data. Example: "In Situ Ocean-based Platforms > Underwater Vehicles > Remotely Operated Vehicles > ROV".',
   instruments: 'GCMD Instrument keywords — the sensors used. Example: "Earth Remote Sensing Instruments > Passive Remote Sensing > Spectrometers/Radiometers > Imaging Spectrometers".',
-  parentCollectionId: 'BEDI granule field: the fileIdentifier of the parent collection record. Must follow the gov.noaa.ncei.oer: namespace. Required for catalog linkage.',
-  diveId: 'BEDI granule field: the identifier for the submersible dive (e.g. JSL2-3699).',
-  tapeNumber: 'BEDI granule field: which tape number within the dive session (e.g. 1 for TAPE1OF1).',
-  segmentNumber: 'BEDI granule field: which video segment on the tape (e.g. 1 for SEG1OF1).',
+  parentCollectionId:
+    'When your active profile supports hierarchical linkage: the parent collection’s fileIdentifier (e.g. gov.noaa.ncei.oer:...). Stabilize after publication.',
+  diveId: 'Submersible or dive session identifier when used by your record (e.g. JSL2-3699).',
+  tapeNumber: 'Tape or media index within a session when applicable (e.g. 1 for TAPE1OF1).',
+  segmentNumber: 'Segment index within a tape or file when applicable (e.g. 1 for SEG1OF1).',
   nceiAccessionId: 'NCEI Accession Number — a numeric ID assigned by NCEI when the dataset is submitted (e.g. 0099999).',
   nceiMetadataId: 'NCEI Metadata Record ID — the internal NCEI identifier for this specific metadata record.',
   metadataUuid:
-    'Optional catalog / CoMET record UUID. When set on BEDI collection or granule records, the ISO XML preview places it on the root gmi:MI_Metadata uuid attribute; importing that XML restores this field.',
+    'Optional catalog / CoMET record UUID. When set, the ISO XML preview can place it on the root gmi:MI_Metadata uuid attribute; re-importing that XML restores the field.',
   landingPageUrl: 'The stable, persistent URL where users can learn about and access this dataset. Required for catalog mode.',
   downloadUrl: 'Direct URL to download the data file(s). Required for catalog mode.',
   doi: 'Digital Object Identifier — a persistent globally unique ID. Format: 10.XXXXX/suffix. Required for catalog mode.',
   browseGraphicUrl: 'URL to a preview image (PNG/JPEG) shown in catalog search results. Strongly recommended.',
-  minDepth: 'BEDI granule: minimum depth of observations in meters (positive = below sea surface).',
-  maxDepth: 'BEDI granule: maximum depth of observations in meters (positive = below sea surface).',
+  minDepth: 'Minimum depth of observations in meters (positive = below sea surface) when your profile captures vertical extent.',
+  maxDepth: 'Maximum depth of observations in meters (positive = below sea surface) when your profile captures vertical extent.',
   presentationForm: 'How the data is presented. Common value for video: "imageDigital".',
-  videoFilename: 'BEDI granule: the filename of the video file (e.g. BIOLUM2009_VID_20090730_SEG1.mp4).',
-  videoFormat: 'BEDI granule: the video file format/codec (e.g. H.264/MP4).',
+  videoFilename: 'Primary video filename when your dataset includes video assets (e.g. survey_SEG1.mp4).',
+  videoFormat: 'Video container/codec when applicable (e.g. H.264/MP4).',
 }
 
 // ── Q&A knowledge base ────────────────────────────────────────────────────────
@@ -57,7 +58,7 @@ export const KNOWLEDGE_BASE = [
   {
     keywords: ['file', 'identifier', 'fileid', 'id', 'unique', 'namespace'],
     q: 'What is a file identifier?',
-    a: `The **file identifier** (fileId) uniquely identifies this metadata record across all catalog systems.\n\nFor NOAA OER records it must follow this namespace pattern:\n  \`gov.noaa.ncei.oer:[name]\`\n\nExample: \`gov.noaa.ncei.oer:Biolum2009\`\n\nBEDI granule records reference their parent collection via this ID in the parentCollectionId field. Keep it stable once published — changing it breaks cross-references.`,
+    a: `The **file identifier** (fileId) uniquely identifies this metadata record across catalog systems.\n\nFor NOAA OER-style records it often follows:\n  \`gov.noaa.ncei.oer:[name]\`\n\nExample: \`gov.noaa.ncei.oer:Biolum2009\`\n\nKeep it stable once published — changing it breaks cross-references. If your workflow links to a parent collection, use that collection’s fileIdentifier consistently.`,
   },
   {
     keywords: ['abstract', 'description', 'summary', 'write', 'describe'],
@@ -85,9 +86,9 @@ export const KNOWLEDGE_BASE = [
     a: `**ROR** (Research Organization Registry) provides persistent, globally unique identifiers for research institutions.\n\nExample: NOAA NCEI → \`https://ror.org/04r0wrp59\`\n\nUsing ROR IDs removes ambiguity when the same institution has multiple name variants. Search for your organization in the **SEARCH** tab (select "Organizations" scheme) to find and copy the correct ROR ID.`,
   },
   {
-    keywords: ['bedi', 'granule', 'parent', 'collection', 'parentcollectionid', 'link', 'linkage'],
+    keywords: ['parent', 'collection', 'parentcollectionid', 'link', 'linkage', 'hierarchy'],
     q: 'What is parentCollectionId?',
-    a: `**parentCollectionId** links a BEDI granule (video segment) to its parent collection (field session) record.\n\nIt must be the exact **fileIdentifier** of the parent collection:\n  \`gov.noaa.ncei.oer:Biolum2009\`\n\nThis linkage enables catalog systems to group granules under their collection and lets users navigate from granule → collection → series. It is the most critical field in the BEDI granule profile.`,
+    a: `When your profile supports it, **parentCollectionId** links a child record to its **parent collection** using the parent’s **fileIdentifier** (e.g. \`gov.noaa.ncei.oer:CollectionName\`).\n\nCatalog systems use this to group related datasets. Use the exact parent ID string — typos break linkage.`,
   },
   {
     keywords: ['doi', 'accession', 'ncei', 'identifier', 'persistent'],
@@ -97,7 +98,7 @@ export const KNOWLEDGE_BASE = [
   {
     keywords: ['iso', '19115', 'standard', 'metadata', 'schema', '19139'],
     q: 'What is ISO 19115?',
-    a: `**ISO 19115** is the international standard for geographic information metadata.\n\n**ISO 19115-1** — Core geographic metadata concepts.\n**ISO 19115-2** — Extensions for imagery and gridded data (required for BEDI).\n**ISO 19139** — XML encoding of ISO 19115.\n\nThis tool generates ISO 19115-2/19139-compliant XML required by NCEI's BEDI program, compatible with NOAA OneStop and CoMET catalog ingest.`,
+    a: `**ISO 19115** is the international standard for geographic information metadata.\n\n**ISO 19115-1** — Core geographic metadata concepts.\n**ISO 19115-2** — Extensions for imagery and gridded data (used for NCEI acquisition / UxS-style metadata).\n**ISO 19139** — XML encoding of ISO 19115.\n\nThis tool generates ISO 19115-2–shaped XML aligned with NCEI and NOAA catalog expectations (e.g. OneStop, CoMET).`,
   },
   {
     keywords: ['platform', 'vehicle', 'auv', 'rov', 'vessel', 'ship', 'submersible'],
@@ -112,12 +113,12 @@ export const KNOWLEDGE_BASE = [
   {
     keywords: ['hierarchy', 'level', 'series', 'dataset', 'collection', 'granule', 'hierarchylevel'],
     q: 'What hierarchy level should I use?',
-    a: `**hierarchyLevel** places your record in the data tree:\n\n• **series** — a named collection of related datasets (use for BEDI field sessions / collections)\n• **dataset** — an individual file or granule (use for BEDI video segments)\n• **service** — a web service (OGC WMS, WFS, etc.)\n• **nonGeographicDataset** — tabular or non-spatial data\n\nFor most BEDI records: field session → **series**, video segment → **dataset**.`,
+    a: `**hierarchyLevel** places your record in the data tree:\n\n• **series** — a named collection of related datasets / campaigns\n• **dataset** — a single dataset or acquisition product (typical for UxS mission metadata)\n• **service** — a web service (OGC WMS, WFS, etc.)\n• **nonGeographicDataset** — tabular or non-spatial data\n\nFor most UxS acquisition records, **dataset** is appropriate unless you are describing a wider collection/series.`,
   },
   {
     keywords: ['depth', 'vertical', 'extent', 'mindepth', 'maxdepth', 'meters'],
     q: 'How do I record depth information?',
-    a: `For BEDI granules (and other ocean datasets), provide a **vertical extent**:\n\n• \`minDepth\` — shallowest observation in meters (positive = below surface)\n• \`maxDepth\` — deepest observation in meters\n\nExample for a 1500 m dive:\n  minDepth: 1200,  maxDepth: 1520\n\nDepth values enable filtering in catalogs like ERDDAP and OneStop that support 3D spatial queries.`,
+    a: `For ocean and subsea UxS data, capture **vertical extent** when your profile exposes depth fields:\n\n• \`minDepth\` — shallowest observation in meters (positive = below surface)\n• \`maxDepth\` — deepest observation in meters\n\nExample for a deep survey:\n  minDepth: 1200,  maxDepth: 1520\n\nDepth values help catalogs (ERDDAP, OneStop, etc.) filter in 3D.`,
   },
   {
     keywords: ['browse', 'graphic', 'image', 'thumbnail', 'preview', 'picture'],
