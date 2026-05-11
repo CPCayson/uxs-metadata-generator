@@ -47,6 +47,7 @@ export default function StepSpatial({
         <label htmlFor="referenceSystem">Reference system</label>
         <input
           id="referenceSystem"
+          data-pilot-field="spatial.referenceSystem"
           className="form-control"
           value={spatial.referenceSystem || ''}
           onChange={(e) => onSpatialPatch({ referenceSystem: e.target.value })}
@@ -55,6 +56,7 @@ export default function StepSpatial({
         <label htmlFor="geographicDescription">Geographic description</label>
         <textarea
           id="geographicDescription"
+          data-pilot-field="spatial.geographicDescription"
           rows={2}
           className="form-control"
           value={spatial.geographicDescription || ''}
@@ -92,6 +94,7 @@ export default function StepSpatial({
             <label htmlFor="vmin">Vertical min</label>
             <input
               id="vmin"
+          data-pilot-field="spatial.vmin"
               className={`form-control${invalid('mission.vmin') ? ' form-control--invalid' : ''}`}
               value={mission.vmin}
               onChange={(e) => onMissionPatch({ vmin: e.target.value })}
@@ -103,6 +106,7 @@ export default function StepSpatial({
             <label htmlFor="vmax">Vertical max</label>
             <input
               id="vmax"
+          data-pilot-field="spatial.vmax"
               className={`form-control${invalid('mission.vmax') ? ' form-control--invalid' : ''}`}
               value={mission.vmax}
               onChange={(e) => onMissionPatch({ vmax: e.target.value })}
@@ -116,6 +120,7 @@ export default function StepSpatial({
         <label htmlFor="verticalCrsUrl">Vertical CRS URL</label>
         <input
           id="verticalCrsUrl"
+          data-pilot-field="spatial.verticalCrsUrl"
           type="url"
           className={`form-control${invalid('spatial.verticalCrsUrl') ? ' form-control--invalid' : ''}`}
           value={spatial.verticalCrsUrl || ''}
@@ -127,6 +132,7 @@ export default function StepSpatial({
         <label htmlFor="dimensions">Number of dimensions (georectified)</label>
         <input
           id="dimensions"
+          data-pilot-field="spatial.dimensions"
           className="form-control"
           placeholder="e.g. 2"
           value={spatial.dimensions || ''}
@@ -154,6 +160,7 @@ export default function StepSpatial({
             <label htmlFor="gridCellGeometry">Cell geometry</label>
             <input
               id="gridCellGeometry"
+          data-pilot-field="spatial.gridCellGeometry"
               className="form-control"
               value={spatial.gridCellGeometry || ''}
               onChange={(e) => onSpatialPatch({ gridCellGeometry: e.target.value })}
@@ -164,6 +171,7 @@ export default function StepSpatial({
                 <label htmlFor="gridColumnSize">Column size</label>
                 <input
                   id="gridColumnSize"
+          data-pilot-field="spatial.gridColumnSize"
                   className={`form-control${invalid('spatial.gridColumnSize') ? ' form-control--invalid' : ''}`}
                   value={spatial.gridColumnSize || ''}
                   onChange={(e) => onSpatialPatch({ gridColumnSize: e.target.value })}
@@ -177,6 +185,7 @@ export default function StepSpatial({
                 <label htmlFor="gridColumnResolution">Column resolution</label>
                 <input
                   id="gridColumnResolution"
+          data-pilot-field="spatial.gridColumnResolution"
                   className="form-control"
                   value={spatial.gridColumnResolution || ''}
                   onChange={(e) => onSpatialPatch({ gridColumnResolution: e.target.value })}
@@ -186,6 +195,7 @@ export default function StepSpatial({
                 <label htmlFor="gridRowSize">Row size</label>
                 <input
                   id="gridRowSize"
+          data-pilot-field="spatial.gridRowSize"
                   className={`form-control${invalid('spatial.gridRowSize') ? ' form-control--invalid' : ''}`}
                   value={spatial.gridRowSize || ''}
                   onChange={(e) => onSpatialPatch({ gridRowSize: e.target.value })}
@@ -199,6 +209,7 @@ export default function StepSpatial({
                 <label htmlFor="gridRowResolution">Row resolution</label>
                 <input
                   id="gridRowResolution"
+          data-pilot-field="spatial.gridRowResolution"
                   className="form-control"
                   value={spatial.gridRowResolution || ''}
                   onChange={(e) => onSpatialPatch({ gridRowResolution: e.target.value })}
@@ -208,6 +219,7 @@ export default function StepSpatial({
                 <label htmlFor="gridVerticalSize">Vertical size</label>
                 <input
                   id="gridVerticalSize"
+          data-pilot-field="spatial.gridVerticalSize"
                   className={`form-control${invalid('spatial.gridVerticalSize') ? ' form-control--invalid' : ''}`}
                   value={spatial.gridVerticalSize || ''}
                   onChange={(e) => onSpatialPatch({ gridVerticalSize: e.target.value })}
@@ -220,6 +232,7 @@ export default function StepSpatial({
                 <label htmlFor="gridVerticalResolution">Vertical resolution</label>
                 <input
                   id="gridVerticalResolution"
+          data-pilot-field="spatial.gridVerticalResolution"
                   className="form-control"
                   value={spatial.gridVerticalResolution || ''}
                   onChange={(e) => onSpatialPatch({ gridVerticalResolution: e.target.value })}
@@ -240,6 +253,7 @@ export default function StepSpatial({
         <label htmlFor="trajectorySampling">Trajectory sampling</label>
         <input
           id="trajectorySampling"
+          data-pilot-field="spatial.trajectorySampling"
           className={`form-control${invalid('spatial.trajectorySampling') ? ' form-control--invalid' : ''}`}
           value={spatial.trajectorySampling || ''}
           onChange={(e) => onSpatialPatch({ trajectorySampling: e.target.value })}
@@ -255,6 +269,7 @@ export default function StepSpatial({
             <label htmlFor="accuracyStandard">Accuracy standard</label>
             <input
               id="accuracyStandard"
+          data-pilot-field="spatial.accuracyStandard"
               className="form-control"
               value={spatial.accuracyStandard || ''}
               onChange={(e) => onSpatialPatch({ accuracyStandard: e.target.value })}
@@ -264,6 +279,7 @@ export default function StepSpatial({
             <label htmlFor="accuracyValue">Accuracy value</label>
             <input
               id="accuracyValue"
+          data-pilot-field="spatial.accuracyValue"
               className={`form-control${invalid('spatial.accuracyValue') ? ' form-control--invalid' : ''}`}
               value={spatial.accuracyValue || ''}
               onChange={(e) => onSpatialPatch({ accuracyValue: e.target.value })}
@@ -277,6 +293,7 @@ export default function StepSpatial({
             <label htmlFor="errorLevel">Error level</label>
             <input
               id="errorLevel"
+          data-pilot-field="spatial.errorLevel"
               className="form-control"
               value={spatial.errorLevel || ''}
               onChange={(e) => onSpatialPatch({ errorLevel: e.target.value })}
@@ -286,6 +303,7 @@ export default function StepSpatial({
             <label htmlFor="errorValue">Error value</label>
             <input
               id="errorValue"
+          data-pilot-field="spatial.errorValue"
               className={`form-control${invalid('spatial.errorValue') ? ' form-control--invalid' : ''}`}
               value={spatial.errorValue || ''}
               onChange={(e) => onSpatialPatch({ errorValue: e.target.value })}
@@ -299,6 +317,7 @@ export default function StepSpatial({
         <label htmlFor="lineageStatement">Lineage statement</label>
         <textarea
           id="lineageStatement"
+          data-pilot-field="spatial.lineageStatement"
           rows={3}
           className="form-control"
           value={spatial.lineageStatement || ''}
@@ -307,6 +326,7 @@ export default function StepSpatial({
         <label htmlFor="lineageProcessSteps">Process steps (one paragraph per step, blank line between)</label>
         <textarea
           id="lineageProcessSteps"
+          data-pilot-field="spatial.lineageProcessSteps"
           rows={4}
           className="form-control"
           value={spatial.lineageProcessSteps || ''}

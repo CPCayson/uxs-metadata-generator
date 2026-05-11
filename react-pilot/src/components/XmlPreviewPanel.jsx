@@ -1,6 +1,9 @@
 import { memo, useCallback, useDeferredValue, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { countLineDiff, highlightXmlToHtml } from '../lib/xmlSyntaxHighlight'
-import { fieldKeyForElement, findFieldLineInXml } from '../lib/xmlFieldLineLocator'
+import { fieldKeyForElement, findFieldLineInXml, FIELD_ELEMENT_HINT } from '../lib/xmlFieldLineLocator'
+import { analyzeMissionPreviewXml } from '../lib/xmlPreviewStructuralHints.js'
+
+const ALL_FIELD_KEYS = Object.keys(FIELD_ELEMENT_HINT)
 
 /**
  * @param {{
@@ -9,6 +12,8 @@ import { fieldKeyForElement, findFieldLineInXml } from '../lib/xmlFieldLineLocat
  *   lastSavedXmlPreview?: string,
  *   expanded?: boolean,
  *   onToggleExpand?: (next: boolean) => void,
+ *   compactRailHeader?: boolean,
+ *   railHideFieldPill?: boolean,
  * }} props
  */
 function XmlPreviewPanel({
@@ -17,6 +22,8 @@ function XmlPreviewPanel({
   lastSavedXmlPreview = '',
   expanded = false,
   onToggleExpand,
+  compactRailHeader = false,
+  railHideFieldPill = false,
 }) {
   // Keep typing snappy: the XML preview (expensive build + 300+ line paint)
   // renders from a DEFERRED copy of pilot state, so form inputs never wait
@@ -38,6 +45,8 @@ function XmlPreviewPanel({
       : null
 
   // Pre-compute per-line highlighted HTML + changed-set (vs last saved draft).
+  const structuralHints = useMemo(() => analyzeMissionPreviewXml(xml).messages, [xml])
+
   const lines = useMemo(() => {
     const arr = String(xml).split('\n')
     const prev = showSavedDiff && lastSavedXmlPreview ? String(lastSavedXmlPreview).split('\n') : null
@@ -66,6 +75,29 @@ function XmlPreviewPanel({
       box.scrollTop + (elRect.top - boxRect.top) - boxRect.height / 2 + elRect.height / 2
     box.scrollTo({ top: Math.max(0, target), behavior: smooth ? 'smooth' : 'auto' })
   }, [])
+
+  // Reverse map: line number → nearest field key, rebuilt when xml changes.
+  const lineToField = useMemo(() => {
+    const map = new Map()
+    for (const field of ALL_FIELD_KEYS) {
+      const line = findFieldLineInXml({ field, xml, pilotState: null })
+      if (line) map.set(line, field)
+    }
+    return map
+  }, [xml])
+
+  const handleLineClick = useCallback((lineNum) => {
+    // Find the closest mapped field at or before the clicked line.
+    let best = null
+    let bestDist = Infinity
+    for (const [mappedLine, field] of lineToField) {
+      const dist = Math.abs(mappedLine - lineNum)
+      if (dist < bestDist) { bestDist = dist; best = field }
+    }
+    if (!best || bestDist > 30) return
+    focusLine(lineNum, { smooth: true })
+    window.dispatchEvent(new CustomEvent('manta:lens-goto-field', { detail: { field: best } }))
+  }, [lineToField, focusLine])
 
   // Global focusin listener — user-initiated jump uses SMOOTH scroll.
   // Refs allow this effect to bind once and not re-run per keystroke.
@@ -129,7 +161,14 @@ function XmlPreviewPanel({
         .filter(Boolean)
         .join(' ')}
     >
-      <div className="xml-preview-header fx-xml-header">
+      <div
+        className={[
+          'xml-preview-header fx-xml-header',
+          compactRailHeader ? 'fx-xml-header--rail-compact' : '',
+        ]
+          .filter(Boolean)
+          .join(' ')}
+      >
         <h2>
           <span className="fx-xml-title-dot" aria-hidden>●</span>
           LIVE XML <span className="fx-xml-title-sub">// iso-19115-2</span>
@@ -139,15 +178,17 @@ function XmlPreviewPanel({
             <span className="fx-xml-pill-label">L</span>
             <span className="fx-xml-pill-value">{lines.length}</span>
           </span>
-          <span
-            className={`fx-xml-pill${activeField ? ' fx-xml-pill--active' : ''}`}
-            title={activeField ? `Tracking field: ${activeField}` : 'No field tracked'}
-          >
-            <span className="fx-xml-pill-label">▸</span>
-            <span className="fx-xml-pill-value fx-xml-pill-value--mono">
-              {activeField || 'idle'}
+          {!railHideFieldPill ? (
+            <span
+              className={`fx-xml-pill${activeField ? ' fx-xml-pill--active' : ''}`}
+              title={activeField ? `Tracking field: ${activeField}` : 'No field tracked'}
+            >
+              <span className="fx-xml-pill-label">▸</span>
+              <span className="fx-xml-pill-value fx-xml-pill-value--mono">
+                {activeField || 'idle'}
+              </span>
             </span>
-          </span>
+          ) : null}
           {typeof onToggleExpand === 'function' ? (
             <button
               type="button"
@@ -162,6 +203,22 @@ function XmlPreviewPanel({
         </div>
       </div>
 
+      {pilotState?.sourceProvenance?.importIsoXmlFamily === '19115-3' ? (
+        <div className="xml-preview-structural-hints" role="note">
+          <p className="hint">
+            Imported as ISO 19115-3; live preview and file export are normalized to ISO 19115-2 (GMI / GMD).
+          </p>
+        </div>
+      ) : null}
+      {structuralHints.length ? (
+        <div className="xml-preview-structural-hints" role="note">
+          {structuralHints.map((msg, i) => (
+            <p key={i} className="hint">
+              {msg}
+            </p>
+          ))}
+        </div>
+      ) : null}
       {lastSavedXmlPreview ? (
         <label className="xml-diff-toggle">
           <input type="checkbox" checked={showSavedDiff} onChange={(e) => setShowSavedDiff(e.target.checked)} />
@@ -199,6 +256,8 @@ function XmlPreviewPanel({
                 className={cls}
                 data-line={line.num}
                 data-active-xml-line={isActive ? 'true' : undefined}
+                onClick={() => handleLineClick(line.num)}
+                style={{ cursor: lineToField.has(line.num) ? 'pointer' : 'default' }}
               >
                 <span className="fx-xml-line-num" aria-hidden>{String(line.num).padStart(3, ' ')}</span>
                 <code className="fx-xml-line-code" dangerouslySetInnerHTML={{ __html: line.html || '&nbsp;' }} />

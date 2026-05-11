@@ -3,7 +3,9 @@
 Date: 2026-02-25  
 **Primary scope (current):** the **deployed React pilot** (e.g. Netlify + `/api/db`), not `file://` or an unhosted static folder.
 
-**Historical:** sections **T01–T12** below were written for the **classic HTML + server** web app. Use them as a loose parity guide only; drive release QA from your **HTTP + `/api/db`** deployment checklist.
+**Manual React pilot smoke:** use **R01–R12** below (wizard steps **1 Mission → 6 Distribution**). **Automated smoke** for the mission profile is `npm run verify:pilot` and `node scripts/test-fixtures.mjs` (see table under Test Data Set A).
+
+**Historical:** sections **T01–T12** at the end of this file were written for the **classic HTML + server** web app. Prefer **R01–R12** + automated scripts for the React pilot; keep T01–T12 only for legacy parity.
 
 **Related docs:** [README.md](README.md), [react-pilot/docs/DEPLOYMENT.md](react-pilot/docs/DEPLOYMENT.md), [METADATA_FIELD_MAP.md](METADATA_FIELD_MAP.md) (field ↔ JSON ↔ XML), [OVERVIEW_TEMPLATE_ALIGNMENT.csv](OVERVIEW_TEMPLATE_ALIGNMENT.csv) (section-level alignment). For the static **`pilot-share/`** bundle, use **Appendix A**.
 
@@ -30,6 +32,46 @@ Use these values where needed:
 - Sensor Type: `SBE CTD Sensor`
 
 ---
+
+## Automated smoke — mission profile (engineering gate)
+
+Run from `react-pilot/`:
+
+| Script | Command | What it exercises |
+|--------|---------|-------------------|
+| **verify-pilot** | `npm run verify:pilot` | ESLint, production build, BEDI XML parser smoke, then Node checks including: seeded **ISO 19115-2** XML preview **→ import round-trip**, NCEI `fileIdentifier` prefix behavior, NOAA/fixture imports, validation parity, BEDI preview round-trips, GeoJSON/DCAT Netlify path, readiness bundles, and **structural ISO sanity** on mission preview (root `gmi:MI_Metadata`, `xmlns:gmi`, `schemaLocation` for gmi.xsd, geographic bbox corners as `gco:Decimal`). |
+| **test-fixtures** | `node scripts/test-fixtures.mjs` | Every file in `react-pilot/fixtures/mission/*.xml` through **import → merge → auto-fix → validate**; prints per-file issues; **exits non-zero on parse/merge crashes** (validation errors on deliberate BAD fixtures are expected). |
+
+Together these subsume the classic Apps Script **Run Smoke Tests** / schema round-trip button for CI and local pre-push checks.
+
+---
+
+## R01–R12 — React pilot (UxS mission profile) manual smoke
+
+**Wizard steps:** 1 Mission · 2 Platform · 3 Sensors · 4 Spatial · 5 Keywords · 6 Distribution (plus XML preview / validation UI). Use **Test Data Set A** where it helps.
+
+| ID | Goal | Procedure (high level) | Expected |
+|----|------|------------------------|----------|
+| R01 | Boot | Open deployed URL or dev server; confirm **Mission / Dataset** profile | First step visible; XML preview/tools load; no blocking error surface |
+| R02 | Navigation + validation | Move **1 → 6 → 1**; leave a required mission field empty; trigger validation | Step state persists; invalid fields show issues |
+| R03 | Template round-trip | Fill several steps; **save template**; clear session/form; **load template** | Values restore; preview updates |
+| R04 | Template delete | Delete the template from R03 | Gone from picker; no stale state |
+| R05 | Platform library | Platform step: save/load/search platform (**needs `/api/db`** for full path) | Same intent as classic T05 |
+| R06 | Sensors | Add/remove sensor rows; exercise save/load if offered | Consistent state and preview |
+| R07 | XML import | **Import XML** with a known-good mission fixture | Forms populate; validation runs; preview reflects import |
+| R08 | Schema / ISO variant | Only if the build exposes **Convert** or alternate ISO targets | Conversion or export matches product docs; preview refreshes |
+| R09 | Validation modes | Switch **lenient / strict / catalog** (toolbar or validation rail) | Mode drives validation; counts/issues update |
+| R10 | Distribution + export | Distribution step: links, license, fees; trigger **preview refresh** / download if present | XML/metadata outputs stay coherent |
+| R11 | GeoJSON / DCAT (optional) | From actions that call host exports (**`/api/db`**) | GeoJSON and DCAT responses succeed when enabled |
+| R12 | Automated gate | Before tagging a release: `npm run verify:pilot`; optional `node scripts/test-fixtures.mjs` | Both succeed locally or in CI |
+
+**Sign-off (React):** Passed ____ / 12 — Blocking: ☐ Yes ☐ No — Tester: ______ — Date: ______
+
+---
+
+## Classic HTML app — T01–T12 (historical manual tests)
+
+The cases below reference the **five-tab** classic UI (Mission through Output). Use them only when validating legacy parity.
 
 ## T01 - App Boot + Initial Render
 

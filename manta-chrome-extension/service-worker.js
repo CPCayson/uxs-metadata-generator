@@ -22,6 +22,26 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
     })()
     return true
   }
+  if (msg?.type === 'manta-open-pilot-window') {
+    void (async () => {
+      try {
+        const base = (msg.url && String(msg.url).trim()) || (await pilotUrl())
+        const w = Number(msg.width) > 320 ? Number(msg.width) : 1280
+        const h = Number(msg.height) > 240 ? Number(msg.height) : 820
+        await chrome.windows.create({
+          url: base,
+          type: 'popup',
+          width: w,
+          height: h,
+          focused: true,
+        })
+        sendResponse({ ok: true })
+      } catch (e) {
+        sendResponse({ ok: false, error: e instanceof Error ? e.message : String(e) })
+      }
+    })()
+    return true
+  }
   if (msg?.type === 'manta-capture-open-pilot') {
     void (async () => {
       try {

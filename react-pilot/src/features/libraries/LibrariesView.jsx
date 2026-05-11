@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 const TABS = [
   { id: 'templates', label: 'Templates' },
@@ -47,14 +47,39 @@ function safeJsonParse(text, fallback) {
   }
 }
 
-function shellCardStyle() {
+/** Match IntakeScreen / Archive “SaaS” panels inside `pilot-intake-surface` */
+const FILTER_ACTIVE = '#534AB7'
+
+function panelCard(extra = {}) {
   return {
-    border: '1px solid var(--border-color)',
-    borderRadius: 10,
+    border: '1px solid var(--border-color, #e2e8f0)',
+    borderRadius: 8,
     padding: '1rem',
-    background: 'var(--card-bg)',
-    boxShadow: 'var(--shadow-sm)',
+    background: 'var(--card-bg, #fff)',
+    ...extra,
   }
+}
+
+const intakeBtnSecondary = {
+  padding: '0.35rem 0.85rem',
+  border: '1px solid var(--border-color, #e2e8f0)',
+  borderRadius: 7,
+  background: 'var(--card-bg, #fff)',
+  fontWeight: 600,
+  fontSize: '0.82rem',
+  cursor: 'pointer',
+  color: 'var(--text-color, #0f172a)',
+}
+
+const intakeBtnPrimary = {
+  padding: '0.35rem 0.9rem',
+  border: 'none',
+  borderRadius: 6,
+  background: FILTER_ACTIVE,
+  color: '#fff',
+  fontWeight: 600,
+  fontSize: '0.82rem',
+  cursor: 'pointer',
 }
 
 export default function LibrariesView({ hostBridge, onLaunch }) {
@@ -75,7 +100,7 @@ export default function LibrariesView({ hostBridge, onLaunch }) {
 
   const hostReady = Boolean(hostBridge?.isAvailable?.())
 
-  async function refreshTemplates() {
+  const refreshTemplates = useCallback(async () => {
     if (!hostReady) return
     setTemplatesBusy(true)
     setStatus('Loading templates…')
@@ -89,9 +114,9 @@ export default function LibrariesView({ hostBridge, onLaunch }) {
     } finally {
       setTemplatesBusy(false)
     }
-  }
+  }, [hostBridge, hostReady])
 
-  async function refreshPlatforms() {
+  const refreshPlatforms = useCallback(async () => {
     if (!hostReady) return
     setPlatformsBusy(true)
     setStatus('Loading platforms…')
@@ -105,9 +130,9 @@ export default function LibrariesView({ hostBridge, onLaunch }) {
     } finally {
       setPlatformsBusy(false)
     }
-  }
+  }, [hostBridge, hostReady])
 
-  async function refreshSensors() {
+  const refreshSensors = useCallback(async () => {
     if (!hostReady) return
     setSensorsBusy(true)
     setStatus('Loading sensors…')
@@ -121,14 +146,14 @@ export default function LibrariesView({ hostBridge, onLaunch }) {
     } finally {
       setSensorsBusy(false)
     }
-  }
+  }, [hostBridge, hostReady])
 
   useEffect(() => {
     if (!hostReady) return
     void refreshTemplates()
     void refreshPlatforms()
     void refreshSensors()
-  }, [hostReady])
+  }, [hostReady, refreshPlatforms, refreshSensors, refreshTemplates])
 
   const templateOptions = useMemo(
     () =>
@@ -304,63 +329,129 @@ export default function LibrariesView({ hostBridge, onLaunch }) {
   }
 
   return (
-    <div style={{ padding: '1.5rem', display: 'grid', gap: '1rem' }}>
-      <div style={shellCardStyle()}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
-          <div>
-            <h2 style={{ margin: 0, color: 'var(--primary-color)', fontSize: '1.1rem' }}>Libraries</h2>
-            <p style={{ margin: '0.35rem 0 0', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-              Internal `/api/db` catalogs with optional CoMET-linked metadata fields.
-            </p>
-          </div>
-          <div style={{ display: 'flex', gap: '0.45rem', flexWrap: 'wrap' }}>
-            <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => void refreshTemplates()} disabled={!hostReady || templatesBusy}>
-              Refresh templates
-            </button>
-            <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => void refreshPlatforms()} disabled={!hostReady || platformsBusy}>
-              Refresh platforms
-            </button>
-            <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => void refreshSensors()} disabled={!hostReady || sensorsBusy}>
-              Refresh sensors
-            </button>
-            {typeof onLaunch === 'function' ? (
-              <button type="button" className="btn btn-sm btn-outline-primary" onClick={() => onLaunch('mission', 'underwater')}>
-                Open mission wizard
-              </button>
-            ) : null}
-          </div>
-        </div>
+    <div style={{ maxWidth: 640, margin: '0 auto' }}>
+      <h2
+        style={{
+          fontSize: '1.35rem',
+          fontWeight: 800,
+          letterSpacing: '-0.02em',
+          marginBottom: '0.35rem',
+          color: 'var(--text-color, #0f172a)',
+        }}
+      >
+        Libraries
+      </h2>
+      <p
+        style={{
+          fontSize: '0.9rem',
+          fontWeight: 600,
+          lineHeight: 1.5,
+          color: 'var(--text-muted)',
+          marginBottom: '1.25rem',
+        }}
+      >
+        Templates, platforms, and sensors from your <code style={{ fontSize: '0.85rem' }}>/api/db</code> host — same
+        card layout as <strong style={{ color: 'var(--text-color, #0f172a)' }}>Start from anything</strong>.
+      </p>
+
+      <p style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '0.55rem' }}>
+        Quick actions
+      </p>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: '1.25rem' }}>
+        <button
+          type="button"
+          onClick={() => void refreshTemplates()}
+          disabled={!hostReady || templatesBusy}
+          style={{
+            ...intakeBtnSecondary,
+            opacity: !hostReady || templatesBusy ? 0.55 : 1,
+            cursor: !hostReady || templatesBusy ? 'not-allowed' : 'pointer',
+          }}
+        >
+          Refresh templates
+        </button>
+        <button
+          type="button"
+          onClick={() => void refreshPlatforms()}
+          disabled={!hostReady || platformsBusy}
+          style={{
+            ...intakeBtnSecondary,
+            opacity: !hostReady || platformsBusy ? 0.55 : 1,
+            cursor: !hostReady || platformsBusy ? 'not-allowed' : 'pointer',
+          }}
+        >
+          Refresh platforms
+        </button>
+        <button
+          type="button"
+          onClick={() => void refreshSensors()}
+          disabled={!hostReady || sensorsBusy}
+          style={{
+            ...intakeBtnSecondary,
+            opacity: !hostReady || sensorsBusy ? 0.55 : 1,
+            cursor: !hostReady || sensorsBusy ? 'not-allowed' : 'pointer',
+          }}
+        >
+          Refresh sensors
+        </button>
+        {typeof onLaunch === 'function' ? (
+          <button type="button" onClick={() => onLaunch('mission', 'underwater')} style={intakeBtnPrimary}>
+            Open mission wizard →
+          </button>
+        ) : null}
       </div>
 
-      <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-        {TABS.map((t) => (
-          <button
-            key={t.id}
-            type="button"
-            className={`button button-secondary${tab === t.id ? ' active' : ''}`}
-            style={{
-              marginTop: 0,
-              borderColor: tab === t.id ? 'var(--primary-color)' : undefined,
-              boxShadow: tab === t.id ? '0 0 0 2px color-mix(in srgb, var(--primary-light) 24%, transparent)' : 'none',
-            }}
-            onClick={() => setTab(t.id)}
-          >
-            {t.label}
-          </button>
-        ))}
+      <p style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '0.55rem' }}>
+        Library section
+      </p>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+          gap: 8,
+          marginBottom: '1rem',
+        }}
+      >
+        {TABS.map((t) => {
+          const active = tab === t.id
+          return (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => setTab(t.id)}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                padding: '0.6rem 0.85rem',
+                border: `1px solid ${active ? FILTER_ACTIVE : 'var(--border-color, #e2e8f0)'}`,
+                borderRadius: 7,
+                background: active ? 'rgba(83, 74, 183, 0.06)' : 'var(--card-bg, #fff)',
+                cursor: 'pointer',
+                textAlign: 'left',
+                boxShadow: active ? `inset 0 0 0 1px ${FILTER_ACTIVE}33` : 'none',
+              }}
+            >
+              <span style={{ fontWeight: 600, fontSize: '0.85rem', color: active ? FILTER_ACTIVE : 'var(--text-color, #0f172a)' }}>
+                {t.label}
+              </span>
+            </button>
+          )
+        })}
       </div>
 
       {!hostReady ? (
-        <div style={shellCardStyle()}>
-          <p style={{ margin: 0, color: 'var(--text-muted)' }}>
-            Host bridge is not connected. Run this app behind `/api/db` (for example via `netlify dev`) to use Libraries.
+        <div style={{ ...panelCard(), marginBottom: '1rem' }}>
+          <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)', lineHeight: 1.5 }}>
+            Host bridge is not connected. Run this app behind <code>/api/db</code> (for example{' '}
+            <code>netlify dev</code>) to load and save library rows.
           </p>
         </div>
       ) : null}
 
       {tab === 'templates' ? (
-        <section style={{ ...shellCardStyle(), display: 'grid', gap: '0.75rem' }}>
-          <h3 style={{ margin: 0, fontSize: '0.95rem' }}>Template Library</h3>
+        <section style={{ ...panelCard(), display: 'grid', gap: '0.75rem' }}>
+          <h3 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-color, #0f172a)' }}>Template library</h3>
           <div style={{ display: 'grid', gap: '0.5rem', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))' }}>
             <label>
               Name
@@ -391,8 +482,19 @@ export default function LibrariesView({ hostBridge, onLaunch }) {
             Template Data (JSON)
             <textarea className="form-control" rows={9} value={templateForm.dataJson} onChange={(e) => setTemplateForm((p) => ({ ...p, dataJson: e.target.value }))} />
           </label>
-          <div style={{ display: 'flex', gap: '0.45rem', flexWrap: 'wrap' }}>
-            <button type="button" className="button" onClick={() => void saveTemplate()} disabled={templatesBusy}>Save template</button>
+          <div style={{ display: 'flex', gap: '0.45rem', flexWrap: 'wrap', alignItems: 'center' }}>
+            <button
+              type="button"
+              onClick={() => void saveTemplate()}
+              disabled={templatesBusy}
+              style={{
+                ...intakeBtnPrimary,
+                opacity: templatesBusy ? 0.65 : 1,
+                cursor: templatesBusy ? 'wait' : 'pointer',
+              }}
+            >
+              Save template
+            </button>
             <select className="form-select" style={{ maxWidth: 280 }} onChange={(e) => void loadTemplateByName(e.target.value)} defaultValue="">
               <option value="">Load existing template…</option>
               {templateOptions.map((name) => (
@@ -431,8 +533,8 @@ export default function LibrariesView({ hostBridge, onLaunch }) {
       ) : null}
 
       {tab === 'platforms' ? (
-        <section style={{ ...shellCardStyle(), display: 'grid', gap: '0.75rem' }}>
-          <h3 style={{ margin: 0, fontSize: '0.95rem' }}>Platform Library</h3>
+        <section style={{ ...panelCard(), display: 'grid', gap: '0.75rem' }}>
+          <h3 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-color, #0f172a)' }}>Platform library</h3>
           <div style={{ display: 'grid', gap: '0.5rem', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))' }}>
             <label>
               Platform ID *
@@ -474,7 +576,18 @@ export default function LibrariesView({ hostBridge, onLaunch }) {
             <textarea className="form-control" rows={2} value={platformForm.comments} onChange={(e) => setPlatformForm((p) => ({ ...p, comments: e.target.value }))} />
           </label>
           <div style={{ display: 'flex', gap: '0.45rem', flexWrap: 'wrap' }}>
-            <button type="button" className="button" onClick={() => void savePlatform()} disabled={platformsBusy}>Save platform</button>
+            <button
+              type="button"
+              onClick={() => void savePlatform()}
+              disabled={platformsBusy}
+              style={{
+                ...intakeBtnPrimary,
+                opacity: platformsBusy ? 0.65 : 1,
+                cursor: platformsBusy ? 'wait' : 'pointer',
+              }}
+            >
+              Save platform
+            </button>
           </div>
           <p className="hint" style={{ marginTop: 0 }}>Current platforms: {platforms.length}</p>
           {platformRows.length ? (
@@ -527,8 +640,8 @@ export default function LibrariesView({ hostBridge, onLaunch }) {
       ) : null}
 
       {tab === 'sensors' ? (
-        <section style={{ ...shellCardStyle(), display: 'grid', gap: '0.75rem' }}>
-          <h3 style={{ margin: 0, fontSize: '0.95rem' }}>Sensor Library</h3>
+        <section style={{ ...panelCard(), display: 'grid', gap: '0.75rem' }}>
+          <h3 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-color, #0f172a)' }}>Sensor library</h3>
           <div style={{ display: 'grid', gap: '0.5rem', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))' }}>
             <label>
               Sensor ID *
@@ -566,7 +679,18 @@ export default function LibrariesView({ hostBridge, onLaunch }) {
             </label>
           </div>
           <div style={{ display: 'flex', gap: '0.45rem', flexWrap: 'wrap' }}>
-            <button type="button" className="button" onClick={() => void saveSensor()} disabled={sensorsBusy}>Save sensor</button>
+            <button
+              type="button"
+              onClick={() => void saveSensor()}
+              disabled={sensorsBusy}
+              style={{
+                ...intakeBtnPrimary,
+                opacity: sensorsBusy ? 0.65 : 1,
+                cursor: sensorsBusy ? 'wait' : 'pointer',
+              }}
+            >
+              Save sensor
+            </button>
           </div>
           <p className="hint" style={{ marginTop: 0 }}>Current sensors: {sensors.length}</p>
           {sensorRows.length ? (
@@ -619,8 +743,14 @@ export default function LibrariesView({ hostBridge, onLaunch }) {
         </section>
       ) : null}
 
-      <div style={shellCardStyle()}>
-        <p className="status-message" role="status" aria-live="polite">{status}</p>
+      <div style={{ ...panelCard({ marginTop: '1rem' }) }}>
+        <p
+          role="status"
+          aria-live="polite"
+          style={{ margin: 0, fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-muted)', lineHeight: 1.5 }}
+        >
+          {status}
+        </p>
       </div>
     </div>
   )

@@ -1,0 +1,14 @@
+{
+  "generated": "2026-05-06T06:29:57.261Z",
+  "source": "/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission",
+  "totalXmlRecords": 6,
+  "totalUniqueUrls": 45,
+  "totalUrlOccurrences": 112,
+  "duplicateUrlOccurrences": 67,
+  "okUrls": 22,
+  "brokenUrls": 23,
+  "docucompUrls": 14,
+  "noddUrls": 0,
+  "osddUrls": 14,
+  "laneStatus": "BLOCK"
+}

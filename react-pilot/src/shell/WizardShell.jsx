@@ -12,6 +12,7 @@
  */
 
 import { useCallback, useDeferredValue, useEffect, useLayoutEffect, useMemo, useRef, useState, Suspense } from 'react'
+import { flushSync, createPortal } from 'react-dom'
 import StepNav from '../components/StepNav'
 import ValidationPanel from '../components/ValidationPanel'
 import ReadinessStrip from '../components/ReadinessStrip.jsx'
@@ -21,9 +22,11 @@ import DebugLogPanel from '../components/DebugLogPanel'
 import { schedulePersistPilotSession, writePilotSessionPayloadNow } from '../lib/pilotSessionStorage'
 import { applyPilotAutoFixes } from '../lib/pilotAutoFix.js'
 import { computeReadinessBundles, computeReadinessSnapshot } from '../lib/readinessSummary.js'
+import { computeCertificationBundles } from '../lib/certificationSummary.js'
 import { scrollToField } from '../core/registry/FieldRegistry.js'
 import { pushPilotDebug } from '../lib/pilotDebugLog'
 import { useMetadataEngine } from './context.js'
+import { useCometWorkbenchBridge } from './CometWorkbenchBridge.jsx'
 import { useProfileHostActions } from './hooks/useProfileHostActions.js'
 import { useCometActionsForProfile } from '../features/comet/useCometActionsForProfile.js'
 import CometPushPanel from '../features/comet/CometPushPanel.jsx'
@@ -31,13 +34,25 @@ import { isoXmlAdapter } from '../core/export/adapters/isoXmlAdapter.js'
 import { getPilotFieldLabelFallback } from '../lib/pilotFieldLabelFallback.js'
 import { emitPilotAuditEvent } from '../lib/pilotAuditEvents.js'
 import { setPilotFieldPath } from '../lib/pilotStateFieldSet.js'
+import MantaMissionCapabilityStrip from '../components/MantaMissionCapabilityStrip.jsx'
+import MissionWizardStepPills from '../components/MissionWizardStepPills.jsx'
+import ImportReviewPanel from '../components/ImportReviewPanel.jsx'
+import WizardStartChoiceModal from '../components/WizardStartChoiceModal.jsx'
+import { diffPilotStates, applyDecisions } from '../core/fragments/diffPilotStates.js'
+import { useWorkbenchChrome } from './useWorkbenchChrome.js'
+import { defaultPilotState } from '../lib/pilotValidation.js'
 
 /**
  * @param {{
  *   onDirtyChange: (isDirty: boolean) => void,
  * }} props
  */
-export default function WizardShell({ onDirtyChange }) {
+export default function WizardShell({ onDirtyChange, breadcrumb }) {
+  const { workspaceDensity, lensActive, assistantLayout } = useWorkbenchChrome()
+  const splitFloatWorkbench = assistantLayout === 'split-float'
+  /** Simple density + Lens on → hide helper copy on rails; use Lens for guidance */
+  const quietSurface = workspaceDensity === 'simple' && lensActive
+
   const {
     profile,
     workflowEngine,
@@ -45,6 +60,8 @@ export default function WizardShell({ onDirtyChange }) {
     hostBridge,
     onPublish,
   } = useMetadataEngine()
+
+  const { registerCometWorkbench } = useCometWorkbenchBridge()
 
   // Local CoMET state — owned here, populated via cross-context window event.
   const [cometUuid, setCometUuid] = useState('')
@@ -94,12 +111,50 @@ export default function WizardShell({ onDirtyChange }) {
   const [isDirty, setIsDirty] = useState(false)
   const [lastSavedXmlPreview, setLastSavedXmlPreview] = useState('')
   const [touched, setTouched] = useState({})
-  const [showAllErrors, setShowAllErrors] = useState(true)
-  const [sidePanelTab, setSidePanelTab] = useState('validator')
+  const [showAllErrors, setShowAllErrors] = useState(false)
+  const canProfileImport = Array.isArray(profile.importParsers) && profile.importParsers.length > 0
+  const [wizardStartOpen, setWizardStartOpen] = useState(false)
+  const [sidePanelTab, setSidePanelTab] = useState('xml')
   const [xmlExpanded, setXmlExpanded] = useState(false)
+  const [leftCollapsed, setLeftCollapsed] = useState(false)
+  /** Left rail Validation accordion — open by default */
+  const [validationRailOpen, setValidationRailOpen] = useState(true)
+  const [rightCollapsed, setRightCollapsed] = useState(false)
+  const [leftW, setLeftW] = useState(280)
+  const [rightW, setRightW] = useState(360)
+  /** Header slot next to XML tools — mission step pills portal target */
+  const [missionStepsSlotEl, setMissionStepsSlotEl] = useState(/** @type {HTMLElement | null} */ (null))
+
+  const startRailDrag = useCallback((e, side) => {
+    e.preventDefault()
+    const startX = e.clientX
+    const startW = side === 'left' ? leftW : rightW
+    const setW = side === 'left' ? setLeftW : setRightW
+    document.body.style.userSelect = 'none'
+    function onMove(ev) {
+      const dx = ev.clientX - startX
+      setW(Math.max(180, Math.min(600, startW + (side === 'left' ? dx : -dx))))
+    }
+    function onUp() {
+      window.removeEventListener('pointermove', onMove)
+      window.removeEventListener('pointerup', onUp)
+      document.body.style.userSelect = ''
+    }
+    window.addEventListener('pointermove', onMove)
+    window.addEventListener('pointerup', onUp)
+  }, [leftW, rightW])
+
   const [statusMessage, setStatusMessage] = useState('Ready')
   const [loading, setLoading] = useState(false)
   const [summary, setSummary] = useState({ platforms: 'not checked', templates: 'not checked' })
+
+  // Import review — holds pending import state until user accepts/rejects conflicts
+  const [pendingImport, setPendingImport] = useState(/** @type {{ changes: any[], next: object, sourceType: string, filename?: string, importedAt?: string } | null} */ (null))
+
+  /** Raw XML + meta from last XmlToolsBar “Apply” — drives downloadable import report */
+  const [importSampleContext, setImportSampleContext] = useState(
+    /** @type {{ rawXml: string, filename?: string, warnings?: string[] } | null} */ (null),
+  )
 
   const pilotRef = useRef(pilotState)
   pilotRef.current = pilotState
@@ -145,33 +200,94 @@ export default function WizardShell({ onDirtyChange }) {
   })
 
   useEffect(() => {
-    if (!showCometPanel && sidePanelTab === 'comet') setSidePanelTab('validator')
+    if (!showCometPanel) {
+      registerCometWorkbench(null)
+      return () => registerCometWorkbench(null)
+    }
+    registerCometWorkbench({ cometUuid, ...comet })
+    return () => registerCometWorkbench(null)
+  }, [showCometPanel, cometUuid, comet, registerCometWorkbench])
+
+  useEffect(() => {
+    if (!showCometPanel && sidePanelTab === 'comet') setSidePanelTab('xml')
   }, [showCometPanel, sidePanelTab])
 
-  // Lens opens over the full workspace grid: keep Validator visible (same chrome as XML tab).
   useEffect(() => {
-    function onLensOpened() {
-      setXmlExpanded(false)
-      setSidePanelTab('validator')
+    const el = document.getElementById('pilot-header-steps-slot')
+    if (el) {
+      setMissionStepsSlotEl(el)
+      return undefined
     }
-    window.addEventListener('manta:lens-opened', onLensOpened)
-    return () => window.removeEventListener('manta:lens-opened', onLensOpened)
+    let tries = 0
+    const id = window.setInterval(() => {
+      const node = document.getElementById('pilot-header-steps-slot')
+      if (node) {
+        setMissionStepsSlotEl(node)
+        window.clearInterval(id)
+      } else if (++tries > 40) {
+        window.clearInterval(id)
+      }
+    }, 50)
+    return () => window.clearInterval(id)
   }, [])
 
-  /** Lens portal sits below step nav so HUD + fix walk aren’t stacked over the tabs. */
+  /** Lens portal aligns with `.workspace-grid` top (nav + XML tools). Spans form + side rail. */
   const lensStackRef = useRef(/** @type {HTMLDivElement | null} */ (null))
+  /** Center column — scroll container for continuous wizard sections */
+  const mainColumnRef = useRef(/** @type {HTMLElement | null} */ (null))
+  /** Skip IntersectionObserver updates while programmatically scrolling to a section */
+  const wizardNavSuppressObserverRef = useRef(false)
   useLayoutEffect(() => {
     const root = lensStackRef.current
     if (!root) return
-    const nav = root.querySelector('.pilot-step-nav')
+
+    // Bound html+body to viewport height — overflow:hidden alone only hides the scrollbar,
+    // the body still grows to content height. height:100dvh caps it so the flex chain works.
+    const prevBodyOverflow = document.body.style.overflow
+    const prevHtmlOverflow = document.documentElement.style.overflow
+    const prevBodyHeight = document.body.style.height
+    const prevHtmlHeight = document.documentElement.style.height
+    document.body.style.overflow = 'hidden'
+    document.documentElement.style.overflow = 'hidden'
+    document.body.style.height = '100dvh'
+    document.documentElement.style.height = '100dvh'
+
     function measure() {
-      const h = nav?.getBoundingClientRect().height ?? 0
-      root.style.setProperty('--pilot-lens-inset-top', `${Math.round(h)}px`)
+      const grid = root.querySelector('.workspace-grid')
+      if (!grid) return
+      const rootRect = root.getBoundingClientRect()
+      const gridRect = grid.getBoundingClientRect()
+      const top = Math.max(0, Math.round(gridRect.top - rootRect.top))
+      root.style.setProperty('--pilot-lens-inset-top', `${top}px`)
     }
+
     measure()
     const ro = new ResizeObserver(measure)
+    const nav = root.querySelector('.pilot-step-nav')
+    const missionStrip = root.querySelector('.pilot-mission-capability-strip')
+    const xml = root.querySelector('.pilot-xml-tools')
     if (nav) ro.observe(nav)
-    return () => ro.disconnect()
+    if (missionStrip) ro.observe(missionStrip)
+    if (xml) ro.observe(xml)
+    window.addEventListener('resize', measure)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', measure)
+      document.body.style.overflow = prevBodyOverflow
+      document.documentElement.style.overflow = prevHtmlOverflow
+      document.body.style.height = prevBodyHeight
+      document.documentElement.style.height = prevHtmlHeight
+    }
+  }, [])
+
+  // Lens opens over the full workspace grid: surface Live XML on the right rail (left rail stays visible).
+  useEffect(() => {
+    function onLensOpened() {
+      setXmlExpanded(false)
+      setSidePanelTab('xml')
+    }
+    window.addEventListener('manta:lens-opened', onLensOpened)
+    return () => window.removeEventListener('manta:lens-opened', onLensOpened)
   }, [])
 
   // Defer validation (and step-status) off the keystroke hot path. React
@@ -201,6 +317,31 @@ export default function WizardShell({ onDirtyChange }) {
     [readinessSnapshot, comet.preflightSummary, isDirty],
   )
 
+  const certificationXml = useMemo(() => {
+    try {
+      const xml = buildXml(deferredPilotState)
+      return typeof xml === 'string' ? xml : ''
+    } catch {
+      return ''
+    }
+  }, [buildXml, deferredPilotState])
+
+  const certificationBundles = useMemo(
+    () => computeCertificationBundles(deferredPilotState, {
+      xml: certificationXml,
+      readinessSnapshot,
+      preflightSummary: comet.preflightSummary,
+      cometUuid,
+      isDirty,
+    }),
+    [deferredPilotState, certificationXml, readinessSnapshot, comet.preflightSummary, cometUuid, isDirty],
+  )
+
+  const readinessAndCertificationBundles = useMemo(
+    () => [...readinessBundles, ...certificationBundles],
+    [readinessBundles, certificationBundles],
+  )
+
   const stepStatuses = useMemo(() => {
     const fromIssues = workflowEngine.stepCompletionFromIssues(validation.issues)
     /** @type {Record<string, 'ok'|'warn'|'err'|'pending'>} */
@@ -219,7 +360,52 @@ export default function WizardShell({ onDirtyChange }) {
   }, [workflowEngine, validation.issues, touched, profile.steps])
 
   const activeStepMeta = profile.steps.find((s) => s.id === activeStep) ?? profile.steps[0]
-  const ActiveStep = activeStepMeta?.component ?? null
+
+  const wizardStepProps = {
+    pilotState,
+    setPilotState,
+    touched,
+    onTouched: setTouchedKey,
+    showAllErrors,
+    issues: validation.issues,
+    mission: pilotState.mission,
+    onMissionPatch: (patch) => setPilotState((p) => ({ ...p, mission: { ...p.mission, ...patch } })),
+    onSourceProvenanceClear: () => setPilotState((p) => ({
+      ...p,
+      sourceProvenance: { sourceType: 'manual', sourceId: '', importedAt: '', originalFilename: '', originalUuid: '' },
+    })),
+    onLoadDraft: ma.loadPilotDraft,
+    onSaveDraft: ma.savePilotDraft,
+    loadDisabled: ma.pilotBusy || !hostBridgeReady,
+    saveDisabled: ma.pilotBusy || !hostBridgeReady,
+    draftStatus: ma.draftStatus,
+    hostBridgeReady,
+    templateCatalogRows: ma.templateCatalogRows,
+    templateCatalogLoading: ma.templateCatalogLoading,
+    templateCatalogError: ma.templateCatalogError,
+    onRefreshTemplateCatalog: ma.refreshTemplateCatalog,
+    onApplySheetTemplate: ma.applySheetTemplateByName,
+    templateApplyDisabled: ma.templateApplyDisabled,
+    platform: pilotState.platform,
+    onPlatformPatch: (patch) => setPilotState((p) => ({ ...p, platform: { ...p.platform, ...patch } })),
+    platformLibraryRows: ma.platformLibraryRows,
+    platformLibraryLoading: ma.platformLibraryLoading,
+    platformLibraryError: ma.platformLibraryError,
+    onRefreshPlatformLibrary: ma.refreshPlatformLibrary,
+    onApplyPlatformFromLibrary: ma.applyPlatformFromLibraryKey,
+    onSavePlatformToSheets: ma.saveCurrentPlatformToSheets,
+    platformSaveBusy: ma.platformSaveBusy,
+    sensors: pilotState.sensors,
+    onSetSensors: (next) => setPilotState((p) => ({ ...p, sensors: next })),
+    spatial: pilotState.spatial,
+    onSpatialPatch: (patch) => setPilotState((p) => ({ ...p, spatial: { ...p.spatial, ...patch } })),
+    keywords: pilotState.keywords,
+    onKeywordsChange: (next) => setPilotState((p) => ({ ...p, keywords: next })),
+    distribution: pilotState.distribution,
+    onDistPatch: (patch) => setPilotState((p) => ({ ...p, distribution: { ...p.distribution, ...patch } })),
+    onSaveSheetTemplate: ma.saveNamedSheetTemplate,
+    sheetTemplateSaveDisabled: ma.sheetTemplateSaveDisabled,
+  }
 
   // ── Dirty tracking (debounced: JSON.stringify is expensive) ─────────────
   useEffect(() => {
@@ -301,7 +487,7 @@ export default function WizardShell({ onDirtyChange }) {
     return () => window.removeEventListener('manta:set-validation-mode', onSetValidationMode)
   }, [setMode])
 
-  // Keep Manta widget quality mode in sync when the user changes mode in the Validator panel
+  // Keep Manta widget quality mode in sync when the user changes mode in the validation panel
   useEffect(() => {
     const m = pilotState.mode
     if (m !== 'lenient' && m !== 'strict' && m !== 'catalog') return
@@ -336,14 +522,43 @@ export default function WizardShell({ onDirtyChange }) {
     setTouched((prev) => ({ ...prev, [key]: true }))
   }
 
+  const selectWizardStep = useCallback((id) => {
+    const ok = profile.steps?.some((s) => s.id === id)
+    if (!ok) return
+    wizardNavSuppressObserverRef.current = true
+    setActiveStep(id)
+    requestAnimationFrame(() => {
+      document.getElementById(`pilot-wizard-section-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      window.setTimeout(() => {
+        wizardNavSuppressObserverRef.current = false
+      }, 700)
+    })
+  }, [profile.steps])
+
   const navigateToPilotField = useCallback((field) => {
     const step = workflowEngine.stepForField(field)
-    setActiveStep(step)
-    window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(() => {
-        const ok = scrollToField(field)
-        if (!ok) setStatusMessage(`Could not find a control for "${field}". Open the matching step manually if needed.`)
-      })
+    wizardNavSuppressObserverRef.current = true
+    flushSync(() => {
+      setActiveStep(step)
+    })
+    requestAnimationFrame(() => {
+      document.getElementById(`pilot-wizard-section-${step}`)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      window.setTimeout(() => {
+        wizardNavSuppressObserverRef.current = false
+      }, 700)
+      if (scrollToField(field)) return
+      let attempts = 0
+      const maxAttempts = 50
+      const tick = () => {
+        if (scrollToField(field)) return
+        attempts += 1
+        if (attempts >= maxAttempts) {
+          setStatusMessage(`Could not find a control for "${field}". Open the matching step manually if needed.`)
+          return
+        }
+        requestAnimationFrame(tick)
+      }
+      requestAnimationFrame(tick)
     })
   }, [workflowEngine])
 
@@ -362,7 +577,7 @@ export default function WizardShell({ onDirtyChange }) {
       const id = e?.detail?.stepId
       if (typeof id !== 'string' || !id.trim()) return
       const ok = profile.steps?.some((s) => s.id === id)
-      if (ok) setActiveStep(id)
+      if (ok) selectWizardStep(id)
     }
     function onRelativeStep(/** @type {CustomEvent} */ e) {
       const delta = e?.detail?.delta
@@ -371,7 +586,8 @@ export default function WizardShell({ onDirtyChange }) {
       if (!steps.length) return
       const idx = Math.max(0, steps.findIndex((s) => s.id === activeStep))
       const next = Math.min(steps.length - 1, Math.max(0, idx + delta))
-      setActiveStep(steps[next]?.id ?? activeStep)
+      const nextId = steps[next]?.id
+      if (nextId) selectWizardStep(nextId)
     }
     window.addEventListener('manta:goto-step', onGotoStep)
     window.addEventListener('manta:step-relative', onRelativeStep)
@@ -379,7 +595,71 @@ export default function WizardShell({ onDirtyChange }) {
       window.removeEventListener('manta:goto-step', onGotoStep)
       window.removeEventListener('manta:step-relative', onRelativeStep)
     }
-  }, [profile.steps, activeStep])
+  }, [profile.steps, activeStep, selectWizardStep])
+
+  /** Keep step tabs / Lens step scope aligned with the section nearest the viewport center */
+  useEffect(() => {
+    const root = mainColumnRef.current
+    if (!root || !profile.steps?.length) return
+    const obs = new IntersectionObserver(
+      (entries) => {
+        if (wizardNavSuppressObserverRef.current) return
+        const crossing = entries
+          .filter((e) => e.isIntersecting && e.intersectionRatio > 0)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
+        if (!crossing.length) return
+        const id = crossing[0].target.getAttribute('data-wizard-step')
+        if (typeof id === 'string' && id) setActiveStep(id)
+      },
+      { root, rootMargin: '-10% 0px -55% 0px', threshold: [0, 0.05, 0.15, 0.35, 0.55] },
+    )
+    for (const s of profile.steps) {
+      const el = document.getElementById(`pilot-wizard-section-${s.id}`)
+      if (el) obs.observe(el)
+    }
+    return () => obs.disconnect()
+  }, [profile.steps, profile.id])
+
+  // Surface savedAt from session storage in the status bar
+  const [savedAt, setSavedAt] = useState(() => {
+    try {
+      const raw = sessionStorage.getItem('uxs-pilot-session')
+      const p = raw ? JSON.parse(raw) : null
+      return p?.savedAt ? new Date(p.savedAt).toLocaleTimeString() : null
+    } catch { return null }
+  })
+  useEffect(() => {
+    function onSessionWrite(/** @type {CustomEvent} */ e) {
+      const at = e?.detail?.savedAt ?? e?.detail?.payload?.savedAt
+      if (at) setSavedAt(new Date(at).toLocaleTimeString())
+    }
+    window.addEventListener('manta:pilot-session-updated', onSessionWrite)
+    return () => window.removeEventListener('manta:pilot-session-updated', onSessionWrite)
+  }, [])
+
+  const handleClearForm = useCallback(() => {
+    if (!window.confirm('Clear all fields and reset this wizard to defaults? Unsaved edits will be lost.')) return
+    const raw = typeof profile.defaultState === 'function' ? profile.defaultState() : defaultPilotState()
+    const fresh = profile.sanitize(raw)
+    baselineSerialized.current = JSON.stringify(fresh)
+    setPilotState(fresh)
+    writePilotSessionPayloadNow(fresh)
+    setTouched({})
+    setShowAllErrors(false)
+    setPendingImport(null)
+    setImportSampleContext(null)
+    setActiveStep(profile.steps[0]?.id ?? 'mission')
+    setIsDirty(false)
+    onDirtyChange(false)
+    try {
+      setLastSavedXmlPreview(buildXml(fresh))
+    } catch {
+      setLastSavedXmlPreview('')
+    }
+    setStatusMessage('Form cleared — defaults loaded.')
+    emitPilotAuditEvent({ profileId: profile.id, action: 'clearForm', result: 'ok' })
+    window.dispatchEvent(new CustomEvent('manta:metadata-import-merged'))
+  }, [profile, buildXml, onDirtyChange])
 
   async function runServerCheck() {
     setLoading(true)
@@ -401,26 +681,123 @@ export default function WizardShell({ onDirtyChange }) {
     }
   }
 
+  function handlePilotImport(next) {
+    const changes = diffPilotStates(pilotState, next, next.sourceProvenance?.sourceType ?? 'rawIso')
+    if (changes.length === 0) {
+      setPilotState(profile.sanitize(next))
+      setTouched({})
+      setShowAllErrors(true)
+      window.dispatchEvent(new CustomEvent('manta:metadata-import-merged'))
+      return
+    }
+    setPendingImport({
+      changes,
+      next,
+      sourceType: next.sourceProvenance?.sourceType ?? 'rawIso',
+      filename: next.sourceProvenance?.originalFilename,
+      importedAt: next.sourceProvenance?.importedAt,
+    })
+  }
+
   return (
     <>
-      <div ref={lensStackRef} className="pilot-wizard-lens-stack manta-workspace-lens-anchor">
-        <StepNav steps={profile.steps} activeStep={activeStep} onSelect={setActiveStep} stepStatus={stepStatuses} />
+      {wizardStartOpen && canProfileImport && (
+        <WizardStartChoiceModal
+          profile={profile}
+          onStartFresh={() => {
+            setWizardStartOpen(false)
+            setShowAllErrors(false)
+            setTouched({})
+          }}
+          onPilotImportMerged={(merged) => {
+            setWizardStartOpen(false)
+            handlePilotImport(merged)
+          }}
+          onImportSampleRecorded={(d) => {
+            setImportSampleContext({
+              rawXml: d.rawXml,
+              filename: d.filename,
+              warnings: d.warnings || [],
+            })
+          }}
+          onStatus={setStatusMessage}
+        />
+      )}
 
+      {/* Import review overlay — shown when an import has fields to review */}
+      {pendingImport && (
+        <ImportReviewPanel
+          changes={pendingImport.changes}
+          sourceType={pendingImport.sourceType}
+          filename={pendingImport.filename}
+          importedAt={pendingImport.importedAt}
+          onApply={(decisions) => {
+            const resolved = applyDecisions(pilotState, pendingImport.next, decisions)
+            setPilotState(profile.sanitize(resolved))
+            setTouched({})
+            setShowAllErrors(true)
+            setPendingImport(null)
+            window.dispatchEvent(new CustomEvent('manta:metadata-import-merged'))
+          }}
+          onCancel={() => setPendingImport(null)}
+        />
+      )}
+
+      <div ref={lensStackRef} className="pilot-wizard-lens-stack manta-workspace-lens-anchor">
+        {isDirty ? (
+          <div className="pilot-dirty-session-banner" role="status">
+            You have unsaved edits in this wizard. The pilot autosaves to browser storage — reloading usually restores your
+            work.{' '}
+            {hostBridgeReady
+              ? 'Use Save draft on the Mission step or Cmd/Ctrl+S to write a server draft when connected.'
+              : 'Connect the host bridge (same-origin /api/db) to enable Save draft / Cmd+S to the server.'}
+          </div>
+        ) : null}
+        {profile.id !== 'mission' ? (
+          <>
+            {breadcrumb && (
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: '0.4rem',
+                padding: '0.28rem 1rem',
+                borderBottom: '1px solid var(--border-color, #e2e8f0)',
+                background: 'var(--card-bg, #fff)',
+                fontSize: '0.78rem', flexShrink: 0,
+              }}>
+                <button type="button" onClick={breadcrumb.onHome} style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: 'var(--text-muted)', padding: '0 2px', fontSize: '0.78rem' }} aria-label="Back to home">← Home</button>
+                <span aria-hidden="true" style={{ color: 'var(--text-muted)' }}>·</span>
+                <span style={{ color: 'var(--text-color)', fontWeight: 500, flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{breadcrumb.label}</span>
+                <button type="button" onClick={breadcrumb.onNewRecord} style={{ border: '1px solid var(--border-color, #e2e8f0)', borderRadius: 5, background: 'transparent', cursor: 'pointer', color: 'var(--text-muted)', padding: '1px 7px', fontSize: '0.72rem' }} title="Start a new record or switch profile">+ New record</button>
+              </div>
+            )}
+            <StepNav
+              steps={profile.steps}
+              activeStep={activeStep}
+              onSelect={selectWizardStep}
+              stepStatus={stepStatuses}
+            />
+          </>
+        ) : null}
+
+        {/* XmlToolsBar portals into #pilot-header-tools-slot (mission + other profiles) */}
         <XmlToolsBar
           profile={profile}
           pilotState={pilotState}
-          onPilotImport={(next) => {
-            const s = profile.sanitize(next)
-            setPilotState(s)
-            setTouched({})
-            setShowAllErrors(false)
+          importSampleContext={importSampleContext}
+          onImportSampleRecorded={(d) => {
+            setImportSampleContext({
+              rawXml: d.rawXml,
+              filename: d.filename,
+              warnings: d.warnings || [],
+            })
           }}
+          onPilotImport={handlePilotImport}
           onScannerApply={(next) => {
             const s = profile.sanitize(next)
             setPilotState(s)
             setTouched({})
             setShowAllErrors(true)
-            setStatusMessage('Scanner suggestions merged. Review the validation panel for any new issues.')
+            setStatusMessage('Scanner suggestions merged. Review any new items in the validation panel.')
+            window.dispatchEvent(new CustomEvent('manta:metadata-import-merged'))
           }}
           onStatus={setStatusMessage}
           hostBridgeReady={hostBridgeReady}
@@ -428,173 +805,79 @@ export default function WizardShell({ onDirtyChange }) {
           onExportGeoJSON={cap.geoJsonExport ? ma.exportGeoJSONFromServer : null}
           onExportDCAT={cap.dcatExport ? ma.exportDCATFromServer : null}
           cometUuid={cometUuid}
-          onPushToComet={comet.pushDraftToComet}
+          onPushToComet={cap.cometPush ? comet.pushDraftToComet : null}
           pushBusy={comet.pushBusy}
           hostBridge={hostBridge}
           validationEngine={validationEngine}
+          quietSurface={quietSurface}
+          onCometPull={
+            profile.id === 'mission' && cap.cometPull
+              ? () => window.dispatchEvent(new CustomEvent('manta:comet-load'))
+              : null
+          }
+          onClearForm={handleClearForm}
         />
 
-        {/* Dual-surface lens: host below step nav, spans workspace grid only; see MANTA_ROADMAP. */}
-        <section className="workspace-grid">
-        <article className={`card workspace-main pilot-step pilot-step--${activeStep}`}>
-          <h2>{activeStepMeta.label}</h2>
+        {profile.id === 'mission' && missionStepsSlotEl
+          ? createPortal(
+              <MissionWizardStepPills
+                wizardSteps={profile.steps.map((s) => ({ id: s.id, label: s.label }))}
+                activeWizardStep={activeStep}
+                onWizardStepSelect={selectWizardStep}
+                stepStatuses={stepStatuses}
+                quietSurface={quietSurface}
+              />,
+              missionStepsSlotEl,
+            )
+          : null}
 
-          {ActiveStep && (
-            <Suspense fallback={<div className="pilot-step-loading">Loading step…</div>}>
-              <ActiveStep
-                // ── shared base (every step) ──────────────────────────────
-                pilotState={pilotState}
-                setPilotState={setPilotState}
-                touched={touched}
-                onTouched={setTouchedKey}
-                showAllErrors={showAllErrors}
-                issues={validation.issues}
-                // ── mission step ──────────────────────────────────────────
-                mission={pilotState.mission}
-                onMissionPatch={(patch) => setPilotState((p) => ({ ...p, mission: { ...p.mission, ...patch } }))}
-                onLoadDraft={ma.loadPilotDraft}
-                onSaveDraft={ma.savePilotDraft}
-                loadDisabled={ma.pilotBusy || !hostBridgeReady}
-                saveDisabled={ma.pilotBusy || !hostBridgeReady}
-                draftStatus={ma.draftStatus}
-                hostBridgeReady={hostBridgeReady}
-                templateCatalogRows={ma.templateCatalogRows}
-                templateCatalogLoading={ma.templateCatalogLoading}
-                templateCatalogError={ma.templateCatalogError}
-                onRefreshTemplateCatalog={ma.refreshTemplateCatalog}
-                onApplySheetTemplate={ma.applySheetTemplateByName}
-                templateApplyDisabled={ma.templateApplyDisabled}
-                // ── platform step ─────────────────────────────────────────
-                platform={pilotState.platform}
-                onPlatformPatch={(patch) => setPilotState((p) => ({ ...p, platform: { ...p.platform, ...patch } }))}
-                platformLibraryRows={ma.platformLibraryRows}
-                platformLibraryLoading={ma.platformLibraryLoading}
-                platformLibraryError={ma.platformLibraryError}
-                onRefreshPlatformLibrary={ma.refreshPlatformLibrary}
-                onApplyPlatformFromLibrary={ma.applyPlatformFromLibraryKey}
-                onSavePlatformToSheets={ma.saveCurrentPlatformToSheets}
-                platformSaveBusy={ma.platformSaveBusy}
-                // ── sensors step ──────────────────────────────────────────
-                sensors={pilotState.sensors}
-                onSetSensors={(next) => setPilotState((p) => ({ ...p, sensors: next }))}
-                // ── spatial step ──────────────────────────────────────────
-                spatial={pilotState.spatial}
-                onSpatialPatch={(patch) => setPilotState((p) => ({ ...p, spatial: { ...p.spatial, ...patch } }))}
-                // ── keywords step ─────────────────────────────────────────
-                keywords={pilotState.keywords}
-                onKeywordsChange={(next) => setPilotState((p) => ({ ...p, keywords: next }))}
-                // ── distribution step ─────────────────────────────────────
-                distribution={pilotState.distribution}
-                onDistPatch={(patch) => setPilotState((p) => ({ ...p, distribution: { ...p.distribution, ...patch } }))}
-                onSaveSheetTemplate={ma.saveNamedSheetTemplate}
-                sheetTemplateSaveDisabled={ma.sheetTemplateSaveDisabled}
-              />
-            </Suspense>
-          )}
-
-          {/* Manta Lens: optional portal host (issues are inline on fields; keep for layout grid hooks). */}
-          <div
-            id="manta-lens-step-footer-host"
-            className="manta-lens-step-footer-host"
-            data-manta-lens-step-footer-host
+        {/* Mission: breadcrumb + score/mode when shown — step pills port to header */}
+        {profile.id === 'mission' && (
+          <MantaMissionCapabilityStrip
+            validationMode={pilotState.mode || 'lenient'}
+            onSetMode={(m) => { setMode(m); setShowAllErrors(true) }}
+            errCount={validation.errCount}
+            score={validation.score}
+            breadcrumb={breadcrumb}
           />
-        </article>
+        )}
 
-        <aside
-          className={`workspace-side-stack${xmlExpanded ? ' workspace-side-stack--xml-full' : ''}`}
-          aria-label="Side panel"
+        {/* Lens host sits after grid — overlays form + left/right rails (dual surface). */}
+        <section
+          className="workspace-grid workspace-grid--split"
+          data-quiet-surface={quietSurface ? 'true' : undefined}
+          style={{
+            gridTemplateColumns: `${leftCollapsed ? '32px' : leftW + 'px'} 5px 1fr 5px ${rightCollapsed ? '32px' : rightW + 'px'}`,
+          }}
         >
-          <div
-            className={`card workspace-side workspace-side--tabbed${xmlExpanded ? ' workspace-side--xml-full' : ''}`}
-          >
-            {!xmlExpanded && (
-              <ul
-                className="nav nav-tabs metadata-tabs pilot-metadata-tabs workspace-side-tablist"
-                role="tablist"
-                aria-label="Side panel views"
-              >
-                <li className="nav-item" role="presentation">
-                  <button
-                    type="button"
-                    role="tab"
-                    id="side-tab-validator"
-                    aria-selected={sidePanelTab === 'validator'}
-                    aria-controls="side-panel-validator"
-                    tabIndex={sidePanelTab === 'validator' ? 0 : -1}
-                    className={`nav-link${sidePanelTab === 'validator' ? ' active' : ''}`}
-                    onClick={() => setSidePanelTab('validator')}
-                  >
-                    Validator
-                  </button>
-                </li>
-                <li className="nav-item" role="presentation">
-                  <button
-                    type="button"
-                    role="tab"
-                    id="side-tab-xml"
-                    aria-selected={sidePanelTab === 'xml'}
-                    aria-controls="side-panel-xml"
-                    tabIndex={sidePanelTab === 'xml' ? 0 : -1}
-                    className={`nav-link${sidePanelTab === 'xml' ? ' active' : ''}`}
-                    onClick={() => setSidePanelTab('xml')}
-                  >
-                    Live XML preview
-                  </button>
-                </li>
-                {showCometPanel ? (
-                  <li className="nav-item" role="presentation">
-                    <button
-                      type="button"
-                      role="tab"
-                      id="side-tab-comet"
-                      aria-selected={sidePanelTab === 'comet'}
-                      aria-controls="side-panel-comet"
-                      tabIndex={sidePanelTab === 'comet' ? 0 : -1}
-                      className={`nav-link${sidePanelTab === 'comet' ? ' active' : ''}`}
-                      onClick={() => setSidePanelTab('comet')}
-                    >
-                      CoMET
-                    </button>
-                  </li>
-                ) : null}
-              </ul>
-            )}
-
-            <div
-              id="side-panel-xml"
-              role="tabpanel"
-              aria-labelledby="side-tab-xml"
-              hidden={!xmlExpanded && sidePanelTab !== 'xml'}
-              className="workspace-side-tabpanel workspace-side-tabpanel--xml"
+        <aside
+          className={`workspace-side-stack workspace-side-stack--left-rail${leftCollapsed ? ' workspace-side-stack--collapsed' : ''}`}
+          aria-label="Validation and scores"
+        >
+          <div className={`card workspace-side workspace-side--tabbed workspace-side--left-rail-card pilot-rail-curved pilot-rail-curved--left${leftCollapsed ? ' rail-card--hidden' : ''}`}>
+            <details
+              className="workspace-rail-validation-accordion"
+              open={validationRailOpen}
+              onToggle={(e) => setValidationRailOpen(e.currentTarget.open)}
             >
-              <XmlPreviewPanel
-                pilotState={pilotState}
-                buildXml={buildXml}
-                lastSavedXmlPreview={lastSavedXmlPreview}
-                expanded={xmlExpanded}
-                onToggleExpand={setXmlExpanded}
-              />
-            </div>
-
-            {!xmlExpanded && (
-              <div
-                id="side-panel-validator"
-                role="tabpanel"
-                aria-labelledby="side-tab-validator"
-                hidden={sidePanelTab !== 'validator'}
-                className="workspace-side-tabpanel workspace-side-tabpanel--validator"
-              >
-                <ReadinessStrip
-                  snapshot={readinessSnapshot}
-                  bundles={readinessBundles}
-                  activeMode={pilotState.mode || 'lenient'}
-                  onSelectMode={(m) => {
-                    setMode(m)
-                    setSidePanelTab('validator')
-                    setShowAllErrors(true)
-                  }}
-                />
+              <summary className="workspace-rail-validation-accordion__summary">
+                <span className="workspace-rail-validation-accordion__summary-main">
+                  <h2 className="workspace-rail-validation-head__title">Validation</h2>
+                  <div className="workspace-rail-validation-head__counts">
+                    <span className="chip chip-err">{validation.errCount} error{validation.errCount !== 1 ? 's' : ''}</span>
+                    <span className="chip chip-warn">{validation.warnCount} warning{validation.warnCount !== 1 ? 's' : ''}</span>
+                  </div>
+                </span>
+              </summary>
+              <div className="workspace-rail-validation-accordion__body">
+                {/* Issues first so they sit directly under “Validation” + counts */}
                 <ValidationPanel
+                  hideSurfaceIntro
+                  hideModePills
+                  hideScoreChips
+                  collapseConnectionTools
+                  collapseFieldHints
+                  quietSurface={quietSurface}
                   mode={pilotState.mode}
                   onModeChange={setMode}
                   score={validation.score}
@@ -618,6 +901,297 @@ export default function WizardShell({ onDirtyChange }) {
                     typeof profile.getFieldLabel === 'function' ? profile.getFieldLabel.bind(profile) : getPilotFieldLabelFallback
                   }
                 />
+                <ReadinessStrip
+                  hideSectionHead
+                  className="readiness-strip--rail-after-issues"
+                  snapshot={readinessSnapshot}
+                  bundles={readinessAndCertificationBundles}
+                  activeMode={pilotState.mode || 'lenient'}
+                  onSelectMode={(m) => {
+                    setMode(m)
+                    setShowAllErrors(true)
+                  }}
+                />
+              </div>
+            </details>
+          </div>
+        </aside>
+
+        <div
+          className="rail-drag-handle rail-drag-handle--left"
+          onPointerDown={(e) => startRailDrag(e, 'left')}
+        >
+          <button
+            type="button"
+            className="rail-collapse-btn"
+            onClick={() => setLeftCollapsed(c => !c)}
+            title={leftCollapsed ? 'Expand' : 'Collapse'}
+            onPointerDown={(e) => e.stopPropagation()}
+          >
+            {leftCollapsed ? '▶' : '◀'}
+          </button>
+        </div>
+
+        <article
+          ref={mainColumnRef}
+          className="card workspace-main pilot-step pilot-step--continuous"
+        >
+          {/* Mission: section titles + step pills already identify the step — avoid repeating activeStep label here */}
+          {profile.id === 'mission' ? (
+            savedAt ? (
+              <div style={{ marginBottom: '0.45rem', fontSize: '0.64rem', fontWeight: 500, color: 'var(--text-muted)', opacity: 0.85 }}>
+                Draft saved {savedAt}
+              </div>
+            ) : null
+          ) : (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem', gap: 8 }}>
+            <h2 style={{ margin: 0, fontSize: '1rem', fontWeight: 700 }}>{activeStepMeta.label}</h2>
+            {!splitFloatWorkbench ? (
+              <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+                <span style={{
+                  fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.05em',
+                  background: validation.errCount === 0 ? '#dcfce7' : '#fee2e2',
+                  color: validation.errCount === 0 ? '#14532d' : '#7f1d1d',
+                  border: `1px solid ${validation.errCount === 0 ? '#16a34a44' : '#dc262644'}`,
+                  padding: '2px 8px', borderRadius: 9999,
+                }}>
+                  {validation.errCount === 0 ? '✓ No errors' : `✗ ${validation.errCount} error${validation.errCount !== 1 ? 's' : ''}`}
+                </span>
+                {validation.warnCount > 0 && (
+                  <span style={{
+                    fontSize: '0.68rem', fontWeight: 700,
+                    background: '#fefce8', color: '#713f12',
+                    border: '1px solid #ca8a0444',
+                    padding: '2px 8px', borderRadius: 9999,
+                  }}>
+                    ⚠ {validation.warnCount}
+                  </span>
+                )}
+                <span style={{
+                  fontSize: '0.68rem', fontWeight: 700,
+                  background: 'var(--card-bg)', color: 'var(--text-muted)',
+                  border: '1px solid var(--border-color)',
+                  padding: '2px 8px', borderRadius: 9999,
+                }}>
+                  {Math.round(validation.score ?? 0)}% ready
+                </span>
+                {savedAt && (
+                  <span style={{
+                    fontSize: '0.64rem', fontWeight: 500,
+                    color: 'var(--text-muted)', opacity: 0.7,
+                  }}>
+                    saved {savedAt}
+                  </span>
+                )}
+              </div>
+            ) : savedAt ? (
+              <span style={{
+                fontSize: '0.64rem', fontWeight: 500,
+                color: 'var(--text-muted)', opacity: 0.7,
+              }}>
+                saved {savedAt}
+              </span>
+            ) : null}
+          </div>
+          )}
+
+          {profile.steps.map((stepMeta) => {
+            const StepComp = stepMeta.component
+            if (!StepComp) return null
+            return (
+              <section
+                key={stepMeta.id}
+                id={`pilot-wizard-section-${stepMeta.id}`}
+                data-wizard-step={stepMeta.id}
+                className={`pilot-wizard-section pilot-step--${stepMeta.id}`}
+                aria-labelledby={`pilot-wizard-heading-${stepMeta.id}`}
+              >
+                <h2 className="pilot-wizard-section__title" id={`pilot-wizard-heading-${stepMeta.id}`}>
+                  {stepMeta.label}
+                </h2>
+                <Suspense fallback={<div className="pilot-step-loading">Loading section…</div>}>
+                  <StepComp
+                    {...wizardStepProps}
+                    {...(stepMeta.id === 'mission'
+                      ? { guidedMissionIntro: workspaceDensity === 'simple' }
+                      : {})}
+                  />
+                </Suspense>
+              </section>
+            )
+          })}
+
+          {/* Manta Lens: optional portal host (issues are inline on fields; keep for layout grid hooks). */}
+          <div
+            id="manta-lens-step-footer-host"
+            className="manta-lens-step-footer-host"
+            data-manta-lens-step-footer-host
+          />
+        </article>
+
+        <div
+          className="rail-drag-handle rail-drag-handle--right"
+          onPointerDown={(e) => startRailDrag(e, 'right')}
+        >
+          <button
+            type="button"
+            className="rail-collapse-btn"
+            onClick={() => setRightCollapsed(c => !c)}
+            title={rightCollapsed ? 'Expand' : 'Collapse'}
+            onPointerDown={(e) => e.stopPropagation()}
+          >
+            {rightCollapsed ? '◀' : '▶'}
+          </button>
+        </div>
+
+        <aside
+          className={`workspace-side-stack workspace-side-stack--right-rail${xmlExpanded ? ' workspace-side-stack--xml-full' : ''}${rightCollapsed ? ' workspace-side-stack--collapsed' : ''}`}
+          aria-label="Preview and output"
+        >
+          <div
+            className={`card workspace-side workspace-side--tabbed pilot-rail-curved pilot-rail-curved--right${xmlExpanded ? ' workspace-side--xml-full' : ''}${rightCollapsed ? ' rail-card--hidden' : ''}`}
+          >
+            {!xmlExpanded ? (
+              <div className="workspace-side-preview-toolbar">
+                <span className="workspace-side-preview-toolbar__title">Preview</span>
+                <ul
+                  className="nav nav-tabs metadata-tabs pilot-metadata-tabs workspace-side-tablist workspace-side-tablist--toolbar"
+                  role="tablist"
+                  aria-label="Preview tabs"
+                >
+                  <li className="nav-item" role="presentation">
+                    <button
+                      type="button"
+                      role="tab"
+                      id="side-tab-xml"
+                      aria-selected={sidePanelTab === 'xml'}
+                      aria-controls="side-panel-xml"
+                      tabIndex={sidePanelTab === 'xml' ? 0 : -1}
+                      className={`nav-link${sidePanelTab === 'xml' ? ' active' : ''}`}
+                      onClick={() => setSidePanelTab('xml')}
+                    >
+                      XML
+                    </button>
+                  </li>
+                  <li className="nav-item" role="presentation">
+                    <button
+                      type="button"
+                      role="tab"
+                      id="side-tab-schema"
+                      aria-selected={sidePanelTab === 'schema'}
+                      aria-controls="side-panel-schema"
+                      tabIndex={sidePanelTab === 'schema' ? 0 : -1}
+                      className={`nav-link${sidePanelTab === 'schema' ? ' active' : ''}`}
+                      onClick={() => setSidePanelTab('schema')}
+                    >
+                      Schema
+                    </button>
+                  </li>
+                  {showCometPanel ? (
+                    <li className="nav-item" role="presentation">
+                      <button
+                        type="button"
+                        role="tab"
+                        id="side-tab-comet"
+                        aria-selected={sidePanelTab === 'comet'}
+                        aria-controls="side-panel-comet"
+                        tabIndex={sidePanelTab === 'comet' ? 0 : -1}
+                        className={`nav-link${sidePanelTab === 'comet' ? ' active' : ''}`}
+                        onClick={() => setSidePanelTab('comet')}
+                      >
+                        CoMET
+                      </button>
+                    </li>
+                  ) : null}
+                </ul>
+              </div>
+            ) : null}
+
+            <div
+              id="side-panel-xml"
+              role="tabpanel"
+              aria-labelledby="side-tab-xml"
+              hidden={!xmlExpanded && sidePanelTab !== 'xml'}
+              className="workspace-side-tabpanel workspace-side-tabpanel--xml"
+            >
+              <XmlPreviewPanel
+                pilotState={pilotState}
+                buildXml={buildXml}
+                lastSavedXmlPreview={lastSavedXmlPreview}
+                expanded={xmlExpanded}
+                onToggleExpand={setXmlExpanded}
+                compactRailHeader={!xmlExpanded}
+                railHideFieldPill={!xmlExpanded}
+              />
+              {/* Action footer — always visible in XML tab */}
+              <div style={{
+                display: 'flex', gap: 6, padding: '0.5rem 0.5rem 0.25rem',
+                borderTop: '1px solid var(--border-color, #e2e8f0)',
+                background: 'var(--card-bg, #fff)',
+                flexWrap: 'wrap',
+              }}>
+                <button
+                  type="button"
+                  onClick={comet.pushDraftToComet}
+                  disabled={comet.pushBusy}
+                  style={{
+                    flex: 1, minWidth: 120, padding: '0.35rem 0.7rem',
+                    fontSize: '0.76rem', fontWeight: 700,
+                    background: 'var(--primary-color, #006994)', color: '#fff',
+                    border: 'none', borderRadius: 5, cursor: comet.pushBusy ? 'wait' : 'pointer',
+                    opacity: comet.pushBusy ? 0.6 : 1,
+                  }}
+                >
+                  {comet.pushBusy ? 'Pushing…' : '↑ Push draft to CoMET'}
+                </button>
+                <button
+                  type="button"
+                  onClick={ma.exportBusy ? null : ma.exportGeoJSONFromServer}
+                  disabled={ma.exportBusy || !cap.geoJsonExport}
+                  style={{
+                    padding: '0.35rem 0.7rem',
+                    fontSize: '0.76rem', fontWeight: 700,
+                    background: 'var(--card-bg)', color: 'var(--text-color)',
+                    border: '1px solid var(--border-color)', borderRadius: 5,
+                    cursor: 'pointer', opacity: cap.geoJsonExport ? 1 : 0.4,
+                  }}
+                  title="Export XML"
+                >
+                  ↓ Export XML
+                </button>
+              </div>
+            </div>
+
+            {/* Schema info tab */}
+            {!xmlExpanded && (
+              <div
+                id="side-panel-schema"
+                role="tabpanel"
+                aria-labelledby="side-tab-schema"
+                hidden={sidePanelTab !== 'schema'}
+                className="workspace-side-tabpanel workspace-side-tabpanel--schema"
+              >
+                <div style={{ padding: '0.75rem', fontSize: '0.8rem' }}>
+                  <div style={{ fontWeight: 700, marginBottom: 6 }}>Active Schema</div>
+                  <div style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: 6, padding: '0.5rem 0.75rem', marginBottom: 8 }}>
+                    <div style={{ fontWeight: 600 }}>ISO 19115-2:2019</div>
+                    <div style={{ color: 'var(--text-muted)', fontSize: '0.72rem', marginTop: 2 }}>+ NOAA Extensions — gmi:MI_Metadata</div>
+                  </div>
+                  <div style={{ fontWeight: 700, marginBottom: 6 }}>Conformance</div>
+                  <div style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: 6, padding: '0.5rem 0.75rem', marginBottom: 8 }}>
+                    <div style={{ fontWeight: 600, color: 'var(--primary-color)' }}>UxS-Marine-Core</div>
+                    <div style={{ display: 'flex', gap: 4, marginTop: 6 }}>
+                      <div style={{ flex: 1, height: 6, background: 'var(--border-color)', borderRadius: 3 }}>
+                        <div style={{ width: `${Math.round(validation.score ?? 0)}%`, height: '100%', background: 'var(--primary-color)', borderRadius: 3, transition: 'width 0.3s' }} />
+                      </div>
+                      <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--primary-color)' }}>{Math.round(validation.score ?? 0)}%</span>
+                    </div>
+                  </div>
+                  <div style={{ fontWeight: 700, marginBottom: 6 }}>SWARM rules</div>
+                  <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>
+                    152 compiled rules · {validation.errCount ?? 0} blocking · {validation.warnCount ?? 0} warnings
+                  </div>
+                </div>
               </div>
             )}
 
@@ -663,31 +1237,13 @@ export default function WizardShell({ onDirtyChange }) {
           </div>
         </aside>
       </section>
-        <div
-          id="manta-scanner-host"
-          className="manta-scanner-host manta-scanner-host--lens-stack"
-          data-manta-scanner-host
-          aria-hidden="true"
-        />
+      <div
+        id="manta-scanner-host"
+        className="manta-scanner-host manta-scanner-host--lens-stack"
+        data-manta-scanner-host
+        aria-hidden="true"
+      />
       </div>
-
-      <section className="card pilot-notes">
-        <h2>Pilot notes</h2>
-        <ol>
-          <li>GCMD and ROR calls run in the browser with defensive error handling.</li>
-          <li>
-            With the host bridge (<code>POST /api/db</code> → your Postgres): Mission draft + template picker; Distribution{' '}
-            <strong>Save as template</strong>; platform + sensor library — <code>getTemplate</code> / <code>saveTemplate</code> /{' '}
-            <code>savePlatform</code> / <code>saveSensorsBatch</code>, etc. Same JSON contract as the historical HTML wizard for
-            interoperability.
-          </li>
-          <li>
-            <strong>Server rules validate</strong> and <strong>GeoJSON</strong> / <strong>DCAT JSON-LD</strong> use{' '}
-            <code>pilotStateToLegacyFormData</code> then <code>/api/db</code> (<code>validateOnServer</code>,{' '}
-            <code>generateGeoJSON</code>, <code>generateDCAT</code>).
-          </li>
-        </ol>
-      </section>
 
       <DebugLogPanel />
     </>

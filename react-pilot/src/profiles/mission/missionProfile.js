@@ -70,7 +70,8 @@ function seedPilotState() {
   s.sensors[0].variable = 'bathymetry'
   // Valid KMS-style UUIDs so lenient "chip UUID" warnings stay quiet in the seeded demo.
   s.keywords.sciencekeywords = [{ label: 'Oceans', uuid: '2ef69df0-bf69-4d5e-b7ff-0cece46ed206' }]
-  s.keywords.datacenters = [{ label: 'DOC/NOAA/NESDIS/NCEI', uuid: '2f31b1f2-335f-4248-8165-215755953857' }]
+  // Label-only avoids KMS Anchor URLs that 404 when the demo UUID is not resolvable.
+  s.keywords.datacenters = [{ label: 'DOC/NOAA/NESDIS/NCEI > National Centers for Environmental Information' }]
   s.keywords.platforms = [{ label: 'UAV', uuid: '3a1196e4-c0d0-4c8d-9a7d-0f5e0c5e5d01' }]
   s.keywords.instruments = [{ label: 'Multibeam Swath Bathymetry System', uuid: '4b22a7f5-d1e1-5d9e-ab8e-1a6f1d6f6e12' }]
   s.keywords.locations = [{ label: 'Gulf of Mexico', uuid: '5c33b8a6-e2f2-6e0f-bc9f-2b7a2e7a7f23' }]

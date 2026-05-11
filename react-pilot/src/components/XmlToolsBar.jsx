@@ -1,15 +1,21 @@
-import { memo, useEffect, useMemo, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { strFromU8, unzipSync } from 'fflate'
 import { emitPilotAuditEvent } from '../lib/pilotAuditEvents.js'
+import { downloadPilotPreviewXml } from '../lib/downloadPilotPreviewXml.js'
+import { downloadPilotImportReport } from '../lib/downloadPilotImportReport.js'
+import { parseProfileXmlImport } from '../lib/parseProfileXmlImport.js'
+import { summarizePilotImportPopulation } from '../lib/importMergeSummary.js'
+import { detectGaps } from '../lib/cometClient.js'
 import ScannerSuggestionsDialog from './ScannerSuggestionsDialog.jsx'
+import { GapPanel } from './UxsGapPanel.jsx'
 
 /**
  * Header-mounted XML tools strip.
  *
- * Portals into #pilot-header-tools-slot (rendered inside <header>) so every
- * profile surfaces Import / Copy / Download / GeoJSON / DCAT next to the
- * profile picker, regardless of which dropdown template is selected.
+ * Portals into #pilot-header-tools-slot (rendered inside <header>). Primary row shows
+ * Import, Clear form (when wired), and ISO/download; paste import, scanner, gap check,
+ * CoMET actions, and secondary exports live under the ☰ overflow menu.
  *
  * Buttons automatically disable themselves when the active profile doesn't
  * support the underlying capability:
@@ -32,6 +38,11 @@ import ScannerSuggestionsDialog from './ScannerSuggestionsDialog.jsx'
  *   hostBridge: import('../adapters/HostBridge.js').HostBridge,
  *   validationEngine: import('../core/validation/ValidationEngine.js').ValidationEngine,
  *   onScannerApply?: (next: object) => void,
+ *   quietSurface?: boolean,
+ *   onCometPull?: (() => void) | null,
+ *   onClearForm?: (() => void) | null,
+ *   importSampleContext?: { rawXml: string, filename?: string, warnings?: string[] } | null,
+ *   onImportSampleRecorded?: ((detail: { rawXml: string, filename?: string, warnings?: string[] }) => void) | null,
  * }} props
  */
 function XmlToolsBar({
@@ -49,6 +60,13 @@ function XmlToolsBar({
   hostBridge,
   validationEngine,
   onScannerApply,
+  quietSurface = false,
+  onCometPull = null,
+  onClearForm = null,
+  importSampleContext = null,
+  onImportSampleRecorded = null,
+  /** When true, render inline instead of portaling to #pilot-header-tools-slot */
+  inline = false,
 }) {
   const cap = profile.capabilities ?? {}
   const importParsers = Array.isArray(profile.importParsers) ? profile.importParsers : []
@@ -63,6 +81,24 @@ function XmlToolsBar({
     hostBridge &&
     validationEngine
 
+  const isMission = profile.id === 'mission'
+  const [gaps, setGaps] = useState(null)
+  const [gapBusy, setGapBusy] = useState(false)
+  const [showGaps, setShowGaps] = useState(false)
+
+  const runGapCheck = useCallback(async () => {
+    setGapBusy(true)
+    setShowGaps(true)
+    try {
+      const result = detectGaps(pilotState, 'mission')
+      setGaps(result || [])
+    } catch {
+      setGaps(['Gap detection failed — check console.'])
+    } finally {
+      setGapBusy(false)
+    }
+  }, [pilotState])
+
   const xml = useMemo(
     () => (canBuildXml ? profile.buildXmlPreview(pilotState) || '' : ''),
     [canBuildXml, profile, pilotState],
@@ -74,11 +110,14 @@ function XmlToolsBar({
   const [importError, setImportError] = useState('')
   const [importBusy, setImportBusy] = useState(false)
   const [scannerOpen, setScannerOpen] = useState(false)
+  const [overflowMenuOpen, setOverflowMenuOpen] = useState(false)
   const [extensionScannerCapture, setExtensionScannerCapture] = useState(null)
+  const [importSummaryText, setImportSummaryText] = useState('')
   /** When a zip contains multiple .xml files, list paths and let the user pick one. */
   const [zipXmlPaths, setZipXmlPaths] = useState(/** @type {string[] | null} */ (null))
   const [zipPickPath, setZipPickPath] = useState('')
   const fileInputRef = useRef(null)
+  const overflowMenuRef = useRef(null)
   const extensionCaptureKeyRef = useRef('')
   /** Map path → bytes while a multi-entry zip is open; cleared after Apply or non-zip load. */
   const zipBytesRef = useRef(/** @type {Record<string, Uint8Array> | null} */ (null))
@@ -87,6 +126,23 @@ function XmlToolsBar({
     /** @type {import('../core/registry/types.js').ImportParseMeta} */ ({}),
   )
   const pendingZipArchiveNameRef = useRef('')
+
+  useEffect(() => {
+    if (!overflowMenuOpen) return undefined
+    function onPointerDown(e) {
+      const el = overflowMenuRef.current
+      if (el && !el.contains(e.target)) setOverflowMenuOpen(false)
+    }
+    function onKeyDown(e) {
+      if (e.key === 'Escape') setOverflowMenuOpen(false)
+    }
+    document.addEventListener('mousedown', onPointerDown)
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('mousedown', onPointerDown)
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [overflowMenuOpen])
 
   function clearZipImportUi() {
     zipBytesRef.current = null
@@ -224,57 +280,42 @@ function XmlToolsBar({
   function applyImport() {
     if (!canImport) return
     setImportError('')
+    setImportSummaryText('')
     setImportBusy(true)
     try {
-      let result = null
       const meta = {
         originalFilename: pendingImportMetaRef.current?.originalFilename,
         originalUuid:     pendingImportMetaRef.current?.originalUuid,
         sourceId:         pendingImportMetaRef.current?.sourceId,
       }
-      for (const parser of importParsers) {
-        try {
-          const r = parser?.parse?.(importText, meta)
-          if (r) {
-            result = r
-            if (r.ok) break
-          }
-        } catch (err) {
-          result = {
-            ok: false,
-            error: err instanceof Error ? err.message : String(err),
-            warnings: [],
-          }
-        }
-      }
-      if (!result) {
-        const msg = 'No import parser is available for this profile.'
-        setImportError(msg)
-        onStatus?.(msg)
+      const out = parseProfileXmlImport(profile, importText, meta)
+      if (!out.ok) {
+        setImportError(out.error || 'Import failed.')
+        setImportSummaryText('')
+        onStatus?.(out.error || 'Import failed.')
         return
       }
-      if (!result.ok) {
-        setImportError(result.error || 'Import failed.')
-        onStatus?.(result.error || 'Import failed.')
-        return
-      }
-      const payload = { ...result.partial }
-      if (result.provenance) payload.sourceProvenance = result.provenance
-      const merged = profile.mergeLoaded
-        ? profile.mergeLoaded(payload)
-        : { ...profile.defaultState(), ...payload }
       pendingImportMetaRef.current = {}
       clearZipImportUi()
-      onPilotImport(merged)
+      const rawSnapshot = importText
+      onImportSampleRecorded?.({
+        rawXml: rawSnapshot,
+        filename: meta.originalFilename,
+        warnings: out.warnings,
+      })
+      onPilotImport(out.merged)
       emitPilotAuditEvent({
         profileId: profile.id,
         action: 'pilotImport',
         result: 'ok',
-        sourceType: result.provenance?.sourceType ?? 'unknown',
+        sourceType: out.provenance?.sourceType ?? 'unknown',
         originalFilename: meta.originalFilename || null,
       })
-      const w = result.warnings?.length ? ` (${result.warnings.join(' ')})` : ''
-      onStatus?.(`Imported fields from XML.${w}`)
+      const pop = summarizePilotImportPopulation(out.merged)
+      const w = out.warnings?.length ? ` Parser notes: ${out.warnings.join(' · ')}` : ''
+      const detail = pop.detail ? ` ${pop.detail}` : ''
+      setImportSummaryText(`${pop.summary}${detail}${w}`)
+      onStatus?.(`${pop.summary}${w ? `.${w}` : ''}`)
       setImportOpen(false)
       setImportText('')
     } finally {
@@ -298,6 +339,7 @@ function XmlToolsBar({
     event.target.value = ''
     if (!file) return
     setImportError('')
+    setImportSummaryText('')
     setImportOpen(true)
     const lower = file.name.toLowerCase()
     const looksZip = lower.endsWith('.zip') || file.type === 'application/zip' || file.type === 'application/x-zip-compressed'
@@ -382,19 +424,17 @@ function XmlToolsBar({
 
   function downloadPreviewXml() {
     if (!canBuildXml) return
-    const baseId = profile.getExportId?.(pilotState) ?? 'metadata'
-    const id = String(baseId || 'metadata').replace(/[^\w.-]+/g, '_') || 'metadata'
-    const blob = new Blob([xml], { type: 'application/xml;charset=utf-8' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `${id}-preview.xml`
-    a.rel = 'noopener'
-    document.body.appendChild(a)
-    a.click()
-    a.remove()
-    URL.revokeObjectURL(url)
-    onStatus?.('Preview XML download started.')
+    downloadPilotPreviewXml(profile, pilotState, onStatus)
+  }
+
+  function downloadImportReport() {
+    downloadPilotImportReport({
+      profile,
+      pilotState,
+      validationEngine,
+      importContext: importSampleContext,
+      onStatus,
+    })
   }
 
   const bar = (
@@ -426,38 +466,16 @@ function XmlToolsBar({
         >
           Import XML / zip…
         </button>
-        <button
-          type="button"
-          className="button button-secondary button-tiny"
-          onClick={() => setImportOpen((o) => !o)}
-          aria-expanded={importOpen}
-          disabled={!canImport}
-          title={canImport ? 'Paste XML to merge into the form' : 'No import parser for this profile'}
-        >
-          {importOpen ? 'Hide import' : 'Paste import…'}
-        </button>
-        <button
-          type="button"
-          className="button button-secondary button-tiny"
-          onClick={() => setScannerOpen(true)}
-          disabled={!canScanner}
-          title={
-            canScanner
-              ? 'Lens Scanner: paste JSON, run heuristic, merge suggestions'
-              : 'Scanner suggestions require scannerPrefill and host/validation wiring'
-          }
-        >
-          Scanner suggestions…
-        </button>
-        <button
-          type="button"
-          className="button button-secondary button-tiny"
-          onClick={() => void copyPreviewToClipboard()}
-          disabled={!canBuildXml}
-          title={canBuildXml ? 'Copy the current XML preview to the clipboard' : 'No XML preview builder for this profile'}
-        >
-          Copy preview XML
-        </button>
+        {typeof onClearForm === 'function' ? (
+          <button
+            type="button"
+            className="button button-tiny pilot-xml-tools__clear-form"
+            onClick={() => onClearForm()}
+            title="Reset all fields to profile defaults (browser session updated)"
+          >
+            Clear form
+          </button>
+        ) : null}
         <button
           type="button"
           className="button button-secondary button-tiny"
@@ -465,66 +483,212 @@ function XmlToolsBar({
           disabled={!canBuildXml}
           title={canBuildXml ? 'Download the current XML preview' : 'No XML preview builder for this profile'}
         >
-          Download preview
+          {isMission ? '</> ISO XML' : 'Download preview'}
         </button>
         <button
           type="button"
           className="button button-secondary button-tiny"
-          onClick={() => onExportGeoJSON?.()}
-          disabled={!canGeoJson || !hostBridgeReady || exportBusy}
-          aria-busy={exportBusy}
+          onClick={downloadImportReport}
+          disabled={!importSampleContext?.rawXml?.trim()}
           title={
-            !canGeoJson
-              ? 'This profile does not support server GeoJSON export'
-              : !hostBridgeReady
-                ? 'Server GeoJSON needs a reachable /api/db (same origin as this app)'
-                : 'Generate GeoJSON on the server'
+            importSampleContext?.rawXml?.trim()
+              ? 'Download Markdown: unset fields, validation issues, upload vs preview XML diff'
+              : 'Import an XML sample first, then download this report'
           }
         >
-          {exportBusy ? 'Export…' : 'GeoJSON (server)'}
-        </button>
-        <button
-          type="button"
-          className="button button-secondary button-tiny"
-          onClick={() => onExportDCAT?.()}
-          disabled={!canDcat || !hostBridgeReady || exportBusy}
-          aria-busy={exportBusy}
-          title={
-            !canDcat
-              ? 'This profile does not support server DCAT export'
-              : !hostBridgeReady
-                ? 'Server DCAT needs a reachable /api/db (same origin as this app)'
-                : 'Generate DCAT JSON-LD on the server'
-          }
-        >
-          {exportBusy ? 'Export…' : 'DCAT JSON-LD (server)'}
+          Import report
         </button>
 
-        <button
-          type="button"
-          className={`button button-tiny pilot-xml-tools__comet-push${cometUuid ? '' : ' button-secondary'}`}
-          onClick={() => void onPushToComet?.()}
-          disabled={!canCometPush || !cometUuid || pushBusy}
-          aria-busy={pushBusy}
-          title={
-            !canCometPush
-              ? 'This profile does not support CoMET push'
-              : !cometUuid
-                ? 'Pull a CoMET record in the side CoMET tab or Manta Ray assistant first'
-                : pushBusy
-                  ? 'Pushing to CoMET…'
-                  : `Push refined ISO 19115-2 XML to CoMET record ${cometUuid.slice(0, 8)}…`
-          }
-        >
-          {pushBusy ? 'Pushing…' : cometUuid ? 'Push to CoMET' : 'Push to CoMET (no record)'}
-        </button>
+        <div className="pilot-xml-tools__overflow-wrap" ref={overflowMenuRef}>
+          <button
+            type="button"
+            className="button button-secondary button-tiny pilot-xml-tools__overflow-trigger"
+            onClick={() => setOverflowMenuOpen((o) => !o)}
+            aria-expanded={overflowMenuOpen}
+            aria-haspopup="menu"
+            aria-label="More XML tools"
+            title="More import, export, and CoMET actions"
+          >
+            ☰
+          </button>
+          {overflowMenuOpen ? (
+            <div className="pilot-xml-tools__overflow-menu" role="menu">
+              <button
+                type="button"
+                role="menuitem"
+                className="button button-secondary button-tiny pilot-xml-tools__overflow-item"
+                onClick={() => {
+                  setOverflowMenuOpen(false)
+                  setImportOpen((o) => !o)
+                }}
+                aria-expanded={importOpen}
+                disabled={!canImport}
+                title={canImport ? 'Paste XML to merge into the form' : 'No import parser for this profile'}
+              >
+                {importOpen ? 'Hide import' : 'Paste import…'}
+              </button>
+              <button
+                type="button"
+                role="menuitem"
+                className="button button-secondary button-tiny pilot-xml-tools__overflow-item"
+                onClick={() => {
+                  setOverflowMenuOpen(false)
+                  setScannerOpen(true)
+                }}
+                disabled={!canScanner}
+                title={
+                  canScanner
+                    ? 'Lens Scanner: paste JSON, run heuristic, merge suggestions'
+                    : 'Scanner suggestions require scannerPrefill and host/validation wiring'
+                }
+              >
+                Scanner suggestions…
+              </button>
+              {isMission ? (
+                <>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className="button button-secondary button-tiny pilot-xml-tools__overflow-item"
+                    disabled={gapBusy}
+                    onClick={() => {
+                      setOverflowMenuOpen(false)
+                      void runGapCheck()
+                    }}
+                    title="Run UxS-specific gap detection using CoMET detectGaps()"
+                  >
+                    {gapBusy ? '⟳ Checking…' : quietSurface ? '🔍 Gaps' : '🔍 UxS gap check'}
+                  </button>
+                  {typeof onCometPull === 'function' ? (
+                    <button
+                      type="button"
+                      role="menuitem"
+                      className="button button-secondary button-tiny pilot-xml-tools__overflow-item"
+                      onClick={() => {
+                        setOverflowMenuOpen(false)
+                        onCometPull()
+                      }}
+                    >
+                      ↓ CoMET pull
+                    </button>
+                  ) : null}
+                  {canCometPush ? (
+                    <button
+                      type="button"
+                      role="menuitem"
+                      className={`button button-tiny pilot-xml-tools__overflow-item pilot-xml-tools__comet-push${
+                        cometUuid ? '' : ' button-secondary'
+                      }`}
+                      onClick={() => {
+                        setOverflowMenuOpen(false)
+                        void onPushToComet?.()
+                      }}
+                      disabled={pushBusy}
+                      aria-busy={pushBusy}
+                      title={
+                        pushBusy
+                          ? 'Pushing to CoMET…'
+                          : cometUuid
+                            ? `Push draft ISO XML to CoMET record ${cometUuid.slice(0, 8)}…`
+                            : 'Push draft metadata to CoMET'
+                      }
+                    >
+                      {pushBusy ? '⟳ Pushing…' : '↑ Push DRAFT'}
+                    </button>
+                  ) : null}
+                </>
+              ) : null}
+              {!isMission && canCometPush ? (
+                <button
+                  type="button"
+                  role="menuitem"
+                  className={`button button-tiny pilot-xml-tools__overflow-item pilot-xml-tools__comet-push${
+                    cometUuid ? '' : ' button-secondary'
+                  }`}
+                  onClick={() => {
+                    setOverflowMenuOpen(false)
+                    void onPushToComet?.()
+                  }}
+                  disabled={!cometUuid || pushBusy}
+                  aria-busy={pushBusy}
+                  title={
+                    !cometUuid
+                      ? 'Pull a CoMET record in the side CoMET tab or Manta Ray assistant first'
+                      : pushBusy
+                        ? 'Pushing to CoMET…'
+                        : `Push refined ISO 19115-2 XML to CoMET record ${cometUuid.slice(0, 8)}…`
+                  }
+                >
+                  {pushBusy ? 'Pushing…' : cometUuid ? 'Push to CoMET' : 'Push to CoMET (no record)'}
+                </button>
+              ) : null}
+              <span className="pilot-xml-tools__overflow-heading" role="presentation">
+                Export:
+              </span>
+              <button
+                type="button"
+                role="menuitem"
+                className="button button-secondary button-tiny pilot-xml-tools__overflow-item"
+                onClick={() => {
+                  setOverflowMenuOpen(false)
+                  void copyPreviewToClipboard()
+                }}
+                disabled={!canBuildXml}
+                title={
+                  canBuildXml ? 'Copy the current XML preview to the clipboard' : 'No XML preview builder for this profile'
+                }
+              >
+                Copy preview XML
+              </button>
+              <button
+                type="button"
+                role="menuitem"
+                className="button button-secondary button-tiny pilot-xml-tools__overflow-item"
+                onClick={() => {
+                  setOverflowMenuOpen(false)
+                  onExportGeoJSON?.()
+                }}
+                disabled={!canGeoJson || !hostBridgeReady || exportBusy}
+                aria-busy={exportBusy}
+                title={
+                  !canGeoJson
+                    ? 'This profile does not support server GeoJSON export'
+                    : !hostBridgeReady
+                      ? 'Server GeoJSON needs a reachable /api/db (same origin as this app)'
+                      : 'Generate GeoJSON on the server'
+                }
+              >
+                {exportBusy ? 'Export…' : isMission ? 'GeoJSON' : 'GeoJSON (server)'}
+              </button>
+              <button
+                type="button"
+                role="menuitem"
+                className="button button-secondary button-tiny pilot-xml-tools__overflow-item"
+                onClick={() => {
+                  setOverflowMenuOpen(false)
+                  onExportDCAT?.()
+                }}
+                disabled={!canDcat || !hostBridgeReady || exportBusy}
+                aria-busy={exportBusy}
+                title={
+                  !canDcat
+                    ? 'This profile does not support server DCAT export'
+                    : !hostBridgeReady
+                      ? 'Server DCAT needs a reachable /api/db (same origin as this app)'
+                      : 'Generate DCAT JSON-LD on the server'
+                }
+              >
+                {exportBusy ? 'Export…' : isMission ? 'DCAT' : 'DCAT JSON-LD (server)'}
+              </button>
+            </div>
+          ) : null}
+        </div>
       </div>
 
-      {(canGeoJson || canDcat) && !hostBridgeReady ? (
-        <p className="pilot-xml-tools__hint">
-          Server GeoJSON / DCAT need the host bridge: deploy with a same-origin <code>/api/db</code> (e.g. Netlify), or run{' '}
-          <code>netlify dev</code> locally.
-        </p>
+      {isMission && showGaps ? (
+        <div className="pilot-xml-tools__gaps">
+          <GapPanel gaps={gaps} onClose={() => setShowGaps(false)} />
+        </div>
       ) : null}
 
       {canImport && importOpen ? (
@@ -587,6 +751,11 @@ function XmlToolsBar({
               Apply to form
             </button>
           </div>
+          {importSummaryText ? (
+            <p className="xml-import-summary hint" role="status">
+              {importSummaryText}
+            </p>
+          ) : null}
           {importError ? (
             <p className="field-error" role="alert">
               {importError}
@@ -596,6 +765,28 @@ function XmlToolsBar({
       ) : null}
     </div>
   )
+
+  if (inline) {
+    return (
+      <>
+        {bar}
+        {canScanner
+          ? createPortal(
+              <ScannerSuggestionsDialog
+                open={scannerOpen}
+                onClose={() => setScannerOpen(false)}
+                profile={profile}
+                pilotState={pilotState}
+                hostBridge={hostBridge}
+                validationEngine={validationEngine}
+                onApply={onScannerApply}
+              />,
+              document.body,
+            )
+          : null}
+      </>
+    )
+  }
 
   if (!mountEl) return null
   return (

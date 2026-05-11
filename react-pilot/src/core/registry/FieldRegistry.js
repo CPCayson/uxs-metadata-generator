@@ -193,7 +193,7 @@ export function scrollToField(fieldPath) {
  */
 function focusAndScroll(el) {
   try {
-    el.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+    el.scrollIntoView({ block: 'center', behavior: 'smooth' })
     if (typeof el.focus === 'function') {
       try { el.focus({ preventScroll: true }) } catch { el.focus() }
     }

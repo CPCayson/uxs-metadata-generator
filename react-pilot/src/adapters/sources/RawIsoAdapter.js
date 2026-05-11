@@ -1,5 +1,5 @@
 /**
- * Source adapter for raw ISO 19115-2 / 19139 XML strings (mission pilot shape).
+ * Source adapter for raw ISO 19115-2 / 19115-3 / 19139 XML strings (mission pilot shape).
  *
  * Wraps {@link importPilotPartialStateFromXml} and attaches {@link SourceProvenance}
  * on successful parses.  Intended as the single entry point for “paste / file ISO”
@@ -14,7 +14,7 @@ import { buildSourceProvenance } from '../../lib/sourceProvenance.js'
 
 export const RAW_ISO_ADAPTER_ID = 'rawIso'
 
-export const RAW_ISO_ADAPTER_LABEL = 'Raw ISO 19115-2 XML'
+export const RAW_ISO_ADAPTER_LABEL = 'Raw ISO 19115-2 / 19115-3 XML'
 
 /**
  * Heuristic: first bytes look like an ISO 19139 / 19115-2 metadata document.

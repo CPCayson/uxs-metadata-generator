@@ -13,7 +13,7 @@
  * Line numbers are 1-based to match gutter display conventions.
  */
 
-const FIELD_ELEMENT_HINT = {
+export const FIELD_ELEMENT_HINT = {
   'mission.title': /<gmd:title>\s*<gco:CharacterString>/,
   'mission.abstract': /<gmd:abstract>/,
   'mission.purpose': /<gmd:purpose>/,

@@ -38,6 +38,7 @@ export default function StepDistribution({
         <label htmlFor="metadataStandard">Metadata standard name</label>
         <input
           id="metadataStandard"
+          data-pilot-field="distribution.metadataStandard"
           className="form-control"
           value={distribution.metadataStandard || ''}
           onChange={(e) => onDistPatch({ metadataStandard: e.target.value })}
@@ -45,6 +46,7 @@ export default function StepDistribution({
         <label htmlFor="metadataVersion">Metadata standard version</label>
         <input
           id="metadataVersion"
+          data-pilot-field="distribution.metadataVersion"
           className="form-control"
           value={distribution.metadataVersion || ''}
           onChange={(e) => onDistPatch({ metadataVersion: e.target.value })}
@@ -52,6 +54,7 @@ export default function StepDistribution({
         <label htmlFor="metadataMaintenanceFrequency">Maintenance frequency</label>
         <select
           id="metadataMaintenanceFrequency"
+          data-pilot-field="distribution.metadataMaintenanceFrequency"
           className="form-control form-select"
           value={distribution.metadataMaintenanceFrequency || 'asNeeded'}
           onChange={(e) => onDistPatch({ metadataMaintenanceFrequency: e.target.value })}
@@ -73,6 +76,7 @@ export default function StepDistribution({
         <label htmlFor="format">Distribution format (short)</label>
         <input
           id="format"
+          data-pilot-field="distribution.format"
           className={`form-control${invalid('distribution.format') ? ' form-control--invalid' : ''}`}
           value={distribution.format || ''}
           onChange={(e) => onDistPatch({ format: e.target.value })}
@@ -84,6 +88,7 @@ export default function StepDistribution({
         <label htmlFor="distributionFormatName">Format name (MD_Format)</label>
         <input
           id="distributionFormatName"
+          data-pilot-field="distribution.distributionFormatName"
           className="form-control"
           value={distribution.distributionFormatName || ''}
           onChange={(e) => onDistPatch({ distributionFormatName: e.target.value })}
@@ -91,6 +96,7 @@ export default function StepDistribution({
         <label htmlFor="distributionFileFormat">File format detail</label>
         <input
           id="distributionFileFormat"
+          data-pilot-field="distribution.distributionFileFormat"
           className="form-control"
           value={distribution.distributionFileFormat || ''}
           onChange={(e) => onDistPatch({ distributionFileFormat: e.target.value })}
@@ -99,6 +105,7 @@ export default function StepDistribution({
         <label htmlFor="license">Use / license (summary)</label>
         <input
           id="license"
+          data-pilot-field="distribution.license"
           className={`form-control${invalid('distribution.license') ? ' form-control--invalid' : ''}`}
           value={distribution.license || ''}
           onChange={(e) => onDistPatch({ license: e.target.value })}
@@ -110,6 +117,7 @@ export default function StepDistribution({
         <label htmlFor="metadataLandingUrl">Metadata landing URL</label>
         <input
           id="metadataLandingUrl"
+          data-pilot-field="distribution.metadataLandingUrl"
           className={`form-control${invalid('distribution.metadataLandingUrl') ? ' form-control--invalid' : ''}`}
           value={distribution.metadataLandingUrl || ''}
           onChange={(e) => onDistPatch({ metadataLandingUrl: e.target.value })}
@@ -122,6 +130,7 @@ export default function StepDistribution({
         <label htmlFor="metadataLandingLinkName">Metadata record link name</label>
         <input
           id="metadataLandingLinkName"
+          data-pilot-field="distribution.metadataLandingLinkName"
           className="form-control"
           value={distribution.metadataLandingLinkName || ''}
           onChange={(e) => onDistPatch({ metadataLandingLinkName: e.target.value })}
@@ -130,6 +139,7 @@ export default function StepDistribution({
         <label htmlFor="metadataLandingDescription">Landing link description</label>
         <input
           id="metadataLandingDescription"
+          data-pilot-field="distribution.metadataLandingDescription"
           className="form-control"
           value={distribution.metadataLandingDescription || ''}
           onChange={(e) => onDistPatch({ metadataLandingDescription: e.target.value })}
@@ -138,6 +148,7 @@ export default function StepDistribution({
         <label htmlFor="landingUrl">Dataset landing URL</label>
         <input
           id="landingUrl"
+          data-pilot-field="distribution.landingUrl"
           className={`form-control${invalid('distribution.landingUrl') ? ' form-control--invalid' : ''}`}
           value={distribution.landingUrl || ''}
           onChange={(e) => onDistPatch({ landingUrl: e.target.value })}
@@ -148,6 +159,7 @@ export default function StepDistribution({
         <label htmlFor="downloadUrl">Download URL</label>
         <input
           id="downloadUrl"
+          data-pilot-field="distribution.downloadUrl"
           className={`form-control${invalid('distribution.downloadUrl') ? ' form-control--invalid' : ''}`}
           value={distribution.downloadUrl || ''}
           onChange={(e) => onDistPatch({ downloadUrl: e.target.value })}
@@ -160,6 +172,7 @@ export default function StepDistribution({
             <label htmlFor="downloadProtocol">Download protocol</label>
             <input
               id="downloadProtocol"
+              data-pilot-field="distribution.downloadProtocol"
               className="form-control"
               value={distribution.downloadProtocol || ''}
               onChange={(e) => onDistPatch({ downloadProtocol: e.target.value })}
@@ -169,6 +182,7 @@ export default function StepDistribution({
             <label htmlFor="downloadLinkName">Download link name</label>
             <input
               id="downloadLinkName"
+              data-pilot-field="distribution.downloadLinkName"
               className="form-control"
               value={distribution.downloadLinkName || ''}
               onChange={(e) => onDistPatch({ downloadLinkName: e.target.value })}
@@ -178,6 +192,7 @@ export default function StepDistribution({
         <label htmlFor="downloadLinkDescription">Download link description</label>
         <textarea
           id="downloadLinkDescription"
+          data-pilot-field="distribution.downloadLinkDescription"
           rows={2}
           className="form-control"
           value={distribution.downloadLinkDescription || ''}
@@ -187,6 +202,7 @@ export default function StepDistribution({
         <label htmlFor="distributionFeesText">Distribution fees</label>
         <input
           id="distributionFeesText"
+          data-pilot-field="distribution.distributionFeesText"
           className="form-control"
           value={distribution.distributionFeesText || ''}
           onChange={(e) => onDistPatch({ distributionFeesText: e.target.value })}
@@ -194,6 +210,7 @@ export default function StepDistribution({
         <label htmlFor="distributionOrderingInstructions">Ordering instructions</label>
         <textarea
           id="distributionOrderingInstructions"
+          data-pilot-field="distribution.distributionOrderingInstructions"
           rows={2}
           className="form-control"
           value={distribution.distributionOrderingInstructions || ''}
@@ -204,6 +221,7 @@ export default function StepDistribution({
         <label htmlFor="distributorIndividualName">Distributor individual name</label>
         <input
           id="distributorIndividualName"
+          data-pilot-field="distribution.distributorIndividualName"
           className="form-control"
           value={distribution.distributorIndividualName || ''}
           onChange={(e) => onDistPatch({ distributorIndividualName: e.target.value })}
@@ -211,6 +229,7 @@ export default function StepDistribution({
         <label htmlFor="distributorOrganisationName">Distributor organisation</label>
         <input
           id="distributorOrganisationName"
+          data-pilot-field="distribution.distributorOrganisationName"
           className="form-control"
           value={distribution.distributorOrganisationName || ''}
           onChange={(e) => onDistPatch({ distributorOrganisationName: e.target.value })}
@@ -218,6 +237,7 @@ export default function StepDistribution({
         <label htmlFor="distributorEmail">Distributor email</label>
         <input
           id="distributorEmail"
+          data-pilot-field="distribution.distributorEmail"
           type="email"
           className="form-control"
           value={distribution.distributorEmail || ''}
@@ -226,6 +246,7 @@ export default function StepDistribution({
         <label htmlFor="distributorContactUrl">Distributor website URL</label>
         <input
           id="distributorContactUrl"
+          data-pilot-field="distribution.distributorContactUrl"
           type="url"
           className={`form-control${invalid('distribution.distributorContactUrl') ? ' form-control--invalid' : ''}`}
           value={distribution.distributorContactUrl || ''}
@@ -271,6 +292,7 @@ export default function StepDistribution({
         <label htmlFor="nceiMetadataContactHref">NCEI metadata contact href (xlink)</label>
         <input
           id="nceiMetadataContactHref"
+          data-pilot-field="distribution.nceiMetadataContactHref"
           className={`form-control${invalid('distribution.nceiMetadataContactHref') ? ' form-control--invalid' : ''}`}
           value={distribution.nceiMetadataContactHref || ''}
           onChange={(e) => onDistPatch({ nceiMetadataContactHref: e.target.value })}
@@ -283,6 +305,7 @@ export default function StepDistribution({
         <label htmlFor="nceiMetadataContactTitle">NCEI metadata contact title</label>
         <input
           id="nceiMetadataContactTitle"
+          data-pilot-field="distribution.nceiMetadataContactTitle"
           className="form-control"
           value={distribution.nceiMetadataContactTitle || ''}
           onChange={(e) => onDistPatch({ nceiMetadataContactTitle: e.target.value })}
@@ -290,6 +313,7 @@ export default function StepDistribution({
         <label htmlFor="nceiDistributorContactHref">NCEI distributor contact href (xlink)</label>
         <input
           id="nceiDistributorContactHref"
+          data-pilot-field="distribution.nceiDistributorContactHref"
           className={`form-control${invalid('distribution.nceiDistributorContactHref') ? ' form-control--invalid' : ''}`}
           value={distribution.nceiDistributorContactHref || ''}
           onChange={(e) => onDistPatch({ nceiDistributorContactHref: e.target.value })}
@@ -302,6 +326,7 @@ export default function StepDistribution({
         <label htmlFor="nceiDistributorContactTitle">NCEI distributor contact title</label>
         <input
           id="nceiDistributorContactTitle"
+          data-pilot-field="distribution.nceiDistributorContactTitle"
           className="form-control"
           value={distribution.nceiDistributorContactTitle || ''}
           onChange={(e) => onDistPatch({ nceiDistributorContactTitle: e.target.value })}
@@ -312,11 +337,11 @@ export default function StepDistribution({
         <h3 className="panel-title">Export routing</h3>
         <p className="card-intro">
           Mirrors classic <code>#outputForm</code> <code>outputLocation</code>, AWS placeholders, and <code>finalNotes</code>.
-          AWS fields are editable here for future S3 workflows; the bundled classic HTML may still show them as read-only.
         </p>
         <label htmlFor="outputLocation">Output location</label>
         <select
           id="outputLocation"
+          data-pilot-field="distribution.outputLocation"
           className="form-control form-select"
           value={distribution.outputLocation || 'download'}
           onChange={(e) => onDistPatch({ outputLocation: e.target.value })}
@@ -329,6 +354,7 @@ export default function StepDistribution({
             <label htmlFor="awsBucket">AWS S3 bucket (optional / future)</label>
             <input
               id="awsBucket"
+              data-pilot-field="distribution.awsBucket"
               className="form-control"
               value={distribution.awsBucket || ''}
               onChange={(e) => onDistPatch({ awsBucket: e.target.value })}
@@ -339,6 +365,7 @@ export default function StepDistribution({
             <label htmlFor="awsPrefix">AWS S3 prefix (optional / future)</label>
             <input
               id="awsPrefix"
+              data-pilot-field="distribution.awsPrefix"
               className="form-control"
               value={distribution.awsPrefix || ''}
               onChange={(e) => onDistPatch({ awsPrefix: e.target.value })}
@@ -349,6 +376,7 @@ export default function StepDistribution({
         <label htmlFor="finalNotes">Final notes (workflow)</label>
         <textarea
           id="finalNotes"
+          data-pilot-field="distribution.finalNotes"
           rows={3}
           className="form-control"
           value={distribution.finalNotes || ''}
@@ -359,13 +387,13 @@ export default function StepDistribution({
       <section className="panel">
         <h3 className="panel-title">Save as sheet template</h3>
         <p className="card-intro">
-          Upserts a row in the spreadsheet <strong>Templates</strong> sheet via <code>saveTemplate</code>, same payload
-          shape as the Mission <strong>Save full draft</strong> action (full <code>pilot</code> JSON). Load it later from
-          the Mission step template picker. Do not use the reserved draft name <code>react-pilot-mission-draft</code> here.
+          Upserts a row in the spreadsheet <strong>Templates</strong> sheet via <code>saveTemplate</code>. Load it later from
+          the Mission step template picker.
         </p>
         <label htmlFor="sheetTemplateName">Template name</label>
         <input
           id="sheetTemplateName"
+          data-pilot-field="distribution.templateName"
           className="form-control"
           value={distribution.templateName || ''}
           onChange={(e) => onDistPatch({ templateName: e.target.value })}
@@ -374,6 +402,7 @@ export default function StepDistribution({
         <label htmlFor="sheetTemplateCategory">Category (optional)</label>
         <input
           id="sheetTemplateCategory"
+          data-pilot-field="distribution.templateCategory"
           className="form-control"
           value={distribution.templateCategory || ''}
           onChange={(e) => onDistPatch({ templateCategory: e.target.value })}
@@ -390,7 +419,7 @@ export default function StepDistribution({
           </button>
         </div>
         {!hostBridgeReady ? (
-          <p className="hint">Saving templates needs a reachable <code>/api/db</code> on the same origin as this app.</p>
+          <p className="hint">Saving templates needs a reachable <code>/api/db</code> on the same origin.</p>
         ) : null}
       </section>
 
@@ -399,6 +428,7 @@ export default function StepDistribution({
         <label htmlFor="parentProject">Parent project</label>
         <input
           id="parentProject"
+          data-pilot-field="distribution.parentProject"
           className={`form-control${invalid('distribution.parentProject') ? ' form-control--invalid' : ''}`}
           value={distribution.parentProject || ''}
           onChange={(e) => onDistPatch({ parentProject: e.target.value })}
@@ -409,6 +439,7 @@ export default function StepDistribution({
         <label htmlFor="publication">Publication reference</label>
         <textarea
           id="publication"
+          data-pilot-field="distribution.publication"
           rows={2}
           className={`form-control${invalid('distribution.publication') ? ' form-control--invalid' : ''}`}
           value={distribution.publication || ''}

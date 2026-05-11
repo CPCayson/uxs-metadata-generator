@@ -1,0 +1,32 @@
+{
+  "generatedAt": "2026-05-06T06:02:15.143Z",
+  "root": "/Users/connorcayson/Downloads/uSX/react-pilot",
+  "overallOk": true,
+  "steps": [
+    {
+      "label": "swarm:validate (rule CSV)",
+      "ok": true,
+      "exitCode": 0,
+      "stdout": "Rule CSV validation passed."
+    },
+    {
+      "label": "swarm:compile",
+      "ok": true,
+      "exitCode": 0,
+      "stdout": "Compiled mission: 50 field(s), 0 unresolved tie(s).\nCompiled collection: 23 field(s), 1 unresolved tie(s).\nCompiled granule: 17 field(s), 0 unresolved tie(s)."
+    },
+    {
+      "label": "swarm:qa (rule quality)",
+      "ok": true,
+      "exitCode": 0,
+      "stderr": "Quality warnings (1):\n- collection.json has 1 unresolved tie(s)",
+      "stdout": "Rule quality checks passed."
+    },
+    {
+      "label": "audit-mission-import (sample XML)",
+      "ok": true,
+      "exitCode": 0,
+      "stdout": "Wrote /Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/_import-audit-report.json\nCatalog: 0 errors, 11 warnings | checklist rows: 0"
+    }
+  ]
+}

@@ -2,6 +2,8 @@
 
 This board operationalizes the metadata workbench swarm into parallel lanes with concrete outputs.
 
+**Mission profile (UxS) — step matrix, lane mapping, demo script:** [MISSION_SWARM_WORKBENCH.md](./MISSION_SWARM_WORKBENCH.md)
+
 ## SWARM-A — Schema Guardrails
 
 - [ ] Add row schemas in `schemas/`:

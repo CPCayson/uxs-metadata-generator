@@ -1,16 +1,16 @@
 {
   "manifest_version": 3,
-  "name": "Manta Pilot Bridge",
-  "version": "1.0.0",
-  "description": "Capture page text, XML, and local files into the Manta metadata pilot.",
+  "name": "Manta Lens Bridge",
+  "version": "1.0.1",
+  "description": "Operational bridge: capture web surfaces into the Manta pilot, or open the pilot in a tab or window.",
   "action": {
-    "default_title": "Manta Pilot Bridge",
+    "default_title": "Manta Lens Bridge",
     "default_popup": "popup.html"
   },
   "background": {
     "service_worker": "service-worker.js"
   },
-  "permissions": ["storage", "activeTab", "scripting", "tabs"],
+  "permissions": ["storage", "activeTab", "scripting", "tabs", "windows"],
   "host_permissions": ["http://*/*", "https://*/*"],
   "content_scripts": [
     {

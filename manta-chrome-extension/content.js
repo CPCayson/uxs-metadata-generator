@@ -126,6 +126,11 @@ function sync() {
     }
     if (window.self !== window.top) return
     if (!document.body) return
+    // Pilot already has bottom Manta Tools FAB — don’t stack the capture “M” on top (same z-index fights).
+    if (isPilotPage(base)) {
+      removeFab()
+      return
+    }
     if (document.getElementById(ID)) {
       const b = document.querySelector(`#${ID} .manta-ext-fab`)
       if (b) b.title = `Capture page into Manta — ${base}`

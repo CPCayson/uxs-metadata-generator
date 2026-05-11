@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gmi:MI_Metadata xmlns:gmd="http://www.isotc211.org/2005/gmd"
+                 xmlns:gco="http://www.isotc211.org/2005/gco"
+                 xmlns:gmi="http://www.isotc211.org/2005/gmi"
+                 xmlns:gmx="http://www.isotc211.org/2005/gmx"
+                 xmlns:gml="http://www.opengis.net/gml/3.2"
+                 xmlns:xlink="http://www.w3.org/1999/xlink">
+  <!-- gmd:parentIdentifier is intentionally omitted here.
+       Only BEDI granule profiles (hierarchyLevel=dataset with a parent collection)
+       should emit parentIdentifier.  Mission and collection records are
+       standalone; adding parentIdentifier to them would create incorrect
+       collection-granule relationships in CoMET and OneStop. -->
+  <gmd:fileIdentifier>
+    <gco:CharacterString>gov.noaa.ncei.uxs:PS2418L0_ER_UUV01_Norbit_MB_20240505T1510Z_MD</gco:CharacterString>
+  </gmd:fileIdentifier>
+  <!-- gmd:dateStamp: omitted — leave blank in form to use server time at generate -->
+  <gmd:hierarchyLevel>
+    <gmd:MD_ScopeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/MD_ScopeCode.xml#MD_ScopeCode" codeListValue="dataset">dataset</gmd:MD_ScopeCode>
+  </gmd:hierarchyLevel>
+  <gmd:metadataStandardName>
+    <gco:CharacterString>ISO 19115-2 Imagery and Gridded Data</gco:CharacterString>
+  </gmd:metadataStandardName>
+  <gmd:metadataStandardVersion>
+    <gco:CharacterString>ISO 19115-2:2009(E)</gco:CharacterString>
+  </gmd:metadataStandardVersion>
+  <gmd:referenceSystemInfo>
+    <gmd:MD_ReferenceSystem>
+      <gmd:referenceSystemIdentifier>
+        <gmd:RS_Identifier>
+          <gmd:code><gco:CharacterString>EPSG:4326</gco:CharacterString></gmd:code>
+        </gmd:RS_Identifier>
+      </gmd:referenceSystemIdentifier>
+    </gmd:MD_ReferenceSystem>
+  </gmd:referenceSystemInfo>
+  <gmd:identificationInfo>
+    <gmd:MD_DataIdentification>
+      <gmd:citation>
+        <gmd:CI_Citation>
+          <gmd:title><gco:CharacterString>Point Sur 2024 Leg 18 Eagle Ray MultiBeam Sonar Data UUV Dive 01</gco:CharacterString></gmd:title>
+          
+          <gmd:date><gmd:CI_Date><gmd:date><gco:DateTime>2024-05-05T15:10</gco:DateTime></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/CI_DateTypeCode.xml#CI_DateTypeCode" codeListValue="creation">creation</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>
+          <gmd:date><gmd:CI_Date><gmd:date><gco:DateTime>2024-05-07T00:00</gco:DateTime></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeListValue="publication">publication</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>
+          <gmd:date><gmd:CI_Date><gmd:date><gco:DateTime>2024-05-06T12:00</gco:DateTime></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeListValue="completion">completion</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>
+          
+          <gmd:identifier><gmd:MD_Identifier><gmd:code><gco:CharacterString>10.7289/V5ABC123</gco:CharacterString></gmd:code></gmd:MD_Identifier></gmd:identifier>
+          <gmd:identifier><gmd:MD_Identifier><gmd:code><gco:CharacterString>0123456</gco:CharacterString></gmd:code></gmd:MD_Identifier></gmd:identifier>
+          
+        </gmd:CI_Citation>
+      </gmd:citation>
+      <gmd:abstract><gco:CharacterString>The MDBC Mapping, Groundtruthing and Modeling team along with USM will conduct UUV acquisition...</gco:CharacterString></gmd:abstract>
+      <gmd:purpose><gco:CharacterString>Seafloor mapping</gco:CharacterString></gmd:purpose>
+      
+      <gmd:extent>
+        <gmd:EX_Extent>
+          <gmd:geographicElement>
+            <gmd:EX_GeographicBoundingBox>
+              <gmd:westBoundLongitude><gco:Decimal>-180</gco:Decimal></gmd:westBoundLongitude>
+              <gmd:eastBoundLongitude><gco:Decimal>180</gco:Decimal></gmd:eastBoundLongitude>
+              <gmd:southBoundLatitude><gco:Decimal>-90</gco:Decimal></gmd:southBoundLatitude>
+              <gmd:northBoundLatitude><gco:Decimal>90</gco:Decimal></gmd:northBoundLatitude>
+            </gmd:EX_GeographicBoundingBox>
+          </gmd:geographicElement>
+          <gmd:temporalElement>
+            <gmd:EX_TemporalExtent>
+              <gmd:extent>
+                <gml:TimePeriod gml:id="tp1">
+                  <gml:beginPosition>2024-05-05T15:10</gml:beginPosition>
+                  <gml:endPosition>2024-05-06T12:00</gml:endPosition>
+                </gml:TimePeriod>
+              </gmd:extent>
+            </gmd:EX_TemporalExtent>
+          </gmd:temporalElement>
+        </gmd:EX_Extent>
+      </gmd:extent>
+      <gmd:pointOfContact>
+        <gmd:CI_ResponsibleParty>
+          <gmd:individualName><gco:CharacterString>Jane Researcher</gco:CharacterString></gmd:individualName>
+          <gmd:organisationName><gco:CharacterString>NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT</gco:CharacterString></gmd:organisationName>
+          <gmd:contactInfo>
+            <gmd:CI_Contact>
+              <gmd:address>
+                <gmd:CI_Address>
+                  <gmd:electronicMailAddress><gco:CharacterString>jane.researcher@noaa.gov</gco:CharacterString></gmd:electronicMailAddress>
+                </gmd:CI_Address>
+              </gmd:address>
+              
+            </gmd:CI_Contact>
+          </gmd:contactInfo>
+    <gmd:party>
+      <gmd:CI_Organisation>
+        <gmd:name><gco:CharacterString>NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT</gco:CharacterString></gmd:name>
+        <gmd:identifier>
+          <gmd:MD_Identifier>
+            <gmd:code><gco:CharacterString>https://ror.org/033thwp43</gco:CharacterString></gmd:code>
+          </gmd:MD_Identifier>
+        </gmd:identifier>
+      </gmd:CI_Organisation>
+    </gmd:party>
+        </gmd:CI_ResponsibleParty>
+      </gmd:pointOfContact>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gmx:Anchor xlink:href="https://gcmd.earthdata.nasa.gov/kms/concepts/concept/2ef69df0-bf69-4d5e-b7ff-0cece46ed206" xlink:actuate="onRequest">Oceans</gmx:Anchor>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD sciencekeywords</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gmx:Anchor xlink:href="https://gcmd.earthdata.nasa.gov/kms/concepts/concept/2f31b1f2-335f-4248-8165-215755953857" xlink:actuate="onRequest">DOC/NOAA/NESDIS/NCEI</gmx:Anchor>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD datacenters</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gmx:Anchor xlink:href="https://gcmd.earthdata.nasa.gov/kms/concepts/concept/3a1196e4-c0d0-4c8d-9a7d-0f5e0c5e5d01" xlink:actuate="onRequest">UAV</gmx:Anchor>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD platforms</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gmx:Anchor xlink:href="https://gcmd.earthdata.nasa.gov/kms/concepts/concept/4b22a7f5-d1e1-5d9e-ab8e-1a6f1d6f6e12" xlink:actuate="onRequest">Multibeam Swath Bathymetry System</gmx:Anchor>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD instruments</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gmx:Anchor xlink:href="https://gcmd.earthdata.nasa.gov/kms/concepts/concept/5c33b8a6-e2f2-6e0f-bc9f-2b7a2e7a7f23" xlink:actuate="onRequest">Gulf of Mexico</gmx:Anchor>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD locations</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gmx:Anchor xlink:href="https://gcmd.earthdata.nasa.gov/kms/concepts/concept/6d44c9b7-f3a3-7f1a-cdaf-3c8b3f8b8a34" xlink:actuate="onRequest">MDBC</gmx:Anchor>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD projects</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gmx:Anchor xlink:href="https://gcmd.earthdata.nasa.gov/kms/concepts/concept/7e55d0c8-a4b4-8a2b-dfc0-4d9c4a0c9b45" xlink:actuate="onRequest">NOAA</gmx:Anchor>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+
+      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:type>
+            <gmd:MD_KeywordTypeCode>platform</gmd:MD_KeywordTypeCode>
+          </gmd:type>
+          <gmd:thesaurusName>
+            <gmd:CI_Citation>
+              <gmd:title><gco:CharacterString>Platform instance</gco:CharacterString></gmd:title>
+            </gmd:CI_Citation>
+          </gmd:thesaurusName>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:status>
+        <gmd:MD_ProgressCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ProgressCode" codeListValue="completed">completed</gmd:MD_ProgressCode>
+      </gmd:status>
+      <gmd:language>
+        <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/php/code_list.php" codeListValue="eng">eng</gmd:LanguageCode>
+      </gmd:language>
+      <gmd:characterSet>
+        <gmd:MD_CharacterSetCode codeListValue="utf8">utf8</gmd:MD_CharacterSetCode>
+      </gmd:characterSet>
+      <gmd:resourceMaintenance>
+        <gmd:MD_MaintenanceInformation>
+          <gmd:maintenanceAndUpdateFrequency>
+            <gmd:MD_MaintenanceFrequencyCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/MD_MaintenanceFrequencyCode.xml#MD_MaintenanceFrequencyCode" codeListValue="asNeeded">asNeeded</gmd:MD_MaintenanceFrequencyCode>
+          </gmd:maintenanceAndUpdateFrequency>
+        </gmd:MD_MaintenanceInformation>
+      </gmd:resourceMaintenance>
+      <gmd:resourceConstraints>
+        <gmd:MD_LegalConstraints>
+          <gmd:useLimitation><gco:CharacterString>Cite as: NOAA UxS pilot QA dataset (placeholder).</gco:CharacterString></gmd:useLimitation>
+        </gmd:MD_LegalConstraints>
+      </gmd:resourceConstraints>
+      <gmd:resourceConstraints xlink:href="https://data.noaa.gov/docucomp/551ecbfb-70c4-43a9-b361-3bf9fea67a75" xlink:title="Data License Statement" />
+      <gmd:aggregationInfo>
+        <gmd:MD_AggregateInformation>
+          <gmd:aggregateDataSetName>
+            <gmd:CI_Citation>
+              <gmd:title><gco:CharacterString>MDBC Restoration</gco:CharacterString></gmd:title>
+              
+              <gmd:identifier><gmd:MD_Identifier><gmd:code><gco:CharacterString>MDBC-PRJ</gco:CharacterString></gmd:code></gmd:MD_Identifier></gmd:identifier>
+            </gmd:CI_Citation>
+          </gmd:aggregateDataSetName>
+          <gmd:associationType>
+            <gmd:DS_AssociationTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/DS_AssociationTypeCode.xml#DS_AssociationTypeCode" codeListValue="largerWorkCitation">largerWorkCitation</gmd:DS_AssociationTypeCode>
+          </gmd:associationType>
+          <gmd:initiativeType>
+            <gmd:DS_InitiativeTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/DS_InitiativeTypeCode.xml#DS_InitiativeTypeCode" codeListValue="project">project</gmd:DS_InitiativeTypeCode>
+          </gmd:initiativeType>
+        </gmd:MD_AggregateInformation>
+      </gmd:aggregationInfo>
+    </gmd:MD_DataIdentification>
+  </gmd:identificationInfo>
+  <gmi:acquisitionInformation>
+    <gmi:MI_AcquisitionInformation>
+      <gmi:platform>
+        <gmi:MI_Platform id="platform">
+          <gmd:identifier>
+            <gmd:MD_Identifier>
+              <gmd:code><gco:CharacterString>UUV-01</gco:CharacterString></gmd:code>
+            </gmd:MD_Identifier>
+          </gmd:identifier>
+          <gmd:description>
+            <gco:CharacterString>Norbit multibeam mapping payload.
+Model: WBMS</gco:CharacterString>
+          </gmd:description>
+          <gmi:type>
+            <gco:CharacterString>UAV</gco:CharacterString>
+          </gmi:type>
+          <gmd:pointOfContact>
+            <gmd:CI_ResponsibleParty>
+              <gmd:organisationName><gco:CharacterString>Norbit</gco:CharacterString></gmd:organisationName>
+              <gmd:role>
+                <gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/CI_RoleCode.xml#CI_RoleCode" codeListValue="pointOfContact">pointOfContact</gmd:CI_RoleCode>
+              </gmd:role>
+            </gmd:CI_ResponsibleParty>
+          </gmd:pointOfContact>
+          
+          <gmi:instrument>
+            <gmi:MI_Instrument>
+              <gmd:identifier>
+                <gmd:MD_Identifier>
+                  <gmd:code><gco:CharacterString>MBES-Norbit</gco:CharacterString></gmd:code>
+                </gmd:MD_Identifier>
+              </gmd:identifier>
+              <gmi:type><gco:CharacterString>Earth Remote Sensing Instruments</gco:CharacterString></gmi:type>
+              <gmd:description><gco:CharacterString>bathymetry</gco:CharacterString></gmd:description>
+            </gmi:MI_Instrument>
+          </gmi:instrument>
+        </gmi:MI_Platform>
+      </gmi:platform>
+      <gmi:instrument>
+        <gmi:MI_Instrument id="instrument_1" xlink:href="#platform">
+          <gmd:identifier>
+            <gmd:MD_Identifier>
+              <gmd:code><gco:CharacterString>MBES-Norbit</gco:CharacterString></gmd:code>
+            </gmd:MD_Identifier>
+          </gmd:identifier>
+          <gmi:type><gco:CharacterString>Earth Remote Sensing Instruments</gco:CharacterString></gmi:type>
+          <gmd:description><gco:CharacterString>bathymetry</gco:CharacterString></gmd:description>
+        </gmi:MI_Instrument>
+      </gmi:instrument>
+    </gmi:MI_AcquisitionInformation>
+  </gmi:acquisitionInformation>
+
+  <gmd:contentInfo>
+  <gmi:MI_CoverageDescription>
+    <gmd:identifier>
+      <gmd:MD_Identifier>
+        <gmd:code><gco:CharacterString>MBES-Norbit</gco:CharacterString></gmd:code>
+      </gmd:MD_Identifier>
+    </gmd:identifier>
+    <gmd:attributeDescription><gco:CharacterString>Earth Remote Sensing Instruments</gco:CharacterString></gmd:attributeDescription>
+    <gmd:name><gco:CharacterString>bathymetry</gco:CharacterString></gmd:name>
+    
+  </gmi:MI_CoverageDescription>
+  </gmd:contentInfo>
+  <gmd:distributionInfo>
+    <gmd:MD_Distribution>
+      <gmd:distributor>
+        <gmd:MD_Distributor>
+          <gmd:distributorContact xlink:title="NCEI (distributor)"/>
+        </gmd:MD_Distributor>
+      </gmd:distributor>
+      <gmd:distributionFormat>
+        <gmd:MD_Format>
+          <gmd:name><gco:CharacterString>NetCDF</gco:CharacterString></gmd:name>
+          
+        </gmd:MD_Format>
+      </gmd:distributionFormat>
+      
+      <gmd:transferOptions>
+        <gmd:MD_DigitalTransferOptions>
+          
+          <gmd:onLine><gmd:CI_OnlineResource><gmd:linkage><gmd:URL>https://example.org/dataset</gmd:URL></gmd:linkage></gmd:CI_OnlineResource></gmd:onLine>
+          <gmd:onLine><gmd:CI_OnlineResource><gmd:linkage><gmd:URL>https://example.org/download</gmd:URL></gmd:linkage><gmd:protocol><gco:CharacterString>HTTPS</gco:CharacterString></gmd:protocol></gmd:CI_OnlineResource></gmd:onLine>
+        </gmd:MD_DigitalTransferOptions>
+      </gmd:transferOptions>
+    </gmd:MD_Distribution>
+  </gmd:distributionInfo>
+  <!-- workflow: outputLocation=download -->
+  <!-- metadataMaintenanceFrequency: asNeeded -->
+  <!-- output flags: useNceiMetadataContactXlink=false omitRootReferenceSystemInfo=false -->
+</gmi:MI_Metadata>

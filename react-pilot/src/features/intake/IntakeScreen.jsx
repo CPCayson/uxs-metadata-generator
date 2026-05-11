@@ -5,7 +5,7 @@
  *   onLaunch(profileId, platformHint, prefillData?) — called when user confirms
  */
 
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useEffect, useId } from 'react'
 import { classifyInput } from './intakeClassifier.js'
 import { validateMissionListCsv } from '../../lib/missionListValidatorClient.js'
 
@@ -18,7 +18,7 @@ const PROFILE_GRID = [
   ],
   [
     { profileId: 'oerDashboard', platformHint: null, label: 'OER/BEDI Workbench', sub: 'OER pipeline + BEDI launch actions' },
-    { profileId: 'nofo',         platformHint: null, label: 'NOFO Closeout',  sub: 'Grant closeout · DISP / DMP', comingSoon: true },
+    { profileId: 'nofo',         platformHint: null, label: 'NOFO Closeout',  sub: 'Grant closeout · DISP / DMP' },
   ],
   [
     { profileId: 'bediGranule',    platformHint: null, label: 'BEDI Granule',    sub: 'Video segment · WoRMS / SeaTube' },
@@ -29,6 +29,9 @@ const PROFILE_GRID = [
     null,
   ],
 ]
+
+/** Flat list for the collapsed profile picker menu (same entries as PROFILE_GRID). */
+const PROFILE_MENU_ITEMS = PROFILE_GRID.flat().filter(Boolean)
 
 const PROFILE_COLORS = {
   mission:        '#534AB7',
@@ -117,7 +120,28 @@ export default function IntakeScreen({ onLaunch }) {
   const [classified, setClassified] = useState(null)
   const [dragOver, setDragOver]     = useState(false)
   const [missionListCheck, setMissionListCheck] = useState(null)
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false)
   const fileRef = useRef(null)
+  const profileMenuRef = useRef(null)
+  const profileMenuPanelId = useId()
+
+  useEffect(() => {
+    if (!profileMenuOpen) return undefined
+    const onKey = (e) => {
+      if (e.key === 'Escape') setProfileMenuOpen(false)
+    }
+    const onDoc = (e) => {
+      if (profileMenuRef.current && !profileMenuRef.current.contains(e.target)) {
+        setProfileMenuOpen(false)
+      }
+    }
+    document.addEventListener('keydown', onKey)
+    document.addEventListener('mousedown', onDoc)
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.removeEventListener('mousedown', onDoc)
+    }
+  }, [profileMenuOpen])
 
   const handleText = useCallback((text) => {
     setPasteValue(text)
@@ -329,61 +353,72 @@ export default function IntakeScreen({ onLaunch }) {
         </div>
       ) : null}
 
-      {/* Manual profile grid */}
-      <div style={{ marginTop: '1.5rem' }}>
+      {/* Manual profile picker — collapsed behind a menu so the intake card stays scannable */}
+      <div ref={profileMenuRef} className="pilot-intake-profile-menu">
         <p style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '0.55rem' }}>
           Or choose a profile directly:
         </p>
-        <div style={{ display: 'grid', gap: 8 }}>
-          {PROFILE_GRID.map((row, ri) => (
-            <div key={ri} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-              {row.map((item, ci) => {
-                if (!item) return <div key={ci} />
-                const color = PROFILE_COLORS[item.profileId] ?? '#64748b'
-                return (
-                  <button
-                    key={ci}
-                    type="button"
-                    disabled={item.comingSoon}
-                    onClick={() => !item.comingSoon && onLaunch(item.profileId, item.platformHint, null)}
-                    style={{
-                      display: 'flex', flexDirection: 'column', alignItems: 'flex-start',
-                      padding: '0.6rem 0.85rem',
-                      border: `1px solid var(--border-color, #e2e8f0)`,
-                      borderRadius: 7,
-                      background: item.comingSoon ? 'var(--disabled-bg, #f8fafc)' : 'var(--card-bg, #fff)',
-                      cursor: item.comingSoon ? 'not-allowed' : 'pointer',
-                      textAlign: 'left',
-                      opacity: item.comingSoon ? 0.65 : 1,
-                    }}
-                  >
-                    <span style={{ fontWeight: 600, fontSize: '0.85rem', color: item.comingSoon ? '#64748b' : color }}>
-                      {item.label}
-                      {item.comingSoon && (
-                        <span style={{
-                          marginLeft: 6, fontSize: '0.67rem', fontWeight: 600,
-                          background: '#f59e0b', color: '#fff',
-                          padding: '0px 5px', borderRadius: 4,
-                        }}>soon</span>
-                      )}
-                    </span>
-                    <span
-                      style={{
-                        fontSize: '0.76rem',
-                        fontWeight: 600,
-                        color: 'var(--text-muted)',
-                        marginTop: 4,
-                        lineHeight: 1.35,
-                      }}
-                    >
-                      {item.sub}
-                    </span>
-                  </button>
-                )
-              })}
-            </div>
-          ))}
-        </div>
+        <button
+          type="button"
+          className="pilot-intake-profile-menu__toggle"
+          aria-expanded={profileMenuOpen}
+          aria-controls={profileMenuPanelId}
+          id={`${profileMenuPanelId}-trigger`}
+          onClick={() => setProfileMenuOpen((v) => !v)}
+        >
+          <span className="pilot-intake-profile-menu__toggle-icon" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+          </span>
+          <span style={{ flex: 1 }}>
+            {profileMenuOpen ? 'Hide workflows' : 'Browse workflows'}
+          </span>
+          <span aria-hidden="true" style={{ fontSize: '0.72rem', opacity: 0.55 }}>
+            {profileMenuOpen ? '▲' : '▼'}
+          </span>
+        </button>
+        {profileMenuOpen && (
+          <div
+            id={profileMenuPanelId}
+            role="region"
+            aria-labelledby={`${profileMenuPanelId}-trigger`}
+            className="pilot-intake-profile-menu__panel"
+          >
+            {PROFILE_MENU_ITEMS.map((item, i) => {
+              const color = PROFILE_COLORS[item.profileId] ?? '#64748b'
+              return (
+                <button
+                  key={`${item.profileId}-${item.platformHint ?? 'x'}-${i}`}
+                  type="button"
+                  disabled={item.comingSoon}
+                  className="pilot-intake-profile-menu__item"
+                  onClick={() => {
+                    if (item.comingSoon) return
+                    onLaunch(item.profileId, item.platformHint, null)
+                    setProfileMenuOpen(false)
+                  }}
+                  style={{
+                    opacity: item.comingSoon ? 0.65 : 1,
+                    cursor: item.comingSoon ? 'not-allowed' : 'pointer',
+                  }}
+                >
+                  <span style={{ fontWeight: 600, fontSize: '0.85rem', color: item.comingSoon ? '#64748b' : color }}>
+                    {item.label}
+                    {item.comingSoon && (
+                      <span style={{
+                        marginLeft: 6, fontSize: '0.67rem', fontWeight: 600,
+                        background: '#f59e0b', color: '#fff',
+                        padding: '0px 5px', borderRadius: 4,
+                      }}>soon</span>
+                    )}
+                  </span>
+                  <span className="pilot-intake-profile-menu__item-sub">{item.sub}</span>
+                </button>
+              )
+            })}
+          </div>
+        )}
       </div>
     </div>
   )

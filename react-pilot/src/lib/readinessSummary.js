@@ -33,16 +33,21 @@ export function computeReadinessSnapshot(pilotState, engine, profile) {
  * @param {{
  *   preflightSummary?: { overall?: string } | null,
  *   isDirty?: boolean,
+ *   oneStopStatus?: 'PASS' | 'CHECK' | 'BLOCK' | null,
+ *   docucompStatus?: 'PASS' | 'CHECK' | 'BLOCK' | null,
+ *   wafStatus?: 'PASS' | 'CHECK' | 'BLOCK' | null,
  * }} [ctx]
  */
 export function computeReadinessBundles(snapshot, ctx = {}) {
-  const draftReady = (snapshot.lenient?.errCount ?? 1) === 0
-  const profileReady = (snapshot.lenient?.errCount ?? 1) === 0
-  const isoReady = (snapshot.strict?.errCount ?? 1) === 0
+  const draftReady     = (snapshot.lenient?.errCount ?? 1) === 0
+  const isoReady       = (snapshot.strict?.errCount  ?? 1) === 0
   const discoveryReady = (snapshot.catalog?.errCount ?? 1) === 0
   const preflightOverall = ctx.preflightSummary?.overall
-  const cometReady = preflightOverall === 'PASS'
-  const archiveReady = isoReady && discoveryReady && (!preflightOverall || cometReady) && !ctx.isDirty
+  const cometReady     = preflightOverall === 'PASS'
+  const oneStopReady   = ctx.oneStopStatus === 'PASS'
+  const docucompReady  = ctx.docucompStatus !== 'BLOCK'
+  const wafReady       = ctx.wafStatus !== 'BLOCK'
+  const archiveReady   = isoReady && discoveryReady && (!preflightOverall || cometReady) && !ctx.isDirty
 
   return [
     {
@@ -51,17 +56,8 @@ export function computeReadinessBundles(snapshot, ctx = {}) {
       scope: 'internal',
       ready: draftReady,
       detail: draftReady
-        ? 'Baseline editor checks pass for continued drafting.'
-        : `${snapshot.lenient?.errCount ?? 0} draft error(s).`,
-    },
-    {
-      id: 'profile-valid',
-      label: 'Profile-valid',
-      scope: 'internal',
-      ready: profileReady,
-      detail: profileReady
-        ? 'Local profile rules have no blocking errors.'
-        : `${snapshot.lenient?.errCount ?? 0} profile validation error(s).`,
+        ? 'Baseline editor checks pass.'
+        : `${snapshot.lenient?.errCount ?? 0} draft error(s) — fix before exporting.`,
     },
     {
       id: 'iso-ready',
@@ -69,8 +65,8 @@ export function computeReadinessBundles(snapshot, ctx = {}) {
       scope: 'internal',
       ready: isoReady,
       detail: isoReady
-        ? 'Local ISO/export-oriented editor checks have no errors.'
-        : `${snapshot.strict?.errCount ?? 0} ISO/editor validation error(s).`,
+        ? 'ISO 19115-2 export checks pass.'
+        : `${snapshot.strict?.errCount ?? 0} ISO validation error(s).`,
     },
     {
       id: 'discovery-ready',
@@ -78,17 +74,48 @@ export function computeReadinessBundles(snapshot, ctx = {}) {
       scope: 'internal',
       ready: discoveryReady,
       detail: discoveryReady
-        ? 'Local catalog/discovery editor checks have no errors.'
+        ? 'Catalog/discovery checks have no errors.'
         : `${snapshot.catalog?.errCount ?? 0} discovery validation error(s).`,
     },
     {
       id: 'comet-preflight',
-      label: 'CoMET-verified',
+      label: 'CoMET',
       scope: 'external',
       ready: cometReady,
       detail: preflightOverall
-        ? `External CoMET preflight: ${preflightOverall}.`
-        : 'External CoMET preflight has not run yet.',
+        ? `CoMET preflight: ${preflightOverall}.`
+        : 'CoMET preflight has not run yet — use the CoMET panel.',
+    },
+    {
+      id: 'onestop',
+      label: 'OneStop',
+      scope: 'external',
+      ready: oneStopReady,
+      detail: ctx.oneStopStatus
+        ? `OneStop readiness: ${ctx.oneStopStatus}. Check GCMD keywords, UUID linkage, and WAF registration.`
+        : 'OneStop readiness check has not run. Verify GCMD keywords and UUID linkage.',
+    },
+    {
+      id: 'docucomp',
+      label: 'DocuComp',
+      scope: 'external',
+      ready: docucompReady,
+      detail: ctx.docucompStatus === 'PASS'
+        ? 'DocuComp license and contact components resolved.'
+        : ctx.docucompStatus === 'BLOCK'
+          ? 'DocuComp component unresolvable — fix xlink href before submission.'
+          : 'DocuComp not yet verified — run preflight to check component links.',
+    },
+    {
+      id: 'waf',
+      label: 'WAF / Archive',
+      scope: 'handoff',
+      ready: wafReady,
+      detail: ctx.wafStatus === 'PASS'
+        ? 'WAF links and archive URLs healthy.'
+        : ctx.wafStatus === 'BLOCK'
+          ? 'Broken WAF or archive URLs detected — run batch:waf:audit.'
+          : 'WAF audit not yet run for this record.',
     },
     {
       id: 'handoff-ready',
@@ -96,10 +123,10 @@ export function computeReadinessBundles(snapshot, ctx = {}) {
       scope: 'handoff',
       ready: archiveReady,
       detail: archiveReady
-        ? 'Local readiness is clear, external preflight is clear when present, and no unsaved edits remain.'
+        ? 'All local checks clear, CoMET confirmed, no unsaved edits.'
         : isoReady
-          ? 'Save/stabilize edits and clear discovery or external preflight blockers before handoff.'
-          : 'Resolve ISO/editor validation errors first.',
+          ? 'Resolve discovery or CoMET blockers before handoff.'
+          : 'Resolve ISO validation errors first.',
     },
   ]
 }

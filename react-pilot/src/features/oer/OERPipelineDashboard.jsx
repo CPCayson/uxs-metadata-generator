@@ -3,7 +3,8 @@
  * Styled using the futuristic.css / index.css design system variables only.
  */
 
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
+import { BEDI_QA_ROWS } from './bediQaCommands.js'
 import { useOerDashboard } from './useOerDashboard.js'
 
 // ── Lane config ──────────────────────────────────────────────────────────────
@@ -28,15 +29,30 @@ const STATUS_META = {
   unknown:       { color: '#64748b', darkColor: '#94a3b8', label: '—' },
 }
 
-const COMET_LOOP_STEPS = [
-  'Select 10 mission UUIDs (mix clean + messy records).',
-  'Pull XML fixtures from CoMET and keep a baseline copy.',
-  'Run local swarm + hygiene checks on every fixture.',
-  'Run MetaServer and OneStop parity checks.',
-  'Gate PASS only when CoMET roundtrip works: import then pull back out.',
-  'Capture any new failure as a rule/map update and rerun all 10 fixtures.',
-]
-const COMET_LOOP_STORAGE_KEY = 'oer.cometValidationLoop.steps.v1'
+/** IntakeScreen profile color for `oerDashboard` — matches Record Studio SaaS tiles */
+const OER_ACCENT = '#1D9E75'
+
+const saasBtnPrimary = {
+  padding: '0.35rem 0.9rem',
+  border: 'none',
+  borderRadius: 6,
+  background: OER_ACCENT,
+  color: '#fff',
+  fontWeight: 600,
+  fontSize: '0.82rem',
+  cursor: 'pointer',
+}
+
+const saasBtnSecondary = {
+  padding: '0.35rem 0.85rem',
+  border: '1px solid var(--border-color, #e2e8f0)',
+  borderRadius: 7,
+  background: 'var(--card-bg, #fff)',
+  fontWeight: 600,
+  fontSize: '0.82rem',
+  cursor: 'pointer',
+  color: 'var(--text-color, #0f172a)',
+}
 
 function LanePill({ status, label }) {
   const meta = STATUS_META[status] ?? STATUS_META.unknown
@@ -59,6 +75,57 @@ const TD_DATES = { ...TD, whiteSpace: 'nowrap', fontSize: '0.74rem', color: 'var
 /** Outer td: must overflow hidden for ellipsis children under table-layout: fixed */
 const TD_NAME  = { ...TD, overflow: 'hidden', maxWidth: 0 }
 const TD_LANES = { ...TD, overflow: 'hidden', paddingTop: 2, paddingBottom: 2 }
+
+function BediLocalQaSection() {
+  const [copyFlash, setCopyFlash] = useState(null)
+
+  async function handleCopy(id, cmd) {
+    try {
+      await navigator.clipboard.writeText(cmd)
+      setCopyFlash({ id, ok: true })
+      window.setTimeout(() => setCopyFlash(null), 2000)
+    } catch {
+      setCopyFlash({ id, ok: false })
+      window.setTimeout(() => setCopyFlash(null), 2000)
+    }
+  }
+
+  return (
+    <details className="pilot-saas-card oer-bedi-qa-details">
+      <summary className="oer-bedi-qa-summary">
+        BEDI local QA
+        <span className="oer-bedi-qa-summary-hint">terminal commands · react-pilot repo root</span>
+      </summary>
+      <p className="oer-bedi-qa-lede">
+        Run these from your <code className="oer-bedi-qa-code">react-pilot/</code> checkout (paths point at a sibling{' '}
+        <code className="oer-bedi-qa-code">oer/</code> folder — edit <code className="oer-bedi-qa-code">bediQaCommands.js</code> if yours differs).
+      </p>
+      <ul className="oer-bedi-qa-list">
+        {BEDI_QA_ROWS.map((row) => (
+          <li key={row.id} className="oer-bedi-qa-item">
+            <div className="oer-bedi-qa-item-head">
+              <span className="oer-bedi-qa-label">{row.label}</span>
+              <button
+                type="button"
+                className="oer-bedi-qa-copy"
+                style={{
+                  ...saasBtnSecondary,
+                  fontSize: '0.68rem',
+                  padding: '0.12rem 0.45rem',
+                }}
+                onClick={() => handleCopy(row.id, row.cmd)}
+              >
+                {copyFlash?.id === row.id ? (copyFlash.ok ? 'Copied' : 'Failed') : 'Copy'}
+              </button>
+            </div>
+            {row.hint && <p className="oer-bedi-qa-hint">{row.hint}</p>}
+            <pre className="oer-bedi-qa-cmd" tabIndex={0}>{row.cmd}</pre>
+          </li>
+        ))}
+      </ul>
+    </details>
+  )
+}
 
 function ExpeditionRow({ expedition }) {
   const { cruiseId, name, start, end, daLink, accessionId, lanes } = expedition
@@ -90,7 +157,16 @@ function ExpeditionRow({ expedition }) {
       </td>
       <td style={TD}>
         {daLink
-          ? <a className="btn btn-sm btn-outline-secondary" href={daLink} target="_blank" rel="noopener noreferrer">View</a>
+          ? (
+            <a
+              href={daLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ ...saasBtnSecondary, fontSize: '0.78rem', display: 'inline-block', textDecoration: 'none' }}
+            >
+              View
+            </a>
+          )
           : <span style={{ color: 'var(--muted-text-color)', fontSize: '0.78rem' }}>—</span>}
       </td>
     </tr>
@@ -102,31 +178,6 @@ function ExpeditionRow({ expedition }) {
 export default function OERPipelineDashboard({ onLaunch }) {
   const { expeditions, loading, error, mode, csvFilename, lastSynced, refetch, loadCsv } = useOerDashboard()
   const csvRef = useRef(null)
-  const [loopChecks, setLoopChecks] = useState(() => COMET_LOOP_STEPS.map(() => false))
-
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(COMET_LOOP_STORAGE_KEY)
-      if (!raw) return
-      const parsed = JSON.parse(raw)
-      if (!Array.isArray(parsed)) return
-      const next = COMET_LOOP_STEPS.map((_, idx) => !!parsed[idx])
-      setLoopChecks(next)
-    } catch {
-      // ignore storage parse errors
-    }
-  }, [])
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(COMET_LOOP_STORAGE_KEY, JSON.stringify(loopChecks))
-    } catch {
-      // ignore storage write errors
-    }
-  }, [loopChecks])
-
-  const completedSteps = loopChecks.filter(Boolean).length
-  const completionPct = Math.round((completedSteps / COMET_LOOP_STEPS.length) * 100)
 
   function handleCsvChange(e) {
     const file = e.target.files?.[0]
@@ -144,21 +195,15 @@ export default function OERPipelineDashboard({ onLaunch }) {
     ? `Synced ${new Date(lastSynced).toLocaleTimeString()}`
     : 'Not yet synced'
 
-  function toggleLoopStep(index) {
-    setLoopChecks((prev) => prev.map((v, i) => (i === index ? !v : v)))
-  }
-
-  function resetLoopChecks() {
-    setLoopChecks(COMET_LOOP_STEPS.map(() => false))
-  }
-
   return (
-    <div className="oer-dashboard">
+    <div className="oer-dashboard pilot-intake-surface pilot-intake-surface--fluid">
 
       {/* ── Inline styles scoped to this component ── */}
       <style>{`
         .oer-dashboard {
-          padding: 1.5rem;
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
           max-width: 100%;
           color: var(--text-color);
         }
@@ -169,26 +214,26 @@ export default function OERPipelineDashboard({ onLaunch }) {
           align-items: center;
           gap: 0.75rem;
           flex-wrap: wrap;
-          margin-bottom: 1.25rem;
+          margin-bottom: 0;
+        }
+
+        .oer-saas-panel--actions .oer-header {
+          margin-bottom: 0.75rem;
+        }
+
+        .oer-launch-row {
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+          align-items: center;
         }
 
         .oer-title {
           margin: 0;
-          font-size: 1.12rem;
-          font-weight: 700;
+          font-size: 1.05rem;
+          font-weight: 800;
           letter-spacing: -0.02em;
-          color: var(--primary-color);
-          position: relative;
-        }
-
-        .oer-title::after {
-          content: '';
-          display: block;
-          width: 56px;
-          height: 3px;
-          margin-top: 0.3rem;
-          border-radius: 3px;
-          background: linear-gradient(120deg, var(--primary-color), var(--primary-light));
+          color: ${OER_ACCENT};
         }
 
         .oer-count-chip {
@@ -197,8 +242,8 @@ export default function OERPipelineDashboard({ onLaunch }) {
           padding: 0.18rem 0.5rem;
           border-radius: 6px;
           border: 1px solid var(--border-color);
-          background: color-mix(in srgb, var(--primary-color) 10%, var(--card-bg));
-          color: var(--primary-color);
+          background: color-mix(in srgb, ${OER_ACCENT} 10%, var(--card-bg));
+          color: ${OER_ACCENT};
           letter-spacing: 0.02em;
         }
 
@@ -275,28 +320,28 @@ export default function OERPipelineDashboard({ onLaunch }) {
         /* CSV drop zone */
         .oer-drop-zone {
           border: 1.5px dashed var(--border-color);
-          border-radius: var(--radius-md, 10px);
+          border-radius: 8px;
           padding: 0.75rem 1.25rem;
-          margin-bottom: 1rem;
+          margin-bottom: 0.75rem;
           cursor: pointer;
           display: flex;
           align-items: center;
           gap: 0.75rem;
           font-size: 0.82rem;
           color: var(--muted-text-color);
-          background: color-mix(in srgb, var(--primary-color) 3%, var(--card-bg));
+          background: color-mix(in srgb, ${OER_ACCENT} 5%, var(--card-bg));
           transition: border-color 0.15s, background 0.15s;
         }
 
         .oer-drop-zone:hover, .oer-drop-zone:focus-visible {
-          border-color: var(--primary-color);
-          background: color-mix(in srgb, var(--primary-color) 6%, var(--card-bg));
+          border-color: ${OER_ACCENT};
+          background: color-mix(in srgb, ${OER_ACCENT} 9%, var(--card-bg));
           outline: none;
         }
 
         .oer-filename {
           font-size: 0.75rem;
-          color: var(--primary-color);
+          color: ${OER_ACCENT};
           font-weight: 600;
           margin-left: auto;
         }
@@ -306,7 +351,7 @@ export default function OERPipelineDashboard({ onLaunch }) {
           display: flex;
           gap: 0.75rem;
           flex-wrap: wrap;
-          margin-bottom: 0.75rem;
+          margin-bottom: 0.65rem;
           font-size: 0.74rem;
           align-items: center;
           color: var(--muted-text-color);
@@ -321,13 +366,12 @@ export default function OERPipelineDashboard({ onLaunch }) {
           vertical-align: middle;
         }
 
-        /* Table card */
-        .oer-table-card {
-          border: 1px solid var(--border-color);
-          border-radius: var(--radius-md, 10px);
+        /* Table shell — nested inside pilot-saas-card */
+        .oer-table-shell {
+          border: 1px solid color-mix(in srgb, var(--border-color) 88%, transparent);
+          border-radius: 8px;
           overflow: hidden;
           background: var(--card-bg);
-          box-shadow: var(--shadow-card, 0 1px 3px rgb(0 0 0 / 0.06));
         }
 
         .oer-table-wrap {
@@ -409,11 +453,11 @@ export default function OERPipelineDashboard({ onLaunch }) {
         }
 
         .oer-table-row:hover {
-          background: color-mix(in srgb, var(--primary-color) 4%, var(--card-bg));
+          background: color-mix(in srgb, ${OER_ACCENT} 5%, var(--card-bg));
         }
 
         :root[data-theme='dark'] .oer-table-row:hover {
-          background: color-mix(in srgb, var(--primary-color) 7%, var(--card-bg));
+          background: color-mix(in srgb, ${OER_ACCENT} 8%, var(--card-bg));
         }
 
         .oer-td {
@@ -445,13 +489,13 @@ export default function OERPipelineDashboard({ onLaunch }) {
         }
 
         .oer-link {
-          color: var(--primary-color);
+          color: ${OER_ACCENT};
           text-decoration: none;
           font-weight: 600;
         }
 
         .oer-link:hover {
-          color: var(--primary-light);
+          color: color-mix(in srgb, ${OER_ACCENT} 82%, #000);
           text-decoration: underline;
         }
 
@@ -533,178 +577,175 @@ export default function OERPipelineDashboard({ onLaunch }) {
         .oer-footnote code {
           font-family: 'JetBrains Mono', monospace;
           font-size: 0.72rem;
-          background: color-mix(in srgb, var(--primary-color) 8%, var(--card-bg));
+          background: color-mix(in srgb, ${OER_ACCENT} 8%, var(--card-bg));
           border: 1px solid var(--border-color);
           border-radius: 4px;
           padding: 0 4px;
-          color: var(--primary-color);
+          color: ${OER_ACCENT};
         }
 
-        .oer-playbook-card {
-          border: 1px solid var(--border-color);
-          border-radius: var(--radius-md, 10px);
-          background: color-mix(in srgb, var(--primary-color) 5%, var(--card-bg));
-          padding: 0.85rem 1rem;
-          margin-bottom: 0.9rem;
+        /* BEDI local QA — collapsible; shell is pilot-saas-card */
+        .oer-bedi-qa-details {
+          padding: 0.65rem 0.9rem 0.85rem;
         }
 
-        .oer-playbook-title {
-          margin: 0 0 0.3rem;
-          font-size: 0.84rem;
+        .oer-bedi-qa-summary {
+          cursor: pointer;
+          font-size: 0.82rem;
           font-weight: 800;
           letter-spacing: 0.03em;
           text-transform: uppercase;
-          color: var(--primary-color);
+          color: ${OER_ACCENT};
+          list-style: none;
+          display: flex;
+          align-items: baseline;
+          gap: 0.5rem;
+          flex-wrap: wrap;
         }
 
-        .oer-playbook-lede {
-          margin: 0 0 0.55rem;
-          font-size: 0.76rem;
-          color: var(--text-color);
+        .oer-bedi-qa-summary::-webkit-details-marker {
+          display: none;
+        }
+
+        .oer-bedi-qa-summary-hint {
+          font-size: 0.68rem;
+          font-weight: 600;
+          text-transform: none;
+          letter-spacing: 0;
+          color: var(--muted-text-color);
+        }
+
+        .oer-bedi-qa-lede {
+          margin: 0.55rem 0 0.65rem;
+          font-size: 0.74rem;
           line-height: 1.45;
+          color: var(--muted-text-color);
         }
 
-        .oer-playbook-list {
+        .oer-bedi-qa-code {
+          font-family: 'JetBrains Mono', 'Fira Code', monospace;
+          font-size: 0.7rem;
+          padding: 0 4px;
+          border-radius: 4px;
+          border: 1px solid var(--border-color);
+          background: color-mix(in srgb, ${OER_ACCENT} 8%, var(--card-bg));
+          color: ${OER_ACCENT};
+        }
+
+        .oer-bedi-qa-list {
           margin: 0;
           padding: 0;
           list-style: none;
           display: grid;
-          gap: 0.35rem;
-          font-size: 0.74rem;
-          color: var(--muted-text-color);
-          line-height: 1.4;
+          gap: 0.65rem;
         }
 
-        .oer-playbook-step {
+        .oer-bedi-qa-item {
+          border: 1px solid color-mix(in srgb, var(--border-color) 85%, transparent);
+          border-radius: 8px;
+          padding: 0.45rem 0.55rem;
+          background: var(--card-bg);
+        }
+
+        .oer-bedi-qa-item-head {
           display: flex;
           align-items: flex-start;
-          gap: 0.45rem;
-          color: var(--text-color);
-        }
-
-        .oer-playbook-step input[type='checkbox'] {
-          margin-top: 0.15rem;
-          accent-color: var(--primary-color);
-          cursor: pointer;
-        }
-
-        .oer-playbook-step label {
-          cursor: pointer;
-          user-select: none;
-        }
-
-        .oer-playbook-step--done label {
-          text-decoration: line-through;
-          color: var(--muted-text-color);
-        }
-
-        .oer-playbook-toolbar {
-          display: flex;
-          align-items: center;
+          justify-content: space-between;
           gap: 0.5rem;
-          margin-bottom: 0.55rem;
-          flex-wrap: wrap;
         }
 
-        .oer-playbook-progress-chip {
-          font-size: 0.7rem;
+        .oer-bedi-qa-label {
+          font-size: 0.76rem;
           font-weight: 700;
+          color: var(--text-color);
+          line-height: 1.35;
+        }
+
+        .oer-bedi-qa-hint {
+          margin: 0.25rem 0 0.35rem;
+          font-size: 0.68rem;
+          color: var(--muted-text-color);
+          line-height: 1.35;
+        }
+
+        .oer-bedi-qa-cmd {
+          margin: 0;
+          padding: 0.45rem 0.5rem;
+          font-family: 'JetBrains Mono', 'Fira Code', monospace;
+          font-size: 0.65rem;
+          line-height: 1.35;
+          white-space: pre-wrap;
+          word-break: break-all;
+          border-radius: 6px;
           border: 1px solid var(--border-color);
-          border-radius: 999px;
-          padding: 0.14rem 0.5rem;
-          color: var(--primary-color);
-          background: color-mix(in srgb, var(--primary-color) 12%, var(--card-bg));
+          background: color-mix(in srgb, var(--muted-text-color) 6%, var(--card-bg));
+          color: var(--text-color);
+          max-height: 5.5rem;
+          overflow: auto;
         }
       `}</style>
 
-      {/* ── Header ─────────────────────────────────────────────────────── */}
-      <div className="oer-header">
-        <h2 className="oer-title">OER Pipeline</h2>
+      {/* ── Actions — SaaS card (matches intake / libraries panels) ─────── */}
+      <section className="pilot-saas-card oer-saas-panel oer-saas-panel--actions" aria-label="OER pipeline">
+        <div className="oer-header">
+          <h2 className="oer-title">OER Pipeline</h2>
 
-        <span className="oer-count-chip">
-          {expeditions.length} expedition{expeditions.length !== 1 ? 's' : ''}
-        </span>
-
-        {mode === 'live' && (
-          <span className="oer-mode-chip oer-mode-chip--live">Live — InfoBroker</span>
-        )}
-        {mode === 'csv' && (
-          <span className="oer-mode-chip oer-mode-chip--csv">
-            CSV{csvFilename ? ` · ${csvFilename}` : ''}
+          <span className="oer-count-chip">
+            {expeditions.length} expedition{expeditions.length !== 1 ? 's' : ''}
           </span>
-        )}
 
-        <span className="oer-sync-label">{syncLabel}</span>
+          {mode === 'live' && (
+            <span className="oer-mode-chip oer-mode-chip--live">Live — InfoBroker</span>
+          )}
+          {mode === 'csv' && (
+            <span className="oer-mode-chip oer-mode-chip--csv">
+              CSV{csvFilename ? ` · ${csvFilename}` : ''}
+            </span>
+          )}
 
-        <button
-          type="button"
-          className="btn btn-sm btn-outline-secondary"
-          onClick={refetch}
-          disabled={loading}
-        >
-          {loading ? 'Refreshing…' : 'Refresh'}
-        </button>
-      </div>
+          <span className="oer-sync-label">{syncLabel}</span>
 
-      {typeof onLaunch === 'function' ? (
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: '0.8rem' }}>
           <button
             type="button"
-            className="btn btn-sm btn-outline-primary"
-            onClick={() => onLaunch('bediGranule', null)}
+            style={{ ...saasBtnSecondary, opacity: loading ? 0.65 : 1, cursor: loading ? 'wait' : 'pointer' }}
+            onClick={refetch}
+            disabled={loading}
           >
-            Open BEDI granule wizard
-          </button>
-          <button
-            type="button"
-            className="btn btn-sm btn-outline-primary"
-            onClick={() => onLaunch('bediCollection', null)}
-          >
-            Open BEDI collection wizard
-          </button>
-          <button
-            type="button"
-            className="btn btn-sm btn-outline-secondary"
-            onClick={() => onLaunch('mission', 'underwater')}
-          >
-            Open UxS mission wizard
+            {loading ? 'Refreshing…' : 'Refresh'}
           </button>
         </div>
-      ) : null}
 
-      <section className="oer-playbook-card" aria-label="CoMET validation loop playbook">
-        <h3 className="oer-playbook-title">CoMET Validation Loop</h3>
-        <p className="oer-playbook-lede">
-          Operational gate: a record is only pass-ready when CoMET accepts import and the same record can be pulled back out.
-        </p>
-        <div className="oer-playbook-toolbar">
-          <span className="oer-playbook-progress-chip">
-            {completedSteps}/{COMET_LOOP_STEPS.length} complete ({completionPct}%)
-          </span>
-          <button
-            type="button"
-            className="btn btn-sm btn-outline-secondary"
-            onClick={resetLoopChecks}
-          >
-            Reset checklist
-          </button>
-        </div>
-        <ol className="oer-playbook-list">
-          {COMET_LOOP_STEPS.map((step, idx) => (
-            <li key={step} className={`oer-playbook-step ${loopChecks[idx] ? 'oer-playbook-step--done' : ''}`}>
-              <input
-                id={`comet-loop-step-${idx}`}
-                type="checkbox"
-                checked={!!loopChecks[idx]}
-                onChange={() => toggleLoopStep(idx)}
-              />
-              <label htmlFor={`comet-loop-step-${idx}`}>{step}</label>
-            </li>
-          ))}
-        </ol>
+        {typeof onLaunch === 'function' ? (
+          <div className="oer-launch-row">
+            <button
+              type="button"
+              style={saasBtnPrimary}
+              onClick={() => onLaunch('bediGranule', null)}
+            >
+              Open BEDI granule wizard
+            </button>
+            <button
+              type="button"
+              style={saasBtnPrimary}
+              onClick={() => onLaunch('bediCollection', null)}
+            >
+              Open BEDI collection wizard
+            </button>
+            <button
+              type="button"
+              style={saasBtnSecondary}
+              onClick={() => onLaunch('mission', 'underwater')}
+            >
+              Open UxS mission wizard
+            </button>
+          </div>
+        ) : null}
       </section>
 
-      {/* ── Offline banner ──────────────────────────────────────────────── */}
+      <BediLocalQaSection />
+
+      {/* ── Cruises / expeditions ───────────────────────────────────────── */}
+      <section className="pilot-saas-card oer-expeditions-panel" aria-label="Cruise CSV and expeditions">
       {mode === 'offline' && (
         <div role="alert" className="oer-offline-banner">
           <strong>InfoBroker not reachable</strong>
@@ -713,7 +754,6 @@ export default function OERPipelineDashboard({ onLaunch }) {
         </div>
       )}
 
-      {/* ── CSV drop zone ───────────────────────────────────────────────── */}
       <div
         className="oer-drop-zone"
         onDrop={handleDrop}
@@ -739,7 +779,6 @@ export default function OERPipelineDashboard({ onLaunch }) {
         />
       </div>
 
-      {/* ── Lane legend ─────────────────────────────────────────────────── */}
       <div className="oer-legend">
         <span>Lane key:</span>
         {Object.entries(STATUS_META).map(([status, meta]) => (
@@ -753,8 +792,7 @@ export default function OERPipelineDashboard({ onLaunch }) {
         ))}
       </div>
 
-      {/* ── Table ───────────────────────────────────────────────────────── */}
-      <div className="oer-table-card">
+      <div className="oer-table-shell">
         <div className="oer-table-wrap">
           <table className="oer-table">
             <colgroup>
@@ -804,6 +842,7 @@ export default function OERPipelineDashboard({ onLaunch }) {
           </table>
         </div>
       </div>
+      </section>
 
       <p className="oer-footnote">
         Lane statuses derived from <code>view_metadata</code> fields.

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 /**
  * @param {{
@@ -22,6 +22,12 @@ import { useMemo, useState } from 'react'
  *   statusMessage: string,
  *   onIssueNavigate?: (field: string) => void,
  *   getFieldLabel?: (field: string) => string,
+ *   hideSurfaceIntro?: boolean,
+ *   hideModePills?: boolean,
+ *   collapseConnectionTools?: boolean,
+ *   collapseFieldHints?: boolean,
+ *   quietSurface?: boolean,
+ *   hideScoreChips?: boolean,
  * }} props
  */
 function displayIssueXpath(xpath) {
@@ -49,13 +55,34 @@ export default function ValidationPanel({
   statusMessage,
   onIssueNavigate,
   getFieldLabel = (field) => field,
+  hideSurfaceIntro = false,
+  hideModePills = false,
+  collapseConnectionTools = false,
+  collapseFieldHints = false,
+  quietSurface = false,
+  hideScoreChips = false,
 }) {
   const [issueFilter, setIssueFilter] = useState(/** @type {'all' | 'e' | 'w'} */ ('all'))
+  const [issueNavIndex, setIssueNavIndex] = useState(0)
 
   const filteredIssues = useMemo(() => {
     if (issueFilter === 'all') return issues
     return issues.filter((i) => i.severity === issueFilter)
   }, [issues, issueFilter])
+
+  useEffect(() => {
+    setIssueNavIndex((i) => {
+      if (!filteredIssues.length) return 0
+      return Math.min(i, filteredIssues.length - 1)
+    })
+  }, [filteredIssues])
+
+  function stepIssue(delta) {
+    if (!filteredIssues.length || typeof onIssueNavigate !== 'function') return
+    const next = (issueNavIndex + delta + filteredIssues.length) % filteredIssues.length
+    setIssueNavIndex(next)
+    onIssueNavigate(filteredIssues[next].field)
+  }
 
   const pct = maxScore > 0 ? Math.round((score / maxScore) * 100) : 0
   const announce = `${errCount} errors, ${warnCount} warnings, ${issues.length} issues`
@@ -64,85 +91,12 @@ export default function ValidationPanel({
       ? `Issues (${issues.length})`
       : `Issues (${filteredIssues.length} of ${issues.length})`
 
-  return (
-    <div className="validation-panel">
-      <header className="validation-panel__intro">
-        <h2>Live validator</h2>
-        <p className="card-intro">
-          Rules and scores track your edits in real time (work stays responsive — validation is deferred). Jump from the list to
-          any field. Toggle inline hints to cover every step at once, or only fields you have touched.
-        </p>
-      </header>
+  const showStatusFeed = Boolean(
+    String(statusMessage || '').trim() && String(statusMessage).trim() !== 'Ready',
+  )
 
-      <section className="validation-panel__mode-score" aria-label="Validation mode and completeness">
-        <div className="mode-pills" role="group" aria-label="Validation mode">
-          {[
-            { id: 'lenient', label: 'Lenient' },
-            { id: 'strict', label: 'Strict' },
-            { id: 'catalog', label: 'Catalog' },
-          ].map((m) => (
-            <button
-              key={m.id}
-              type="button"
-              className={`mode-pill${mode === m.id ? ' active' : ''}`}
-              aria-pressed={mode === m.id}
-              onClick={() => onModeChange(m.id)}
-            >
-              {m.label}
-            </button>
-          ))}
-        </div>
-
-        <div className="score-row">
-          <div className="score-bar-wrap" aria-label={`Completeness ${pct} percent`}>
-            <div className="score-bar-bg">
-              <div className="score-bar-fill" style={{ width: `${pct}%` }} />
-            </div>
-          </div>
-          <div className="score-chips">
-            <span className="chip chip-err">{errCount} errors</span>
-            <span className="chip chip-warn">{warnCount} warnings</span>
-          </div>
-        </div>
-        <p className="visually-hidden" aria-live="polite" aria-atomic="true">
-          {announce}
-        </p>
-      </section>
-
-      <section className="validation-panel__inline-mode" aria-label="Inline field messages">
-        <div className="inline-mode-row">
-          <span className="inline-mode-label" id="inline-hints-label">
-            Field hints
-          </span>
-          <div
-            className="inline-mode-toggle"
-            role="group"
-            aria-labelledby="inline-hints-label"
-          >
-            <button
-              type="button"
-              className={`inline-mode-pill${!inlineEverywhere ? ' active' : ''}`}
-              aria-pressed={!inlineEverywhere}
-              onClick={() => onInlineEverywhereChange(false)}
-            >
-              Touched
-            </button>
-            <button
-              type="button"
-              className={`inline-mode-pill${inlineEverywhere ? ' active' : ''}`}
-              aria-pressed={inlineEverywhere}
-              onClick={() => onInlineEverywhereChange(true)}
-            >
-              All fields
-            </button>
-          </div>
-        </div>
-        <p className="inline-mode-hint">
-          <strong>All fields</strong> shows messages under every control that has an issue, on every step — same data as this list.
-          <strong> Touched</strong> is quieter while you first fill a step.
-        </p>
-      </section>
-
+  const connectionSections = (
+    <>
       <section className="validation-panel__meta" aria-label="Bridge status">
         <div className="status-list">
           <div>
@@ -196,10 +150,87 @@ export default function ValidationPanel({
           </p>
         ) : null}
       </section>
+    </>
+  )
+
+  return (
+    <div className="validation-panel">
+      {!hideSurfaceIntro ? (
+        <header className="validation-panel__intro">
+          <h2>Validation</h2>
+          <p className="card-intro">
+            Rules and scores update as you edit. Use the list to jump to a field. Turn on field hints for every step, or only where
+            you have made changes.
+          </p>
+          <details className="validation-panel__severity-help">
+            <summary>Errors vs warnings · validator buttons</summary>
+            <p className="hint">
+              <strong>Errors</strong> are blocking for the current validation mode. <strong>Warnings</strong> are advisory.
+              Bridge check tests the API connection; server rules runs catalog rules when the host is available — both are optional
+              if you only need local ISO checks.
+            </p>
+          </details>
+        </header>
+      ) : null}
+
+      <section
+        className={`validation-panel__mode-score${hideModePills ? ' validation-panel__mode-score--modes-upstream' : ''}`}
+        aria-label="Validation mode and completeness"
+      >
+        {!hideModePills ? (
+          <div className="mode-pills" role="group" aria-label="Validation mode">
+            {[
+              { id: 'lenient', label: 'Lenient' },
+              { id: 'strict', label: 'Strict' },
+              { id: 'catalog', label: 'Catalog' },
+            ].map((m) => (
+              <button
+                key={m.id}
+                type="button"
+                className={`mode-pill${mode === m.id ? ' active' : ''}`}
+                aria-pressed={mode === m.id}
+                onClick={() => onModeChange(m.id)}
+              >
+                {m.label}
+              </button>
+            ))}
+          </div>
+        ) : null}
+
+        <div className="score-row">
+          <div className="score-bar-wrap" aria-label={`Completeness ${pct} percent`}>
+            <div className="score-bar-bg">
+              <div className="score-bar-fill" style={{ width: `${pct}%` }} />
+            </div>
+          </div>
+          {!hideScoreChips ? (
+            <div className="score-chips">
+              <span className="chip chip-err">{errCount} errors</span>
+              <span className="chip chip-warn">{warnCount} warnings</span>
+            </div>
+          ) : null}
+        </div>
+        <p className="visually-hidden" aria-live="polite" aria-atomic="true">
+          {announce}
+        </p>
+      </section>
 
       <section className="validator-list validation-panel__issues-wrap" aria-labelledby="validation-issues-heading">
         <div className="validation-issues-head">
           <strong id="validation-issues-heading">{listLabel}</strong>
+          {filteredIssues.length && typeof onIssueNavigate === 'function' ? (
+            <div className="issue-step-nav" role="group" aria-label="Step through issues">
+              <button type="button" className="button button-secondary button-tiny" onClick={() => stepIssue(-1)}>
+                ← Prev
+              </button>
+              <button type="button" className="button button-secondary button-tiny" onClick={() => stepIssue(1)}>
+                Next →
+              </button>
+              <span className="issue-step-nav__pos" aria-live="polite">
+                {issueNavIndex + 1}/{filteredIssues.length}
+              </span>
+            </div>
+          ) : null}
           <div className="issue-filter" role="group" aria-label="Filter issues by severity">
             {(
               [
@@ -248,15 +279,104 @@ export default function ValidationPanel({
             })}
           </ul>
         ) : !issues.length ? (
-          <p className="hint">No issues for current mode.</p>
+          <p className="hint">All clear for this mode.</p>
         ) : null}
       </section>
 
-      <div className="validation-panel__feed">
-        <p className="status-message" role="status" aria-live="polite" aria-atomic="true">
-          {statusMessage}
-        </p>
-      </div>
+      {showStatusFeed ? (
+        <div className="validation-panel__feed">
+          <p className="status-message" role="status" aria-live="polite" aria-atomic="true">
+            {statusMessage}
+          </p>
+        </div>
+      ) : null}
+
+      {!quietSurface ? (
+        collapseFieldHints ? (
+          <details className="validation-panel__field-hints-acc">
+            <summary className="validation-panel__field-hints-acc-summary">
+              Field hints · {inlineEverywhere ? 'All fields' : 'Touched'}
+            </summary>
+            <section className="validation-panel__inline-mode validation-panel__inline-mode--nested" aria-label="Inline field messages">
+              <div className="inline-mode-row">
+                <span className="inline-mode-label" id="inline-hints-label">
+                  Scope
+                </span>
+                <div
+                  className="inline-mode-toggle"
+                  role="group"
+                  aria-labelledby="inline-hints-label"
+                >
+                  <button
+                    type="button"
+                    className={`inline-mode-pill${!inlineEverywhere ? ' active' : ''}`}
+                    aria-pressed={!inlineEverywhere}
+                    onClick={() => onInlineEverywhereChange(false)}
+                  >
+                    Touched
+                  </button>
+                  <button
+                    type="button"
+                    className={`inline-mode-pill${inlineEverywhere ? ' active' : ''}`}
+                    aria-pressed={inlineEverywhere}
+                    onClick={() => onInlineEverywhereChange(true)}
+                  >
+                    All fields
+                  </button>
+                </div>
+              </div>
+            </section>
+          </details>
+        ) : (
+          <section className="validation-panel__inline-mode" aria-label="Inline field messages">
+            <div className="inline-mode-row">
+              <span className="inline-mode-label" id="inline-hints-label">
+                Field hints
+              </span>
+              <div
+                className="inline-mode-toggle"
+                role="group"
+                aria-labelledby="inline-hints-label"
+              >
+                <button
+                  type="button"
+                  className={`inline-mode-pill${!inlineEverywhere ? ' active' : ''}`}
+                  aria-pressed={!inlineEverywhere}
+                  onClick={() => onInlineEverywhereChange(false)}
+                >
+                  Touched
+                </button>
+                <button
+                  type="button"
+                  className={`inline-mode-pill${inlineEverywhere ? ' active' : ''}`}
+                  aria-pressed={inlineEverywhere}
+                  onClick={() => onInlineEverywhereChange(true)}
+                >
+                  All fields
+                </button>
+              </div>
+            </div>
+            <p className="inline-mode-hint">
+              <strong>Touched</strong>: hints only on fields you have edited.
+              <strong> All fields</strong>: every issue on every step (same as this list).
+            </p>
+          </section>
+        )
+      ) : null}
+
+      {collapseConnectionTools ? (
+        <details
+          className="validation-panel__advanced"
+          open={!hostBridgeReady}
+        >
+          <summary className="validation-panel__advanced-summary">
+            Connection & tools
+          </summary>
+          {connectionSections}
+        </details>
+      ) : (
+        connectionSections
+      )}
     </div>
   )
 }

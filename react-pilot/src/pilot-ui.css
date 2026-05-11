@@ -102,6 +102,15 @@
   border-bottom: none;
 }
 
+/* Modes live in ReadinessStrip — avoid a second heavy box with only the score track (looks empty). */
+.validation-panel__mode-score--modes-upstream {
+  margin-top: 0.45rem;
+  padding: 0.35rem 0;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
 .validation-panel__inline-mode {
   margin: 0.75rem 0 0;
   padding: 0.8rem 0.9rem;
@@ -165,6 +174,29 @@
 .validation-panel__inline-mode .inline-mode-hint strong {
   color: var(--text-color);
   font-weight: 700;
+}
+
+.validation-panel__field-hints-acc {
+  margin: 0.75rem 0 0;
+}
+
+.validation-panel__field-hints-acc-summary {
+  cursor: pointer;
+  list-style: none;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: 0.35rem 0;
+  user-select: none;
+}
+
+.validation-panel__field-hints-acc-summary::-webkit-details-marker {
+  display: none;
+}
+
+.validation-panel__inline-mode--nested {
+  margin-top: 0.45rem;
+  margin-bottom: 0;
 }
 
 .validation-issues-head {
@@ -276,7 +308,135 @@
   margin-top: 0;
 }
 
+/* --- Field hint tooltips (ⓘ) — long copy off the form baseline --- */
+.field-hint-tooltip {
+  position: relative;
+  display: inline-flex;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.field-hint-tooltip__trigger {
+  appearance: none;
+  margin: 0;
+  padding: 0 0.15rem;
+  border: none;
+  background: transparent;
+  color: color-mix(in srgb, var(--text-muted, #64748b) 92%, var(--primary-color, #006994));
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: help;
+  border-radius: 4px;
+  transition: color 0.12s ease, background 0.12s ease;
+}
+
+.field-hint-tooltip__trigger:hover,
+.field-hint-tooltip__trigger:focus-visible {
+  color: var(--primary-color, #006994);
+  background: color-mix(in srgb, var(--primary-color, #006994) 10%, transparent);
+}
+
+.field-hint-tooltip__bubble {
+  position: absolute;
+  z-index: 40;
+  left: 0;
+  bottom: calc(100% + 6px);
+  min-width: 220px;
+  max-width: min(420px, 72vw);
+  max-height: min(280px, 45vh);
+  overflow: auto;
+  padding: 0.55rem 0.65rem;
+  font-size: 0.74rem;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--text-color, #0f172a);
+  background: var(--card-bg, #fff);
+  border: 1px solid color-mix(in srgb, var(--border-color, #e2e8f0) 90%, var(--text-color));
+  border-radius: 8px;
+  box-shadow: 0 10px 28px rgb(15 23 42 / 0.14);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition:
+    opacity 0.14s ease,
+    transform 0.14s ease;
+}
+
+.field-hint-tooltip:hover .field-hint-tooltip__bubble,
+.field-hint-tooltip:focus-within .field-hint-tooltip__bubble {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+:root[data-theme='dark'] .field-hint-tooltip__bubble {
+  background: color-mix(in srgb, #0f172a 94%, #1e293b);
+  color: #e2e8f0;
+  border-color: color-mix(in srgb, #334155 85%, #22d3ee);
+  box-shadow: 0 12px 36px rgb(0 0 0 / 0.45);
+}
+
+.field-label-with-hint {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.35rem;
+  margin-bottom: 0.28rem;
+}
+
+.field-label-with-hint label {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.field-label-with-hint__req {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+.field-label-with-hint__kicker {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+details summary .field-hint-tooltip {
+  margin-left: 0.35rem;
+  vertical-align: middle;
+}
+
+.panel-title.panel-title-hint,
+h3.panel-title.panel-title-hint,
+h4.panel-subtitle.panel-title-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.panel-subtitle.panel-title-hint {
+  margin-bottom: 0.5rem;
+}
+
 /* --- Form fields: readability --- */
+/* Continuous wizard — all steps in one scroll column; step tabs scroll to #pilot-wizard-section-{id} */
+.pilot-wizard-section {
+  scroll-margin-top: calc(var(--header-offset, 58px) + 3rem);
+}
+.pilot-wizard-section__title {
+  margin: 0 0 0.85rem;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+}
+.pilot-wizard-section + .pilot-wizard-section {
+  margin-top: 1.75rem;
+}
+
 #root .workspace-main textarea.form-control {
   min-height: 5.5rem;
   line-height: 1.5;
@@ -373,6 +533,82 @@
   border-color: color-mix(in srgb, var(--border) 80%, transparent);
 }
 
+/*
+ * Platform library — light “paper” panel in dark theme so Postgres /api/db copy,
+ * selects, and load errors stay high-contrast (wizard Platform step).
+ */
+:root[data-theme='dark'] #root .workspace-main.pilot-step .panel.platform-library-panel {
+  background: linear-gradient(165deg, #f8fafc 0%, #eef2f7 52%, #f1f5f9 100%) !important;
+  border: 1px solid color-mix(in srgb, var(--step-accent-start, #22c55e) 22%, #cbd5e1) !important;
+  border-left: 4px solid var(--step-accent-start, var(--success-color)) !important;
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.88) inset,
+    0 10px 26px rgb(15 23 42 / 0.12) !important;
+}
+
+:root[data-theme='dark'] #root .panel.platform-library-panel .panel-title {
+  font-family:
+    'Plus Jakarta Sans',
+    ui-sans-serif,
+    system-ui,
+    sans-serif !important;
+  letter-spacing: -0.02em !important;
+  text-transform: none !important;
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+}
+
+:root[data-theme='dark'] #root .panel.platform-library-panel .panel-title::before {
+  content: none !important;
+}
+
+:root[data-theme='dark'] #root .panel.platform-library-panel .card-intro,
+:root[data-theme='dark'] #root .panel.platform-library-panel .platform-library-intro {
+  color: #475569 !important;
+}
+
+:root[data-theme='dark'] #root .panel.platform-library-panel .hint {
+  color: #64748b !important;
+}
+
+:root[data-theme='dark'] #root .panel.platform-library-panel .hint code,
+:root[data-theme='dark'] #root .panel.platform-library-panel .card-intro code {
+  background: #e2e8f0 !important;
+  color: #0f172a !important;
+  padding: 0.12em 0.35em;
+  border-radius: 4px;
+}
+
+:root[data-theme='dark'] #root .panel.platform-library-panel .form-control,
+:root[data-theme='dark'] #root .panel.platform-library-panel .form-select {
+  background: #fff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: inset 0 1px 2px rgb(15 23 42 / 0.05) !important;
+}
+
+:root[data-theme='dark'] #root .panel.platform-library-panel .form-control:hover:not(:disabled):not(:focus),
+:root[data-theme='dark'] #root .panel.platform-library-panel .form-select:hover:not(:disabled):not(:focus) {
+  border-color: #94a3b8 !important;
+}
+
+:root[data-theme='dark'] #root .panel.platform-library-panel .platform-library-row:hover {
+  background: rgb(148 163 184 / 0.18) !important;
+  border-color: #cbd5e1 !important;
+}
+
+:root[data-theme='dark'] #root .panel.platform-library-panel .field-error {
+  color: #991b1b !important;
+  background: rgb(254 226 226 / 0.95);
+  border: 1px solid rgb(248 113 113 / 0.45);
+  border-radius: var(--radius-sm, 6px);
+  padding: 0.5rem 0.65rem;
+}
+
 /* --- Toggles (spatial, etc.) --- */
 #root label.toggle {
   display: flex;
@@ -443,20 +679,6 @@
 .pilot-debug-log__list {
   scrollbar-color: color-mix(in srgb, var(--text-muted) 55%, transparent) transparent;
   scrollbar-width: thin;
-}
-
-/* --- Pilot notes --- */
-#root .pilot-notes {
-  padding: 1.35rem 1.5rem 1.5rem;
-}
-
-#root .pilot-notes ol {
-  margin-top: 0.5rem;
-  line-height: 1.55;
-}
-
-#root .pilot-notes li {
-  color: color-mix(in srgb, var(--text-color) 88%, var(--text-muted));
 }
 
 /* --- Ghost / link buttons --- */

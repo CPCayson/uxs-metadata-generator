@@ -84,6 +84,11 @@ function gcoDateOrDateTimeInner(v) {
   return s.includes('T') ? `<gco:DateTime>${esc(s)}</gco:DateTime>` : `<gco:Date>${esc(s)}</gco:Date>`
 }
 
+/** Default gmd:dateStamp when the form is blank — stable UTC “Z” instant for preview/export. */
+function utcNowIsoZForDateStamp() {
+  return new Date().toISOString().replace(/\.\d{3}Z$/, 'Z')
+}
+
 /**
  * @param {string} v
  * @returns {number | null}
@@ -297,23 +302,24 @@ export function buildXmlPreview(state) {
   const omitRef = dist.omitRootReferenceSystemInfo
   const useNceiMeta = dist.useNceiMetadataContactXlink
 
+  /** One MD_Keywords block per facet with repeated gmd:keyword (matches common NCEI/GCMD patterns). */
   const kwBlock = (facet) => {
     const arr = Array.isArray(kw[facet]) ? kw[facet] : []
-    if (!arr.length) return `    <!-- ${facet} -->\n`
-    return arr
+    const inner = arr
       .map((k) => {
         const label = String(k?.label || '').trim()
         const uuid = String(k?.uuid || '').trim()
         const href = gcmdKeywordHrefFromStoredUuid(uuid)
         const display = label || uuid
         if (!display) return ''
-        const kwInner = href
+        return href
           ? `        <gmd:keyword>\n          <gmx:Anchor xlink:href="${esc(href)}" xlink:actuate="onRequest">${esc(display)}</gmx:Anchor>\n        </gmd:keyword>\n`
           : `        <gmd:keyword>\n          <gco:CharacterString>${esc(display)}</gco:CharacterString>\n        </gmd:keyword>\n`
-        return `    <gmd:descriptiveKeywords>\n      <gmd:MD_Keywords>\n${kwInner}        <gmd:thesaurusName>\n          <gmd:CI_Citation>\n            <gmd:title><gco:CharacterString>GCMD ${esc(facet)}</gco:CharacterString></gmd:title>\n          </gmd:CI_Citation>\n        </gmd:thesaurusName>\n      </gmd:MD_Keywords>\n    </gmd:descriptiveKeywords>\n`
       })
       .filter(Boolean)
       .join('')
+    if (!inner) return `    <!-- ${facet} -->\n`
+    return `    <gmd:descriptiveKeywords>\n      <gmd:MD_Keywords>\n${inner}        <gmd:thesaurusName>\n          <gmd:CI_Citation>\n            <gmd:title><gco:CharacterString>GCMD ${esc(facet)}</gco:CharacterString></gmd:title>\n          </gmd:CI_Citation>\n        </gmd:thesaurusName>\n      </gmd:MD_Keywords>\n    </gmd:descriptiveKeywords>\n`
   }
 
   const citationPartiesXml = [
@@ -907,9 +913,8 @@ ${dist.finalNotes ? `  <!-- finalNotes: ${esc(String(dist.finalNotes).trim())} -
 ` : ''}`
 
   const scopeToken = String(m.scopeCode || 'dataset').trim() || 'dataset'
-  const dateStampXml = m.metadataRecordDate
-    ? `  <gmd:dateStamp>${gcoDateOrDateTimeInner(m.metadataRecordDate)}</gmd:dateStamp>\n`
-    : `  <!-- gmd:dateStamp: omitted — leave blank in form to use server time at generate -->\n`
+  const dateStampSource = String(m.metadataRecordDate || '').trim() || utcNowIsoZForDateStamp()
+  const dateStampXml = `  <gmd:dateStamp>${gcoDateOrDateTimeInner(dateStampSource)}</gmd:dateStamp>\n`
 
   const tiUnit = String(m.temporalExtentIntervalUnit || '').trim()
   const tiVal  = String(m.temporalExtentIntervalValue || '').trim()
@@ -927,7 +932,9 @@ ${dist.finalNotes ? `  <!-- finalNotes: ${esc(String(dist.finalNotes).trim())} -
                  xmlns:gmi="http://www.isotc211.org/2005/gmi"
                  xmlns:gmx="http://www.isotc211.org/2005/gmx"
                  xmlns:gml="http://www.opengis.net/gml/3.2"
-                 xmlns:xlink="http://www.w3.org/1999/xlink">
+                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://www.isotc211.org/2005/gmi http://schemas.opengis.net/iso/19115/-2/gmi/1.0/gmi.xsd">
   <!-- gmd:parentIdentifier is intentionally omitted here.
        Only BEDI granule profiles (hierarchyLevel=dataset with a parent collection)
        should emit parentIdentifier.  Mission and collection records are

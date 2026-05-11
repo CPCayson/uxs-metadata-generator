@@ -1,4 +1,6 @@
 /**
+ * Pilot wizard step tabs — compact strip only (no stream / hero panel).
+ *
  * @param {{
  *   steps: Array<{ id: string, label: string }>,
  *   activeStep: string,
@@ -6,25 +8,6 @@
  *   stepStatus?: Record<string, 'ok'|'warn'|'err'|'pending'>,
  * }} props
  */
-const STEP_NAV_GRAPHIC_SRC = `${import.meta.env.BASE_URL}aitubo.mp4`
-
-// Tiny inline gradient (cyan → deep blue) used as poster so the slot never
-// flashes blank before the mp4 decodes, and also when hosted in contexts
-// (e.g. some embedded hosts) where the mp4 can't be served relatively.
-const STEP_NAV_POSTER =
-  'data:image/svg+xml;utf8,' +
-  encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 390">
-      <defs>
-        <radialGradient id="g" cx="70%" cy="50%" r="70%">
-          <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.55"/>
-          <stop offset="45%" stop-color="#2563eb" stop-opacity="0.25"/>
-          <stop offset="100%" stop-color="#020617" stop-opacity="0"/>
-        </radialGradient>
-      </defs>
-      <rect width="720" height="390" fill="url(#g)"/>
-    </svg>`,
-  )
 
 const STEP_STATUS_LABELS = {
   pending: 'Step not reviewed yet',
@@ -42,32 +25,24 @@ const STEP_STATUS_VISIBLE = {
 }
 
 export default function StepNav({ steps, activeStep, onSelect, stepStatus = {} }) {
-  const openLens = () => {
-    if (typeof window !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('manta:open-lens'))
-    }
-  }
-
-  const onLensKeyDown = (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault()
-      openLens()
-    }
-  }
-
   return (
-    <nav className="header-nav metadata-nav-wrap pilot-step-nav" aria-label="Pilot steps">
-      <div className="metadata-nav-inner pilot-step-nav__row w-100">
+    <nav
+      className="header-nav metadata-nav-wrap pilot-step-nav pilot-step-nav--compact"
+      aria-label="Pilot steps"
+    >
+      <div className="metadata-nav-inner pilot-step-nav__row pilot-step-nav__row--tabs-only w-100">
         <ul className="nav nav-tabs metadata-tabs pilot-metadata-tabs" role="tablist">
           {steps.map((step) => {
-            const st = stepStatus[step.id] || 'ok'
+            const st = stepStatus[step.id] || 'pending'
             const statusLabel = STEP_STATUS_LABELS[st] || 'Status unknown'
             return (
               <li key={step.id} className="nav-item" role="presentation">
                 <button
                   type="button"
                   role="tab"
+                  id={`pilot-step-tab-${step.id}`}
                   aria-selected={activeStep === step.id}
+                  aria-controls={`pilot-wizard-section-${step.id}`}
                   aria-label={`${step.label}: ${statusLabel}`}
                   title={`${step.label}: ${statusLabel}`}
                   className={`nav-link nav-link--step-${st}${activeStep === step.id ? ' active' : ''}`}
@@ -83,42 +58,6 @@ export default function StepNav({ steps, activeStep, onSelect, stepStatus = {} }
             )
           })}
         </ul>
-        <div
-          className="pilot-step-nav__stream-wrap"
-          role="button"
-          tabIndex={0}
-          onClick={openLens}
-          onKeyDown={onLensKeyDown}
-          aria-label="Open Manta Lens — validation scanner over the workspace"
-          title="Lens — open validation scanner (form + XML)"
-        >
-          <div className="pilot-step-nav__stream" aria-hidden="true">
-            <video
-              className="pilot-step-nav__graphic"
-              src={STEP_NAV_GRAPHIC_SRC}
-              poster={STEP_NAV_POSTER}
-              width={720}
-              height={390}
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="auto"
-              tabIndex={-1}
-              onError={(e) => {
-                // Hide the whole stream if the video can't load (e.g. Apps
-                // Script single-file deploy where relative mp4 has no host).
-                const wrap = e.currentTarget.closest('.pilot-step-nav__stream-wrap')
-                if (wrap) wrap.style.display = 'none'
-              }}
-            />
-            <span className="pilot-step-nav__stream-scan" />
-            <span className="pilot-step-nav__stream-grid" />
-          </div>
-          <span className="pilot-step-nav__stream-lens-hint" aria-hidden="true">
-            Lens
-          </span>
-        </div>
       </div>
     </nav>
   )

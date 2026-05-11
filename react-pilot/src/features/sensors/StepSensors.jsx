@@ -187,6 +187,7 @@ export default function StepSensors({ sensors, onSetSensors, touched, onTouched,
             <label htmlFor={`${pfx}-sid`}>Sensor ID</label>
             <input
               id={`${pfx}-sid`}
+              data-pilot-field={`sensors[${idx}].modelId`}
               className="form-control"
               value={sen.sensorId || ''}
               onChange={(e) => patchSensor(idx, { sensorId: e.target.value })}
@@ -195,6 +196,7 @@ export default function StepSensors({ sensors, onSetSensors, touched, onTouched,
             <label htmlFor={`${pfx}-type`}>Type</label>
             <select
               id={`${pfx}-type`}
+              data-pilot-field={`sensors[${idx}].type`}
               className={`form-control form-select${inv(fType) ? ' form-control--invalid' : ''}`}
               value={sen.type}
               onChange={(e) => patchSensor(idx, { type: e.target.value })}
@@ -213,6 +215,7 @@ export default function StepSensors({ sensors, onSetSensors, touched, onTouched,
             <label htmlFor={`${pfx}-model`}>Model ID</label>
             <input
               id={`${pfx}-model`}
+              data-pilot-field={`sensors[${idx}].model`}
               className={`form-control${inv(fModel) ? ' form-control--invalid' : ''}`}
               value={sen.modelId}
               onChange={(e) => patchSensor(idx, { modelId: e.target.value })}
@@ -224,6 +227,7 @@ export default function StepSensors({ sensors, onSetSensors, touched, onTouched,
             <label htmlFor={`${pfx}-var`}>Observed variable</label>
             <input
               id={`${pfx}-var`}
+              data-pilot-field={`sensors[${idx}].variable`}
               className={`form-control${inv(fVar) ? ' form-control--invalid' : ''}`}
               value={sen.variable}
               onChange={(e) => patchSensor(idx, { variable: e.target.value })}
@@ -235,6 +239,7 @@ export default function StepSensors({ sensors, onSetSensors, touched, onTouched,
             <label htmlFor={`${pfx}-fw`}>Firmware</label>
             <input
               id={`${pfx}-fw`}
+              data-pilot-field={`sensors[${idx}].firmware`}
               className="form-control"
               value={sen.firmware || ''}
               onChange={(e) => patchSensor(idx, { firmware: e.target.value })}
@@ -248,6 +253,7 @@ export default function StepSensors({ sensors, onSetSensors, touched, onTouched,
                     <label htmlFor={`${pfx}-${key}`}>{SENSOR_XML_EXTRA_FIELD_LABELS[key] || key}</label>
                     <input
                       id={`${pfx}-${key}`}
+                      data-pilot-field={`sensors[${idx}].${key}`}
                       className="form-control"
                       value={sen[key] || ''}
                       onChange={(e) => patchSensor(idx, { [key]: e.target.value })}

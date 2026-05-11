@@ -273,7 +273,7 @@ export default function StepKeywords({ mission = {}, keywords, onKeywordsChange,
     <>
       <p className="card-intro">
         <strong>GCMD faceted keywords</strong> — search per facet, or use <strong>Suggest from title / abstract</strong>{' '}
-        for heuristic matches. Chip counts flow into the live validator.
+        for heuristic matches. Chip counts appear in the validation panel.
       </p>
 
       {keywordMetadataIssues.length > 0 ? (

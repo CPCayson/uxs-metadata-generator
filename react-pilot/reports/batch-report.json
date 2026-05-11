@@ -1,0 +1,70 @@
+{
+  "generated": "2026-05-06T08:00:36.828Z",
+  "overallStatus": "BLOCK",
+  "summary": {
+    "pass": 3,
+    "check": 6,
+    "block": 1
+  },
+  "lanes": [
+    {
+      "name": "xmlCertification",
+      "status": "PASS",
+      "detail": "107 records analysed via inline engine"
+    },
+    {
+      "name": "uuidIntegrity",
+      "status": "PASS",
+      "detail": "valid=107 missing=0 dupes=0"
+    },
+    {
+      "name": "noddCloudLinks",
+      "status": "CHECK",
+      "detail": "0 NODD URLs found across 107 records"
+    },
+    {
+      "name": "osddLinks",
+      "status": "CHECK",
+      "detail": "0 OSDD URLs found across 107 records"
+    },
+    {
+      "name": "docucompIntegrity",
+      "status": "CHECK",
+      "detail": "0 DocuComp URLs, 0/0 DocuComp images"
+    },
+    {
+      "name": "imageUrlIntegrity",
+      "status": "CHECK",
+      "detail": "0 browse graphic URLs found"
+    },
+    {
+      "name": "wafLinkHealth",
+      "status": "BLOCK",
+      "detail": "45 URLs checked, 23 broken"
+    },
+    {
+      "name": "noddPlan",
+      "status": "CHECK",
+      "detail": "Run: npm run batch:nodd:plan -- --csv nodd.csv --xml-dir <path>"
+    },
+    {
+      "name": "osddPlan",
+      "status": "CHECK",
+      "detail": "Run: npm run batch:osdd:plan -- --csv osdd.csv --xml-dir <path>"
+    },
+    {
+      "name": "uuidAudit",
+      "status": "PASS",
+      "detail": "valid=107 missing=0 dupes=0"
+    }
+  ],
+  "totals": {
+    "xmlRecords": 107,
+    "totalUrls": 1495,
+    "noddUrls": 0,
+    "osddUrls": 0,
+    "docucompUrls": 0,
+    "imageUrls": 0,
+    "docucompImages": 0
+  }
+}

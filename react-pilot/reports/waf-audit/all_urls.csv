@@ -1,0 +1,560 @@
+status,httpStatus,url,source,uuid,isDocucomp,isNodd,isOsdd,isImage,error
+OK,200,https://ror.org/04r0wrp59,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,400,https://doi.org/{{DOI}},/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,0,https://gcmdservices.gsfc.nasa.gov/kms/concept/{{UUID}},/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,getaddrinfo ENOTFOUND gcmdservices.gsfc.nasa.gov
+BROKEN,500,https://vocab.nerc.ac.uk/collection/C17/current/{{ConceptID}}/,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,https://www.ncei.noaa.gov/contact,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,302,https://forum.earthdata.nasa.gov/app.php/tag/GCMD%2BKeywords,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,http://wis.wmo.int/style/WMOCodeLists_Style.xml,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,301,https://gcos.wmo.int/en/essential-climate-variables,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,https://vocab.ices.dk/?ref=315,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,https://scholar.google.com/scholar?q={{queryValue}},/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,401,https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/{{fileIdentifier}}/html/,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,404,"https://data.noaa.gov/docucomp/image/5abab464-7994-49fc-8a2f-ec337a11bfd4
+          
+          
+            NOAA logo
+          
+          
+            PNG",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,Y,,Y,Y,
+OK,200,https://data.noaa.gov/docucomp/image/5abab464-7994-49fc-8a2f-ec337a11bfd4,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,Y,,Y,Y,
+BROKEN,404,"https://www.ncei.noaa.gov/contact
+              
+              
+                NCEI Contact Information
+              
+              
+                Information for contacts at NCEI.
+              
+              
+                information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,404,"https://www.ncei.noaa.gov/contact
+                  
+                  
+                    NCEI Contact Information
+                  
+                  
+                    Information for contacts at NCEI.
+                  
+                  
+                    information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,404,"https://forum.earthdata.nasa.gov/app.php/tag/GCMD%2BKeywords
+                          
+                          
+                            GCMD Keyword Forum Page
+                          
+                          
+                            Global Change Master Directory (GCMD). 2025. GCMD Keywords, Version 22. Greenbelt, MD: Earth Science Data and Information System, Earth Science Projects Division, Goddard Space Flight Center (GSFC), National Aeronautics and Space Administration (NASA). URL (GCMD Keyword Forum Page): https://forum.earthdata.nasa.gov/app.php/tag/GCMD+Keywords
+                          
+                          
+                            information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,403,"http://wis.wmo.int/style/WMOCodeLists_Style.xml
+                          
+                          
+                            WMO Codelist Catalog for ISO 19139 Metadata
+                          
+                          
+                            Codelists for description of metadata datasets compliant with the WMO Core Metadata Profile version 1.3 (derived from ISO/TC 211 19115:2003 and 19139).
+                          
+                          
+                            information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,404,"https://gcos.wmo.int/en/essential-climate-variables
+                          
+                          
+                            HTTPS
+                          
+                          
+                            Web Browser
+                          
+                          
+                            GCOS Essential Climate Variables
+                          
+                          
+                            Overview of the GCOS Essential Climate Variables.
+                          
+                          
+                            information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,"https://vocab.ices.dk/?ref=315
+                          
+                          
+                            ICES/SDN Ship Codes
+                          
+                          
+                            information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,"https://scholar.google.com/scholar?q={{queryValue}}
+                          
+                          
+                            HTTPS
+                          
+                          
+                            Google Scholar search results
+                          
+                          
+                            Search for publications that cite this dataset by {{queryValue}}.
+                          
+                          
+                            information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,403,"https://www.ncei.noaa.gov/contact
+                      
+                      
+                        NCEI Contact Information
+                      
+                      
+                        Information for contacts at NCEI.
+                      
+                      
+                        information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,401,"https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/{{fileIdentifier}}/html/
+                  
+                  
+                    HTTPS
+                  
+                  
+                    Metadata Landing Page
+                  
+                  
+                    information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,https://ror.org/04r0wrp59,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-54-21/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,400,https://doi.org/{{DOI}},/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-54-21/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,0,https://gcmdservices.gsfc.nasa.gov/kms/concept/{{UUID}},/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-54-21/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,getaddrinfo ENOTFOUND gcmdservices.gsfc.nasa.gov
+BROKEN,500,https://vocab.nerc.ac.uk/collection/C17/current/{{ConceptID}}/,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-54-21/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,https://www.ncei.noaa.gov/contact,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-54-21/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,302,https://forum.earthdata.nasa.gov/app.php/tag/GCMD%2BKeywords,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-54-21/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,http://wis.wmo.int/style/WMOCodeLists_Style.xml,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-54-21/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,301,https://gcos.wmo.int/en/essential-climate-variables,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-54-21/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,https://vocab.ices.dk/?ref=315,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-54-21/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,https://scholar.google.com/scholar?q={{queryValue}},/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-54-21/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,401,https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/{{fileIdentifier}}/html/,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-54-21/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,404,"https://data.noaa.gov/docucomp/image/5abab464-7994-49fc-8a2f-ec337a11bfd4
+          
+          
+            NOAA logo
+          
+          
+            PNG",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-54-21/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,Y,,Y,Y,
+OK,200,https://data.noaa.gov/docucomp/image/5abab464-7994-49fc-8a2f-ec337a11bfd4,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-54-21/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,Y,,Y,Y,
+BROKEN,404,"https://www.ncei.noaa.gov/contact
+              
+              
+                NCEI Contact Information
+              
+              
+                Information for contacts at NCEI.
+              
+              
+                information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-54-21/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,404,"https://www.ncei.noaa.gov/contact
+                  
+                  
+                    NCEI Contact Information
+                  
+                  
+                    Information for contacts at NCEI.
+                  
+                  
+                    information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-54-21/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,404,"https://forum.earthdata.nasa.gov/app.php/tag/GCMD%2BKeywords
+                          
+                          
+                            GCMD Keyword Forum Page
+                          
+                          
+                            Global Change Master Directory (GCMD). 2025. GCMD Keywords, Version 22. Greenbelt, MD: Earth Science Data and Information System, Earth Science Projects Division, Goddard Space Flight Center (GSFC), National Aeronautics and Space Administration (NASA). URL (GCMD Keyword Forum Page): https://forum.earthdata.nasa.gov/app.php/tag/GCMD+Keywords
+                          
+                          
+                            information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-54-21/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,403,"http://wis.wmo.int/style/WMOCodeLists_Style.xml
+                          
+                          
+                            WMO Codelist Catalog for ISO 19139 Metadata
+                          
+                          
+                            Codelists for description of metadata datasets compliant with the WMO Core Metadata Profile version 1.3 (derived from ISO/TC 211 19115:2003 and 19139).
+                          
+                          
+                            information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-54-21/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,404,"https://gcos.wmo.int/en/essential-climate-variables
+                          
+                          
+                            HTTPS
+                          
+                          
+                            Web Browser
+                          
+                          
+                            GCOS Essential Climate Variables
+                          
+                          
+                            Overview of the GCOS Essential Climate Variables.
+                          
+                          
+                            information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-54-21/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,"https://vocab.ices.dk/?ref=315
+                          
+                          
+                            ICES/SDN Ship Codes
+                          
+                          
+                            information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-54-21/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,"https://scholar.google.com/scholar?q={{queryValue}}
+                          
+                          
+                            HTTPS
+                          
+                          
+                            Google Scholar search results
+                          
+                          
+                            Search for publications that cite this dataset by {{queryValue}}.
+                          
+                          
+                            information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-54-21/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,403,"https://www.ncei.noaa.gov/contact
+                      
+                      
+                        NCEI Contact Information
+                      
+                      
+                        Information for contacts at NCEI.
+                      
+                      
+                        information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-54-21/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,401,"https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/{{fileIdentifier}}/html/
+                  
+                  
+                    HTTPS
+                  
+                  
+                    Metadata Landing Page
+                  
+                  
+                    information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-54-21/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,https://ror.org/04r0wrp59,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-59-54/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,400,https://doi.org/{{DOI}},/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-59-54/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,0,https://gcmdservices.gsfc.nasa.gov/kms/concept/{{UUID}},/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-59-54/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,getaddrinfo ENOTFOUND gcmdservices.gsfc.nasa.gov
+BROKEN,500,https://vocab.nerc.ac.uk/collection/C17/current/{{ConceptID}}/,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-59-54/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,https://www.ncei.noaa.gov/contact,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-59-54/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,302,https://forum.earthdata.nasa.gov/app.php/tag/GCMD%2BKeywords,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-59-54/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,http://wis.wmo.int/style/WMOCodeLists_Style.xml,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-59-54/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,301,https://gcos.wmo.int/en/essential-climate-variables,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-59-54/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,https://vocab.ices.dk/?ref=315,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-59-54/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,https://scholar.google.com/scholar?q={{queryValue}},/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-59-54/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,401,https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/{{fileIdentifier}}/html/,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-59-54/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,404,"https://data.noaa.gov/docucomp/image/5abab464-7994-49fc-8a2f-ec337a11bfd4
+          
+          
+            NOAA logo
+          
+          
+            PNG",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-59-54/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,Y,,Y,Y,
+OK,200,https://data.noaa.gov/docucomp/image/5abab464-7994-49fc-8a2f-ec337a11bfd4,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-59-54/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,Y,,Y,Y,
+BROKEN,404,"https://www.ncei.noaa.gov/contact
+              
+              
+                NCEI Contact Information
+              
+              
+                Information for contacts at NCEI.
+              
+              
+                information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-59-54/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,404,"https://www.ncei.noaa.gov/contact
+                  
+                  
+                    NCEI Contact Information
+                  
+                  
+                    Information for contacts at NCEI.
+                  
+                  
+                    information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-59-54/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,404,"https://forum.earthdata.nasa.gov/app.php/tag/GCMD%2BKeywords
+                          
+                          
+                            GCMD Keyword Forum Page
+                          
+                          
+                            Global Change Master Directory (GCMD). 2025. GCMD Keywords, Version 22. Greenbelt, MD: Earth Science Data and Information System, Earth Science Projects Division, Goddard Space Flight Center (GSFC), National Aeronautics and Space Administration (NASA). URL (GCMD Keyword Forum Page): https://forum.earthdata.nasa.gov/app.php/tag/GCMD+Keywords
+                          
+                          
+                            information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-59-54/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,403,"http://wis.wmo.int/style/WMOCodeLists_Style.xml
+                          
+                          
+                            WMO Codelist Catalog for ISO 19139 Metadata
+                          
+                          
+                            Codelists for description of metadata datasets compliant with the WMO Core Metadata Profile version 1.3 (derived from ISO/TC 211 19115:2003 and 19139).
+                          
+                          
+                            information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-59-54/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,404,"https://gcos.wmo.int/en/essential-climate-variables
+                          
+                          
+                            HTTPS
+                          
+                          
+                            Web Browser
+                          
+                          
+                            GCOS Essential Climate Variables
+                          
+                          
+                            Overview of the GCOS Essential Climate Variables.
+                          
+                          
+                            information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-59-54/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,"https://vocab.ices.dk/?ref=315
+                          
+                          
+                            ICES/SDN Ship Codes
+                          
+                          
+                            information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-59-54/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,"https://scholar.google.com/scholar?q={{queryValue}}
+                          
+                          
+                            HTTPS
+                          
+                          
+                            Google Scholar search results
+                          
+                          
+                            Search for publications that cite this dataset by {{queryValue}}.
+                          
+                          
+                            information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-59-54/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,403,"https://www.ncei.noaa.gov/contact
+                      
+                      
+                        NCEI Contact Information
+                      
+                      
+                        Information for contacts at NCEI.
+                      
+                      
+                        information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-59-54/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,401,"https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/{{fileIdentifier}}/html/
+                  
+                  
+                    HTTPS
+                  
+                  
+                    Metadata Landing Page
+                  
+                  
+                    information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T12-59-54/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,https://ror.org/04r0wrp59,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T13-05-51/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,400,https://doi.org/{{DOI}},/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T13-05-51/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,0,https://gcmdservices.gsfc.nasa.gov/kms/concept/{{UUID}},/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T13-05-51/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,getaddrinfo ENOTFOUND gcmdservices.gsfc.nasa.gov
+BROKEN,500,https://vocab.nerc.ac.uk/collection/C17/current/{{ConceptID}}/,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T13-05-51/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,https://www.ncei.noaa.gov/contact,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T13-05-51/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,302,https://forum.earthdata.nasa.gov/app.php/tag/GCMD%2BKeywords,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T13-05-51/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,http://wis.wmo.int/style/WMOCodeLists_Style.xml,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T13-05-51/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,301,https://gcos.wmo.int/en/essential-climate-variables,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T13-05-51/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,https://vocab.ices.dk/?ref=315,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T13-05-51/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,https://scholar.google.com/scholar?q={{queryValue}},/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T13-05-51/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,401,https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/{{fileIdentifier}}/html/,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T13-05-51/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,404,"https://data.noaa.gov/docucomp/image/5abab464-7994-49fc-8a2f-ec337a11bfd4
+          
+          
+            NOAA logo
+          
+          
+            PNG",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T13-05-51/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,Y,,Y,Y,
+OK,200,https://data.noaa.gov/docucomp/image/5abab464-7994-49fc-8a2f-ec337a11bfd4,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T13-05-51/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,Y,,Y,Y,
+BROKEN,404,"https://www.ncei.noaa.gov/contact
+              
+              
+                NCEI Contact Information
+              
+              
+                Information for contacts at NCEI.
+              
+              
+                information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T13-05-51/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,404,"https://www.ncei.noaa.gov/contact
+                  
+                  
+                    NCEI Contact Information
+                  
+                  
+                    Information for contacts at NCEI.
+                  
+                  
+                    information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T13-05-51/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,404,"https://forum.earthdata.nasa.gov/app.php/tag/GCMD%2BKeywords
+                          
+                          
+                            GCMD Keyword Forum Page
+                          
+                          
+                            Global Change Master Directory (GCMD). 2025. GCMD Keywords, Version 22. Greenbelt, MD: Earth Science Data and Information System, Earth Science Projects Division, Goddard Space Flight Center (GSFC), National Aeronautics and Space Administration (NASA). URL (GCMD Keyword Forum Page): https://forum.earthdata.nasa.gov/app.php/tag/GCMD+Keywords
+                          
+                          
+                            information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T13-05-51/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,403,"http://wis.wmo.int/style/WMOCodeLists_Style.xml
+                          
+                          
+                            WMO Codelist Catalog for ISO 19139 Metadata
+                          
+                          
+                            Codelists for description of metadata datasets compliant with the WMO Core Metadata Profile version 1.3 (derived from ISO/TC 211 19115:2003 and 19139).
+                          
+                          
+                            information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T13-05-51/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,404,"https://gcos.wmo.int/en/essential-climate-variables
+                          
+                          
+                            HTTPS
+                          
+                          
+                            Web Browser
+                          
+                          
+                            GCOS Essential Climate Variables
+                          
+                          
+                            Overview of the GCOS Essential Climate Variables.
+                          
+                          
+                            information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T13-05-51/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,"https://vocab.ices.dk/?ref=315
+                          
+                          
+                            ICES/SDN Ship Codes
+                          
+                          
+                            information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T13-05-51/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,"https://scholar.google.com/scholar?q={{queryValue}}
+                          
+                          
+                            HTTPS
+                          
+                          
+                            Google Scholar search results
+                          
+                          
+                            Search for publications that cite this dataset by {{queryValue}}.
+                          
+                          
+                            information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T13-05-51/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,403,"https://www.ncei.noaa.gov/contact
+                      
+                      
+                        NCEI Contact Information
+                      
+                      
+                        Information for contacts at NCEI.
+                      
+                      
+                        information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T13-05-51/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+BROKEN,401,"https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/{{fileIdentifier}}/html/
+                  
+                  
+                    HTTPS
+                  
+                  
+                    Metadata Landing Page
+                  
+                  
+                    information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/comet-export-2026-04-30T13-05-51/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,9f21ce1a-1e11-4461-bc84-81939f73cfc2,,,,,
+OK,200,https://data.noaa.gov/docucomp/440b3ac2-64a5-46e2-9846-38305718b644,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/navy-uxs-swarm-clean.xml,gov.noaa.ncei.uxs:SWARM_DEMO_001,Y,,Y,,
+BROKEN,404,https://doi.org/10.25923/swarm-demo-uxs,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/navy-uxs-swarm-clean.xml,gov.noaa.ncei.uxs:SWARM_DEMO_001,,,,,
+OK,200,https://ror.org/04r0wrp59,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/navy-uxs-swarm-clean.xml,gov.noaa.ncei.uxs:SWARM_DEMO_001,,,,,
+OK,200,https://data.noaa.gov/docucomp/401b6d95-a542-4309-bf52-8c9b20caeccd,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/navy-uxs-swarm-clean.xml,gov.noaa.ncei.uxs:SWARM_DEMO_001,Y,,Y,,
+OK,200,https://data.noaa.gov/docucomp/227737d0-428b-11df-9879-0800200c9a66,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/navy-uxs-swarm-clean.xml,gov.noaa.ncei.uxs:SWARM_DEMO_001,Y,,Y,,
+OK,200,https://data.noaa.gov/docucomp/82A5DD19565ACBECE040AC8C5AB41A40,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/navy-uxs-swarm-clean.xml,gov.noaa.ncei.uxs:SWARM_DEMO_001,Y,,Y,,
+OK,200,https://data.noaa.gov/docucomp/82A5DD195659CBECE040AC8C5AB41A40,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/navy-uxs-swarm-clean.xml,gov.noaa.ncei.uxs:SWARM_DEMO_001,Y,,Y,,
+OK,200,https://data.noaa.gov/docucomp/82A5DD195658CBECE040AC8C5AB41A40,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/navy-uxs-swarm-clean.xml,gov.noaa.ncei.uxs:SWARM_DEMO_001,Y,,Y,,
+OK,200,https://data.noaa.gov/docucomp/9f0de6e5-428b-11df-9879-0800200c9a66,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/navy-uxs-swarm-clean.xml,gov.noaa.ncei.uxs:SWARM_DEMO_001,Y,,Y,,
+OK,200,https://data.noaa.gov/docucomp/9f0de6e6-428b-11df-9879-0800200c9a66,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/navy-uxs-swarm-clean.xml,gov.noaa.ncei.uxs:SWARM_DEMO_001,Y,,Y,,
+OK,200,https://data.noaa.gov/docucomp/dadd4ac3-2b9f-4db5-8603-71285b94c3d7,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/navy-uxs-swarm-clean.xml,gov.noaa.ncei.uxs:SWARM_DEMO_001,Y,,Y,,
+OK,200,https://data.noaa.gov/docucomp/e8163b1b-fb5a-4f4e-8d5c-ed06da10e21b,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/navy-uxs-swarm-clean.xml,gov.noaa.ncei.uxs:SWARM_DEMO_001,Y,,Y,,
+OK,200,https://data.noaa.gov/docucomp/10bb305d-f440-4b92-8c1c-759dd543bc51,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/navy-uxs-swarm-clean.xml,gov.noaa.ncei.uxs:SWARM_DEMO_001,Y,,Y,,
+BROKEN,500,https://data.noaa.gov/docucomp/placeholder-providers,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/navy-uxs-swarm-clean.xml,gov.noaa.ncei.uxs:SWARM_DEMO_001,Y,,Y,,
+BROKEN,403,https://www.noaa.gov,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/navy-uxs-swarm-clean.xml,gov.noaa.ncei.uxs:SWARM_DEMO_001,,,,,
+OK,200,https://www.ncei.noaa.gov,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/navy-uxs-swarm-clean.xml,gov.noaa.ncei.uxs:SWARM_DEMO_001,,,,,
+BROKEN,401,https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/SWARM_DEMO_001/html/,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/navy-uxs-swarm-clean.xml,gov.noaa.ncei.uxs:SWARM_DEMO_001,,,,,
+BROKEN,404,https://www.ncei.noaa.gov/data/path/demo-swarm-file.nc,/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/navy-uxs-swarm-clean.xml,gov.noaa.ncei.uxs:SWARM_DEMO_001,,,,,
+BROKEN,0,"https://www.noaa.gov
+                                            
+                                            
+                                                HTTPS
+                                            
+                                            
+                                                web browser
+                                            
+                                            
+                                                Organization landing page
+                                            
+                                            
+                                                Official NCEI web presence.
+                                            
+                                            
+                                                information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/navy-uxs-swarm-clean.xml,gov.noaa.ncei.uxs:SWARM_DEMO_001,,,,,Invalid URL
+BROKEN,0,"https://www.noaa.gov
+                                            
+                                            
+                                                The connection protocol to be used such as http, ftp, etc.
+                                            
+                                            
+                                                web browser
+                                            
+                                            
+                                                Background Information Name of the online resource.
+                                            
+                                            
+                                                Background information from the source. Description of the online resource that provides the resource sought.
+                                            
+                                            
+                                                information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/navy-uxs-swarm-clean.xml,gov.noaa.ncei.uxs:SWARM_DEMO_001,,,,,Invalid URL
+BROKEN,0,"https://www.ncei.noaa.gov
+                                    
+                                    
+                                        HTTPS
+                                    
+                                    
+                                        web browser
+                                    
+                                    
+                                        Organization landing page
+                                    
+                                    
+                                        Official NCEI web presence.
+                                    
+                                    
+                                        information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/navy-uxs-swarm-clean.xml,gov.noaa.ncei.uxs:SWARM_DEMO_001,,,,,Invalid URL
+BROKEN,0,"https://www.ncei.noaa.gov
+                                                  
+                                                  
+                                                  NCEI home
+                                                  
+                                                  
+                                                  Related holdings landing.
+                                                  
+                                                  
+                                                  information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/navy-uxs-swarm-clean.xml,gov.noaa.ncei.uxs:SWARM_DEMO_001,,,,,Invalid URL
+BROKEN,401,"https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/SWARM_DEMO_001/html/
+                                    
+                                    
+                                        HTTPS
+                                    
+                                    
+                                        Metadata Landing Page
+                                    
+                                    
+                                        information",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/navy-uxs-swarm-clean.xml,gov.noaa.ncei.uxs:SWARM_DEMO_001,,,,,
+BROKEN,404,"https://www.ncei.noaa.gov/data/path/demo-swarm-file.nc
+                                    
+                                    
+                                        HTTPS
+                                    
+                                    
+                                        NCEI direct download
+                                    
+                                    
+                                        Gridded demonstration extract for swarm import QA.
+                                    
+                                    
+                                        download",/Users/connorcayson/Downloads/uSX/react-pilot/fixtures/mission/navy-uxs-swarm-clean.xml,gov.noaa.ncei.uxs:SWARM_DEMO_001,,,,,

@@ -38,6 +38,7 @@ import { memo } from 'react'
  *   onCometLogin?: () => void,
  *   onMetaserverLogin?: () => void,
  *   onClearAuth?: () => void,
+ *   embedInFab?: boolean,
  * }} props
  */
 function CometPushPanel({
@@ -68,6 +69,7 @@ function CometPushPanel({
   onCometLogin,
   onMetaserverLogin,
   onClearAuth,
+  embedInFab = false,
 }) {
   const anyBusy = pullBusy || pushBusy || preflightBusy || metaserverBusy
   const pushDisabled = !capPush || !cometUuid || pushBusy || anyBusy
@@ -83,14 +85,14 @@ function CometPushPanel({
 
   return (
     <section
-      className="comet-push-panel"
+      className={['comet-push-panel', embedInFab ? 'comet-push-panel--in-fab' : ''].filter(Boolean).join(' ')}
       role="region"
       aria-label="CoMET integration"
     >
-      <h3 className="h6 mb-2" id="comet-panel-heading">
+      <h3 className={`h6 mb-2${embedInFab ? ' mb-1' : ''}`} id="comet-panel-heading">
         CoMET
       </h3>
-      <p className="small text-muted mb-3">
+      <p className={`small text-muted${embedInFab ? ' mb-2' : ' mb-3'}`}>
         Session is via Netlify proxy (<code>COMET_SESSION_ID</code>). Pull imports ISO into this profile; preflight runs resolver, validate, link check, and rubric; push updates the loaded UUID. PASS requires zero reported CoMET validate/link/rubric errors.
       </p>
 

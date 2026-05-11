@@ -13,6 +13,21 @@
 const DB_URL = '/api/db'
 
 /**
+ * Plain `npm run dev` (Vite on :5173) registers a middleware stub for `POST /api/db` that
+ * returns JSON `{ ok: false }` — not Postgres. Netlify dev proxies the app on :8888 (default)
+ * where `/api/db` is the real function. Treat Vite-only dev as disconnected so UI does not
+ * offer Apply template / drafts against a fake API.
+ */
+function httpDbEffectiveFromBrowser() {
+  if (typeof window === 'undefined') return true
+  if (!import.meta.env.DEV) return true
+  const { hostname, port } = window.location
+  const local = hostname === 'localhost' || hostname === '127.0.0.1'
+  if (!local) return true
+  return port !== '5173'
+}
+
+/**
  * Posts a function call to the DB API function.
  * @param {string} fn
  * @param {unknown[]} args
@@ -51,7 +66,7 @@ function toListResult(raw) {
 export function createHttpHostAdapter() {
   return {
     isAvailable() {
-      return true
+      return httpDbEffectiveFromBrowser()
     },
 
     async listTemplates() {

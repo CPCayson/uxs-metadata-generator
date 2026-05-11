@@ -1,0 +1,51 @@
+{
+  "xmlDir": "/Users/connorcayson/Downloads/oer/bedi_renderer/out_collections",
+  "uniqueRefs": 9,
+  "refs": [
+    {
+      "docucomp_ref": "227737d0-428b-11df-9879-0800200c9a66",
+      "source_files": 3,
+      "sources_preview": "../../oer/bedi_renderer/out_collections/Biolum2009_collection.xml; ../../oer/bedi_renderer/out_collections/ETTA2004_collection.xml; ../../oer/bedi_renderer/out_collections/ODS2007_collection.xml"
+    },
+    {
+      "docucomp_ref": "401b6d95-a542-4309-bf52-8c9b20caeccd",
+      "source_files": 3,
+      "sources_preview": "../../oer/bedi_renderer/out_collections/Biolum2009_collection.xml; ../../oer/bedi_renderer/out_collections/ETTA2004_collection.xml; ../../oer/bedi_renderer/out_collections/ODS2007_collection.xml"
+    },
+    {
+      "docucomp_ref": "440b3ac2-64a5-46e2-9846-38305718b644",
+      "source_files": 3,
+      "sources_preview": "../../oer/bedi_renderer/out_collections/Biolum2009_collection.xml; ../../oer/bedi_renderer/out_collections/ETTA2004_collection.xml; ../../oer/bedi_renderer/out_collections/ODS2007_collection.xml"
+    },
+    {
+      "docucomp_ref": "493b9ff1-4465-404d-bcdf-e0fe1cedb14f",
+      "source_files": 3,
+      "sources_preview": "../../oer/bedi_renderer/out_collections/Biolum2009_collection.xml; ../../oer/bedi_renderer/out_collections/ETTA2004_collection.xml; ../../oer/bedi_renderer/out_collections/ODS2007_collection.xml"
+    },
+    {
+      "docucomp_ref": "5c633d5b-5d71-446a-bfd2-f1a7ce3dd234",
+      "source_files": 3,
+      "sources_preview": "../../oer/bedi_renderer/out_collections/Biolum2009_collection.xml; ../../oer/bedi_renderer/out_collections/ETTA2004_collection.xml; ../../oer/bedi_renderer/out_collections/ODS2007_collection.xml"
+    },
+    {
+      "docucomp_ref": "9f0de6e6-428b-11df-9879-0800200c9a66",
+      "source_files": 3,
+      "sources_preview": "../../oer/bedi_renderer/out_collections/Biolum2009_collection.xml; ../../oer/bedi_renderer/out_collections/ETTA2004_collection.xml; ../../oer/bedi_renderer/out_collections/ODS2007_collection.xml"
+    },
+    {
+      "docucomp_ref": "dadd4ac3-2b9f-4db5-8603-71285b94c3d7",
+      "source_files": 3,
+      "sources_preview": "../../oer/bedi_renderer/out_collections/Biolum2009_collection.xml; ../../oer/bedi_renderer/out_collections/ETTA2004_collection.xml; ../../oer/bedi_renderer/out_collections/ODS2007_collection.xml"
+    },
+    {
+      "docucomp_ref": "e8163b1b-fb5a-4f4e-8d5c-ed06da10e21b",
+      "source_files": 3,
+      "sources_preview": "../../oer/bedi_renderer/out_collections/Biolum2009_collection.xml; ../../oer/bedi_renderer/out_collections/ETTA2004_collection.xml; ../../oer/bedi_renderer/out_collections/ODS2007_collection.xml"
+    },
+    {
+      "docucomp_ref": "ED9AF398-D6CF-A63A-D75D527D366248F3",
+      "source_files": 3,
+      "sources_preview": "../../oer/bedi_renderer/out_collections/Biolum2009_collection.xml; ../../oer/bedi_renderer/out_collections/ETTA2004_collection.xml; ../../oer/bedi_renderer/out_collections/ODS2007_collection.xml"
+    }
+  ]
+}

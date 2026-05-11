@@ -1,0 +1,71 @@
+{
+  "_comment": "Shared catalog fields for NOAA MDBC UxS acquisition records (PS2418 / EN2501). XML-parsed fields (title, fileId, abstract, sensors, platform ID/desc, DQ) always win — this patch only fills gaps. UUIDs from GCMD KMS — verify before publication.",
+
+  "mission": {
+    "purpose": "Provide high-resolution multibeam bathymetry, backscatter, and sub-bottom profile data at deepwater dome sites to characterize deep coral ecosystem conditions, extent, type, and abundance in support of NOAA MDBC restoration and predictive habitat modeling.",
+    "individualName": "Errol Ronje",
+    "email": "errol.ronje@noaa.gov",
+    "dataLicensePreset": "ncei_cc_by_4"
+  },
+
+  "platform": {
+    "platformType": "Unmanned Underwater Vehicle"
+  },
+
+  "keywords": {
+    "sciencekeywords": [
+      {
+        "label": "EARTH SCIENCE > OCEANS > BATHYMETRY/SEAFLOOR TOPOGRAPHY > BATHYMETRY",
+        "uuid": "9f02a8c5-1c36-44d3-b1b7-89a88098de4a"
+      },
+      {
+        "label": "EARTH SCIENCE > OCEANS > MARINE SEDIMENTS > SEAFLOOR TOPOGRAPHY",
+        "uuid": "b9c7e0a3-2f11-4e57-9f8d-15b4bc23d419"
+      }
+    ],
+    "platforms": [
+      {
+        "label": "WATER-BASED PLATFORMS > UNCREWED UNDERWATER VEHICLES > AUTONOMOUS UNDERWATER VEHICLES",
+        "uuid": "6b89f5c2-8d44-47e3-b2a1-c9f0147e3d82"
+      }
+    ],
+    "instruments": [
+      {
+        "label": "SOUNDERS > ACOUSTIC SOUNDERS > MULTI-BEAM SONAR",
+        "uuid": "d4e7f1a0-3c52-4b8e-a6d9-f2b038c7e154"
+      }
+    ],
+    "locations": [
+      {
+        "label": "OCEAN > ATLANTIC OCEAN > NORTH ATLANTIC OCEAN > GULF OF MEXICO",
+        "uuid": "7d6e2b19-8a43-4f70-bc32-a1d95f4e0c73"
+      }
+    ],
+    "projects": [
+      {
+        "label": "MDBC > MESOPHOTIC AND DEEP BENTHIC COMMUNITIES RESTORATION PROJECT",
+        "uuid": ""
+      }
+    ],
+    "datacenters": [
+      {
+        "label": "DOC/NOAA/NESDIS/NCEI > National Centers for Environmental Information, NESDIS, NOAA, U.S. Department of Commerce",
+        "uuid": "aba5e8c4-1f73-4e29-9b6d-d3c7f0b82e41"
+      }
+    ],
+    "providers": [
+      {
+        "label": "DOC/NOAA/NOS/ORR > Office of Response and Restoration, National Ocean Service, NOAA, U.S. Department of Commerce",
+        "uuid": ""
+      }
+    ]
+  },
+
+  "distribution": {
+    "format": "NetCDF",
+    "distributionFormatName": "NetCDF",
+    "downloadProtocol": "HTTPS",
+    "landingUrl": "https://www.ncei.noaa.gov/archive/accession/PLACEHOLDER",
+    "distributionLiability": "Distribution liability: NOAA and NCEI make no warranty, expressed or implied, regarding these data, nor does the fact of distribution constitute such a warranty. NOAA and NCEI cannot assume liability for any damages caused by any errors or omissions in these data."
+  }
+}

@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-04-30T11:45:41.206Z",
+  "generatedAt": "2026-05-06T06:02:02.723Z",
   "fixtureDir": "fixtures/mission",
   "includeProxy": false,
   "includeRoundtrip": false,
-  "totalFiles": 2,
+  "totalFiles": 3,
   "files": [
     {
       "file": "9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml",
@@ -70,6 +70,49 @@
         "checks": [
           "ncei_recommended",
           "docucomp_recommended",
+          "standards_interop"
+        ]
+      }
+    },
+    {
+      "file": "navy-uxs-swarm-clean.xml",
+      "localIssues": [
+        "Found unresolved {{token}} placeholder(s)",
+        "Found malformed brace token(s) like {TOKEN}}"
+      ],
+      "nceiCore": {
+        "block": [],
+        "check": []
+      },
+      "docucomp": {
+        "block": [
+          "Malformed Docucomp xlink(s): https://data.noaa.gov/docucomp/placeholder-providers"
+        ],
+        "check": [],
+        "docucompRefCount": 15
+      },
+      "oerDbRequired": {
+        "block": []
+      },
+      "standardsAdvisory": {
+        "check": [
+          "No reference system block detected; some standards profiles expect CRS clarity."
+        ]
+      },
+      "dsmqAdvisory": {
+        "check": [],
+        "hasDsmqSignal": true
+      },
+      "proxy": {},
+      "roundtrip": null,
+      "pass": false,
+      "publishReadiness": {
+        "status": "BLOCK",
+        "blockers": [
+          "template_hygiene",
+          "docucomp"
+        ],
+        "checks": [
           "standards_interop"
         ]
       }
@@ -180,6 +223,6 @@
   ],
   "summary": {
     "pass": 0,
-    "fail": 2
+    "fail": 3
   }
 }

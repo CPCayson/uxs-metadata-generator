@@ -1,6 +1,6 @@
+import { getFieldDefinition } from '../shell/metadataKnowledgeBase.js'
+
 /**
- * Guided “fix walk” queue for Manta lens — deterministic ordering by issue list.
- *
  * @param {Array<{ field?: string, message: string, severity: string }>} issues
  * @returns {Array<{ field?: string, message: string, severity: string }>}
  */
@@ -23,9 +23,17 @@ export function countFixableIssues(issues) {
  */
 export function getCoachingPrompts(issue) {
   if (!issue) return []
-  const lines = [String(issue.message || '').trim()]
-  if (issue.field) lines.push(`Field path: ${issue.field}`)
-  if (issue.severity === 'e') lines.push('This is a blocking error in the current validation mode.')
+  const lines = []
+
+  const def = issue.field ? getFieldDefinition(issue.field) : null
+  if (def) {
+    lines.push(def)
+  }
+
+  lines.push(String(issue.message || '').trim())
+
+  if (issue.severity === 'e') lines.push('Blocking error — must be resolved before catalog submission.')
   else if (issue.severity === 'w') lines.push('Warning — fix before catalog handoff if possible.')
+
   return lines.filter(Boolean)
 }

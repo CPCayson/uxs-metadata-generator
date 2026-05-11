@@ -57,6 +57,14 @@ function openPilot() {
   })
 }
 
+function openPilotWindow() {
+  const n = normalizeUrl($('pilotBaseUrl').value) || DEFAULT_PILOT
+  void chrome.runtime.sendMessage({ type: 'manta-open-pilot-window', url: n }, (res) => {
+    if (res?.ok) setStatus('Opened pilot window.')
+    else if (res?.error) setStatus(String(res.error), true)
+  })
+}
+
 function sendCaptureToPilot(capture) {
   const n = normalizeUrl($('pilotBaseUrl').value) || DEFAULT_PILOT
   void chrome.runtime.sendMessage({ type: 'manta-capture-open-pilot', url: n, capture }, (res) => {
@@ -189,6 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
   void load()
   $('save').addEventListener('click', save)
   $('openPilot').addEventListener('click', openPilot)
+  $('openPilotWindow').addEventListener('click', openPilotWindow)
   $('captureSelection').addEventListener('click', () => void captureFromTab('selection'))
   $('capturePage').addEventListener('click', () => void captureFromTab('page'))
   $('captureXml').addEventListener('click', () => void captureFromTab('xml'))

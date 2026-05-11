@@ -3,6 +3,10 @@ import { searchRorOrganizationsClient } from '../../lib/rorClient'
 import { fromDatetimeLocalValue, toDatetimeLocalValue } from '../../lib/datetimeLocal'
 import { useFieldValidation } from '../../components/fields/useFieldValidation'
 import { UXS_LAYER_OPTIONS, UXS_OUTCOME_OPTIONS, getUxsLayerDefinition } from '../../lib/uxsOperationalModel.js'
+import MantaFieldGlass from '../../components/MantaFieldGlass.jsx'
+import MantaFieldInsights from '../../components/MantaFieldInsights.jsx'
+import SourceProvenancePanel from '../../components/SourceProvenancePanel.jsx'
+import FieldHintTooltip, { LabelWithHint } from '../../components/FieldHintTooltip.jsx'
 
 /**
  * @param {{
@@ -45,6 +49,10 @@ export default function StepMission({
   onRefreshTemplateCatalog,
   onApplySheetTemplate,
   templateApplyDisabled = false,
+  pilotState = null,
+  onSourceProvenanceClear,
+  /** Workspace “Simple” density — shorter Mission intro; tuck optional UxS block behind a disclosure */
+  guidedMissionIntro = false,
 }) {
   const [rorQuery, setRorQuery] = useState('')
   const [rorLoading, setRorLoading] = useState(false)
@@ -53,6 +61,9 @@ export default function StepMission({
   const [selectedTemplateKey, setSelectedTemplateKey] = useState('')
 
   const { show, invalid } = useFieldValidation({ issues, touched, showAllErrors })
+
+  /** Align MantaFieldGlass with useFieldValidation — no red "required" / issue chips until touch or show-all. */
+  const glassShowChrome = (fieldKey) => Boolean(touched[fieldKey] || showAllErrors)
 
   async function runRorSearch() {
     setRorError('')
@@ -115,24 +126,54 @@ export default function StepMission({
     })
   }
 
+  const sourceProvenance = pilotState?.sourceProvenance ?? null
+
   return (
     <>
-      <p className="card-intro">
-        <strong>Required for export</strong> in the current mode: identifiers, title, abstract, purpose, period, contact,
-        status, and language. <strong>Optional</strong> below: UxS operational context, supplemental text, and aggregation.
-        Bbox, CRS, and data-quality detail live on the <strong>Spatial</strong> step.
-      </p>
+      <SourceProvenancePanel
+        sourceProvenance={sourceProvenance}
+        onClear={onSourceProvenanceClear ?? (() => {})}
+      />
+
+      {guidedMissionIntro ? (
+        <p className="card-intro">
+          <strong>Quick path:</strong> identifiers, title, abstract, period, contact, status, and language. Spatial bbox
+          and CRS are on the <strong>Spatial</strong> step. Use <strong>Detailed</strong> workspace density (tools FAB) for
+          full field-by-field guidance.
+        </p>
+      ) : (
+        <p className="card-intro">
+          <strong>Required for export</strong> in the current mode: identifiers, title, abstract, purpose, period, contact,
+          status, and language. <strong>Optional</strong> below: UxS operational context, supplemental text, and aggregation.
+          Bbox, CRS, and data-quality detail live on the <strong>Spatial</strong> step.
+        </p>
+      )}
       {stepErrorSummary ? <p className="hint"><strong>Current step blockers:</strong> {stepErrorSummary}</p> : null}
 
       <section className="panel" aria-labelledby="uxs-context-heading">
-        <h3 className="panel-title" id="uxs-context-heading">UxS collection context</h3>
-        <p className="hint" id="uxs-context-help">
-          NOAA UxS records often sit in a stack: program → deployment → run → sortie or dive → dataset/product.
-          Capture the operational layer here so runs and dives are not hidden only in the title or abstract.
-        </p>
+        <h3 className="panel-title panel-title-hint" id="uxs-context-heading">
+          <span>UxS collection context</span>
+          <FieldHintTooltip ariaLabel="About UxS collection context">
+            <>
+              NOAA UxS records often sit in a stack: program → deployment → run → sortie or dive → dataset/product.
+              Capture the operational layer here so runs and dives are not hidden only in the title or abstract.
+            </>
+          </FieldHintTooltip>
+        </h3>
         <div className="form-row-2">
           <div>
-            <label htmlFor="uxsPrimaryLayer">This metadata record primarily describes</label>
+            <LabelWithHint
+              htmlFor="uxsPrimaryLayer"
+              label="This metadata record primarily describes"
+              hint={
+                <>
+                  Parent project below is the program citation; this block is the operational unit the data came from.
+                  {uxsLayer.idField
+                    ? ` Catalog mode expects ${uxsLayer.label.toLowerCase()} ID/name fields when this layer is selected.`
+                    : ''}
+                </>
+              }
+            />
             <select
               id="uxsPrimaryLayer"
               className="form-control"
@@ -140,19 +181,23 @@ export default function StepMission({
               value={uxsContext.primaryLayer || 'datasetProduct'}
               onChange={(e) => patchUxsContext({ primaryLayer: e.target.value })}
               onBlur={() => onTouched('mission.uxsContext.primaryLayer')}
-              aria-describedby="uxs-context-help"
             >
               {UXS_LAYER_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
               ))}
             </select>
-            <p className="hint">
-              Parent project below is the program citation; this block is the operational unit the data came from.
-              {uxsLayer.idField ? ` Catalog mode expects ${uxsLayer.label.toLowerCase()} ID/name fields when this layer is selected.` : ''}
-            </p>
           </div>
           <div>
-            <label htmlFor="uxsOperationOutcome">Operation outcome</label>
+            <LabelWithHint
+              htmlFor="uxsOperationOutcome"
+              label="Operation outcome"
+              hint={
+                <>
+                  Operational outcome for filtering sorties/runs; separate from dataset status /{' '}
+                  <code>MD_ProgressCode</code>.
+                </>
+              }
+            />
             <select
               id="uxsOperationOutcome"
               className="form-control"
@@ -165,18 +210,17 @@ export default function StepMission({
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
               ))}
             </select>
-            <p className="hint">
-              Operational outcome for filtering sorties/runs; separate from dataset status / <code>MD_ProgressCode</code>.
-            </p>
           </div>
         </div>
 
         <details>
-          <summary>Deployment, run, sortie, and dive identifiers</summary>
-          <p className="hint">
-            Use field-log labels and IDs where available. These are optional in this first slice and prepare the archive
-            search model before XML aggregation export is expanded.
-          </p>
+          <summary>
+            Deployment, run, sortie, and dive identifiers
+            <FieldHintTooltip ariaLabel="About deployment identifiers">
+              Use field-log labels and IDs where available. These are optional in this first slice and prepare the archive
+              search model before XML aggregation export is expanded.
+            </FieldHintTooltip>
+          </summary>
           <div className="form-row-2">
             <div>
               <label htmlFor="uxsDeploymentName">Deployment name</label>
@@ -288,69 +332,113 @@ export default function StepMission({
 
       <section className="panel">
         <h3 className="panel-title">Identification</h3>
-        <label htmlFor="fileId">File identifier</label>
-        <input
-          id="fileId"
-          className={`form-control${invalid('mission.fileId') ? ' form-control--invalid' : ''}`}
-          data-pilot-field="mission.fileId"
+        <MantaFieldInsights
+          issues={issues}
+          pilotState={{ mission, platform: {}, spatial: {}, keywords: {} }}
+          activeStep="mission"
+          onApply={(field, value) => {
+            const key = field.replace('mission.', '')
+            onMissionPatch({ [key]: value })
+          }}
+        />
+        <MantaFieldGlass
+          fieldPath="mission.fileId"
           value={mission.fileId}
-          onChange={(e) => onMissionPatch({ fileId: e.target.value })}
-          onBlur={() => onTouched('mission.fileId')}
-          aria-invalid={invalid('mission.fileId')}
-          aria-required
-        />
-        <p className="hint">
-          NCEI file identifier; optional <code>gov.noaa.ncei.uxs:</code> prefix. Legacy <code>missionId</code> maps here when
-          empty.
-        </p>
-        {show('mission.fileId') ? <p className="field-error">{show('mission.fileId')}</p> : null}
+          issues={issues}
+          label="File identifier"
+          required
+          showValidationChrome={glassShowChrome('mission.fileId')}
+          hint={<>NCEI file identifier; optional <code>gov.noaa.ncei.uxs:</code> prefix.</>}
+        >
+          <input
+            id="fileId"
+            className={`form-control${invalid('mission.fileId') ? ' form-control--invalid' : ''}`}
+            data-pilot-field="mission.fileId"
+            value={mission.fileId}
+            onChange={(e) => onMissionPatch({ fileId: e.target.value })}
+            onBlur={() => onTouched('mission.fileId')}
+            aria-invalid={invalid('mission.fileId')}
+            aria-required
+          />
+        </MantaFieldGlass>
 
-        <label htmlFor="title">Title</label>
-        <input
-          id="title"
-          className={`form-control${invalid('mission.title') ? ' form-control--invalid' : ''}`}
-          data-pilot-field="mission.title"
+        <MantaFieldGlass
+          fieldPath="mission.title"
           value={mission.title}
-          onChange={(e) => onMissionPatch({ title: e.target.value })}
-          onBlur={() => onTouched('mission.title')}
-          aria-required
-        />
-        {show('mission.title') ? <p className="field-error">{show('mission.title')}</p> : null}
+          issues={issues}
+          label="Title"
+          required
+          showValidationChrome={glassShowChrome('mission.title')}
+        >
+          <input
+            id="title"
+            className={`form-control${invalid('mission.title') ? ' form-control--invalid' : ''}`}
+            data-pilot-field="mission.title"
+            value={mission.title}
+            onChange={(e) => onMissionPatch({ title: e.target.value })}
+            onBlur={() => onTouched('mission.title')}
+            aria-required
+          />
+        </MantaFieldGlass>
 
-        <label htmlFor="alternateTitle">Alternate title</label>
-        <input
-          id="alternateTitle"
-          className="form-control"
-          data-pilot-field="mission.alternateTitle"
+        <MantaFieldGlass
+          fieldPath="mission.alternateTitle"
           value={mission.alternateTitle || ''}
-          onChange={(e) => onMissionPatch({ alternateTitle: e.target.value })}
-        />
+          issues={issues}
+          label="Alternate title"
+          hideAskMore
+          showValidationChrome={glassShowChrome('mission.alternateTitle')}
+        >
+          <input
+            id="alternateTitle"
+            className="form-control"
+            data-pilot-field="mission.alternateTitle"
+            value={mission.alternateTitle || ''}
+            onChange={(e) => onMissionPatch({ alternateTitle: e.target.value })}
+          />
+        </MantaFieldGlass>
 
-        <label htmlFor="abstract">Abstract</label>
-        <textarea
-          id="abstract"
-          rows={4}
-          className={`form-control${invalid('mission.abstract') ? ' form-control--invalid' : ''}`}
-          data-pilot-field="mission.abstract"
+        <MantaFieldGlass
+          fieldPath="mission.abstract"
           value={mission.abstract}
-          onChange={(e) => onMissionPatch({ abstract: e.target.value })}
-          onBlur={() => onTouched('mission.abstract')}
-          aria-required
-        />
-        {show('mission.abstract') ? <p className="field-error">{show('mission.abstract')}</p> : null}
+          issues={issues}
+          label="Abstract"
+          required
+          textLengthThreshold={100}
+          showValidationChrome={glassShowChrome('mission.abstract')}
+          hint="Include platform type, instruments, survey area, dates, and data products."
+        >
+          <textarea
+            id="abstract"
+            rows={4}
+            className={`form-control${invalid('mission.abstract') ? ' form-control--invalid' : ''}`}
+            data-pilot-field="mission.abstract"
+            value={mission.abstract}
+            onChange={(e) => onMissionPatch({ abstract: e.target.value })}
+            onBlur={() => onTouched('mission.abstract')}
+            aria-required
+          />
+        </MantaFieldGlass>
 
-        <label htmlFor="purpose">Purpose (dataset)</label>
-        <textarea
-          id="purpose"
-          rows={2}
-          className={`form-control${invalid('mission.purpose') ? ' form-control--invalid' : ''}`}
-          data-pilot-field="mission.purpose"
+        <MantaFieldGlass
+          fieldPath="mission.purpose"
           value={mission.purpose || ''}
-          onChange={(e) => onMissionPatch({ purpose: e.target.value })}
-          onBlur={() => onTouched('mission.purpose')}
-          aria-required
-        />
-        {show('mission.purpose') ? <p className="field-error">{show('mission.purpose')}</p> : null}
+          issues={issues}
+          label="Purpose (dataset)"
+          required
+          showValidationChrome={glassShowChrome('mission.purpose')}
+        >
+          <textarea
+            id="purpose"
+            rows={2}
+            className={`form-control${invalid('mission.purpose') ? ' form-control--invalid' : ''}`}
+            data-pilot-field="mission.purpose"
+            value={mission.purpose || ''}
+            onChange={(e) => onMissionPatch({ purpose: e.target.value })}
+            onBlur={() => onTouched('mission.purpose')}
+            aria-required
+          />
+        </MantaFieldGlass>
 
         <label htmlFor="supplementalInformation">Supplemental information</label>
         <textarea
@@ -362,6 +450,15 @@ export default function StepMission({
           onChange={(e) => onMissionPatch({ supplementalInformation: e.target.value })}
         />
 
+        <div className="field-label-with-hint">
+          <span className="field-label-with-hint__kicker">Dataset period</span>
+          <FieldHintTooltip ariaLabel="About dataset period vs metadata record date">
+            <>
+              <strong>Dataset period</strong> for citation creation / completion and <code>gml:TimePeriod</code> in the XML
+              preview — not the same as <em>metadata record date</em> below (when the metadata document itself was prepared).
+            </>
+          </FieldHintTooltip>
+        </div>
         <div className="form-row-2">
           <div>
             <label htmlFor="startDate">Start date *</label>
@@ -392,17 +489,18 @@ export default function StepMission({
             {show('mission.endDate') ? <p className="field-error">{show('mission.endDate')}</p> : null}
           </div>
         </div>
-        <p className="hint">
-          <strong>Dataset period</strong> for citation creation / completion and <code>gml:TimePeriod</code> in the
-          XML preview — not the same as <em>metadata record date</em> below (when the metadata document itself was
-          prepared).
-        </p>
 
         <div className="form-row-2">
           <div>
-            <label htmlFor="temporalExtentIntervalUnit">
-              Temporal sampling interval unit (<code>gml:timeInterval</code> @unit)
-            </label>
+            <LabelWithHint
+              htmlFor="temporalExtentIntervalUnit"
+              label={
+                <>
+                  Temporal sampling interval unit (<code>gml:timeInterval</code> @unit)
+                </>
+              }
+              hint="Optional. NOAA template uses a unit token with a numeric value below."
+            />
             <input
               id="temporalExtentIntervalUnit"
               className="form-control"
@@ -411,12 +509,17 @@ export default function StepMission({
               value={mission.temporalExtentIntervalUnit || ''}
               onChange={(e) => onMissionPatch({ temporalExtentIntervalUnit: e.target.value })}
             />
-            <p className="hint">
-              Optional. NOAA template uses a unit token with a numeric value below.
-            </p>
           </div>
           <div>
-            <label htmlFor="temporalExtentIntervalValue">Temporal sampling interval value</label>
+            <LabelWithHint
+              htmlFor="temporalExtentIntervalValue"
+              label="Temporal sampling interval value"
+              hint={
+                <>
+                  Paired with interval unit for <code>gml:timeInterval</code> inside acquisition period.
+                </>
+              }
+            />
             <input
               id="temporalExtentIntervalValue"
               className="form-control"
@@ -425,15 +528,26 @@ export default function StepMission({
               value={mission.temporalExtentIntervalValue || ''}
               onChange={(e) => onMissionPatch({ temporalExtentIntervalValue: e.target.value })}
             />
-            <p className="hint">
-              Paired with interval unit for <code>gml:timeInterval</code> inside acquisition period.
-            </p>
           </div>
         </div>
 
         <div className="form-row-2">
           <div>
-            <label htmlFor="metadataRecordDate">Metadata record date (<code>gmd:dateStamp</code>)</label>
+            <LabelWithHint
+              htmlFor="metadataRecordDate"
+              label={
+                <>
+                  Metadata record date (<code>gmd:dateStamp</code>)
+                </>
+              }
+              hint={
+                <>
+                  <strong>Metadata record date</strong> for <code>gmd:dateStamp</code>. When blank, the XML preview uses the
+                  current UTC instant so downloads always carry a fresh stamp; set this field to freeze a specific instant
+                  (for example to match a source file you imported).
+                </>
+              }
+            />
             <input
               id="metadataRecordDate"
               type="datetime-local"
@@ -443,19 +557,20 @@ export default function StepMission({
               onChange={(e) => onMissionPatch({ metadataRecordDate: fromDatetimeLocalValue(e.target.value) })}
               onBlur={() => onTouched('mission.metadataRecordDate')}
             />
-            <p className="hint">
-              <strong>Metadata record date</strong> for <code>gmd:dateStamp</code>: when this field is set, the
-              preview emits it; when it is blank, the preview omits <code>dateStamp</code> (with a comment) and a
-              server-side generator may stamp &quot;now&quot; at export time. If you merge a payload where only{' '}
-              <code>output.metadataRecordDate</code> is filled, it is copied here only when this field is still empty — a
-              value you enter in the Mission step always wins.
-            </p>
             {show('mission.metadataRecordDate') ? (
               <p className="field-error">{show('mission.metadataRecordDate')}</p>
             ) : null}
           </div>
           <div>
-            <label htmlFor="publicationDate">Dataset publication date (citation)</label>
+            <LabelWithHint
+              htmlFor="publicationDate"
+              label="Dataset publication date (citation)"
+              hint={
+                <>
+                  <code>CI_DateTypeCode</code> publication, separate from completion/end.
+                </>
+              }
+            />
             <input
               id="publicationDate"
               type="datetime-local"
@@ -465,9 +580,6 @@ export default function StepMission({
               onChange={(e) => onMissionPatch({ publicationDate: fromDatetimeLocalValue(e.target.value) })}
               onBlur={() => onTouched('mission.publicationDate')}
             />
-            <p className="hint">
-              <code>CI_DateTypeCode</code> publication, separate from completion/end.
-            </p>
             {show('mission.publicationDate') ? <p className="field-error">{show('mission.publicationDate')}</p> : null}
           </div>
         </div>
@@ -500,8 +612,16 @@ export default function StepMission({
           </div>
         </div>
 
-        <h4 className="panel-subtitle">Topic categories (ISO)</h4>
-        <label htmlFor="topicCategories">MD_TopicCategoryCode values (one per line)</label>
+        <h4 className="panel-subtitle panel-title-hint">
+          <span>Topic categories (ISO)</span>
+          <FieldHintTooltip ariaLabel="About ISO topic categories">
+            <>
+              Maps to repeated <code>gmd:topicCategory</code> / <code>MD_TopicCategoryCode</code> in the XML preview (NCEI
+              UxS template pattern).
+            </>
+          </FieldHintTooltip>
+        </h4>
+        <label htmlFor="topicCategories">MD_TopicCategoryCode values (one per line, comma, or semicolon)</label>
         <textarea
           id="topicCategories"
           className="form-control"
@@ -513,11 +633,10 @@ geoscientificInformation`}
           value={(Array.isArray(mission.topicCategories) ? mission.topicCategories : []).join('\n')}
           onChange={(e) =>
             onMissionPatch({
-              topicCategories: e.target.value.split(/[\n,]+/).map((s) => s.trim()).filter(Boolean),
+              topicCategories: e.target.value.split(/[\n,;]+/).map((s) => s.trim()).filter(Boolean),
             })
           }
         />
-        <p className="hint">Maps to repeated <code>gmd:topicCategory</code> / <code>MD_TopicCategoryCode</code> in the XML preview (NCEI UxS template pattern).</p>
 
         <h4 className="panel-subtitle">Graphic overview (optional)</h4>
         <div className="form-row-2">
@@ -545,11 +664,17 @@ geoscientificInformation`}
           </div>
         </div>
 
-        <h4 className="panel-subtitle">Citation parties (<code>CI_Citation</code> / <code>citedResponsibleParty</code>)</h4>
-        <p className="hint">
-          Distinct from resource <code>gmd:pointOfContact</code> below — these are author / publisher / originator on the
-          dataset citation.
-        </p>
+        <h4 className="panel-subtitle panel-title-hint">
+          <span>
+            Citation parties (<code>CI_Citation</code> / <code>citedResponsibleParty</code>)
+          </span>
+          <FieldHintTooltip ariaLabel="Citation parties vs point of contact">
+            <>
+              Distinct from resource <code>gmd:pointOfContact</code> below — these are author / publisher / originator on
+              the dataset citation.
+            </>
+          </FieldHintTooltip>
+        </h4>
         <div className="form-row-2">
           <div>
             <label htmlFor="citationAuthorIndividualName">Author — individual</label>
@@ -796,11 +921,15 @@ geoscientificInformation`}
       </section>
 
       <section className="panel">
-        <h3 className="panel-title">Constraints &amp; legal</h3>
-        <p className="hint">
-          Same fields as the classic <code>#missionForm</code>: cite-as, other constraints, license preset / URL, access text,
-          distribution liability (see <code>METADATA_FIELD_MAP.md</code> §2).
-        </p>
+        <h3 className="panel-title panel-title-hint">
+          <span>Constraints &amp; legal</span>
+          <FieldHintTooltip ariaLabel="About constraints fields">
+            <>
+              Same fields as the classic <code>#missionForm</code>: cite-as, other constraints, license preset / URL, access
+              text, distribution liability (see <code>METADATA_FIELD_MAP.md</code> §2).
+            </>
+          </FieldHintTooltip>
+        </h3>
         <label htmlFor="citeAs">Cite as (use limitation)</label>
         <textarea
           id="citeAs"
@@ -846,7 +975,17 @@ geoscientificInformation`}
           aria-required={mission.dataLicensePreset === 'custom'}
         />
         {show('mission.licenseUrl') ? <p className="field-error">{show('mission.licenseUrl')}</p> : null}
-        <label htmlFor="accessConstraintsCode">Access restriction (ISO MD_RestrictionCode)</label>
+        <LabelWithHint
+          htmlFor="accessConstraintsCode"
+          label="Access restriction (ISO MD_RestrictionCode)"
+          hint={
+            <>
+              The live XML preview emits a proper <code>gmd:MD_RestrictionCode</code> with codelist when a value is chosen;
+              notes add <code>gmd:otherConstraints</code> for details. Text without a code maps to{' '}
+              <code>otherRestrictions</code> + your text (legacy free-text shape is normalized).
+            </>
+          }
+        />
         <select
           id="accessConstraintsCode"
           className="form-control form-select"
@@ -861,11 +1000,6 @@ geoscientificInformation`}
           <option value="confidential">confidential</option>
           <option value="otherRestrictions">otherRestrictions (see notes)</option>
         </select>
-        <p className="hint">
-          The live XML preview emits a proper <code>gmd:MD_RestrictionCode</code> with codelist when a value is chosen;
-          notes add <code>gmd:otherConstraints</code> for details. Text without a code maps to{' '}
-          <code>otherRestrictions</code> + your text (legacy free-text shape is normalized).
-        </p>
         <label htmlFor="accessConstraints">Access notes / narrative</label>
         <textarea
           id="accessConstraints"
@@ -888,12 +1022,15 @@ geoscientificInformation`}
       </section>
 
       <section className="panel">
-        <h3 className="panel-title">Aggregation &amp; related resources</h3>
-        <p className="hint">
-          Same flat <code>name</code> attributes as the classic mission form (larger work, cross-reference dataset,
-          associated publication). Preview emits XML comments until full <code>aggregationInfo</code> blocks are
-          modeled.
-        </p>
+        <h3 className="panel-title panel-title-hint">
+          <span>Aggregation &amp; related resources</span>
+          <FieldHintTooltip ariaLabel="About aggregation fields">
+            <>
+              Same flat <code>name</code> attributes as the classic mission form (larger work, cross-reference dataset,
+              associated publication). Preview emits XML comments until full <code>aggregationInfo</code> blocks are modeled.
+            </>
+          </FieldHintTooltip>
+        </h3>
 
         <h4 className="panel-subtitle">Parent project (larger work citation)</h4>
         <div className="form-row-3">
@@ -1089,7 +1226,23 @@ geoscientificInformation`}
           </button>
         </div>
         {!hostBridgeReady ? (
-          <p className="hint">Templates need a reachable <code>/api/db</code> on the same origin as this app.</p>
+          <p className="hint">
+            <span>Templates need a reachable <code>/api/db</code> on the same origin.</span>{' '}
+            <FieldHintTooltip ariaLabel="Enable catalog templates">
+              <>
+                Templates load from Postgres via <code>/api/db</code>.
+                {import.meta.env.DEV && typeof window !== 'undefined' && window.location.port === '5173'
+                  ? (
+                      <>
+                        {' '}
+                        You are on plain Vite — run <code>npm run dev:netlify</code> and open{' '}
+                        <strong>http://localhost:8888</strong>.
+                      </>
+                    )
+                  : null}
+              </>
+            </FieldHintTooltip>
+          </p>
         ) : null}
         {templateCatalogError ? <p className="field-error">{templateCatalogError}</p> : null}
       </section>

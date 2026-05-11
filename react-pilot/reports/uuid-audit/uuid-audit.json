@@ -1,0 +1,17 @@
+{
+  "generated": "2026-05-06T08:00:36.091Z",
+  "xmlDir": "/Users/connorcayson/Downloads/oer/BEDI_METADATA_SAMPLES/out_segments",
+  "totalXmlRecords": 107,
+  "uuids": {
+    "valid": 107,
+    "missing": 0,
+    "malformed": 0,
+    "duplicates": 0
+  },
+  "images": {
+    "total": 0,
+    "docucomp": 0,
+    "nonDocucomp": 0
+  },
+  "laneStatus": "PASS"
+}

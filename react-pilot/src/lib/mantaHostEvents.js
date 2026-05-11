@@ -19,8 +19,8 @@
  * - `manta:pilot-audit` — host-defined audit payload
  * - `manta:map-command` — map UI integration (see SpatialExtentMap)
  *
- * Portals: lens mounts under `#manta-scanner-host` (overlays the full `workspace-grid`
- * in WizardShell — form + side rail) via MantaScannerFrame.
+ * Portals: lens mounts under `#manta-scanner-host` (`.manta-scanner-host--lens-stack`
+ * under `.pilot-wizard-lens-stack`) via MantaScannerFrame — overlays form + side rail.
  *
  * @module lib/mantaHostEvents
  */

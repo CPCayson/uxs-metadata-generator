@@ -116,6 +116,8 @@
  *   importedAt: string,
  *   originalFilename: string,
  *   originalUuid: string,
+ *   importIsoXmlFamily?: '19115-2'|'19115-3',
+ *   exportPreviewIsoFamily?: '19115-2',
  * }} SourceProvenance
  */
 

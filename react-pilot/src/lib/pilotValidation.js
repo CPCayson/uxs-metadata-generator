@@ -916,6 +916,8 @@ export function defaultPilotState() {
       importedAt:       '',
       originalFilename: '',
       originalUuid:     '',
+      importIsoXmlFamily: '',
+      exportPreviewIsoFamily: '',
     },
     distribution: {
       format: '',

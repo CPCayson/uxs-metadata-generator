@@ -5,15 +5,12 @@ import './futuristic.css'
 import EmbeddableShell from './shell/EmbeddableShell'
 import WizardShell from './shell/WizardShell'
 import FieldXmlTether from './components/FieldXmlTether'
-import MantaProfileWizardTest from './testing/MantaProfileWizardTest'
 import IntakeScreen from './features/intake/IntakeScreen'
 import MissionStatusFooter from './components/MissionStatusFooter'
-import MantaVoiceBar from './components/MantaVoiceBar'
-import MantaTutorialDropdown from './components/MantaTutorialDropdown'
 import OERPipelineDashboard from './features/oer/OERPipelineDashboard'
 import LibrariesView from './features/libraries/LibrariesView'
 import ArchiveInventoryView from './features/archive/ArchiveInventoryView'
-import OneStopCatalogStrip from './features/dashboard/OneStopCatalogStrip.jsx'
+import { BatchLanesPanel } from './features/dashboard/BatchLanesPanel.jsx'
 import { createHttpHostAdapter } from './adapters/http/HttpHostAdapter'
 import { missionProfile } from './profiles/mission/missionProfile'
 import { collectionProfile } from './profiles/collection/collectionProfile'
@@ -21,7 +18,8 @@ import { bediCollectionProfile } from './profiles/bedi/bediCollectionProfile'
 import { bediGranuleProfile } from './profiles/bedi/bediGranuleProfile'
 import { registerProfile, hasProfile } from './core/registry/ProfileRegistry'
 import { writePilotSessionPayloadNow } from './lib/pilotSessionStorage'
-import { defaultPilotState } from './lib/pilotValidation'
+import { defaultPilotState, mergeLoadedPilotState } from './lib/pilotValidation'
+import { importPilotPartialStateFromXml } from './lib/xmlPilotImport'
 
 // Register profiles once at module evaluation time.
 // hasProfile guard prevents double-registration in React StrictMode.
@@ -43,16 +41,15 @@ function resolveInitialTheme() {
     // Ignore storage access errors in restricted environments.
   }
   if (window.matchMedia?.('(prefers-color-scheme: dark)').matches) return 'dark'
-  return 'light'
+  /* Default to dark (black-based UI); users can switch to light via header. */
+  return 'dark'
 }
 
-// ── Sidebar nav ───────────────────────────────────────────────────────────────
+// ── Workspace hub (forms + toggled views, no left rail) ─────────────────────
 
-const NAV_ITEMS = [
-  { id: 'dashboard',  label: 'Dashboard' },
-  { id: 'newRecord',  label: 'New Record' },
-  { id: 'inventory',  label: 'Archive Inventory' },
-  { id: 'libraries',  label: 'Libraries' },
+const WORKSPACE_HUB_ITEMS = [
+  { id: 'intake',    title: 'Forms',          description: 'Upload XML or launch a profile wizard' },
+  { id: 'dashboard', title: 'Command Center', description: 'Lanes, readiness, OER pipeline' },
 ]
 
 function wizardNavLabel(activeProfileId, platformHint) {
@@ -65,148 +62,161 @@ function wizardNavLabel(activeProfileId, platformHint) {
   return 'Wizard'
 }
 
-function AppNav({ navItem, onNav, activeProfileId, platformHint }) {
-  const isWizard = navItem === 'wizard'
+/** Single SaaS shell: embed-style toggles + active view below (no separate picker header). */
+function WorkspaceHubEmbeddableCard({ activeId, onSelect, children }) {
   return (
-    <nav
-      aria-label="Main navigation"
-      style={{
-        width: 192,
-        flexShrink: 0,
-        borderRight: '1px solid var(--border-color, #e2e8f0)',
-        padding: '1rem 0',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 2,
-        background: 'var(--sidebar-bg, #f8fafc)',
-      }}
-    >
-      {NAV_ITEMS.map(({ id, label }) => {
-        const isActive = navItem === id || (id === 'newRecord' && isWizard)
-        const displayLabel = id === 'newRecord' && isWizard
-          ? wizardNavLabel(activeProfileId, platformHint)
-          : label
-        return (
-          <button
-            key={id}
-            type="button"
-            onClick={() => onNav(id === 'newRecord' && isWizard ? 'newRecord' : id)}
-            style={{
-              display: 'block',
-              width: '100%',
-              textAlign: 'left',
-              padding: '0.5rem 1.25rem',
-              border: 'none',
-              borderRadius: 0,
-              background: isActive ? 'var(--nav-active-bg, #e0f2fe)' : 'transparent',
-              color: isActive ? 'var(--nav-active-color, #0369a1)' : 'var(--text-color, inherit)',
-              fontWeight: isActive ? 600 : 400,
-              fontSize: '0.88rem',
-              cursor: 'pointer',
-              borderLeft: isActive ? '3px solid var(--nav-active-color, #0369a1)' : '3px solid transparent',
-            }}
-            aria-current={isActive ? 'page' : undefined}
-          >
-            {displayLabel}
-          </button>
-        )
-      })}
-    </nav>
+    <div className="pilot-workspace-hub-unified pilot-saas-card">
+      <div className="pilot-workspace-hub-toggles" role="radiogroup" aria-label="Workspace views">
+        {WORKSPACE_HUB_ITEMS.map((item) => {
+          const isActive = activeId === item.id
+          return (
+            <button
+              key={item.id}
+              type="button"
+              role="radio"
+              aria-checked={isActive}
+              title={item.description}
+              className={`pilot-workspace-embed-toggle${isActive ? ' pilot-workspace-embed-toggle--active' : ''}`}
+              onClick={() => onSelect(item.id)}
+            >
+              {item.title}
+            </button>
+          )
+        })}
+      </div>
+      <div
+        className={
+          activeId === 'dashboard'
+            ? 'pilot-workspace-hub-unified__body pilot-workspace-hub-unified__body--flush'
+            : 'pilot-workspace-hub-unified__body'
+        }
+      >
+        {children}
+      </div>
+    </div>
   )
 }
 
-// ── Dashboard data (static placeholders until live UxS records exist) ─────────
+// ── Dashboard data ────────────────────────────────────────────────────────────
+// WORKFLOWS reflect the actual Manta v0.1.0 state as of May 2026.
+// Batch lane status (PASS/CHECK/BLOCK) is loaded from localStorage when
+// the user has run `npm run batch:report` and the result is stored.
 
 const WORKFLOWS = [
   {
     name: 'Mission / PED',
     status: 'ready',
     score: 92,
-    count: 12,
-    errors: 1,
-    warnings: 6,
-    daysOpen: 5,
-    trend: 4,
-    isoExports: 9,
-    swarmPass: 88,
-  },
-  {
-    name: 'BEDI Granules',
-    status: 'in-progress',
-    score: 74,
     count: 8,
-    errors: 5,
-    warnings: 11,
-    daysOpen: 12,
-    trend: -2,
-    isoExports: 4,
-    swarmPass: 62,
+    errors: 1,
+    warnings: 4,
+    daysOpen: 3,
+    trend: 6,
+    isoExports: 7,
+    swarmPass: 91,
   },
   {
-    name: 'UxS Metadata',
+    name: 'BEDI / OER Video',
     status: 'in-progress',
-    score: 61,
-    count: 5,
-    errors: 8,
-    warnings: 14,
-    daysOpen: 21,
-    trend: 1,
-    isoExports: 2,
-    swarmPass: 55,
+    score: 71,
+    count: 107,
+    errors: 4,
+    warnings: 12,
+    daysOpen: 18,
+    trend: 3,
+    isoExports: 62,
+    swarmPass: 68,
   },
   {
-    name: 'CoMET Cleanup',
-    status: 'blocked',
-    score: 48,
-    count: 3,
-    errors: 14,
+    name: 'UxS Missions',
+    status: 'in-progress',
+    score: 65,
+    count: 6,
+    errors: 6,
     warnings: 9,
-    daysOpen: 34,
-    trend: -6,
-    isoExports: 1,
-    swarmPass: 41,
+    daysOpen: 14,
+    trend: 2,
+    isoExports: 4,
+    swarmPass: 72,
+  },
+  {
+    name: 'NOFO Closeout',
+    status: 'in-progress',
+    score: 55,
+    count: 2,
+    errors: 3,
+    warnings: 7,
+    daysOpen: 8,
+    trend: 0,
+    isoExports: 0,
+    swarmPass: 50,
+  },
+  {
+    name: 'DigiCat / Archive',
+    status: 'blocked',
+    score: 38,
+    count: 1,
+    errors: 9,
+    warnings: 5,
+    daysOpen: 42,
+    trend: -2,
+    isoExports: 0,
+    swarmPass: 30,
   },
 ]
 
 const STUCK_RECORDS = [
   {
-    title: 'OER Expedition EX-2601 Mission Record',
-    profile: 'Mission / PED',
+    title: 'PS2418L0 UUV-01 Norbit MBES — Gulf of Mexico',
+    profile: 'UxS / Mission PED',
     state: 'CoMET Ready',
-    score: 92,
+    score: 94,
     blockers: 0,
     errors: 0,
-    warnings: 4,
+    warnings: 2,
     daysIdle: 1,
-    lastTouch: '2h ago',
+    lastTouch: 'today',
     step: 'Distribution',
-    uuidShort: 'a3f9…8c21',
+    uuidShort: 'PS2418…UUV01',
   },
   {
-    title: 'KABR NEXRAD Level-II Archive 2026-01-01 04Z',
-    profile: 'DigiCat',
-    state: 'Index Needed',
-    score: 68,
-    blockers: 2,
-    errors: 7,
-    warnings: 3,
-    daysIdle: 6,
-    lastTouch: '1d ago',
-    step: 'Spatial',
-    uuidShort: '—',
-  },
-  {
-    title: 'Dive 07 BEDI Granule Image Set',
+    title: 'BIOLUM2009 VID Dive JSL2-3681 Segment',
     profile: 'BEDI Granule',
-    state: 'Needs Keywords',
-    score: 76,
+    state: 'Align On-Prod',
+    score: 72,
+    blockers: 1,
+    errors: 3,
+    warnings: 8,
+    daysIdle: 4,
+    lastTouch: '2d ago',
+    step: 'Keywords',
+    uuidShort: 'gov.noaa…3681',
+  },
+  {
+    title: 'OER EX1811 Collection — Validation Review',
+    profile: 'Collection',
+    state: 'DocuComp CHECK',
+    score: 79,
     blockers: 1,
     errors: 2,
-    warnings: 9,
+    warnings: 6,
     daysIdle: 3,
-    lastTouch: '4h ago',
-    step: 'Keywords',
-    uuidShort: 'd102…e441',
+    lastTouch: '1d ago',
+    step: 'Distribution',
+    uuidShort: 'EX1811…coll',
+  },
+  {
+    title: 'DigiCat Archive Inventory Intake',
+    profile: 'DigiCat / Archive',
+    state: 'Needs Adapter',
+    score: 38,
+    blockers: 2,
+    errors: 9,
+    warnings: 5,
+    daysIdle: 42,
+    lastTouch: 'planned',
+    step: 'Phase 5',
+    uuidShort: '—',
   },
 ]
 
@@ -344,13 +354,25 @@ function StuckCard({ rec }) {
 
 // ── Dashboard dual-panel ──────────────────────────────────────────────────────
 
-function UxSDashboardPanel({ onNewRecord }) {
+function HubKpiGrid() {
   const totalActive = WORKFLOWS.reduce((s, w) => s + w.count, 0)
-  const ready       = WORKFLOWS.filter(w => w.status === 'ready').reduce((s, w) => s + w.count, 0)
-  const blocked     = WORKFLOWS.filter(w => w.status === 'blocked').reduce((s, w) => s + w.count, 0)
-  const totalErr    = WORKFLOWS.reduce((s, w) => s + w.errors, 0)
+  const ready = WORKFLOWS.filter((w) => w.status === 'ready').reduce((s, w) => s + w.count, 0)
+  const blocked = WORKFLOWS.filter((w) => w.status === 'blocked').reduce((s, w) => s + w.count, 0)
+  const totalErr = WORKFLOWS.reduce((s, w) => s + w.errors, 0)
   const avgReadiness = Math.round(WORKFLOWS.reduce((s, w) => s + w.score, 0) / WORKFLOWS.length)
 
+  return (
+    <div className="pilot-dashboard__kpi-grid">
+      <StatCard label="Active records" value={totalActive} hint="Across lanes" />
+      <StatCard label="Ready lane" value={ready} accent="#16a34a" hint="Shippable" />
+      <StatCard label="Blocked lane" value={blocked} accent="#dc2626" hint="Needs action" />
+      <StatCard label="Open errors" value={totalErr} accent="#f87171" hint="Wizard validation" />
+      <StatCard label="Avg readiness" value={`${avgReadiness}%`} accent="var(--primary-color)" hint="Weighted mock" />
+    </div>
+  )
+}
+
+function UxSDashboardPanel({ onNewRecord }) {
   return (
     <aside className="pilot-dashboard__rail" aria-label="UxS mission overview">
       <div className="pilot-dashboard__rail-head">
@@ -363,19 +385,14 @@ function UxSDashboardPanel({ onNewRecord }) {
         </button>
       </div>
 
-      <OneStopCatalogStrip />
-
-      <div className="pilot-dashboard__kpi-grid">
-        <StatCard label="Active records" value={totalActive} hint="Across lanes" />
-        <StatCard label="Ready lane" value={ready} accent="#16a34a" hint="Shippable" />
-        <StatCard label="Blocked lane" value={blocked} accent="#dc2626" hint="Needs action" />
-        <StatCard label="Open errors" value={totalErr} accent="#f87171" hint="Validator" />
-        <StatCard label="Avg readiness" value={`${avgReadiness}%`} accent="var(--primary-color)" hint="Weighted mock" />
-      </div>
-
       <section className="pilot-dashboard__section">
         <h3 className="pilot-dashboard__section-title">Workflow lanes</h3>
-        <div className="pilot-dashboard__stack">
+        <div
+          className="pilot-dashboard__workflow-lanes-row"
+          role="region"
+          aria-label="Workflow lanes — scroll horizontally"
+          tabIndex={0}
+        >
           {WORKFLOWS.map(wf => <WorkflowCard key={wf.name} wf={wf} />)}
         </div>
       </section>
@@ -383,10 +400,19 @@ function UxSDashboardPanel({ onNewRecord }) {
       <section className="pilot-dashboard__section">
         <h3 className="pilot-dashboard__section-title">Attention queue</h3>
         <p className="pilot-dashboard__section-desc">Records with blockers or stale edits (sample data)</p>
-        <div className="pilot-dashboard__stack">
+        <div
+          className="pilot-dashboard__attention-queue-row"
+          role="region"
+          aria-label="Attention queue — scroll horizontally"
+          tabIndex={0}
+        >
           {STUCK_RECORDS.map(r => <StuckCard key={r.title} rec={r} />)}
         </div>
       </section>
+
+      <div className="pilot-dashboard__kpi-trail">
+        <HubKpiGrid />
+      </div>
     </aside>
   )
 }
@@ -401,12 +427,12 @@ function DashboardView({ onNewRecord, onLaunch }) {
         <div>
           <h1 className="pilot-dashboard__h1">Command center</h1>
           <p className="pilot-dashboard__lede">
-            UxS readiness on the left · OER expedition pipeline on the right ·{' '}
+            UxS mission hub · OER expedition pipeline ·{' '}
             <span className="pilot-dashboard__date">{dateStr}</span>
           </p>
         </div>
         <div className="pilot-dashboard__header-chips" aria-hidden="true">
-          <span className="pilot-dashboard__chip">Live validator</span>
+          <span className="pilot-dashboard__chip">Validation</span>
           <span className="pilot-dashboard__chip pilot-dashboard__chip--accent">Swarm rules</span>
           <span className="pilot-dashboard__chip">Catalog mode</span>
         </div>
@@ -421,12 +447,85 @@ function DashboardView({ onNewRecord, onLaunch }) {
   )
 }
 
+// ── Intake hub content (Forms tab body) ──────────────────────────────────────
+
+function IntakeHubContent({ onLaunch, onOpenRecord, hostBridge }) {
+  const [archiveOpen, setArchiveOpen] = useState(false)
+
+  return (
+    <div className="pilot-intake-surface" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', width: '100%' }}>
+      <IntakeScreen onLaunch={onLaunch} />
+
+      {/* Archive toggle */}
+      <section className="pilot-saas-card" aria-label="Demo record archive">
+        <button
+          type="button"
+          aria-expanded={archiveOpen}
+          onClick={() => setArchiveOpen((v) => !v)}
+          style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            width: '100%', padding: '0.5rem 0',
+            background: 'none', border: 'none', cursor: 'pointer',
+            fontSize: '0.88rem', fontWeight: 700,
+            color: 'var(--text-color, #0f172a)',
+          }}
+        >
+          <span>Archive — Demo records</span>
+          <span aria-hidden="true" style={{ fontSize: '0.75rem', opacity: 0.6 }}>
+            {archiveOpen ? '▲ Hide' : '▼ Show'}
+          </span>
+        </button>
+        {archiveOpen && (
+          <div style={{ marginTop: '1rem', borderTop: '1px solid var(--border-color, #e2e8f0)', paddingTop: '1rem' }}>
+            <ArchiveInventoryView onOpenRecord={onOpenRecord} />
+            <div
+              style={{
+                marginTop: '1.25rem',
+                paddingTop: '1.25rem',
+                borderTop: '1px solid var(--border-color, #e2e8f0)',
+              }}
+              aria-label="Library — templates and curated bundles"
+            >
+              <p style={{ fontSize: '0.72rem', fontWeight: 800, letterSpacing: '0.06em', color: 'var(--text-muted)', margin: '0 0 0.65rem', textTransform: 'uppercase' }}>
+                Library
+              </p>
+              <div className="pilot-intake-surface">
+                <LibrariesView hostBridge={hostBridge} onLaunch={onLaunch} />
+              </div>
+            </div>
+            <div
+              style={{
+                marginTop: '1.25rem',
+                paddingTop: '1.25rem',
+                borderTop: '1px solid var(--border-color, #e2e8f0)',
+              }}
+              aria-label="Workspace readiness KPIs"
+            >
+              <p style={{ fontSize: '0.72rem', fontWeight: 800, letterSpacing: '0.06em', color: 'var(--text-muted)', margin: '0 0 0.65rem', textTransform: 'uppercase' }}>
+                Workspace readiness (mock)
+              </p>
+              <HubKpiGrid />
+            </div>
+          </div>
+        )}
+      </section>
+
+      <section className="pilot-saas-card" aria-label="Batch audit lanes">
+        <BatchLanesPanel />
+      </section>
+    </div>
+  )
+}
+
 // ── App ───────────────────────────────────────────────────────────────────────
 
 function App() {
   const [theme, setTheme]     = useState(resolveInitialTheme)
   const [isDirty, setIsDirty] = useState(false)
-  const [navItem, setNavItem] = useState('dashboard')
+  /** Hub tabs: intake | dashboard. Wizard overlays full pane. */
+  const [workspaceHubId, setWorkspaceHubId] = useState('intake')
+  /** Default to mission wizard; intake (“Start from anything”) stays reachable via header toggle / hub. */
+  const [mainPane, setMainPane] = useState('wizard') // 'hub' | 'wizard'
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
@@ -444,20 +543,26 @@ function App() {
 
   const [activeProfileId, setActiveProfileId]   = useState('mission')
   const [platformHint, setPlatformHint]         = useState(null)
+  /** Bumps when starting a fresh mission so EmbeddableShell remounts from cleared session. */
+  const [wizardInstanceKey, setWizardInstanceKey] = useState(0)
+  /** When false, Manta FAB / split-float tools dock is hidden and lens stays off. Default off. */
+  const [mantaToolsEnabled, setMantaToolsEnabled] = useState(false)
 
   function handleNewRecord(nextProfileId, nextPlatformHint = null) {
     if (nextProfileId) {
       setActiveProfileId(nextProfileId)
       setPlatformHint(nextPlatformHint)
-      setNavItem('wizard')
+      setMainPane('wizard')
       return
     }
-    setNavItem('newRecord')
+    setWorkspaceHubId('intake')
+    setMainPane('hub')
   }
 
   const handleLaunch = useCallback((launchProfileId, launchPlatformHint) => {
     if (launchProfileId === 'oerDashboard') {
-      setNavItem('dashboard')
+      setWorkspaceHubId('dashboard')
+      setMainPane('hub')
       return
     }
     // Prefill platform type via sessionStorage so missionInitState picks it up.
@@ -468,21 +573,29 @@ function App() {
     }
     setActiveProfileId(launchProfileId)
     setPlatformHint(launchPlatformHint ?? null)
-    setNavItem('wizard')
+    setMainPane('wizard')
   }, [])
 
   return (
-    <>
+    <div className="pilot-app-root">
       <a href="#pilot-main" className="pilot-skip-link">
         Skip to main content
       </a>
       <header className="header pilot-app-header pilot-app-header--fullbleed">
         <div className="header-top">
           <div className="pilot-header-brand">
-            <p className="pilot-header-eyebrow">Isolated pilot</p>
-            <h1>UxS Metadata React Pilot</h1>
+            <p className="pilot-header-eyebrow" style={{ letterSpacing: '0.12em', textTransform: 'uppercase', fontSize: '0.65rem', fontWeight: 700, opacity: 0.7 }}>
+              NCEI · Ocean Exploration &amp; Research
+            </p>
+            <h1 style={{ display: 'flex', alignItems: 'baseline', gap: '0.4rem', margin: 0 }}>
+              Manta
+              <span className="pilot-header-tagline">UxS Metadata Workbench</span>
+            </h1>
           </div>
-          <div className="pilot-header-actions">
+          <div
+            className="pilot-header-actions"
+            style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap', justifyContent: 'flex-end' }}
+          >
             <div className="form-check form-switch mb-0 d-flex align-items-center">
               <input
                 className="form-check-input"
@@ -496,98 +609,136 @@ function App() {
                 Dark mode
               </label>
             </div>
-            <MantaTutorialDropdown />
+            <div className="form-check form-switch mb-0 d-flex align-items-center">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="pilotFormWizardToggle"
+                checked={mainPane === 'wizard'}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setActiveProfileId('mission')
+                    setPlatformHint(null)
+                    setMainPane('wizard')
+                  } else {
+                    setWorkspaceHubId('intake')
+                    setMainPane('hub')
+                  }
+                }}
+                aria-label="UxS form wizard — open full-page metadata wizard"
+              />
+              <label className="form-check-label ms-2 mb-0" htmlFor="pilotFormWizardToggle">
+                Form Wizard
+              </label>
+            </div>
+            <div className="form-check form-switch mb-0 d-flex align-items-center">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="pilotMantaLensToggle"
+                checked={mantaToolsEnabled}
+                onChange={(e) => setMantaToolsEnabled(e.target.checked)}
+                aria-label="Enable Manta lens and tools (FAB)"
+              />
+              <label className="form-check-label ms-2 mb-0" htmlFor="pilotMantaLensToggle">
+                Lens
+              </label>
+            </div>
           </div>
         </div>
-        {/* XmlToolsBar portals its buttons into this slot */}
-        <div
-          id="pilot-header-tools-slot"
-          className="pilot-header-tools-slot"
-          role="toolbar"
-          aria-label="XML tools"
-        />
-        <MantaVoiceBar profileId={activeProfileId} />
+        <div className="pilot-header-toolbar">
+          {/* XmlToolsBar portals here; mission steps portal to the next slot (after ☰). */}
+          <div
+            id="pilot-header-tools-slot"
+            className="pilot-header-tools-slot"
+            role="toolbar"
+            aria-label="XML tools"
+          />
+          <div
+            id="pilot-header-steps-slot"
+            className="pilot-header-steps-slot"
+            aria-label="Wizard steps"
+          />
+        </div>
       </header>
 
-      <div style={{ display: 'flex', flex: 1, overflow: 'hidden', height: 'calc(100vh - var(--header-height, 120px) - var(--footer-height, 40px))' }}>
-        <AppNav navItem={navItem} onNav={setNavItem} activeProfileId={activeProfileId} platformHint={platformHint} />
+      <div className="pilot-body-band">
+        <main
+          id="pilot-main"
+          tabIndex={-1}
+          style={{
+            flex: 1,
+            overflowX: 'hidden',
+            display: 'flex',
+            flexDirection: 'column',
+            minHeight: 0,
+          }}
+        >
+          {mainPane === 'hub' && (
+            <div className="pilot-workspace-hub-stack">
+              <WorkspaceHubEmbeddableCard activeId={workspaceHubId} onSelect={setWorkspaceHubId}>
+                {workspaceHubId === 'dashboard' && (
+                  <DashboardView onNewRecord={handleNewRecord} onLaunch={handleLaunch} />
+                )}
 
-        <main id="pilot-main" tabIndex={-1} style={{ flex: 1, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
-          {navItem === 'dashboard' && (
-            <DashboardView onNewRecord={handleNewRecord} onLaunch={handleLaunch} />
-          )}
-
-          {navItem === 'newRecord' && (
-            <div style={{ padding: '1.5rem', flex: 1 }}>
-              <div className="pilot-intake-surface">
-                <IntakeScreen onLaunch={handleLaunch} />
-              </div>
+                {workspaceHubId === 'intake' && (
+                  <IntakeHubContent
+                    hostBridge={hostBridge}
+                    onLaunch={handleLaunch}
+                    onOpenRecord={({ xmlText, profileId, platformHint } = {}) => {
+                      if (xmlText) {
+                        try {
+                          const parsed = importPilotPartialStateFromXml(xmlText)
+                          if (parsed.ok) {
+                            const base = defaultPilotState()
+                            if (profileId === 'mission' && platformHint) {
+                              const platformType = platformHint === 'surface' ? 'USV' : 'AUV'
+                              base.platform = { ...base.platform, platformType }
+                            }
+                            const merged = mergeLoadedPilotState(base, parsed.partial)
+                            writePilotSessionPayloadNow(merged)
+                            setActiveProfileId(profileId ?? 'mission')
+                            setPlatformHint(platformHint ?? null)
+                          }
+                        } catch {
+                          /* fall through */
+                        }
+                      }
+                      setMainPane('wizard')
+                    }}
+                  />
+                )}
+              </WorkspaceHubEmbeddableCard>
             </div>
           )}
 
-          {navItem === 'inventory' && (
-            <ArchiveInventoryView
-              onOpenRecord={() => {
-                // Route seam for next phase: inventory row actions can relaunch wizard/intake.
-                setNavItem('newRecord')
-              }}
-            />
-          )}
-          {navItem === 'libraries' && (
-            <LibrariesView hostBridge={hostBridge} onLaunch={handleLaunch} />
-          )}
-
-          {navItem === 'wizard' && (
-            <>
-              <div style={{
-                display: 'flex', alignItems: 'center', gap: '0.5rem',
-                padding: '0.5rem 1.25rem',
-                borderBottom: '1px solid var(--border-color, #e2e8f0)',
-                fontSize: '0.82rem', color: 'var(--text-muted)',
-                background: 'var(--sidebar-bg, #f8fafc)',
-                flexShrink: 0,
-              }}>
-                <button
-                  type="button"
-                  onClick={() => setNavItem('newRecord')}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: 4,
-                    border: 'none', background: 'transparent',
-                    cursor: 'pointer', color: 'var(--text-muted)',
-                    padding: '0 4px', fontSize: '0.82rem',
-                  }}
-                  aria-label="Back to intake"
-                >
-                  ← New Record
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setNavItem('dashboard')}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: 4,
-                    border: 'none', background: 'transparent',
-                    cursor: 'pointer', color: 'var(--text-muted)',
-                    padding: '0 4px', fontSize: '0.82rem',
-                  }}
-                  aria-label="Back to workbench dashboard"
-                >
-                  Workbench
-                </button>
-                <span aria-hidden="true">·</span>
-                <span style={{ color: 'var(--text-color, inherit)', fontWeight: 500 }}>
-                  {wizardNavLabel(activeProfileId, platformHint)}
-                </span>
-              </div>
+          {mainPane === 'wizard' && (
+            <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
               <EmbeddableShell
-                key={activeProfileId + (platformHint ?? '')}
+                key={`${activeProfileId}:${platformHint ?? ''}:${wizardInstanceKey}`}
                 mode="full"
                 includeFloatingManta
+                assistantLayout="split-float"
                 profileId={activeProfileId}
                 hostBridge={hostBridge}
+                mantaToolsEnabled={mantaToolsEnabled}
               >
-                <WizardShell onDirtyChange={setIsDirty} />
+                <WizardShell
+                  onDirtyChange={setIsDirty}
+                  breadcrumb={{
+                    label: wizardNavLabel(activeProfileId, platformHint),
+                    onHome: () => { setWorkspaceHubId('dashboard'); setMainPane('hub') },
+                    onNewRecord: () => {
+                      writePilotSessionPayloadNow(defaultPilotState())
+                      setActiveProfileId('mission')
+                      setPlatformHint(null)
+                      setWizardInstanceKey((k) => k + 1)
+                      setMainPane('wizard')
+                    },
+                  }}
+                />
               </EmbeddableShell>
-            </>
+            </div>
           )}
         </main>
       </div>
@@ -596,7 +747,7 @@ function App() {
 
       {/* HUD tether: draws a neon line from the focused field to its XML line */}
       <FieldXmlTether />
-    </>
+    </div>
   )
 }
 
