@@ -11,6 +11,10 @@ This file orients **automated agents** (Cursor, CI bots, swarm lanes) on how to 
 | `react-pilot/netlify/functions/` | Same-origin `POST /api/db` when using Netlify / `netlify dev`. |
 | `schemas/`, `compiled_rules/`, `scripts/swarm/` | Rule pipeline (SWARM board); see `react-pilot/docs/SWARM_IMPLEMENTATION_BOARD.md`. |
 
+### ISO metadata lineage (19115-3 → 19115-2)
+
+The React pilot **does not** preserve −3 XML verbatim on export. **`importPilotPartialStateFromXml`** accepts **both** ISO **19115-3** (`mdb` / `standards.iso.org/iso/19115/-3`) and **19115-2** (`gmi:MI_Metadata` / classic `gmd`). **`buildXmlPreview` / file export always emits ISO 19115-2-shaped GMI/GMD** (`react-pilot/src/lib/xmlPreviewBuilder.js`). So the canonical transfer is **3 → 2** (or **2 → 2**) through **`pilotState`**. Provenance: `sourceProvenance.importIsoXmlFamily` / `exportPreviewIsoFamily` in `xmlPilotImport.js` (`stampIsoImportProvenance`). XML preview surfaces a hint when the upload was −3 (`XmlPreviewPanel.jsx`).
+
 ## Commands agents should actually run
 
 ```bash
@@ -62,5 +66,6 @@ See `react-pilot/docs/SWARM_IMPLEMENTATION_BOARD.md` for SWARM-A … SWARM-F own
 | 2026-05 | Import merge surfaces population summary (`importMergeSummary.js`); XmlToolsBar / wizard-start modal show merge stats + parser warnings; Validation panel adds severity explainer, Prev/Next issue stepping, darker-theme button/select contrast; Xml preview optional structural hints (`xmlPreviewStructuralHints.js`); Mission guided intro when workspace density is Simple. |
 | 2026-05 | **Mission step density:** long helper copy moved from under inputs into `FieldHintTooltip` / `LabelWithHint` (`FieldHintTooltip.jsx`); `StepMission.jsx` panel titles and UxS/temporal/constraints/aggregation blocks use ⓘ bubbles; `LabelWithHint` default `aria-label` avoids `[object Object]` when `label` is JSX. |
 | 2026-05 | **Import sample report:** After XML **Apply** (header `XmlToolsBar` or wizard-start import), **Import report** downloads Markdown (`*-import-report.md`): parser warnings, validation issues, unset tracked paths (`pilotImportReportPaths.js`), line-diff table upload vs `buildXmlPreview` output (`pilotImportSampleReport.js`). Cleared on **Clear form**. |
+| 2026-05 | **ISO 19115-3 → 19115-2:** Documented in Agents; import accepts −3 or −2 XML; preview/export is always −2 via `pilotState`. Import sample report clarifies this when provenance stamps −3 uploads. |
 
 When closing a lens-related task, append one row if behavior or ports changed.

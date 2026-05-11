@@ -46,8 +46,6 @@ export function downloadPilotImportReport({
     importWarnings: importContext.warnings,
     validationIssues: vr.issues ?? [],
     validationScore: vr.score,
-    validationErrCount: vr.errCount,
-    validationWarnCount: vr.warnCount,
   })
 
   const baseId =

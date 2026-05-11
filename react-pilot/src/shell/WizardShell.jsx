@@ -169,6 +169,19 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     onDirtyChange(false)
   }, [onDirtyChange])
 
+  /** Import / scanner merge replaces the whole form — treat merged state as the new clean baseline (not “unsaved edits”). */
+  const syncBaselineAfterExternalMerge = useCallback(
+    (cleanState) => {
+      onStateLoaded(cleanState)
+      try {
+        setLastSavedXmlPreview(buildXml(cleanState))
+      } catch {
+        setLastSavedXmlPreview('')
+      }
+    },
+    [onStateLoaded, buildXml],
+  )
+
   const ma = useProfileHostActions({
     profile,
     pilotState,
@@ -656,7 +669,9 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     } catch {
       setLastSavedXmlPreview('')
     }
-    setStatusMessage('Form cleared — defaults loaded.')
+    setStatusMessage(
+      'Form cleared — defaults loaded. Validation will show many errors until you fill required fields; that is normal for an empty template.',
+    )
     emitPilotAuditEvent({ profileId: profile.id, action: 'clearForm', result: 'ok' })
     window.dispatchEvent(new CustomEvent('manta:metadata-import-merged'))
   }, [profile, buildXml, onDirtyChange])
@@ -684,7 +699,9 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
   function handlePilotImport(next) {
     const changes = diffPilotStates(pilotState, next, next.sourceProvenance?.sourceType ?? 'rawIso')
     if (changes.length === 0) {
-      setPilotState(profile.sanitize(next))
+      const clean = profile.sanitize(next)
+      setPilotState(clean)
+      syncBaselineAfterExternalMerge(clean)
       setTouched({})
       setShowAllErrors(true)
       window.dispatchEvent(new CustomEvent('manta:metadata-import-merged'))
@@ -733,7 +750,9 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
           importedAt={pendingImport.importedAt}
           onApply={(decisions) => {
             const resolved = applyDecisions(pilotState, pendingImport.next, decisions)
-            setPilotState(profile.sanitize(resolved))
+            const clean = profile.sanitize(resolved)
+            setPilotState(clean)
+            syncBaselineAfterExternalMerge(clean)
             setTouched({})
             setShowAllErrors(true)
             setPendingImport(null)
@@ -794,6 +813,7 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
           onScannerApply={(next) => {
             const s = profile.sanitize(next)
             setPilotState(s)
+            syncBaselineAfterExternalMerge(s)
             setTouched({})
             setShowAllErrors(true)
             setStatusMessage('Scanner suggestions merged. Review any new items in the validation panel.')

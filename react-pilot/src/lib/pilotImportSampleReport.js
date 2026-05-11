@@ -1,11 +1,32 @@
 /**
  * Build a Markdown report after loading a sample XML: unset tracked fields, validation issues,
- * import warnings, and a line-level diff between original upload and current ISO preview XML.
+ * import warnings, and an XML comparison section (overlap metrics — positional line diff is low signal).
  *
  * @module lib/pilotImportSampleReport
  */
 
 import { PILOT_IMPORT_REPORT_TRACK_PATHS } from './pilotImportReportPaths.js'
+
+/**
+ * Same field/message often appears from multiple rules — keep one row per path + message + severity.
+ * @param {Array<{ severity?: string, path?: string, field?: string, message?: string }>} issues
+ */
+export function dedupeValidationIssues(issues) {
+  if (!Array.isArray(issues)) return []
+  const seen = new Set()
+  /** @type {typeof issues} */
+  const out = []
+  for (const i of issues) {
+    const path = String(i.path || i.field || '').trim()
+    const msg = String(i.message || '').trim()
+    const sev = i.severity === 'e' ? 'e' : 'w'
+    const key = `${sev}|${path}|${msg}`
+    if (seen.has(key)) continue
+    seen.add(key)
+    out.push(i)
+  }
+  return out
+}
 
 /** @param {unknown} obj @param {string} dot */
 function getPath(obj, dot) {
@@ -45,10 +66,67 @@ export function listUnsetPilotImportReportPaths(merged) {
   return missing
 }
 
-const DIFF_MAX_LINES = 120
+const DIFF_MAX_LINES = 24
 
 /**
- * First line-by-line mismatches (1-based line numbers) for XML comparison.
+ * Strip tags coarsely and compare word sets (Jaccard) — robust to reorder / pretty-print.
+ * @param {string} xml
+ */
+function xmlToWordSet(xml) {
+  const t = String(xml ?? '')
+    .replace(/<[^>]{0,800}>/g, ' ')
+    .replace(/[^\w\s.-]/g, ' ')
+  const words = t
+    .split(/\s+/)
+    .map((w) => w.trim())
+    .filter((w) => w.length > 2 && !/^\d+$/.test(w))
+  return new Set(words)
+}
+
+/**
+ * @param {string} original
+ * @param {string} preview
+ */
+export function computeXmlWordOverlap(original, preview) {
+  const A = xmlToWordSet(original)
+  const B = xmlToWordSet(preview)
+  let inter = 0
+  for (const w of A) {
+    if (B.has(w)) inter += 1
+  }
+  const union = A.size + B.size - inter
+  const jaccard = union > 0 ? inter / union : 0
+  return {
+    jaccard,
+    wordsOriginal: A.size,
+    wordsPreview: B.size,
+    wordsShared: inter,
+  }
+}
+
+/**
+ * Lines from original that appear verbatim (trimmed) inside preview — shows carried-over snippets.
+ * @param {string} original
+ * @param {string} preview
+ * @param {number} maxRows
+ */
+export function findSharedTrimmedLines(original, preview, maxRows = 18) {
+  const pv = String(preview ?? '')
+  const candidates = String(original ?? '')
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter((l) => l.length >= 48 && !l.startsWith('<?xml'))
+  /** @type {string[]} */
+  const out = []
+  for (const line of candidates) {
+    if (out.length >= maxRows) break
+    if (pv.includes(line)) out.push(line.length > 160 ? `${line.slice(0, 160)}…` : line)
+  }
+  return out
+}
+
+/**
+ * First line-by-line mismatches (1-based line numbers). Misleading when XML order differs — use with caution.
  * @param {string} original
  * @param {string} preview
  * @returns {{ totalCompared: number, mismatchCount: number, rows: { line: number, original: string, preview: string }[] }}
@@ -92,8 +170,6 @@ export function computeXmlLineDiffPreview(original, preview) {
  *   importWarnings?: string[],
  *   validationIssues?: Array<{ severity?: string, path?: string, field?: string, message?: string }>,
  *   validationScore?: number,
- *   validationErrCount?: number,
- *   validationWarnCount?: number,
  * }} opts
  * @returns {string}
  */
@@ -108,8 +184,6 @@ export function buildPilotImportSampleReportMarkdown(opts) {
     importWarnings = [],
     validationIssues = [],
     validationScore,
-    validationErrCount,
-    validationWarnCount,
   } = opts
 
   const sp = pilotState?.sourceProvenance && typeof pilotState.sourceProvenance === 'object'
@@ -122,6 +196,17 @@ export function buildPilotImportSampleReportMarkdown(opts) {
   const origLen = String(originalXml ?? '').length
   const prevLen = String(previewXml ?? '').length
   const diff = computeXmlLineDiffPreview(originalXml, previewXml)
+  const overlap = computeXmlWordOverlap(originalXml, previewXml)
+  const sharedSnippets = findSharedTrimmedLines(originalXml, previewXml)
+  const issuesDeduped = dedupeValidationIssues(validationIssues)
+  const dedupErrs = issuesDeduped.filter((i) => i.severity === 'e').length
+  const dedupWarns = issuesDeduped.filter((i) => i.severity !== 'e').length
+  const rawErr = validationIssues.filter((i) => i.severity === 'e').length
+  const rawWarn = validationIssues.filter((i) => i.severity !== 'e').length
+  const dupNote =
+    rawErr + rawWarn > dedupErrs + dedupWarns
+      ? ` (${rawErr + rawWarn} rows from rules; duplicates collapsed)`
+      : ''
 
   const lines = []
   lines.push('# Sample XML import report')
@@ -132,9 +217,12 @@ export function buildPilotImportSampleReportMarkdown(opts) {
   }
   if (originalFilename) lines.push(`Source file: ${originalFilename}`)
   if (impFam || expFam) {
-    lines.push(
-      `ISO lineage: import ${impFam || '—'} → preview export ${expFam || '19115-2 (generator)'}`,
-    )
+    const exp = expFam || '19115-2 (generator)'
+    const transferNote =
+      impFam === '19115-3' && String(exp).includes('19115-2')
+        ? ' — Upload is ISO **19115-3**; preview/download are normalized ISO **19115-2** (not a verbatim −3 round-trip).'
+        : ''
+    lines.push(`ISO lineage: import ${impFam || '—'} → preview export ${exp}${transferNote}`)
   }
   lines.push('')
   lines.push('## Import parser')
@@ -147,12 +235,13 @@ export function buildPilotImportSampleReportMarkdown(opts) {
   lines.push('')
   lines.push('## Validation (current form)')
   lines.push('')
-  if (validationErrCount != null && validationWarnCount != null) {
-    lines.push(`- Errors: ${validationErrCount} · Warnings: ${validationWarnCount} · Score: ${validationScore ?? '—'}`)
-  }
-  if (validationIssues.length) {
-    const errs = validationIssues.filter((i) => i.severity === 'e')
-    const warns = validationIssues.filter((i) => i.severity !== 'e')
+  lines.push(
+    `Unique issues: **${dedupErrs}** errors · **${dedupWarns}** warnings${dupNote} · Score: ${validationScore ?? '—'}`,
+  )
+  lines.push('')
+  if (issuesDeduped.length) {
+    const errs = issuesDeduped.filter((i) => i.severity === 'e')
+    const warns = issuesDeduped.filter((i) => i.severity !== 'e')
     if (errs.length) {
       lines.push('### Errors')
       for (const i of errs) {
@@ -189,29 +278,54 @@ export function buildPilotImportSampleReportMarkdown(opts) {
   lines.push('## Original XML vs preview XML')
   lines.push('')
   lines.push(
-    'Preview is **generated** from the merged form (`buildXmlPreview`), not a verbatim copy of the upload. ',
-    'Large differences are normal for ISO 19115-3 sources or templates with extra sections.',
+    'Preview is **generated** from the merged form (`buildXmlPreview`), not a verbatim copy of the upload.',
+  )
+  lines.push('')
+  lines.push(
+    '**Why line numbers rarely match:** the exporter uses a fixed element order, adds an XML declaration, wraps tags differently, and may prefix `fileIdentifier`. Comparing “line 1 to line 1” therefore shows **almost every row different** even when titles, abstracts, and contacts round-trip into the form.',
   )
   lines.push('')
   lines.push(`- Original size: ${origLen} characters`)
   lines.push(`- Preview size: ${prevLen} characters`)
-  lines.push(`- Lines compared: ${diff.totalCompared} · Lines that differ: ${diff.mismatchCount}`)
+  lines.push(
+    `- **Rough text overlap (word Jaccard after stripping tags): ${(overlap.jaccard * 100).toFixed(1)}%** (${overlap.wordsShared} shared tokens · ~${overlap.wordsOriginal} vs ~${overlap.wordsPreview} distinct words)`,
+  )
+  lines.push('')
+  if (sharedSnippets.length) {
+    lines.push('### Snippets that appear verbatim in both documents')
+    lines.push('')
+    lines.push(
+      'These trimmed lines from the upload were found inside the preview text (good sign content carried over):',
+    )
+    lines.push('')
+    for (const s of sharedSnippets) {
+      lines.push(`- ${s.replace(/\|/g, '¦')}`)
+    }
+    lines.push('')
+  }
+  lines.push(`- Raw line index: ${diff.totalCompared} rows · ${diff.mismatchCount} positions differ when aligned naïvely`)
   lines.push('')
   if (diff.mismatchCount === 0) {
-    lines.push('### Line diff')
+    lines.push('### Positional line comparison')
     lines.push('')
     lines.push('*(Original and preview text match line-for-line after newline normalization.)*')
   } else {
-    lines.push('### First differing lines')
+    lines.push('### Positional line comparison (low signal — optional)')
     lines.push('')
-    lines.push('| Line | Original (upload) | Preview (download) |')
+    lines.push(
+      '*Same row index compares unrelated markup when element order differs; use overlap score above or an XML-aware diff tool on downloaded preview vs upload.*',
+    )
+    lines.push('')
+    lines.push('| Line # | Original (upload) | Preview (download) |')
     lines.push('| ---: | --- | --- |')
     for (const r of diff.rows) {
-        lines.push(`| ${r.line} | ${r.original} | ${r.preview} |`)
+      lines.push(`| ${r.line} | ${r.original} | ${r.preview} |`)
     }
     if (diff.mismatchCount > diff.rows.length) {
       lines.push('')
-      lines.push(`*… ${diff.mismatchCount - diff.rows.length} more differing lines not shown.*`)
+      lines.push(
+        `*… ${diff.mismatchCount - diff.rows.length} more row pairs differ at the same index (not shown).*`,
+      )
     }
   }
   lines.push('')

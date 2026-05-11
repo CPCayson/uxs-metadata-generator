@@ -26,6 +26,27 @@ function getPath(obj, key) {
   return cur
 }
 
+/** Compiled WAF rules use `ident.*` paths; pilot/BEDI state stores ids under `mission.fileId` or top-level `fileId`. */
+const COMPILED_FIELD_ALIASES = {
+  'ident.fileIdentifier': ['mission.fileId', 'fileId'],
+}
+
+/**
+ * @param {Record<string, unknown>} obj
+ * @param {string} key
+ */
+function getPathWithCompiledAliases(obj, key) {
+  const direct = getPath(obj, key)
+  if (!isBlank(direct)) return direct
+  const fallbacks = COMPILED_FIELD_ALIASES[String(key)]
+  if (!fallbacks) return direct
+  for (const alt of fallbacks) {
+    const v = getPath(obj, alt)
+    if (!isBlank(v)) return v
+  }
+  return direct
+}
+
 function isBlank(v) {
   if (Array.isArray(v)) return v.length === 0
   return v == null || (typeof v === 'string' && v.trim() === '')
@@ -105,7 +126,7 @@ function parseConditionExpr(text) {
 function shouldFailRule(rule, state) {
   const requirement = String(rule.requirement || '')
   const fieldKey = String(rule.field_key || '')
-  const value = getPath(state, fieldKey)
+  const value = getPathWithCompiledAliases(state, fieldKey)
   if (requirement === 'required' && isBlank(value)) return true
   if (requirement === 'forbidden' && !isBlank(value)) return true
   if (requirement === 'conditional') {

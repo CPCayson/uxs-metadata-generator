@@ -119,6 +119,8 @@
  *   importIsoXmlFamily?: '19115-2'|'19115-3',
  *   exportPreviewIsoFamily?: '19115-2',
  * }} SourceProvenance
+ *
+ * Import XML may be ISO 19115-3 or 19115-2; live preview and export are always normalized to ISO 19115-2 via pilotState.
  */
 
 /**

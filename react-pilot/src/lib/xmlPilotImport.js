@@ -161,6 +161,77 @@ function keywordThesaurusTitleLower(mk) {
 }
 
 /**
+ * Map ISO 19139 `MD_KeywordTypeCode` (InPort/NOAA) to pilot GCMD-style facets when thesaurus title is absent.
+ * @param {string} raw
+ */
+function keywordFacetFromIsoKeywordTypeCode(raw) {
+  const v = String(raw || '').trim().toLowerCase().replace(/\s+/g, '')
+  if (!v) return ''
+  if (v === 'theme') return 'sciencekeywords'
+  if (v === 'place') return 'locations'
+  if (v === 'project') return 'projects'
+  if (v === 'datacentre' || v === 'datacenter') return 'datacenters'
+  if (v === 'platform') return 'platforms'
+  if (v === 'instrument') return 'instruments'
+  if (v === 'temporal') return ''
+  return ''
+}
+
+/**
+ * @param {Element} mk `gmd:MD_Keywords`
+ */
+function facetFromMdKeywordsBlock(mk) {
+  const thesTitle = keywordThesaurusTitleLower(mk)
+  if (thesTitle.includes('platform instance')) return ''
+
+  let facet = ''
+  if (thesTitle.includes('science')) facet = 'sciencekeywords'
+  else if (thesTitle.includes('data center') || thesTitle.includes('datacenter')) facet = 'datacenters'
+  else if (thesTitle.includes('platform')) facet = 'platforms'
+  else if (thesTitle.includes('instrument')) facet = 'instruments'
+  else if (thesTitle.includes('location')) facet = 'locations'
+  else if (thesTitle.includes('project')) facet = 'projects'
+  else if (thesTitle.includes('provider')) facet = 'providers'
+  if (!facet && thesTitle.includes('gcmd') && /science|earth/i.test(thesTitle)) facet = 'sciencekeywords'
+
+  if (!facet) {
+    const typeEl = childNS(mk, NS.gmd, 'type')
+    const codeEl = typeEl ? childNS(typeEl, NS.gmd, 'MD_KeywordTypeCode') : null
+    const tv = codeEl?.getAttribute('codeListValue') || txt(codeEl) || ''
+    facet = keywordFacetFromIsoKeywordTypeCode(tv)
+  }
+  return facet
+}
+
+/**
+ * @param {Element} mk `mri:MD_Keywords` (ISO 19115-3)
+ */
+function facetFromMriKeywordsBlock(mk) {
+  const thesWrap = cn3(mk, NS3.mri, 'thesaurusName')
+  const thesCite = thesWrap ? cn3(thesWrap, NS3.cit, 'CI_Citation') : null
+  const thesTitle = thesCite ? gcs3(cn3(thesCite, NS3.cit, 'title')).toLowerCase() : ''
+  if (thesTitle.includes('platform instance')) return ''
+
+  let facet = ''
+  if (thesTitle.includes('science')) facet = 'sciencekeywords'
+  else if (thesTitle.includes('data center') || thesTitle.includes('datacenter')) facet = 'datacenters'
+  else if (thesTitle.includes('platform')) facet = 'platforms'
+  else if (thesTitle.includes('instrument')) facet = 'instruments'
+  else if (thesTitle.includes('location')) facet = 'locations'
+  else if (thesTitle.includes('project')) facet = 'projects'
+  else if (thesTitle.includes('provider')) facet = 'providers'
+  if (!facet && thesTitle.includes('gcmd') && /science|earth/i.test(thesTitle)) facet = 'sciencekeywords'
+
+  if (!facet) {
+    const typeEl = cn3(mk, NS3.mri, 'type')
+    const codeEl = typeEl ? cn3(typeEl, NS3.mcc, 'MD_KeywordTypeCode') || childLocal(typeEl, 'MD_KeywordTypeCode') : null
+    const tv = codeEl?.getAttribute?.('codeListValue') || txt(codeEl) || ''
+    facet = keywordFacetFromIsoKeywordTypeCode(tv)
+  }
+  return facet
+}
+
+/**
  * @param {Element | null | undefined} numWrap e.g. `gmd:westBoundLongitude`
  */
 function gcoDecimalFromWrapper(numWrap) {
@@ -459,11 +530,22 @@ function parseExtent(exExtent) {
       txt(childNS(tp, NS.gml, 'beginPosition')) ||
       txt(childLocal(tp, 'begin')) ||
       txt(childLocal(tp, 'beginPosition'))
-    out.endDate =
+    let endTxt =
       txt(childNS(tp, NS.gml, 'end')) ||
-      txt(childNS(tp, NS.gml, 'endPosition')) ||
       txt(childLocal(tp, 'end')) ||
-      txt(childLocal(tp, 'endPosition'))
+      ''
+    endTxt = String(endTxt).trim()
+    const endPosEl =
+      childNS(tp, NS.gml, 'endPosition') ||
+      childLocal(tp, 'endPosition')
+    if (!endTxt && endPosEl) {
+      endTxt = txt(endPosEl).trim()
+      const indet = String(endPosEl.getAttribute('indeterminatePosition') || '').trim().toLowerCase()
+      if (!endTxt && indet === 'now') {
+        endTxt = new Date().toISOString().slice(0, 10)
+      }
+    }
+    out.endDate = endTxt
     const ti = childNS(tp, NS.gml, 'timeInterval') || childLocal(tp, 'timeInterval')
     if (ti) {
       out.temporalExtentIntervalUnit = ti.getAttribute('unit') || ti.getAttributeNS(NS.gml, 'unit') || ''
@@ -485,17 +567,7 @@ function parseKeywords(dataId) {
   for (const dk of childrenNS(dataId, NS.gmd, 'descriptiveKeywords')) {
     const mk = childNS(dk, NS.gmd, 'MD_Keywords')
     if (!mk) continue
-    const thesTitle = keywordThesaurusTitleLower(mk)
-    if (thesTitle.includes('platform instance')) continue
-
-    let facet = ''
-    if (thesTitle.includes('science')) facet = 'sciencekeywords'
-    else if (thesTitle.includes('data center') || thesTitle.includes('datacenter')) facet = 'datacenters'
-    else if (thesTitle.includes('platform')) facet = 'platforms'
-    else if (thesTitle.includes('instrument')) facet = 'instruments'
-    else if (thesTitle.includes('location')) facet = 'locations'
-    else if (thesTitle.includes('project')) facet = 'projects'
-    else if (thesTitle.includes('provider')) facet = 'providers'
+    const facet = facetFromMdKeywordsBlock(mk)
     if (!facet) continue
 
     const labels = []
@@ -509,6 +581,9 @@ function parseKeywords(dataId) {
       if (!facets[facet]) facets[facet] = []
       facets[facet].push(...labels)
     }
+  }
+  if (facets.datacenters?.length && !facets.providers?.length) {
+    facets.providers = facets.datacenters.map((row) => ({ ...row }))
   }
   return facets
 }
@@ -1015,7 +1090,6 @@ function parseSpatialRepresentation(root) {
   for (const sri of childrenNS(root, NS.gmd, 'spatialRepresentationInfo')) {
     const grid = childNS(sri, NS.gmd, 'MD_GridSpatialRepresentation')
     if (grid) {
-      out.useGridRepresentation = true
       const cg = childNS(childNS(grid, NS.gmd, 'cellGeometry'), NS.gmd, 'MD_CellGeometryCode')
       out.gridCellGeometry = cg?.getAttribute('codeListValue') || txt(cg)
       for (const ax of childrenNS(grid, NS.gmd, 'axisDimensionProperties')) {
@@ -1036,6 +1110,7 @@ function parseSpatialRepresentation(root) {
           out.gridVerticalResolution = res
         }
       }
+      out.useGridRepresentation = !!(String(out.gridColumnSize || '').trim() && String(out.gridRowSize || '').trim())
       continue
     }
     const geo = childNS(sri, NS.gmd, 'MD_Georectified')
@@ -1062,6 +1137,73 @@ function isImportableOnlineUrl(raw) {
   } catch {
     return false
   }
+}
+
+/**
+ * First http(s) linkage under citation citedResponsibleParty (InPort full-metadata URL often lives here).
+ * Namespace-agnostic so ISO19115-3 `cit:CI_Citation` also works.
+ * @param {Element | null} cite `gmd:CI_Citation` or `cit:CI_Citation`
+ */
+function firstCitationOnlineLinkageUrl(cite) {
+  if (!cite) return ''
+  const cited = []
+  cited.push(...childrenNS(cite, NS.gmd, 'citedResponsibleParty'))
+  if (!cited.length) {
+    for (const c of cite.children || []) {
+      if (c.localName === 'citedResponsibleParty') cited.push(c)
+    }
+  }
+  for (const crp of cited) {
+    let rp = childNS(crp, NS.gmd, 'CI_ResponsibleParty')
+    if (!rp) {
+      for (const c of crp.children || []) {
+        if (c.localName === 'CI_ResponsibleParty') {
+          rp = c
+          break
+        }
+      }
+    }
+    if (!rp) continue
+    let ci = childNS(childNS(rp, NS.gmd, 'contactInfo'), NS.gmd, 'CI_Contact')
+    if (!ci) {
+      const ciWrap = childLocal(rp, 'contactInfo')
+      ci = ciWrap ? childLocal(ciWrap, 'CI_Contact') : null
+    }
+    let or = ci ? childNS(ci, NS.gmd, 'onlineResource') : null
+    if (!or && ci) or = childLocal(ci, 'onlineResource')
+    let ciOn = or ? childNS(or, NS.gmd, 'CI_OnlineResource') : null
+    if (!ciOn && or) ciOn = childLocal(or, 'CI_OnlineResource')
+    let linkEl = ciOn ? childNS(ciOn, NS.gmd, 'linkage') : null
+    if (!linkEl && ciOn) linkEl = childLocal(ciOn, 'linkage')
+    let urlEl = linkEl ? childNS(linkEl, NS.gmd, 'URL') : null
+    if (!urlEl && linkEl) urlEl = childLocal(linkEl, 'URL')
+    const raw = urlEl ? txt(urlEl) : ''
+    const u = stripUxTemplateBraces(raw).trim()
+    if (u && isImportableOnlineUrl(u)) return u
+  }
+  return ''
+}
+
+/**
+ * First http(s) linkage on root metadata contact when POC omits online resource (common for InPort).
+ * @param {Element} root
+ */
+function firstRootContactOnlineLinkageUrl(root) {
+  for (const c of childrenNS(root, NS.gmd, 'contact')) {
+    const href = (c.getAttributeNS(NS.xlink, 'href') || c.getAttribute('xlink:href') || '').trim()
+    if (href) continue
+    const rp = childNS(c, NS.gmd, 'CI_ResponsibleParty')
+    if (!rp) continue
+    const ci = childNS(childNS(rp, NS.gmd, 'contactInfo'), NS.gmd, 'CI_Contact')
+    const or = ci ? childNS(ci, NS.gmd, 'onlineResource') : null
+    const ciOn = or ? childNS(or, NS.gmd, 'CI_OnlineResource') : null
+    const linkEl = ciOn ? childNS(ciOn, NS.gmd, 'linkage') : null
+    const urlEl = linkEl ? childNS(linkEl, NS.gmd, 'URL') : null
+    const raw = urlEl ? txt(urlEl) : ''
+    const u = stripUxTemplateBraces(raw).trim()
+    if (u && isImportableOnlineUrl(u)) return u
+  }
+  return ''
 }
 
 /**
@@ -2170,6 +2312,16 @@ function gcoDecimal3(numWrap) {
 }
 
 /**
+ * Integer from `gco:Integer` or CharacterString under ISO 19115-3 wrappers (e.g. grid `dimensionSize`).
+ * @param {Element | null | undefined} intWrap
+ */
+function gcoInteger3(intWrap) {
+  if (!intWrap) return ''
+  const el = cn3(intWrap, NS3.gco, 'Integer') || cn3(intWrap, NS3.gco, 'CharacterString')
+  return el ? txt(el) : ''
+}
+
+/**
  * Parse a cit:CI_Responsibility (19115-3 replacement for CI_ResponsibleParty).
  * @param {Element | null} resp
  */
@@ -2388,13 +2540,39 @@ function parseExtent3(dataId) {
       out.south = gcoDecimal3(cn3(bbox, NS3.gex, 'southBoundLatitude'))
       out.north = gcoDecimal3(cn3(bbox, NS3.gex, 'northBoundLatitude'))
     }
+    for (const ve of cns3(ex, NS3.gex, 'verticalElement')) {
+      const vx = cn3(ve, NS3.gex, 'EX_VerticalExtent')
+      if (!vx) continue
+      const lo = gcoDecimal3(cn3(vx, NS3.gex, 'minimumValue'))
+      const hi = gcoDecimal3(cn3(vx, NS3.gex, 'maximumValue'))
+      if (lo || hi) {
+        out.vmin = lo
+        out.vmax = hi
+        break
+      }
+    }
     for (const te of cns3(ex, NS3.gex, 'temporalElement')) {
       const ext = cn3(te, NS3.gex, 'EX_TemporalExtent')
       const inner = ext ? cn3(ext, NS3.gex, 'extent') : null
       const tp = inner ? childLocal(inner, 'TimePeriod') : null
       if (!tp) continue
       out.startDate = txt(childNS(tp, NS.gml, 'beginPosition')) || txt(childLocal(tp, 'beginPosition')) || txt(childNS(tp, NS.gml, 'begin')) || txt(childLocal(tp, 'begin'))
-      out.endDate = txt(childNS(tp, NS.gml, 'endPosition')) || txt(childLocal(tp, 'endPosition')) || txt(childNS(tp, NS.gml, 'end')) || txt(childLocal(tp, 'end'))
+      let endTxt =
+        txt(childNS(tp, NS.gml, 'end')) ||
+        txt(childLocal(tp, 'end')) ||
+        ''
+      endTxt = String(endTxt).trim()
+      const endPosEl =
+        childNS(tp, NS.gml, 'endPosition') ||
+        childLocal(tp, 'endPosition')
+      if (!endTxt && endPosEl) {
+        endTxt = txt(endPosEl).trim()
+        const indet = String(endPosEl.getAttribute('indeterminatePosition') || '').trim().toLowerCase()
+        if (!endTxt && indet === 'now') {
+          endTxt = new Date().toISOString().slice(0, 10)
+        }
+      }
+      out.endDate = endTxt
     }
   }
   return out
@@ -2455,9 +2633,28 @@ function parseSpatialRepresentation3(root) {
     }
     const grid = cn3(sri, NS3.msr, 'MD_GridSpatialRepresentation')
     if (grid) {
-      out.useGridRepresentation = true
       const cg = cn3(cn3(grid, NS3.msr, 'cellGeometry'), NS3.msr, 'MD_CellGeometryCode')
       if (cg) out.gridCellGeometry = cg.getAttribute('codeListValue') || txt(cg)
+      for (const ax of cns3(grid, NS3.msr, 'axisDimensionProperties')) {
+        const dim = cn3(ax, NS3.msr, 'MD_Dimension')
+        if (!dim) continue
+        const nameCode = cn3(cn3(dim, NS3.msr, 'dimensionName'), NS3.msr, 'MD_DimensionNameTypeCode')
+        const axis = (nameCode?.getAttribute('codeListValue') || txt(nameCode)).toLowerCase()
+        const size = stripUxTemplateBraces(gcoInteger3(cn3(dim, NS3.msr, 'dimensionSize'))).trim()
+        const resWrap = cn3(dim, NS3.msr, 'resolution')
+        const res = stripUxTemplateBraces(resWrap ? gcs3(resWrap) : '').trim()
+        if (axis === 'column') {
+          out.gridColumnSize = size
+          out.gridColumnResolution = res
+        } else if (axis === 'row') {
+          out.gridRowSize = size
+          out.gridRowResolution = res
+        } else if (axis === 'vertical') {
+          out.gridVerticalSize = size
+          out.gridVerticalResolution = res
+        }
+      }
+      out.useGridRepresentation = !!(String(out.gridColumnSize || '').trim() && String(out.gridRowSize || '').trim())
     }
   }
   return out
@@ -2614,19 +2811,7 @@ function parseKeywords3(dataId) {
   for (const dk of cns3(dataId, NS3.mri, 'descriptiveKeywords')) {
     const mk = cn3(dk, NS3.mri, 'MD_Keywords')
     if (!mk) continue
-    const thesWrap = cn3(mk, NS3.mri, 'thesaurusName')
-    const thesCite = thesWrap ? cn3(thesWrap, NS3.cit, 'CI_Citation') : null
-    const thesTitle = thesCite ? gcs3(cn3(thesCite, NS3.cit, 'title')).toLowerCase() : ''
-    if (thesTitle.includes('platform instance')) continue
-    let facet = ''
-    if (thesTitle.includes('science')) facet = 'sciencekeywords'
-    else if (thesTitle.includes('data center') || thesTitle.includes('datacenter')) facet = 'datacenters'
-    else if (thesTitle.includes('platform')) facet = 'platforms'
-    else if (thesTitle.includes('instrument')) facet = 'instruments'
-    else if (thesTitle.includes('location')) facet = 'locations'
-    else if (thesTitle.includes('project')) facet = 'projects'
-    else if (thesTitle.includes('provider')) facet = 'providers'
-    if (!facet && thesTitle.includes('gcmd') && /science|earth/i.test(thesTitle)) facet = 'sciencekeywords'
+    const facet = facetFromMriKeywordsBlock(mk)
     if (!facet) continue
     const labels = []
     for (const kw of cns3(mk, NS3.mri, 'keyword')) {
@@ -2638,6 +2823,9 @@ function parseKeywords3(dataId) {
       if (!facets[facet]) facets[facet] = []
       facets[facet].push(...labels)
     }
+  }
+  if (facets.datacenters?.length && !facets.providers?.length) {
+    facets.providers = facets.datacenters.map((row) => ({ ...row }))
   }
   return facets
 }
@@ -2818,6 +3006,11 @@ function extractFrom19115_3(root, raw, warnings) {
   const kw = parseKeywords3(dataId)
   const acqParsed = parseAcquisition3(root)
 
+  const mergedContactUrl =
+    String(poc.contactUrl || '').trim() ||
+    firstCitationOnlineLinkageUrl(cite) ||
+    firstRootContactOnlineLinkageUrl(root)
+
   const missionFields = {
     fileId,
     title: stripUxTemplateBraces(title),
@@ -2839,7 +3032,7 @@ function extractFrom19115_3(root, raw, warnings) {
     individualName: poc.individualName,
     email: poc.email,
     contactPhone: poc.contactPhone,
-    contactUrl: poc.contactUrl,
+    contactUrl: mergedContactUrl,
     contactAddress: poc.contactAddress,
     west: ext.west,
     east: ext.east,
@@ -3060,6 +3253,11 @@ export function importPilotPartialStateFromXml(xmlString) {
   const scEl = hl ? childNS(hl, NS.gmd, 'MD_ScopeCode') : null
   const scopeFromRoot = scEl ? scEl.getAttribute('codeListValue') || txt(scEl) : ''
 
+  const mergedContactUrl =
+    String(poc.contactUrl || '').trim() ||
+    firstCitationOnlineLinkageUrl(cite) ||
+    firstRootContactOnlineLinkageUrl(root)
+
   /** @type {Record<string, unknown>} */
   const missionFields = {
     fileId,
@@ -3084,7 +3282,7 @@ export function importPilotPartialStateFromXml(xmlString) {
     individualName: poc.individualName,
     email: poc.email,
     contactPhone: poc.contactPhone,
-    contactUrl: poc.contactUrl,
+    contactUrl: mergedContactUrl,
     contactAddress: poc.contactAddress,
     ...(poc.ror ? { ror: poc.ror } : {}),
     west: ext.west,

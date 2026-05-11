@@ -231,6 +231,18 @@ function truthyFlag(v) {
 }
 
 /**
+ * Normalize punctuation so latitude/longitude and numeric fields from XML survive validation.
+ * @param {unknown} v
+ * @returns {string}
+ */
+function normalizePilotNumericToken(v) {
+  let s = String(v ?? '').trim()
+  s = s.replace(/\u2212|\u2013|\u2014/g, '-')
+  s = s.replace(/,/g, '')
+  return s
+}
+
+/**
  * Coerce common legacy JSON quirks so validation matches the in-browser form.
  * @param {unknown} state
  * @returns {object}
@@ -247,13 +259,25 @@ export function sanitizePilotState(state) {
       m[k] = canonicalMissionInstantForStorage(raw)
     }
     for (const ax of ['west', 'east', 'south', 'north']) {
-      m[ax] = pickBboxAxis(m[ax], BBOX_DEFAULT[ax])
+      const raw = pickBboxAxis(m[ax], BBOX_DEFAULT[ax])
+      const n = normalizePilotNumericToken(raw)
+      m[ax] = isValidNumber(n) ? n : BBOX_DEFAULT[ax]
     }
     if (m.accession != null) m.accession = String(m.accession).replace(/\u00a0/g, ' ').trim()
     for (const k of ['vmin', 'vmax']) {
       const t = String(m[k] ?? '').trim()
       if (t === '') continue
-      if (Number.isNaN(Number(t))) m[k] = ''
+      const n = normalizePilotNumericToken(t)
+      if (Number.isNaN(Number(n))) m[k] = ''
+      else m[k] = n
+    }
+    {
+      const vmin = String(m.vmin ?? '').trim()
+      const vmax = String(m.vmax ?? '').trim()
+      if (isValidNumber(vmin) && isValidNumber(vmax) && Number(normalizePilotNumericToken(vmin)) > Number(normalizePilotNumericToken(vmax))) {
+        m.vmin = vmax
+        m.vmax = vmin
+      }
     }
     if (Array.isArray(m.topicCategories)) {
       m.topicCategories = m.topicCategories.map((c) => String(c ?? '').trim()).filter(Boolean)
@@ -272,6 +296,14 @@ export function sanitizePilotState(state) {
     const sp = out.spatial
     sp.useGridRepresentation = truthyFlag(sp.useGridRepresentation)
     sp.hasTrajectory = truthyFlag(sp.hasTrajectory)
+    if (sp.hasTrajectory && isBlank(sp.trajectorySampling)) {
+      sp.hasTrajectory = false
+    }
+    for (const k of ['accuracyValue', 'errorValue', 'gridColumnSize', 'gridRowSize', 'gridVerticalSize']) {
+      if (sp[k] == null) continue
+      const n = normalizePilotNumericToken(sp[k])
+      if (n !== '' && !isValidNumber(n)) sp[k] = ''
+    }
   }
 
   if (out.distribution && typeof out.distribution === 'object') {
@@ -306,11 +338,27 @@ export function sanitizePilotState(state) {
     const firstInst = Array.isArray(ins) && ins[0]?.label ? String(ins[0].label).trim() : ''
     if (firstInst) {
       out.sensors = out.sensors.map((s, i) => {
+        if (i !== 0) return s
+        let next = { ...s }
         const v = String(s?.variable ?? '').trim()
-        if (v) return s
-        if (i === 0) return { ...s, variable: firstInst }
-        return s
+        if (!v) next = { ...next, variable: firstInst }
+        const t = String(s?.type ?? '').trim()
+        if (!t) next = { ...next, type: firstInst }
+        return next
       })
+    }
+    if (out.platform && typeof out.platform === 'object' && out.sensors.length) {
+      const platId = String(out.platform.platformId ?? '').trim()
+      if (platId) {
+        out.sensors = out.sensors.map((s, i) => {
+          if (i !== 0) return s
+          let modelId = String(s?.modelId ?? '').trim()
+          let sensorId = String(s?.sensorId ?? '').trim()
+          if (!modelId) modelId = platId
+          if (!sensorId) sensorId = platId
+          return { ...s, modelId, sensorId }
+        })
+      }
     }
     while (out.sensors.length > 1 && sensorRowIsInactive(out.sensors[out.sensors.length - 1])) {
       out.sensors.pop()
@@ -325,7 +373,7 @@ export function sanitizePilotState(state) {
  * @returns {boolean}
  */
 function isValidNumber(s) {
-  const v = String(s || '').trim()
+  const v = normalizePilotNumericToken(s)
   if (v === '') return false
   return !Number.isNaN(Number(v))
 }
