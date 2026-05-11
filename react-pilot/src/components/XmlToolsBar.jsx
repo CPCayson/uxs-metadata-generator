@@ -9,18 +9,19 @@ import { summarizePilotImportPopulation } from '../lib/importMergeSummary.js'
 import { detectGaps } from '../lib/cometClient.js'
 import ScannerSuggestionsDialog from './ScannerSuggestionsDialog.jsx'
 import { GapPanel } from './UxsGapPanel.jsx'
+import { getBundledMissionXmlSamples } from '../lib/missionBundledXmlSamples.js'
 
 /**
  * Header-mounted XML tools strip.
  *
- * Portals into #pilot-header-tools-slot (rendered inside <header>). Primary row shows
- * Import, Clear form (when wired), and ISO/download; paste import, scanner, gap check,
- * CoMET actions, and secondary exports live under the ☰ overflow menu.
+ * Portals into #pilot-header-tools-slot (below #pilot-header-steps-slot in <header>). Primary row shows
+ * Metadata label + Import / Start over / Export / Summary; paste import, scanner, gap check,
+ * CoMET actions, and secondary exports live under the More overflow menu.
  *
  * Buttons automatically disable themselves when the active profile doesn't
  * support the underlying capability:
- *   - Import XML / zip / Paste import : needs at least one profile.importParsers entry.
- *   - Copy / Download preview   : needs profile.buildXmlPreview.
+ *   - Import / paste panel       : needs at least one profile.importParsers entry.
+ *   - Copy / Export / Summary    : needs profile.buildXmlPreview (Summary after an import).
  *   - GeoJSON / DCAT (server)   : capability flag + same-origin `/api/db`.
  *
  * @param {{
@@ -43,6 +44,7 @@ import { GapPanel } from './UxsGapPanel.jsx'
  *   onClearForm?: (() => void) | null,
  *   importSampleContext?: { rawXml: string, filename?: string, warnings?: string[] } | null,
  *   onImportSampleRecorded?: ((detail: { rawXml: string, filename?: string, warnings?: string[] }) => void) | null,
+ *   workspaceNav?: { onHome: () => void, onNewRecord: () => void } | null,
  * }} props
  */
 function XmlToolsBar({
@@ -65,6 +67,7 @@ function XmlToolsBar({
   onClearForm = null,
   importSampleContext = null,
   onImportSampleRecorded = null,
+  workspaceNav = null,
   /** When true, render inline instead of portaling to #pilot-header-tools-slot */
   inline = false,
 }) {
@@ -82,6 +85,10 @@ function XmlToolsBar({
     validationEngine
 
   const isMission = profile.id === 'mission'
+  const bundledMissionSamples = useMemo(
+    () => (isMission ? getBundledMissionXmlSamples() : []),
+    [isMission],
+  )
   const [gaps, setGaps] = useState(null)
   const [gapBusy, setGapBusy] = useState(false)
   const [showGaps, setShowGaps] = useState(false)
@@ -436,11 +443,14 @@ function XmlToolsBar({
     })
   }
 
+  const showLegacyMeta = canBuildXml || isMission
+  const nceiUxSUrl = 'https://www.ncei.noaa.gov/products/uncrewed-system-metadata-templates'
+
   const bar = (
     <div className="pilot-xml-tools" data-profile={profile.id}>
       <div className="pilot-xml-tools__row">
-        <span className="pilot-xml-tools__label" aria-hidden>
-          XML
+        <span className="pilot-xml-tools__label">
+          <span className="pilot-xml-tools__label-text">Metadata</span>
         </span>
 
         <input
@@ -454,64 +464,94 @@ function XmlToolsBar({
         />
         <button
           type="button"
-          className="button button-secondary button-tiny"
+          className="button button-tiny pilot-xml-tools__action pilot-xml-tools__action--primary"
           onClick={() => fileInputRef.current?.click()}
           disabled={!canImport}
           title={
             canImport
-              ? 'Load a metadata .xml file or a .zip that contains one or more .xml files'
-              : 'No import parser for this profile'
+              ? 'Choose a metadata file (.xml) or a zip folder that contains XML — we merge it into your form'
+              : 'This profile does not support file import yet'
           }
         >
-          Import XML / zip…
+          Import
         </button>
         {typeof onClearForm === 'function' ? (
           <button
             type="button"
-            className="button button-tiny pilot-xml-tools__clear-form"
+            className="button button-secondary button-tiny pilot-xml-tools__clear-form pilot-xml-tools__action"
             onClick={() => onClearForm()}
-            title="Reset all fields to profile defaults (browser session updated)"
+            title="Reset the form to a fresh start (your browser draft is cleared too)"
           >
-            Clear form
+            Start over
           </button>
         ) : null}
         <button
           type="button"
-          className="button button-secondary button-tiny"
+          className="button button-tiny pilot-xml-tools__action pilot-xml-tools__action--primary"
           onClick={downloadPreviewXml}
           disabled={!canBuildXml}
-          title={canBuildXml ? 'Download the current XML preview' : 'No XML preview builder for this profile'}
+          title={
+            canBuildXml
+              ? 'Download your metadata as a standard XML file you can archive or share'
+              : 'No preview export for this profile'
+          }
         >
-          {isMission ? '</> ISO XML' : 'Download preview'}
+          Export
         </button>
         <button
           type="button"
-          className="button button-secondary button-tiny"
+          className="button button-secondary button-tiny pilot-xml-tools__action pilot-xml-tools__action--quiet"
           onClick={downloadImportReport}
           disabled={!importSampleContext?.rawXml?.trim()}
           title={
             importSampleContext?.rawXml?.trim()
-              ? 'Download Markdown: unset fields, validation issues, upload vs preview XML diff'
-              : 'Import an XML sample first, then download this report'
+              ? 'Download a friendly summary: what filled in, checks, and how it compares to your upload'
+              : 'Available after you import a file — summarizes changes and checks'
           }
         >
-          Import report
+          Summary
         </button>
 
         <div className="pilot-xml-tools__overflow-wrap" ref={overflowMenuRef}>
           <button
             type="button"
-            className="button button-secondary button-tiny pilot-xml-tools__overflow-trigger"
+            className="button button-secondary button-tiny pilot-xml-tools__overflow-trigger pilot-xml-tools__action--quiet"
             onClick={() => setOverflowMenuOpen((o) => !o)}
             aria-expanded={overflowMenuOpen}
             aria-haspopup="menu"
-            aria-label="More XML tools"
-            title="More import, export, and CoMET actions"
+            aria-label="More metadata options"
+            title="Paste text, copy to clipboard, maps & catalog exports, and more"
           >
-            ☰
+            More
           </button>
           {overflowMenuOpen ? (
             <div className="pilot-xml-tools__overflow-menu" role="menu">
+              {workspaceNav ? (
+                <>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className="button button-secondary button-tiny pilot-xml-tools__overflow-item"
+                    onClick={() => {
+                      setOverflowMenuOpen(false)
+                      workspaceNav.onHome()
+                    }}
+                  >
+                    ← Workspace home
+                  </button>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className="button button-secondary button-tiny pilot-xml-tools__overflow-item"
+                    onClick={() => {
+                      setOverflowMenuOpen(false)
+                      workspaceNav.onNewRecord()
+                    }}
+                  >
+                    + New record
+                  </button>
+                </>
+              ) : null}
               <button
                 type="button"
                 role="menuitem"
@@ -522,10 +562,46 @@ function XmlToolsBar({
                 }}
                 aria-expanded={importOpen}
                 disabled={!canImport}
-                title={canImport ? 'Paste XML to merge into the form' : 'No import parser for this profile'}
+                title={canImport ? 'Paste metadata text to merge into the form' : 'This profile does not support import'}
               >
-                {importOpen ? 'Hide import' : 'Paste import…'}
+                {importOpen ? 'Hide paste box' : 'Paste from clipboard…'}
               </button>
+              {isMission && canImport && bundledMissionSamples.length > 0 ? (
+                <>
+                  <span className="pilot-xml-tools__overflow-heading" role="presentation">
+                    Import templates
+                  </span>
+                  <label className="pilot-xml-tools__overflow-item pilot-xml-tools__bundled-template-select-label">
+                    <span className="visually-hidden">Load a bundled XML template into the import box</span>
+                    <select
+                      className="form-control pilot-xml-tools__bundled-template-select"
+                      aria-label="Bundled import template"
+                      defaultValue=""
+                      onChange={(e) => {
+                        const file = e.target.value
+                        e.target.value = ''
+                        if (!file) return
+                        const hit = bundledMissionSamples.find((s) => s.file === file)
+                        if (!hit) return
+                        clearZipImportUi()
+                        pendingImportMetaRef.current = { originalFilename: hit.file }
+                        setImportText(hit.xml)
+                        setImportError('')
+                        setImportOpen(true)
+                        setOverflowMenuOpen(false)
+                        onStatus?.(`Loaded bundled template ${hit.file} (${hit.xml.length} chars). Review and Apply to form.`)
+                      }}
+                    >
+                      <option value="">Bundled template…</option>
+                      {bundledMissionSamples.map((s) => (
+                        <option key={s.file} value={s.file}>
+                          {s.label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </>
+              ) : null}
               <button
                 type="button"
                 role="menuitem"
@@ -537,11 +613,11 @@ function XmlToolsBar({
                 disabled={!canScanner}
                 title={
                   canScanner
-                    ? 'Lens Scanner: paste JSON, run heuristic, merge suggestions'
-                    : 'Scanner suggestions require scannerPrefill and host/validation wiring'
+                    ? 'Open suggestions to help fill fields from pasted notes or JSON'
+                    : 'Suggestions need scanner wiring for this workspace'
                 }
               >
-                Scanner suggestions…
+                Field suggestions…
               </button>
               {isMission ? (
                 <>
@@ -622,7 +698,7 @@ function XmlToolsBar({
                 </button>
               ) : null}
               <span className="pilot-xml-tools__overflow-heading" role="presentation">
-                Export:
+                Also export
               </span>
               <button
                 type="button"
@@ -634,10 +710,10 @@ function XmlToolsBar({
                 }}
                 disabled={!canBuildXml}
                 title={
-                  canBuildXml ? 'Copy the current XML preview to the clipboard' : 'No XML preview builder for this profile'
+                  canBuildXml ? 'Copy the current metadata XML to your clipboard' : 'No preview export for this profile'
                 }
               >
-                Copy preview XML
+                Copy XML to clipboard
               </button>
               <button
                 type="button"
@@ -684,6 +760,42 @@ function XmlToolsBar({
         </div>
       </div>
 
+      {showLegacyMeta ? (
+        <div className="pilot-xml-tools__legacy-meta" aria-label="Export format and host status">
+          {canBuildXml ? (
+            <span className="pilot-xml-tools__schema-line">
+              <span className="pilot-xml-tools__schema-kicker">Target schema</span>
+              <span className="pilot-xml-tools__schema-value">ISO 19115-2</span>
+            </span>
+          ) : null}
+          <span
+            className={`pilot-xml-tools__host-pill${hostBridgeReady ? ' pilot-xml-tools__host-pill--on' : ''}`}
+            title={
+              hostBridgeReady
+                ? 'Same-origin /api/db is reachable (catalog, GeoJSON, DCAT, server checks).'
+                : 'Host bridge offline — use npm run dev:netlify or deploy for /api/db features.'
+            }
+          >
+            <span className="pilot-xml-tools__host-dot" aria-hidden />
+            {hostBridgeReady ? 'Host connected' : 'Host offline'}
+          </span>
+          <span className="pilot-xml-tools__preview-hint" title="Live XML preview updates when you edit the form">
+            Preview updates live
+          </span>
+          {isMission ? (
+            <a
+              href={nceiUxSUrl}
+              className="pilot-xml-tools__ncei-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="NCEI Uncrewed Systems metadata templates (opens new tab)"
+            >
+              NCEI UxS templates
+            </a>
+          ) : null}
+        </div>
+      ) : null}
+
       {isMission && showGaps ? (
         <div className="pilot-xml-tools__gaps">
           <GapPanel gaps={gaps} onClose={() => setShowGaps(false)} />
@@ -693,9 +805,9 @@ function XmlToolsBar({
       {canImport && importOpen ? (
         <div className="xml-import-panel pilot-xml-tools__import">
           <p className="xml-import-hint">
-            Paste XML, load a single <code>.xml</code> file, or a <code>.zip</code> of shared metadata (multiple
-            XML files show a picker). Merges into the <strong>{profile.label}</strong> form; unrecognized elements are
-            ignored. Press <kbd>Esc</kbd> to close.
+            Paste text here, or use <strong>Import</strong> above for a file. One <code>.xml</code> or a <code>.zip</code>{' '}
+            with several files (you can pick which file). We merge into the <strong>{profile.label}</strong> form and skip
+            anything we do not recognize. Press <kbd>Esc</kbd> to close.
           </p>
           {zipXmlPaths && zipXmlPaths.length > 1 ? (
             <label className="xml-import-zip-pick">

@@ -277,25 +277,24 @@ export default function StepKeywords({ mission = {}, keywords, onKeywordsChange,
       </p>
 
       {keywordMetadataIssues.length > 0 ? (
-        <div className="alert alert-secondary" role="status" aria-label="Keyword metadata quality">
-          <strong>Keyword metadata</strong>
-          <p className="form-text mb-1">
+        <div className="keyword-metadata-bw" role="status" aria-label="Keyword metadata quality">
+          <strong className="keyword-metadata-bw__title">Keyword metadata</strong>
+          <p className="keyword-metadata-bw__lede">
             These warnings do not block export; they help ensure GCMD <code>gmx:Anchor</code> links resolve in the XML
             preview.
           </p>
-          <ul className="mb-0 small">
+          <ul className="keyword-metadata-bw__list">
             {keywordMetadataIssues.map((i, idx) => {
               const label = getPilotFieldLabelFallback(i.field)
               return (
                 <li key={`${i.field}-${idx}`}>
                   <strong>{label}</strong>
                   {label !== i.field ? (
-                    <span className="form-text d-block">
+                    <span className="keyword-metadata-bw__path">
                       <code>{i.field}</code>
                     </span>
                   ) : null}
-                  {' — '}
-                  {i.message}
+                  <span className="keyword-metadata-bw__msg"> — {i.message}</span>
                 </li>
               )
             })}

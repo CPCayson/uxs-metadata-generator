@@ -5,12 +5,32 @@ import { memo, useEffect, useState } from 'react'
  *
  * - Left:   status LED + SYSTEMS label (cyan when saved, magenta when dirty)
  * - Middle: live UTC timestamp + session uptime (mm:ss)
+ * - Controls: Dark mode, Form Wizard, Lens (lifted from header for density)
  * - Right:  version chip + persistence pill
  *
- * Isolated in its own component so the once-a-second clock tick re-renders
- * *only* the footer — the wizard, validator, and XML preview stay idle.
+ * Clock tick re-renders only this footer subtree.
+ *
+ * @param {{
+ *   isDirty: boolean,
+ *   appVersion: string,
+ *   darkMode: boolean,
+ *   onDarkModeChange: (next: boolean) => void,
+ *   formWizard: boolean,
+ *   onFormWizardChange: (next: boolean) => void,
+ *   lensEnabled: boolean,
+ *   onLensChange: (next: boolean) => void,
+ * }} props
  */
-function MissionStatusFooter({ isDirty, appVersion }) {
+function MissionStatusFooter({
+  isDirty,
+  appVersion,
+  darkMode,
+  onDarkModeChange,
+  formWizard,
+  onFormWizardChange,
+  lensEnabled,
+  onLensChange,
+}) {
   const [now, setNow] = useState(() => Date.now())
   const [mountedAt] = useState(() => Date.now())
 
@@ -62,6 +82,49 @@ function MissionStatusFooter({ isDirty, appVersion }) {
             persisted
           </span>
         </span>
+      </div>
+
+      {/* Workspace toggles (were in header — frees vertical space for the form) */}
+      <div className="mission-footer__cluster mission-footer__cluster--controls" aria-label="Workspace preferences">
+        <div className="form-check form-switch mb-0 d-flex align-items-center mission-footer__toggle">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            id="pilotThemeToggle"
+            checked={darkMode}
+            onChange={(e) => onDarkModeChange(e.target.checked)}
+            aria-label="Toggle dark theme"
+          />
+          <label className="form-check-label ms-2 mb-0" htmlFor="pilotThemeToggle">
+            Dark mode
+          </label>
+        </div>
+        <div className="form-check form-switch mb-0 d-flex align-items-center mission-footer__toggle">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            id="pilotFormWizardToggle"
+            checked={formWizard}
+            onChange={(e) => onFormWizardChange(e.target.checked)}
+            aria-label="UxS form wizard — open full-page metadata wizard"
+          />
+          <label className="form-check-label ms-2 mb-0" htmlFor="pilotFormWizardToggle">
+            Form Wizard
+          </label>
+        </div>
+        <div className="form-check form-switch mb-0 d-flex align-items-center mission-footer__toggle">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            id="pilotMantaLensToggle"
+            checked={lensEnabled}
+            onChange={(e) => onLensChange(e.target.checked)}
+            aria-label="Enable Manta lens and tools (FAB)"
+          />
+          <label className="form-check-label ms-2 mb-0" htmlFor="pilotMantaLensToggle">
+            Lens
+          </label>
+        </div>
       </div>
 
       {/* Right: version chip */}

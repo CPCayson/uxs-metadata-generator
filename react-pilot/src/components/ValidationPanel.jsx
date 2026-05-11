@@ -28,11 +28,26 @@ import { useEffect, useMemo, useRef, useState } from 'react'
  *   collapseFieldHints?: boolean,
  *   quietSurface?: boolean,
  *   hideScoreChips?: boolean,
+ *   railIntroProfileLabel?: string,
+ *   validationIdle?: boolean,
  * }} props
  */
 function displayIssueXpath(xpath) {
   return String(xpath || '').replace(/^\/gmd:MD_Metadata\b/, '/gmi:MI_Metadata')
 }
+
+const VALIDATION_MODE_TITLE = {
+  lenient: 'Lenient — permissive checks while drafting; fewer blocking rules.',
+  strict: 'Strict — tighter required fields and formats before handoff.',
+  catalog: 'Catalog — layers NCEI/catalog expectations on top of strict checks.',
+}
+
+const BRIDGE_CHECK_TITLE =
+  'Tests same-origin /api/db (use npm run dev:netlify or a deployed Netlify function). Optional if you only validate locally.'
+const SERVER_RULES_TITLE =
+  'Runs catalog/server rules when the database bridge is connected. Disabled without /api/db.'
+const INLINE_TOUCHED_TITLE = 'Show inline hints only on fields you have edited.'
+const INLINE_ALL_TITLE = 'Show inline hints for every field with an issue (all steps).'
 
 export default function ValidationPanel({
   mode,
@@ -61,6 +76,8 @@ export default function ValidationPanel({
   collapseFieldHints = false,
   quietSurface = false,
   hideScoreChips = false,
+  railIntroProfileLabel = '',
+  validationIdle = false,
 }) {
   const [issueFilter, setIssueFilter] = useState(/** @type {'all' | 'e' | 'w'} */ ('all'))
   const [issueNavIndex, setIssueNavIndex] = useState(0)
@@ -109,6 +126,9 @@ export default function ValidationPanel({
     String(statusMessage || '').trim() && String(statusMessage).trim() !== 'Ready',
   )
 
+  /** Prev/Next + issue list above the score band while blocking errors exist */
+  const issuesFirstRail = errCount > 0
+
   const connectionSections = (
     <>
       <section className="validation-panel__meta" aria-label="Bridge status">
@@ -137,6 +157,7 @@ export default function ValidationPanel({
             disabled={!hostBridgeReady || loading}
             aria-describedby={!hostBridgeReady ? 'bridgeHintVal' : undefined}
             aria-busy={loading}
+            title={BRIDGE_CHECK_TITLE}
           >
             {loading ? 'Checking…' : 'Bridge check'}
           </button>
@@ -149,6 +170,7 @@ export default function ValidationPanel({
               !hostBridgeReady ? 'bridgeHintVal' : serverRulesSummary ? 'serverRulesHint' : undefined
             }
             aria-busy={serverRulesBusy}
+            title={SERVER_RULES_TITLE}
           >
             {serverRulesBusy ? 'Server rules…' : 'Server rules validate'}
           </button>
@@ -167,69 +189,88 @@ export default function ValidationPanel({
     </>
   )
 
-  return (
-    <div className="validation-panel">
+  const surfaceIntro = (
+    <>
+      {hideSurfaceIntro && !quietSurface ? (
+        <p className="hint validation-panel__rail-ew validation-panel__rail-ew--top">
+          {railIntroProfileLabel ? (
+            <>
+              <strong>{railIntroProfileLabel}</strong>{' '}
+            </>
+          ) : null}
+          <strong>Errors</strong> reduce your readiness score in this mode; <strong>warnings</strong> are advisory. Use
+          Prev/Next or tap an issue to jump to its field.
+        </p>
+      ) : null}
       {!hideSurfaceIntro ? (
         <header className="validation-panel__intro">
           <h2>Validation</h2>
+          <p className="hint validation-panel__ew-inline">
+            <strong>Errors</strong> block scoring for the selected mode; <strong>warnings</strong> are advisory.
+          </p>
           <p className="card-intro">
             Rules and scores update as you edit. Use the list to jump to a field. Turn on field hints for every step, or only where
             you have made changes.
           </p>
           <details className="validation-panel__severity-help">
-            <summary>Errors vs warnings · validator buttons</summary>
+            <summary>Optional: bridge check · server rules</summary>
             <p className="hint">
-              <strong>Errors</strong> are blocking for the current validation mode. <strong>Warnings</strong> are advisory.
-              Bridge check tests the API connection; server rules runs catalog rules when the host is available — both are optional
-              if you only need local ISO checks.
+              Bridge check tests <code>/api/db</code>; server rules runs catalog checks when the host is connected — both optional
+              if you only need local ISO validation.
             </p>
           </details>
         </header>
       ) : null}
+    </>
+  )
 
-      <section
-        className={`validation-panel__mode-score${hideModePills ? ' validation-panel__mode-score--modes-upstream' : ''}`}
-        aria-label="Validation mode and completeness"
-      >
-        {!hideModePills ? (
-          <div className="mode-pills" role="group" aria-label="Validation mode">
-            {[
-              { id: 'lenient', label: 'Lenient' },
-              { id: 'strict', label: 'Strict' },
-              { id: 'catalog', label: 'Catalog' },
-            ].map((m) => (
-              <button
-                key={m.id}
-                type="button"
-                className={`mode-pill${mode === m.id ? ' active' : ''}`}
-                aria-pressed={mode === m.id}
-                onClick={() => onModeChange(m.id)}
-              >
-                {m.label}
-              </button>
-            ))}
+  const modeScoreSection = (
+    <section
+      className={`validation-panel__mode-score${hideModePills ? ' validation-panel__mode-score--modes-upstream' : ''}`}
+      aria-label="Validation mode and completeness"
+    >
+      {!hideModePills ? (
+        <div className="mode-pills" role="group" aria-label="Validation mode">
+          {[
+            { id: 'lenient', label: 'Lenient' },
+            { id: 'strict', label: 'Strict' },
+            { id: 'catalog', label: 'Catalog' },
+          ].map((m) => (
+            <button
+              key={m.id}
+              type="button"
+              className={`mode-pill${mode === m.id ? ' active' : ''}`}
+              aria-pressed={mode === m.id}
+              onClick={() => onModeChange(m.id)}
+              title={VALIDATION_MODE_TITLE[m.id] ?? ''}
+            >
+              {m.label}
+            </button>
+          ))}
+        </div>
+      ) : null}
+
+      <div className="score-row">
+        <div className="score-bar-wrap" aria-label={`Completeness ${pct} percent`}>
+          <div className="score-bar-bg">
+            <div className="score-bar-fill" style={{ width: `${pct}%` }} />
+          </div>
+        </div>
+        {!hideScoreChips ? (
+          <div className="score-chips">
+            <span className="chip chip-err">{errCount} errors</span>
+            <span className="chip chip-warn">{warnCount} warnings</span>
           </div>
         ) : null}
+      </div>
+      <p className="visually-hidden" aria-live="polite" aria-atomic="true">
+        {announce}
+      </p>
+    </section>
+  )
 
-        <div className="score-row">
-          <div className="score-bar-wrap" aria-label={`Completeness ${pct} percent`}>
-            <div className="score-bar-bg">
-              <div className="score-bar-fill" style={{ width: `${pct}%` }} />
-            </div>
-          </div>
-          {!hideScoreChips ? (
-            <div className="score-chips">
-              <span className="chip chip-err">{errCount} errors</span>
-              <span className="chip chip-warn">{warnCount} warnings</span>
-            </div>
-          ) : null}
-        </div>
-        <p className="visually-hidden" aria-live="polite" aria-atomic="true">
-          {announce}
-        </p>
-      </section>
-
-      <section className="validator-list validation-panel__issues-wrap" aria-labelledby="validation-issues-heading">
+  const issuesSection = (
+    <section className="validator-list validation-panel__issues-wrap" aria-labelledby="validation-issues-heading">
         <div className="validation-issues-head">
           <strong id="validation-issues-heading">{listLabel}</strong>
           {filteredIssues.length && typeof onIssueNavigate === 'function' ? (
@@ -311,9 +352,33 @@ export default function ValidationPanel({
             })}
           </ul>
         ) : !issues.length ? (
-          <p className="hint">All clear for this mode.</p>
+          <p className="hint">
+            {validationIdle
+              ? 'Validation starts after you import XML, apply a sheet template, load a draft, or edit a field.'
+              : 'All clear for this mode.'}
+          </p>
         ) : null}
       </section>
+  )
+
+  return (
+    <div
+      className={`validation-panel${quietSurface ? ' validation-panel--quiet-surface' : ''}${
+        issuesFirstRail ? ' validation-panel--issues-first' : ''
+      }`}
+    >
+      {surfaceIntro}
+      {issuesFirstRail ? (
+        <>
+          {issuesSection}
+          {modeScoreSection}
+        </>
+      ) : (
+        <>
+          {modeScoreSection}
+          {issuesSection}
+        </>
+      )}
 
       {showStatusFeed ? (
         <div className="validation-panel__feed">
@@ -344,6 +409,7 @@ export default function ValidationPanel({
                     className={`inline-mode-pill${!inlineEverywhere ? ' active' : ''}`}
                     aria-pressed={!inlineEverywhere}
                     onClick={() => onInlineEverywhereChange(false)}
+                    title={INLINE_TOUCHED_TITLE}
                   >
                     Touched
                   </button>
@@ -352,6 +418,7 @@ export default function ValidationPanel({
                     className={`inline-mode-pill${inlineEverywhere ? ' active' : ''}`}
                     aria-pressed={inlineEverywhere}
                     onClick={() => onInlineEverywhereChange(true)}
+                    title={INLINE_ALL_TITLE}
                   >
                     All fields
                   </button>
@@ -375,6 +442,7 @@ export default function ValidationPanel({
                   className={`inline-mode-pill${!inlineEverywhere ? ' active' : ''}`}
                   aria-pressed={!inlineEverywhere}
                   onClick={() => onInlineEverywhereChange(false)}
+                  title={INLINE_TOUCHED_TITLE}
                 >
                   Touched
                 </button>
@@ -383,6 +451,7 @@ export default function ValidationPanel({
                   className={`inline-mode-pill${inlineEverywhere ? ' active' : ''}`}
                   aria-pressed={inlineEverywhere}
                   onClick={() => onInlineEverywhereChange(true)}
+                  title={INLINE_ALL_TITLE}
                 >
                   All fields
                 </button>

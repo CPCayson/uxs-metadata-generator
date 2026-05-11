@@ -2,6 +2,7 @@ import { memo, useCallback, useDeferredValue, useEffect, useLayoutEffect, useMem
 import { countLineDiff, highlightXmlToHtml } from '../lib/xmlSyntaxHighlight'
 import { fieldKeyForElement, findFieldLineInXml, FIELD_ELEMENT_HINT } from '../lib/xmlFieldLineLocator'
 import { analyzeMissionPreviewXml } from '../lib/xmlPreviewStructuralHints.js'
+import FieldHintTooltip from './FieldHintTooltip.jsx'
 
 const ALL_FIELD_KEYS = Object.keys(FIELD_ELEMENT_HINT)
 
@@ -25,37 +26,46 @@ function XmlPreviewPanel({
   compactRailHeader = false,
   railHideFieldPill = false,
 }) {
-  // Keep typing snappy: the XML preview (expensive build + 300+ line paint)
-  // renders from a DEFERRED copy of pilot state, so form inputs never wait
-  // for XML to regenerate before accepting the next keystroke.
-  const deferredPilotState = useDeferredValue(pilotState)
-  const xml = useMemo(
-    () => (typeof buildXml === 'function' ? buildXml(deferredPilotState) || '' : ''),
-    [buildXml, deferredPilotState],
+  // Canonical preview = same string as Download preview / `</> ISO XML` / import-report diff (immediate state).
+  const previewXml = useMemo(
+    () => (typeof buildXml === 'function' ? buildXml(pilotState) || '' : ''),
+    [buildXml, pilotState],
   )
+  // Defer only the painted snapshot so syntax highlighting does not block keystrokes; Copy XML / draft diff use previewXml.
+  const renderXml = useDeferredValue(previewXml)
   const [showSavedDiff, setShowSavedDiff] = useState(false)
   const [activeLine, setActiveLine] = useState(0)
   const [activeField, setActiveField] = useState('')
+  const [copyFlash, setCopyFlash] = useState(false)
   const scrollRef = useRef(null)
   const lineRefs = useRef(new Map())
 
   const diff =
     showSavedDiff && lastSavedXmlPreview
-      ? countLineDiff(lastSavedXmlPreview, xml)
+      ? countLineDiff(lastSavedXmlPreview, previewXml)
       : null
 
+  const canonicalLineCount = useMemo(
+    () => (previewXml ? String(previewXml).split('\n').length : 0),
+    [previewXml],
+  )
+
   // Pre-compute per-line highlighted HTML + changed-set (vs last saved draft).
-  const structuralHints = useMemo(() => analyzeMissionPreviewXml(xml).messages, [xml])
+  const structuralHints = useMemo(
+    () => analyzeMissionPreviewXml(previewXml).messages,
+    [previewXml],
+  )
 
   const lines = useMemo(() => {
-    const arr = String(xml).split('\n')
+    const displayArr = String(renderXml).split('\n')
+    const canonicalArr = String(previewXml).split('\n')
     const prev = showSavedDiff && lastSavedXmlPreview ? String(lastSavedXmlPreview).split('\n') : null
-    return arr.map((raw, i) => ({
+    return displayArr.map((raw, i) => ({
       num: i + 1,
       html: highlightXmlToHtml(raw),
-      changed: prev ? (prev[i] ?? '') !== raw : false,
+      changed: prev ? (prev[i] ?? '') !== (canonicalArr[i] ?? '') : false,
     }))
-  }, [xml, showSavedDiff, lastSavedXmlPreview])
+  }, [previewXml, renderXml, showSavedDiff, lastSavedXmlPreview])
 
   // Scroll the active line into view and flash it.
   // `smooth: true` for user-initiated focus; false for typing-driven updates
@@ -80,11 +90,23 @@ function XmlPreviewPanel({
   const lineToField = useMemo(() => {
     const map = new Map()
     for (const field of ALL_FIELD_KEYS) {
-      const line = findFieldLineInXml({ field, xml, pilotState: null })
+      const line = findFieldLineInXml({ field, xml: previewXml, pilotState: null })
       if (line) map.set(line, field)
     }
     return map
-  }, [xml])
+  }, [previewXml])
+
+  const copyPreviewXml = useCallback(async () => {
+    const text = String(previewXml || '')
+    if (!text.trim()) return
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopyFlash(true)
+      window.setTimeout(() => setCopyFlash(false), 2000)
+    } catch {
+      /* clipboard may be denied — ignore */
+    }
+  }, [previewXml])
 
   const handleLineClick = useCallback((lineNum) => {
     // Find the closest mapped field at or before the clicked line.
@@ -102,10 +124,10 @@ function XmlPreviewPanel({
   // Global focusin listener — user-initiated jump uses SMOOTH scroll.
   // Refs allow this effect to bind once and not re-run per keystroke.
   // Updated via useLayoutEffect (not during render) to satisfy react-hooks/refs.
-  const xmlRef = useRef(xml)
+  const xmlRef = useRef(previewXml)
   const pilotStateRef = useRef(pilotState)
   useLayoutEffect(() => {
-    xmlRef.current = xml
+    xmlRef.current = previewXml
     pilotStateRef.current = pilotState
   })
 
@@ -146,11 +168,11 @@ function XmlPreviewPanel({
     if (!activeField) return
     let raf = 0
     raf = window.requestAnimationFrame(() => {
-      const line = findFieldLineInXml({ field: activeField, xml, pilotState: deferredPilotState })
+      const line = findFieldLineInXml({ field: activeField, xml: previewXml, pilotState })
       if (line && line !== activeLine) focusLine(line, { smooth: false })
     })
     return () => window.cancelAnimationFrame(raf)
-  }, [xml, activeField, deferredPilotState, activeLine, focusLine])
+  }, [previewXml, activeField, pilotState, activeLine, focusLine])
 
   return (
     <div
@@ -169,14 +191,42 @@ function XmlPreviewPanel({
           .filter(Boolean)
           .join(' ')}
       >
-        <h2>
-          <span className="fx-xml-title-dot" aria-hidden>●</span>
-          LIVE XML <span className="fx-xml-title-sub">// iso-19115-2</span>
-        </h2>
+        <div className="fx-xml-header-title-group">
+          <h2>
+            <span className="fx-xml-title-dot" aria-hidden>●</span>
+            LIVE XML <span className="fx-xml-title-sub">// iso-19115-2</span>
+          </h2>
+          <FieldHintTooltip ariaLabel="About the XML preview" className="fx-xml-preview-hint">
+            <>
+              <strong>Live preview</strong> uses the same XML string as <strong>Download preview</strong>,{' '}
+              <strong>{'</>'} ISO XML</strong>, and import reports. Highlighting may trail typing slightly;{' '}
+              <strong>Copy XML</strong> always matches export. Lines are ISO-like GMI/GMD; click a mapped line to jump.
+              <br />
+              <br />
+              <strong>Structural hints</strong> (when shown) flag docucomp/template gaps the analyzer detected in this
+              snapshot.
+              <br />
+              <br />
+              After a successful <strong>draft save</strong>, use <strong>Highlight line delta vs last successful draft
+              save</strong> to compare this preview to the stored XML. Use <strong>Expand</strong> (⤢) when you need a
+              taller panel.
+            </>
+          </FieldHintTooltip>
+        </div>
         <div className="fx-xml-header-meta" aria-live="polite">
+          <button
+            type="button"
+            className="fx-xml-copy-btn"
+            onClick={() => void copyPreviewXml()}
+            disabled={!String(previewXml || '').trim()}
+            title="Copy preview XML only (no labels or line numbers)"
+            aria-label="Copy preview XML to clipboard"
+          >
+            {copyFlash ? 'Copied' : 'Copy XML'}
+          </button>
           <span className="fx-xml-pill">
             <span className="fx-xml-pill-label">L</span>
-            <span className="fx-xml-pill-value">{lines.length}</span>
+            <span className="fx-xml-pill-value">{canonicalLineCount}</span>
           </span>
           {!railHideFieldPill ? (
             <span

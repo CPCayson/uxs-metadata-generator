@@ -335,6 +335,28 @@
   border-top: 1px solid color-mix(in srgb, var(--border) 88%, transparent);
 }
 
+/* Prev/Next + filters first when blocking errors exist */
+.validation-panel--issues-first .validation-panel__issues-wrap {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+  padding-bottom: 0.65rem;
+  margin-bottom: 0.25rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 88%, transparent);
+}
+
+.validation-panel--issues-first .validation-panel__rail-ew--top + .validation-panel__issues-wrap {
+  margin-top: 0.35rem;
+}
+
+.validation-panel--issues-first .validation-panel__intro + .validation-panel__issues-wrap {
+  margin-top: 0.45rem;
+}
+
+.validation-panel--issues-first .validation-panel__mode-score {
+  margin-top: 0.35rem;
+}
+
 .validation-panel__issues-wrap > strong {
   display: block;
   font-size: 0.78rem;

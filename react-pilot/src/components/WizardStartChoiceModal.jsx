@@ -2,9 +2,10 @@
  * First-run gate: start from defaults (quiet validation) or import ISO XML (must parse).
  */
 
-import { useState, useRef } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { emitPilotAuditEvent } from '../lib/pilotAuditEvents.js'
 import { parseProfileXmlImport } from '../lib/parseProfileXmlImport.js'
+import { getBundledMissionXmlSamples } from '../lib/missionBundledXmlSamples.js'
 
 /**
  * @param {{
@@ -28,6 +29,7 @@ export default function WizardStartChoiceModal({
   const [importBusy, setImportBusy] = useState(false)
   const metaRef = useRef(/** @type {Record<string, unknown>} */ ({}))
   const fileRef = useRef(/** @type {HTMLInputElement | null} */ (null))
+  const bundledSamples = useMemo(() => getBundledMissionXmlSamples(), [])
 
   const canImport = Array.isArray(profile.importParsers) && profile.importParsers.length > 0
 
@@ -214,6 +216,42 @@ export default function WizardStartChoiceModal({
                 ← Back
               </button>
             </div>
+            {profile.id === 'mission' && bundledSamples.length > 0 ? (
+              <div style={{ marginBottom: 8 }}>
+                <div style={{ fontSize: '0.7rem', fontWeight: 750, color: 'rgba(226,232,240,0.85)', marginBottom: 6 }}>
+                  Import templates (bundled)
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                  {bundledSamples.map((s) => (
+                    <button
+                      key={s.file}
+                      type="button"
+                      onClick={() => {
+                        setImportError('')
+                        setImportText(s.xml)
+                        metaRef.current = { originalFilename: s.file }
+                        onStatus?.(`Loaded bundled template ${s.file} (${s.xml.length} chars).`)
+                      }}
+                      style={{
+                        padding: '0.28rem 0.55rem',
+                        borderRadius: 6,
+                        border: '1px solid rgba(94, 234, 212, 0.35)',
+                        background: 'rgba(13, 148, 136, 0.2)',
+                        color: '#ccfbf1',
+                        fontWeight: 650,
+                        fontSize: '0.72rem',
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        maxWidth: '100%',
+                      }}
+                      title={s.file}
+                    >
+                      {s.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : null}
             <textarea
               className="form-control wizard-start-choice__textarea"
               value={importText}

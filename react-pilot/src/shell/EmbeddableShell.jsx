@@ -246,6 +246,10 @@ export default function EmbeddableShell({
     function refresh() {
       try {
         const payload = readPilotSessionPayload()
+        if (payload?.validationPrimed === false) {
+          setTriggerScore(null)
+          return
+        }
         const state   = payload?.pilot ?? defaultPilotState()
         const result  = validationEngine.run({ profile, state, mode: 'lenient' })
         setTriggerScore((prev) => {

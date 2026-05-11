@@ -171,6 +171,11 @@ export function useMissionCometActions({
         recordUuid: uuid,
         gapCount: (gaps ?? []).length,
       })
+      try {
+        window.dispatchEvent(new CustomEvent('manta:metadata-import-merged'))
+      } catch {
+        /* ignore */
+      }
     },
     [
       profile,

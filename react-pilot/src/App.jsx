@@ -569,7 +569,7 @@ function App() {
     if (launchProfileId === 'mission' && launchPlatformHint) {
       const platformType = launchPlatformHint === 'surface' ? 'USV' : 'AUV'
       const prefill = { ...defaultPilotState(), platform: { ...defaultPilotState().platform, platformType } }
-      writePilotSessionPayloadNow(prefill)
+      writePilotSessionPayloadNow(prefill, { validationPrimed: false })
     }
     setActiveProfileId(launchProfileId)
     setPlatformHint(launchPlatformHint ?? null)
@@ -581,84 +581,53 @@ function App() {
       <a href="#pilot-main" className="pilot-skip-link">
         Skip to main content
       </a>
-      <header className="header pilot-app-header pilot-app-header--fullbleed">
-        <div className="header-top">
+      <header
+        className={`header pilot-app-header pilot-app-header--fullbleed${
+          mainPane === 'wizard' ? ' pilot-app-header--compact-wizard' : ''
+        }`}
+      >
+        <div className="header-top pilot-header-top--brand-only">
           <div className="pilot-header-brand">
-            <p className="pilot-header-eyebrow" style={{ letterSpacing: '0.12em', textTransform: 'uppercase', fontSize: '0.65rem', fontWeight: 700, opacity: 0.7 }}>
+            <p className="pilot-header-eyebrow">
               NCEI · Ocean Exploration &amp; Research
             </p>
-            <h1 style={{ display: 'flex', alignItems: 'baseline', gap: '0.4rem', margin: 0 }}>
+            <h1 className="pilot-header-title-row">
               Manta
               <span className="pilot-header-tagline">UxS Metadata Workbench</span>
             </h1>
           </div>
-          <div
-            className="pilot-header-actions"
-            style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap', justifyContent: 'flex-end' }}
-          >
-            <div className="form-check form-switch mb-0 d-flex align-items-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="pilotThemeToggle"
-                checked={theme === 'dark'}
-                onChange={(e) => setTheme(e.target.checked ? 'dark' : 'light')}
-                aria-label="Toggle dark theme"
-              />
-              <label className="form-check-label ms-2 mb-0" htmlFor="pilotThemeToggle">
-                Dark mode
-              </label>
-            </div>
-            <div className="form-check form-switch mb-0 d-flex align-items-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="pilotFormWizardToggle"
-                checked={mainPane === 'wizard'}
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    setActiveProfileId('mission')
-                    setPlatformHint(null)
-                    setMainPane('wizard')
-                  } else {
-                    setWorkspaceHubId('intake')
-                    setMainPane('hub')
-                  }
-                }}
-                aria-label="UxS form wizard — open full-page metadata wizard"
-              />
-              <label className="form-check-label ms-2 mb-0" htmlFor="pilotFormWizardToggle">
-                Form Wizard
-              </label>
-            </div>
-            <div className="form-check form-switch mb-0 d-flex align-items-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="pilotMantaLensToggle"
-                checked={mantaToolsEnabled}
-                onChange={(e) => setMantaToolsEnabled(e.target.checked)}
-                aria-label="Enable Manta lens and tools (FAB)"
-              />
-              <label className="form-check-label ms-2 mb-0" htmlFor="pilotMantaLensToggle">
-                Lens
-              </label>
-            </div>
-          </div>
         </div>
         <div className="pilot-header-toolbar">
-          {/* XmlToolsBar portals here; mission steps portal to the next slot (after ☰). */}
-          <div
-            id="pilot-header-tools-slot"
-            className="pilot-header-tools-slot"
-            role="toolbar"
-            aria-label="XML tools"
-          />
-          <div
-            id="pilot-header-steps-slot"
-            className="pilot-header-steps-slot"
-            aria-label="Wizard steps"
-          />
+          {/* Legacy-style single “work strip”: step pills + metadata tools in one light card. */}
+          {mainPane === 'wizard' ? (
+            <div className="pilot-header-mission-workstrip">
+              <div
+                id="pilot-header-steps-slot"
+                className="pilot-header-steps-slot"
+                aria-label="Wizard steps"
+              />
+              <div
+                id="pilot-header-tools-slot"
+                className="pilot-header-tools-slot"
+                role="toolbar"
+                aria-label="Metadata and file tools"
+              />
+            </div>
+          ) : (
+            <>
+              <div
+                id="pilot-header-steps-slot"
+                className="pilot-header-steps-slot"
+                aria-label="Wizard steps"
+              />
+              <div
+                id="pilot-header-tools-slot"
+                className="pilot-header-tools-slot"
+                role="toolbar"
+                aria-label="Metadata and file tools"
+              />
+            </>
+          )}
         </div>
       </header>
 
@@ -696,7 +665,7 @@ function App() {
                               base.platform = { ...base.platform, platformType }
                             }
                             const merged = mergeLoadedPilotState(base, parsed.partial)
-                            writePilotSessionPayloadNow(merged)
+                            writePilotSessionPayloadNow(merged, { validationPrimed: true })
                             setActiveProfileId(profileId ?? 'mission')
                             setPlatformHint(platformHint ?? null)
                           }
@@ -713,7 +682,7 @@ function App() {
           )}
 
           {mainPane === 'wizard' && (
-            <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
+            <div className="pilot-wizard-main-wrap" style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
               <EmbeddableShell
                 key={`${activeProfileId}:${platformHint ?? ''}:${wizardInstanceKey}`}
                 mode="full"
@@ -729,7 +698,7 @@ function App() {
                     label: wizardNavLabel(activeProfileId, platformHint),
                     onHome: () => { setWorkspaceHubId('dashboard'); setMainPane('hub') },
                     onNewRecord: () => {
-                      writePilotSessionPayloadNow(defaultPilotState())
+                      writePilotSessionPayloadNow(defaultPilotState(), { validationPrimed: false })
                       setActiveProfileId('mission')
                       setPlatformHint(null)
                       setWizardInstanceKey((k) => k + 1)
@@ -743,7 +712,25 @@ function App() {
         </main>
       </div>
 
-      <MissionStatusFooter isDirty={isDirty} appVersion={appVersion} />
+      <MissionStatusFooter
+        isDirty={isDirty}
+        appVersion={appVersion}
+        darkMode={theme === 'dark'}
+        onDarkModeChange={(on) => setTheme(on ? 'dark' : 'light')}
+        formWizard={mainPane === 'wizard'}
+        onFormWizardChange={(on) => {
+          if (on) {
+            setActiveProfileId('mission')
+            setPlatformHint(null)
+            setMainPane('wizard')
+          } else {
+            setWorkspaceHubId('intake')
+            setMainPane('hub')
+          }
+        }}
+        lensEnabled={mantaToolsEnabled}
+        onLensChange={setMantaToolsEnabled}
+      />
 
       {/* HUD tether: draws a neon line from the focused field to its XML line */}
       <FieldXmlTether />

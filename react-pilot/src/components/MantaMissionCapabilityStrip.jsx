@@ -1,5 +1,5 @@
 /**
- * MantaMissionCapabilityStrip — mission **breadcrumb + validation mode** row when shown.
+ * MantaMissionCapabilityStrip — mission **validation mode** row when shown (scores duplicate split-float rails).
  * Wizard step pills live in the app header ({@link MissionWizardStepPills} → #pilot-header-steps-slot).
  */
 
@@ -10,16 +10,13 @@ export default function MantaMissionCapabilityStrip({
   onSetMode,
   errCount = 0,
   score = 0,
-  /** Breadcrumb nav merged into the strip: { label, onHome, onNewRecord } — New record omitted in chrome */
-  breadcrumb,
 }) {
   const { assistantLayout } = useWorkbenchChrome()
   const hideDupValidationRow = assistantLayout === 'split-float'
 
-  const showBreadcrumb = Boolean(breadcrumb)
   const showScoreRow = !hideDupValidationRow
 
-  if (!showBreadcrumb && !showScoreRow) {
+  if (!showScoreRow) {
     return null
   }
 
@@ -35,36 +32,12 @@ export default function MantaMissionCapabilityStrip({
       style={{
       background: 'var(--card-bg, #fff)',
       borderBottom: '1px solid var(--border-color)',
-      padding: breadcrumb ? '0.3rem 0.85rem 0.45rem' : '0.45rem 0.85rem',
+      padding: '0.45rem 0.85rem',
       display: 'flex',
       flexDirection: 'column',
       gap: 6,
     }}
     >
-      {/* Breadcrumb nav row — merged from the standalone bar */}
-      {breadcrumb && (
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: '0.4rem',
-          marginBottom: 2,
-          paddingBottom: '0.3rem',
-          borderBottom: '1px solid color-mix(in srgb, var(--border-color, #e2e8f0) 55%, transparent)',
-          fontSize: '0.78rem',
-        }}>
-          <button
-            type="button"
-            onClick={breadcrumb.onHome}
-            style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: 'var(--text-muted)', padding: '0 2px', fontSize: '0.78rem' }}
-            aria-label="Back to home"
-          >
-            ← Home
-          </button>
-          <span aria-hidden="true" style={{ color: 'var(--text-muted)' }}>·</span>
-          <span style={{ color: 'var(--text-color)', fontWeight: 500, flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            {breadcrumb.label}
-          </span>
-        </div>
-      )}
-
       {/* Score + validation mode — gap check / CoMET / exports live in header XmlToolsBar */}
       {showScoreRow ? (
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', justifyContent: 'flex-end' }}>

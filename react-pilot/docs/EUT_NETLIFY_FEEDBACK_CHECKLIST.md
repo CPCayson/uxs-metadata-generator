@@ -17,7 +17,7 @@ Use `- [ ]` / `- [x]` to track progress. Link PRs or issues in parentheses when 
 
 ## B. Mission step — layout & comprehension
 
-- [ ] **Top-of-step empty / broken image**: confirm asset path on Netlify (`404` vs missing `public/` asset); fix deploy base URL or replace placeholder.
+- [x] **Top-of-step empty / broken image**: confirm asset path on Netlify (`404` vs missing `public/` asset); fix deploy base URL or replace placeholder. *(FAB arc trigger: `url("/manta-core-trigger.png")` → Vite-resolved `url("./assets/manta-core-trigger.png")` so hashed asset works with `base: './'`.)*
 - [ ] **Field clarity**: File Identifier, Cite as, NCEI title guidance — add tooltips, examples, or links to NCEI template guidance where appropriate.
 - [ ] **DocuComp / template parity**: call out that output uses docucomp-oriented blocks per NCEI template; link internal reference (`NCEI Template/`, `METADATA_FIELD_MAP.md`).
 - [ ] **Required vs optional**: visible legend (e.g. red asterisk + “Required” strip); align with validation profile — avoid implying everything is required.
@@ -49,16 +49,16 @@ Use `- [ ]` / `- [x]` to track progress. Link PRs or issues in parentheses when 
 ## E. XML Preview panel
 
 - [x] **Dark mode — preview actions low contrast**: raise button/text contrast for preview toolbar.
-- [ ] **Preview options**: short popup or “?” explaining each option (structure hints, pretty-print, etc.).
+- [x] **Preview options**: short popup or “?” explaining each option (structure hints, pretty-print, etc.). *(Shipped: ⓘ `FieldHintTooltip` on XML preview header — live rebuild, hints, draft delta, expand.)*
 
 ---
 
 ## F. Validator panel
 
 - [x] **Dark mode — buttons hard to see**: same contrast pass as preview.
-- [ ] **Button explanations**: tooltips for strict / lenient / catalog modes and auxiliary actions.
+- [x] **Button explanations**: tooltips for strict / lenient / catalog modes and auxiliary actions. *(Shipped: `title` on mode pills, bridge check, server rules, Touched / All fields.)*
 - [ ] **Simplify modes?**: decide if primary UX is single **Validate** with advanced modes collapsed.
-- [ ] **Errors vs warnings**: one-line explainer (blocking vs advisory) + doc link.
+- [x] **Errors vs warnings**: one-line explainer (blocking vs advisory) + doc link. *(Shipped: always-visible line under Validation heading + rail strip when intro hidden; collapsed details for bridge/server only.)*
 
 ---
 
@@ -66,7 +66,7 @@ Use `- [ ]` / `- [x]` to track progress. Link PRs or issues in parentheses when 
 
 - [x] **Header / top options** low visibility: increase contrast and affordance (discoverability of Import, Lens, density, etc.). *(Shipped: dark-theme toolbar band + stronger header switch/label styling in `futuristic.css`.)*
 - [x] **Autofill / select contrast**: selected values in inputs hard to read in theme — fix CSS variables for filled selects. *(Shipped: `--input-autofill-bg` + `color-scheme: dark` on dark root; `form-select` / `option` dark rules in `App.css`.)*
-- [ ] **Click-through issues**: strengthen Next/Prev issue navigation from validator (already partially present — verify end-to-end).
+- [x] **Click-through issues**: strengthen Next/Prev issue navigation from validator (already partially present — verify end-to-end). *(Shipped: list click syncs Prev/Next index + active row highlight; issue list scrolls active row into view; larger Prev/Next hit targets; lazy-step retries with delayed `scrollToField` after Suspense.)*
 
 ---
 

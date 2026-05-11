@@ -25,5 +25,7 @@ export function formatNceiUxsFileIdentifierForXml(fileId, dist) {
   if (!raw) return ''
   if (dist?.nceiFileIdPrefix === false || dist?.nceiFileIdPrefix === 'false') return raw
   if (raw.startsWith(NCEI_UXS_FILE_ID_PREFIX)) return raw
+  // Already a NOAA OID-style identifier (InPort, NMFS, etc.) — do not nest under the UxS prefix.
+  if (/^gov\.noaa\./i.test(raw)) return raw
   return `${NCEI_UXS_FILE_ID_PREFIX}${raw}`
 }

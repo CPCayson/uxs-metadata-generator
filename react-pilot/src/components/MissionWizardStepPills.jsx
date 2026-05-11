@@ -1,6 +1,6 @@
 /**
- * Mission wizard step pills (labels + per-step review status).
- * Rendered in #pilot-header-steps-slot next to XML tools, or inline when needed.
+ * Mission wizard step pills (step title inline; review status in tooltip to save width).
+ * Rendered in #pilot-header-steps-slot above the XML tools strip, or inline when needed.
  */
 
 /** @param {'ok'|'warn'|'err'|'pending'|undefined} st */
@@ -17,20 +17,6 @@ function stepStatusLabel(st) {
   }
 }
 
-/** @param {'ok'|'warn'|'err'|'pending'|undefined} st */
-function stepStatusSubColor(st) {
-  switch (st) {
-    case 'ok':
-      return '#15803d'
-    case 'warn':
-      return '#a16207'
-    case 'err':
-      return '#b91c1c'
-    default:
-      return 'var(--text-muted)'
-  }
-}
-
 /**
  * @param {{
  *   wizardSteps: Array<{ id: string, label: string }>,
@@ -39,13 +25,13 @@ function stepStatusSubColor(st) {
  *   stepStatuses?: Record<string, 'ok'|'warn'|'err'|'pending'>,
  *   quietSurface?: boolean,
  * }} props
+ * `quietSurface` is accepted for compatibility but ignored (status is always in the tooltip).
  */
 export default function MissionWizardStepPills({
   wizardSteps,
   activeWizardStep,
   onWizardStepSelect,
   stepStatuses,
-  quietSurface = false,
 }) {
   if (!wizardSteps?.length) return null
 
@@ -59,21 +45,24 @@ export default function MissionWizardStepPills({
         const active = activeWizardStep === step.id
         const clickable = typeof onWizardStepSelect === 'function'
         const st = stepStatuses?.[step.id]
-        const subLabel = stepStatusLabel(st)
-        const subColor = stepStatusSubColor(st)
-        const showStepSub = !quietSurface || st === 'ok' || st === 'warn' || st === 'err'
+        const statusText = stepStatusLabel(st)
+        const tip = `${step.label}: ${statusText}`
         return (
           <button
             key={step.id}
             type="button"
+            className="pilot-header-step-pill"
             disabled={!clickable}
             onClick={() => onWizardStepSelect?.(step.id)}
+            title={tip}
+            aria-label={tip}
             style={{
               display: 'flex',
-              flexDirection: 'column',
+              flexDirection: 'row',
               alignItems: 'center',
-              gap: 1,
-              padding: '0.35rem 0.55rem',
+              justifyContent: 'center',
+              gap: '0.25rem',
+              padding: '0.35rem 0.45rem',
               borderRadius: 8,
               border: `1px solid ${active ? 'color-mix(in srgb, var(--primary-color, #006994) 55%, var(--border-color))' : 'var(--border-color)'}`,
               background: active
@@ -81,18 +70,11 @@ export default function MissionWizardStepPills({
                 : 'color-mix(in srgb, var(--card-bg) 96%, var(--text-color) 2%)',
               cursor: clickable ? 'pointer' : 'default',
               textAlign: 'center',
-              minWidth: '6.5rem',
+              minWidth: 'min-content',
               transition: 'border-color 0.12s, background 0.12s',
             }}
           >
-            <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-color)', lineHeight: 1.25 }}>
-              {step.label}
-            </span>
-            {showStepSub ? (
-              <span style={{ fontSize: '0.62rem', fontWeight: 600, color: subColor }}>
-                {subLabel}
-              </span>
-            ) : null}
+            <span className="pilot-header-step-pill__label">{step.label}</span>
           </button>
         )
       })}

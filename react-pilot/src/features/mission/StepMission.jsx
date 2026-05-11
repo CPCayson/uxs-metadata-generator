@@ -135,13 +135,91 @@ export default function StepMission({
         onClear={onSourceProvenanceClear ?? (() => {})}
       />
 
+      <details className="panel mission-templates-disclosure">
+        <summary className="mission-templates-disclosure__summary">
+          <span className="mission-templates-disclosure__title">Mission templates from catalog</span>
+          <span className="mission-templates-disclosure__expand-hint">Click to expand</span>
+        </summary>
+        <div className="mission-templates-disclosure__body">
+          <fieldset className="pilot-fieldset mission-field-group">
+            <legend className="mission-fieldset-legend">Sheet template catalog</legend>
+            <p className="card-intro platform-library-intro">
+              Load a named template from your Postgres-backed catalog (<code>/api/db</code>). The list loads when you open
+              this step; use Refresh after catalog edits. Pick a template in the dropdown, then <strong>Apply template</strong>.
+            </p>
+            <div className="platform-library-row">
+              <select
+                className="form-control form-select"
+                value={selectedTemplateKey}
+                disabled={!hostBridgeReady || templateCatalogLoading}
+                onChange={(e) => setSelectedTemplateKey(e.target.value)}
+              >
+                <option value="">Select a template…</option>
+                {templateCatalogRows.map(({ key, name, category }) => {
+                  const cat = String(category || '').trim()
+                  const label = cat ? `${name} (${cat})` : name
+                  return (
+                    <option key={key} value={key}>
+                      {label}
+                    </option>
+                  )
+                })}
+              </select>
+              <button
+                type="button"
+                className="button button-secondary button-tiny"
+                disabled={!hostBridgeReady || templateCatalogLoading}
+                onClick={() => onRefreshTemplateCatalog?.()}
+              >
+                {templateCatalogLoading ? 'Loading…' : 'Refresh'}
+              </button>
+              <button
+                type="button"
+                className="button button-secondary button-tiny mission-template-clear"
+                disabled={!selectedTemplateKey}
+                onClick={() => setSelectedTemplateKey('')}
+                title="Clear template selection"
+                aria-label="Clear template selection"
+              >
+                Clear
+              </button>
+              <button
+                type="button"
+                className="button button-tiny"
+                disabled={templateApplyDisabled || templateCatalogLoading || !selectedTemplateKey}
+                onClick={() => onApplySheetTemplate?.(selectedTemplateKey)}
+              >
+                Apply template
+              </button>
+            </div>
+            {!hostBridgeReady ? (
+              <p className="hint">
+                <span>Templates need a reachable <code>/api/db</code> on the same origin.</span>{' '}
+                <FieldHintTooltip ariaLabel="Enable catalog templates">
+                  <>
+                    Templates load from Postgres via <code>/api/db</code>.
+                    {import.meta.env.DEV && typeof window !== 'undefined' && window.location.port === '5173'
+                      ? (
+                          <>
+                            {' '}
+                            You are on plain Vite — run <code>npm run dev:netlify</code> and open{' '}
+                            <strong>http://localhost:8888</strong>.
+                          </>
+                        )
+                      : null}
+                  </>
+                </FieldHintTooltip>
+              </p>
+            ) : null}
+            {templateCatalogError ? <p className="field-error">{templateCatalogError}</p> : null}
+          </fieldset>
+        </div>
+      </details>
+
       {guidedMissionIntro ? (
-        <p className="card-intro">
-          <strong>UxS acquisition data first:</strong> collection context (deployment, run, dive/sortie), then platform,
-          sensors, and spatial extent, describe the unmanned-systems collection — identifiers, title, abstract, period,
-          contact, status, and language round out the ISO record for export. Bbox and CRS are on the{' '}
-          <strong>Spatial</strong> step. Use <strong>Detailed</strong> workspace density (tools FAB) for full
-          field-by-field guidance.
+        <p className="card-intro card-intro--guided">
+          <strong>Start here:</strong> collection context (below), then use the steps across the top — Platform, Sensors,
+          Spatial, and the rest. Turn on <strong>Detailed</strong> in the tools menu when you want every label explained.
         </p>
       ) : (
         <p className="card-intro">
@@ -152,7 +230,11 @@ export default function StepMission({
           detail are on the <strong>Spatial</strong> step.
         </p>
       )}
-      {stepErrorSummary ? <p className="hint"><strong>Current step blockers:</strong> {stepErrorSummary}</p> : null}
+      {stepErrorSummary && !guidedMissionIntro ? (
+        <p className="hint">
+          <strong>Current step blockers:</strong> {stepErrorSummary}
+        </p>
+      ) : null}
 
       <section className="panel" aria-labelledby="uxs-context-heading">
         <h3 className="panel-title panel-title-hint" id="uxs-context-heading">
@@ -1224,73 +1306,10 @@ geoscientificInformation`}
         </fieldset>
       </section>
 
-      <section className="panel">
-        <h3 className="panel-title">Mission templates</h3>
+      <section className="panel" aria-labelledby="mission-local-draft-heading">
+        <h3 className="panel-title" id="mission-local-draft-heading">Local draft</h3>
         <fieldset className="pilot-fieldset mission-field-group">
-          <legend className="mission-fieldset-legend">Sheet template catalog</legend>
-        <p className="card-intro platform-library-intro">
-          Load a named template from your Postgres-backed catalog (<code>/api/db</code>). The list loads when you open
-          this step; use Refresh after catalog edits. Pick a template in the dropdown, then <strong>Apply template</strong>.
-        </p>
-        <div className="platform-library-row">
-          <select
-            className="form-control form-select"
-            value={selectedTemplateKey}
-            disabled={!hostBridgeReady || templateCatalogLoading}
-            onChange={(e) => setSelectedTemplateKey(e.target.value)}
-          >
-            <option value="">Select a template…</option>
-            {templateCatalogRows.map(({ key, name, category }) => {
-              const cat = String(category || '').trim()
-              const label = cat ? `${name} (${cat})` : name
-              return (
-                <option key={key} value={key}>
-                  {label}
-                </option>
-              )
-            })}
-          </select>
-          <button
-            type="button"
-            className="button button-secondary button-tiny"
-            disabled={!hostBridgeReady || templateCatalogLoading}
-            onClick={() => onRefreshTemplateCatalog?.()}
-          >
-            {templateCatalogLoading ? 'Loading…' : 'Refresh'}
-          </button>
-          <button
-            type="button"
-            className="button button-tiny"
-            disabled={templateApplyDisabled || templateCatalogLoading || !selectedTemplateKey}
-            onClick={() => onApplySheetTemplate?.(selectedTemplateKey)}
-          >
-            Apply template
-          </button>
-        </div>
-        {!hostBridgeReady ? (
-          <p className="hint">
-            <span>Templates need a reachable <code>/api/db</code> on the same origin.</span>{' '}
-            <FieldHintTooltip ariaLabel="Enable catalog templates">
-              <>
-                Templates load from Postgres via <code>/api/db</code>.
-                {import.meta.env.DEV && typeof window !== 'undefined' && window.location.port === '5173'
-                  ? (
-                      <>
-                        {' '}
-                        You are on plain Vite — run <code>npm run dev:netlify</code> and open{' '}
-                        <strong>http://localhost:8888</strong>.
-                      </>
-                    )
-                  : null}
-              </>
-            </FieldHintTooltip>
-          </p>
-        ) : null}
-        {templateCatalogError ? <p className="field-error">{templateCatalogError}</p> : null}
-        </fieldset>
-
-        <fieldset className="pilot-fieldset mission-field-group">
-          <legend className="mission-fieldset-legend">Local draft</legend>
+          <legend className="visually-hidden">Draft actions</legend>
           <div className="mission-actions">
             <button type="button" className="button button-secondary" onClick={onLoadDraft} disabled={loadDisabled}>
               Load full draft

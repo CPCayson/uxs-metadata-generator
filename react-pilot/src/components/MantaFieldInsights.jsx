@@ -16,6 +16,7 @@
  */
 
 import { useState, memo } from 'react'
+import './MantaFieldInsights.css'
 
 // ── Suggestion builders ───────────────────────────────────────────────────────
 
@@ -137,103 +138,75 @@ function MantaFieldInsights({ issues = [], pilotState = {}, activeStep = 'missio
   const warnCount  = suggestions.filter((s) => s.severity === 'warn').length
   const autoActive = Object.values(automations).filter(Boolean).length
 
+  const tone = errCount > 0 ? 'err' : warnCount > 0 ? 'warn' : 'ok'
+
   function toggleAuto(id) {
     setAutomations((prev) => ({ ...prev, [id]: !prev[id] }))
   }
 
-  const triggerColor = errCount > 0 ? '#dc2626' : warnCount > 0 ? '#ca8a04' : 'var(--primary-color)'
-
   return (
-    <div style={{
-      margin: '0.5rem 0 0.75rem',
-      border: `1px solid ${open ? triggerColor + '44' : 'var(--border-color)'}`,
-      borderRadius: 8,
-      background: 'var(--card-bg, #fff)',
-      transition: 'border-color 0.15s',
-      overflow: 'hidden',
-    }}>
-      {/* trigger bar */}
+    <div
+      className={`manta-field-insights${open ? ' manta-field-insights--open' : ''}`}
+      data-tone={tone}
+    >
       <button
         type="button"
+        className="manta-field-insights__trigger"
         onClick={() => setOpen((v) => !v)}
-        style={{
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          gap: 8,
-          padding: '0.45rem 0.75rem',
-          border: 'none',
-          background: 'transparent',
-          cursor: 'pointer',
-          textAlign: 'left',
-        }}
         aria-expanded={open}
       >
-        <span style={{ fontSize: '0.8rem' }}>☆</span>
-        <span style={{ fontSize: '0.75rem', fontWeight: 700, flex: 1, color: 'var(--text-color)' }}>
-          Field Insights
-        </span>
+        <span style={{ fontSize: '0.8rem' }} aria-hidden>☆</span>
+        <span className="manta-field-insights__title">Field Insights</span>
         {suggestions.length > 0 && (
-          <span style={{
-            fontSize: '0.67rem', fontWeight: 800,
-            background: errCount > 0 ? '#fee2e2' : '#fefce8',
-            color: errCount > 0 ? '#7f1d1d' : '#713f12',
-            border: `1px solid ${errCount > 0 ? '#dc262633' : '#ca8a0433'}`,
-            padding: '1px 7px', borderRadius: 9999,
-          }}>
+          <span
+            className={`manta-field-insights__pill ${errCount > 0 ? 'manta-field-insights__pill--sugg-err' : 'manta-field-insights__pill--sugg-warn'}`}
+          >
             {suggestions.length} suggestion{suggestions.length !== 1 ? 's' : ''}
           </span>
         )}
-        <span style={{
-          fontSize: '0.67rem', fontWeight: 700,
-          background: '#dbeafe', color: '#1e3a8a',
-          border: '1px solid #3b82f633',
-          padding: '1px 7px', borderRadius: 9999,
-        }}>
+        <span className="manta-field-insights__pill manta-field-insights__pill--auto">
           {autoActive} active
         </span>
-        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }}>▼</span>
+        <span
+          className={`manta-field-insights__chevron${open ? ' manta-field-insights__chevron--open' : ''}`}
+          aria-hidden
+        >
+          ▼
+        </span>
       </button>
 
       {open && (
-        <div style={{ borderTop: '1px solid var(--border-color)' }}>
-          {/* Suggestions */}
+        <div className="manta-field-insights__panel">
           {suggestions.length > 0 && (
-            <div style={{ padding: '0.6rem 0.75rem', display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <div style={{ fontSize: '0.67rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--text-muted)', marginBottom: 2 }}>
+            <div className="manta-field-insights__suggestions">
+              <div className="manta-field-insights__section-label">
                 Suggestions · {suggestions.length}
               </div>
               {suggestions.map((s) => (
-                <div key={s.id} style={{
-                  display: 'flex', alignItems: 'flex-start', gap: 8,
-                  padding: '0.4rem 0.6rem',
-                  background: s.severity === 'error' ? '#fee2e211' : s.severity === 'warn' ? '#fefce811' : 'var(--card-bg)',
-                  border: `1px solid ${s.severity === 'error' ? '#dc262622' : s.severity === 'warn' ? '#ca8a0422' : 'var(--border-color)'}`,
-                  borderRadius: 6,
-                }}>
-                  <span style={{ fontSize: '0.85rem', flexShrink: 0, marginTop: 1 }}>{s.icon}</span>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{
-                      fontSize: '0.76rem', fontWeight: 700,
-                      color: s.severity === 'error' ? '#dc2626' : s.severity === 'warn' ? '#ca8a04' : 'var(--text-color)',
-                    }}>{s.label}</div>
-                    <div style={{ fontSize: '0.71rem', color: 'var(--text-muted)', marginTop: 2, lineHeight: 1.4 }}>{s.detail}</div>
+                <div
+                  key={s.id}
+                  className={`manta-field-insights__suggestion${
+                    s.severity === 'error'
+                      ? ' manta-field-insights__suggestion--error'
+                      : s.severity === 'warn'
+                        ? ' manta-field-insights__suggestion--warn'
+                        : ''
+                  }`}
+                >
+                  <span style={{ fontSize: '0.85rem', flexShrink: 0, marginTop: 2 }} aria-hidden>{s.icon}</span>
+                  <div className="manta-field-insights__suggestion-main">
+                    <div className="manta-field-insights__suggestion-title">{s.label}</div>
+                    <div className="manta-field-insights__suggestion-detail">{s.detail}</div>
                   </div>
                   {s.field && s.value != null && (
                     <button
                       type="button"
+                      className="manta-field-insights__apply"
                       onClick={() => {
-                        // Fire manta:set-pilot-field so WizardShell applies it directly to pilotState.
                         window.dispatchEvent(new CustomEvent('manta:set-pilot-field', {
                           detail: { field: s.field, value: s.value },
                         }))
                         if (typeof onApply === 'function') onApply(s.field, s.value)
-                      }}
-                      style={{
-                        fontSize: '0.68rem', fontWeight: 700, flexShrink: 0,
-                        padding: '2px 9px',
-                        background: 'var(--primary-color, #006994)', color: '#fff',
-                        border: 'none', borderRadius: 4, cursor: 'pointer',
                       }}
                     >
                       Add
@@ -244,45 +217,28 @@ function MantaFieldInsights({ issues = [], pilotState = {}, activeStep = 'missio
             </div>
           )}
 
-          {/* Automations */}
-          <div style={{
-            padding: '0.55rem 0.75rem',
-            borderTop: suggestions.length > 0 ? '1px solid var(--border-color)' : 'none',
-            background: 'var(--intake-drop-idle-bg, rgba(248,250,252,0.9))',
-          }}>
-            <div style={{ fontSize: '0.67rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--text-muted)', marginBottom: 6 }}>
+          <div
+            className={`manta-field-insights__automations${suggestions.length === 0 ? ' manta-field-insights__automations--flush-top' : ''}`}
+          >
+            <div className="manta-field-insights__section-label">
               Automations · {autoActive} active
             </div>
             {AUTOMATIONS.map((auto) => (
-              <div key={auto.id} style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                padding: '3px 0', gap: 8,
-              }}>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <span style={{ fontSize: '0.76rem', fontWeight: 600, color: 'var(--text-color)' }}>{auto.label}</span>
-                  <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginLeft: 6 }}>{auto.detail}</span>
+              <div key={auto.id} className="manta-field-insights__auto-row">
+                <div className="manta-field-insights__auto-text">
+                  <span className="manta-field-insights__auto-label">{auto.label}</span>
+                  <span className="manta-field-insights__auto-detail">{auto.detail}</span>
                 </div>
                 <button
                   type="button"
                   role="switch"
                   aria-checked={automations[auto.id]}
+                  aria-label={`${auto.label}: ${automations[auto.id] ? 'on' : 'off'}`}
+                  data-on={automations[auto.id] ? 'true' : 'false'}
+                  className="manta-field-insights__switch"
                   onClick={() => toggleAuto(auto.id)}
-                  style={{
-                    width: 36, height: 20, flexShrink: 0,
-                    borderRadius: 10, border: 'none', cursor: 'pointer',
-                    background: automations[auto.id] ? 'var(--primary-color, #006994)' : '#cbd5e1',
-                    position: 'relative', transition: 'background 0.2s',
-                    padding: 0,
-                  }}
                 >
-                  <span style={{
-                    position: 'absolute', top: 2,
-                    left: automations[auto.id] ? 18 : 2,
-                    width: 16, height: 16, borderRadius: '50%',
-                    background: '#fff',
-                    transition: 'left 0.2s',
-                    display: 'block',
-                  }} />
+                  <span className="manta-field-insights__switch-knob" />
                 </button>
               </div>
             ))}

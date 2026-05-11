@@ -28,17 +28,71 @@ export function readPilotSessionPayload() {
 }
 
 /**
+ * Heuristic: saved pilot looks user-edited or imported (not an empty shell).
+ * Used when legacy session payloads omit `validationPrimed`.
+ *
+ * @param {unknown} pilot
+ */
+export function pilotSessionPilotLooksEngaged(pilot) {
+  if (!pilot || typeof pilot !== 'object') return false
+  const p = /** @type {Record<string, unknown>} */ (pilot)
+  const m = p.mission && typeof p.mission === 'object' ? /** @type {Record<string, unknown>} */ (p.mission) : null
+  if (!m) return false
+  if (String(m.missionTitle || m.title || '').trim().length > 2) return true
+  if (String(m.abstract || '').trim().length > 12) return true
+  const identFi =
+    p.ident && typeof p.ident === 'object'
+      ? String(/** @type {{ fileIdentifier?: string }} */ (p.ident).fileIdentifier || '').trim()
+      : ''
+  if (identFi.length > 3) return true
+  if (String(m.contactEmail || '').includes('@')) return true
+  return false
+}
+
+/**
+ * Initial {@link WizardShell} validation priming: idle until first edit/import unless session says otherwise.
+ *
+ * @returns {boolean}
+ */
+export function readInitialValidationPrimed() {
+  try {
+    const session = readPilotSessionPayload()
+    if (!session) return false
+    if (session.validationPrimed === false) return false
+    if (session.validationPrimed === true) return true
+    return pilotSessionPilotLooksEngaged(session.pilot)
+  } catch {
+    return false
+  }
+}
+
+/**
+ * @param {{ validationPrimed?: boolean }} [prev]
+ * @param {{ validationPrimed?: boolean }} [meta]
+ */
+function resolveValidationPrimed(prev, meta) {
+  if (meta?.validationPrimed !== undefined) return Boolean(meta.validationPrimed)
+  if (prev && typeof prev === 'object' && prev.validationPrimed === false) return false
+  if (prev && typeof prev === 'object' && prev.validationPrimed === true) return true
+  return false
+}
+
+/**
  * Write session immediately (used after Manta auto-fix so the widget re-reads fresh state).
  * @param {object} pilotState
+ * @param {{ validationPrimed?: boolean }} [meta]
  */
-export function writePilotSessionPayloadNow(pilotState) {
+export function writePilotSessionPayloadNow(pilotState, meta = {}) {
   if (typeof sessionStorage === 'undefined') return
   try {
+    const prev = readPilotSessionPayload()
+    const validationPrimed = resolveValidationPrimed(prev, meta)
     sessionStorage.setItem(
       SESSION_KEY,
       JSON.stringify({
-        pilot:     pilotState,
-        savedAt:   new Date().toISOString(),
+        pilot: pilotState,
+        savedAt: new Date().toISOString(),
+        validationPrimed,
       }),
     )
     notifyPilotSessionWritten()
@@ -49,18 +103,22 @@ export function writePilotSessionPayloadNow(pilotState) {
 
 /**
  * @param {object} pilotState
+ * @param {{ validationPrimed?: boolean }} [meta]
  */
-export function schedulePersistPilotSession(pilotState) {
+export function schedulePersistPilotSession(pilotState, meta = {}) {
   if (typeof sessionStorage === 'undefined') return
   if (timer) clearTimeout(timer)
   timer = setTimeout(() => {
     timer = null
     try {
+      const prev = readPilotSessionPayload()
+      const validationPrimed = resolveValidationPrimed(prev, meta)
       sessionStorage.setItem(
         SESSION_KEY,
         JSON.stringify({
           pilot: pilotState,
           savedAt: new Date().toISOString(),
+          validationPrimed,
         }),
       )
       notifyPilotSessionWritten()

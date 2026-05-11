@@ -163,23 +163,22 @@ export default function ImportReviewPanel({ changes, sourceType, filename, impor
         paddingBottom: 'max(1rem, env(safe-area-inset-bottom, 0px))',
       }}
     >
-      <div style={{
-        background: 'var(--card-bg, #fff)',
-        borderRadius: 12,
-        boxShadow: '0 24px 80px rgba(0,0,0,0.28)',
-        width: '100%',
-        maxWidth: 680,
-        maxHeight: '90vh',
-        display: 'flex',
-        flexDirection: 'column',
-        overflow: 'hidden',
-      }}>
+      <div
+        className="import-review-panel"
+        style={{
+          borderRadius: 12,
+          boxShadow: '0 24px 80px rgba(0,0,0,0.28)',
+          width: '100%',
+          maxWidth: 680,
+          maxHeight: '90vh',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+        }}
+      >
 
         {/* Header */}
-        <div style={{
-          padding: '1rem 1.25rem 0.75rem',
-          borderBottom: '1px solid var(--border-color, #e2e8f0)',
-        }}>
+        <div className="import-review-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
             <div style={{
               width: 32, height: 32, borderRadius: 8,
@@ -188,10 +187,8 @@ export default function ImportReviewPanel({ changes, sourceType, filename, impor
               color: '#fff', fontSize: '1rem', flexShrink: 0,
             }}>↓</div>
             <div>
-              <div style={{ fontWeight: 800, fontSize: '1rem', color: 'var(--text-color)' }}>
-                Review import
-              </div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--muted-text-color)' }}>
+              <div className="import-review-title">Review import</div>
+              <div className="import-review-subtitle">
                 {SOURCE_LABELS[sourceType] ?? sourceType}
                 {filename ? ` — ${filename}` : ''}
                 {importedAtDisplay ? ` · ${importedAtDisplay}` : ''}
@@ -213,7 +210,7 @@ export default function ImportReviewPanel({ changes, sourceType, filename, impor
         </div>
 
         {/* Body */}
-        <div style={{ overflowY: 'auto', flex: 1, padding: '0.75rem 1.25rem' }}>
+        <div className="import-review-body">
 
           {/* Conflicts section */}
           {conflicts.length > 0 && (
@@ -222,7 +219,7 @@ export default function ImportReviewPanel({ changes, sourceType, filename, impor
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                 marginBottom: '0.5rem',
               }}>
-                <h3 style={{ fontSize: '0.8rem', fontWeight: 700, color: '#b45309', margin: 0 }}>
+                <h3 className="import-review-section-title import-review-section-title--conflicts">
                   ⚠ Conflicts — existing values will be overwritten
                 </h3>
                 <div style={{ display: 'flex', gap: 6 }}>
@@ -254,19 +251,16 @@ export default function ImportReviewPanel({ changes, sourceType, filename, impor
           {/* New fields section */}
           {newFields.length > 0 && (
             <section>
-              <h3 style={{ fontSize: '0.8rem', fontWeight: 700, color: '#15803d', margin: '0 0 0.5rem' }}>
+              <h3 className="import-review-section-title import-review-section-title--new">
                 ✓ New fields — added to empty slots
               </h3>
-              <div style={{
-                display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px 1rem',
-                fontSize: '0.75rem', color: 'var(--text-color)',
-              }}>
+              <div className="import-review-new-fields-grid">
                 {newFields.map(c => (
-                  <div key={c.fieldPath} style={{ display: 'flex', gap: 6, alignItems: 'flex-start', minWidth: 0 }}>
-                    <span style={{ color: '#16a34a', flexShrink: 0 }}>+</span>
+                  <div key={c.fieldPath} className="import-review-new-field-row">
+                    <span className="import-review-new-field-plus">+</span>
                     <div style={{ minWidth: 0 }}>
-                      <span style={{ fontWeight: 600 }}>{fieldLabel(c.fieldPath)}</span>
-                      <span style={{ color: 'var(--muted-text-color)', marginLeft: 4 }}>
+                      <span className="import-review-new-field-name">{fieldLabel(c.fieldPath)}</span>
+                      <span className="import-review-new-field-value">
                         {truncate(c.newValue, 40)}
                       </span>
                     </div>
@@ -277,51 +271,27 @@ export default function ImportReviewPanel({ changes, sourceType, filename, impor
           )}
 
           {changes.length === 0 && (
-            <div style={{ textAlign: 'center', color: 'var(--muted-text-color)', padding: '2rem 0', fontSize: '0.85rem' }}>
+            <div className="import-review-empty">
               No new fields found in this import.
             </div>
           )}
         </div>
 
         {/* Footer */}
-        <div style={{
-          padding: '0.75rem 1.25rem',
-          borderTop: '1px solid var(--border-color, #e2e8f0)',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8,
-        }}>
-          <div style={{ fontSize: '0.75rem', color: 'var(--muted-text-color)' }}>
+        <div className="import-review-footer">
+          <div className="import-review-footer-note">
             Evidence: <strong>{evidenceClassLabel(decisions[0]?.evidenceClass ?? 'iso-xpath-exact')}</strong>
             {acceptedCount > 0 && ` · ${acceptedCount} field${acceptedCount !== 1 ? 's' : ''} will be applied`}
           </div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button
-              type="button"
-              onClick={onCancel}
-              style={{
-                padding: '0.4rem 0.9rem',
-                border: '1px solid var(--border-color)',
-                borderRadius: 6,
-                background: 'transparent',
-                fontSize: '0.82rem', fontWeight: 600,
-                cursor: 'pointer',
-                color: 'var(--text-color)',
-              }}
-            >
+          <div className="import-review-footer-actions">
+            <button type="button" className="import-review-btn import-review-btn--cancel" onClick={onCancel}>
               Cancel import
             </button>
             <button
               type="button"
+              className="import-review-btn import-review-btn--apply"
               disabled={unresolvedCount > 0}
               onClick={() => onApply(decisions)}
-              style={{
-                padding: '0.4rem 0.9rem',
-                border: 'none',
-                borderRadius: 6,
-                background: unresolvedCount > 0 ? '#cbd5e1' : 'var(--fx-ocean, #006994)',
-                color: '#fff',
-                fontSize: '0.82rem', fontWeight: 700,
-                cursor: unresolvedCount > 0 ? 'not-allowed' : 'pointer',
-              }}
             >
               {unresolvedCount > 0 ? `Resolve ${unresolvedCount} conflict${unresolvedCount !== 1 ? 's' : ''}` : `Apply ${acceptedCount} field${acceptedCount !== 1 ? 's' : ''}`}
             </button>
@@ -333,7 +303,6 @@ export default function ImportReviewPanel({ changes, sourceType, filename, impor
 }
 
 function ConflictRow({ change, accepted, onAccept, onReject }) {
-  // Dark-theme cards: light #fffbeb + var(--text-color) was illegible; use translucent tints on dark.
   const borderColor = accepted === true
     ? 'rgba(34, 197, 94, 0.55)'
     : accepted === false
@@ -346,28 +315,29 @@ function ConflictRow({ change, accepted, onAccept, onReject }) {
       : 'rgba(245, 158, 11, 0.1)'
 
   return (
-    <div style={{
-      border: `1.5px solid ${borderColor}`,
-      borderRadius: 7,
-      background: bgColor,
-      padding: '0.5rem 0.65rem',
-      display: 'grid',
-      gridTemplateColumns: '1fr auto',
-      gap: '0.35rem 0.75rem',
-      alignItems: 'start',
-    }}>
+    <div
+      className="import-review-conflict-row"
+      style={{
+        border: `1.5px solid ${borderColor}`,
+        borderRadius: 7,
+        background: bgColor,
+        padding: '0.5rem 0.65rem',
+        display: 'grid',
+        gridTemplateColumns: '1fr auto',
+        gap: '0.35rem 0.75rem',
+        alignItems: 'start',
+      }}
+    >
       <div style={{ minWidth: 0 }}>
-        <div style={{ fontWeight: 700, fontSize: '0.78rem', color: 'var(--text-color)', marginBottom: 3 }}>
-          {fieldLabel(change.fieldPath)}
-        </div>
+        <div className="import-review-conflict-field">{fieldLabel(change.fieldPath)}</div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2, fontSize: '0.72rem' }}>
           <div>
-            <span style={{ color: '#b45309', fontWeight: 600 }}>Was: </span>
-            <span style={{ color: 'var(--muted-text-color)' }}>{truncate(change.previousValue)}</span>
+            <span className="import-review-val-label import-review-val-label--was">Was: </span>
+            <span className="import-review-val-text import-review-val-text--muted">{truncate(change.previousValue)}</span>
           </div>
           <div>
-            <span style={{ color: '#16a34a', fontWeight: 600 }}>New: </span>
-            <span style={{ color: 'var(--text-color)' }}>{truncate(change.newValue)}</span>
+            <span className="import-review-val-label import-review-val-label--new">New: </span>
+            <span className="import-review-val-text import-review-val-text--emph">{truncate(change.newValue)}</span>
           </div>
         </div>
       </div>
@@ -393,6 +363,7 @@ function DecisionBtn({ label, active, activeColor, onClick }) {
   return (
     <button
       type="button"
+      className={`import-review-decision-btn${active ? ' import-review-decision-btn--active' : ''}`}
       onClick={onClick}
       style={{
         padding: '0.28rem 0.65rem',
@@ -416,16 +387,7 @@ function DecisionBtn({ label, active, activeColor, onClick }) {
 
 function Pill({ color, label }) {
   return (
-    <span style={{
-      display: 'inline-block',
-      padding: '2px 8px',
-      borderRadius: 9999,
-      background: `${color}18`,
-      border: `1px solid ${color}40`,
-      color,
-      fontSize: '0.72rem',
-      fontWeight: 700,
-    }}>
+    <span className="import-review-pill" style={{ '--pill-accent': color }}>
       {label}
     </span>
   )
@@ -435,17 +397,8 @@ function InlineBtn({ label, onClick, highlight = false }) {
   return (
     <button
       type="button"
+      className={`import-review-inline-btn${highlight ? ' import-review-inline-btn--highlight' : ''}`}
       onClick={onClick}
-      style={{
-        padding: '4px 10px',
-        border: highlight ? '1.5px solid #f59e0b' : '1px solid rgba(148, 163, 184, 0.45)',
-        borderRadius: 6,
-        background: highlight ? '#f59e0b' : 'rgba(15, 23, 42, 0.55)',
-        fontSize: '0.72rem',
-        fontWeight: 700,
-        cursor: 'pointer',
-        color: highlight ? '#1c1917' : '#f1f5f9',
-      }}
     >
       {label}
     </button>

@@ -19,7 +19,12 @@ import ReadinessStrip from '../components/ReadinessStrip.jsx'
 import XmlPreviewPanel from '../components/XmlPreviewPanel'
 import XmlToolsBar from '../components/XmlToolsBar'
 import DebugLogPanel from '../components/DebugLogPanel'
-import { schedulePersistPilotSession, writePilotSessionPayloadNow } from '../lib/pilotSessionStorage'
+import {
+  schedulePersistPilotSession,
+  writePilotSessionPayloadNow,
+  readPilotSessionPayload,
+  readInitialValidationPrimed,
+} from '../lib/pilotSessionStorage'
 import { applyPilotAutoFixes } from '../lib/pilotAutoFix.js'
 import { computeReadinessBundles, computeReadinessSnapshot } from '../lib/readinessSummary.js'
 import { computeCertificationBundles } from '../lib/certificationSummary.js'
@@ -43,16 +48,33 @@ import { summarizePilotImportPopulation } from '../lib/importMergeSummary.js'
 import { useWorkbenchChrome } from './useWorkbenchChrome.js'
 import { defaultPilotState } from '../lib/pilotValidation.js'
 
+const IDLE_VALIDATION_RESULT = Object.freeze({
+  issues: [],
+  score: 100,
+  maxScore: 100,
+  errCount: 0,
+  warnCount: 0,
+})
+
+const IDLE_READINESS_SNAPSHOT = Object.freeze({
+  lenient: IDLE_VALIDATION_RESULT,
+  strict: IDLE_VALIDATION_RESULT,
+  catalog: IDLE_VALIDATION_RESULT,
+})
+
+/** Narrow rail column when collapsed — fits drag strip + prominent collapse control */
+const RAIL_COLLAPSED_TRACK_PX = 44
+
 /**
  * @param {{
  *   onDirtyChange: (isDirty: boolean) => void,
  * }} props
  */
 export default function WizardShell({ onDirtyChange, breadcrumb }) {
-  const { workspaceDensity, lensActive, assistantLayout } = useWorkbenchChrome()
+  const { workspaceDensity, assistantLayout } = useWorkbenchChrome()
   const splitFloatWorkbench = assistantLayout === 'split-float'
-  /** Simple density + Lens on → hide helper copy on rails; use Lens for guidance */
-  const quietSurface = workspaceDensity === 'simple' && lensActive
+  /** Simple workspace density → less rail copy, collapsed field-hint controls, calmer step pills (Lens optional) */
+  const quietSurface = workspaceDensity === 'simple'
 
   const {
     profile,
@@ -117,10 +139,14 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
   const [wizardStartOpen, setWizardStartOpen] = useState(false)
   const [sidePanelTab, setSidePanelTab] = useState('xml')
   const [xmlExpanded, setXmlExpanded] = useState(false)
-  const [leftCollapsed, setLeftCollapsed] = useState(false)
+  const [leftCollapsed, setLeftCollapsed] = useState(
+    () => assistantLayout === 'split-float' && !readInitialValidationPrimed(),
+  )
   /** Left rail Validation accordion — open by default */
   const [validationRailOpen, setValidationRailOpen] = useState(true)
-  const [rightCollapsed, setRightCollapsed] = useState(false)
+  const [rightCollapsed, setRightCollapsed] = useState(
+    () => assistantLayout === 'split-float' && !readInitialValidationPrimed(),
+  )
   const [leftW, setLeftW] = useState(280)
   const [rightW, setRightW] = useState(360)
   /** Header slot next to XML tools — mission step pills portal target */
@@ -159,6 +185,9 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
 
   /** Bumping remounts XmlToolsBar so paste/import textarea + zip UI reset when clearing the form */
   const [xmlToolsBarResetKey, setXmlToolsBarResetKey] = useState(0)
+
+  /** False after Clear workspace until import, template load, draft load, or user edits (persisted in session). */
+  const [validationPrimed, setValidationPrimed] = useState(readInitialValidationPrimed)
 
   const pilotRef = useRef(pilotState)
   pilotRef.current = pilotState
@@ -215,6 +244,19 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     onPublish,
     capabilities: cap,
   })
+
+  const applySheetTemplatePrimed = useCallback(
+    async (name) => {
+      await ma.applySheetTemplateByName(name)
+      setValidationPrimed(true)
+    },
+    [ma],
+  )
+
+  const loadPilotDraftPrimed = useCallback(async () => {
+    await ma.loadPilotDraft()
+    setValidationPrimed(true)
+  }, [ma])
 
   useEffect(() => {
     if (!showCometPanel) {
@@ -312,27 +354,51 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
   // when idle, keeping typing snappy even with large rule sets.
   const deferredPilotState = useDeferredValue(pilotState)
 
-  const validation = useMemo(
-    () => validationEngine.run({
+  const validation = useMemo(() => {
+    if (!validationPrimed) return IDLE_VALIDATION_RESULT
+    return validationEngine.run({
       profile,
       state: deferredPilotState,
       mode: deferredPilotState.mode || 'lenient',
-    }),
-    [validationEngine, profile, deferredPilotState],
-  )
+    })
+  }, [validationPrimed, validationEngine, profile, deferredPilotState])
 
-  const readinessSnapshot = useMemo(
-    () => computeReadinessSnapshot(deferredPilotState, validationEngine, profile),
-    [deferredPilotState, validationEngine, profile],
-  )
+  // Split-float: idle validation (cleared / session) → collapse rails so the center form is the focus.
+  useEffect(() => {
+    if (!splitFloatWorkbench || validationPrimed) return
+    setLeftCollapsed(true)
+    setRightCollapsed(true)
+  }, [splitFloatWorkbench, validationPrimed])
 
-  const readinessBundles = useMemo(
-    () => computeReadinessBundles(readinessSnapshot, {
+  // Surface blocking issues automatically by expanding the validation rail.
+  useEffect(() => {
+    if (!splitFloatWorkbench) return
+    if (validation.errCount > 0 || validation.warnCount > 0) setLeftCollapsed(false)
+  }, [splitFloatWorkbench, validation.errCount, validation.warnCount])
+
+  // Import / merge completed → show both rails again (preview + checks).
+  useEffect(() => {
+    if (!splitFloatWorkbench) return
+    function onMerged() {
+      setLeftCollapsed(false)
+      setRightCollapsed(false)
+    }
+    window.addEventListener('manta:metadata-import-merged', onMerged)
+    return () => window.removeEventListener('manta:metadata-import-merged', onMerged)
+  }, [splitFloatWorkbench])
+
+  const readinessSnapshot = useMemo(() => {
+    if (!validationPrimed) return IDLE_READINESS_SNAPSHOT
+    return computeReadinessSnapshot(deferredPilotState, validationEngine, profile)
+  }, [validationPrimed, deferredPilotState, validationEngine, profile])
+
+  const readinessBundles = useMemo(() => {
+    if (!validationPrimed) return []
+    return computeReadinessBundles(readinessSnapshot, {
       preflightSummary: comet.preflightSummary,
       isDirty,
-    }),
-    [readinessSnapshot, comet.preflightSummary, isDirty],
-  )
+    })
+  }, [validationPrimed, readinessSnapshot, comet.preflightSummary, isDirty])
 
   const certificationXml = useMemo(() => {
     try {
@@ -343,16 +409,24 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     }
   }, [buildXml, deferredPilotState])
 
-  const certificationBundles = useMemo(
-    () => computeCertificationBundles(deferredPilotState, {
+  const certificationBundles = useMemo(() => {
+    if (!validationPrimed) return []
+    return computeCertificationBundles(deferredPilotState, {
       xml: certificationXml,
       readinessSnapshot,
       preflightSummary: comet.preflightSummary,
       cometUuid,
       isDirty,
-    }),
-    [deferredPilotState, certificationXml, readinessSnapshot, comet.preflightSummary, cometUuid, isDirty],
-  )
+    })
+  }, [
+    validationPrimed,
+    deferredPilotState,
+    certificationXml,
+    readinessSnapshot,
+    comet.preflightSummary,
+    cometUuid,
+    isDirty,
+  ])
 
   const readinessAndCertificationBundles = useMemo(
     () => [...readinessBundles, ...certificationBundles],
@@ -395,7 +469,7 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
       ...p,
       sourceProvenance: { sourceType: 'manual', sourceId: '', importedAt: '', originalFilename: '', originalUuid: '' },
     })),
-    onLoadDraft: ma.loadPilotDraft,
+    onLoadDraft: loadPilotDraftPrimed,
     onSaveDraft: ma.savePilotDraft,
     loadDisabled: ma.pilotBusy || !hostBridgeReady,
     saveDisabled: ma.pilotBusy || !hostBridgeReady,
@@ -405,7 +479,7 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     templateCatalogLoading: ma.templateCatalogLoading,
     templateCatalogError: ma.templateCatalogError,
     onRefreshTemplateCatalog: ma.refreshTemplateCatalog,
-    onApplySheetTemplate: ma.applySheetTemplateByName,
+    onApplySheetTemplate: applySheetTemplatePrimed,
     templateApplyDisabled: ma.templateApplyDisabled,
     platform: pilotState.platform,
     onPlatformPatch: (patch) => setPilotState((p) => ({ ...p, platform: { ...p.platform, ...patch } })),
@@ -442,9 +516,23 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
   // ── Session persistence (already throttled internally; now also waits
   //    one paint so the keystroke lands first) ──────────────────────────
   useEffect(() => {
-    const raf = window.requestAnimationFrame(() => schedulePersistPilotSession(pilotState))
+    const raf = window.requestAnimationFrame(() =>
+      schedulePersistPilotSession(pilotState, { validationPrimed }),
+    )
     return () => window.cancelAnimationFrame(raf)
-  }, [pilotState])
+  }, [pilotState, validationPrimed])
+
+  useEffect(() => {
+    function onImportMerged() {
+      setValidationPrimed(true)
+    }
+    window.addEventListener('manta:metadata-import-merged', onImportMerged)
+    return () => window.removeEventListener('manta:metadata-import-merged', onImportMerged)
+  }, [])
+
+  useEffect(() => {
+    if (Object.keys(touched).length > 0) setValidationPrimed(true)
+  }, [touched])
 
   // Manta widget / Lens "Fix Issues" — apply safe auto-fixes to live wizard state
   useEffect(() => {
@@ -464,7 +552,8 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
       }
       const after = runValidationCount(next, mode)
       setPilotState(next)
-      writePilotSessionPayloadNow(next)
+      setValidationPrimed(true)
+      writePilotSessionPayloadNow(next, { validationPrimed: true })
       setShowAllErrors(true)
       const preview = applied.length > 6 ? `${applied.slice(0, 6).join('; ')}…` : applied.join('; ')
       setStatusMessage(`Auto-fix (${applied.length}): ${preview} — issues ${before}→${after}`)
@@ -483,7 +572,8 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
         const next = setPilotFieldPath(pilotRef.current, field, value)
         const san = profile.sanitize(next)
         setPilotState(san)
-        writePilotSessionPayloadNow(san)
+        setValidationPrimed(true)
+        writePilotSessionPayloadNow(san, { validationPrimed: true })
         setShowAllErrors(true)
         setStatusMessage(`Updated ${field} from Manta lens quick action.`)
       } catch (err) {
@@ -663,10 +753,11 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
   // Surface savedAt from session storage in the status bar
   const [savedAt, setSavedAt] = useState(() => {
     try {
-      const raw = sessionStorage.getItem('uxs-pilot-session')
-      const p = raw ? JSON.parse(raw) : null
+      const p = readPilotSessionPayload()
       return p?.savedAt ? new Date(p.savedAt).toLocaleTimeString() : null
-    } catch { return null }
+    } catch {
+      return null
+    }
   })
   useEffect(() => {
     function onSessionWrite(/** @type {CustomEvent} */ e) {
@@ -678,12 +769,15 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
   }, [])
 
   const handleClearForm = useCallback(() => {
-    if (!window.confirm('Clear all fields and reset this wizard to defaults? Unsaved edits will be lost.')) return
+    if (!window.confirm('Clear saved workspace data and reset this wizard to defaults? Unsaved edits will be lost.')) return
     const raw = typeof profile.defaultState === 'function' ? profile.defaultState() : defaultPilotState()
     const fresh = profile.sanitize(raw)
     baselineSerialized.current = JSON.stringify(fresh)
     setPilotState(fresh)
-    writePilotSessionPayloadNow(fresh)
+    setValidationPrimed(false)
+    setCometUuid('')
+    setSummary({ platforms: 'not checked', templates: 'not checked' })
+    writePilotSessionPayloadNow(fresh, { validationPrimed: false })
     setTouched({})
     setShowAllErrors(false)
     setPendingImport(null)
@@ -698,11 +792,14 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
       setLastSavedXmlPreview('')
     }
     setStatusMessage(
-      'Form cleared — defaults loaded. Validation will show many errors until you fill required fields; that is normal for an empty template.',
+      'Workspace cleared — defaults loaded. Validation stays idle until you import XML, apply a template, load a draft, or edit a field.',
     )
+    if (assistantLayout === 'split-float') {
+      setLeftCollapsed(true)
+      setRightCollapsed(true)
+    }
     emitPilotAuditEvent({ profileId: profile.id, action: 'clearForm', result: 'ok' })
-    window.dispatchEvent(new CustomEvent('manta:metadata-import-merged'))
-  }, [profile, buildXml, onDirtyChange])
+  }, [profile, buildXml, onDirtyChange, assistantLayout])
 
   async function runServerCheck() {
     setLoading(true)
@@ -733,13 +830,16 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     const changes = diffPilotStates(pilotState, next, next.sourceProvenance?.sourceType ?? 'rawIso')
     if (changes.length === 0) {
       const clean = profile.sanitize(next)
-      setPilotState(clean)
       syncBaselineAfterExternalMerge(clean)
+      setPilotState(clean)
       setTouched({})
-      setShowAllErrors(true)
+      setShowAllErrors(false)
       const pop = summarizePilotImportPopulation(clean)
       const w = importWarnings.length ? ` Parser notes: ${importWarnings.join(' · ')}` : ''
-      setStatusMessage(`${pop.summary}${w ? `.${w}` : ''}`)
+      setStatusMessage(
+        `${pop.summary}${w ? `.${w}` : ''}` +
+          ' Review any remaining checks in the Validation panel.',
+      )
       window.dispatchEvent(new CustomEvent('manta:metadata-import-merged'))
       return
     }
@@ -793,11 +893,14 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
           onApply={(decisions) => {
             const resolved = applyDecisions(pilotState, pendingImport.next, decisions)
             const clean = profile.sanitize(resolved)
-            setPilotState(clean)
             syncBaselineAfterExternalMerge(clean)
+            setPilotState(clean)
             setTouched({})
-            setShowAllErrors(true)
+            setShowAllErrors(false)
             setPendingImport(null)
+            setStatusMessage(
+              'Import applied — merged state is the new baseline. Review checks in the Validation panel.',
+            )
             window.dispatchEvent(new CustomEvent('manta:metadata-import-merged'))
           }}
           onCancel={() => setPendingImport(null)}
@@ -839,10 +942,15 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
           </>
         ) : null}
 
-        {/* XmlToolsBar portals into #pilot-header-tools-slot (mission + other profiles) */}
+        {/* XmlToolsBar portals into #pilot-header-tools-slot under step pills (mission + other profiles) */}
         <XmlToolsBar
           key={xmlToolsBarResetKey}
           profile={profile}
+          workspaceNav={
+            profile.id === 'mission' && breadcrumb
+              ? { onHome: breadcrumb.onHome, onNewRecord: breadcrumb.onNewRecord }
+              : null
+          }
           pilotState={pilotState}
           importSampleContext={importSampleContext}
           onImportSampleRecorded={(d) => {
@@ -855,11 +963,11 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
           onPilotImport={handlePilotImport}
           onScannerApply={(next) => {
             const s = profile.sanitize(next)
-            setPilotState(s)
             syncBaselineAfterExternalMerge(s)
+            setPilotState(s)
             setTouched({})
-            setShowAllErrors(true)
-            setStatusMessage('Scanner suggestions merged. Review any new items in the validation panel.')
+            setShowAllErrors(false)
+            setStatusMessage('Scanner suggestions merged. Review any new items in the Validation panel.')
             window.dispatchEvent(new CustomEvent('manta:metadata-import-merged'))
           }}
           onStatus={setStatusMessage}
@@ -901,7 +1009,6 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
             onSetMode={(m) => { setMode(m); setShowAllErrors(true) }}
             errCount={validation.errCount}
             score={validation.score}
-            breadcrumb={breadcrumb}
           />
         )}
 
@@ -909,8 +1016,11 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
         <section
           className="workspace-grid workspace-grid--split"
           data-quiet-surface={quietSurface ? 'true' : undefined}
+          data-workspace-rails-collapsed={
+            splitFloatWorkbench && leftCollapsed && rightCollapsed ? 'true' : undefined
+          }
           style={{
-            gridTemplateColumns: `${leftCollapsed ? '32px' : leftW + 'px'} 5px 1fr 5px ${rightCollapsed ? '32px' : rightW + 'px'}`,
+            gridTemplateColumns: `${leftCollapsed ? `${RAIL_COLLAPSED_TRACK_PX}px` : `${leftW}px`} 8px minmax(0, 1fr) 8px ${rightCollapsed ? `${RAIL_COLLAPSED_TRACK_PX}px` : `${rightW}px`}`,
           }}
         >
         <aside
@@ -941,6 +1051,8 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
                   collapseConnectionTools
                   collapseFieldHints
                   quietSurface={quietSurface}
+                  railIntroProfileLabel={profile.id === 'mission' ? 'UxS / Mission PED' : ''}
+                  validationIdle={!validationPrimed}
                   mode={pilotState.mode}
                   onModeChange={setMode}
                   score={validation.score}
@@ -967,6 +1079,11 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
                 <ReadinessStrip
                   hideSectionHead
                   className="readiness-strip--rail-after-issues"
+                  idleHint={
+                    !validationPrimed
+                      ? 'Readiness scores stay idle until you import XML, apply a sheet template, load a draft, or edit the form.'
+                      : ''
+                  }
                   snapshot={readinessSnapshot}
                   bundles={hideReadinessGoalBundles ? [] : readinessAndCertificationBundles}
                   activeMode={pilotState.mode || 'lenient'}
@@ -998,6 +1115,7 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
         <article
           ref={mainColumnRef}
           className="card workspace-main pilot-step pilot-step--continuous"
+          data-active-step={activeStep}
         >
           {/* Mission: section titles + step pills already identify the step — avoid repeating activeStep label here */}
           {profile.id === 'mission' ? (
@@ -1177,7 +1295,9 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
               hidden={!xmlExpanded && sidePanelTab !== 'xml'}
               className="workspace-side-tabpanel workspace-side-tabpanel--xml"
             >
+              {/* Same key as XmlToolsBar — remount so deferred preview paint cannot lag behind a cleared pilotState */}
               <XmlPreviewPanel
+                key={xmlToolsBarResetKey}
                 pilotState={pilotState}
                 buildXml={buildXml}
                 lastSavedXmlPreview={lastSavedXmlPreview}

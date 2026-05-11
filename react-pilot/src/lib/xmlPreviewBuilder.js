@@ -403,13 +403,17 @@ export function buildXmlPreview(state) {
     .map(
       (s, i) => {
         const covDesc = buildAcquisitionInstrumentDescription(s, { includeVariableLine: false })
+        const attrDesc = String(s.type || s.variable || '').trim()
+        const attrDescXml = attrDesc
+          ? `<gmd:attributeDescription><gco:CharacterString>${esc(attrDesc)}</gco:CharacterString></gmd:attributeDescription>`
+          : ''
         return `  <gmi:MI_CoverageDescription>
     <gmd:identifier>
       <gmd:MD_Identifier>
         <gmd:code><gco:CharacterString>${esc(s.sensorId || s.modelId || `sensor_${i + 1}`)}</gco:CharacterString></gmd:code>
       </gmd:MD_Identifier>
     </gmd:identifier>
-    <gmd:attributeDescription><gco:CharacterString>${esc(s.type)}</gco:CharacterString></gmd:attributeDescription>
+    ${attrDescXml}
     <gmd:name><gco:CharacterString>${esc(s.variable)}</gco:CharacterString></gmd:name>
     ${covDesc ? `<gmd:description><gco:CharacterString>${esc(covDesc)}</gco:CharacterString></gmd:description>` : ''}
   </gmi:MI_CoverageDescription>`
@@ -418,17 +422,39 @@ export function buildXmlPreview(state) {
     .join('\n')
 
   const rorXml = m.ror?.id
-    ? `    <gmd:party>
-      <gmd:CI_Organisation>
-        <gmd:name><gco:CharacterString>${esc(m.org)}</gco:CharacterString></gmd:name>
-        <gmd:identifier>
-          <gmd:MD_Identifier>
-            <gmd:code><gco:CharacterString>${esc(m.ror.id)}</gco:CharacterString></gmd:code>
-          </gmd:MD_Identifier>
-        </gmd:identifier>
-      </gmd:CI_Organisation>
-    </gmd:party>\n`
+    ? `          <gmd:party>
+            <gmd:CI_Organisation>
+              <gmd:name><gco:CharacterString>${esc(m.org)}</gco:CharacterString></gmd:name>
+              <gmd:identifier>
+                <gmd:MD_Identifier>
+                  <gmd:code><gco:CharacterString>${esc(m.ror.id)}</gco:CharacterString></gmd:code>
+                </gmd:MD_Identifier>
+              </gmd:identifier>
+            </gmd:CI_Organisation>
+          </gmd:party>\n`
     : ''
+
+  /** ISO keyword block for the platform *instance* id — omit when empty (avoids useless empty MD_Keywords). */
+  const platformInstanceFacetXml = (() => {
+    const pid = String(p.platformId || '').trim()
+    if (!pid) return ''
+    return `      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:keyword>
+            <gco:CharacterString>${esc(pid)}</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:type>
+            <gmd:MD_KeywordTypeCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="platform">platform</gmd:MD_KeywordTypeCode>
+          </gmd:type>
+          <gmd:thesaurusName>
+            <gmd:CI_Citation>
+              <gmd:title><gco:CharacterString>Platform instance</gco:CharacterString></gmd:title>
+            </gmd:CI_Citation>
+          </gmd:thesaurusName>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+`
+  })()
 
   const citationDates = [
     m.startDate
@@ -1042,7 +1068,7 @@ ${verticalXml}        </gmd:EX_Extent>
         <gmd:CI_ResponsibleParty>
           <gmd:individualName><gco:CharacterString>${esc(m.individualName)}</gco:CharacterString></gmd:individualName>
           <gmd:organisationName><gco:CharacterString>${esc(m.org)}</gco:CharacterString></gmd:organisationName>
-          <gmd:contactInfo>
+${rorXml}          <gmd:contactInfo>
             <gmd:CI_Contact>
               <gmd:address>
                 <gmd:CI_Address>
@@ -1052,21 +1078,9 @@ ${verticalXml}        </gmd:EX_Extent>
               ${contactExtra}
             </gmd:CI_Contact>
           </gmd:contactInfo>
-${rorXml}        </gmd:CI_ResponsibleParty>
+        </gmd:CI_ResponsibleParty>
       </gmd:pointOfContact>
-${kwBlock('sciencekeywords')}${kwBlock('datacenters')}${kwBlock('platforms')}${kwBlock('instruments')}${kwBlock('locations')}${kwBlock('projects')}${kwBlock('providers')}
-      <gmd:descriptiveKeywords>
-        <gmd:MD_Keywords>
-          <gmd:type>
-            <gmd:MD_KeywordTypeCode>platform</gmd:MD_KeywordTypeCode>
-          </gmd:type>
-          <gmd:thesaurusName>
-            <gmd:CI_Citation>
-              <gmd:title><gco:CharacterString>Platform instance</gco:CharacterString></gmd:title>
-            </gmd:CI_Citation>
-          </gmd:thesaurusName>
-        </gmd:MD_Keywords>
-      </gmd:descriptiveKeywords>
+${kwBlock('sciencekeywords')}${kwBlock('datacenters')}${kwBlock('platforms')}${kwBlock('instruments')}${kwBlock('locations')}${kwBlock('projects')}${kwBlock('providers')}${platformInstanceFacetXml}
       <gmd:status>
         <gmd:MD_ProgressCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ProgressCode" codeListValue="${esc(progressCode)}">${esc(progressCode)}</gmd:MD_ProgressCode>
       </gmd:status>

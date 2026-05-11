@@ -15,6 +15,7 @@ import { memo } from 'react'
  *   hideSectionHead?: boolean,
  *   accordion?: boolean,
  *   accordionDefaultOpen?: boolean,
+ *   idleHint?: string,
  * }} props
  */
 function ReadinessStrip({
@@ -26,7 +27,19 @@ function ReadinessStrip({
   hideSectionHead = false,
   accordion = false,
   accordionDefaultOpen = false,
+  idleHint = '',
 }) {
+  if (idleHint.trim()) {
+    return (
+      <section
+        className={`readiness-strip readiness-strip--idle${className ? ` ${className}` : ''}`}
+        aria-label="Validation readiness"
+      >
+        <p className="hint readiness-strip__idle-hint">{idleHint.trim()}</p>
+      </section>
+    )
+  }
+
   const modes = [
     { id: 'lenient', label: 'Lenient', hint: 'Baseline / internal draft' },
     { id: 'strict', label: 'Strict', hint: 'Publication-style required fields' },

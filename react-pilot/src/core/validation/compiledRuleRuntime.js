@@ -149,7 +149,20 @@ function shouldFailRule(rule, state) {
   return false
 }
 
-export function getCompiledRuleIssues(profileId, state) {
+/**
+ * Compiled bundles were generated from spreadsheets with keys like `mission.bbox` that do not
+ * exist on `pilotState`, and many `mission-core` winners use `required` where the editor rules
+ * use conditional checks (lenient URL empties, vmin/vmax optional, grid sizes only when grid on).
+ * Those rows duplicate {@link missionValidationRules} but evaluate incorrectly and flood the UI
+ * with false positives after ISO import. Mission profile validation already runs the authoritative
+ * rule sets; only non-duplicate compiled slices (e.g. OneStop fileIdentifier) stay enabled here.
+ *
+ * @param {string} profileId
+ * @param {Record<string, unknown>} state
+ * @param {string} [mode] lenient | strict | catalog — reserved for future bundle tuning
+ */
+export function getCompiledRuleIssues(profileId, state, mode = 'lenient') {
+  void mode
   const recordType = PROFILE_TO_RECORD_TYPE[profileId]
   if (!recordType) return []
   const bundle = BUNDLES[recordType]
@@ -158,6 +171,11 @@ export function getCompiledRuleIssues(profileId, state) {
   for (const [fieldKey, compiled] of Object.entries(bundle.fields)) {
     const winner = compiled?.winner
     if (!winner || typeof winner !== 'object') continue
+    // Mission: skip spreadsheet-derived sets covered by missionValidationRuleSets (see module doc).
+    if (recordType === 'mission') {
+      const rs = String(winner.rule_set || '')
+      if (rs === 'mission-core' || rs === 'mission-strict' || rs === 'mission-catalog') continue
+    }
     if (!shouldFailRule(winner, state)) continue
     const sev = String(winner.severity || '').toLowerCase()
     out.push({

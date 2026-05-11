@@ -1,0 +1,319 @@
+/**
+ * MantaFieldInsights — readable in light (dark text on light cards) and dark theme.
+ */
+
+.manta-field-insights {
+  margin: 0.5rem 0 0.75rem;
+  border-radius: 10px;
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--border-color, #e2e8f0);
+  color: var(--text-color, #0f172a);
+  overflow: hidden;
+  transition: border-color 0.15s ease;
+}
+
+.manta-field-insights--open[data-tone='err'] {
+  border-color: color-mix(in srgb, #dc2626 42%, var(--border-color));
+}
+
+.manta-field-insights--open[data-tone='warn'] {
+  border-color: color-mix(in srgb, #ca8a04 45%, var(--border-color));
+}
+
+.manta-field-insights--open[data-tone='ok'] {
+  border-color: color-mix(in srgb, var(--primary-color, #0891b2) 40%, var(--border-color));
+}
+
+.manta-field-insights__trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.75rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  font-family: inherit;
+}
+
+.manta-field-insights__trigger:focus-visible {
+  outline: 2px solid var(--primary-color, #0891b2);
+  outline-offset: 2px;
+}
+
+.manta-field-insights__title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex: 1;
+  min-width: 0;
+  color: var(--text-color, #0f172a);
+  letter-spacing: 0.02em;
+}
+
+.manta-field-insights__chevron {
+  font-size: 0.75rem;
+  color: var(--text-muted, #64748b);
+  transform: rotate(0deg);
+  transition: transform 0.15s ease;
+}
+
+.manta-field-insights__chevron--open {
+  transform: rotate(180deg);
+}
+
+/* Count pills — high contrast in both themes */
+.manta-field-insights__pill {
+  font-size: 0.66rem;
+  font-weight: 800;
+  padding: 0.12rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.manta-field-insights__pill--sugg-err {
+  background: color-mix(in srgb, #fee2e2 92%, var(--card-bg));
+  color: #7f1d1d;
+  border-color: color-mix(in srgb, #dc2626 28%, transparent);
+}
+
+.manta-field-insights__pill--sugg-warn {
+  background: color-mix(in srgb, #fef9c3 88%, var(--card-bg));
+  color: #713f12;
+  border-color: color-mix(in srgb, #ca8a04 30%, transparent);
+}
+
+:root[data-theme='dark'] .manta-field-insights__pill--sugg-err {
+  background: rgba(127, 29, 29, 0.35);
+  color: #fecaca;
+  border-color: rgba(248, 113, 113, 0.35);
+}
+
+:root[data-theme='dark'] .manta-field-insights__pill--sugg-warn {
+  background: rgba(113, 63, 18, 0.45);
+  color: #fde68a;
+  border-color: rgba(251, 191, 36, 0.35);
+}
+
+/* “N active” automations — dark ink in light mode, light ink in dark */
+.manta-field-insights__pill--auto {
+  background: color-mix(in srgb, var(--primary-color, #1e40af) 12%, var(--card-bg));
+  color: #0f172a;
+  border-color: color-mix(in srgb, var(--primary-color, #2563eb) 32%, transparent);
+  font-weight: 800;
+}
+
+:root[data-theme='dark'] .manta-field-insights__pill--auto {
+  background: rgba(34, 211, 238, 0.14);
+  color: #e0f2fe;
+  border-color: rgba(34, 211, 238, 0.38);
+}
+
+.manta-field-insights__panel {
+  border-top: 1px solid var(--border-color, #e2e8f0);
+}
+
+.manta-field-insights__section-label {
+  font-size: 0.66rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted, #64748b);
+  margin-bottom: 0.35rem;
+}
+
+.manta-field-insights__suggestions {
+  padding: 0.6rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.manta-field-insights__suggestion {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+  padding: 0.42rem 0.55rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+}
+
+.manta-field-insights__suggestion-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.manta-field-insights__automations--flush-top {
+  border-top: none !important;
+}
+
+.manta-field-insights__suggestion--error {
+  background: color-mix(in srgb, #fee2e2 55%, var(--card-bg));
+  border-color: color-mix(in srgb, #dc2626 28%, var(--border-color));
+}
+
+.manta-field-insights__suggestion--warn {
+  background: color-mix(in srgb, #fef9c3 45%, var(--card-bg));
+  border-color: color-mix(in srgb, #ca8a04 28%, var(--border-color));
+}
+
+:root[data-theme='dark'] .manta-field-insights__suggestion--error {
+  background: rgba(127, 29, 29, 0.28);
+  border-color: rgba(248, 113, 113, 0.35);
+}
+
+:root[data-theme='dark'] .manta-field-insights__suggestion--warn {
+  background: rgba(113, 63, 18, 0.35);
+  border-color: rgba(251, 191, 36, 0.28);
+}
+
+.manta-field-insights__suggestion-title {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--text-color, #0f172a);
+}
+
+.manta-field-insights__suggestion--error .manta-field-insights__suggestion-title {
+  color: #991b1b;
+}
+
+.manta-field-insights__suggestion--warn .manta-field-insights__suggestion-title {
+  color: #92400e;
+}
+
+:root[data-theme='dark'] .manta-field-insights__suggestion--error .manta-field-insights__suggestion-title {
+  color: #fecaca;
+}
+
+:root[data-theme='dark'] .manta-field-insights__suggestion--warn .manta-field-insights__suggestion-title {
+  color: #fde68a;
+}
+
+.manta-field-insights__suggestion-detail {
+  font-size: 0.71rem;
+  color: var(--text-muted, #475569);
+  margin-top: 0.15rem;
+  line-height: 1.45;
+}
+
+.manta-field-insights__suggestion-detail code {
+  font-size: 0.68rem;
+  padding: 0.08em 0.28em;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--text-color) 6%, var(--card-bg));
+  color: var(--text-color, #0f172a);
+}
+
+:root[data-theme='dark'] .manta-field-insights__suggestion-detail code {
+  background: rgba(15, 23, 42, 0.65);
+  color: #e2e8f0;
+}
+
+.manta-field-insights__apply {
+  font-size: 0.68rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  padding: 0.15rem 0.55rem;
+  background: var(--primary-color, #0891b2);
+  color: #f8fafc;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.manta-field-insights__apply:hover {
+  filter: brightness(1.06);
+}
+
+/* Automations block */
+.manta-field-insights__automations {
+  padding: 0.55rem 0.75rem;
+  border-top: 1px solid var(--border-color);
+  background: color-mix(in srgb, var(--text-color) 4%, var(--card-bg));
+}
+
+:root[data-theme='dark'] .manta-field-insights__automations {
+  background: rgba(15, 23, 42, 0.72);
+  border-top-color: rgba(148, 163, 184, 0.22);
+}
+
+.manta-field-insights__auto-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.28rem 0;
+}
+
+.manta-field-insights__auto-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.manta-field-insights__auto-label {
+  display: block;
+  font-size: 0.76rem;
+  font-weight: 650;
+  color: var(--text-color, #0f172a);
+  letter-spacing: 0.01em;
+}
+
+.manta-field-insights__auto-detail {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--text-muted, #475569);
+  margin-top: 0.12rem;
+  line-height: 1.35;
+}
+
+:root[data-theme='dark'] .manta-field-insights__auto-label {
+  color: #f1f5f9;
+}
+
+:root[data-theme='dark'] .manta-field-insights__auto-detail {
+  color: #94a3b8;
+}
+
+.manta-field-insights__switch {
+  width: 38px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: 11px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s ease;
+  padding: 0;
+}
+
+.manta-field-insights__switch[data-on='true'] {
+  background: var(--primary-color, #0891b2);
+}
+
+.manta-field-insights__switch[data-on='false'] {
+  background: #cbd5e1;
+}
+
+:root[data-theme='dark'] .manta-field-insights__switch[data-on='false'] {
+  background: #475569;
+}
+
+.manta-field-insights__switch-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: left 0.2s ease;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.2);
+}
+
+.manta-field-insights__switch[data-on='true'] .manta-field-insights__switch-knob {
+  left: 19px;
+}

@@ -25,7 +25,11 @@ import { NCEI_UXS_FILE_ID_PREFIX } from '../src/lib/nceiUxsFileId.js'
 import { buildXmlPreview } from '../src/lib/xmlPreviewBuilder.js'
 import { missionPreviewIso191152SanityFailures } from '../src/lib/iso191152PreviewSanity.js'
 import { importPilotPartialStateFromXml } from '../src/lib/xmlPilotImport.js'
-import { normalizeValidationIssue, ValidationEngine } from '../src/core/validation/ValidationEngine.js'
+import {
+  dedupeIssuesByFieldAndMessage,
+  normalizeValidationIssue,
+  ValidationEngine,
+} from '../src/core/validation/ValidationEngine.js'
 import { getCompiledRuleIssues } from '../src/core/validation/compiledRuleRuntime.js'
 import { missionValidationRuleSets } from '../src/profiles/mission/missionValidationRules.js'
 import { missionProfile } from '../src/profiles/mission/missionProfile.js'
@@ -227,6 +231,23 @@ function checkNceiFileIdPrefixPreviewAndImport() {
   xml = buildXmlPreview(off)
   assert.ok(!xml.includes(`${NCEI_UXS_FILE_ID_PREFIX}plain-id`), 'nceiFileIdPrefix false should omit prefix')
   assert.ok(xml.includes('plain-id'))
+
+  const inportStyle = {
+    ...withPrefix,
+    mission: {
+      ...withPrefix.mission,
+      fileId: 'gov.noaa.nmfs.inport:5619',
+    },
+  }
+  xml = buildXmlPreview(inportStyle)
+  assert.ok(
+    xml.includes('<gco:CharacterString>gov.noaa.nmfs.inport:5619</gco:CharacterString>'),
+    'existing gov.noaa.* fileId should not get a second ncei.uxs prefix',
+  )
+  assert.ok(
+    !xml.includes(`${NCEI_UXS_FILE_ID_PREFIX}gov.noaa.`),
+    'should not stack UxS prefix onto another gov.noaa namespace',
+  )
 }
 
 function checkPilotXmlImportLineageDistributionRoundtrip() {
@@ -695,7 +716,7 @@ function assertValidationParity(label, state, mode) {
   const profileStub = { id: 'mission', validationRuleSets: missionValidationRuleSets }
 
   const legacy = validatePilotState(mode, state)
-  const compiledRaw = getCompiledRuleIssues('mission', state)
+  const compiledRaw = getCompiledRuleIssues('mission', state, mode)
   const compiledNorm = compiledRaw.map((i) =>
     normalizeValidationIssue(i, {
       profile: profileStub,
@@ -704,7 +725,7 @@ function assertValidationParity(label, state, mode) {
       ruleSetId: 'compiled-rules',
     }),
   )
-  const refIssues = [...legacy.issues, ...compiledNorm]
+  const refIssues = dedupeIssuesByFieldAndMessage([...legacy.issues, ...compiledNorm])
 
   const cand = engine.run({ profile: profileStub, state, mode })
 
@@ -734,7 +755,7 @@ function assertValidationParity(label, state, mode) {
   const refErr = refIssues.filter((i) => i.severity === 'e').length
   const refWarn = refIssues.filter((i) => i.severity === 'w').length
   const refScore = Math.max(0, 100 - refErr * 8 - refWarn * 3)
-  assert.equal(refScore, cand.score, `[${label} / ${mode}] score mismatch`)
+  assert.equal(refScore, cand.score, `[${label} / ${mode}] score mismatch (deduped legacy+compiled vs engine)`)
 }
 
 function checkValidationRulesParity() {

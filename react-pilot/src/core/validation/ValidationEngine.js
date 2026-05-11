@@ -92,6 +92,23 @@ export function normalizeValidationIssue(issue, ctx = {}) {
 }
 
 /**
+ * Profile + compiled SWARM rules can both flag the same field with the same message — keep one row in the UI.
+ *
+ * @param {import('../entities/types.js').ValidationIssue[]} issues
+ */
+export function dedupeIssuesByFieldAndMessage(issues) {
+  const seen = new Set()
+  const out = []
+  for (const i of issues) {
+    const key = `${i.severity}|${i.field}|${i.message}`
+    if (seen.has(key)) continue
+    seen.add(key)
+    out.push(i)
+  }
+  return out
+}
+
+/**
  * @param {import('../entities/types.js').ValidationIssue[]} issues
  */
 function summarizeIssues(issues) {
@@ -216,7 +233,7 @@ export class ValidationEngine {
     }
 
     // Append compiled swarm rules (if a compiled bundle exists for this profile type).
-    const compiledIssues = getCompiledRuleIssues(profile?.id, state)
+    const compiledIssues = getCompiledRuleIssues(profile?.id, state, mode)
     if (compiledIssues.length) {
       issues.push(...compiledIssues.map((i) => normalizeValidationIssue(i, {
         profile,
@@ -226,6 +243,6 @@ export class ValidationEngine {
       })))
     }
 
-    return summarizeIssues(issues)
+    return summarizeIssues(dedupeIssuesByFieldAndMessage(issues))
   }
 }
