@@ -1,0 +1,303 @@
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/description/CharacterString	5801952
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/identifier/MD_Identifier/code/CharacterString	5801952
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/description/CharacterString	measures wind speed An anemometer is an instrument that measures wind speed. Note that an aerovane (insttypes_id 175) is an anemometer which has a tail and a propeller to measure the speed and direction of the wind.
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	anemometer
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/type/CharacterString	anemometer
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/description/CharacterString	radiometer
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	radiometer
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/type/CharacterString	radiometer
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[11]/MI_Instrument/description/CharacterString	A sensor used to measure temperature.
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[11]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	temperature sensor
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[11]/MI_Instrument/type/CharacterString	temperature sensor
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[12]/MI_Instrument/description/CharacterString	generic thermometer or reversing thermometer use thermometer when temperature is a data type, but the exact instrument used to measure temperature is unknown
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[12]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	thermometer
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[12]/MI_Instrument/type/CharacterString	thermometer
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/description/CharacterString	Barometers are instruments for measuring atmospheric pressure; two types include mercury barometers and aneroid barometers.
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	barometer
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/type/CharacterString	barometer
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/description/CharacterString	An instrument for measuring time.
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	clock
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/type/CharacterString	clock
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/description/CharacterString	Conductivity-Temperature-Depth probe
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	CTD
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/type/CharacterString	CTD
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/description/CharacterString	fluorometer
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	fluorometer
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/type/CharacterString	fluorometer
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/description/CharacterString	Global Positioning System receiver satellite-based instrument used for geo-location, positioning and navigation
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	GPS
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/type/CharacterString	GPS
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/description/CharacterString	Global Positioning System space Payload The GPSP uses the Global Positioning System (GPS) to determine the satellite's position by triangulation, in the same way that GPS fixes are obtained on Earth. At least three GPS satellites determine a mobile object's (in this case the satellite's) exact position at a given instant. Positional data are then integrated into an orbit determination model to track the satellite's trajectory continuously. Jason-2 is a French-U.S. satellite launched in 2008 d…
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	GPSP
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/type/CharacterString	GPSP
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/description/CharacterString	HUMIDITY SENSORS are devices that receive a signal or stimulus (as heat or pressure or light or motion etc.) and responds to it, in this case humidity or some measure of the water vapor content of air.
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	humidity sensor
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/type/CharacterString	humidity sensor
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/description/CharacterString	Any instrument that measures oxygen content in a compound.
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	oxygen sensor
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/type/CharacterString	oxygen sensor
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/type/CharacterString	5801952
+1	MI_Metadata/contentInfo/MI_CoverageDescription[1]/attributeDescription/CharacterString	anemometer
+1	MI_Metadata/contentInfo/MI_CoverageDescription[1]/identifier/MD_Identifier/code/CharacterString	anemometer
+1	MI_Metadata/contentInfo/MI_CoverageDescription[1]/name/CharacterString	measures wind speed An anemometer is an instrument that measures wind speed. Note that an aerovane (insttypes_id 175) is an anemometer which has a tail and a propeller to measure the speed and direction of the wind.
+1	MI_Metadata/contentInfo/MI_CoverageDescription[10]/attributeDescription/CharacterString	radiometer
+1	MI_Metadata/contentInfo/MI_CoverageDescription[10]/identifier/MD_Identifier/code/CharacterString	radiometer
+1	MI_Metadata/contentInfo/MI_CoverageDescription[10]/name/CharacterString	radiometer
+1	MI_Metadata/contentInfo/MI_CoverageDescription[11]/attributeDescription/CharacterString	temperature sensor
+1	MI_Metadata/contentInfo/MI_CoverageDescription[11]/identifier/MD_Identifier/code/CharacterString	temperature sensor
+1	MI_Metadata/contentInfo/MI_CoverageDescription[11]/name/CharacterString	A sensor used to measure temperature.
+1	MI_Metadata/contentInfo/MI_CoverageDescription[12]/attributeDescription/CharacterString	thermometer
+1	MI_Metadata/contentInfo/MI_CoverageDescription[12]/identifier/MD_Identifier/code/CharacterString	thermometer
+1	MI_Metadata/contentInfo/MI_CoverageDescription[12]/name/CharacterString	generic thermometer or reversing thermometer use thermometer when temperature is a data type, but the exact instrument used to measure temperature is unknown
+1	MI_Metadata/contentInfo/MI_CoverageDescription[2]/attributeDescription/CharacterString	barometer
+1	MI_Metadata/contentInfo/MI_CoverageDescription[2]/identifier/MD_Identifier/code/CharacterString	barometer
+1	MI_Metadata/contentInfo/MI_CoverageDescription[2]/name/CharacterString	Barometers are instruments for measuring atmospheric pressure; two types include mercury barometers and aneroid barometers.
+1	MI_Metadata/contentInfo/MI_CoverageDescription[3]/attributeDescription/CharacterString	clock
+1	MI_Metadata/contentInfo/MI_CoverageDescription[3]/identifier/MD_Identifier/code/CharacterString	clock
+1	MI_Metadata/contentInfo/MI_CoverageDescription[3]/name/CharacterString	An instrument for measuring time.
+1	MI_Metadata/contentInfo/MI_CoverageDescription[4]/attributeDescription/CharacterString	CTD
+1	MI_Metadata/contentInfo/MI_CoverageDescription[4]/identifier/MD_Identifier/code/CharacterString	CTD
+1	MI_Metadata/contentInfo/MI_CoverageDescription[4]/name/CharacterString	Conductivity-Temperature-Depth probe
+1	MI_Metadata/contentInfo/MI_CoverageDescription[5]/attributeDescription/CharacterString	fluorometer
+1	MI_Metadata/contentInfo/MI_CoverageDescription[5]/identifier/MD_Identifier/code/CharacterString	fluorometer
+1	MI_Metadata/contentInfo/MI_CoverageDescription[5]/name/CharacterString	fluorometer
+1	MI_Metadata/contentInfo/MI_CoverageDescription[6]/attributeDescription/CharacterString	GPS
+1	MI_Metadata/contentInfo/MI_CoverageDescription[6]/identifier/MD_Identifier/code/CharacterString	GPS
+1	MI_Metadata/contentInfo/MI_CoverageDescription[6]/name/CharacterString	Global Positioning System receiver satellite-based instrument used for geo-location, positioning and navigation
+1	MI_Metadata/contentInfo/MI_CoverageDescription[7]/attributeDescription/CharacterString	GPSP
+1	MI_Metadata/contentInfo/MI_CoverageDescription[7]/identifier/MD_Identifier/code/CharacterString	GPSP
+1	MI_Metadata/contentInfo/MI_CoverageDescription[7]/name/CharacterString	Global Positioning System space Payload The GPSP uses the Global Positioning System (GPS) to determine the satellite's position by triangulation, in the same way that GPS fixes are obtained on Earth. At least three GPS satellites determine a mobile object's (in this case the satellite's) exact position at a given instant. Positional data are then integrated into an orbit determination model to track the satellite's trajectory continuously. Jason-2 is a French-U.S. satellite launched in 2008 d…
+1	MI_Metadata/contentInfo/MI_CoverageDescription[8]/attributeDescription/CharacterString	humidity sensor
+1	MI_Metadata/contentInfo/MI_CoverageDescription[8]/identifier/MD_Identifier/code/CharacterString	humidity sensor
+1	MI_Metadata/contentInfo/MI_CoverageDescription[8]/name/CharacterString	HUMIDITY SENSORS are devices that receive a signal or stimulus (as heat or pressure or light or motion etc.) and responds to it, in this case humidity or some measure of the water vapor content of air.
+1	MI_Metadata/contentInfo/MI_CoverageDescription[9]/attributeDescription/CharacterString	oxygen sensor
+1	MI_Metadata/contentInfo/MI_CoverageDescription[9]/identifier/MD_Identifier/code/CharacterString	oxygen sensor
+1	MI_Metadata/contentInfo/MI_CoverageDescription[9]/name/CharacterString	Any instrument that measures oxygen content in a compound.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[1]/LI_ProcessStep/description/CharacterString	Parameter or Variable: LATITUDE (measured); Units: degrees N; Observation Category: in situ; Sampling Instrument: GPS.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[10]/LI_ProcessStep/description/CharacterString	Parameter or Variable: Oxygen Concentration - SD (calculated); Units: micromole/liter; Observation Category: other; Sampling Instrument: Oxygen Optode; Sampling and Analyzing Method: Standard deviation of mole concentration of dissolved molecular oxygen in sea water observations.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[11]/LI_ProcessStep/description/CharacterString	Parameter or Variable: BAROMETRIC PRESSURE - MEAN (calculated); Units: hPa; Observation Category: other; Sampling Instrument: barometer; Sampling and Analyzing Method: Mean of air pressure observations.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[12]/LI_ProcessStep/description/CharacterString	Parameter or Variable: Wind speed - east-west component (U) - MEAN (calculated); Units: meters per second; Observation Category: other; Sampling Instrument: anemometer; Sampling and Analyzing Method: Mean of observed eastward wind speed.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[13]/LI_ProcessStep/description/CharacterString	Parameter or Variable: SALINITY - MEAN (calculated); Units: PSS-78; Observation Category: other; Sampling Instrument: CTD; Sampling and Analyzing Method: Mean of observed practical salinity.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[14]/LI_ProcessStep/description/CharacterString	Parameter or Variable: SALINITY - SD (calculated); Units: PSS-78; Observation Category: other; Sampling Instrument: CTD; Sampling and Analyzing Method: Standard deviation of observed practical salinity.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[15]/LI_ProcessStep/description/CharacterString	Parameter or Variable: AIR TEMPERATURE - MEAN (calculated); Units: degrees C; Observation Category: other; Sampling Instrument: AT/RH; Sampling and Analyzing Method: Mean of air temperature observations.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[16]/LI_ProcessStep/description/CharacterString	Parameter or Variable: CHLOROPHYLL Concentration - SD (calculated); Units: microgram/liter; Observation Category: other; Sampling Instrument: fluorometer; Sampling and Analyzing Method: Standard deviation of observed mass concentration of chlorophyll in sea water.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[17]/LI_ProcessStep/description/CharacterString	Parameter or Variable: OXYGEN - PERCENT SATURATION - MEAN (calculated); Units: percent; Observation Category: other; Sampling Instrument: Oxygen Optode; Sampling and Analyzing Method: Mean of observed fractional saturation of oxygen in sea water.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[18]/LI_ProcessStep/description/CharacterString	Parameter or Variable: CDOM concentration SD (calculated); Units: ppb; Observation Category: other; Sampling Instrument: fluorometer; Sampling and Analyzing Method: Standard deviation of observed concentration of colored dissolved organic matter in sea water expressed as equivalent mass fraction of quinine sulfate dihydrate.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[19]/LI_ProcessStep/description/CharacterString	Parameter or Variable: CONDUCTIVITY - Mean (calculated); Units: milliS cm-1; Observation Category: other; Sampling Instrument: CTD; Sampling and Analyzing Method: Mean of observed seawater conductivity.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[2]/LI_ProcessStep/description/CharacterString	Parameter or Variable: LONGITUDE (measured); Units: degrees E; Observation Category: in situ; Sampling Instrument: GPS.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[20]/LI_ProcessStep/description/CharacterString	Parameter or Variable: OPTICAL BACKSCATTER - 650 nm - Mean (calculated); Units: (m sr)-1; Observation Category: other; Sampling Instrument: fluorometer; Sampling and Analyzing Method: Mean of observed backscatter at 650 nm.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[21]/LI_ProcessStep/description/CharacterString	Parameter or Variable: Skin Temperature - MEAN (calculated); Units: degrees C; Observation Category: other; Sampling Instrument: IR Thermometer; Sampling and Analyzing Method: Mean of observed sea surface skin temperature.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[22]/LI_ProcessStep/description/CharacterString	Parameter or Variable: OXYGEN - PERCENT SATURATION - SD (calculated); Units: percent; Observation Category: other; Sampling Instrument: Oxygen Optode; Sampling and Analyzing Method: Standard deviation of observed fractional saturation of oxygen in sea water.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[23]/LI_ProcessStep/description/CharacterString	Parameter or Variable: Oxygen Concentration - MEAN (calculated); Units: micromole/liter; Observation Category: other; Sampling Instrument: oxygen sensor; Sampling and Analyzing Method: Mean of observed mole concentration of dissolved molecular oxygen in sea water.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[24]/LI_ProcessStep/description/CharacterString	Parameter or Variable: WATER TEMPERATURE - MEAN (calculated); Units: degrees C; Observation Category: other; Sampling Instrument: Oxygen Optode; Sampling and Analyzing Method: Mean of observed sea water temperature.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[25]/LI_ProcessStep/description/CharacterString	Parameter or Variable: WATER TEMPERATURE - SD (calculated); Units: degrees C; Observation Category: other; Sampling Instrument: CTD; Sampling and Analyzing Method: Standard deviation of sea water temperature measured by CTD.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[26]/LI_ProcessStep/description/CharacterString	Parameter or Variable: AIR TEMPERATURE - SD (calculated); Units: degrees C; Observation Category: other; Sampling Instrument: AT/RH; Sampling and Analyzing Method: Standard deviation of air temperature observations.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[27]/LI_ProcessStep/description/CharacterString	Parameter or Variable: WATER TEMPERATURE - MEAN (calculated); Units: degrees C; Observation Category: other; Sampling Instrument: CTD; Sampling and Analyzing Method: Mean of sea water temperature measurements by CTD.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[28]/LI_ProcessStep/description/CharacterString	Parameter or Variable: CONDUCTIVITY -SD (calculated); Units: milliS cm-1; Observation Category: other; Sampling Instrument: CTD; Sampling and Analyzing Method: Standard deviation of observed sea water electrical conductivity.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[29]/LI_ProcessStep/description/CharacterString	Parameter or Variable: Pitch (measured); Units: degree; Observation Category: in situ; Sampling Instrument: Inertial Navigation System; Sampling and Analyzing Method: platform pitch angle.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[3]/LI_ProcessStep/description/CharacterString	Parameter or Variable: Time (measured); Units: secon; Observation Category: in situ; Sampling Instrument: clock; Sampling and Analyzing Method: seconds since 1970-01-01T00:00:00Z.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[30]/LI_ProcessStep/description/CharacterString	Parameter or Variable: Wing Angle (measured); Units: degree; Observation Category: in situ; Sampling Instrument: Onboard Computer; Sampling and Analyzing Method: Angle of saildrone wing.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[31]/LI_ProcessStep/description/CharacterString	Parameter or Variable: Skin Temperature - SD (calculated); Units: degrees C; Observation Category: other; Sampling Instrument: IR Thermometer; Sampling and Analyzing Method: Standard deviation of observed sea surface skin temperature.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[32]/LI_ProcessStep/description/CharacterString	Parameter or Variable: Wind speed - north-south component (V) - SD (calculated); Units: m s-1; Observation Category: other; Sampling Instrument: anemometer; Sampling and Analyzing Method: Standard deviation of observed northward wind speeds.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[33]/LI_ProcessStep/description/CharacterString	Parameter or Variable: RELATIVE HUMIDITY - SD (calculated); Units: percent; Observation Category: other; Sampling Instrument: AT/RH; Sampling and Analyzing Method: Standard deviation of observed relative humidity.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[34]/LI_ProcessStep/description/CharacterString	Parameter or Variable: WIND GUST - SD (calculated); Units: m s-1; Observation Category: other; Sampling Instrument: anemometer; Sampling and Analyzing Method: Standard deviation of measured wind gusts.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[35]/LI_ProcessStep/description/CharacterString	Parameter or Variable: WIND GUST - MEAN (calculated); Units: m s-1; Observation Category: other; Sampling Instrument: anemometer; Sampling and Analyzing Method: Mean of observed wind speed gusts.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[36]/LI_ProcessStep/description/CharacterString	Parameter or Variable: OPTICAL BACKSCATTER - 650 nm - SD (calculated); Units: (m sr)-1; Observation Category: other; Sampling Instrument: fluorometer; Sampling and Analyzing Method: Standard deviation of observed optical backscatter at 650nm.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[37]/LI_ProcessStep/description/CharacterString	Parameter or Variable: BAROMETRIC PRESSURE - SD (calculated); Units: hPa; Observation Category: other; Sampling Instrument: barometer; Sampling and Analyzing Method: Standard deviation of observed barometric air pressure.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[38]/LI_ProcessStep/description/CharacterString	Parameter or Variable: Wind speed - north-south component (V) - MEAN (calculated); Units: m s-1; Observation Category: other; Sampling Instrument: anemometer; Sampling and Analyzing Method: Standard deviation of observed northward wind speed.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[39]/LI_ProcessStep/description/CharacterString	Parameter or Variable: Wind speed - east-west component (U) - SD (calculated); Units: m s-1; Observation Category: other; Sampling Instrument: anemometer; Sampling and Analyzing Method: Standard deviation of observed eastward wind speed.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[4]/LI_ProcessStep/description/CharacterString	Parameter or Variable: WIND DIRECTION (measured); Units: degree; Observation Category: in situ; Sampling Instrument: anemometer.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[40]/LI_ProcessStep/description/CharacterString	Parameter or Variable: speed over ground (measured); Units: m s-1; Observation Category: in situ; Sampling Instrument: IMU; Sampling and Analyzing Method: Platform speed over ground.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[41]/LI_ProcessStep/description/CharacterString	Parameter or Variable: Roll (measured); Units: degree; Observation Category: in situ; Sampling Instrument: Inertial Navigation System; Sampling and Analyzing Method: Platform roll.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[42]/LI_ProcessStep/description/CharacterString	Parameter or Variable: Heading (measured); Units: degrees T; Observation Category: in situ; Sampling Instrument: Inertial Navigation System; Sampling and Analyzing Method: Platform heading or yaw angle.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[43]/LI_ProcessStep/description/CharacterString	Parameter or Variable: course over ground (measured); Units: degrees T; Observation Category: in situ; Sampling Instrument: Inertial Navigation System; Sampling and Analyzing Method: Platform course over ground.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[44]/LI_ProcessStep/description/CharacterString	Parameter or Variable: Heading - Wing (measured); Units: degrees T; Observation Category: in situ; Sampling Instrument: Inertial Navigation System; Sampling and Analyzing Method: Heading of platform's wing or "sail".
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[45]/LI_ProcessStep/description/CharacterString	Parameter or Variable: Downward wind speed - MEAN (calculated); Units: m s-1; Observation Category: other; Sampling Instrument: anemometer; Sampling and Analyzing Method: Mean of observed downward wind velocities.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[46]/LI_ProcessStep/description/CharacterString	Parameter or Variable: Downward wind speed - SD (calculated); Units: m s-1; Observation Category: other; Sampling Instrument: anemometer; Sampling and Analyzing Method: Standard deviation of observed downward wind velocities.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[47]/LI_ProcessStep/description/CharacterString	Parameter or Variable: Distance 1005_1029 (measured); Units: km; Observation Category: in situ; Sampling Instrument: IMU; Sampling and Analyzing Method: Distance between Saildrone 1005 and Saildrone 1029.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[48]/LI_ProcessStep/description/CharacterString	Parameter or Variable: Distance 1005_1030 (measured); Units: km; Observation Category: in situ; Sampling Instrument: IMU; Sampling and Analyzing Method: Distance between Saildrone 1005 and Saildrone 1030.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[49]/LI_ProcessStep/description/CharacterString	Parameter or Variable: Distance 1029_1030 (measured); Units: km; Observation Category: in situ; Sampling Instrument: IMU; Sampling and Analyzing Method: Distance between Saildrone 1029 and Saildrone 1030.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[5]/LI_ProcessStep/description/CharacterString	Parameter or Variable: WIND SPEED (measured); Units: meters per second; Observation Category: in situ; Sampling Instrument: anemometer.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[50]/LI_ProcessStep/description/CharacterString	Parameter or Variable: Distance 1005_1006 (measured); Units: km; Observation Category: in situ; Sampling Instrument: IMU; Sampling and Analyzing Method: Distance between Saildrone 1005 and Saildrone 1006.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[51]/LI_ProcessStep/description/CharacterString	Parameter or Variable: Distance 1006_1029 (measured); Units: km; Observation Category: in situ; Sampling Instrument: IMU; Sampling and Analyzing Method: Distance between Saildrone 1006 and Saildrone 1029.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[52]/LI_ProcessStep/description/CharacterString	Parameter or Variable: Distance 1006_1030 (measured); Units: km; Observation Category: in situ; Sampling Instrument: IMU; Sampling and Analyzing Method: Distance between Saildrone 1006 and Saildrone 1030.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[6]/LI_ProcessStep/description/CharacterString	Parameter or Variable: SEA SURFACE TEMPERATURE SD (calculated); Units: degrees C; Observation Category: other; Sampling Instrument: Oxygen optode; Sampling and Analyzing Method: Standard deviation of measured sea water temperature.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[7]/LI_ProcessStep/description/CharacterString	Parameter or Variable: Chlorophyll concentration - MEAN (calculated); Units: microgram/liter; Observation Category: other; Sampling Instrument: Fluorometer; Sampling and Analyzing Method: Mean of mass concentration of chlorophyll in sea water.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[8]/LI_ProcessStep/description/CharacterString	Parameter or Variable: RELATIVE HUMIDITY - MEAN (calculated); Units: percent; Observation Category: other; Sampling Instrument: AT/RH; Sampling and Analyzing Method: Mean of relative humidity observations.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/processStep[9]/LI_ProcessStep/description/CharacterString	Parameter or Variable: CDOM concentration - MEAN (calculated); Units: ppb; Observation Category: other; Sampling Instrument: fluorometer; Sampling and Analyzing Method: Mean of Concentration of colored dissolved organic matter in sea water expressed as equivalent mass fraction of quinine sulfate dihydrate observations.
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/lineage/LI_Lineage/statement/CharacterString	Parameter or Variable: LATITUDE (measured); Units: degrees N; Observation Category: in situ; Sampling Instrument: GPS. Parameter or Variable: LONGITUDE (measured); Units: degrees E; Observation Category: in situ; Sampling Instrument: GPS. Parameter or Variable: Time (measured); Units: secon; Observation Category: in situ; Sampling Instrument: clock; Sampling and Analyzing Method: seconds since 1970-01-01T00:00:00Z. Parameter or Variable: WIND DIRECTION (measured); Units: degree; Observation C…
+1	MI_Metadata/dateStamp/DateTime	2025-01-30T17:16
+1	MI_Metadata/distributionInfo/MD_Distribution/distributionFormat/MD_Format/name/CharacterString	Originator data format
+1	MI_Metadata/distributionInfo/MD_Distribution/distributionOrderProcess/MD_StandardOrderProcess/fees/CharacterString	In most cases, electronic downloads of the data are free. However, fees may apply for custom orders, data certifications, copies of analog materials, and data distribution on physical media.
+1	MI_Metadata/distributionInfo/MD_Distribution/distributionOrderProcess/MD_StandardOrderProcess/orderingInstructions/CharacterString	Data in this archival information package are not currently available for public download from NCEI. Please contact NCEI directly for access to these data.
+1	MI_Metadata/distributionInfo/MD_Distribution/distributor/MD_Distributor/distributorContact/CI_ResponsibleParty/organisationName/CharacterString	NOAA National Centers for Environmental Information
+1	MI_Metadata/distributionInfo/MD_Distribution/distributor/MD_Distributor/distributorContact/CI_ResponsibleParty/role/CI_RoleCode	distributor
+1	MI_Metadata/distributionInfo/MD_Distribution/transferOptions/MD_DigitalTransferOptions/onLine[1]/CI_OnlineResource/description/CharacterString	Navigate directly to the URL for a descriptive web page.
+1	MI_Metadata/distributionInfo/MD_Distribution/transferOptions/MD_DigitalTransferOptions/onLine[1]/CI_OnlineResource/linkage/URL	https://www.ncei.noaa.gov/archive/accession/oas/297635
+1	MI_Metadata/distributionInfo/MD_Distribution/transferOptions/MD_DigitalTransferOptions/onLine[1]/CI_OnlineResource/name/CharacterString	Descriptive Information
+1	MI_Metadata/distributionInfo/MD_Distribution/transferOptions/MD_DigitalTransferOptions/onLine[2]/CI_OnlineResource/linkage/URL	https://www.ncei.noaa.gov/contact
+1	MI_Metadata/distributionInfo/MD_Distribution/transferOptions/MD_DigitalTransferOptions/onLine[3]/CI_OnlineResource/description/CharacterString	Navigate directly to the URL for a descriptive web page with download links.
+1	MI_Metadata/distributionInfo/MD_Distribution/transferOptions/MD_DigitalTransferOptions/onLine[3]/CI_OnlineResource/linkage/URL	https://www.ncei.noaa.gov/archive/accession/0297635
+1	MI_Metadata/distributionInfo/MD_Distribution/transferOptions/MD_DigitalTransferOptions/onLine[3]/CI_OnlineResource/name/CharacterString	NCEI Dataset Landing Page
+1	MI_Metadata/distributionInfo/MD_Distribution/transferOptions/MD_DigitalTransferOptions/onLine[3]/CI_OnlineResource/protocol/CharacterString	HTTPS
+1	MI_Metadata/fileIdentifier/CharacterString	gov.noaa.ncei.uxs:gov.noaa.nodc:0297635
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[1]/CI_ResponsibleParty/individualName/CharacterString	Zhang, Dongxiao
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[1]/CI_ResponsibleParty/organisationName/CharacterString	UW Joint Institute for the Study of Atmosphere and Ocean (JISAO)
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[1]/CI_ResponsibleParty/role/CI_RoleCode	author
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[2]/CI_ResponsibleParty/organisationName/CharacterString	NOAA National Centers for Environmental Information
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[2]/CI_ResponsibleParty/role/CI_RoleCode	publisher
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[1]/CI_Date/date/Date	2018-10-03
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[1]/CI_Date/dateType/CI_DateTypeCode	creation
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[2]/CI_Date/date/Date	2025-01-28
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[2]/CI_Date/dateType/CI_DateTypeCode	publication
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[3]/CI_Date/date/Date	2019-01-27
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[3]/CI_Date/dateType/CI_DateTypeCode	completion
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/identifier/MD_Identifier/code/CharacterString	0297635
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[1]/CharacterString	AIR TEMPERATURE
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[10]/CharacterString	LONGITUDE
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[11]/CharacterString	LONGWAVE IRRADIANCE
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[12]/CharacterString	OPTICAL BACKSCATTER
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[13]/CharacterString	OXYGEN - PERCENT SATURATION
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[14]/CharacterString	PERCENT OXYGEN
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[15]/CharacterString	RELATIVE HUMIDITY
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[16]/CharacterString	SALINITY
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[17]/CharacterString	SHORTWAVE IRRADIANCE
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[18]/CharacterString	speed over ground
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[19]/CharacterString	WATER TEMPERATURE
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[2]/CharacterString	BAROMETRIC PRESSURE
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[20]/CharacterString	WIND DIRECTION
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[21]/CharacterString	WIND GUST
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[22]/CharacterString	WIND SPEED
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[23]/CharacterString	Wind speed - east-west component (U)
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[24]/CharacterString	Wind speed - north-south component (V)
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[25]/CharacterString	in situ
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[26]/CharacterString	oceanography
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[27]/Anchor	EARTH SCIENCE > ATMOSPHERE > ATMOSPHERIC PRESSURE
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[28]/Anchor	EARTH SCIENCE > ATMOSPHERE > ATMOSPHERIC TEMPERATURE
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[29]/Anchor	EARTH SCIENCE > ATMOSPHERE > ATMOSPHERIC WATER VAPOR > WATER VAPOR INDICATORS > HUMIDITY > RELATIVE HUMIDITY
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[3]/CharacterString	CHLOROPHYLL A CONCENTRATION
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[30]/Anchor	EARTH SCIENCE > ATMOSPHERE > ATMOSPHERIC WINDS > SURFACE WINDS
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[31]/Anchor	EARTH SCIENCE > ATMOSPHERE > ATMOSPHERIC WINDS > SURFACE WINDS > U/V WIND COMPONENTS
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[32]/Anchor	EARTH SCIENCE > ATMOSPHERE > ATMOSPHERIC WINDS > SURFACE WINDS > WIND DIRECTION
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[33]/Anchor	EARTH SCIENCE > ATMOSPHERE > ATMOSPHERIC WINDS > SURFACE WINDS > WIND SPEED
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[34]/Anchor	EARTH SCIENCE > OCEANS > OCEAN CHEMISTRY > CHLOROPHYLL
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[35]/Anchor	EARTH SCIENCE > OCEANS > OCEAN CHEMISTRY > ORGANIC MATTER
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[36]/Anchor	EARTH SCIENCE > OCEANS > OCEAN CHEMISTRY > OXYGEN
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[37]/Anchor	EARTH SCIENCE > OCEANS > OCEAN OPTICS
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[38]/Anchor	EARTH SCIENCE > OCEANS > OCEAN OPTICS > IRRADIANCE
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[39]/Anchor	EARTH SCIENCE > OCEANS > OCEAN TEMPERATURE > WATER TEMPERATURE
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[4]/CharacterString	Chromophoric Dissolved Organic Matter (CDOM)
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[40]/Anchor	EARTH SCIENCE > OCEANS > SALINITY/DENSITY > CONDUCTIVITY
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[41]/Anchor	EARTH SCIENCE > OCEANS > SALINITY/DENSITY > SALINITY
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[5]/CharacterString	CONDUCTIVITY
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[6]/CharacterString	course over ground
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[7]/CharacterString	DISSOLVED OXYGEN
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[8]/CharacterString	irradiance
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword[9]/CharacterString	LATITUDE
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString	GCMD sciencekeywords
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/keyword[1]/CharacterString	US DOC; NOAA; OAR; Pacific Marine Environmental Laboratory
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/keyword[2]/CharacterString	US DOC; NOAA; NESDIS; National Centers for Environmental Information
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/keyword[3]/Anchor	DOC/NOAA/NESDIS/NCEI > National Centers for Environmental Information, NESDIS, NOAA, U.S. Department of Commerce
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/keyword[4]/Anchor	DOC/NOAA/OAR/PMEL > Pacific Marine Environmental Laboratory, OAR, NOAA, U.S. Department of Commerce
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString	GCMD datacenters
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[3]/MD_Keywords/keyword[1]/CharacterString	5801952
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[3]/MD_Keywords/keyword[2]/CharacterString	Saildrone 1005
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[3]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString	GCMD platforms
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[1]/CharacterString	anemometer
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[10]/CharacterString	radiometer
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[11]/CharacterString	temperature sensor
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[12]/CharacterString	thermometer
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[13]/Anchor	ANEMOMETERS > ANEMOMETERS
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[14]/Anchor	BAROMETERS > BAROMETERS
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[15]/Anchor	CLOCKS
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[16]/Anchor	CTD > Conductivity, Temperature, Depth
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[17]/Anchor	FLUOROMETERS > FLUOROMETERS
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[18]/Anchor	GPS RECEIVERS > GPS RECEIVERS
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[19]/Anchor	GPSP > Global Positioning System Payload
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[2]/CharacterString	barometer
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[20]/Anchor	HUMIDITY SENSORS > HUMIDITY SENSORS
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[21]/Anchor	OXYGEN METERS > OXYGEN METERS
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[22]/Anchor	RADIOMETERS
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[23]/Anchor	TEMPERATURE SENSORS > TEMPERATURE SENSORS
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[24]/Anchor	THERMOMETERS > THERMOMETERS
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[25]/CharacterString	AT/RH
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[26]/CharacterString	IMU
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[27]/CharacterString	IR Thermometer
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[28]/CharacterString	Inertial Navigation System
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[29]/CharacterString	Onboard Computer
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[3]/CharacterString	clock
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[30]/CharacterString	Oxygen Optode
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[4]/CharacterString	CTD
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[5]/CharacterString	fluorometer
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[6]/CharacterString	GPS
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[7]/CharacterString	GPSP
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[8]/CharacterString	humidity sensor
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword[9]/CharacterString	oxygen sensor
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString	GCMD instruments
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[5]/MD_Keywords/keyword[1]/CharacterString	Equatorial Pacific Ocean
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[5]/MD_Keywords/keyword[2]/Anchor	OCEAN > PACIFIC OCEAN
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[5]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString	GCMD locations
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[6]/MD_Keywords/keyword[1]/CharacterString	TROPICAL PACIFIC (TROPAC)
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[6]/MD_Keywords/keyword[2]/CharacterString	TPOS-2020 Saildrone Pilot Study
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[6]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString	GCMD projects
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[1]/CharacterString	AIR TEMPERATURE - MEAN
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[10]/CharacterString	Chlorophyll concentration - MEAN
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[11]/CharacterString	Distance 1005_1006
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[12]/CharacterString	Distance 1005_1029
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[13]/CharacterString	Distance 1005_1030
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[14]/CharacterString	Distance 1006_1029
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[15]/CharacterString	Distance 1006_1030
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[16]/CharacterString	Distance 1029_1030
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[17]/CharacterString	Downward wind speed - MEAN
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[18]/CharacterString	Downward wind speed - SD
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[19]/CharacterString	Heading
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[2]/CharacterString	AIR TEMPERATURE - SD
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[20]/CharacterString	Heading - Wing
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[21]/CharacterString	OPTICAL BACKSCATTER - 650 nm - Mean
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[22]/CharacterString	OPTICAL BACKSCATTER - 650 nm - SD
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[23]/CharacterString	OXYGEN - PERCENT SATURATION - MEAN
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[24]/CharacterString	OXYGEN - PERCENT SATURATION - SD
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[25]/CharacterString	Oxygen Concentration - MEAN
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[26]/CharacterString	Oxygen Concentration - SD
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[27]/CharacterString	Pitch
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[28]/CharacterString	RELATIVE HUMIDITY - MEAN
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[29]/CharacterString	RELATIVE HUMIDITY - SD
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[3]/CharacterString	BAROMETRIC PRESSURE - MEAN
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[30]/CharacterString	Roll
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[31]/CharacterString	SALINITY - MEAN
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[32]/CharacterString	SALINITY - SD
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[33]/CharacterString	SEA SURFACE TEMPERATURE SD
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[34]/CharacterString	Skin Temperature - MEAN
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[35]/CharacterString	Skin Temperature - SD
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[36]/CharacterString	Time
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[37]/CharacterString	WATER TEMPERATURE - MEAN
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[38]/CharacterString	WATER TEMPERATURE - SD
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[39]/CharacterString	WIND GUST - MEAN
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[4]/CharacterString	BAROMETRIC PRESSURE - SD
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[40]/CharacterString	WIND GUST - SD
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[41]/CharacterString	Wind speed - east-west component (U) - MEAN
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[42]/CharacterString	Wind speed - east-west component (U) - SD
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[43]/CharacterString	Wind speed - north-south component (V) - MEAN
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[44]/CharacterString	Wind speed - north-south component (V) - SD
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[45]/CharacterString	Wing Angle
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[46]/CharacterString	other
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[5]/CharacterString	CDOM concentration - MEAN
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[6]/CharacterString	CDOM concentration SD
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[7]/CharacterString	CHLOROPHYLL Concentration - SD
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[8]/CharacterString	CONDUCTIVITY - Mean
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[9]/CharacterString	CONDUCTIVITY -SD
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString	GCMD providers
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[8]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString	Platform instance
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[8]/MD_Keywords/type/MD_KeywordTypeCode	platform
+1	MI_Metadata/identificationInfo/MD_DataIdentification/language/LanguageCode	eng
+1	MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/individualName/CharacterString	Zhang, Dongxiao
+1	MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/organisationName/CharacterString	NOAA National Centers for Environmental Information
+1	MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/party/CI_Organisation/identifier/MD_Identifier/code/CharacterString	https://ror.org/04r0wrp59
+1	MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/party/CI_Organisation/name/CharacterString	NOAA National Centers for Environmental Information
+1	MI_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints/MD_LegalConstraints/accessConstraints/MD_RestrictionCode	otherRestrictions
+1	MI_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints/MD_LegalConstraints/otherConstraints[1]/CharacterString	otherRestrictions
+1	MI_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints/MD_LegalConstraints/otherConstraints[2]/CharacterString	Use liability: NOAA and NCEI cannot provide any warranty as to the accuracy, reliability, or completeness of furnished data. Users assume responsibility to determine the usability of these data. The user is responsible for the results of any application of this data for other than its intended purpose.
+1	MI_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints/MD_LegalConstraints/otherConstraints[3]/CharacterString	Data license: https://www.ncei.noaa.gov/archive/accession/0297635
+1	MI_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints/MD_LegalConstraints/useLimitation/CharacterString	Distribution liability: NOAA and NCEI make no warranty, expressed or implied, regarding these data, nor does the fact of distribution constitute such a warranty. NOAA and NCEI cannot assume liability for any damages caused by any errors or omissions in these data. If appropriate, NCEI can only certify that the data it distributes are an authentic copy of the records that were accepted for inclusion in the NCEI archives.
+1	MI_Metadata/identificationInfo/MD_DataIdentification/supplementalInformation/CharacterString	The PIs were Dr. Meghan Cronin (NOAA PMEL), Dr. Dongxiao Zhang (UW Joint Institue for the Study of Atmoshere and Ocean (JISAO)), Dr. Adrienne Sutton (NOAA PMEL), and Mr. Christian Meinig (NOAA PMEL). Mr. Nathan Anderson contributed to the metadata creation. UxS operational layer: Dataset or product
+1	MI_Metadata/referenceSystemInfo/MD_ReferenceSystem/referenceSystemIdentifier/RS_Identifier/code/CharacterString	EPSG:4326

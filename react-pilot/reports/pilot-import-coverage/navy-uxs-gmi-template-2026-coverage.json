@@ -1,0 +1,2160 @@
+{
+  "generatedAt": "2026-05-11T16:09:54.934Z",
+  "sourceXml": "fixtures/mission/navy-uxs-gmi-template-2026.xml",
+  "importWarnings": [
+    "Navy UxS template placeholders detected: provisional values were applied for empty/invalid catalog fields (DOI, ROR, email, URLs, accession, provider keyword, download URL, platform type). Replace with real metadata before publication."
+  ],
+  "summary": {
+    "leafPaths": 209,
+    "filled": 111,
+    "empty": 98,
+    "sameAsDefault": 90,
+    "changedFromDefault": 119
+  },
+  "byStep": {
+    "6-distribution": {
+      "filled": 21,
+      "empty": 15,
+      "sameAsDefault": 21,
+      "total": 36
+    },
+    "5-keywords": {
+      "filled": 9,
+      "empty": 16,
+      "sameAsDefault": 0,
+      "total": 25
+    },
+    "1-mission": {
+      "filled": 53,
+      "empty": 24,
+      "sameAsDefault": 29,
+      "total": 77
+    },
+    "meta": {
+      "filled": 4,
+      "empty": 4,
+      "sameAsDefault": 6,
+      "total": 8
+    },
+    "2-platform": {
+      "filled": 3,
+      "empty": 16,
+      "sameAsDefault": 16,
+      "total": 19
+    },
+    "3-sensors": {
+      "filled": 10,
+      "empty": 14,
+      "sameAsDefault": 7,
+      "total": 24
+    },
+    "4-spatial": {
+      "filled": 11,
+      "empty": 9,
+      "sameAsDefault": 11,
+      "total": 20
+    }
+  },
+  "emptyPaths": [
+    "distribution.awsBucket",
+    "distribution.awsPrefix",
+    "distribution.distributionFileFormat",
+    "distribution.distributorContactUrl",
+    "distribution.distributorEmail",
+    "distribution.distributorIndividualName",
+    "distribution.distributorOrganisationName",
+    "distribution.downloadLinkDescription",
+    "distribution.downloadLinkName",
+    "distribution.finalNotes",
+    "distribution.metadataLandingDescription",
+    "distribution.metadataLandingLinkName",
+    "distribution.metadataLandingUrl",
+    "distribution.templateCategory",
+    "distribution.templateName",
+    "keywords.datacenters",
+    "keywords.datacenters[0].uuid",
+    "keywords.datacenters[1].uuid",
+    "keywords.instruments",
+    "keywords.instruments[0].uuid",
+    "keywords.locations",
+    "keywords.locations[0].uuid",
+    "keywords.platforms",
+    "keywords.platforms[0].uuid",
+    "keywords.projects",
+    "keywords.projects[0].uuid",
+    "keywords.providers",
+    "keywords.providers[0].uuid",
+    "keywords.providers[1].uuid",
+    "keywords.sciencekeywords",
+    "keywords.sciencekeywords[0].uuid",
+    "mission.accessConstraints",
+    "mission.accessConstraintsCode",
+    "mission.alternateTitle",
+    "mission.associatedPublicationCode",
+    "mission.citeAs",
+    "mission.contactAddress",
+    "mission.contactPhone",
+    "mission.licenseUrl",
+    "mission.relatedDataUrl",
+    "mission.relatedDataUrlDescription",
+    "mission.relatedDataUrlTitle",
+    "mission.relatedDatasetOrg",
+    "mission.ror",
+    "mission.topicCategories",
+    "mission.uxsContext.deploymentId",
+    "mission.uxsContext.deploymentName",
+    "mission.uxsContext.diveId",
+    "mission.uxsContext.diveName",
+    "mission.uxsContext.narrative",
+    "mission.uxsContext.operationOutcome",
+    "mission.uxsContext.runId",
+    "mission.uxsContext.runName",
+    "mission.uxsContext.sortieId",
+    "mission.uxsContext.sortieName",
+    "platform.customPlatformType",
+    "platform.deploymentDate",
+    "platform.height",
+    "platform.length",
+    "platform.manufacturer",
+    "platform.material",
+    "platform.model",
+    "platform.navigationSystem",
+    "platform.operationalArea",
+    "platform.platformName",
+    "platform.powerSource",
+    "platform.sensorMounts",
+    "platform.serialNumber",
+    "platform.speed",
+    "platform.weight",
+    "platform.width",
+    "sensors[0].beamCount",
+    "sensors[0].confidenceInterval",
+    "sensors[0].depthRating",
+    "sensors[0].firmware",
+    "sensors[0].frequency",
+    "sensors[0].operationMode",
+    "sensors[0].uncertainty",
+    "sensors[1].beamCount",
+    "sensors[1].confidenceInterval",
+    "sensors[1].depthRating",
+    "sensors[1].firmware",
+    "sensors[1].frequency",
+    "sensors[1].operationMode",
+    "sensors[1].uncertainty",
+    "sourceProvenance.importedAt",
+    "sourceProvenance.originalFilename",
+    "sourceProvenance.originalUuid",
+    "sourceProvenance.sourceId",
+    "spatial.accuracyStandard",
+    "spatial.accuracyValue",
+    "spatial.dimensions",
+    "spatial.errorLevel",
+    "spatial.errorValue",
+    "spatial.lineageProcessSteps",
+    "spatial.lineageStatement",
+    "spatial.trajectorySampling",
+    "spatial.verticalCrsUrl"
+  ],
+  "filledPaths": [
+    "distribution.distributionFeesText",
+    "distribution.distributionFormatName",
+    "distribution.distributionOrderingInstructions",
+    "distribution.downloadProtocol",
+    "distribution.downloadUrl",
+    "distribution.format",
+    "distribution.landingUrl",
+    "distribution.license",
+    "distribution.metadataMaintenanceFrequency",
+    "distribution.metadataStandard",
+    "distribution.metadataVersion",
+    "distribution.nceiDistributorContactHref",
+    "distribution.nceiDistributorContactTitle",
+    "distribution.nceiFileIdPrefix",
+    "distribution.nceiMetadataContactHref",
+    "distribution.nceiMetadataContactTitle",
+    "distribution.omitRootReferenceSystemInfo",
+    "distribution.outputLocation",
+    "distribution.parentProject",
+    "distribution.publication",
+    "distribution.useNceiMetadataContactXlink",
+    "keywords.datacenters[0].label",
+    "keywords.datacenters[1].label",
+    "keywords.instruments[0].label",
+    "keywords.locations[0].label",
+    "keywords.platforms[0].label",
+    "keywords.projects[0].label",
+    "keywords.providers[0].label",
+    "keywords.providers[1].label",
+    "keywords.sciencekeywords[0].label",
+    "mission.abstract",
+    "mission.accession",
+    "mission.associatedPublicationDate",
+    "mission.associatedPublicationTitle",
+    "mission.characterSet",
+    "mission.citationAuthorIndividualName",
+    "mission.citationAuthorOrganisationName",
+    "mission.citationOriginatorIndividualName",
+    "mission.citationOriginatorOrganisationName",
+    "mission.citationPublisherOrganisationName",
+    "mission.contactUrl",
+    "mission.dataLicensePreset",
+    "mission.distributionLiability",
+    "mission.doi",
+    "mission.east",
+    "mission.email",
+    "mission.endDate",
+    "mission.fileId",
+    "mission.graphicOverviewHref",
+    "mission.graphicOverviewTitle",
+    "mission.individualName",
+    "mission.language",
+    "mission.metadataRecordDate",
+    "mission.north",
+    "mission.org",
+    "mission.otherCiteAs",
+    "mission.parentProjectCode",
+    "mission.parentProjectDate",
+    "mission.parentProjectTitle",
+    "mission.publicationDate",
+    "mission.purpose",
+    "mission.relatedDatasetCode",
+    "mission.relatedDatasetDate",
+    "mission.relatedDatasetTitle",
+    "mission.ror.id",
+    "mission.ror.label",
+    "mission.scopeCode",
+    "mission.south",
+    "mission.startDate",
+    "mission.status",
+    "mission.supplementalInformation",
+    "mission.temporalExtentIntervalUnit",
+    "mission.temporalExtentIntervalValue",
+    "mission.title",
+    "mission.topicCategories[0]",
+    "mission.topicCategories[1]",
+    "mission.topicCategories[2]",
+    "mission.topicCategories[3]",
+    "mission.topicCategories[4]",
+    "mission.uxsContext.primaryLayer",
+    "mission.vmax",
+    "mission.vmin",
+    "mission.west",
+    "mode",
+    "platform.platformDesc",
+    "platform.platformId",
+    "platform.platformType",
+    "sensors[0].localId",
+    "sensors[0].modelId",
+    "sensors[0].sensorId",
+    "sensors[0].type",
+    "sensors[0].variable",
+    "sensors[1].localId",
+    "sensors[1].modelId",
+    "sensors[1].sensorId",
+    "sensors[1].type",
+    "sensors[1].variable",
+    "sourceProvenance.exportPreviewIsoFamily",
+    "sourceProvenance.importIsoXmlFamily",
+    "sourceProvenance.sourceType",
+    "spatial.geographicDescription",
+    "spatial.gridCellGeometry",
+    "spatial.gridColumnResolution",
+    "spatial.gridColumnSize",
+    "spatial.gridRowResolution",
+    "spatial.gridRowSize",
+    "spatial.gridVerticalResolution",
+    "spatial.gridVerticalSize",
+    "spatial.hasTrajectory",
+    "spatial.referenceSystem",
+    "spatial.useGridRepresentation"
+  ],
+  "changedPaths": [
+    {
+      "path": "distribution.distributionFeesText",
+      "merged": "In most cases, electronic downloads of the data are free. However, fees may apply for custom orders, data certifications, copies of analog materials, and data distribution on physical media."
+    },
+    {
+      "path": "distribution.distributionFormatName",
+      "merged": "format name"
+    },
+    {
+      "path": "distribution.distributionOrderingInstructions",
+      "merged": "Contact NCEI for other distribution options and instructions."
+    },
+    {
+      "path": "distribution.downloadUrl",
+      "merged": "https://www.ncei.noaa.gov/access/uxs-template-pending-file"
+    },
+    {
+      "path": "distribution.format",
+      "merged": "format name"
+    },
+    {
+      "path": "distribution.landingUrl",
+      "merged": "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/Unique Identifier Assigned to Metadata Record/html/"
+    },
+    {
+      "path": "distribution.license",
+      "merged": "CC0-1.0"
+    },
+    {
+      "path": "distribution.metadataStandard",
+      "merged": "ISO 19115-2 Geographic Information - Metadata - Part 2: Extensions for Imagery and Gridded Data"
+    },
+    {
+      "path": "distribution.nceiDistributorContactHref",
+      "merged": "https://data.noaa.gov/docucomp/440b3ac2-64a5-46e2-9846-38305718b644"
+    },
+    {
+      "path": "distribution.nceiDistributorContactTitle",
+      "merged": "NCEI (distributor)"
+    },
+    {
+      "path": "distribution.nceiMetadataContactHref",
+      "merged": "https://data.noaa.gov/docucomp/440b3ac2-64a5-46e2-9846-38305718b644"
+    },
+    {
+      "path": "distribution.nceiMetadataContactTitle",
+      "merged": "NCEI (pointOfContact)"
+    },
+    {
+      "path": "distribution.parentProject",
+      "merged": "TITLE OF PROJECT"
+    },
+    {
+      "path": "distribution.publication",
+      "merged": "TITLE OF PUBLICATION; 9999-09-09"
+    },
+    {
+      "path": "distribution.useNceiMetadataContactXlink",
+      "merged": true
+    },
+    {
+      "path": "keywords.datacenters"
+    },
+    {
+      "path": "keywords.datacenters[0].label",
+      "merged": "DOC/NOAA/NESDIS/NCEI > National Centers for Environmental Information, NESDIS, NOAA, U.S. Department of Commerce"
+    },
+    {
+      "path": "keywords.datacenters[0].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.datacenters[1].label",
+      "merged": "Short_Name > Long_Name"
+    },
+    {
+      "path": "keywords.datacenters[1].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.instruments"
+    },
+    {
+      "path": "keywords.instruments[0].label",
+      "merged": "Short_Name > Long_Name"
+    },
+    {
+      "path": "keywords.instruments[0].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.locations"
+    },
+    {
+      "path": "keywords.locations[0].label",
+      "merged": "Location_Category > Location_Type > Location_Subregion1"
+    },
+    {
+      "path": "keywords.locations[0].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.platforms"
+    },
+    {
+      "path": "keywords.platforms[0].label",
+      "merged": "Short_Name > Long_Name"
+    },
+    {
+      "path": "keywords.platforms[0].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.projects"
+    },
+    {
+      "path": "keywords.projects[0].label",
+      "merged": "Short_Name > Long_Name"
+    },
+    {
+      "path": "keywords.projects[0].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers"
+    },
+    {
+      "path": "keywords.providers[0].label",
+      "merged": "DOC/NOAA/NESDIS/NCEI > National Centers for Environmental Information, NESDIS, NOAA, U.S. Department of Commerce"
+    },
+    {
+      "path": "keywords.providers[0].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[1].label",
+      "merged": "Short_Name > Long_Name"
+    },
+    {
+      "path": "keywords.providers[1].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.sciencekeywords"
+    },
+    {
+      "path": "keywords.sciencekeywords[0].label",
+      "merged": "Earth Science > Topic > Term > Variable_Level_1"
+    },
+    {
+      "path": "keywords.sciencekeywords[0].uuid",
+      "merged": ""
+    },
+    {
+      "path": "mission.abstract",
+      "merged": "Not a scientific abstract. Describe dataset, goals of mission."
+    },
+    {
+      "path": "mission.accession",
+      "merged": "DOI"
+    },
+    {
+      "path": "mission.associatedPublicationDate",
+      "merged": "9999-09-09"
+    },
+    {
+      "path": "mission.associatedPublicationTitle",
+      "merged": "TITLE OF PUBLICATION"
+    },
+    {
+      "path": "mission.citationAuthorIndividualName",
+      "merged": "POC for Dataset"
+    },
+    {
+      "path": "mission.citationAuthorOrganisationName",
+      "merged": "POC's Org"
+    },
+    {
+      "path": "mission.citationOriginatorIndividualName",
+      "merged": "POC for Dataset"
+    },
+    {
+      "path": "mission.citationOriginatorOrganisationName",
+      "merged": "POC's Org"
+    },
+    {
+      "path": "mission.citationPublisherOrganisationName",
+      "merged": "NOAA National Centers for Environmental Information"
+    },
+    {
+      "path": "mission.contactUrl",
+      "merged": "https://www.ncei.noaa.gov"
+    },
+    {
+      "path": "mission.dataLicensePreset",
+      "merged": "ncei_cc0"
+    },
+    {
+      "path": "mission.distributionLiability",
+      "merged": "CITE AS STATEMENT"
+    },
+    {
+      "path": "mission.doi",
+      "merged": "10.25923/ncei.uxs.template.pending"
+    },
+    {
+      "path": "mission.email",
+      "merged": "metadata.help@noaa.gov"
+    },
+    {
+      "path": "mission.endDate",
+      "merged": "9999-01-02"
+    },
+    {
+      "path": "mission.fileId",
+      "merged": "Unique Identifier Assigned to Metadata Record"
+    },
+    {
+      "path": "mission.graphicOverviewHref",
+      "merged": "https://data.noaa.gov/docucomp/401b6d95-a542-4309-bf52-8c9b20caeccd"
+    },
+    {
+      "path": "mission.graphicOverviewTitle",
+      "merged": "Default NOAA logo"
+    },
+    {
+      "path": "mission.individualName",
+      "merged": "Metadata contact (replace with responsible party)"
+    },
+    {
+      "path": "mission.language",
+      "merged": "eng; USA"
+    },
+    {
+      "path": "mission.metadataRecordDate",
+      "merged": "2025-09-23T18:47"
+    },
+    {
+      "path": "mission.org",
+      "merged": "NOAA National Centers for Environmental Information"
+    },
+    {
+      "path": "mission.otherCiteAs",
+      "merged": "OTHER CITE AS STATEMENTS (e.g. reference papers)"
+    },
+    {
+      "path": "mission.parentProjectCode",
+      "merged": "PROJECT ID"
+    },
+    {
+      "path": "mission.parentProjectDate",
+      "merged": "9999-09-09"
+    },
+    {
+      "path": "mission.parentProjectTitle",
+      "merged": "TITLE OF PROJECT"
+    },
+    {
+      "path": "mission.publicationDate",
+      "merged": "2024-10-11"
+    },
+    {
+      "path": "mission.purpose",
+      "merged": "Not a scientific abstract. Describe collection purpose/overarching project."
+    },
+    {
+      "path": "mission.relatedDatasetCode",
+      "merged": "dataset identifier"
+    },
+    {
+      "path": "mission.relatedDatasetDate",
+      "merged": "9999-09-09"
+    },
+    {
+      "path": "mission.relatedDatasetTitle",
+      "merged": "related dataset title"
+    },
+    {
+      "path": "mission.ror"
+    },
+    {
+      "path": "mission.ror.id",
+      "merged": "https://ror.org/04r0wrp59"
+    },
+    {
+      "path": "mission.ror.label",
+      "merged": "NOAA National Centers for Environmental Information"
+    },
+    {
+      "path": "mission.startDate",
+      "merged": "9999-01-01"
+    },
+    {
+      "path": "mission.status",
+      "merged": "completed"
+    },
+    {
+      "path": "mission.supplementalInformation",
+      "merged": "any other information"
+    },
+    {
+      "path": "mission.temporalExtentIntervalUnit",
+      "merged": "day"
+    },
+    {
+      "path": "mission.temporalExtentIntervalValue",
+      "merged": "99"
+    },
+    {
+      "path": "mission.title",
+      "merged": "Aquisition (data collection) entity should be globally unique"
+    },
+    {
+      "path": "mission.topicCategories"
+    },
+    {
+      "path": "mission.topicCategories[0]",
+      "merged": "oceans"
+    },
+    {
+      "path": "mission.topicCategories[1]",
+      "merged": "climatologyMeteorologyAtmosphere"
+    },
+    {
+      "path": "mission.topicCategories[2]",
+      "merged": "elevation"
+    },
+    {
+      "path": "mission.topicCategories[3]",
+      "merged": "geoscientificInformation"
+    },
+    {
+      "path": "mission.topicCategories[4]",
+      "merged": "inlandWaters"
+    },
+    {
+      "path": "mission.vmax",
+      "merged": "99"
+    },
+    {
+      "path": "mission.vmin",
+      "merged": "99"
+    },
+    {
+      "path": "platform.platformDesc",
+      "merged": "BRIEF DESCRIPTION OF PLATFORM"
+    },
+    {
+      "path": "platform.platformId",
+      "merged": "PLATFORM_ID"
+    },
+    {
+      "path": "platform.platformType",
+      "merged": "Short_Name"
+    },
+    {
+      "path": "sensors[0].localId",
+      "merged": "{INSTRUMENT_ID}}"
+    },
+    {
+      "path": "sensors[0].modelId",
+      "merged": "{INSTRUMENT_ID}}"
+    },
+    {
+      "path": "sensors[0].sensorId",
+      "merged": "{INSTRUMENT_ID}}"
+    },
+    {
+      "path": "sensors[0].type",
+      "merged": "TYPE OF INSTRUMENT"
+    },
+    {
+      "path": "sensors[0].variable",
+      "merged": "BRIEF DESCRIPTION OF INSTRUMENT"
+    },
+    {
+      "path": "sensors[1].beamCount",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].confidenceInterval",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].depthRating",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].firmware",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].frequency",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].localId",
+      "merged": "INSTRUMENT_ID"
+    },
+    {
+      "path": "sensors[1].modelId",
+      "merged": "INSTRUMENT_ID"
+    },
+    {
+      "path": "sensors[1].operationMode",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].sensorId",
+      "merged": "INSTRUMENT_ID"
+    },
+    {
+      "path": "sensors[1].type",
+      "merged": "TYPE OF INSTRUMENT"
+    },
+    {
+      "path": "sensors[1].uncertainty",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].variable",
+      "merged": "BRIEF DESCRIPTION OF INSTRUMENT"
+    },
+    {
+      "path": "sourceProvenance.exportPreviewIsoFamily",
+      "merged": "19115-2"
+    },
+    {
+      "path": "sourceProvenance.importIsoXmlFamily",
+      "merged": "19115-2"
+    },
+    {
+      "path": "spatial.geographicDescription",
+      "merged": "BRIEF DESCRIPTION OF EXTENT"
+    },
+    {
+      "path": "spatial.gridCellGeometry",
+      "merged": "area"
+    },
+    {
+      "path": "spatial.gridColumnResolution",
+      "merged": "99"
+    },
+    {
+      "path": "spatial.gridColumnSize",
+      "merged": "99"
+    },
+    {
+      "path": "spatial.gridRowResolution",
+      "merged": "99"
+    },
+    {
+      "path": "spatial.gridRowSize",
+      "merged": "99"
+    },
+    {
+      "path": "spatial.gridVerticalResolution",
+      "merged": "99"
+    },
+    {
+      "path": "spatial.gridVerticalSize",
+      "merged": "99"
+    },
+    {
+      "path": "spatial.useGridRepresentation",
+      "merged": true
+    }
+  ],
+  "detailSample": [
+    {
+      "path": "distribution.awsBucket",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.awsPrefix",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.distributionFeesText",
+      "merged": "In most cases, electronic downloads of the data are free. However, fees may apply for custom orders, data certifications, copies of analog materials, and data distribution on physical media.",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.distributionFileFormat",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.distributionFormatName",
+      "merged": "format name",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.distributionOrderingInstructions",
+      "merged": "Contact NCEI for other distribution options and instructions.",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.distributorContactUrl",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.distributorEmail",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.distributorIndividualName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.distributorOrganisationName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.downloadLinkDescription",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.downloadLinkName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.downloadProtocol",
+      "merged": "HTTPS",
+      "default": "HTTPS",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.downloadUrl",
+      "merged": "https://www.ncei.noaa.gov/access/uxs-template-pending-file",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.finalNotes",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.format",
+      "merged": "format name",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.landingUrl",
+      "merged": "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/Unique Identifier Assigned to Metadata Record/html/",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.license",
+      "merged": "CC0-1.0",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.metadataLandingDescription",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.metadataLandingLinkName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.metadataLandingUrl",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.metadataMaintenanceFrequency",
+      "merged": "asNeeded",
+      "default": "asNeeded",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.metadataStandard",
+      "merged": "ISO 19115-2 Geographic Information - Metadata - Part 2: Extensions for Imagery and Gridded Data",
+      "default": "ISO 19115-2 Imagery and Gridded Data",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.metadataVersion",
+      "merged": "ISO 19115-2:2009(E)",
+      "default": "ISO 19115-2:2009(E)",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.nceiDistributorContactHref",
+      "merged": "https://data.noaa.gov/docucomp/440b3ac2-64a5-46e2-9846-38305718b644",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.nceiDistributorContactTitle",
+      "merged": "NCEI (distributor)",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.nceiFileIdPrefix",
+      "merged": true,
+      "default": true,
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.nceiMetadataContactHref",
+      "merged": "https://data.noaa.gov/docucomp/440b3ac2-64a5-46e2-9846-38305718b644",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.nceiMetadataContactTitle",
+      "merged": "NCEI (pointOfContact)",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.omitRootReferenceSystemInfo",
+      "merged": false,
+      "default": false,
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.outputLocation",
+      "merged": "download",
+      "default": "download",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.parentProject",
+      "merged": "TITLE OF PROJECT",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.publication",
+      "merged": "TITLE OF PUBLICATION; 9999-09-09",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.templateCategory",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.templateName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.useNceiMetadataContactXlink",
+      "merged": true,
+      "default": false,
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.datacenters",
+      "default": [],
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.datacenters[0].label",
+      "merged": "DOC/NOAA/NESDIS/NCEI > National Centers for Environmental Information, NESDIS, NOAA, U.S. Department of Commerce",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.datacenters[0].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.datacenters[1].label",
+      "merged": "Short_Name > Long_Name",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.datacenters[1].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments",
+      "default": [],
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[0].label",
+      "merged": "Short_Name > Long_Name",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[0].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.locations",
+      "default": [],
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.locations[0].label",
+      "merged": "Location_Category > Location_Type > Location_Subregion1",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.locations[0].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.platforms",
+      "default": [],
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.platforms[0].label",
+      "merged": "Short_Name > Long_Name",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.platforms[0].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.projects",
+      "default": [],
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.projects[0].label",
+      "merged": "Short_Name > Long_Name",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.projects[0].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers",
+      "default": [],
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[0].label",
+      "merged": "DOC/NOAA/NESDIS/NCEI > National Centers for Environmental Information, NESDIS, NOAA, U.S. Department of Commerce",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[0].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[1].label",
+      "merged": "Short_Name > Long_Name",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[1].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords",
+      "default": [],
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[0].label",
+      "merged": "Earth Science > Topic > Term > Variable_Level_1",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[0].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.abstract",
+      "merged": "Not a scientific abstract. Describe dataset, goals of mission.",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.accessConstraints",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.accessConstraintsCode",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.accession",
+      "merged": "DOI",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.alternateTitle",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.associatedPublicationCode",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.associatedPublicationDate",
+      "merged": "9999-09-09",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.associatedPublicationTitle",
+      "merged": "TITLE OF PUBLICATION",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.characterSet",
+      "merged": "utf8",
+      "default": "utf8",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.citationAuthorIndividualName",
+      "merged": "POC for Dataset",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.citationAuthorOrganisationName",
+      "merged": "POC's Org",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.citationOriginatorIndividualName",
+      "merged": "POC for Dataset",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.citationOriginatorOrganisationName",
+      "merged": "POC's Org",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.citationPublisherOrganisationName",
+      "merged": "NOAA National Centers for Environmental Information",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.citeAs",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.contactAddress",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.contactPhone",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.contactUrl",
+      "merged": "https://www.ncei.noaa.gov",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.dataLicensePreset",
+      "merged": "ncei_cc0",
+      "default": "custom",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.distributionLiability",
+      "merged": "CITE AS STATEMENT",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.doi",
+      "merged": "10.25923/ncei.uxs.template.pending",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.east",
+      "merged": "180",
+      "default": "180",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.email",
+      "merged": "metadata.help@noaa.gov",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.endDate",
+      "merged": "9999-01-02",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.fileId",
+      "merged": "Unique Identifier Assigned to Metadata Record",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.graphicOverviewHref",
+      "merged": "https://data.noaa.gov/docucomp/401b6d95-a542-4309-bf52-8c9b20caeccd",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.graphicOverviewTitle",
+      "merged": "Default NOAA logo",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.individualName",
+      "merged": "Metadata contact (replace with responsible party)",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.language",
+      "merged": "eng; USA",
+      "default": "eng",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.licenseUrl",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.metadataRecordDate",
+      "merged": "2025-09-23T18:47",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.north",
+      "merged": "90",
+      "default": "90",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.org",
+      "merged": "NOAA National Centers for Environmental Information",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.otherCiteAs",
+      "merged": "OTHER CITE AS STATEMENTS (e.g. reference papers)",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.parentProjectCode",
+      "merged": "PROJECT ID",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.parentProjectDate",
+      "merged": "9999-09-09",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.parentProjectTitle",
+      "merged": "TITLE OF PROJECT",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.publicationDate",
+      "merged": "2024-10-11",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.purpose",
+      "merged": "Not a scientific abstract. Describe collection purpose/overarching project.",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.relatedDataUrl",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.relatedDataUrlDescription",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.relatedDataUrlTitle",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.relatedDatasetCode",
+      "merged": "dataset identifier",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.relatedDatasetDate",
+      "merged": "9999-09-09",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.relatedDatasetOrg",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.relatedDatasetTitle",
+      "merged": "related dataset title",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.ror",
+      "default": null,
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.ror.id",
+      "merged": "https://ror.org/04r0wrp59",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.ror.label",
+      "merged": "NOAA National Centers for Environmental Information",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.scopeCode",
+      "merged": "dataset",
+      "default": "dataset",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.south",
+      "merged": "-90",
+      "default": "-90",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.startDate",
+      "merged": "9999-01-01",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.status",
+      "merged": "completed",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.supplementalInformation",
+      "merged": "any other information",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.temporalExtentIntervalUnit",
+      "merged": "day",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.temporalExtentIntervalValue",
+      "merged": "99",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.title",
+      "merged": "Aquisition (data collection) entity should be globally unique",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.topicCategories",
+      "default": [],
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.topicCategories[0]",
+      "merged": "oceans",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.topicCategories[1]",
+      "merged": "climatologyMeteorologyAtmosphere",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.topicCategories[2]",
+      "merged": "elevation",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.topicCategories[3]",
+      "merged": "geoscientificInformation",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.topicCategories[4]",
+      "merged": "inlandWaters",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.uxsContext.deploymentId",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.deploymentName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.diveId",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.diveName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.narrative",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.operationOutcome",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.primaryLayer",
+      "merged": "datasetProduct",
+      "default": "datasetProduct",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.runId",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.runName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.sortieId",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.sortieName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.vmax",
+      "merged": "99",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.vmin",
+      "merged": "99",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.west",
+      "merged": "-180",
+      "default": "-180",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mode",
+      "merged": "lenient",
+      "default": "lenient",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.customPlatformType",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.deploymentDate",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.height",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.length",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.manufacturer",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.material",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.model",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.navigationSystem",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.operationalArea",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.platformDesc",
+      "merged": "BRIEF DESCRIPTION OF PLATFORM",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "platform.platformId",
+      "merged": "PLATFORM_ID",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "platform.platformName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.platformType",
+      "merged": "Short_Name",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "platform.powerSource",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.sensorMounts",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.serialNumber",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.speed",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.weight",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.width",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].beamCount",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].confidenceInterval",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].depthRating",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].firmware",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].frequency",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].localId",
+      "merged": "{INSTRUMENT_ID}}",
+      "default": "sen_1778515794929",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[0].modelId",
+      "merged": "{INSTRUMENT_ID}}",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[0].operationMode",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].sensorId",
+      "merged": "{INSTRUMENT_ID}}",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[0].type",
+      "merged": "TYPE OF INSTRUMENT",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[0].uncertainty",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].variable",
+      "merged": "BRIEF DESCRIPTION OF INSTRUMENT",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].beamCount",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].confidenceInterval",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].depthRating",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].firmware",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].frequency",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].localId",
+      "merged": "INSTRUMENT_ID",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].modelId",
+      "merged": "INSTRUMENT_ID",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].operationMode",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].sensorId",
+      "merged": "INSTRUMENT_ID",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].type",
+      "merged": "TYPE OF INSTRUMENT",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].uncertainty",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].variable",
+      "merged": "BRIEF DESCRIPTION OF INSTRUMENT",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sourceProvenance.exportPreviewIsoFamily",
+      "merged": "19115-2",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sourceProvenance.importIsoXmlFamily",
+      "merged": "19115-2",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sourceProvenance.importedAt",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sourceProvenance.originalFilename",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sourceProvenance.originalUuid",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sourceProvenance.sourceId",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sourceProvenance.sourceType",
+      "merged": "manual",
+      "default": "manual",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.accuracyStandard",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.accuracyValue",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.dimensions",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.errorLevel",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.errorValue",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.geographicDescription",
+      "merged": "BRIEF DESCRIPTION OF EXTENT",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "spatial.gridCellGeometry",
+      "merged": "area",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "spatial.gridColumnResolution",
+      "merged": "99",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "spatial.gridColumnSize",
+      "merged": "99",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "spatial.gridRowResolution",
+      "merged": "99",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "spatial.gridRowSize",
+      "merged": "99",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "spatial.gridVerticalResolution",
+      "merged": "99",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "spatial.gridVerticalSize",
+      "merged": "99",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "spatial.hasTrajectory",
+      "merged": false,
+      "default": false,
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.lineageProcessSteps",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.lineageStatement",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.referenceSystem",
+      "merged": "EPSG:4326",
+      "default": "EPSG:4326",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.trajectorySampling",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.useGridRepresentation",
+      "merged": true,
+      "default": false,
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "spatial.verticalCrsUrl",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    }
+  ],
+  "truncatedDetail": false
+}

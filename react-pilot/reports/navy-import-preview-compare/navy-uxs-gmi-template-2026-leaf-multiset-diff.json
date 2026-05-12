@@ -1,0 +1,922 @@
+{
+  "generatedAt": "2026-05-11T16:06:47.001Z",
+  "sourceXml": "fixtures/mission/navy-uxs-gmi-template-2026.xml",
+  "counts": {
+    "probesConsidered": 20,
+    "missingAfterImport": 0,
+    "missingOriginalVsPreviewXml": 0,
+    "originalXmlChars": 55716,
+    "previewXmlChars": 27118,
+    "fullLeafEntriesOriginal": 65,
+    "fullLeafEntriesPreview": 124,
+    "fullLeafMultisetDiffRows": 129,
+    "fullLeafOnlyInOriginalRows": 35,
+    "fullLeafOnlyInPreviewRows": 94
+  },
+  "multisetDiffSample": [
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/description/CharacterString\tBRIEF DESCRIPTION OF INSTRUMENT",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/description/CharacterString",
+      "text": "BRIEF DESCRIPTION OF INSTRUMENT",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/type/CharacterString\tTYPE OF INSTRUMENT",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/type/CharacterString",
+      "text": "TYPE OF INSTRUMENT",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/description/CharacterString\tBRIEF DESCRIPTION OF INSTRUMENT",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/description/CharacterString",
+      "text": "BRIEF DESCRIPTION OF INSTRUMENT",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\t{INSTRUMENT_ID}}",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "{INSTRUMENT_ID}}",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tINSTRUMENT_ID",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "INSTRUMENT_ID",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/type/CharacterString\tTYPE OF INSTRUMENT",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/type/CharacterString",
+      "text": "TYPE OF INSTRUMENT",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/description/CharacterString\tBRIEF DESCRIPTION OF PLATFORM",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/description/CharacterString",
+      "text": "BRIEF DESCRIPTION OF PLATFORM",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/identifier/MD_Identifier/code/CharacterString\tPLATFORM_ID",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/identifier/MD_Identifier/code/CharacterString",
+      "text": "PLATFORM_ID",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/description/CharacterString\tBRIEF DESCRIPTION OF INSTRUMENT",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/description/CharacterString",
+      "text": "BRIEF DESCRIPTION OF INSTRUMENT",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\t{INSTRUMENT_ID}}",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "{INSTRUMENT_ID}}",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/type/CharacterString\tTYPE OF INSTRUMENT",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/type/CharacterString",
+      "text": "TYPE OF INSTRUMENT",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/description/CharacterString\tBRIEF DESCRIPTION OF INSTRUMENT",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/description/CharacterString",
+      "text": "BRIEF DESCRIPTION OF INSTRUMENT",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tINSTRUMENT_ID",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "INSTRUMENT_ID",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/type/CharacterString\tTYPE OF INSTRUMENT",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/type/CharacterString",
+      "text": "TYPE OF INSTRUMENT",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/type/CharacterString\tShort_Name",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/type/CharacterString",
+      "text": "Short_Name",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[1]/attributeDescription/CharacterString\tTYPE OF INSTRUMENT",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[1]/attributeDescription/CharacterString",
+      "text": "TYPE OF INSTRUMENT",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[1]/identifier/MD_Identifier/code/CharacterString\t{INSTRUMENT_ID}}",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[1]/identifier/MD_Identifier/code/CharacterString",
+      "text": "{INSTRUMENT_ID}}",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[1]/name/CharacterString\tBRIEF DESCRIPTION OF INSTRUMENT",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[1]/name/CharacterString",
+      "text": "BRIEF DESCRIPTION OF INSTRUMENT",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[2]/attributeDescription/CharacterString\tTYPE OF INSTRUMENT",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[2]/attributeDescription/CharacterString",
+      "text": "TYPE OF INSTRUMENT",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[2]/identifier/MD_Identifier/code/CharacterString\tINSTRUMENT_ID",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[2]/identifier/MD_Identifier/code/CharacterString",
+      "text": "INSTRUMENT_ID",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[2]/name/CharacterString\tBRIEF DESCRIPTION OF INSTRUMENT",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[2]/name/CharacterString",
+      "text": "BRIEF DESCRIPTION OF INSTRUMENT",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription/contentType/MD_CoverageContentTypeCode\tphysicalMeasurement",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription/contentType/MD_CoverageContentTypeCode",
+      "text": "physicalMeasurement",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/dataQualityInfo/DQ_DataQuality/scope/DQ_Scope/level/MD_ScopeCode\tdataset",
+      "path": "MI_Metadata/dataQualityInfo/DQ_DataQuality/scope/DQ_Scope/level/MD_ScopeCode",
+      "text": "dataset",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/dateStamp/DateTime\t2025-09-23T18:47",
+      "path": "MI_Metadata/dateStamp/DateTime",
+      "text": "2025-09-23T18:47",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/distributionInfo/MD_Distribution/distributionFormat/MD_Format/name/CharacterString\tformat name",
+      "path": "MI_Metadata/distributionInfo/MD_Distribution/distributionFormat/MD_Format/name/CharacterString",
+      "text": "format name",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/distributionInfo/MD_Distribution/distributionOrderProcess/MD_StandardOrderProcess/fees/CharacterString\tIn most cases, electronic downloads of the data are free. However, fees may apply for custom orders, data certifications, copies of analog materials, and data distribution on physical media.",
+      "path": "MI_Metadata/distributionInfo/MD_Distribution/distributionOrderProcess/MD_StandardOrderProcess/fees/CharacterString",
+      "text": "In most cases, electronic downloads of the data are free. However, fees may apply for custom orders, data certifications, copies of analog materials, and data distribution on physical media.",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/distributionInfo/MD_Distribution/distributionOrderProcess/MD_StandardOrderProcess/orderingInstructions/CharacterString\tContact NCEI for other distribution options and instructions.",
+      "path": "MI_Metadata/distributionInfo/MD_Distribution/distributionOrderProcess/MD_StandardOrderProcess/orderingInstructions/CharacterString",
+      "text": "Contact NCEI for other distribution options and instructions.",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/distributionInfo/MD_Distribution/distributor/MD_Distributor/distributionOrderProcess/MD_StandardOrderProcess/fees/CharacterString\tIn most cases, electronic downloads of the data are free. However, fees may apply for custom orders, data certifications, copies of analog materials, and data distribution on physical media.",
+      "path": "MI_Metadata/distributionInfo/MD_Distribution/distributor/MD_Distributor/distributionOrderProcess/MD_StandardOrderProcess/fees/CharacterString",
+      "text": "In most cases, electronic downloads of the data are free. However, fees may apply for custom orders, data certifications, copies of analog materials, and data distribution on physical media.",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/distributionInfo/MD_Distribution/distributor/MD_Distributor/distributionOrderProcess/MD_StandardOrderProcess/orderingInstructions/CharacterString\tContact NCEI for other distribution options and instructions.",
+      "path": "MI_Metadata/distributionInfo/MD_Distribution/distributor/MD_Distributor/distributionOrderProcess/MD_StandardOrderProcess/orderingInstructions/CharacterString",
+      "text": "Contact NCEI for other distribution options and instructions.",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/distributionInfo/MD_Distribution/distributor/MD_Distributor/distributorTransferOptions[1]/MD_DigitalTransferOptions/onLine/CI_OnlineResource/function/CI_OnLineFunctionCode\tinformation",
+      "path": "MI_Metadata/distributionInfo/MD_Distribution/distributor/MD_Distributor/distributorTransferOptions[1]/MD_DigitalTransferOptions/onLine/CI_OnlineResource/function/CI_OnLineFunctionCode",
+      "text": "information",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/distributionInfo/MD_Distribution/distributor/MD_Distributor/distributorTransferOptions[1]/MD_DigitalTransferOptions/onLine/CI_OnlineResource/name/CharacterString\tMetadata Landing Page",
+      "path": "MI_Metadata/distributionInfo/MD_Distribution/distributor/MD_Distributor/distributorTransferOptions[1]/MD_DigitalTransferOptions/onLine/CI_OnlineResource/name/CharacterString",
+      "text": "Metadata Landing Page",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/distributionInfo/MD_Distribution/distributor/MD_Distributor/distributorTransferOptions[1]/MD_DigitalTransferOptions/onLine/CI_OnlineResource/protocol/CharacterString\tHTTPS",
+      "path": "MI_Metadata/distributionInfo/MD_Distribution/distributor/MD_Distributor/distributorTransferOptions[1]/MD_DigitalTransferOptions/onLine/CI_OnlineResource/protocol/CharacterString",
+      "text": "HTTPS",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/distributionInfo/MD_Distribution/distributor/MD_Distributor/distributorTransferOptions[2]/MD_DigitalTransferOptions/onLine/CI_OnlineResource/function/CI_OnLineFunctionCode\tdownload",
+      "path": "MI_Metadata/distributionInfo/MD_Distribution/distributor/MD_Distributor/distributorTransferOptions[2]/MD_DigitalTransferOptions/onLine/CI_OnlineResource/function/CI_OnLineFunctionCode",
+      "text": "download",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/distributionInfo/MD_Distribution/transferOptions/MD_DigitalTransferOptions/onLine[1]/CI_OnlineResource/linkage/URL\thttps://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/Unique Identifier Assigned to Metadata Record/html/",
+      "path": "MI_Metadata/distributionInfo/MD_Distribution/transferOptions/MD_DigitalTransferOptions/onLine[1]/CI_OnlineResource/linkage/URL",
+      "text": "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/Unique Identifier Assigned to Metadata Record/html/",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/distributionInfo/MD_Distribution/transferOptions/MD_DigitalTransferOptions/onLine[2]/CI_OnlineResource/linkage/URL\thttps://www.ncei.noaa.gov/access/uxs-template-pending-file",
+      "path": "MI_Metadata/distributionInfo/MD_Distribution/transferOptions/MD_DigitalTransferOptions/onLine[2]/CI_OnlineResource/linkage/URL",
+      "text": "https://www.ncei.noaa.gov/access/uxs-template-pending-file",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/distributionInfo/MD_Distribution/transferOptions/MD_DigitalTransferOptions/onLine[2]/CI_OnlineResource/protocol/CharacterString\tHTTPS",
+      "path": "MI_Metadata/distributionInfo/MD_Distribution/transferOptions/MD_DigitalTransferOptions/onLine[2]/CI_OnlineResource/protocol/CharacterString",
+      "text": "HTTPS",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/fileIdentifier/CharacterString\tgov.noaa.ncei.uxs:Unique Identifier Assigned to Metadata Record",
+      "path": "MI_Metadata/fileIdentifier/CharacterString",
+      "text": "gov.noaa.ncei.uxs:Unique Identifier Assigned to Metadata Record",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/abstract/CharacterString\tNot a scientific abstract. Describe dataset, goals of mission.",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/abstract/CharacterString",
+      "text": "Not a scientific abstract. Describe dataset, goals of mission.",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/aggregationInfo[1]/MD_AggregateInformation/aggregateDataSetName/CI_Citation/date/CI_Date/date/Date\t9999-09-09",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/aggregationInfo[1]/MD_AggregateInformation/aggregateDataSetName/CI_Citation/date/CI_Date/date/Date",
+      "text": "9999-09-09",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/aggregationInfo[1]/MD_AggregateInformation/aggregateDataSetName/CI_Citation/identifier/MD_Identifier/code/CharacterString\tPROJECT ID",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/aggregationInfo[1]/MD_AggregateInformation/aggregateDataSetName/CI_Citation/identifier/MD_Identifier/code/CharacterString",
+      "text": "PROJECT ID",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/aggregationInfo[1]/MD_AggregateInformation/aggregateDataSetName/CI_Citation/title/CharacterString\tTITLE OF PROJECT",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/aggregationInfo[1]/MD_AggregateInformation/aggregateDataSetName/CI_Citation/title/CharacterString",
+      "text": "TITLE OF PROJECT",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/aggregationInfo[2]/MD_AggregateInformation/aggregateDataSetName/CI_Citation/citedResponsibleParty[2]/CI_ResponsibleParty/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/function/CI_OnLineFunctionCode\tinformation",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/aggregationInfo[2]/MD_AggregateInformation/aggregateDataSetName/CI_Citation/citedResponsibleParty[2]/CI_ResponsibleParty/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/function/CI_OnLineFunctionCode",
+      "text": "information",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/aggregationInfo[2]/MD_AggregateInformation/aggregateDataSetName/CI_Citation/date/CI_Date/date/Date\t9999-09-09",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/aggregationInfo[2]/MD_AggregateInformation/aggregateDataSetName/CI_Citation/date/CI_Date/date/Date",
+      "text": "9999-09-09",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/aggregationInfo[2]/MD_AggregateInformation/aggregateDataSetName/CI_Citation/identifier/MD_Identifier/code/CharacterString\tdataset identifier",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/aggregationInfo[2]/MD_AggregateInformation/aggregateDataSetName/CI_Citation/identifier/MD_Identifier/code/CharacterString",
+      "text": "dataset identifier",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/aggregationInfo[2]/MD_AggregateInformation/aggregateDataSetName/CI_Citation/title/CharacterString\trelated dataset title",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/aggregationInfo[2]/MD_AggregateInformation/aggregateDataSetName/CI_Citation/title/CharacterString",
+      "text": "related dataset title",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/aggregationInfo[3]/MD_AggregateInformation/aggregateDataSetName/CI_Citation/date/CI_Date/date/Date\t9999-09-09",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/aggregationInfo[3]/MD_AggregateInformation/aggregateDataSetName/CI_Citation/date/CI_Date/date/Date",
+      "text": "9999-09-09",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/aggregationInfo[3]/MD_AggregateInformation/aggregateDataSetName/CI_Citation/title/CharacterString\tTITLE OF PUBLICATION",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/aggregationInfo[3]/MD_AggregateInformation/aggregateDataSetName/CI_Citation/title/CharacterString",
+      "text": "TITLE OF PUBLICATION",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/characterSet/MD_CharacterSetCode\tutf8",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/characterSet/MD_CharacterSetCode",
+      "text": "utf8",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[1]/CI_ResponsibleParty/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/applicationProfile/CharacterString\tweb browser",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[1]/CI_ResponsibleParty/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/applicationProfile/CharacterString",
+      "text": "web browser",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[1]/CI_ResponsibleParty/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/function/CI_OnLineFunctionCode\tinformation",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[1]/CI_ResponsibleParty/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/function/CI_OnLineFunctionCode",
+      "text": "information",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[1]/CI_ResponsibleParty/individualName/CharacterString\tPOC for Dataset",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[1]/CI_ResponsibleParty/individualName/CharacterString",
+      "text": "POC for Dataset",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[1]/CI_ResponsibleParty/organisationName/CharacterString\tPOC's Org",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[1]/CI_ResponsibleParty/organisationName/CharacterString",
+      "text": "POC's Org",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[3]/CI_ResponsibleParty/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/applicationProfile/CharacterString\tweb browser",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[3]/CI_ResponsibleParty/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/applicationProfile/CharacterString",
+      "text": "web browser",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[3]/CI_ResponsibleParty/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/description/CharacterString\tBackground information from the source. Description of the online resource that provides the resource sought.",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[3]/CI_ResponsibleParty/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/description/CharacterString",
+      "text": "Background information from the source. Description of the online resource that provides the resource sought.",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[3]/CI_ResponsibleParty/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/function/CI_OnLineFunctionCode\tinformation",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[3]/CI_ResponsibleParty/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/function/CI_OnLineFunctionCode",
+      "text": "information",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[3]/CI_ResponsibleParty/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/name/CharacterString\tBackground Information Name of the online resource.",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[3]/CI_ResponsibleParty/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/name/CharacterString",
+      "text": "Background Information Name of the online resource.",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[3]/CI_ResponsibleParty/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/protocol/CharacterString\tThe connection protocol to be used such as http, ftp, etc.",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[3]/CI_ResponsibleParty/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/protocol/CharacterString",
+      "text": "The connection protocol to be used such as http, ftp, etc.",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[3]/CI_ResponsibleParty/individualName/CharacterString\tPOC for Dataset",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[3]/CI_ResponsibleParty/individualName/CharacterString",
+      "text": "POC for Dataset",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[3]/CI_ResponsibleParty/organisationName/CharacterString\tPOC's Org",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[3]/CI_ResponsibleParty/organisationName/CharacterString",
+      "text": "POC's Org",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[1]/CI_Date/date/Date\t9999-01-01",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[1]/CI_Date/date/Date",
+      "text": "9999-01-01",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[2]/CI_Date/date/Date\t2024-10-11",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[2]/CI_Date/date/Date",
+      "text": "2024-10-11",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[3]/CI_Date/date/Date\t9999-01-02",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[3]/CI_Date/date/Date",
+      "text": "9999-01-02",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[3]/CI_Date/dateType/CI_DateTypeCode\tcompletion",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[3]/CI_Date/dateType/CI_DateTypeCode",
+      "text": "completion",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/identifier[1]/MD_Identifier/authority/CI_Citation/title/CharacterString\tInternational DOI Foundation (IDF)",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/identifier[1]/MD_Identifier/authority/CI_Citation/title/CharacterString",
+      "text": "International DOI Foundation (IDF)",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/identifier[1]/MD_Identifier/code/CharacterString\t10.25923/ncei.uxs.template.pending",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/identifier[1]/MD_Identifier/code/CharacterString",
+      "text": "10.25923/ncei.uxs.template.pending",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/identifier[2]/MD_Identifier/authority/CI_Citation/title/CharacterString\tNCEI Archive Management System",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/identifier[2]/MD_Identifier/authority/CI_Citation/title/CharacterString",
+      "text": "NCEI Archive Management System",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/identifier[2]/MD_Identifier/code/CharacterString\tDOI",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/identifier[2]/MD_Identifier/code/CharacterString",
+      "text": "DOI",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/identifier[3]/MD_Identifier/authority/CI_Citation/title/CharacterString\tNOAA National Centers for Environmental Information",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/identifier[3]/MD_Identifier/authority/CI_Citation/title/CharacterString",
+      "text": "NOAA National Centers for Environmental Information",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/title/CharacterString\tAquisition (data collection) entity should be globally unique",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/title/CharacterString",
+      "text": "Aquisition (data collection) entity should be globally unique",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword/CharacterString\tEarth Science > Topic > Term > Variable_Level_1",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword/CharacterString",
+      "text": "Earth Science > Topic > Term > Variable_Level_1",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString\tGCMD sciencekeywords",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString",
+      "text": "GCMD sciencekeywords",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/type/MD_KeywordTypeCode\ttheme",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/type/MD_KeywordTypeCode",
+      "text": "theme",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/keyword[1]/CharacterString\tDOC/NOAA/NESDIS/NCEI > National Centers for Environmental Information, NESDIS, NOAA, U.S. Department of Commerce",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/keyword[1]/CharacterString",
+      "text": "DOC/NOAA/NESDIS/NCEI > National Centers for Environmental Information, NESDIS, NOAA, U.S. Department of Commerce",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/keyword[2]/CharacterString\tShort_Name > Long_Name",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/keyword[2]/CharacterString",
+      "text": "Short_Name > Long_Name",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString\tGCMD datacenters",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString",
+      "text": "GCMD datacenters",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/type/MD_KeywordTypeCode\tplace",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/type/MD_KeywordTypeCode",
+      "text": "place",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[3]/MD_Keywords/keyword/CharacterString\tShort_Name > Long_Name",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[3]/MD_Keywords/keyword/CharacterString",
+      "text": "Short_Name > Long_Name",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[3]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString\tGCMD platforms",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[3]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString",
+      "text": "GCMD platforms",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[3]/MD_Keywords/type/MD_KeywordTypeCode\tplatform",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[3]/MD_Keywords/type/MD_KeywordTypeCode",
+      "text": "platform",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword/CharacterString\tShort_Name > Long_Name",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword/CharacterString",
+      "text": "Short_Name > Long_Name",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString\tGCMD instruments",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString",
+      "text": "GCMD instruments",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/type/MD_KeywordTypeCode\tinstrument",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/type/MD_KeywordTypeCode",
+      "text": "instrument",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[5]/MD_Keywords/keyword/CharacterString\tLocation_Category > Location_Type > Location_Subregion1",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[5]/MD_Keywords/keyword/CharacterString",
+      "text": "Location_Category > Location_Type > Location_Subregion1",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[5]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString\tGCMD locations",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[5]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString",
+      "text": "GCMD locations",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[5]/MD_Keywords/type/MD_KeywordTypeCode\tproject",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[5]/MD_Keywords/type/MD_KeywordTypeCode",
+      "text": "project",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[6]/MD_Keywords/keyword[1]/CharacterString\tDOC/NOAA/NESDIS/NCEI > National Centers for Environmental Information, NESDIS, NOAA, U.S. Department of Commerce",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[6]/MD_Keywords/keyword[1]/CharacterString",
+      "text": "DOC/NOAA/NESDIS/NCEI > National Centers for Environmental Information, NESDIS, NOAA, U.S. Department of Commerce",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[6]/MD_Keywords/keyword/CharacterString\tShort_Name > Long_Name",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[6]/MD_Keywords/keyword/CharacterString",
+      "text": "Short_Name > Long_Name",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[6]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString\tGCMD projects",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[6]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString",
+      "text": "GCMD projects",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[6]/MD_Keywords/type/MD_KeywordTypeCode\tdataCentre",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[6]/MD_Keywords/type/MD_KeywordTypeCode",
+      "text": "dataCentre",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[1]/CharacterString\tDOC/NOAA/NESDIS/NCEI > National Centers for Environmental Information, NESDIS, NOAA, U.S. Department of Commerce",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[1]/CharacterString",
+      "text": "DOC/NOAA/NESDIS/NCEI > National Centers for Environmental Information, NESDIS, NOAA, U.S. Department of Commerce",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[2]/CharacterString\tShort_Name > Long_Name",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[2]/CharacterString",
+      "text": "Short_Name > Long_Name",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString\tGCMD providers",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString",
+      "text": "GCMD providers",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[8]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString\tPlatform instance",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[8]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString",
+      "text": "Platform instance",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[8]/MD_Keywords/type/MD_KeywordTypeCode\tplatform",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[8]/MD_Keywords/type/MD_KeywordTypeCode",
+      "text": "platform",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/description/CharacterString\tBRIEF DESCRIPTION OF EXTENT",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/description/CharacterString",
+      "text": "BRIEF DESCRIPTION OF EXTENT",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/eastBoundLongitude/Decimal\t180",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/eastBoundLongitude/Decimal",
+      "text": "180",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/northBoundLatitude/Decimal\t90",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/northBoundLatitude/Decimal",
+      "text": "90",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/southBoundLatitude/Decimal\t-90",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/southBoundLatitude/Decimal",
+      "text": "-90",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/westBoundLongitude/Decimal\t-180",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/westBoundLongitude/Decimal",
+      "text": "-180",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/temporalElement/EX_TemporalExtent/extent/TimePeriod/beginPosition\t9999-01-01",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/temporalElement/EX_TemporalExtent/extent/TimePeriod/beginPosition",
+      "text": "9999-01-01",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/temporalElement/EX_TemporalExtent/extent/TimePeriod/endPosition\t9999-01-02",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/temporalElement/EX_TemporalExtent/extent/TimePeriod/endPosition",
+      "text": "9999-01-02",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/verticalElement/EX_VerticalExtent/maximumValue/Real\t99",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/verticalElement/EX_VerticalExtent/maximumValue/Real",
+      "text": "99",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/verticalElement/EX_VerticalExtent/minimumValue/Real\t99",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/verticalElement/EX_VerticalExtent/minimumValue/Real",
+      "text": "99",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/language/CharacterString\teng; USA",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/language/CharacterString",
+      "text": "eng; USA",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/language/LanguageCode\teng; USA",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/language/LanguageCode",
+      "text": "eng; USA",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact[2]/CI_ResponsibleParty/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/applicationProfile/CharacterString\tweb browser",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact[2]/CI_ResponsibleParty/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/applicationProfile/CharacterString",
+      "text": "web browser",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact[2]/CI_ResponsibleParty/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/function/CI_OnLineFunctionCode\tinformation",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact[2]/CI_ResponsibleParty/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/function/CI_OnLineFunctionCode",
+      "text": "information",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact[2]/CI_ResponsibleParty/role/CI_RoleCode\tpointOfContact",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact[2]/CI_ResponsibleParty/role/CI_RoleCode",
+      "text": "pointOfContact",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/contactInfo/CI_Contact/address/CI_Address/electronicMailAddress/CharacterString\tmetadata.help@noaa.gov",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/contactInfo/CI_Contact/address/CI_Address/electronicMailAddress/CharacterString",
+      "text": "metadata.help@noaa.gov",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/linkage/URL\thttps://www.ncei.noaa.gov",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/linkage/URL",
+      "text": "https://www.ncei.noaa.gov",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/individualName/CharacterString\tMetadata contact (replace with responsible party)",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/individualName/CharacterString",
+      "text": "Metadata contact (replace with responsible party)",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/organisationName/CharacterString\tNOAA National Centers for Environmental Information",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/organisationName/CharacterString",
+      "text": "NOAA National Centers for Environmental Information",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/party/CI_Organisation/identifier/MD_Identifier/code/CharacterString\thttps://ror.org/04r0wrp59",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/party/CI_Organisation/identifier/MD_Identifier/code/CharacterString",
+      "text": "https://ror.org/04r0wrp59",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/party/CI_Organisation/name/CharacterString\tNOAA National Centers for Environmental Information",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/party/CI_Organisation/name/CharacterString",
+      "text": "NOAA National Centers for Environmental Information",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/purpose/CharacterString\tNot a scientific abstract. Describe collection purpose/overarching project.",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/purpose/CharacterString",
+      "text": "Not a scientific abstract. Describe collection purpose/overarching project.",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints[1]/MD_LegalConstraints/otherConstraints[1]/CharacterString\tCITE AS STATEMENT",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints[1]/MD_LegalConstraints/otherConstraints[1]/CharacterString",
+      "text": "CITE AS STATEMENT",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints[1]/MD_LegalConstraints/otherConstraints[2]/CharacterString\tOTHER CITE AS STATEMENTS (e.g. reference papers)",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints[1]/MD_LegalConstraints/otherConstraints[2]/CharacterString",
+      "text": "OTHER CITE AS STATEMENTS (e.g. reference papers)",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints[3]/MD_LegalConstraints/useLimitation/CharacterString\totherRestrictions",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints[3]/MD_LegalConstraints/useLimitation/CharacterString",
+      "text": "otherRestrictions",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/supplementalInformation/CharacterString\tany other information UxS operational layer: Dataset or product",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/supplementalInformation/CharacterString",
+      "text": "any other information UxS operational layer: Dataset or product",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/language/CharacterString\teng; USA",
+      "path": "MI_Metadata/language/CharacterString",
+      "text": "eng; USA",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/metadataMaintenance/MD_MaintenanceInformation/maintenanceAndUpdateFrequency/MD_MaintenanceFrequencyCode\tasNeeded",
+      "path": "MI_Metadata/metadataMaintenance/MD_MaintenanceInformation/maintenanceAndUpdateFrequency/MD_MaintenanceFrequencyCode",
+      "text": "asNeeded",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/referenceSystemInfo/MD_ReferenceSystem/referenceSystemIdentifier/RS_Identifier/code/CharacterString\tEPSG:4326",
+      "path": "MI_Metadata/referenceSystemInfo/MD_ReferenceSystem/referenceSystemIdentifier/RS_Identifier/code/CharacterString",
+      "text": "EPSG:4326",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/spatialRepresentationInfo/MD_GridSpatialRepresentation/axisDimensionProperties[1]/MD_Dimension/dimensionSize/Integer\t99",
+      "path": "MI_Metadata/spatialRepresentationInfo/MD_GridSpatialRepresentation/axisDimensionProperties[1]/MD_Dimension/dimensionSize/Integer",
+      "text": "99",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/spatialRepresentationInfo/MD_GridSpatialRepresentation/axisDimensionProperties[1]/MD_Dimension/resolution/CharacterString\t99",
+      "path": "MI_Metadata/spatialRepresentationInfo/MD_GridSpatialRepresentation/axisDimensionProperties[1]/MD_Dimension/resolution/CharacterString",
+      "text": "99",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/spatialRepresentationInfo/MD_GridSpatialRepresentation/axisDimensionProperties[2]/MD_Dimension/dimensionSize/Integer\t99",
+      "path": "MI_Metadata/spatialRepresentationInfo/MD_GridSpatialRepresentation/axisDimensionProperties[2]/MD_Dimension/dimensionSize/Integer",
+      "text": "99",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/spatialRepresentationInfo/MD_GridSpatialRepresentation/axisDimensionProperties[2]/MD_Dimension/resolution/CharacterString\t99",
+      "path": "MI_Metadata/spatialRepresentationInfo/MD_GridSpatialRepresentation/axisDimensionProperties[2]/MD_Dimension/resolution/CharacterString",
+      "text": "99",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/spatialRepresentationInfo/MD_GridSpatialRepresentation/axisDimensionProperties[3]/MD_Dimension/dimensionSize/Integer\t99",
+      "path": "MI_Metadata/spatialRepresentationInfo/MD_GridSpatialRepresentation/axisDimensionProperties[3]/MD_Dimension/dimensionSize/Integer",
+      "text": "99",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/spatialRepresentationInfo/MD_GridSpatialRepresentation/axisDimensionProperties[3]/MD_Dimension/resolution/CharacterString\t99",
+      "path": "MI_Metadata/spatialRepresentationInfo/MD_GridSpatialRepresentation/axisDimensionProperties[3]/MD_Dimension/resolution/CharacterString",
+      "text": "99",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/spatialRepresentationInfo/MD_GridSpatialRepresentation/transformationParameterAvailability/Boolean\t0",
+      "path": "MI_Metadata/spatialRepresentationInfo/MD_GridSpatialRepresentation/transformationParameterAvailability/Boolean",
+      "text": "0",
+      "onlyIn": "original",
+      "count": 1
+    }
+  ],
+  "truncated": false
+}

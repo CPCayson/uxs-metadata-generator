@@ -1,0 +1,257 @@
+# Pilot state coverage after XML import
+
+- **Source:** `../MANTA End User Testing/samples/uxs_test.xml`
+- **Leaf paths:** 565
+- **Filled (has semantic content):** 333
+- **Empty:** 232
+- **Unchanged from defaultPilotState():** 107
+- **Changed from default:** 458
+
+## By wizard bucket
+
+| Bucket | Paths | Filled | Empty | Same as default |
+|--------|------:|-------:|------:|----------------:|
+| 1-mission | 77 | 41 | 36 | 39 |
+| 2-platform | 19 | 3 | 16 | 16 |
+| 3-sensors | 144 | 60 | 84 | 7 |
+| 4-spatial | 20 | 5 | 15 | 18 |
+| 5-keywords | 261 | 198 | 63 | 0 |
+| 6-distribution | 36 | 22 | 14 | 21 |
+| meta | 8 | 4 | 4 | 6 |
+
+_“Same as default” includes seeded defaults that match XML (e.g. bbox −180…90). Use **changedPaths** in JSON for strict diff._
+
+## Empty paths (232)
+
+- `distribution.awsBucket`
+- `distribution.awsPrefix`
+- `distribution.distributionFileFormat`
+- `distribution.distributorContactUrl`
+- `distribution.distributorIndividualName`
+- `distribution.finalNotes`
+- `distribution.nceiDistributorContactHref`
+- `distribution.nceiDistributorContactTitle`
+- `distribution.nceiMetadataContactHref`
+- `distribution.nceiMetadataContactTitle`
+- `distribution.parentProject`
+- `distribution.publication`
+- `distribution.templateCategory`
+- `distribution.templateName`
+- `keywords.datacenters`
+- `keywords.instruments`
+- `keywords.instruments[24].uuid`
+- `keywords.instruments[25].uuid`
+- `keywords.instruments[26].uuid`
+- `keywords.instruments[27].uuid`
+- `keywords.instruments[28].uuid`
+- `keywords.instruments[29].uuid`
+- `keywords.locations`
+- `keywords.platforms`
+- `keywords.platforms[0].uuid`
+- `keywords.platforms[1].uuid`
+- `keywords.projects`
+- `keywords.projects[1].uuid`
+- `keywords.providers`
+- `keywords.providers[0].uuid`
+- `keywords.providers[10].uuid`
+- `keywords.providers[11].uuid`
+- `keywords.providers[12].uuid`
+- `keywords.providers[13].uuid`
+- `keywords.providers[14].uuid`
+- `keywords.providers[15].uuid`
+- `keywords.providers[16].uuid`
+- `keywords.providers[17].uuid`
+- `keywords.providers[18].uuid`
+- `keywords.providers[19].uuid`
+- `keywords.providers[1].uuid`
+- `keywords.providers[20].uuid`
+- `keywords.providers[21].uuid`
+- `keywords.providers[22].uuid`
+- `keywords.providers[23].uuid`
+- `keywords.providers[24].uuid`
+- `keywords.providers[25].uuid`
+- `keywords.providers[26].uuid`
+- `keywords.providers[27].uuid`
+- `keywords.providers[28].uuid`
+- `keywords.providers[29].uuid`
+- `keywords.providers[2].uuid`
+- `keywords.providers[30].uuid`
+- `keywords.providers[31].uuid`
+- `keywords.providers[32].uuid`
+- `keywords.providers[33].uuid`
+- `keywords.providers[34].uuid`
+- `keywords.providers[35].uuid`
+- `keywords.providers[36].uuid`
+- `keywords.providers[37].uuid`
+- `keywords.providers[38].uuid`
+- `keywords.providers[39].uuid`
+- `keywords.providers[3].uuid`
+- `keywords.providers[40].uuid`
+- `keywords.providers[41].uuid`
+- `keywords.providers[42].uuid`
+- `keywords.providers[43].uuid`
+- `keywords.providers[44].uuid`
+- `keywords.providers[45].uuid`
+- `keywords.providers[4].uuid`
+- `keywords.providers[5].uuid`
+- `keywords.providers[6].uuid`
+- `keywords.providers[7].uuid`
+- `keywords.providers[8].uuid`
+- `keywords.providers[9].uuid`
+- `keywords.sciencekeywords`
+- `keywords.sciencekeywords[25].uuid`
+- `mission.alternateTitle`
+- `mission.associatedPublicationCode`
+- `mission.associatedPublicationDate`
+- `mission.associatedPublicationTitle`
+- `mission.citationOriginatorIndividualName`
+- `mission.citationOriginatorOrganisationName`
+- `mission.contactAddress`
+- `mission.contactPhone`
+- `mission.doi`
+- `mission.otherCiteAs`
+- `mission.parentProjectCode`
+- `mission.parentProjectDate`
+- `mission.parentProjectTitle`
+- `mission.relatedDataUrl`
+- `mission.relatedDataUrlDescription`
+- `mission.relatedDataUrlTitle`
+- `mission.relatedDatasetCode`
+- `mission.relatedDatasetDate`
+- `mission.relatedDatasetOrg`
+- `mission.relatedDatasetTitle`
+- `mission.ror`
+- `mission.temporalExtentIntervalUnit`
+- `mission.temporalExtentIntervalValue`
+- `mission.topicCategories`
+- `mission.uxsContext.deploymentId`
+- `mission.uxsContext.deploymentName`
+- `mission.uxsContext.diveId`
+- `mission.uxsContext.diveName`
+- `mission.uxsContext.narrative`
+- `mission.uxsContext.operationOutcome`
+- `mission.uxsContext.runId`
+- `mission.uxsContext.runName`
+- `mission.uxsContext.sortieId`
+- `mission.uxsContext.sortieName`
+- `mission.vmax`
+- `mission.vmin`
+- `platform.customPlatformType`
+- `platform.deploymentDate`
+- `platform.height`
+- `platform.length`
+- `platform.manufacturer`
+- `platform.material`
+- `platform.model`
+- `platform.navigationSystem`
+- `platform.operationalArea`
+- `platform.platformName`
+- `platform.powerSource`
+- `platform.sensorMounts`
+- `platform.serialNumber`
+- `platform.speed`
+- `platform.weight`
+- `platform.width`
+- `sensors[0].beamCount`
+- `sensors[0].confidenceInterval`
+- `sensors[0].depthRating`
+- `sensors[0].firmware`
+- `sensors[0].frequency`
+- `sensors[0].operationMode`
+- `sensors[0].uncertainty`
+- `sensors[10].beamCount`
+- `sensors[10].confidenceInterval`
+- `sensors[10].depthRating`
+- `sensors[10].firmware`
+- `sensors[10].frequency`
+- `sensors[10].operationMode`
+- `sensors[10].uncertainty`
+- `sensors[11].beamCount`
+- `sensors[11].confidenceInterval`
+- `sensors[11].depthRating`
+- `sensors[11].firmware`
+- `sensors[11].frequency`
+- `sensors[11].operationMode`
+- `sensors[11].uncertainty`
+- `sensors[1].beamCount`
+- `sensors[1].confidenceInterval`
+- `sensors[1].depthRating`
+- `sensors[1].firmware`
+- `sensors[1].frequency`
+- `sensors[1].operationMode`
+- `sensors[1].uncertainty`
+- `sensors[2].beamCount`
+- `sensors[2].confidenceInterval`
+- `sensors[2].depthRating`
+- `sensors[2].firmware`
+- `sensors[2].frequency`
+- `sensors[2].operationMode`
+- `sensors[2].uncertainty`
+- `sensors[3].beamCount`
+- `sensors[3].confidenceInterval`
+- `sensors[3].depthRating`
+- `sensors[3].firmware`
+- `sensors[3].frequency`
+- `sensors[3].operationMode`
+- `sensors[3].uncertainty`
+- `sensors[4].beamCount`
+- `sensors[4].confidenceInterval`
+- `sensors[4].depthRating`
+- `sensors[4].firmware`
+- `sensors[4].frequency`
+- `sensors[4].operationMode`
+- `sensors[4].uncertainty`
+- `sensors[5].beamCount`
+- `sensors[5].confidenceInterval`
+- `sensors[5].depthRating`
+- `sensors[5].firmware`
+- `sensors[5].frequency`
+- `sensors[5].operationMode`
+- `sensors[5].uncertainty`
+- `sensors[6].beamCount`
+- `sensors[6].confidenceInterval`
+- `sensors[6].depthRating`
+- `sensors[6].firmware`
+- `sensors[6].frequency`
+- `sensors[6].operationMode`
+- `sensors[6].uncertainty`
+- `sensors[7].beamCount`
+- `sensors[7].confidenceInterval`
+- `sensors[7].depthRating`
+- `sensors[7].firmware`
+- `sensors[7].frequency`
+- `sensors[7].operationMode`
+- `sensors[7].uncertainty`
+- `sensors[8].beamCount`
+- `sensors[8].confidenceInterval`
+- `sensors[8].depthRating`
+- `sensors[8].firmware`
+- `sensors[8].frequency`
+- `sensors[8].operationMode`
+- `sensors[8].uncertainty`
+- `sensors[9].beamCount`
+- `sensors[9].confidenceInterval`
+- `sensors[9].depthRating`
+- `sensors[9].firmware`
+- `sensors[9].frequency`
+- `sensors[9].operationMode`
+- `sensors[9].uncertainty`
+- `sourceProvenance.importedAt`
+- `sourceProvenance.originalFilename`
+- `sourceProvenance.originalUuid`
+- `sourceProvenance.sourceId`
+- `spatial.accuracyStandard`
+- `spatial.accuracyValue`
+- `spatial.dimensions`
+- `spatial.errorLevel`
+- `spatial.errorValue`
+- `spatial.geographicDescription`
+- `spatial.gridCellGeometry`
+- `spatial.gridColumnResolution`
+- `spatial.gridColumnSize`
+- `spatial.gridRowResolution`
+- `spatial.gridRowSize`
+- `spatial.gridVerticalResolution`
+- `spatial.gridVerticalSize`
+- `spatial.trajectorySampling`
+- `spatial.verticalCrsUrl`

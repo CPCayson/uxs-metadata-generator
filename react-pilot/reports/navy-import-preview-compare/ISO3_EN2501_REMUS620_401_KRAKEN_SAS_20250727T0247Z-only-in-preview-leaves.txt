@@ -1,0 +1,77 @@
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/description/CharacterString	Manufacturer: Exail; Model: iXBlue 6000; Firmware: NAV_SUBSEA_1_7_7.a
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	PHINS INS
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/type/CharacterString	Inertial Navigation System
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/description/CharacterString	Manufacturer: Kraken Robotics
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	Kraken SAS
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/type/CharacterString	Synthetic Aperture Sonar
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[3]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	PDVL 300
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[3]/MI_Instrument/type/CharacterString	Doppler Velocity Logger
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[4]/MI_Instrument/description/CharacterString	Manufacturer: Teledyne Marine RD Instruments; Firmware: 83.3
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[4]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	RDI ADCP
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[4]/MI_Instrument/type/CharacterString	Acoustic Doppler Current Profiler
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[5]/MI_Instrument/description/CharacterString	Manufacturer: AML Oceanographic; Firmware: 83.3
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[5]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	AML CTD
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[5]/MI_Instrument/type/CharacterString	Conductivity, Temperature, Depth Sensor
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/description/CharacterString	Platform: REMUS 620 by HII Model: REMUS 620
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/identifier/MD_Identifier/code/CharacterString	REMUS620_401
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/description/CharacterString	Manufacturer: Exail; Model: iXBlue 6000; Firmware: NAV_SUBSEA_1_7_7.a
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	PHINS INS
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/type/CharacterString	Inertial Navigation System
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/description/CharacterString	Manufacturer: Kraken Robotics
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	Kraken SAS
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/type/CharacterString	Synthetic Aperture Sonar
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	PDVL 300
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/type/CharacterString	Doppler Velocity Logger
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/description/CharacterString	Manufacturer: Teledyne Marine RD Instruments; Firmware: 83.3
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	RDI ADCP
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/type/CharacterString	Acoustic Doppler Current Profiler
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/description/CharacterString	Manufacturer: AML Oceanographic; Firmware: 83.3
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	AML CTD
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/type/CharacterString	Conductivity, Temperature, Depth Sensor
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/type/CharacterString	Unmanned Underwater Vehicle
+1	MI_Metadata/contentInfo/MI_CoverageDescription[1]/attributeDescription/CharacterString	Inertial Navigation System
+1	MI_Metadata/contentInfo/MI_CoverageDescription[1]/identifier/MD_Identifier/code/CharacterString	PHINS INS
+1	MI_Metadata/contentInfo/MI_CoverageDescription[1]/name/CharacterString	Manufacturer: Exail; Model: iXBlue 6000; Firmware: NAV_SUBSEA_1_7_7.a
+1	MI_Metadata/contentInfo/MI_CoverageDescription[2]/attributeDescription/CharacterString	Synthetic Aperture Sonar
+1	MI_Metadata/contentInfo/MI_CoverageDescription[2]/identifier/MD_Identifier/code/CharacterString	Kraken SAS
+1	MI_Metadata/contentInfo/MI_CoverageDescription[2]/name/CharacterString	Manufacturer: Kraken Robotics
+1	MI_Metadata/contentInfo/MI_CoverageDescription[3]/attributeDescription/CharacterString	Doppler Velocity Logger
+1	MI_Metadata/contentInfo/MI_CoverageDescription[3]/identifier/MD_Identifier/code/CharacterString	PDVL 300
+1	MI_Metadata/contentInfo/MI_CoverageDescription[4]/attributeDescription/CharacterString	Acoustic Doppler Current Profiler
+1	MI_Metadata/contentInfo/MI_CoverageDescription[4]/identifier/MD_Identifier/code/CharacterString	RDI ADCP
+1	MI_Metadata/contentInfo/MI_CoverageDescription[4]/name/CharacterString	Manufacturer: Teledyne Marine RD Instruments; Firmware: 83.3
+1	MI_Metadata/contentInfo/MI_CoverageDescription[5]/attributeDescription/CharacterString	Conductivity, Temperature, Depth Sensor
+1	MI_Metadata/contentInfo/MI_CoverageDescription[5]/identifier/MD_Identifier/code/CharacterString	AML CTD
+1	MI_Metadata/contentInfo/MI_CoverageDescription[5]/name/CharacterString	Manufacturer: AML Oceanographic; Firmware: 83.3
+1	MI_Metadata/dateStamp/DateTime	2026-05-11T16:17:31Z
+1	MI_Metadata/distributionInfo/MD_Distribution/transferOptions/MD_DigitalTransferOptions/onLine/CI_OnlineResource/linkage/URL	https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio
+1	MI_Metadata/fileIdentifier/CharacterString	gov.noaa.ncei.uxs:EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z
+1	MI_Metadata/hierarchyLevel/MD_ScopeCode	dataset
+1	MI_Metadata/identificationInfo/MD_DataIdentification/abstract/CharacterString	The MDBC Mapping, Ground truthing and Modeling team along with USM will conduct UUV missions to collect synthetic aperture sonar data using the REMUS 620 platform equipped with the KRAKEN Sonar sensor and other oceanographic equipment
+1	MI_Metadata/identificationInfo/MD_DataIdentification/characterSet/MD_CharacterSetCode	utf8
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/alternateTitle/CharacterString	EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[1]/CI_Date/date/DateTime	2025-07-27T00:48
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[1]/CI_Date/dateType/CI_DateTypeCode	creation
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[2]/CI_Date/date/DateTime	2025-07-27T07:47
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[2]/CI_Date/dateType/CI_DateTypeCode	completion
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/title/CharacterString	RV Expedition 2025 LEG 01 REMUS620 KRAKEN SAS MGM Dive 05
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword/CharacterString	Platform: REMUS 620 by HII Model: REMUS 620
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString	GCMD platforms
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/keyword/CharacterString	Inertial Navigation System
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString	GCMD instruments
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[3]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString	Platform instance
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[3]/MD_Keywords/type/MD_KeywordTypeCode	platform
+1	MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/eastBoundLongitude/Decimal	-87.31786719161755
+1	MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/northBoundLatitude/Decimal	29.930553243137695
+1	MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/southBoundLatitude/Decimal	29.843156926151266
+1	MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/westBoundLongitude/Decimal	-87.15895078704915
+1	MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/temporalElement/EX_TemporalExtent/extent/TimePeriod/beginPosition	2025-07-27T00:48
+1	MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/temporalElement/EX_TemporalExtent/extent/TimePeriod/endPosition	2025-07-27T07:47
+1	MI_Metadata/identificationInfo/MD_DataIdentification/language/LanguageCode	eng
+1	MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/organisationName/CharacterString	NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT
+1	MI_Metadata/identificationInfo/MD_DataIdentification/resourceMaintenance/MD_MaintenanceInformation/maintenanceAndUpdateFrequency/MD_MaintenanceFrequencyCode	asNeeded
+1	MI_Metadata/identificationInfo/MD_DataIdentification/status/MD_ProgressCode	ongoing
+1	MI_Metadata/identificationInfo/MD_DataIdentification/supplementalInformation/CharacterString	UxS operational layer: Dataset or product
+1	MI_Metadata/metadataStandardName/CharacterString	ISO 19115-3
+1	MI_Metadata/metadataStandardVersion/CharacterString	2.0
+1	MI_Metadata/referenceSystemInfo/MD_ReferenceSystem/referenceSystemIdentifier/RS_Identifier/code/CharacterString	EPSG:4326

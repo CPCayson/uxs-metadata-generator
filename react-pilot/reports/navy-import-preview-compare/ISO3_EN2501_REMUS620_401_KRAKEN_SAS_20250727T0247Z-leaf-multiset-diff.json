@@ -1,0 +1,887 @@
+{
+  "generatedAt": "2026-05-11T16:17:31.258Z",
+  "sourceXml": "../MANTA End User Testing/samples/ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
+  "counts": {
+    "probesConsidered": 20,
+    "missingAfterImport": 0,
+    "missingOriginalVsPreviewXml": 0,
+    "originalXmlChars": 12786,
+    "previewXmlChars": 17934,
+    "fullLeafEntriesOriginal": 47,
+    "fullLeafEntriesPreview": 77,
+    "fullLeafMultisetDiffRows": 124,
+    "fullLeafOnlyInOriginalRows": 47,
+    "fullLeafOnlyInPreviewRows": 77
+  },
+  "multisetDiffSample": [
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/description/CharacterString\tManufacturer: Exail; Model: iXBlue 6000; Firmware: NAV_SUBSEA_1_7_7.a",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/description/CharacterString",
+      "text": "Manufacturer: Exail; Model: iXBlue 6000; Firmware: NAV_SUBSEA_1_7_7.a",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tPHINS INS",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "PHINS INS",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/type/CharacterString\tInertial Navigation System",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/type/CharacterString",
+      "text": "Inertial Navigation System",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/description/CharacterString\tManufacturer: Kraken Robotics",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/description/CharacterString",
+      "text": "Manufacturer: Kraken Robotics",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tKraken SAS",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "Kraken SAS",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/type/CharacterString\tSynthetic Aperture Sonar",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/type/CharacterString",
+      "text": "Synthetic Aperture Sonar",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[3]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tPDVL 300",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[3]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "PDVL 300",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[3]/MI_Instrument/type/CharacterString\tDoppler Velocity Logger",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[3]/MI_Instrument/type/CharacterString",
+      "text": "Doppler Velocity Logger",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[4]/MI_Instrument/description/CharacterString\tManufacturer: Teledyne Marine RD Instruments; Firmware: 83.3",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[4]/MI_Instrument/description/CharacterString",
+      "text": "Manufacturer: Teledyne Marine RD Instruments; Firmware: 83.3",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[4]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tRDI ADCP",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[4]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "RDI ADCP",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[4]/MI_Instrument/type/CharacterString\tAcoustic Doppler Current Profiler",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[4]/MI_Instrument/type/CharacterString",
+      "text": "Acoustic Doppler Current Profiler",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[5]/MI_Instrument/description/CharacterString\tManufacturer: AML Oceanographic; Firmware: 83.3",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[5]/MI_Instrument/description/CharacterString",
+      "text": "Manufacturer: AML Oceanographic; Firmware: 83.3",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[5]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tAML CTD",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[5]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "AML CTD",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[5]/MI_Instrument/type/CharacterString\tConductivity, Temperature, Depth Sensor",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[5]/MI_Instrument/type/CharacterString",
+      "text": "Conductivity, Temperature, Depth Sensor",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/description[1]/CharacterString\tPlatform: REMUS 620 by HII Model: REMUS 620",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/description[1]/CharacterString",
+      "text": "Platform: REMUS 620 by HII Model: REMUS 620",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/description[2]/CharacterString\tSpecifications: Weight: 300 kg, Length: 3.25 m, Width: 0.5 m, Height: 0.5 m",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/description[2]/CharacterString",
+      "text": "Specifications: Weight: 300 kg, Length: 3.25 m, Width: 0.5 m, Height: 0.5 m",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/identifier/MD_Identifier/code/CharacterString\tREMUS620_401",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/identifier/MD_Identifier/code/CharacterString",
+      "text": "REMUS620_401",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/deliveryPoint/CharacterString\tSuite 1003, 1021 Balch Boulevard, Stennis Space Center, MS 39529, USA",
+      "path": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/deliveryPoint/CharacterString",
+      "text": "Suite 1003, 1021 Balch Boulevard, Stennis Space Center, MS 39529, USA",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/electronicMailAddress/CharacterString\terrol.ronje@noaa.gov",
+      "path": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/electronicMailAddress/CharacterString",
+      "text": "errol.ronje@noaa.gov",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/linkage/CharacterString\thttps://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "path": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/linkage/CharacterString",
+      "text": "https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/phone/CI_Telephone/number/CharacterString\t(555) 555-5555",
+      "path": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/phone/CI_Telephone/number/CharacterString",
+      "text": "(555) 555-5555",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/name/CharacterString\tNOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT",
+      "path": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/name/CharacterString",
+      "text": "NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/contact/CI_Responsibility/role/CI_RoleCode\tpointOfContact",
+      "path": "MD_Metadata/contact/CI_Responsibility/role/CI_RoleCode",
+      "text": "pointOfContact",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/dataQualityInfo/DQ_DataQuality/scope/DQ_Scope/level/MD_ScopeCode\tdataset",
+      "path": "MD_Metadata/dataQualityInfo/DQ_DataQuality/scope/DQ_Scope/level/MD_ScopeCode",
+      "text": "dataset",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/dateInfo/CI_Date/date/DateTime\t2025-07-27T00:48:00.000Z",
+      "path": "MD_Metadata/dateInfo/CI_Date/date/DateTime",
+      "text": "2025-07-27T00:48:00.000Z",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/dateInfo/CI_Date/dateType/CI_DateTypeCode\tcreation",
+      "path": "MD_Metadata/dateInfo/CI_Date/dateType/CI_DateTypeCode",
+      "text": "creation",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/defaultLocale/PT_Locale/characterEncoding/MD_CharacterSetCode\tutf8",
+      "path": "MD_Metadata/defaultLocale/PT_Locale/characterEncoding/MD_CharacterSetCode",
+      "text": "utf8",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/defaultLocale/PT_Locale/language/LanguageCode\teng",
+      "path": "MD_Metadata/defaultLocale/PT_Locale/language/LanguageCode",
+      "text": "eng",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/abstract/CharacterString\tThe MDBC Mapping, Ground truthing and Modeling team along with USM will conduct UUV missions to collect synthetic aperture sonar data using the REMUS 620 platform equipped with the KRAKEN Sonar sensor and other oceanographic equipment",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/abstract/CharacterString",
+      "text": "The MDBC Mapping, Ground truthing and Modeling team along with USM will conduct UUV missions to collect synthetic aperture sonar data using the REMUS 620 platform equipped with the KRAKEN Sonar sensor and other oceanographic equipment",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/alternateTitle/CharacterString\tEN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/alternateTitle/CharacterString",
+      "text": "EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[1]/CI_Date/date/DateTime\t2025-07-27T00:48:00.000Z",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[1]/CI_Date/date/DateTime",
+      "text": "2025-07-27T00:48:00.000Z",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[1]/CI_Date/dateType/CI_DateTypeCode\tcreation",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[1]/CI_Date/dateType/CI_DateTypeCode",
+      "text": "creation",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[2]/CI_Date/date/DateTime\t2025-07-27T07:47:00.000Z",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[2]/CI_Date/date/DateTime",
+      "text": "2025-07-27T07:47:00.000Z",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[2]/CI_Date/dateType/CI_DateTypeCode\tcompletion",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[2]/CI_Date/dateType/CI_DateTypeCode",
+      "text": "completion",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/title/CharacterString\tRV Expedition 2025 LEG 01 REMUS620 KRAKEN SAS MGM Dive 05",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/title/CharacterString",
+      "text": "RV Expedition 2025 LEG 01 REMUS620 KRAKEN SAS MGM Dive 05",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/eastBoundLongitude/CharacterString\t-87.31786719161755",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/eastBoundLongitude/CharacterString",
+      "text": "-87.31786719161755",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/northBoundLatitude/CharacterString\t29.930553243137695",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/northBoundLatitude/CharacterString",
+      "text": "29.930553243137695",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/southBoundLatitude/CharacterString\t29.843156926151266",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/southBoundLatitude/CharacterString",
+      "text": "29.843156926151266",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/westBoundLongitude/CharacterString\t-87.15895078704915",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/westBoundLongitude/CharacterString",
+      "text": "-87.15895078704915",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/name/CharacterString\tNOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/name/CharacterString",
+      "text": "NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/role/CI_RoleCode\tpointOfContact",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/role/CI_RoleCode",
+      "text": "pointOfContact",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/status/MD_ProgressCode\tongoing",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/status/MD_ProgressCode",
+      "text": "ongoing",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/metadataIdentifier/MD_Identifier/code/CharacterString\tEN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z",
+      "path": "MD_Metadata/metadataIdentifier/MD_Identifier/code/CharacterString",
+      "text": "EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/metadataScope/MD_MetadataScope/resourceScope/MD_ScopeCode\tdataset",
+      "path": "MD_Metadata/metadataScope/MD_MetadataScope/resourceScope/MD_ScopeCode",
+      "text": "dataset",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/metadataStandard/CI_Citation/edition/CharacterString\t2.0",
+      "path": "MD_Metadata/metadataStandard/CI_Citation/edition/CharacterString",
+      "text": "2.0",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/metadataStandard/CI_Citation/title/CharacterString\tISO 19115-3",
+      "path": "MD_Metadata/metadataStandard/CI_Citation/title/CharacterString",
+      "text": "ISO 19115-3",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/referenceSystemInfo/MD_ReferenceSystem/referenceSystemIdentifier/MD_Identifier/code/CharacterString\tEPSG:4326",
+      "path": "MD_Metadata/referenceSystemInfo/MD_ReferenceSystem/referenceSystemIdentifier/MD_Identifier/code/CharacterString",
+      "text": "EPSG:4326",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/description/CharacterString\tManufacturer: Exail; Model: iXBlue 6000; Firmware: NAV_SUBSEA_1_7_7.a",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/description/CharacterString",
+      "text": "Manufacturer: Exail; Model: iXBlue 6000; Firmware: NAV_SUBSEA_1_7_7.a",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tPHINS INS",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "PHINS INS",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/type/CharacterString\tInertial Navigation System",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/type/CharacterString",
+      "text": "Inertial Navigation System",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/description/CharacterString\tManufacturer: Kraken Robotics",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/description/CharacterString",
+      "text": "Manufacturer: Kraken Robotics",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tKraken SAS",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "Kraken SAS",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/type/CharacterString\tSynthetic Aperture Sonar",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/type/CharacterString",
+      "text": "Synthetic Aperture Sonar",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[3]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tPDVL 300",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[3]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "PDVL 300",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[3]/MI_Instrument/type/CharacterString\tDoppler Velocity Logger",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[3]/MI_Instrument/type/CharacterString",
+      "text": "Doppler Velocity Logger",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[4]/MI_Instrument/description/CharacterString\tManufacturer: Teledyne Marine RD Instruments; Firmware: 83.3",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[4]/MI_Instrument/description/CharacterString",
+      "text": "Manufacturer: Teledyne Marine RD Instruments; Firmware: 83.3",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[4]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tRDI ADCP",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[4]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "RDI ADCP",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[4]/MI_Instrument/type/CharacterString\tAcoustic Doppler Current Profiler",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[4]/MI_Instrument/type/CharacterString",
+      "text": "Acoustic Doppler Current Profiler",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[5]/MI_Instrument/description/CharacterString\tManufacturer: AML Oceanographic; Firmware: 83.3",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[5]/MI_Instrument/description/CharacterString",
+      "text": "Manufacturer: AML Oceanographic; Firmware: 83.3",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[5]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tAML CTD",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[5]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "AML CTD",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[5]/MI_Instrument/type/CharacterString\tConductivity, Temperature, Depth Sensor",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[5]/MI_Instrument/type/CharacterString",
+      "text": "Conductivity, Temperature, Depth Sensor",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/description/CharacterString\tPlatform: REMUS 620 by HII Model: REMUS 620",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/description/CharacterString",
+      "text": "Platform: REMUS 620 by HII Model: REMUS 620",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/identifier/MD_Identifier/code/CharacterString\tREMUS620_401",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/identifier/MD_Identifier/code/CharacterString",
+      "text": "REMUS620_401",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/description/CharacterString\tManufacturer: Exail; Model: iXBlue 6000; Firmware: NAV_SUBSEA_1_7_7.a",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/description/CharacterString",
+      "text": "Manufacturer: Exail; Model: iXBlue 6000; Firmware: NAV_SUBSEA_1_7_7.a",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tPHINS INS",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "PHINS INS",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/type/CharacterString\tInertial Navigation System",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/type/CharacterString",
+      "text": "Inertial Navigation System",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/description/CharacterString\tManufacturer: Kraken Robotics",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/description/CharacterString",
+      "text": "Manufacturer: Kraken Robotics",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tKraken SAS",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "Kraken SAS",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/type/CharacterString\tSynthetic Aperture Sonar",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/type/CharacterString",
+      "text": "Synthetic Aperture Sonar",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tPDVL 300",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "PDVL 300",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/type/CharacterString\tDoppler Velocity Logger",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/type/CharacterString",
+      "text": "Doppler Velocity Logger",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/description/CharacterString\tManufacturer: Teledyne Marine RD Instruments; Firmware: 83.3",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/description/CharacterString",
+      "text": "Manufacturer: Teledyne Marine RD Instruments; Firmware: 83.3",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tRDI ADCP",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "RDI ADCP",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/type/CharacterString\tAcoustic Doppler Current Profiler",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/type/CharacterString",
+      "text": "Acoustic Doppler Current Profiler",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/description/CharacterString\tManufacturer: AML Oceanographic; Firmware: 83.3",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/description/CharacterString",
+      "text": "Manufacturer: AML Oceanographic; Firmware: 83.3",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tAML CTD",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "AML CTD",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/type/CharacterString\tConductivity, Temperature, Depth Sensor",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/type/CharacterString",
+      "text": "Conductivity, Temperature, Depth Sensor",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/type/CharacterString\tUnmanned Underwater Vehicle",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/type/CharacterString",
+      "text": "Unmanned Underwater Vehicle",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[1]/attributeDescription/CharacterString\tInertial Navigation System",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[1]/attributeDescription/CharacterString",
+      "text": "Inertial Navigation System",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[1]/identifier/MD_Identifier/code/CharacterString\tPHINS INS",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[1]/identifier/MD_Identifier/code/CharacterString",
+      "text": "PHINS INS",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[1]/name/CharacterString\tManufacturer: Exail; Model: iXBlue 6000; Firmware: NAV_SUBSEA_1_7_7.a",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[1]/name/CharacterString",
+      "text": "Manufacturer: Exail; Model: iXBlue 6000; Firmware: NAV_SUBSEA_1_7_7.a",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[2]/attributeDescription/CharacterString\tSynthetic Aperture Sonar",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[2]/attributeDescription/CharacterString",
+      "text": "Synthetic Aperture Sonar",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[2]/identifier/MD_Identifier/code/CharacterString\tKraken SAS",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[2]/identifier/MD_Identifier/code/CharacterString",
+      "text": "Kraken SAS",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[2]/name/CharacterString\tManufacturer: Kraken Robotics",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[2]/name/CharacterString",
+      "text": "Manufacturer: Kraken Robotics",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[3]/attributeDescription/CharacterString\tDoppler Velocity Logger",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[3]/attributeDescription/CharacterString",
+      "text": "Doppler Velocity Logger",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[3]/identifier/MD_Identifier/code/CharacterString\tPDVL 300",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[3]/identifier/MD_Identifier/code/CharacterString",
+      "text": "PDVL 300",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[4]/attributeDescription/CharacterString\tAcoustic Doppler Current Profiler",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[4]/attributeDescription/CharacterString",
+      "text": "Acoustic Doppler Current Profiler",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[4]/identifier/MD_Identifier/code/CharacterString\tRDI ADCP",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[4]/identifier/MD_Identifier/code/CharacterString",
+      "text": "RDI ADCP",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[4]/name/CharacterString\tManufacturer: Teledyne Marine RD Instruments; Firmware: 83.3",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[4]/name/CharacterString",
+      "text": "Manufacturer: Teledyne Marine RD Instruments; Firmware: 83.3",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[5]/attributeDescription/CharacterString\tConductivity, Temperature, Depth Sensor",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[5]/attributeDescription/CharacterString",
+      "text": "Conductivity, Temperature, Depth Sensor",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[5]/identifier/MD_Identifier/code/CharacterString\tAML CTD",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[5]/identifier/MD_Identifier/code/CharacterString",
+      "text": "AML CTD",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[5]/name/CharacterString\tManufacturer: AML Oceanographic; Firmware: 83.3",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[5]/name/CharacterString",
+      "text": "Manufacturer: AML Oceanographic; Firmware: 83.3",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/dateStamp/DateTime\t2026-05-11T16:17:31Z",
+      "path": "MI_Metadata/dateStamp/DateTime",
+      "text": "2026-05-11T16:17:31Z",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/distributionInfo/MD_Distribution/transferOptions/MD_DigitalTransferOptions/onLine/CI_OnlineResource/linkage/URL\thttps://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "path": "MI_Metadata/distributionInfo/MD_Distribution/transferOptions/MD_DigitalTransferOptions/onLine/CI_OnlineResource/linkage/URL",
+      "text": "https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/fileIdentifier/CharacterString\tgov.noaa.ncei.uxs:EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z",
+      "path": "MI_Metadata/fileIdentifier/CharacterString",
+      "text": "gov.noaa.ncei.uxs:EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/hierarchyLevel/MD_ScopeCode\tdataset",
+      "path": "MI_Metadata/hierarchyLevel/MD_ScopeCode",
+      "text": "dataset",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/abstract/CharacterString\tThe MDBC Mapping, Ground truthing and Modeling team along with USM will conduct UUV missions to collect synthetic aperture sonar data using the REMUS 620 platform equipped with the KRAKEN Sonar sensor and other oceanographic equipment",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/abstract/CharacterString",
+      "text": "The MDBC Mapping, Ground truthing and Modeling team along with USM will conduct UUV missions to collect synthetic aperture sonar data using the REMUS 620 platform equipped with the KRAKEN Sonar sensor and other oceanographic equipment",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/characterSet/MD_CharacterSetCode\tutf8",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/characterSet/MD_CharacterSetCode",
+      "text": "utf8",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/alternateTitle/CharacterString\tEN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/alternateTitle/CharacterString",
+      "text": "EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[1]/CI_Date/date/DateTime\t2025-07-27T00:48",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[1]/CI_Date/date/DateTime",
+      "text": "2025-07-27T00:48",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[1]/CI_Date/dateType/CI_DateTypeCode\tcreation",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[1]/CI_Date/dateType/CI_DateTypeCode",
+      "text": "creation",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[2]/CI_Date/date/DateTime\t2025-07-27T07:47",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[2]/CI_Date/date/DateTime",
+      "text": "2025-07-27T07:47",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[2]/CI_Date/dateType/CI_DateTypeCode\tcompletion",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[2]/CI_Date/dateType/CI_DateTypeCode",
+      "text": "completion",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/title/CharacterString\tRV Expedition 2025 LEG 01 REMUS620 KRAKEN SAS MGM Dive 05",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/title/CharacterString",
+      "text": "RV Expedition 2025 LEG 01 REMUS620 KRAKEN SAS MGM Dive 05",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword/CharacterString\tPlatform: REMUS 620 by HII Model: REMUS 620",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword/CharacterString",
+      "text": "Platform: REMUS 620 by HII Model: REMUS 620",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString\tGCMD platforms",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString",
+      "text": "GCMD platforms",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/keyword/CharacterString\tInertial Navigation System",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/keyword/CharacterString",
+      "text": "Inertial Navigation System",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString\tGCMD instruments",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString",
+      "text": "GCMD instruments",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[3]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString\tPlatform instance",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[3]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString",
+      "text": "Platform instance",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[3]/MD_Keywords/type/MD_KeywordTypeCode\tplatform",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[3]/MD_Keywords/type/MD_KeywordTypeCode",
+      "text": "platform",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/eastBoundLongitude/Decimal\t-87.31786719161755",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/eastBoundLongitude/Decimal",
+      "text": "-87.31786719161755",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/northBoundLatitude/Decimal\t29.930553243137695",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/northBoundLatitude/Decimal",
+      "text": "29.930553243137695",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/southBoundLatitude/Decimal\t29.843156926151266",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/southBoundLatitude/Decimal",
+      "text": "29.843156926151266",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/westBoundLongitude/Decimal\t-87.15895078704915",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/westBoundLongitude/Decimal",
+      "text": "-87.15895078704915",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/temporalElement/EX_TemporalExtent/extent/TimePeriod/beginPosition\t2025-07-27T00:48",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/temporalElement/EX_TemporalExtent/extent/TimePeriod/beginPosition",
+      "text": "2025-07-27T00:48",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/temporalElement/EX_TemporalExtent/extent/TimePeriod/endPosition\t2025-07-27T07:47",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/temporalElement/EX_TemporalExtent/extent/TimePeriod/endPosition",
+      "text": "2025-07-27T07:47",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/language/LanguageCode\teng",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/language/LanguageCode",
+      "text": "eng",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/organisationName/CharacterString\tNOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/organisationName/CharacterString",
+      "text": "NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/resourceMaintenance/MD_MaintenanceInformation/maintenanceAndUpdateFrequency/MD_MaintenanceFrequencyCode\tasNeeded",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/resourceMaintenance/MD_MaintenanceInformation/maintenanceAndUpdateFrequency/MD_MaintenanceFrequencyCode",
+      "text": "asNeeded",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/status/MD_ProgressCode\tongoing",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/status/MD_ProgressCode",
+      "text": "ongoing",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/supplementalInformation/CharacterString\tUxS operational layer: Dataset or product",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/supplementalInformation/CharacterString",
+      "text": "UxS operational layer: Dataset or product",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/metadataStandardName/CharacterString\tISO 19115-3",
+      "path": "MI_Metadata/metadataStandardName/CharacterString",
+      "text": "ISO 19115-3",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/metadataStandardVersion/CharacterString\t2.0",
+      "path": "MI_Metadata/metadataStandardVersion/CharacterString",
+      "text": "2.0",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/referenceSystemInfo/MD_ReferenceSystem/referenceSystemIdentifier/RS_Identifier/code/CharacterString\tEPSG:4326",
+      "path": "MI_Metadata/referenceSystemInfo/MD_ReferenceSystem/referenceSystemIdentifier/RS_Identifier/code/CharacterString",
+      "text": "EPSG:4326",
+      "onlyIn": "preview",
+      "count": 1
+    }
+  ],
+  "truncated": false
+}

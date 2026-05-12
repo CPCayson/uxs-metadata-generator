@@ -1,0 +1,700 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gmi:MI_Metadata xmlns:gmd="http://www.isotc211.org/2005/gmd"
+                 xmlns:gco="http://www.isotc211.org/2005/gco"
+                 xmlns:gmi="http://www.isotc211.org/2005/gmi"
+                 xmlns:gmx="http://www.isotc211.org/2005/gmx"
+                 xmlns:gml="http://www.opengis.net/gml/3.2"
+                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://www.isotc211.org/2005/gmi http://schemas.opengis.net/iso/19115/-2/gmi/1.0/gmi.xsd">
+  <!-- gmd:parentIdentifier is intentionally omitted here.
+       Only BEDI granule profiles (hierarchyLevel=dataset with a parent collection)
+       should emit parentIdentifier.  Mission and collection records are
+       standalone; adding parentIdentifier to them would create incorrect
+       collection-granule relationships in CoMET and OneStop. -->
+  <gmd:fileIdentifier>
+    <gco:CharacterString>gov.noaa.ncei.uxs:PS2418L0_ER_AUV01_Norbit_MB_20240505T1510Z_MD</gco:CharacterString>
+  </gmd:fileIdentifier>
+  <gmd:dateStamp><gco:DateTime>2024-05-05T15:10</gco:DateTime></gmd:dateStamp>
+  <gmd:hierarchyLevel>
+    <gmd:MD_ScopeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/MD_ScopeCode.xml#MD_ScopeCode" codeListValue="dataset">dataset</gmd:MD_ScopeCode>
+  </gmd:hierarchyLevel>
+  <gmd:metadataStandardName>
+    <gco:CharacterString>ISO 19115 Geographic Information - Metadata</gco:CharacterString>
+  </gmd:metadataStandardName>
+  <gmd:metadataStandardVersion>
+    <gco:CharacterString>2:2019/Amd 1:2022</gco:CharacterString>
+  </gmd:metadataStandardVersion>
+  <gmd:referenceSystemInfo>
+    <gmd:MD_ReferenceSystem>
+      <gmd:referenceSystemIdentifier>
+        <gmd:RS_Identifier>
+          <gmd:code><gco:CharacterString>WGS84E_2D</gco:CharacterString></gmd:code>
+        </gmd:RS_Identifier>
+      </gmd:referenceSystemIdentifier>
+    </gmd:MD_ReferenceSystem>
+  </gmd:referenceSystemInfo>
+  <gmd:identificationInfo>
+    <gmd:MD_DataIdentification>
+      <gmd:citation>
+        <gmd:CI_Citation>
+          <gmd:title><gco:CharacterString>Point Sur 2024 Leg 18 Eagle Ray MultiBeam Sonar Data AUV Dive 01</gco:CharacterString></gmd:title>
+          <gmd:alternateTitle><gco:CharacterString>PS2418L0_ER_AUV01_Norbit_MB_20240505T1510Z</gco:CharacterString></gmd:alternateTitle>
+          <gmd:date><gmd:CI_Date><gmd:date><gco:DateTime>2024-05-05T13:58</gco:DateTime></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/CI_DateTypeCode.xml#CI_DateTypeCode" codeListValue="creation">creation</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>
+          <gmd:date><gmd:CI_Date><gmd:date><gco:DateTime>2024-05-05T15:10</gco:DateTime></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeListValue="publication">publication</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>
+          
+          
+          <gmd:identifier><gmd:MD_Identifier><gmd:code><gco:CharacterString>insert DOI or UIUD or reference to parent data collection</gco:CharacterString></gmd:code></gmd:MD_Identifier></gmd:identifier>
+          
+        </gmd:CI_Citation>
+      </gmd:citation>
+      <gmd:abstract><gco:CharacterString>The MDBC Mapping, Groundtruthing and Modeling team along with USM will conduct AUV acquisition at 
+									 multiple deepwater dome sites for 11 operational days using the RV Point Sur.  The mission will 
+									 focus on two objectives - 1) Collect high-resolution multibeam bathymetry and backscatter over 
+									 Macondo wellhead and impact area (MC252) using the USM Eagle Ray (ER) AUV, 2) collect high resolution 
+									 data at other proximal dome features where significant feature anomalies of been identified from existing
+									 data</gco:CharacterString></gmd:abstract>
+      <gmd:purpose><gco:CharacterString></gco:CharacterString></gmd:purpose>
+      <gmd:supplementalInformation><gco:CharacterString>UxS operational layer: Dataset or product</gco:CharacterString></gmd:supplementalInformation>
+      <gmd:extent>
+        <gmd:EX_Extent>
+          <gmd:geographicElement>
+            <gmd:EX_GeographicBoundingBox>
+              <gmd:westBoundLongitude><gco:Decimal>-180</gco:Decimal></gmd:westBoundLongitude>
+              <gmd:eastBoundLongitude><gco:Decimal>180</gco:Decimal></gmd:eastBoundLongitude>
+              <gmd:southBoundLatitude><gco:Decimal>-90</gco:Decimal></gmd:southBoundLatitude>
+              <gmd:northBoundLatitude><gco:Decimal>90</gco:Decimal></gmd:northBoundLatitude>
+            </gmd:EX_GeographicBoundingBox>
+          </gmd:geographicElement>
+          <gmd:temporalElement>
+            <gmd:EX_TemporalExtent>
+              <gmd:extent>
+                <gml:TimePeriod gml:id="tp1">
+                  <gml:beginPosition>2024-05-05T13:58</gml:beginPosition>
+                  <gml:endPosition indeterminatePosition="unknown"/>
+                </gml:TimePeriod>
+              </gmd:extent>
+            </gmd:EX_TemporalExtent>
+          </gmd:temporalElement>
+        </gmd:EX_Extent>
+      </gmd:extent>
+      <gmd:pointOfContact>
+        <gmd:CI_ResponsibleParty>
+          <gmd:individualName><gco:CharacterString></gco:CharacterString></gmd:individualName>
+          <gmd:organisationName><gco:CharacterString>NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT</gco:CharacterString></gmd:organisationName>
+          <gmd:contactInfo>
+            <gmd:CI_Contact>
+              <gmd:address>
+                <gmd:CI_Address>
+                  <gmd:electronicMailAddress><gco:CharacterString>errol.ronje@noaa.gov</gco:CharacterString></gmd:electronicMailAddress>
+                </gmd:CI_Address>
+              </gmd:address>
+              <gmd:phone><gmd:CI_Telephone><gmd:voice><gco:CharacterString>+17692421590</gco:CharacterString></gmd:voice></gmd:CI_Telephone></gmd:phone>
+              <gmd:onlineResource><gmd:CI_OnlineResource><gmd:linkage><gmd:URL>https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio</gmd:URL></gmd:linkage></gmd:CI_OnlineResource></gmd:onlineResource>
+              <gmd:address><gmd:CI_Address><gmd:deliveryPoint><gco:CharacterString>Suite 1003</gco:CharacterString></gmd:deliveryPoint></gmd:CI_Address></gmd:address>
+            </gmd:CI_Contact>
+          </gmd:contactInfo>
+        </gmd:CI_ResponsibleParty>
+      </gmd:pointOfContact>
+    <!-- sciencekeywords -->
+    <!-- datacenters -->
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>Eagle Ray Deep Water Mapping AUV</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD platforms</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>Paroscientific Digiquartz Series 8000 Pressure Sensor</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD instruments</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <!-- locations -->
+    <!-- projects -->
+    <!-- providers -->
+
+      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:type>
+            <gmd:MD_KeywordTypeCode>platform</gmd:MD_KeywordTypeCode>
+          </gmd:type>
+          <gmd:thesaurusName>
+            <gmd:CI_Citation>
+              <gmd:title><gco:CharacterString>Platform instance</gco:CharacterString></gmd:title>
+            </gmd:CI_Citation>
+          </gmd:thesaurusName>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:status>
+        <gmd:MD_ProgressCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ProgressCode" codeListValue="completed">completed</gmd:MD_ProgressCode>
+      </gmd:status>
+      <gmd:language>
+        <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/php/code_list.php" codeListValue="eng">eng</gmd:LanguageCode>
+      </gmd:language>
+      <gmd:characterSet>
+        <gmd:MD_CharacterSetCode codeListValue="utf8">utf8</gmd:MD_CharacterSetCode>
+      </gmd:characterSet>
+      <gmd:resourceMaintenance>
+        <gmd:MD_MaintenanceInformation>
+          <gmd:maintenanceAndUpdateFrequency>
+            <gmd:MD_MaintenanceFrequencyCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/MD_MaintenanceFrequencyCode.xml#MD_MaintenanceFrequencyCode" codeListValue="asNeeded">asNeeded</gmd:MD_MaintenanceFrequencyCode>
+          </gmd:maintenanceAndUpdateFrequency>
+        </gmd:MD_MaintenanceInformation>
+      </gmd:resourceMaintenance>
+      <gmd:resourceConstraints>
+        <gmd:MD_LegalConstraints>
+          <gmd:accessConstraints><gmd:MD_RestrictionCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#MD_RestrictionCode" codeListValue="otherRestrictions">otherRestrictions</gmd:MD_RestrictionCode></gmd:accessConstraints>
+          <gmd:otherConstraints><gco:CharacterString>otherRestrictions</gco:CharacterString></gmd:otherConstraints>
+          <gmd:otherConstraints><gco:CharacterString>Distribution liability: NOAA and NCEI make no warranty,
+							expressed or implied, regarding these data, nor does the fact of
+							distribution constitute such a warranty. NOAA and NCEI cannot assume
+							liability for any damages caused by any errors or omissions in these
+							data. If appropriate, NCEI can only certify that the data it distributes
+							are an authentic copy of the records that were accepted for inclusion in the NCEI archives.</gco:CharacterString></gmd:otherConstraints>
+          <gmd:otherConstraints><gco:CharacterString>Data license: https://www.ncei.noaa.gov/</gco:CharacterString></gmd:otherConstraints>
+        </gmd:MD_LegalConstraints>
+      </gmd:resourceConstraints>
+    </gmd:MD_DataIdentification>
+  </gmd:identificationInfo>
+  <gmd:spatialRepresentationInfo>
+    <gmd:MD_Georectified>
+      <gmd:numberOfDimensions>
+        <gco:Integer>3</gco:Integer>
+      </gmd:numberOfDimensions>
+    </gmd:MD_Georectified>
+  </gmd:spatialRepresentationInfo>
+  <gmi:acquisitionInformation>
+    <gmi:MI_AcquisitionInformation>
+      <gmi:platform>
+        <gmi:MI_Platform id="platform">
+          <gmd:identifier>
+            <gmd:MD_Identifier>
+              <gmd:code><gco:CharacterString>PS Eagle Ray</gco:CharacterString></gmd:code>
+            </gmd:MD_Identifier>
+          </gmd:identifier>
+          <gmd:description>
+            <gco:CharacterString>Eagle Ray Deep Water Mapping AUV</gco:CharacterString>
+          </gmd:description>
+          <gmi:type>
+            <gco:CharacterString>Eagle Ray Deep Water Mapping AUV</gco:CharacterString>
+          </gmi:type>
+          <gmd:pointOfContact>
+            <gmd:CI_ResponsibleParty>
+              <gmd:organisationName><gco:CharacterString>NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT</gco:CharacterString></gmd:organisationName>
+              <gmd:role>
+                <gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/CI_RoleCode.xml#CI_RoleCode" codeListValue="pointOfContact">pointOfContact</gmd:CI_RoleCode>
+              </gmd:role>
+            </gmd:CI_ResponsibleParty>
+          </gmd:pointOfContact>
+          
+          <gmi:instrument>
+            <gmi:MI_Instrument>
+              <gmd:identifier>
+                <gmd:MD_Identifier>
+                  <gmd:code><gco:CharacterString>Paroscientific Pressure Sensor</gco:CharacterString></gmd:code>
+                </gmd:MD_Identifier>
+              </gmd:identifier>
+              <gmi:type><gco:CharacterString>Paroscientific Digiquartz Series 8000 Pressure Sensor</gco:CharacterString></gmi:type>
+              <gmd:description><gco:CharacterString>Paroscientific Digiquartz Series 8000 Pressure Sensor
+Uncertainty Estimate - 0.2m
+Confidence Interval - RMS
+0.01% Typical Accuracy (Total depth of 2200m)</gco:CharacterString></gmd:description>
+            </gmi:MI_Instrument>
+          </gmi:instrument>
+          <gmi:instrument>
+            <gmi:MI_Instrument>
+              <gmd:identifier>
+                <gmd:MD_Identifier>
+                  <gmd:code><gco:CharacterString>SBE CTD Sensor</gco:CharacterString></gmd:code>
+                </gmd:MD_Identifier>
+              </gmd:identifier>
+              <gmi:type><gco:CharacterString>SBE 49 FastCAT CTD Sensor</gco:CharacterString></gmi:type>
+              <gmd:description><gco:CharacterString>SBE 49 FastCAT CTD Sensor
+Operation Mode 1 hz
+Uncertainty Estimate =/- 0.002 deg C; =/- 0.0003 S/m for conductivity; 0.1% for pressure
+Confidence Interval RMS</gco:CharacterString></gmd:description>
+            </gmi:MI_Instrument>
+          </gmi:instrument>
+          <gmi:instrument>
+            <gmi:MI_Instrument>
+              <gmd:identifier>
+                <gmd:MD_Identifier>
+                  <gmd:code><gco:CharacterString>Masterclock GNSS Receiver</gco:CharacterString></gmd:code>
+                </gmd:MD_Identifier>
+              </gmd:identifier>
+              <gmi:type><gco:CharacterString>Masterclock GNSS Receiver GMR Series 1000</gco:CharacterString></gmi:type>
+              <gmd:description><gco:CharacterString>Masterclock GNSS Receiver GMR Series 1000
+Operation mode - Internal Clock
+Uncertainty Estimate - Correction time: +/-60 ns of UTC
+Accurate to reference within +/- 15ns of UTC, Time drift per year (max): +3 sec/year</gco:CharacterString></gmd:description>
+            </gmi:MI_Instrument>
+          </gmi:instrument>
+          <gmi:instrument>
+            <gmi:MI_Instrument>
+              <gmd:identifier>
+                <gmd:MD_Identifier>
+                  <gmd:code><gco:CharacterString>Norbit MBES</gco:CharacterString></gmd:code>
+                </gmd:MD_Identifier>
+              </gmd:identifier>
+              <gmi:type><gco:CharacterString>Norbit WBMS MBES</gco:CharacterString></gmi:type>
+              <gmd:description><gco:CharacterString>Norbit WBMS MBES
+200 and 400 kHz
+512 beams
+0.9 degrees x 0.9 degrees</gco:CharacterString></gmd:description>
+            </gmi:MI_Instrument>
+          </gmi:instrument>
+          <gmi:instrument>
+            <gmi:MI_Instrument>
+              <gmd:identifier>
+                <gmd:MD_Identifier>
+                  <gmd:code><gco:CharacterString>Geoacoustic Subbottom Profiler</gco:CharacterString></gmd:code>
+                </gmd:MD_Identifier>
+              </gmd:identifier>
+              <gmi:type><gco:CharacterString>Geoacoustic Subbottom Profiler based on GeoPulse model</gco:CharacterString></gmi:type>
+              <gmd:description><gco:CharacterString>Geoacoustic Subbottom Profiler based on GeoPulse model
+1.5 kHz</gco:CharacterString></gmd:description>
+            </gmi:MI_Instrument>
+          </gmi:instrument>
+          <gmi:instrument>
+            <gmi:MI_Instrument>
+              <gmd:identifier>
+                <gmd:MD_Identifier>
+                  <gmd:code><gco:CharacterString>Exail INS</gco:CharacterString></gmd:code>
+                </gmd:MD_Identifier>
+              </gmd:identifier>
+              <gmi:type><gco:CharacterString>Exail Phins C7 INS</gco:CharacterString></gmi:type>
+              <gmd:description><gco:CharacterString>Exail Phins C7 INS
+Operation Mode - Position Accuracy
+Roll and Pitch
+Uncertainty Estimate - 0.010 deg
+Confidence Interval - RMS
+Use with GNSS or USBL and DVL</gco:CharacterString></gmd:description>
+            </gmi:MI_Instrument>
+          </gmi:instrument>
+          <gmi:instrument>
+            <gmi:MI_Instrument>
+              <gmd:identifier>
+                <gmd:MD_Identifier>
+                  <gmd:code><gco:CharacterString>Nortek DVL</gco:CharacterString></gmd:code>
+                </gmd:MD_Identifier>
+              </gmd:identifier>
+              <gmi:type><gco:CharacterString>Nortek 500 DVL</gco:CharacterString></gmi:type>
+              <gmd:description><gco:CharacterString>Nortek 500 DVL
+Operation Mode - Long-term Accuracy
+Uncertainty Estimate - +/- 0.1% / +/- 0.1 cm/s
+Confidence Interval - RMS
+Depth and Speed</gco:CharacterString></gmd:description>
+            </gmi:MI_Instrument>
+          </gmi:instrument>
+          <gmi:instrument>
+            <gmi:MI_Instrument>
+              <gmd:identifier>
+                <gmd:MD_Identifier>
+                  <gmd:code><gco:CharacterString>Sonardyne USBL</gco:CharacterString></gmd:code>
+                </gmd:MD_Identifier>
+              </gmd:identifier>
+              <gmi:type><gco:CharacterString>Sonardyne Ranger2 USBL</gco:CharacterString></gmi:type>
+              <gmd:description><gco:CharacterString>Sonardyne Ranger2 USBL
+Operation Mode - slant range system accuracy
+Uncertainty Estimate - 0.04%
+Confidence Interval - RMS
+Sampling rate 1 Hz and frequency of 19-34 kHz or 14-19.5 kHz</gco:CharacterString></gmd:description>
+            </gmi:MI_Instrument>
+          </gmi:instrument>
+          <gmi:instrument>
+            <gmi:MI_Instrument>
+              <gmd:identifier>
+                <gmd:MD_Identifier>
+                  <gmd:code><gco:CharacterString>Sonardyne USBL Transponder</gco:CharacterString></gmd:code>
+                </gmd:MD_Identifier>
+              </gmd:identifier>
+              <gmi:type><gco:CharacterString>Sonardyne AVTrack6 USBL Transponder</gco:CharacterString></gmi:type>
+              <gmd:description><gco:CharacterString>Sonardyne AVTrack6 USBL Transponder
+Operation Mode - Depth Sensor
+Uncertainty Estimate - +/- 0.5% full scale
+Confidence Interval - RMS
+Range precision better than 15mm</gco:CharacterString></gmd:description>
+            </gmi:MI_Instrument>
+          </gmi:instrument>
+          <gmi:instrument>
+            <gmi:MI_Instrument>
+              <gmd:identifier>
+                <gmd:MD_Identifier>
+                  <gmd:code><gco:CharacterString>OFG Magnetometer</gco:CharacterString></gmd:code>
+                </gmd:MD_Identifier>
+              </gmd:identifier>
+              <gmi:type><gco:CharacterString>OFG Self-compensating Magnetometer (SCM)</gco:CharacterString></gmi:type>
+              <gmd:description><gco:CharacterString>OFG Self-compensating Magnetometer (SCM)
+Depth rated 6000m</gco:CharacterString></gmd:description>
+            </gmi:MI_Instrument>
+          </gmi:instrument>
+        </gmi:MI_Platform>
+      </gmi:platform>
+      <gmi:instrument>
+        <gmi:MI_Instrument id="instrument_1" xlink:href="#platform">
+          <gmd:identifier>
+            <gmd:MD_Identifier>
+              <gmd:code><gco:CharacterString>Paroscientific Pressure Sensor</gco:CharacterString></gmd:code>
+            </gmd:MD_Identifier>
+          </gmd:identifier>
+          <gmi:type><gco:CharacterString>Paroscientific Digiquartz Series 8000 Pressure Sensor</gco:CharacterString></gmi:type>
+          <gmd:description><gco:CharacterString>Paroscientific Digiquartz Series 8000 Pressure Sensor
+Uncertainty Estimate - 0.2m
+Confidence Interval - RMS
+0.01% Typical Accuracy (Total depth of 2200m)</gco:CharacterString></gmd:description>
+        </gmi:MI_Instrument>
+      </gmi:instrument>
+      <gmi:instrument>
+        <gmi:MI_Instrument id="instrument_2" xlink:href="#platform">
+          <gmd:identifier>
+            <gmd:MD_Identifier>
+              <gmd:code><gco:CharacterString>SBE CTD Sensor</gco:CharacterString></gmd:code>
+            </gmd:MD_Identifier>
+          </gmd:identifier>
+          <gmi:type><gco:CharacterString>SBE 49 FastCAT CTD Sensor</gco:CharacterString></gmi:type>
+          <gmd:description><gco:CharacterString>SBE 49 FastCAT CTD Sensor
+Operation Mode 1 hz
+Uncertainty Estimate =/- 0.002 deg C; =/- 0.0003 S/m for conductivity; 0.1% for pressure
+Confidence Interval RMS</gco:CharacterString></gmd:description>
+        </gmi:MI_Instrument>
+      </gmi:instrument>
+      <gmi:instrument>
+        <gmi:MI_Instrument id="instrument_3" xlink:href="#platform">
+          <gmd:identifier>
+            <gmd:MD_Identifier>
+              <gmd:code><gco:CharacterString>Masterclock GNSS Receiver</gco:CharacterString></gmd:code>
+            </gmd:MD_Identifier>
+          </gmd:identifier>
+          <gmi:type><gco:CharacterString>Masterclock GNSS Receiver GMR Series 1000</gco:CharacterString></gmi:type>
+          <gmd:description><gco:CharacterString>Masterclock GNSS Receiver GMR Series 1000
+Operation mode - Internal Clock
+Uncertainty Estimate - Correction time: +/-60 ns of UTC
+Accurate to reference within +/- 15ns of UTC, Time drift per year (max): +3 sec/year</gco:CharacterString></gmd:description>
+        </gmi:MI_Instrument>
+      </gmi:instrument>
+      <gmi:instrument>
+        <gmi:MI_Instrument id="instrument_4" xlink:href="#platform">
+          <gmd:identifier>
+            <gmd:MD_Identifier>
+              <gmd:code><gco:CharacterString>Norbit MBES</gco:CharacterString></gmd:code>
+            </gmd:MD_Identifier>
+          </gmd:identifier>
+          <gmi:type><gco:CharacterString>Norbit WBMS MBES</gco:CharacterString></gmi:type>
+          <gmd:description><gco:CharacterString>Norbit WBMS MBES
+200 and 400 kHz
+512 beams
+0.9 degrees x 0.9 degrees</gco:CharacterString></gmd:description>
+        </gmi:MI_Instrument>
+      </gmi:instrument>
+      <gmi:instrument>
+        <gmi:MI_Instrument id="instrument_5" xlink:href="#platform">
+          <gmd:identifier>
+            <gmd:MD_Identifier>
+              <gmd:code><gco:CharacterString>Geoacoustic Subbottom Profiler</gco:CharacterString></gmd:code>
+            </gmd:MD_Identifier>
+          </gmd:identifier>
+          <gmi:type><gco:CharacterString>Geoacoustic Subbottom Profiler based on GeoPulse model</gco:CharacterString></gmi:type>
+          <gmd:description><gco:CharacterString>Geoacoustic Subbottom Profiler based on GeoPulse model
+1.5 kHz</gco:CharacterString></gmd:description>
+        </gmi:MI_Instrument>
+      </gmi:instrument>
+      <gmi:instrument>
+        <gmi:MI_Instrument id="instrument_6" xlink:href="#platform">
+          <gmd:identifier>
+            <gmd:MD_Identifier>
+              <gmd:code><gco:CharacterString>Exail INS</gco:CharacterString></gmd:code>
+            </gmd:MD_Identifier>
+          </gmd:identifier>
+          <gmi:type><gco:CharacterString>Exail Phins C7 INS</gco:CharacterString></gmi:type>
+          <gmd:description><gco:CharacterString>Exail Phins C7 INS
+Operation Mode - Position Accuracy
+Roll and Pitch
+Uncertainty Estimate - 0.010 deg
+Confidence Interval - RMS
+Use with GNSS or USBL and DVL</gco:CharacterString></gmd:description>
+        </gmi:MI_Instrument>
+      </gmi:instrument>
+      <gmi:instrument>
+        <gmi:MI_Instrument id="instrument_7" xlink:href="#platform">
+          <gmd:identifier>
+            <gmd:MD_Identifier>
+              <gmd:code><gco:CharacterString>Nortek DVL</gco:CharacterString></gmd:code>
+            </gmd:MD_Identifier>
+          </gmd:identifier>
+          <gmi:type><gco:CharacterString>Nortek 500 DVL</gco:CharacterString></gmi:type>
+          <gmd:description><gco:CharacterString>Nortek 500 DVL
+Operation Mode - Long-term Accuracy
+Uncertainty Estimate - +/- 0.1% / +/- 0.1 cm/s
+Confidence Interval - RMS
+Depth and Speed</gco:CharacterString></gmd:description>
+        </gmi:MI_Instrument>
+      </gmi:instrument>
+      <gmi:instrument>
+        <gmi:MI_Instrument id="instrument_8" xlink:href="#platform">
+          <gmd:identifier>
+            <gmd:MD_Identifier>
+              <gmd:code><gco:CharacterString>Sonardyne USBL</gco:CharacterString></gmd:code>
+            </gmd:MD_Identifier>
+          </gmd:identifier>
+          <gmi:type><gco:CharacterString>Sonardyne Ranger2 USBL</gco:CharacterString></gmi:type>
+          <gmd:description><gco:CharacterString>Sonardyne Ranger2 USBL
+Operation Mode - slant range system accuracy
+Uncertainty Estimate - 0.04%
+Confidence Interval - RMS
+Sampling rate 1 Hz and frequency of 19-34 kHz or 14-19.5 kHz</gco:CharacterString></gmd:description>
+        </gmi:MI_Instrument>
+      </gmi:instrument>
+      <gmi:instrument>
+        <gmi:MI_Instrument id="instrument_9" xlink:href="#platform">
+          <gmd:identifier>
+            <gmd:MD_Identifier>
+              <gmd:code><gco:CharacterString>Sonardyne USBL Transponder</gco:CharacterString></gmd:code>
+            </gmd:MD_Identifier>
+          </gmd:identifier>
+          <gmi:type><gco:CharacterString>Sonardyne AVTrack6 USBL Transponder</gco:CharacterString></gmi:type>
+          <gmd:description><gco:CharacterString>Sonardyne AVTrack6 USBL Transponder
+Operation Mode - Depth Sensor
+Uncertainty Estimate - +/- 0.5% full scale
+Confidence Interval - RMS
+Range precision better than 15mm</gco:CharacterString></gmd:description>
+        </gmi:MI_Instrument>
+      </gmi:instrument>
+      <gmi:instrument>
+        <gmi:MI_Instrument id="instrument_10" xlink:href="#platform">
+          <gmd:identifier>
+            <gmd:MD_Identifier>
+              <gmd:code><gco:CharacterString>OFG Magnetometer</gco:CharacterString></gmd:code>
+            </gmd:MD_Identifier>
+          </gmd:identifier>
+          <gmi:type><gco:CharacterString>OFG Self-compensating Magnetometer (SCM)</gco:CharacterString></gmi:type>
+          <gmd:description><gco:CharacterString>OFG Self-compensating Magnetometer (SCM)
+Depth rated 6000m</gco:CharacterString></gmd:description>
+        </gmi:MI_Instrument>
+      </gmi:instrument>
+    </gmi:MI_AcquisitionInformation>
+  </gmi:acquisitionInformation>
+
+  <gmd:contentInfo>
+  <gmi:MI_CoverageDescription>
+    <gmd:identifier>
+      <gmd:MD_Identifier>
+        <gmd:code><gco:CharacterString>Paroscientific Pressure Sensor</gco:CharacterString></gmd:code>
+      </gmd:MD_Identifier>
+    </gmd:identifier>
+    <gmd:attributeDescription><gco:CharacterString>Paroscientific Digiquartz Series 8000 Pressure Sensor</gco:CharacterString></gmd:attributeDescription>
+    <gmd:name><gco:CharacterString>Paroscientific Digiquartz Series 8000 Pressure Sensor
+Uncertainty Estimate - 0.2m
+Confidence Interval - RMS
+0.01% Typical Accuracy (Total depth of 2200m)</gco:CharacterString></gmd:name>
+    
+  </gmi:MI_CoverageDescription>
+  <gmi:MI_CoverageDescription>
+    <gmd:identifier>
+      <gmd:MD_Identifier>
+        <gmd:code><gco:CharacterString>SBE CTD Sensor</gco:CharacterString></gmd:code>
+      </gmd:MD_Identifier>
+    </gmd:identifier>
+    <gmd:attributeDescription><gco:CharacterString>SBE 49 FastCAT CTD Sensor</gco:CharacterString></gmd:attributeDescription>
+    <gmd:name><gco:CharacterString>SBE 49 FastCAT CTD Sensor
+Operation Mode 1 hz
+Uncertainty Estimate =/- 0.002 deg C; =/- 0.0003 S/m for conductivity; 0.1% for pressure
+Confidence Interval RMS</gco:CharacterString></gmd:name>
+    
+  </gmi:MI_CoverageDescription>
+  <gmi:MI_CoverageDescription>
+    <gmd:identifier>
+      <gmd:MD_Identifier>
+        <gmd:code><gco:CharacterString>Masterclock GNSS Receiver</gco:CharacterString></gmd:code>
+      </gmd:MD_Identifier>
+    </gmd:identifier>
+    <gmd:attributeDescription><gco:CharacterString>Masterclock GNSS Receiver GMR Series 1000</gco:CharacterString></gmd:attributeDescription>
+    <gmd:name><gco:CharacterString>Masterclock GNSS Receiver GMR Series 1000
+Operation mode - Internal Clock
+Uncertainty Estimate - Correction time: +/-60 ns of UTC
+Accurate to reference within +/- 15ns of UTC, Time drift per year (max): +3 sec/year</gco:CharacterString></gmd:name>
+    
+  </gmi:MI_CoverageDescription>
+  <gmi:MI_CoverageDescription>
+    <gmd:identifier>
+      <gmd:MD_Identifier>
+        <gmd:code><gco:CharacterString>Norbit MBES</gco:CharacterString></gmd:code>
+      </gmd:MD_Identifier>
+    </gmd:identifier>
+    <gmd:attributeDescription><gco:CharacterString>Norbit WBMS MBES</gco:CharacterString></gmd:attributeDescription>
+    <gmd:name><gco:CharacterString>Norbit WBMS MBES
+200 and 400 kHz
+512 beams
+0.9 degrees x 0.9 degrees</gco:CharacterString></gmd:name>
+    
+  </gmi:MI_CoverageDescription>
+  <gmi:MI_CoverageDescription>
+    <gmd:identifier>
+      <gmd:MD_Identifier>
+        <gmd:code><gco:CharacterString>Geoacoustic Subbottom Profiler</gco:CharacterString></gmd:code>
+      </gmd:MD_Identifier>
+    </gmd:identifier>
+    <gmd:attributeDescription><gco:CharacterString>Geoacoustic Subbottom Profiler based on GeoPulse model</gco:CharacterString></gmd:attributeDescription>
+    <gmd:name><gco:CharacterString>Geoacoustic Subbottom Profiler based on GeoPulse model
+1.5 kHz</gco:CharacterString></gmd:name>
+    
+  </gmi:MI_CoverageDescription>
+  <gmi:MI_CoverageDescription>
+    <gmd:identifier>
+      <gmd:MD_Identifier>
+        <gmd:code><gco:CharacterString>Exail INS</gco:CharacterString></gmd:code>
+      </gmd:MD_Identifier>
+    </gmd:identifier>
+    <gmd:attributeDescription><gco:CharacterString>Exail Phins C7 INS</gco:CharacterString></gmd:attributeDescription>
+    <gmd:name><gco:CharacterString>Exail Phins C7 INS
+Operation Mode - Position Accuracy
+Roll and Pitch
+Uncertainty Estimate - 0.010 deg
+Confidence Interval - RMS
+Use with GNSS or USBL and DVL</gco:CharacterString></gmd:name>
+    
+  </gmi:MI_CoverageDescription>
+  <gmi:MI_CoverageDescription>
+    <gmd:identifier>
+      <gmd:MD_Identifier>
+        <gmd:code><gco:CharacterString>Nortek DVL</gco:CharacterString></gmd:code>
+      </gmd:MD_Identifier>
+    </gmd:identifier>
+    <gmd:attributeDescription><gco:CharacterString>Nortek 500 DVL</gco:CharacterString></gmd:attributeDescription>
+    <gmd:name><gco:CharacterString>Nortek 500 DVL
+Operation Mode - Long-term Accuracy
+Uncertainty Estimate - +/- 0.1% / +/- 0.1 cm/s
+Confidence Interval - RMS
+Depth and Speed</gco:CharacterString></gmd:name>
+    
+  </gmi:MI_CoverageDescription>
+  <gmi:MI_CoverageDescription>
+    <gmd:identifier>
+      <gmd:MD_Identifier>
+        <gmd:code><gco:CharacterString>Sonardyne USBL</gco:CharacterString></gmd:code>
+      </gmd:MD_Identifier>
+    </gmd:identifier>
+    <gmd:attributeDescription><gco:CharacterString>Sonardyne Ranger2 USBL</gco:CharacterString></gmd:attributeDescription>
+    <gmd:name><gco:CharacterString>Sonardyne Ranger2 USBL
+Operation Mode - slant range system accuracy
+Uncertainty Estimate - 0.04%
+Confidence Interval - RMS
+Sampling rate 1 Hz and frequency of 19-34 kHz or 14-19.5 kHz</gco:CharacterString></gmd:name>
+    
+  </gmi:MI_CoverageDescription>
+  <gmi:MI_CoverageDescription>
+    <gmd:identifier>
+      <gmd:MD_Identifier>
+        <gmd:code><gco:CharacterString>Sonardyne USBL Transponder</gco:CharacterString></gmd:code>
+      </gmd:MD_Identifier>
+    </gmd:identifier>
+    <gmd:attributeDescription><gco:CharacterString>Sonardyne AVTrack6 USBL Transponder</gco:CharacterString></gmd:attributeDescription>
+    <gmd:name><gco:CharacterString>Sonardyne AVTrack6 USBL Transponder
+Operation Mode - Depth Sensor
+Uncertainty Estimate - +/- 0.5% full scale
+Confidence Interval - RMS
+Range precision better than 15mm</gco:CharacterString></gmd:name>
+    
+  </gmi:MI_CoverageDescription>
+  <gmi:MI_CoverageDescription>
+    <gmd:identifier>
+      <gmd:MD_Identifier>
+        <gmd:code><gco:CharacterString>OFG Magnetometer</gco:CharacterString></gmd:code>
+      </gmd:MD_Identifier>
+    </gmd:identifier>
+    <gmd:attributeDescription><gco:CharacterString>OFG Self-compensating Magnetometer (SCM)</gco:CharacterString></gmd:attributeDescription>
+    <gmd:name><gco:CharacterString>OFG Self-compensating Magnetometer (SCM)
+Depth rated 6000m</gco:CharacterString></gmd:name>
+    
+  </gmi:MI_CoverageDescription>
+  </gmd:contentInfo>
+  <gmd:dataQualityInfo>
+    <gmd:DQ_DataQuality>
+    <gmd:scope>
+      <gmd:DQ_Scope>
+        <gmd:level>
+          <gmd:MD_ScopeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/MD_ScopeCode.xml#MD_ScopeCode" codeListValue="dataset">dataset</gmd:MD_ScopeCode>
+        </gmd:level>
+      </gmd:DQ_Scope>
+    </gmd:scope>
+    <gmd:report>
+      <gmd:DQ_QuantitativeAttributeAccuracy>
+        <gmd:result>
+          <gmd:DQ_QuantitativeResult>
+          <gco:valueType>
+            <gco:RecordType>IHO Map Accuracy Standard</gco:RecordType>
+          </gco:valueType>
+          <gco:value>
+            <gco:Record>
+              <gmi:Quantity>
+                <gco:Decimal>1</gco:Decimal>
+                <gco:uom>m</gco:uom>
+              </gmi:Quantity>
+            </gco:Record>
+          </gco:value>
+        </gmd:DQ_QuantitativeResult>
+        </gmd:result>
+      </gmd:DQ_QuantitativeAttributeAccuracy>
+    </gmd:report>
+    <gmd:report>
+      <gmd:DQ_AbsoluteExternalPositionalAccuracy>
+        <gmd:result>
+          <gmd:DQ_QuantitativeResult>
+          <gco:valueType>
+            <gco:RecordType>Absolute Linear Error at 90% Significance Level
+											of Biased Vertical Data (Alternative 2)</gco:RecordType>
+          </gco:valueType>
+          <gco:value>
+            <gco:Record>
+              <gmi:Quantity>
+                <gco:Decimal>1.5</gco:Decimal>
+                <gco:uom>m</gco:uom>
+              </gmi:Quantity>
+            </gco:Record>
+          </gco:value>
+        </gmd:DQ_QuantitativeResult>
+        </gmd:result>
+      </gmd:DQ_AbsoluteExternalPositionalAccuracy>
+    </gmd:report>
+
+    </gmd:DQ_DataQuality>
+  </gmd:dataQualityInfo>
+  <gmd:distributionInfo>
+    <gmd:MD_Distribution>
+      <gmd:distributor>
+        <gmd:MD_Distributor>
+          <gmd:distributorContact xlink:title="NCEI (distributor)"/>
+        </gmd:MD_Distributor>
+      </gmd:distributor>
+      <gmd:distributionFormat>
+        <gmd:MD_Format>
+          <gmd:name><gco:CharacterString></gco:CharacterString></gmd:name>
+          
+        </gmd:MD_Format>
+      </gmd:distributionFormat>
+      
+      <gmd:transferOptions>
+        <gmd:MD_DigitalTransferOptions>
+          
+          <gmd:onLine><gmd:CI_OnlineResource><gmd:linkage><gmd:URL>https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio</gmd:URL></gmd:linkage></gmd:CI_OnlineResource></gmd:onLine>
+          
+        </gmd:MD_DigitalTransferOptions>
+      </gmd:transferOptions>
+    </gmd:MD_Distribution>
+  </gmd:distributionInfo>
+  <!-- workflow: outputLocation=download -->
+  <!-- metadataMaintenanceFrequency: asNeeded -->
+  <!-- output flags: useNceiMetadataContactXlink=false omitRootReferenceSystemInfo=false -->
+</gmi:MI_Metadata>

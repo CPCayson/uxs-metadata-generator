@@ -1,0 +1,1497 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+	
+<mdb:MD_Metadata xmlns:xlink="http://www.w3.org/1999/xlink" 
+	xmlns:cat="http://standards.iso.org/iso/19115/-3/cat/1.0"
+	xmlns:cit="http://standards.iso.org/iso/19115/-3/cit/2.0"
+	xmlns:gco="http://standards.iso.org/iso/19115/-3/gco/1.0"
+	xmlns:gcx="http://standards.iso.org/iso/19115/-3/gcx/1.0"
+	xmlns:gex="http://standards.iso.org/iso/19115/-3/gex/1.0"
+	xmlns:lan="http://standards.iso.org/iso/19115/-3/lan/1.0"
+	xmlns:mas="http://standards.iso.org/iso/19115/-3/mas/1.0"
+	xmlns:mcc="http://standards.iso.org/iso/19115/-3/mcc/1.0"
+	xmlns:mco="http://standards.iso.org/iso/19115/-3/mco/1.0"
+	xmlns:mda="http://standards.iso.org/iso/19115/-3/mda/1.0"
+	xmlns:mdq="http://standards.iso.org/iso/19157/-2/mdq/1.0"
+	xmlns:mex="http://standards.iso.org/iso/19115/-3/mex/1.0"
+	xmlns:mmi="http://standards.iso.org/iso/19115/-3/mmi/1.0"
+	xmlns:mpc="http://standards.iso.org/iso/19115/-3/mpc/1.0"
+	xmlns:mrd="http://standards.iso.org/iso/19115/-3/mrd/1.0"
+	xmlns:mri="http://standards.iso.org/iso/19115/-3/mri/1.0"
+	xmlns:mrs="http://standards.iso.org/iso/19115/-3/mrs/1.0"
+	xmlns:mac="http://standards.iso.org/iso/19115/-3/mac/2.0"
+	xmlns:mdb="http://standards.iso.org/iso/19115/-3/mdb/2.0"
+	xmlns:mds="http://standards.iso.org/iso/19115/-3/mds/2.0"
+	xmlns:mdt="http://standards.iso.org/iso/19115/-3/mdt/2.0"
+	xmlns:mrl="http://standards.iso.org/iso/19115/-3/mrl/2.0"
+	xmlns:mrc="http://standards.iso.org/iso/19115/-3/mrc/2.0"
+	xmlns:msr="http://standards.iso.org/iso/19115/-3/msr/2.0"
+	xmlns:srv="http://standards.iso.org/iso/19115/-3/srv/2.0"
+	xmlns:swe="http://www.opengis.net/swe/2.0" xmlns:sml="https://www.opengis.net/sensorml/2.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://schemas.opengis.net/gml/3.2.1/gml http://schemas.opengis.net/gml/3.2.1/gml.xsd
+	http://standards.iso.org/iso/19115/-3/mdb/2.0 http://standards.iso.org/iso/19115/-3/mdb/2.0/mdb.xsd 
+	http://standards.iso.org/iso/19115/-3/mdt/2.0/mdt http://standards.iso.org/iso/19115/-3/mdt/2.0/mdt.xsd
+	http://standards.iso.org/iso/19115/-3/cat/1.0 http://standards.iso.org/iso/19115/-3/cat/1.0/cat.xsd
+	http://standards.iso.org/iso/19115/-3/cit/2.0 http://standards.iso.org/iso/19115/-3/cit/2.0/cit.xsd
+	http://standards.iso.org/iso/19115/-3/gcx/1.0 http://standards.iso.org/iso/19115/-3/gcx/1.0/gcx.xsd
+	http://standards.iso.org/iso/19115/-3/gex/1.0 http://standards.iso.org/iso/19115/-3/gex/1.0/gex.xsd
+	http://standards.iso.org/iso/19115/-3/lan/1.0 http://standards.iso.org/iso/19115/-3/lan/1.0/lan.xsd
+	http://standards.iso.org/iso/19115/-3/srv/2.0 http://standards.iso.org/iso/19115/-3/srv/2.0/srv.xsd
+	http://standards.iso.org/iso/19115/-3/mas/1.0 http://standards.iso.org/iso/19115/-3/mas/1.0/mas.xsd 
+	http://standards.iso.org/iso/19115/-3/mcc/1.0 http://standards.iso.org/iso/19115/-3/mcc/1.0/mcc.xsd
+	http://standards.iso.org/iso/19115/-3/mco/1.0 http://standards.iso.org/iso/19115/-3/mco/1.0/mco.xsd
+	http://standards.iso.org/iso/19115/-3/mda/1.0 http://standards.iso.org/iso/19115/-3/mda/1.0/mda.xsd
+	http://standards.iso.org/iso/19115/-3/mds/1.0 http://standards.iso.org/iso/19115/-3/mds/1.0/mds.xsd
+	http://standards.iso.org/iso/19115/-3/mex/1.0 http://standards.iso.org/iso/19115/-3/mex/1.0/mex.xsd
+	http://standards.iso.org/iso/19115/-3/mmi/1.0 http://standards.iso.org/iso/19115/-3/mmi/1.0/mmi.xsd
+	http://standards.iso.org/iso/19115/-3/mpc/1.0 http://standards.iso.org/iso/19115/-3/mpc/1.0/mpc.xsd
+	http://standards.iso.org/iso/19115/-3/mrc/1.0 http://standards.iso.org/iso/19115/-3/mrc/1.0/mrc.xsd
+	http://standards.iso.org/iso/19115/-3/mrd/1.0 http://standards.iso.org/iso/19115/-3/mrd/1.0/mrd.xsd
+	http://standards.iso.org/iso/19115/-3/mri/1.0 http://standards.iso.org/iso/19115/-3/mri/1.0/mri.xsd
+	http://standards.iso.org/iso/19115/-3/mrl/1.0 http://standards.iso.org/iso/19115/-3/mrl/1.0/mrl.xsd
+	http://standards.iso.org/iso/19115/-3/mrs/1.0 http://standards.iso.org/iso/19115/-3/mrs/1.0/mrs.xsd
+	http://standards.iso.org/iso/19115/-3/msr/1.0 http://standards.iso.org/iso/19115/-3/msr/2.0/msr.xsd
+	http://standards.iso.org/iso/19157/-2/mdq/1.0 http://standards.iso.org/iso/19157/-2/mdq/1.0/mdq.xsd
+	http://standards.iso.org/iso/19115/-3/mac/1.0 http://standards.iso.org/iso/19115/-3/mac/1.0/mac.xsd 
+	http://standards.iso.org/iso/19115/-3/gco/1.0 http://standards.iso.org/iso/19115/-3/gco/1.0/gco.xsd
+	http://www.opengis.net/gml/3.2 http://schemas.opengis.net/gml/3.2.1/gml.xsd 
+	http://www.w3.org/1999/xlink http://www.w3.org/1999/xlink.xsd
+	http://standards.iso.org/iso/19157/-2/mdq/1.0 http://standards.iso.org/iso/19157/-2/mdq/1.0/mdq.xsd
+	">
+
+	<mdb:metadataIdentifier>
+		<mcc:MD_Identifier>
+			<mcc:code>
+				<gco:CharacterString>PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z_MD</gco:CharacterString>
+			</mcc:code>
+		</mcc:MD_Identifier>
+	</mdb:metadataIdentifier>
+	
+	<mdb:defaultLocale>
+		<lan:PT_Locale>
+			<lan:language>
+				<lan:LanguageCode codeList="https://standards.iso.org/iso/19139/resources/ML_gmxCodelists.xml#LanguageCode" codeListValue="eng">English</lan:LanguageCode>
+			</lan:language>
+			<lan:characterEncoding>
+				<lan:MD_CharacterSetCode codeList="https://standards.iso.org/iso/19139/resources/ML_gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8">utf8</lan:MD_CharacterSetCode>
+			</lan:characterEncoding>
+		</lan:PT_Locale>
+	</mdb:defaultLocale>
+
+	<mdb:metadataScope>
+		<mdb:MD_MetadataScope>
+			<mdb:resourceScope>
+				<mcc:MD_ScopeCode codeList="https://schemas.isotc211.org/19115/resources/Codelist/gml/MD_ScopeCode.xml#MD_ScopeCode" codeListValue="dataset">dataset</mcc:MD_ScopeCode>
+			</mdb:resourceScope>
+			<mdb:name>
+				<gco:CharacterString>PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z</gco:CharacterString>
+			</mdb:name>
+		</mdb:MD_MetadataScope>
+	</mdb:metadataScope>
+
+	<!-- Resource Metadata Contact: This is the PREPARER of this metadata record. This can be an organization or person. 
+		There can be more information added to the contact, including phone, and address. Change as needed.-->
+
+	<mdb:contact>
+		<cit:CI_Responsibility>
+			<cit:role>
+				<cit:CI_RoleCode codeList="codeListLocation#CI_RoleCode" codeListValue="pointOfContact">pointOfContact</cit:CI_RoleCode>
+			</cit:role>
+			<cit:party>
+				<cit:CI_Organisation>
+					<cit:name>
+						<gco:CharacterString>NOAA - NCEI</gco:CharacterString>
+					</cit:name>
+					<cit:contactInfo>
+						<cit:CI_Contact>
+							<cit:phone>
+								<cit:CI_Telephone>
+									<cit:number>
+										<!-- An “internationalized” telephone number as specified in ITU-T 
+											Recommendation E.123 Clause 2. -->
+										<gco:CharacterString>(601) 207-2323</gco:CharacterString>
+									</cit:number>
+								</cit:CI_Telephone>
+							</cit:phone>
+							<cit:address>
+								<cit:CI_Address>
+									<cit:deliveryPoint>
+										<gco:CharacterString>Suite 1003</gco:CharacterString>
+									</cit:deliveryPoint>
+									<cit:deliveryPoint>
+										<gco:CharacterString>1021 Balch Boulevard</gco:CharacterString>
+									</cit:deliveryPoint>
+									<cit:city>
+										<gco:CharacterString>Stennis Space Center</gco:CharacterString>
+									</cit:city>
+									<cit:administrativeArea>
+										<gco:CharacterString>MS</gco:CharacterString>
+									</cit:administrativeArea>
+									<cit:postalCode>
+										<gco:CharacterString>39529</gco:CharacterString>
+									</cit:postalCode>
+									<cit:country>
+										<gco:CharacterString>USA</gco:CharacterString>
+									</cit:country>
+									<cit:electronicMailAddress>
+										<gco:CharacterString>andrew.evans@noaa.gov</gco:CharacterString>
+									</cit:electronicMailAddress>
+								</cit:CI_Address>
+							</cit:address>
+							<!-- optional but recommended -->
+							<cit:onlineResource>
+								<cit:CI_OnlineResource>
+									<cit:linkage>
+										<gco:CharacterString>https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio</gco:CharacterString>
+									</cit:linkage>
+									<cit:name>
+										<gco:CharacterString>MESOPHOTIC AND DEEP BENTHIC COMMUNITIES PORTFOLIO</gco:CharacterString>
+									</cit:name>
+									<cit:description>
+										<gco:CharacterString>The MDBC Portfolio comprises four coordinated projects. The Portfolio Deliverables 
+															 site provides access to documents and products created to inform and support this 
+															 effort at the portfolio level, including those designated as deliverables by the MDBC 
+															 Portfolio. </gco:CharacterString>
+									</cit:description>
+									<cit:function>
+										<cit:CI_OnLineFunctionCode codeList="https://schemas.isotc211.org/19115/resources/Codelist/gml/CI_OnLineFunctionCode.xml#CI_OnLineFunctionCode" codeListValue="information">information</cit:CI_OnLineFunctionCode>
+									</cit:function>
+								</cit:CI_OnlineResource>
+							</cit:onlineResource>
+						</cit:CI_Contact>
+					</cit:contactInfo>
+				</cit:CI_Organisation>
+			</cit:party>
+		</cit:CI_Responsibility>
+	</mdb:contact>
+
+	<!-- Resource Metadata Date and Time: This is the date and time that this metadata record was prepared 
+		(and its content known to be accurate). This format is based on automated capture from the platform/insturment,
+		however the data can be listed as YYYY-MM-DD-->
+	<mdb:dateInfo>
+		<cit:CI_Date>
+			<cit:date>
+				<gco:DateTime>2024-05-09T21:16:39Z</gco:DateTime>
+			</cit:date>
+			<cit:dateType>
+				<cit:CI_DateTypeCode codeList="https://schemas.isotc211.org/19115/resources/Codelist/gml/CI_DateTypeCode.xml#CI_DateTypeCode" codeListValue="creation">creation</cit:CI_DateTypeCode>
+			</cit:dateType>
+		</cit:CI_Date>
+	</mdb:dateInfo>
+
+	<!-- Metadata Standard Reference: It is a Recommended Best Practice to use the full name of the metadata standard 
+		and its edition in order to eliminate ambiguity. This is the default for this template.-->
+
+	<mdb:metadataStandard>
+		<cit:CI_Citation>
+			<cit:title>
+				<gco:CharacterString>ISO 19115 Geographic Information - Metadata </gco:CharacterString>
+			</cit:title>
+			<cit:alternateTitle>
+				<gco:CharacterString>ISOTC211</gco:CharacterString>
+			</cit:alternateTitle>
+			<cit:edition>
+				<gco:CharacterString>2:2019/Amd 1:2022</gco:CharacterString>
+			</cit:edition>
+		</cit:CI_Citation>
+	</mdb:metadataStandard>
+
+	<!--If you have a spatial representation, you can add it in the section(s) below. There are two types of specialized grids 
+		in ISO. Georectified versus Georeferenceable.-->
+
+	<!-- Spatial Representation Information: The digital representation of spatial information in the dataset. The grid data in the resource has been georectified. 
+	Type of spatial representation info include MD_GridSpatialRepresentation, MD_Georectified, MD_Georeferenceable, MD_VectorSpatialRepresentation, MI_Georectified, MI_Georeferenceable
+    Georectified (regular) grids can be described in the spatialReprentationInfo. Ex. If the lat and lon spacing is uniform in a netCDF or HDF5, the grid could be described as georectifed.
+    Georeferenced (irregular) grids can be described in MD_Georeferenceable. If data are irregularly spaced and can be geolocated using an internal (within the data) coordinate system they
+    georeferenced data. An example would be using a map projection to determine where every point of an aerial photo is located on the surface of Earth.-->
+
+	<mdb:spatialRepresentationInfo>
+		<msr:MD_Georectified>
+			<msr:numberOfDimensions>
+				<gco:Integer>3</gco:Integer>
+			</msr:numberOfDimensions>
+			<msr:cellGeometry>
+				<msr:MD_CellGeometryCode codeList="https://schemas.isotc211.org/19115/resources/Codelist/gml/MD_CellGeometryCode.xml#MD_CellGeometryCode?" codeListValue="grid"/>
+			</msr:cellGeometry>
+
+			<!--Are parameters for transformation between image coordinates and geographic or map coordinates available-->
+			<msr:transformationParameterAvailability>
+				<gco:Boolean><!--true or false-->true</gco:Boolean>
+			</msr:transformationParameterAvailability>
+
+			<!--Are geographic position points available to test the accuracy of the groreferenced grid data-->
+			<msr:checkPointAvailability>
+				<gco:Boolean><!--true or false-->true</gco:Boolean>
+			</msr:checkPointAvailability>
+
+			<!--Corner Points-->
+			<msr:cornerPoints>
+				<!-- lat DD lon DD is preferred format-->
+				<ns1:Point xmlns:ns1="http://www.opengis.net/gml/3.2">
+					<ns1:identifier codeSpace="cornerPoint-upper-left"/>
+					<ns1:coordinates>88° 25.92753' W	28° 43.32011' N</ns1:coordinates>
+				</ns1:Point>
+			</msr:cornerPoints>
+			<msr:cornerPoints>
+				<ns1:Point xmlns:ns1="http://www.opengis.net/gml/3.2">
+					<ns1:identifier codeSpace="cornerPoint-upper-right"/>
+					<ns1:coordinates>88° 25.92753' W	28° 39.29200' N</ns1:coordinates>
+				</ns1:Point>
+			</msr:cornerPoints>
+			<msr:cornerPoints>
+				<ns1:Point xmlns:ns1="http://www.opengis.net/gml/3.2">
+					<ns1:identifier codeSpace="cornerPoint-lower-right"/>
+					<ns1:coordinates>88° 30.19532' W	28° 39.29200' N</ns1:coordinates>
+				</ns1:Point>
+			</msr:cornerPoints>
+			<msr:cornerPoints>
+				<ns1:Point xmlns:ns1="http://www.opengis.net/gml/3.2">
+					<ns1:identifier codeSpace="cornerPoint-lower-left"/>
+					<ns1:coordinates>88° 30.19532' W	28° 43.32011' N</ns1:coordinates>
+				</ns1:Point>
+			</msr:cornerPoints>
+
+			<!--Point in a pixel corresponding to the Earth location of the pixel-->
+			<msr:pointInPixel>
+				<!-- Orientation of Pixel Coordinates (ex.lower left, center, etc) -->
+				<msr:MD_PixelOrientationCode>lowerLeft</msr:MD_PixelOrientationCode>
+			</msr:pointInPixel>
+		</msr:MD_Georectified>
+	</mdb:spatialRepresentationInfo>
+
+	<!-- ENTER REFERENCE SYSTEM INFORMATION AS NEEDED. -->
+
+	<mdb:referenceSystemInfo>
+		<mrs:MD_ReferenceSystem>
+			<mrs:referenceSystemIdentifier>
+				<!-- Both the mcc:code and mcc:codeSpace shall be specified. -->
+				<mcc:MD_Identifier>
+					<mcc:code>
+						<gco:CharacterString>WGS84E_2D</gco:CharacterString>
+					</mcc:code>
+					<mcc:codeSpace>
+						<gco:CharacterString>http://standards.iso.org/iso/19115/-3/mrs/1.0</gco:CharacterString>
+					</mcc:codeSpace>
+				</mcc:MD_Identifier>
+			</mrs:referenceSystemIdentifier>
+			<mrs:referenceSystemType>
+				<mrs:MD_ReferenceSystemTypeCode codeList="https://schemas.isotc211.org/19115/resources/Codelist/gml/MD_ReferenceSystemTypeCode.xml#MD_ReferenceSystemTypeCode" codeListValue="geodeticGeographic2D"/>
+			</mrs:referenceSystemType>
+		</mrs:MD_ReferenceSystem>
+	</mdb:referenceSystemInfo>
+
+	<!-- Resource Identification Information: The metadata specifically about 
+		the Data Content. It may include thematic and spatio-temporal extent information 
+		as well as information related to provenance. -->
+
+	<mdb:identificationInfo>
+		<mri:MD_DataIdentification>
+
+			<mri:citation>
+				<cit:CI_Citation>
+					<!--title of dataset-->
+					<cit:title>
+						<gco:CharacterString>Point Sur 2024 Leg 18 Eagle Ray MultiBeam Sonar Data AUV Dive 03</gco:CharacterString>
+					</cit:title>
+
+					<cit:alternateTitle>
+						<gco:CharacterString>PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z</gco:CharacterString>
+					</cit:alternateTitle>
+
+					<cit:date>
+						<cit:CI_Date>
+							<cit:date>
+								<gco:DateTime>2024-05-08T01:17:27Z</gco:DateTime>
+							</cit:date>
+							<cit:dateType>
+								<cit:CI_DateTypeCode codeList="https://schemas.isotc211.org/19115/resources/Codelist/gml/CI_DateTypeCode.xml#CI_DateTypeCode" codeListValue="publication"/>
+							</cit:dateType>
+						</cit:CI_Date>
+					</cit:date>
+
+					<!-- Citation for resource. In this example citation to Entity which collected the data-->
+					<cit:identifier>
+						<mcc:MD_Identifier>
+							<mcc:authority>
+								<cit:CI_Citation>
+									<cit:title>
+										<gco:CharacterString>University of Southern Mississippi</gco:CharacterString>
+									</cit:title>
+									<cit:date>
+										<cit:CI_Date>
+											<cit:date>
+												<gco:DateTime>2024-05-08T01:17:27Z</gco:DateTime>
+											</cit:date>
+											<cit:dateType>
+												<cit:CI_DateTypeCode codeList="https://schemas.isotc211.org/19115/resources/Codelist/gml/CI_DateTypeCode.xml#CI_DateTypeCode" codeListValue="creation"/>
+											</cit:dateType>
+										</cit:CI_Date>
+									</cit:date>
+								</cit:CI_Citation>
+							</mcc:authority>
+
+							<mcc:code>
+								<!-- Value that uniquely identifies the referenced resource. If it is a permanent URI then use
+								gmx:Anchor instead of gco:CharacterString-->
+								<gco:CharacterString>{{insert DOI or UIUD or reference to parent data collection}}</gco:CharacterString>
+							</mcc:code>
+
+						</mcc:MD_Identifier>
+					</cit:identifier>
+				</cit:CI_Citation>
+			</mri:citation>
+
+			<!--Abstract for the dataset. This is not a scientific abstract. Describe the purpose of collection-->
+			<mri:abstract>
+				<gco:CharacterString>The MDBC Mapping, Groundtruthing and Modeling team along with USM will conduct AUV acquisition at 
+									 multiple deepwater dome sites for 11 operational days using the RV Point Sur.  The mission will 
+									 focus on two objectives - 1) Collect high-resolution multibeam bathymetry and backscatter over 
+									 Macondo wellhead and impact area (MC252) using the USM Eagle Ray (ER) AUV, 2) collect high resolution 
+									 data at other proximal dome features where significant feature anomalies of been identified from existing
+									 data </gco:CharacterString>
+			</mri:abstract>
+
+			<!-- Individuals and/or organizations available for questions about the resource -->
+			<mri:pointOfContact>
+				<cit:CI_Responsibility>
+					<cit:role>
+						<cit:CI_RoleCode codeList="codeListLocation#CI_RoleCode" codeListValue="pointOfContact">pointOfContact</cit:CI_RoleCode>
+					</cit:role>
+					<cit:party>
+						<cit:CI_Organisation>
+							<cit:name>
+								<gco:CharacterString>NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT</gco:CharacterString>
+							</cit:name>
+							<cit:contactInfo>
+								<cit:CI_Contact>
+									<cit:phone>
+										<cit:CI_Telephone>
+											<cit:number>
+												<!-- An “internationalized” telephone number as specified in ITU-T Recommendation E.123 Clause 2. -->
+												<gco:CharacterString>+17692421590</gco:CharacterString>
+											</cit:number>
+										</cit:CI_Telephone>
+									</cit:phone>
+									<cit:address>
+										<cit:CI_Address>
+											<cit:deliveryPoint>
+												<gco:CharacterString>Suite 1003</gco:CharacterString>
+											</cit:deliveryPoint>
+											<cit:deliveryPoint>
+												<gco:CharacterString>1021 Balch Boulevard</gco:CharacterString>
+											</cit:deliveryPoint>
+											<cit:city>
+												<gco:CharacterString>Stennis Space Center</gco:CharacterString>
+											</cit:city>
+											<cit:administrativeArea>
+												<gco:CharacterString>MS</gco:CharacterString>
+											</cit:administrativeArea>
+											<cit:postalCode>
+												<gco:CharacterString>39529</gco:CharacterString>
+											</cit:postalCode>
+											<cit:country>
+												<gco:CharacterString>USA</gco:CharacterString>
+											</cit:country>
+											<cit:electronicMailAddress>
+												<gco:CharacterString>errol.ronje@noaa.gov</gco:CharacterString>
+											</cit:electronicMailAddress>
+										</cit:CI_Address>
+									</cit:address>
+
+									<cit:onlineResource>
+										<cit:CI_OnlineResource>
+											<cit:linkage>
+												<gco:CharacterString>https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio</gco:CharacterString>
+											</cit:linkage>
+											<cit:name>
+												<gco:CharacterString>MESOPHOTIC AND DEEP BENTHIC COMMUNITIES PORTFOLIO</gco:CharacterString>
+											</cit:name>
+											<cit:description>
+												<gco:CharacterString>The MDBC Portfolio comprises four coordinated projects. The Portfolio Deliverables 
+															 site provides access to documents and products created to inform and support this 
+															 effort at the portfolio level, including those designated as deliverables by the MDBC 
+															 Portfolio. </gco:CharacterString>
+											</cit:description>
+											<cit:function>
+												<cit:CI_OnLineFunctionCode codeList="https://schemas.isotc211.org/19115/resources/Codelist/gml/CI_OnLineFunctionCode.xml#CI_OnLineFunctionCode" codeListValue="information">information</cit:CI_OnLineFunctionCode>
+											</cit:function>
+										</cit:CI_OnlineResource>
+									</cit:onlineResource>
+								</cit:CI_Contact>
+							</cit:contactInfo>
+						</cit:CI_Organisation>
+					</cit:party>
+				</cit:CI_Responsibility>
+			</mri:pointOfContact>
+
+
+			<!-- Security Constraints: This specifies any restrictions applicable to the data content itself.
+				In addition, the classification should be provided in MD_SecurityConstraints, which 	
+				would be interoperable with ISO 19115-1:2014 based systems. In this example, the data content 
+				is unclassified. -->
+			<mri:resourceConstraints>
+				<!-- Example for ISO191** only, does not contain CUI Markings -->
+				<mco:MD_SecurityConstraints>
+					<!-- The value for classification is specified by an ISO-registered codelist published at the URL in @codeList -->
+					<mco:classification>
+						<mco:MD_ClassificationCode codeList="https://schemas.isotc211.org/19115/resources/Codelist/gml/MD_ClassificationCode.xml#MD_ClassificationCode" codeListValue="limitedDistribution"/>
+					</mco:classification>
+					<mco:classificationSystem>
+						<gco:CharacterString>USA</gco:CharacterString>
+					</mco:classificationSystem>
+					<mco:handlingDescription>
+						<gco:CharacterString>Data should not be distributed beyond members of the Science Team which collected the data or other MDBC project 
+											 members with written consent from the project manager until data is released for public accessibility</gco:CharacterString>
+					</mco:handlingDescription>
+				</mco:MD_SecurityConstraints>
+			</mri:resourceConstraints>
+
+
+			<!-- Legal Constraints: Regarding data access, the data content is subject to the provisions of the US Privacy Act. Regarding data use, it is subject 
+					to both provisions of the US Privacy Act and additional intellectual property rights. -->
+			<mri:resourceConstraints>
+				<mco:MD_LegalConstraints>
+					<mco:accessConstraints>
+						<mco:MD_RestrictionCode codeList="https://schemas.isotc211.org/19115/resources/Codelist/gml/MD_RestrictionCode.xml#MD_RestrictionCode" codeListValue="otherRestrictions">otherRestrictions</mco:MD_RestrictionCode>
+					</mco:accessConstraints>
+					<mco:useConstraints>
+						<mco:MD_RestrictionCode codeList="https://schemas.isotc211.org/19115/resources/Codelist/gml/MD_RestrictionCode.xml#MD_RestrictionCode" codeListValue="confidential">confidential</mco:MD_RestrictionCode>
+						<!-- confidential: not available to the public contains information that could be prejudicial to a commercial, industrial, or national interest -->
+					</mco:useConstraints>
+					<mco:otherConstraints>
+						<gco:CharacterString>Distribution liability: NOAA and NCEI make no warranty,
+							expressed or implied, regarding these data, nor does the fact of
+							distribution constitute such a warranty. NOAA and NCEI cannot assume
+							liability for any damages caused by any errors or omissions in these
+							data. If appropriate, NCEI can only certify that the data it distributes
+							are an authentic copy of the records that were accepted for inclusion in the NCEI archives.</gco:CharacterString>
+					</mco:otherConstraints>
+				</mco:MD_LegalConstraints>
+
+			</mri:resourceConstraints>
+		</mri:MD_DataIdentification>
+	</mdb:identificationInfo>
+
+
+	<!--Data Quality and Lineage -->
+	<mdb:dataQualityInfo>
+		<mdq:DQ_DataQuality>
+			<mdq:scope>
+				<!-- In this example we presume that the scope of this data quality specification encompasses the entire cell; therefore, the values of mcc:level and mcc:levelDescription 							
+					correspond to the mdb:resourceScope and mdb:name specified for the Metadata Scope - namely that the resource is a dataset representing a cell. -->
+				<mcc:MD_Scope>
+					<!-- The value for level is specified by a codelist published at the URL in @codeList -->
+					<mcc:level>
+						<mcc:MD_ScopeCode codeList="https://schemas.isotc211.org/19115/resources/Codelist/gml/MD_ScopeCode.xml#MD_ScopeCode" codeListValue="dataset"/>
+					</mcc:level>
+					<mcc:levelDescription>
+						<mcc:MD_ScopeDescription>
+							<mcc:other>
+								<gco:CharacterString>cell</gco:CharacterString>
+							</mcc:other>
+						</mcc:MD_ScopeDescription>
+					</mcc:levelDescription>
+				</mcc:MD_Scope>
+			</mdq:scope>
+			<mdq:report>
+				<!--Gridded Data Positional Accuracy: Specifies the assessed accuracy of the geospatial contents of the data cell.-->
+				<mdq:DQ_GriddedDataPositionalAccuracy>
+					<mdq:result>
+						<mdq:DQ_QuantitativeResult>
+							<mdq:value>
+								<gco:Record>
+									<!-- The definition is specified by IHO quality measures published at the URL in @definition -->
+									<swe:Quantity
+										definition="https://iho.int/en/standards-and-specifications">
+										<swe:label>IHO Map Accuracy Standard</swe:label>
+										<swe:uom
+											xlink:href="http://www.opengis.net/def/uom/OGC/1.0/metre"/>
+										<swe:value>1.0</swe:value>
+									</swe:Quantity>
+								</gco:Record>
+							</mdq:value>
+						</mdq:DQ_QuantitativeResult>
+					</mdq:result>
+				</mdq:DQ_GriddedDataPositionalAccuracy>
+			</mdq:report>
+			<mdq:report>
+				<!-- Data Absolute External Positional Accuracy: Specifies the vertical accuracy in meters. -->
+				<mdq:DQ_AbsoluteExternalPositionalAccuracy>
+					<mdq:result>
+						<mdq:DQ_QuantitativeResult>
+							<mdq:value>
+								<gco:Record>
+									<swe:Quantity
+										definition="https://iho.int/en/standards-and-specifications">
+										<swe:label>Absolute Linear Error at 90% Significance Level
+											of Biased Vertical Data (Alternative 2)</swe:label>
+										<swe:uom
+											xlink:href="http://www.opengis.net/def/uom/OGC/1.0/metre"/>
+										<swe:value>1.5</swe:value>
+									</swe:Quantity>
+								</gco:Record>
+							</mdq:value>
+						</mdq:DQ_QuantitativeResult>
+					</mdq:result>
+				</mdq:DQ_AbsoluteExternalPositionalAccuracy>
+			</mdq:report>
+		</mdq:DQ_DataQuality>
+	</mdb:dataQualityInfo>
+
+
+	<!--Mission Information such as platform, instrument, and mission events -->
+
+	<mdb:acquisitionInformation>
+		<mac:MI_AcquisitionInformation>
+			<mac:scope>
+				<mcc:MD_Scope>
+					<mcc:level>
+						<mcc:MD_ScopeCode codeList="https://schemas.isotc211.org/19115/resources/Codelist/gml/MD_ScopeCode.xml#MD_ScopeCode" codeListValue="MD_ScopeCode">Dataset</mcc:MD_ScopeCode>
+					</mcc:level>
+					<mcc:extent>
+						<gex:EX_Extent>
+							<gex:description>
+								<gco:CharacterString>Northern Gulf of Mexico</gco:CharacterString>
+							</gex:description>
+						</gex:EX_Extent>
+					</mcc:extent>
+					<mcc:levelDescription>
+						<mcc:MD_ScopeDescription>
+							<mcc:other>
+								<gco:CharacterString>AUV surveys (each approximately 20 km2 will be conducted at locations to 
+													 validate and inform the interpretation of acoustic signatures from previously collected 
+													 ship-based multibeam system surveys.</gco:CharacterString>
+							</mcc:other>
+						</mcc:MD_ScopeDescription>
+					</mcc:levelDescription>
+				</mcc:MD_Scope>
+			</mac:scope>
+
+			<!--Mission Information -->
+			<mac:operation>
+				<mac:MI_Operation id="operationIdentifier">
+					<mac:description>
+						<gco:CharacterString>AUV acquisition within MC252 will be to provide detailed, contemporary information and 
+											 products within this region. Additionally, this expedition will focus on characterizing 
+											 deep coral ecosystem conditions, extent, type, and abundance (topography, biology and 
+											 geomorphology) within a salt dome complex to inform predictive habitat modeling product 
+											 development. </gco:CharacterString>
+					</mac:description>
+					<mac:identifier>
+						<mcc:MD_Identifier>
+							<mcc:code>
+								<gco:CharacterString>PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z</gco:CharacterString>
+							</mcc:code>
+						</mcc:MD_Identifier>
+					</mac:identifier>
+					<mac:status>
+						<mcc:MD_ProgressCode codeList="https://schemas.isotc211.org/19115/resources/Codelist/gml/MD_ProgressCode.xml#MD_ProgressCode" codeListValue="completed"/>
+					</mac:status>
+					<mac:type>
+						<mac:MI_OperationTypeCode codeList="https://standards.iso.org/iso/19115/resources/Codelists/mac/MI_OperationTypeCode.xml#MI_OperationTypeCode" codeListValue="real"/>
+					</mac:type>
+					<mac:parentOperation/>
+					<mac:childOperation/>
+
+					<mac:plan xlink:href="#planIdentifier"/>
+					<mac:significantEvent>
+						<mac:MI_Event id="eventIdentifier">
+							<mac:identifier>
+								<mcc:MD_Identifier>
+									<mcc:code>
+										<gco:CharacterString>Arrival at survey areas</gco:CharacterString>
+									</mcc:code>
+								</mcc:MD_Identifier>
+							</mac:identifier>
+							<mac:trigger>
+								<mac:MI_TriggerCode codeList="https://standards.iso.org/iso/19139/resourcesCodelist/gmxCodelists.xml#MI_TriggerCode" codeListValue="automatic">automatic</mac:MI_TriggerCode>
+							</mac:trigger>
+							<mac:context>
+								<mac:MI_ContextCode codeList="https://standards.iso.org/iso/19139/resourcesCodelist/gmxCodelists.xml#MI_ContextCode" codeListValue="acquisition">acquisition</mac:MI_ContextCode>
+							</mac:context>
+							<mac:sequence>
+								<mac:MI_SequenceCode codeList="https://standards.iso.org/iso/19139/resourcesCodelist/gmxCodelists.xml#MI_SequenceCode" codeListValue="start">start</mac:MI_SequenceCode>
+							</mac:sequence>
+							<mac:time>
+								<gco:DateTime>2024-05-07T00:03:27</gco:DateTime>
+							</mac:time>
+							<mac:relatedPass xlink:href="objectivePassIdentifier"/>
+							<mac:relatedSensor xlink:href="sensorIdentifier"/>
+							<mac:expectedObjective xlink:href="objectiveIdentifier"/>
+						</mac:MI_Event>
+					</mac:significantEvent>
+					<mac:otherPropertyType/>
+					<mac:otherProperty/>
+				</mac:MI_Operation>
+			</mac:operation>
+
+			<!--UxS Platform-->
+			
+			<mac:platform>
+				<mac:MI_Platform>
+					<mac:identifier>
+						<mcc:MD_Identifier id="PS_ER">
+							<mcc:code>
+								<gco:CharacterString>PS Eagle Ray</gco:CharacterString>
+							</mcc:code>
+						</mcc:MD_Identifier>
+					</mac:identifier>
+					<mac:description>
+						<gco:CharacterString>Eagle Ray Deep Water Mapping AUV</gco:CharacterString>
+					</mac:description>
+					<mac:sponsor>
+						<cit:CI_Responsibility id="sponsorOrg">
+							<cit:role>
+								<cit:CI_RoleCode codeList="codeListLocation#CI_RoleCode" codeListValue="pointOfContact"/>
+							</cit:role>
+							<cit:party>
+								<cit:CI_Organisation>
+									<cit:name>
+										<gco:CharacterString>NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT</gco:CharacterString>
+									</cit:name>
+									<cit:contactInfo>
+										<cit:CI_Contact>
+											<cit:address>
+												<cit:CI_Address>
+												<cit:electronicMailAddress>
+												<gco:CharacterString>errol.ronje@noaa.gov</gco:CharacterString>
+												</cit:electronicMailAddress>
+												</cit:CI_Address>
+											</cit:address>
+										</cit:CI_Contact>
+									</cit:contactInfo>
+								</cit:CI_Organisation>
+							</cit:party>
+						</cit:CI_Responsibility>
+					</mac:sponsor>
+
+					<!--Instrument is Repeatable -->
+					
+					<mac:instrument>
+						<mac:MI_Instrument id="PressureSensor">
+							<mac:identifier>
+								<mcc:MD_Identifier>
+									<mcc:code>
+										<gco:CharacterString>Paroscientific Pressure Sensor</gco:CharacterString>
+									</mcc:code>
+								</mcc:MD_Identifier>
+							</mac:identifier>
+							<mac:type>
+								<gco:CharacterString>Paroscientific Digiquartz Series 8000 Pressure Sensor</gco:CharacterString>
+							</mac:type>
+							<mac:description>
+								<gco:CharacterString>Paroscientific Digiquartz Series 8000 Pressure Sensor 
+													 Uncertainty Estimate - 0.2m
+													 Confidence Interval - RMS 
+													 0.01% Typical Accuracy (Total depth of 2200m)</gco:CharacterString>
+							</mac:description>
+							<mac:mountedOn xlink:href="PS_ER"/>
+							<mac:otherPropertyType>
+								<gco:RecordType xlink:href="http://schemas.opengis.net/sensorML/2.0/core.xsd#xpointer(//complexType[@name='ParameterListType'])">Sensor Markup Language ParameterList</gco:RecordType>
+							</mac:otherPropertyType>
+							<mac:history>
+								<mac:MI_InstrumentationEventList>
+									<mac:citation>
+										<cit:CI_Citation>
+											<cit:title>
+												<gco:CharacterString>PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z</gco:CharacterString>
+											</cit:title>
+											<cit:onlineResource>
+												<cit:CI_OnlineResource>
+													<cit:linkage>
+														<gco:CharacterString>https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio</gco:CharacterString>
+													</cit:linkage>
+												</cit:CI_OnlineResource>
+											</cit:onlineResource>
+										</cit:CI_Citation>
+									</mac:citation>
+									<mac:description>
+										<gco:CharacterString>Arrived at mission area</gco:CharacterString>
+									</mac:description>
+									<mac:locale>
+										<lan:PT_Locale>
+											<lan:language>
+												<lan:LanguageCode codeList="https://standards.iso.org/iso/19139/resources/ML_gmxCodelists.xml#LanguageCode" codeListValue="eng">English</lan:LanguageCode>
+											</lan:language>
+											<lan:characterEncoding>
+												<lan:MD_CharacterSetCode codeList="https://standards.iso.org/iso/19139/resources/ML_gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8">utf8</lan:MD_CharacterSetCode>
+											</lan:characterEncoding>
+										</lan:PT_Locale>
+									</mac:locale>
+									<mac:metadataConstraints/>
+									<mac:instrumentationEvent/>
+								</mac:MI_InstrumentationEventList>
+							</mac:history>
+						</mac:MI_Instrument>
+					</mac:instrument>
+					
+					<mac:instrument>
+						<mac:MI_Instrument id="CTD">
+							<mac:identifier>
+								<mcc:MD_Identifier>
+									<mcc:code>
+										<gco:CharacterString>SBE CTD Sensor</gco:CharacterString>
+									</mcc:code>
+								</mcc:MD_Identifier>
+							</mac:identifier>
+							<mac:type>
+								<gco:CharacterString>SBE 49 FastCAT CTD Sensor</gco:CharacterString>
+							</mac:type>
+							<mac:description>
+								<gco:CharacterString>SBE 49 FastCAT CTD Sensor
+													 Operation Mode 1 hz
+													 Uncertainty Estimate =/- 0.002 deg C; =/- 0.0003 S/m for conductivity; 0.1% for pressure
+													 Confidence Interval RMS</gco:CharacterString>
+							</mac:description>
+							<mac:mountedOn xlink:href="PS_ER"/>
+							<mac:otherPropertyType>
+								<gco:RecordType xlink:href="http://schemas.opengis.net/sensorML/2.0/core.xsd#xpointer(//complexType[@name='ParameterListType'])">Sensor Markup Language ParameterList</gco:RecordType>
+							</mac:otherPropertyType>
+							<mac:history>
+								<mac:MI_InstrumentationEventList>
+									<mac:citation>
+										<cit:CI_Citation>
+											<cit:title>
+												<gco:CharacterString>PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z</gco:CharacterString>
+											</cit:title>
+											<cit:onlineResource>
+												<cit:CI_OnlineResource>
+													<cit:linkage>
+														<gco:CharacterString>https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio</gco:CharacterString>
+													</cit:linkage>
+												</cit:CI_OnlineResource>
+											</cit:onlineResource>
+										</cit:CI_Citation>
+									</mac:citation>
+									<mac:description>
+										<gco:CharacterString>Arrived at mission area</gco:CharacterString>
+									</mac:description>
+									<mac:locale>
+										<lan:PT_Locale>
+											<lan:language>
+												<lan:LanguageCode codeList="https://standards.iso.org/iso/19139/resources/ML_gmxCodelists.xml#LanguageCode" codeListValue="eng">English</lan:LanguageCode>
+											</lan:language>
+											<lan:characterEncoding>
+												<lan:MD_CharacterSetCode codeList="https://standards.iso.org/iso/19139/resources/ML_gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8">utf8</lan:MD_CharacterSetCode>
+											</lan:characterEncoding>
+										</lan:PT_Locale>
+									</mac:locale>
+									<mac:metadataConstraints/>
+									<mac:instrumentationEvent/>
+								</mac:MI_InstrumentationEventList>
+							</mac:history>
+						</mac:MI_Instrument>
+					</mac:instrument>
+					
+					<mac:instrument>
+						<mac:MI_Instrument id="GNSS">
+							<mac:identifier>
+								<mcc:MD_Identifier>
+									<mcc:code>
+										<gco:CharacterString>Masterclock GNSS Receiver</gco:CharacterString>
+									</mcc:code>
+								</mcc:MD_Identifier>
+							</mac:identifier>
+							<mac:type>
+								<gco:CharacterString>Masterclock GNSS Receiver GMR Series 1000</gco:CharacterString>
+							</mac:type>
+							<mac:description>
+								<gco:CharacterString>Masterclock GNSS Receiver GMR Series 1000 
+													 Operation mode - Internal Clock
+													 Uncertainty Estimate - Correction time: +/-60 ns of UTC
+													 Accurate to reference within +/- 15ns of UTC, Time drift per year (max): +3 sec/year</gco:CharacterString>
+							</mac:description>
+							<mac:mountedOn xlink:href="PS_ER"/>
+							<mac:otherPropertyType>
+								<gco:RecordType xlink:href="http://schemas.opengis.net/sensorML/2.0/core.xsd#xpointer(//complexType[@name='ParameterListType'])">Sensor Markup Language ParameterList</gco:RecordType>
+							</mac:otherPropertyType>
+							<mac:history>
+								<mac:MI_InstrumentationEventList>
+									<mac:citation>
+										<cit:CI_Citation>
+											<cit:title>
+												<gco:CharacterString>PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z</gco:CharacterString>
+											</cit:title>
+											<cit:onlineResource>
+												<cit:CI_OnlineResource>
+													<cit:linkage>
+														<gco:CharacterString>https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio</gco:CharacterString>
+													</cit:linkage>
+												</cit:CI_OnlineResource>
+											</cit:onlineResource>
+										</cit:CI_Citation>
+									</mac:citation>
+									<mac:description>
+										<gco:CharacterString>Arrived at mission area</gco:CharacterString>
+									</mac:description>
+									<mac:locale>
+										<lan:PT_Locale>
+											<lan:language>
+												<lan:LanguageCode codeList="https://standards.iso.org/iso/19139/resources/ML_gmxCodelists.xml#LanguageCode" codeListValue="eng">English</lan:LanguageCode>
+											</lan:language>
+											<lan:characterEncoding>
+												<lan:MD_CharacterSetCode codeList="https://standards.iso.org/iso/19139/resources/ML_gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8">utf8</lan:MD_CharacterSetCode>
+											</lan:characterEncoding>
+										</lan:PT_Locale>
+									</mac:locale>
+									<mac:metadataConstraints/>
+									<mac:instrumentationEvent/>
+								</mac:MI_InstrumentationEventList>
+							</mac:history>
+						</mac:MI_Instrument>
+					</mac:instrument>
+					
+					<mac:instrument>
+						<mac:MI_Instrument id="MBES">
+							<mac:identifier>
+								<mcc:MD_Identifier>
+									<mcc:code>
+										<gco:CharacterString>Norbit MBES</gco:CharacterString>
+									</mcc:code>
+								</mcc:MD_Identifier>
+							</mac:identifier>
+							<mac:type>
+								<gco:CharacterString>Norbit WBMS MBES</gco:CharacterString>
+							</mac:type>
+							<mac:description>
+								<gco:CharacterString>Norbit WBMS MBES
+													 200 and 400 kHz
+													 512 beams
+													 0.9 degrees x 0.9 degrees</gco:CharacterString>
+							</mac:description>
+							<mac:mountedOn xlink:href="PS_ER"/>
+							<mac:otherPropertyType>
+								<gco:RecordType xlink:href="http://schemas.opengis.net/sensorML/2.0/core.xsd#xpointer(//complexType[@name='ParameterListType'])">Sensor Markup Language ParameterList</gco:RecordType>
+							</mac:otherPropertyType>
+							<mac:history>
+								<mac:MI_InstrumentationEventList>
+									<mac:citation>
+										<cit:CI_Citation>
+											<cit:title>
+												<gco:CharacterString>PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z</gco:CharacterString>
+											</cit:title>
+											<cit:onlineResource>
+												<cit:CI_OnlineResource>
+													<cit:linkage>
+														<gco:CharacterString>https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio</gco:CharacterString>
+													</cit:linkage>
+												</cit:CI_OnlineResource>
+											</cit:onlineResource>
+										</cit:CI_Citation>
+									</mac:citation>
+									<mac:description>
+										<gco:CharacterString>Arrived at mission area</gco:CharacterString>
+									</mac:description>
+									<mac:locale>
+										<lan:PT_Locale>
+											<lan:language>
+												<lan:LanguageCode codeList="https://standards.iso.org/iso/19139/resources/ML_gmxCodelists.xml#LanguageCode" codeListValue="eng">English</lan:LanguageCode>
+											</lan:language>
+											<lan:characterEncoding>
+												<lan:MD_CharacterSetCode codeList="https://standards.iso.org/iso/19139/resources/ML_gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8">utf8</lan:MD_CharacterSetCode>
+											</lan:characterEncoding>
+										</lan:PT_Locale>
+									</mac:locale>
+									<mac:metadataConstraints/>
+									<mac:instrumentationEvent/>
+								</mac:MI_InstrumentationEventList>
+							</mac:history>
+						</mac:MI_Instrument>
+					</mac:instrument>
+					
+					<mac:instrument>
+						<mac:MI_Instrument id="SBP">
+							<mac:identifier>
+								<mcc:MD_Identifier>
+									<mcc:code>
+										<gco:CharacterString>Geoacoustic Subbottom Profiler</gco:CharacterString>
+									</mcc:code>
+								</mcc:MD_Identifier>
+							</mac:identifier>
+							<mac:type>
+								<gco:CharacterString>Geoacoustic Subbottom Profiler based on GeoPulse model</gco:CharacterString>
+							</mac:type>
+							<mac:description>
+								<gco:CharacterString>Geoacoustic Subbottom Profiler based on GeoPulse model
+													 1.5 kHz</gco:CharacterString>
+							</mac:description>
+							<mac:mountedOn xlink:href="PS_ER"/>
+							<mac:otherPropertyType>
+								<gco:RecordType xlink:href="http://schemas.opengis.net/sensorML/2.0/core.xsd#xpointer(//complexType[@name='ParameterListType'])">Sensor Markup Language ParameterList</gco:RecordType>
+							</mac:otherPropertyType>
+							<mac:history>
+								<mac:MI_InstrumentationEventList>
+									<mac:citation>
+										<cit:CI_Citation>
+											<cit:title>
+												<gco:CharacterString>PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z</gco:CharacterString>
+											</cit:title>
+											<cit:onlineResource>
+												<cit:CI_OnlineResource>
+													<cit:linkage>
+														<gco:CharacterString>https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio</gco:CharacterString>
+													</cit:linkage>
+												</cit:CI_OnlineResource>
+											</cit:onlineResource>
+										</cit:CI_Citation>
+									</mac:citation>
+									<mac:description>
+										<gco:CharacterString>Arrived at mission area</gco:CharacterString>
+									</mac:description>
+									<mac:locale>
+										<lan:PT_Locale>
+											<lan:language>
+												<lan:LanguageCode codeList="https://standards.iso.org/iso/19139/resources/ML_gmxCodelists.xml#LanguageCode" codeListValue="eng">English</lan:LanguageCode>
+											</lan:language>
+											<lan:characterEncoding>
+												<lan:MD_CharacterSetCode codeList="https://standards.iso.org/iso/19139/resources/ML_gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8">utf8</lan:MD_CharacterSetCode>
+											</lan:characterEncoding>
+										</lan:PT_Locale>
+									</mac:locale>
+									<mac:metadataConstraints/>
+									<mac:instrumentationEvent/>
+								</mac:MI_InstrumentationEventList>
+							</mac:history>
+						</mac:MI_Instrument>
+					</mac:instrument>
+					
+					<mac:instrument>
+						<mac:MI_Instrument id="INS">
+							<mac:identifier>
+								<mcc:MD_Identifier>
+									<mcc:code>
+										<gco:CharacterString>Exail INS</gco:CharacterString>
+									</mcc:code>
+								</mcc:MD_Identifier>
+							</mac:identifier>
+							<mac:type>
+								<gco:CharacterString>Exail Phins C7 INS</gco:CharacterString>
+							</mac:type>
+							<mac:description>
+								<gco:CharacterString>Exail Phins C7 INS
+													 Operation Mode - Position Accuracy
+																	  Roll and Pitch
+													 Uncertainty Estimate - 0.010 deg
+													 Confidence Interval - RMS
+													 Use with GNSS or USBL and DVL</gco:CharacterString>
+							</mac:description>
+							<mac:mountedOn xlink:href="PS_ER"/>
+							<mac:otherPropertyType>
+								<gco:RecordType xlink:href="http://schemas.opengis.net/sensorML/2.0/core.xsd#xpointer(//complexType[@name='ParameterListType'])">Sensor Markup Language ParameterList</gco:RecordType>
+							</mac:otherPropertyType>
+							<mac:history>
+								<mac:MI_InstrumentationEventList>
+									<mac:citation>
+										<cit:CI_Citation>
+											<cit:title>
+												<gco:CharacterString>PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z</gco:CharacterString>
+											</cit:title>
+											<cit:onlineResource>
+												<cit:CI_OnlineResource>
+													<cit:linkage>
+														<gco:CharacterString>https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio</gco:CharacterString>
+													</cit:linkage>
+												</cit:CI_OnlineResource>
+											</cit:onlineResource>
+										</cit:CI_Citation>
+									</mac:citation>
+									<mac:description>
+										<gco:CharacterString>Arrived at mission area</gco:CharacterString>
+									</mac:description>
+									<mac:locale>
+										<lan:PT_Locale>
+											<lan:language>
+												<lan:LanguageCode codeList="https://standards.iso.org/iso/19139/resources/ML_gmxCodelists.xml#LanguageCode" codeListValue="eng">English</lan:LanguageCode>
+											</lan:language>
+											<lan:characterEncoding>
+												<lan:MD_CharacterSetCode codeList="https://standards.iso.org/iso/19139/resources/ML_gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8">utf8</lan:MD_CharacterSetCode>
+											</lan:characterEncoding>
+										</lan:PT_Locale>
+									</mac:locale>
+									<mac:metadataConstraints/>
+									<mac:instrumentationEvent/>
+								</mac:MI_InstrumentationEventList>
+							</mac:history>
+						</mac:MI_Instrument>
+					</mac:instrument>
+					
+					<mac:instrument>
+						<mac:MI_Instrument id="DVL">
+							<mac:identifier>
+								<mcc:MD_Identifier>
+									<mcc:code>
+										<gco:CharacterString>Nortek DVL</gco:CharacterString>
+									</mcc:code>
+								</mcc:MD_Identifier>
+							</mac:identifier>
+							<mac:type>
+								<gco:CharacterString>Nortek 500 DVL</gco:CharacterString>
+							</mac:type>
+							<mac:description>
+								<gco:CharacterString>Nortek 500 DVL		
+													 Operation Mode - Long-term Accuracy 
+													 Uncertainty Estimate - +/- 0.1% / +/- 0.1 cm/s
+													 Confidence Interval - RMS
+													 Depth and Speed</gco:CharacterString>
+							</mac:description>
+							<mac:mountedOn xlink:href="PS_ER"/>
+							<mac:otherPropertyType>
+								<gco:RecordType xlink:href="http://schemas.opengis.net/sensorML/2.0/core.xsd#xpointer(//complexType[@name='ParameterListType'])">Sensor Markup Language ParameterList</gco:RecordType>
+							</mac:otherPropertyType>
+							<mac:history>
+								<mac:MI_InstrumentationEventList>
+									<mac:citation>
+										<cit:CI_Citation>
+											<cit:title>
+												<gco:CharacterString>PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z</gco:CharacterString>
+											</cit:title>
+											<cit:onlineResource>
+												<cit:CI_OnlineResource>
+													<cit:linkage>
+														<gco:CharacterString>https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio</gco:CharacterString>
+													</cit:linkage>
+												</cit:CI_OnlineResource>
+											</cit:onlineResource>
+										</cit:CI_Citation>
+									</mac:citation>
+									<mac:description>
+										<gco:CharacterString>Arrived at mission area</gco:CharacterString>
+									</mac:description>
+									<mac:locale>
+										<lan:PT_Locale>
+											<lan:language>
+												<lan:LanguageCode codeList="https://standards.iso.org/iso/19139/resources/ML_gmxCodelists.xml#LanguageCode" codeListValue="eng">English</lan:LanguageCode>
+											</lan:language>
+											<lan:characterEncoding>
+												<lan:MD_CharacterSetCode codeList="https://standards.iso.org/iso/19139/resources/ML_gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8">utf8</lan:MD_CharacterSetCode>
+											</lan:characterEncoding>
+										</lan:PT_Locale>
+									</mac:locale>
+									<mac:metadataConstraints/>
+									<mac:instrumentationEvent/>
+								</mac:MI_InstrumentationEventList>
+							</mac:history>
+						</mac:MI_Instrument>
+					</mac:instrument>
+					
+					<mac:instrument>
+						<mac:MI_Instrument id="USBL">
+							<mac:identifier>
+								<mcc:MD_Identifier>
+									<mcc:code>
+										<gco:CharacterString>Sonardyne USBL</gco:CharacterString>
+									</mcc:code>
+								</mcc:MD_Identifier>
+							</mac:identifier>
+							<mac:type>
+								<gco:CharacterString>Sonardyne Ranger2 USBL</gco:CharacterString>
+							</mac:type>
+							<mac:description>
+								<gco:CharacterString>Sonardyne Ranger2 USBL 
+													 Operation Mode - slant range system accuracy
+													 Uncertainty Estimate - 0.04%
+													 Confidence Interval - RMS
+													 Sampling rate 1 Hz and frequency of 19-34 kHz or 14-19.5 kHz</gco:CharacterString>
+							</mac:description>
+							<mac:mountedOn xlink:href="PS_ER"/>
+							<mac:otherPropertyType>
+								<gco:RecordType xlink:href="http://schemas.opengis.net/sensorML/2.0/core.xsd#xpointer(//complexType[@name='ParameterListType'])">Sensor Markup Language ParameterList</gco:RecordType>
+							</mac:otherPropertyType>
+							<mac:history>
+								<mac:MI_InstrumentationEventList>
+									<mac:citation>
+										<cit:CI_Citation>
+											<cit:title>
+												<gco:CharacterString>PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z</gco:CharacterString>
+											</cit:title>
+											<cit:onlineResource>
+												<cit:CI_OnlineResource>
+													<cit:linkage>
+														<gco:CharacterString>https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio</gco:CharacterString>
+													</cit:linkage>
+												</cit:CI_OnlineResource>
+											</cit:onlineResource>
+										</cit:CI_Citation>
+									</mac:citation>
+									<mac:description>
+										<gco:CharacterString>Arrived at mission area</gco:CharacterString>
+									</mac:description>
+									<mac:locale>
+										<lan:PT_Locale>
+											<lan:language>
+												<lan:LanguageCode codeList="https://standards.iso.org/iso/19139/resources/ML_gmxCodelists.xml#LanguageCode" codeListValue="eng">English</lan:LanguageCode>
+											</lan:language>
+											<lan:characterEncoding>
+												<lan:MD_CharacterSetCode codeList="https://standards.iso.org/iso/19139/resources/ML_gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8">utf8</lan:MD_CharacterSetCode>
+											</lan:characterEncoding>
+										</lan:PT_Locale>
+									</mac:locale>
+									<mac:metadataConstraints/>
+									<mac:instrumentationEvent/>
+								</mac:MI_InstrumentationEventList>
+							</mac:history>
+						</mac:MI_Instrument>
+					</mac:instrument>
+					
+					<mac:instrument>
+						<mac:MI_Instrument id="USBL_Transponder">
+							<mac:identifier>
+								<mcc:MD_Identifier>
+									<mcc:code>
+										<gco:CharacterString>Sonardyne USBL Transponder</gco:CharacterString>
+									</mcc:code>
+								</mcc:MD_Identifier>
+							</mac:identifier>
+							<mac:type>
+								<gco:CharacterString>Sonardyne AVTrack6 USBL Transponder</gco:CharacterString>
+							</mac:type>
+							<mac:description>
+								<gco:CharacterString>Sonardyne AVTrack6 USBL Transponder 
+													 Operation Mode - Depth Sensor
+													 Uncertainty Estimate - +/- 0.5% full scale
+													 Confidence Interval - RMS
+													 Range precision better than 15mm</gco:CharacterString>
+							</mac:description>
+							<mac:mountedOn xlink:href="PS_ER"/>
+							<mac:otherPropertyType>
+								<gco:RecordType xlink:href="http://schemas.opengis.net/sensorML/2.0/core.xsd#xpointer(//complexType[@name='ParameterListType'])">Sensor Markup Language ParameterList</gco:RecordType>
+							</mac:otherPropertyType>
+							<mac:history>
+								<mac:MI_InstrumentationEventList>
+									<mac:citation>
+										<cit:CI_Citation>
+											<cit:title>
+												<gco:CharacterString>PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z</gco:CharacterString>
+											</cit:title>
+											<cit:onlineResource>
+												<cit:CI_OnlineResource>
+													<cit:linkage>
+														<gco:CharacterString>https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio</gco:CharacterString>
+													</cit:linkage>
+												</cit:CI_OnlineResource>
+											</cit:onlineResource>
+										</cit:CI_Citation>
+									</mac:citation>
+									<mac:description>
+										<gco:CharacterString>Arrived at mission area</gco:CharacterString>
+									</mac:description>
+									<mac:locale>
+										<lan:PT_Locale>
+											<lan:language>
+												<lan:LanguageCode codeList="https://standards.iso.org/iso/19139/resources/ML_gmxCodelists.xml#LanguageCode" codeListValue="eng">English</lan:LanguageCode>
+											</lan:language>
+											<lan:characterEncoding>
+												<lan:MD_CharacterSetCode codeList="https://standards.iso.org/iso/19139/resources/ML_gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8">utf8</lan:MD_CharacterSetCode>
+											</lan:characterEncoding>
+										</lan:PT_Locale>
+									</mac:locale>
+									<mac:metadataConstraints/>
+									<mac:instrumentationEvent/>
+								</mac:MI_InstrumentationEventList>
+							</mac:history>
+						</mac:MI_Instrument>
+					</mac:instrument>
+					
+					<mac:instrument>
+						<mac:MI_Instrument id="Magnetometer">
+							<mac:identifier>
+								<mcc:MD_Identifier>
+									<mcc:code>
+										<gco:CharacterString>OFG Magnetometer</gco:CharacterString>
+									</mcc:code>
+								</mcc:MD_Identifier>
+							</mac:identifier>
+							<mac:type>
+								<gco:CharacterString>OFG Self-compensating Magnetometer (SCM)</gco:CharacterString>
+							</mac:type>
+							<mac:description>
+								<gco:CharacterString>OFG Self-compensating Magnetometer (SCM)
+													 Depth rated 6000m</gco:CharacterString>
+							</mac:description>
+							<mac:mountedOn xlink:href="PS_ER"/>
+							<mac:otherPropertyType>
+								<gco:RecordType xlink:href="http://schemas.opengis.net/sensorML/2.0/core.xsd#xpointer(//complexType[@name='ParameterListType'])">Sensor Markup Language ParameterList</gco:RecordType>
+							</mac:otherPropertyType>
+							<mac:history>
+								<mac:MI_InstrumentationEventList>
+									<mac:citation>
+										<cit:CI_Citation>
+											<cit:title>
+												<gco:CharacterString>PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z</gco:CharacterString>
+											</cit:title>
+											<cit:onlineResource>
+												<cit:CI_OnlineResource>
+													<cit:linkage>
+														<gco:CharacterString>https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio</gco:CharacterString>
+													</cit:linkage>
+												</cit:CI_OnlineResource>
+											</cit:onlineResource>
+										</cit:CI_Citation>
+									</mac:citation>
+									<mac:description>
+										<gco:CharacterString>Arrived at mission area</gco:CharacterString>
+									</mac:description>
+									<mac:locale>
+										<lan:PT_Locale>
+											<lan:language>
+												<lan:LanguageCode codeList="https://standards.iso.org/iso/19139/resources/ML_gmxCodelists.xml#LanguageCode" codeListValue="eng">English</lan:LanguageCode>
+											</lan:language>
+											<lan:characterEncoding>
+												<lan:MD_CharacterSetCode codeList="https://standards.iso.org/iso/19139/resources/ML_gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8">utf8</lan:MD_CharacterSetCode>
+											</lan:characterEncoding>
+										</lan:PT_Locale>
+									</mac:locale>
+									<mac:metadataConstraints/>
+									<mac:instrumentationEvent/>
+								</mac:MI_InstrumentationEventList>
+							</mac:history>
+						</mac:MI_Instrument>
+					</mac:instrument>
+
+					<mac:otherProperty>
+						<gco:Record>
+							
+							
+							<!-- ======================================= -->
+							<!-- Characteristics -->
+							<!-- ======================================= -->
+							<!-- Example list of Characteristics to describe physical attributes of 
+								 platform, refer to sensorml.com/ont/swe/property for full list of values -->
+							<sml:characteristics name="generalProperties">
+								<sml:CharacteristicList>
+									<sml:characteristic name="physicalProperties">
+										<swe:DataRecord
+											definition="http://sensorml.com/ont/swe/property/PhysicalProperties">
+											<swe:label>Physical Properties</swe:label>
+											<swe:field name="PhysicalProperties">
+												<swe:DataRecord>
+												<!-- Values of Physical Property in UOM specified based on platform specifications -->
+												<swe:field name="Weight">
+												<swe:Quantity definition="kg">
+												<swe:value>907</swe:value>
+												</swe:Quantity>
+												</swe:field>
+												<swe:field name="Length">
+												<swe:Quantity
+												definition="http://sensorml.com/ont/swe/property/Length">
+												<swe:uom code="m"/>
+												<swe:value>5</swe:value>
+												</swe:Quantity>
+												</swe:field>
+												<swe:field name="Width">
+												<swe:Quantity
+												definition="http://sensorml.com/ont/swe/property/Width">
+												<swe:uom code="m"/>
+												<swe:value>0.7</swe:value>
+												</swe:Quantity>
+												</swe:field>
+												<swe:field name="Height">
+												<swe:Quantity
+												definition="http://sensorml.com/ont/swe/property/Height">
+												<swe:uom code="m"/>
+												<swe:value>0.7</swe:value>
+												</swe:Quantity>
+												</swe:field>
+												<swe:field name="CasingMaterial">
+												<swe:Category
+												definition="http://sensorml.com/ont/swe/property/Material">
+												<swe:value>Fiberglass</swe:value>
+												</swe:Category>
+												</swe:field>
+												</swe:DataRecord>
+											</swe:field>
+										</swe:DataRecord>
+									</sml:characteristic>
+								</sml:CharacteristicList>
+							</sml:characteristics>
+							
+							
+							<!-- ================================================= -->
+							<!-- Dynamic Location -->
+							<!-- ================================================= -->
+							<sml:position>
+								<!-- Location will be described as either way points, trajectory, or other time + GPS coordinates to show 
+									 location of vehicle at the time of sensor measurements -->
+								<swe:DataArray
+									definition="http://sensorml.com/ont/swe/property/Trajectory">
+									<swe:elementCount>
+										<swe:Count>
+											<swe:value>620640</swe:value>
+										</swe:Count>
+									</swe:elementCount>
+									<swe:elementType name="trajectory">
+										<swe:DataRecord
+											definition="http://sensorml.com/ont/swe/property/TrajectoryPositions">
+											<swe:field name="samplingTime">
+												<swe:Time
+												definition="http://sensorml.com/ont/swe/property/SamplingTime">
+												<swe:label>4.5 per second</swe:label>
+												<swe:uom
+												xlink:href="http://www.opengis.net/def/uom/ISO-8601/0/Gregorian"
+												/>
+												</swe:Time>
+											</swe:field>
+											<swe:field name="location">
+												<swe:Vector
+												definition="http://sensorml.com/ont/swe/property/location"
+												referenceFrame="http://www.opengis.net/def/crs/EPSG/6.7/4326"
+												localFrame="#SENSOR_CRS">
+													<swe:label>Northern Gulf of Mexico in the vicinity of Macondo wellhead and impact area
+															   including the Gloria Dome</swe:label>
+												<swe:coordinate name="Lat">
+												<swe:Quantity definition="http://sensorml.com/ont/swe/property/Latitude" axisID="Lat">
+												<swe:uom code="deg"/>
+												</swe:Quantity>
+												</swe:coordinate>
+												<swe:coordinate name="Lon">
+												<swe:Quantity definition="http://sensorml.com/ont/swe/property/Longitude" axisID="Long">
+												<swe:uom code="deg"/>
+												</swe:Quantity>
+												</swe:coordinate>
+												</swe:Vector>
+											</swe:field>
+										</swe:DataRecord>
+									</swe:elementType>
+									<swe:encoding>
+										<swe:TextEncoding blockSeparator=" " tokenSeparator=","/>
+									</swe:encoding>
+									<swe:values>88° 25.92753' W	28° 43.32011' N
+												88° 25.92753' W	28° 39.29200' N
+												88° 30.19532' W	28° 39.29200' N
+												88° 30.19532' W	28° 43.32011' N</swe:values>
+								</swe:DataArray>
+							</sml:position>
+
+							
+							<!-- ============================ -->
+							<!-- Capabilities -->
+							<!-- ============================ -->
+							<!-- Example list of Platform and Sensor capabilities with minimum and maximum values 
+								for each data parameter, refer to sensorml.com/ont/swe/property for full list of values -->
+							<sml:capabilities name="specifications">
+								<sml:capability name="measurementProperties">
+									<sml:CapabilityList>
+										<swe:DataRecord
+											definition="http://sensorml.com/ont/swe/property/MeasurementProperties">
+											<swe:label>Measurement Properties</swe:label>
+											<swe:field name="SamplingTime">
+												<swe:QuantityRange
+													definition="http://www.opengis.net/def/property/OGC/0/SamplingTime">
+													<swe:uom code="deg"/>
+													<swe:value>0 90</swe:value>
+												</swe:QuantityRange>
+											</swe:field>
+											<swe:field name="Latitude">
+												<swe:QuantityRange
+												definition="http://sensorml.com/ont/swe/property/Latitude">
+												<swe:uom code="deg"/>
+												<swe:value>-90 90</swe:value>
+												</swe:QuantityRange>
+											</swe:field>
+											<swe:field name="Longitude">
+												<swe:Quantity
+												definition="http://sensorml.com/ont/swe/property/Longitude">
+												<swe:uom code="deg"/>
+												<swe:value>-180 180</swe:value>
+												</swe:Quantity>
+											</swe:field>
+											<swe:field name="Heading">
+												<swe:Quantity
+												definition="http://sensorml.com/ont/swe/property/MagneticHeading">
+												<swe:uom code="deg"/>
+												<swe:value>0 360</swe:value>
+												</swe:Quantity>
+											</swe:field>
+											<swe:field name="PitchAngle">
+												<swe:Quantity
+												definition="http://sensorml.com/ont/swe/property/PitchAngle">
+												<swe:uom code="deg"/>
+												<swe:value>0 360 </swe:value>
+												</swe:Quantity>
+											</swe:field>
+											<swe:field name="RollAngle">
+												<swe:Quantity
+												definition="http://sensorml.com/ont/swe/property/RollAngle">
+												<swe:uom code="deg"/>
+												<swe:value>0 360</swe:value>
+												</swe:Quantity>
+											</swe:field>
+											<swe:field name="SamplePeriod">
+												<swe:Quantity
+												definition="http://sensorml.com/ont/swe/property/SamplePeriod">
+												<swe:uom code="s"/>
+												<swe:value>1</swe:value>
+												</swe:Quantity>
+											</swe:field>
+											<swe:field name="SpeedOverWater">
+												<swe:Quantity
+												definition="http://sensorml.com/ont/swe/property/SpeedOverWater">
+												<swe:uom code="m/s"/>
+												<swe:value>0 99</swe:value>
+												</swe:Quantity>
+											</swe:field>
+										</swe:DataRecord>
+									</sml:CapabilityList>
+								</sml:capability>
+							</sml:capabilities>
+						</gco:Record>
+					</mac:otherProperty>
+
+
+
+					<mac:history>
+						<mac:MI_InstrumentationEventList>
+							<mac:citation/>
+							<mac:description/>
+							<mac:locale/>
+							<mac:metadataConstraints/>
+							<mac:instrumentationEvent/>
+						</mac:MI_InstrumentationEventList>
+					</mac:history>
+				</mac:MI_Platform>
+			</mac:platform>
+
+			<mac:acquisitionRequirement>
+				<mac:MI_Requirement>
+					<mac:citation/>
+					<mac:identifier>
+						<mcc:MD_Identifier id="acquisitionRequirement">
+							<mcc:code>
+								<gco:CharacterString>The purpose of AUV acquisition within MC252 will be to provide detailed, 
+													 contemporary information and products within this region. Additionally, 
+													 this expedition will focus on characterizing deep coral ecosystem conditions, 
+													 extent, type, and abundance (topography, biology and geomorphology) within a 
+													 salt dome complex to inform predictive habitat modeling product development. 
+													 AUV surveys (each approximately 20 km2 will be conducted at locations to 
+													 validate and inform the interpretation of acoustic signatures from previously
+													 collected ship-based multibeam system surveys..
+								</gco:CharacterString>
+							</mcc:code>
+						</mcc:MD_Identifier>
+					</mac:identifier>
+					<mac:requestor/>
+					<mac:recipient/>
+					<mac:priority>
+						<mac:MI_PriorityCode codeList="https://standards.iso.org/iso/19139/resourcesCodelist/gmxCodelists.xml#MI_PriorityCode" codeListValue="highImportance">highImportance</mac:MI_PriorityCode>
+					</mac:priority>
+					<!-- Requested and Expiry Date optional -->
+					<mac:requestedDate>
+						<mac:MI_RequestedDate>
+							<mac:requestedDateOfCollection>
+								<gco:DateTime>2000-01-01T00:00:00Z</gco:DateTime>
+							</mac:requestedDateOfCollection>
+							<mac:latestAcceptableDate>
+								<gco:DateTime>2000-01-01T00:00:00Z</gco:DateTime>
+							</mac:latestAcceptableDate>
+						</mac:MI_RequestedDate>
+					</mac:requestedDate>
+					<mac:expiryDate>
+						<gco:DateTime>2000-01-01T00:00:00Z</gco:DateTime>
+					</mac:expiryDate>
+					<mac:satisifiedPlan/>
+				</mac:MI_Requirement>
+			</mac:acquisitionRequirement>
+		</mac:MI_AcquisitionInformation>
+	</mdb:acquisitionInformation>
+</mdb:MD_Metadata>

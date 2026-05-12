@@ -1,0 +1,203 @@
+# Pilot state coverage after XML import
+
+- **Source:** `../MANTA End User Testing/samples/NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml`
+- **Leaf paths:** 284
+- **Filled (has semantic content):** 106
+- **Empty:** 178
+- **Unchanged from defaultPilotState():** 130
+- **Changed from default:** 154
+
+## By wizard bucket
+
+| Bucket | Paths | Filled | Empty | Same as default |
+|--------|------:|-------:|------:|----------------:|
+| 1-mission | 70 | 27 | 43 | 52 |
+| 2-platform | 19 | 4 | 15 | 15 |
+| 3-sensors | 120 | 50 | 70 | 7 |
+| 4-spatial | 20 | 9 | 11 | 13 |
+| 5-keywords | 11 | 2 | 9 | 5 |
+| 6-distribution | 36 | 10 | 26 | 32 |
+| meta | 8 | 4 | 4 | 6 |
+
+_“Same as default” includes seeded defaults that match XML (e.g. bbox −180…90). Use **changedPaths** in JSON for strict diff._
+
+## Empty paths (178)
+
+- `distribution.awsBucket`
+- `distribution.awsPrefix`
+- `distribution.distributionFeesText`
+- `distribution.distributionFileFormat`
+- `distribution.distributionFormatName`
+- `distribution.distributionOrderingInstructions`
+- `distribution.distributorContactUrl`
+- `distribution.distributorEmail`
+- `distribution.distributorIndividualName`
+- `distribution.distributorOrganisationName`
+- `distribution.downloadLinkDescription`
+- `distribution.downloadLinkName`
+- `distribution.downloadUrl`
+- `distribution.finalNotes`
+- `distribution.format`
+- `distribution.metadataLandingDescription`
+- `distribution.metadataLandingLinkName`
+- `distribution.metadataLandingUrl`
+- `distribution.nceiDistributorContactHref`
+- `distribution.nceiDistributorContactTitle`
+- `distribution.nceiMetadataContactHref`
+- `distribution.nceiMetadataContactTitle`
+- `distribution.parentProject`
+- `distribution.publication`
+- `distribution.templateCategory`
+- `distribution.templateName`
+- `keywords.datacenters`
+- `keywords.instruments`
+- `keywords.instruments[0].uuid`
+- `keywords.locations`
+- `keywords.platforms`
+- `keywords.platforms[0].uuid`
+- `keywords.projects`
+- `keywords.providers`
+- `keywords.sciencekeywords`
+- `mission.associatedPublicationCode`
+- `mission.associatedPublicationDate`
+- `mission.associatedPublicationTitle`
+- `mission.citationAuthorIndividualName`
+- `mission.citationAuthorOrganisationName`
+- `mission.citationOriginatorIndividualName`
+- `mission.citationOriginatorOrganisationName`
+- `mission.citationPublisherOrganisationName`
+- `mission.citeAs`
+- `mission.doi`
+- `mission.endDate`
+- `mission.graphicOverviewHref`
+- `mission.graphicOverviewTitle`
+- `mission.individualName`
+- `mission.otherCiteAs`
+- `mission.parentProjectCode`
+- `mission.parentProjectDate`
+- `mission.parentProjectTitle`
+- `mission.purpose`
+- `mission.relatedDataUrl`
+- `mission.relatedDataUrlDescription`
+- `mission.relatedDataUrlTitle`
+- `mission.relatedDatasetCode`
+- `mission.relatedDatasetDate`
+- `mission.relatedDatasetOrg`
+- `mission.relatedDatasetTitle`
+- `mission.ror`
+- `mission.supplementalInformation`
+- `mission.temporalExtentIntervalUnit`
+- `mission.temporalExtentIntervalValue`
+- `mission.topicCategories`
+- `mission.uxsContext.deploymentId`
+- `mission.uxsContext.deploymentName`
+- `mission.uxsContext.diveId`
+- `mission.uxsContext.diveName`
+- `mission.uxsContext.narrative`
+- `mission.uxsContext.operationOutcome`
+- `mission.uxsContext.runId`
+- `mission.uxsContext.runName`
+- `mission.uxsContext.sortieId`
+- `mission.uxsContext.sortieName`
+- `mission.vmax`
+- `mission.vmin`
+- `platform.customPlatformType`
+- `platform.deploymentDate`
+- `platform.height`
+- `platform.length`
+- `platform.material`
+- `platform.model`
+- `platform.navigationSystem`
+- `platform.operationalArea`
+- `platform.platformName`
+- `platform.powerSource`
+- `platform.sensorMounts`
+- `platform.serialNumber`
+- `platform.speed`
+- `platform.weight`
+- `platform.width`
+- `sensors[0].beamCount`
+- `sensors[0].confidenceInterval`
+- `sensors[0].depthRating`
+- `sensors[0].firmware`
+- `sensors[0].frequency`
+- `sensors[0].operationMode`
+- `sensors[0].uncertainty`
+- `sensors[1].beamCount`
+- `sensors[1].confidenceInterval`
+- `sensors[1].depthRating`
+- `sensors[1].firmware`
+- `sensors[1].frequency`
+- `sensors[1].operationMode`
+- `sensors[1].uncertainty`
+- `sensors[2].beamCount`
+- `sensors[2].confidenceInterval`
+- `sensors[2].depthRating`
+- `sensors[2].firmware`
+- `sensors[2].frequency`
+- `sensors[2].operationMode`
+- `sensors[2].uncertainty`
+- `sensors[3].beamCount`
+- `sensors[3].confidenceInterval`
+- `sensors[3].depthRating`
+- `sensors[3].firmware`
+- `sensors[3].frequency`
+- `sensors[3].operationMode`
+- `sensors[3].uncertainty`
+- `sensors[4].beamCount`
+- `sensors[4].confidenceInterval`
+- `sensors[4].depthRating`
+- `sensors[4].firmware`
+- `sensors[4].frequency`
+- `sensors[4].operationMode`
+- `sensors[4].uncertainty`
+- `sensors[5].beamCount`
+- `sensors[5].confidenceInterval`
+- `sensors[5].depthRating`
+- `sensors[5].firmware`
+- `sensors[5].frequency`
+- `sensors[5].operationMode`
+- `sensors[5].uncertainty`
+- `sensors[6].beamCount`
+- `sensors[6].confidenceInterval`
+- `sensors[6].depthRating`
+- `sensors[6].firmware`
+- `sensors[6].frequency`
+- `sensors[6].operationMode`
+- `sensors[6].uncertainty`
+- `sensors[7].beamCount`
+- `sensors[7].confidenceInterval`
+- `sensors[7].depthRating`
+- `sensors[7].firmware`
+- `sensors[7].frequency`
+- `sensors[7].operationMode`
+- `sensors[7].uncertainty`
+- `sensors[8].beamCount`
+- `sensors[8].confidenceInterval`
+- `sensors[8].depthRating`
+- `sensors[8].firmware`
+- `sensors[8].frequency`
+- `sensors[8].operationMode`
+- `sensors[8].uncertainty`
+- `sensors[9].beamCount`
+- `sensors[9].confidenceInterval`
+- `sensors[9].depthRating`
+- `sensors[9].firmware`
+- `sensors[9].frequency`
+- `sensors[9].operationMode`
+- `sensors[9].uncertainty`
+- `sourceProvenance.importedAt`
+- `sourceProvenance.originalFilename`
+- `sourceProvenance.originalUuid`
+- `sourceProvenance.sourceId`
+- `spatial.geographicDescription`
+- `spatial.gridColumnResolution`
+- `spatial.gridColumnSize`
+- `spatial.gridRowResolution`
+- `spatial.gridRowSize`
+- `spatial.gridVerticalResolution`
+- `spatial.gridVerticalSize`
+- `spatial.lineageProcessSteps`
+- `spatial.lineageStatement`
+- `spatial.trajectorySampling`
+- `spatial.verticalCrsUrl`

@@ -1,0 +1,4883 @@
+{
+  "sampleDir": "/Users/connorcayson/Downloads/uSX/MANTA End User Testing/samples",
+  "sampleDirRelative": "MANTA End User Testing/samples",
+  "generated": "2026-05-11T16:58:54.505Z",
+  "lenientRollupSummary": {
+    "patternCount": 193,
+    "rollupJson": "MANTA End User Testing/reports/manta-samples-lenient-rollup.json",
+    "rollupMd": "MANTA End User Testing/reports/manta-samples-lenient-rollup.md",
+    "rollupCsv": "MANTA End User Testing/reports/manta-samples-lenient-patterns.csv"
+  },
+  "rows": [
+    {
+      "file": "0299833.xml",
+      "sourceShape": "ISO 19115-2 style (gmi:MI_Metadata)",
+      "importOk": true,
+      "mergeOk": true,
+      "parseOk": true,
+      "lenientErrors": 0,
+      "lenientWarns": 4,
+      "strictErrors": 2,
+      "strictWarns": 3,
+      "catalogErrors": 3,
+      "catalogWarns": 3,
+      "pipelineError": null,
+      "iso2PreviewFails": [],
+      "previewLen": 30003,
+      "previewRoundtripPartial": true,
+      "xmllintOk": true,
+      "lenientByStep": {
+        "mission": {
+          "e": 0,
+          "w": 3
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 1
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 2,
+          "w": 2
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 1
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "lenientIssues": [
+        {
+          "field": "mission.abstract",
+          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.abstract",
+          "message": "Abstract uses acronym \"QL\"; expand it on first use when possible.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.ror",
+          "message": "No ROR selected (recommended for organization linkage)",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        },
+        {
+          "field": "keywords.sciencekeywords[3].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ]
+    },
+    {
+      "file": "AFSC_GA13_Raw_Data.xml",
+      "sourceShape": "ISO 19115-2 style (gmi:MI_Metadata)",
+      "importOk": true,
+      "mergeOk": true,
+      "parseOk": true,
+      "lenientErrors": 1,
+      "lenientWarns": 17,
+      "strictErrors": 2,
+      "strictWarns": 16,
+      "catalogErrors": 4,
+      "catalogWarns": 16,
+      "pipelineError": null,
+      "iso2PreviewFails": [],
+      "previewLen": 25542,
+      "previewRoundtripPartial": true,
+      "xmllintOk": true,
+      "lenientByStep": {
+        "mission": {
+          "e": 1,
+          "w": 1
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 16
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 2,
+          "w": 0
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 16
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "lenientIssues": [
+        {
+          "field": "mission.accession",
+          "message": "NCEI Accession must be alphanumeric",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
+        },
+        {
+          "field": "mission.ror",
+          "message": "No ROR selected (recommended for organization linkage)",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        },
+        {
+          "field": "keywords.sciencekeywords[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[2].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[3].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[4].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[5].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[6].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[7].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.datacenters[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.platforms[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ]
+    },
+    {
+      "file": "C01531.xml",
+      "sourceShape": "ISO 19115-2 style (gmi:MI_Metadata)",
+      "importOk": true,
+      "mergeOk": true,
+      "parseOk": true,
+      "lenientErrors": 1,
+      "lenientWarns": 23,
+      "strictErrors": 3,
+      "strictWarns": 22,
+      "catalogErrors": 6,
+      "catalogWarns": 22,
+      "pipelineError": null,
+      "iso2PreviewFails": [],
+      "previewLen": 26252,
+      "previewRoundtripPartial": true,
+      "xmllintOk": true,
+      "lenientByStep": {
+        "mission": {
+          "e": 1,
+          "w": 3
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 20
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 3,
+          "w": 2
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 20
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "lenientIssues": [
+        {
+          "field": "mission.abstract",
+          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.abstract",
+          "message": "Abstract uses acronym \"EHIS\"; expand it on first use when possible.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.individualName",
+          "message": "Individual name is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName"
+        },
+        {
+          "field": "mission.ror",
+          "message": "No ROR selected (recommended for organization linkage)",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        },
+        {
+          "field": "keywords.sciencekeywords[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[2].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[3].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[4].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.datacenters[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.datacenters[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.datacenters[2].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.platforms[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.platforms[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.platforms[2].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.platforms[3].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects[2].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[2].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ]
+    },
+    {
+      "file": "C01678.xml",
+      "sourceShape": "ISO 19115-2 style (gmi:MI_Metadata)",
+      "importOk": true,
+      "mergeOk": true,
+      "parseOk": true,
+      "lenientErrors": 1,
+      "lenientWarns": 20,
+      "strictErrors": 2,
+      "strictWarns": 19,
+      "catalogErrors": 5,
+      "catalogWarns": 19,
+      "pipelineError": null,
+      "iso2PreviewFails": [],
+      "previewLen": 26773,
+      "previewRoundtripPartial": true,
+      "xmllintOk": true,
+      "lenientByStep": {
+        "mission": {
+          "e": 0,
+          "w": 3
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 1,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 17
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 1,
+          "w": 2
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 1,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 17
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "lenientIssues": [
+        {
+          "field": "mission.abstract",
+          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.abstract",
+          "message": "Abstract uses acronym \"PATMOS\"; expand it on first use when possible.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.ror",
+          "message": "No ROR selected (recommended for organization linkage)",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        },
+        {
+          "field": "sensors[1].variable",
+          "message": "Sensor 2: observed variable is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:contentInfo/gmi:MI_CoverageDescription/gmd:name"
+        },
+        {
+          "field": "keywords.sciencekeywords[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[2].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[3].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[4].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.datacenters[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.datacenters[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.platforms[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[2].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ]
+    },
+    {
+      "file": "EX1904_collection.xml",
+      "sourceShape": "ISO 19115-2 style (gmi:MI_Metadata)",
+      "importOk": true,
+      "mergeOk": true,
+      "parseOk": true,
+      "lenientErrors": 7,
+      "lenientWarns": 84,
+      "strictErrors": 9,
+      "strictWarns": 83,
+      "catalogErrors": 13,
+      "catalogWarns": 83,
+      "pipelineError": null,
+      "iso2PreviewFails": [],
+      "previewLen": 27092,
+      "previewRoundtripPartial": true,
+      "xmllintOk": true,
+      "lenientByStep": {
+        "mission": {
+          "e": 4,
+          "w": 2
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 2,
+          "w": 82
+        },
+        "distribution": {
+          "e": 1,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 6,
+          "w": 1
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 2,
+          "w": 82
+        },
+        "distribution": {
+          "e": 1,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "lenientIssues": [
+        {
+          "field": "mission.abstract",
+          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.endDate",
+          "message": "End date is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement"
+        },
+        {
+          "field": "mission.accession",
+          "message": "NCEI Accession must be alphanumeric",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
+        },
+        {
+          "field": "mission.individualName",
+          "message": "Individual name is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName"
+        },
+        {
+          "field": "mission.email",
+          "message": "Email is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:electronicMailAddress"
+        },
+        {
+          "field": "mission.ror",
+          "message": "No ROR selected (recommended for organization linkage)",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        },
+        {
+          "field": "keywords.locations",
+          "message": "Locations: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects",
+          "message": "Projects: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[2].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.datacenters[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.datacenters[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.platforms[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[2].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[3].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[4].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[5].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[6].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[7].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[8].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[9].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[10].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[11].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[12].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[13].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[14].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[15].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[16].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[17].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[18].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[19].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[20].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[21].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[22].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[23].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[24].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[25].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[26].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[27].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[28].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[29].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[30].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[31].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[32].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[33].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[34].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[35].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[36].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[37].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[38].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[39].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[40].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[41].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[42].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[43].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[44].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[45].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[46].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[47].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[48].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[49].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[50].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[51].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[52].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[53].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[54].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[55].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[56].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[57].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[58].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[59].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[60].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[61].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[62].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[63].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[64].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[65].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[66].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[67].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[68].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[69].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[70].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[71].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[72].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[73].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[74].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "distribution.format",
+          "message": "Distribution format is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:distributionFormat/gmd:MD_Format/gmd:name"
+        }
+      ]
+    },
+    {
+      "file": "EX2306_COLLECTION.xml",
+      "sourceShape": "ISO 19115-2 style (gmi:MI_Metadata)",
+      "importOk": true,
+      "mergeOk": true,
+      "parseOk": true,
+      "lenientErrors": 3,
+      "lenientWarns": 13,
+      "strictErrors": 4,
+      "strictWarns": 13,
+      "catalogErrors": 8,
+      "catalogWarns": 13,
+      "pipelineError": null,
+      "iso2PreviewFails": [],
+      "previewLen": 66234,
+      "previewRoundtripPartial": true,
+      "xmllintOk": true,
+      "lenientByStep": {
+        "mission": {
+          "e": 1,
+          "w": 1
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 1,
+          "w": 12
+        },
+        "distribution": {
+          "e": 1,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 2,
+          "w": 1
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 1,
+          "w": 12
+        },
+        "distribution": {
+          "e": 1,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "lenientIssues": [
+        {
+          "field": "mission.abstract",
+          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.endDate",
+          "message": "End date is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement"
+        },
+        {
+          "field": "keywords.projects",
+          "message": "Projects: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[2].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.datacenters[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.datacenters[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.platforms[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.platforms[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "distribution.format",
+          "message": "Distribution format is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:distributionFormat/gmd:MD_Format/gmd:name"
+        }
+      ]
+    },
+    {
+      "file": "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
+      "sourceShape": "ISO 19115-3 (mdb / -3)",
+      "importOk": true,
+      "mergeOk": true,
+      "parseOk": true,
+      "lenientErrors": 11,
+      "lenientWarns": 6,
+      "strictErrors": 15,
+      "strictWarns": 4,
+      "catalogErrors": 19,
+      "catalogWarns": 4,
+      "pipelineError": null,
+      "iso2PreviewFails": [],
+      "previewLen": 17928,
+      "previewRoundtripPartial": true,
+      "xmllintOk": true,
+      "lenientByStep": {
+        "mission": {
+          "e": 3,
+          "w": 4
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 1,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 5,
+          "w": 2
+        },
+        "distribution": {
+          "e": 2,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 7,
+          "w": 2
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 1,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 5,
+          "w": 2
+        },
+        "distribution": {
+          "e": 2,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "lenientIssues": [
+        {
+          "field": "mission.abstract",
+          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.abstract",
+          "message": "Abstract uses acronym \"MDBC\"; expand it on first use when possible.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.individualName",
+          "message": "Individual name is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName"
+        },
+        {
+          "field": "mission.email",
+          "message": "Email is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:electronicMailAddress"
+        },
+        {
+          "field": "mission.purpose",
+          "message": "Purpose (dataset) is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:purpose"
+        },
+        {
+          "field": "mission.licenseUrl",
+          "message": "License URL recommended when preset is custom",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints"
+        },
+        {
+          "field": "mission.ror",
+          "message": "No ROR selected (recommended for organization linkage)",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        },
+        {
+          "field": "sensors[3].variable",
+          "message": "Sensor 4: observed variable is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:contentInfo/gmi:MI_CoverageDescription/gmd:name"
+        },
+        {
+          "field": "keywords.sciencekeywords",
+          "message": "Science Keywords: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.datacenters",
+          "message": "Data Centers: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations",
+          "message": "Locations: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects",
+          "message": "Projects: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers",
+          "message": "Providers: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.platforms[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "distribution.format",
+          "message": "Distribution format is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:distributionFormat/gmd:MD_Format/gmd:name"
+        },
+        {
+          "field": "distribution.license",
+          "message": "Use/License is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:useConstraints"
+        }
+      ]
+    },
+    {
+      "file": "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
+      "sourceShape": "ISO 19115-3 (mdb / -3)",
+      "importOk": true,
+      "mergeOk": true,
+      "parseOk": true,
+      "lenientErrors": 11,
+      "lenientWarns": 6,
+      "strictErrors": 15,
+      "strictWarns": 4,
+      "catalogErrors": 19,
+      "catalogWarns": 4,
+      "pipelineError": null,
+      "iso2PreviewFails": [],
+      "previewLen": 17791,
+      "previewRoundtripPartial": true,
+      "xmllintOk": true,
+      "lenientByStep": {
+        "mission": {
+          "e": 3,
+          "w": 4
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 1,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 5,
+          "w": 2
+        },
+        "distribution": {
+          "e": 2,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 7,
+          "w": 2
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 1,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 5,
+          "w": 2
+        },
+        "distribution": {
+          "e": 2,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "lenientIssues": [
+        {
+          "field": "mission.abstract",
+          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.abstract",
+          "message": "Abstract uses acronym \"MDBC\"; expand it on first use when possible.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.individualName",
+          "message": "Individual name is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName"
+        },
+        {
+          "field": "mission.email",
+          "message": "Email is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:electronicMailAddress"
+        },
+        {
+          "field": "mission.purpose",
+          "message": "Purpose (dataset) is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:purpose"
+        },
+        {
+          "field": "mission.licenseUrl",
+          "message": "License URL recommended when preset is custom",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints"
+        },
+        {
+          "field": "mission.ror",
+          "message": "No ROR selected (recommended for organization linkage)",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        },
+        {
+          "field": "sensors[2].variable",
+          "message": "Sensor 3: observed variable is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:contentInfo/gmi:MI_CoverageDescription/gmd:name"
+        },
+        {
+          "field": "keywords.sciencekeywords",
+          "message": "Science Keywords: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.datacenters",
+          "message": "Data Centers: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations",
+          "message": "Locations: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects",
+          "message": "Projects: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers",
+          "message": "Providers: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.platforms[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "distribution.format",
+          "message": "Distribution format is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:distributionFormat/gmd:MD_Format/gmd:name"
+        },
+        {
+          "field": "distribution.license",
+          "message": "Use/License is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:useConstraints"
+        }
+      ]
+    },
+    {
+      "file": "LISTEN_GoMex_Raw_Audio.xml",
+      "sourceShape": "ISO 19115-2 style (gmi:MI_Metadata)",
+      "importOk": true,
+      "mergeOk": true,
+      "parseOk": true,
+      "lenientErrors": 3,
+      "lenientWarns": 16,
+      "strictErrors": 3,
+      "strictWarns": 16,
+      "catalogErrors": 7,
+      "catalogWarns": 16,
+      "pipelineError": null,
+      "iso2PreviewFails": [],
+      "previewLen": 24869,
+      "previewRoundtripPartial": true,
+      "xmllintOk": true,
+      "lenientByStep": {
+        "mission": {
+          "e": 2,
+          "w": 2
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 1,
+          "w": 14
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 2,
+          "w": 2
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 1,
+          "w": 14
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "lenientIssues": [
+        {
+          "field": "mission.abstract",
+          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.abstract",
+          "message": "Abstract uses acronym \"UCSD\"; expand it on first use when possible.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.endDate",
+          "message": "End date is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement"
+        },
+        {
+          "field": "mission.accession",
+          "message": "NCEI Accession must be alphanumeric",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
+        },
+        {
+          "field": "keywords.projects",
+          "message": "Projects: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[2].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[3].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[4].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[5].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[6].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[7].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.datacenters[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.platforms[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ]
+    },
+    {
+      "file": "NCRMP-Benthic-FG.xml",
+      "sourceShape": "ISO 19115-2 style (gmi:MI_Metadata)",
+      "importOk": true,
+      "mergeOk": true,
+      "parseOk": true,
+      "lenientErrors": 0,
+      "lenientWarns": 49,
+      "strictErrors": 0,
+      "strictWarns": 49,
+      "catalogErrors": 3,
+      "catalogWarns": 49,
+      "pipelineError": null,
+      "iso2PreviewFails": [],
+      "previewLen": 42670,
+      "previewRoundtripPartial": true,
+      "xmllintOk": true,
+      "lenientByStep": {
+        "mission": {
+          "e": 0,
+          "w": 2
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 47
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 0,
+          "w": 2
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 47
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "lenientIssues": [
+        {
+          "field": "mission.abstract",
+          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.abstract",
+          "message": "Abstract uses acronym \"FGBNMS\"; expand it on first use when possible.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "keywords.sciencekeywords[17].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[18].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[19].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[20].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[21].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[22].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[23].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[24].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[25].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[26].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[27].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[28].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[29].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[30].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[31].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[32].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[38].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[39].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[40].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[41].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[42].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[43].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[44].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.datacenters[3].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.datacenters[4].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.datacenters[5].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.datacenters[6].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.platforms[3].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.platforms[4].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[3].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[2].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[3].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[4].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[5].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[6].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[9].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[10].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects[3].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects[4].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects[5].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects[6].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects[7].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects[8].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects[9].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ]
+    },
+    {
+      "file": "NCRMP-Socio-Guam.xml",
+      "sourceShape": "ISO 19115-2 style (gmi:MI_Metadata)",
+      "importOk": true,
+      "mergeOk": true,
+      "parseOk": true,
+      "lenientErrors": 1,
+      "lenientWarns": 18,
+      "strictErrors": 1,
+      "strictWarns": 18,
+      "catalogErrors": 4,
+      "catalogWarns": 18,
+      "pipelineError": null,
+      "iso2PreviewFails": [],
+      "previewLen": 28818,
+      "previewRoundtripPartial": true,
+      "xmllintOk": true,
+      "lenientByStep": {
+        "mission": {
+          "e": 0,
+          "w": 1
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 1,
+          "w": 17
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 0,
+          "w": 1
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 1,
+          "w": 17
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "lenientIssues": [
+        {
+          "field": "mission.abstract",
+          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "keywords.platforms",
+          "message": "Platforms: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[3].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[4].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[5].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[6].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[9].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[2].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[3].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[5].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[6].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[7].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects[3].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects[4].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects[5].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects[6].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ]
+    },
+    {
+      "file": "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
+      "sourceShape": "ISO 19115-3 (mdb / -3)",
+      "importOk": true,
+      "mergeOk": true,
+      "parseOk": true,
+      "lenientErrors": 9,
+      "lenientWarns": 5,
+      "strictErrors": 11,
+      "strictWarns": 4,
+      "catalogErrors": 15,
+      "catalogWarns": 4,
+      "pipelineError": null,
+      "iso2PreviewFails": [],
+      "previewLen": 34217,
+      "previewRoundtripPartial": true,
+      "xmllintOk": true,
+      "lenientByStep": {
+        "mission": {
+          "e": 3,
+          "w": 3
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 5,
+          "w": 2
+        },
+        "distribution": {
+          "e": 1,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 5,
+          "w": 2
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 5,
+          "w": 2
+        },
+        "distribution": {
+          "e": 1,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "lenientIssues": [
+        {
+          "field": "mission.abstract",
+          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.abstract",
+          "message": "Abstract uses acronym \"MDBC\"; expand it on first use when possible.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.endDate",
+          "message": "End date is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement"
+        },
+        {
+          "field": "mission.individualName",
+          "message": "Individual name is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName"
+        },
+        {
+          "field": "mission.purpose",
+          "message": "Purpose (dataset) is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:purpose"
+        },
+        {
+          "field": "mission.ror",
+          "message": "No ROR selected (recommended for organization linkage)",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        },
+        {
+          "field": "keywords.sciencekeywords",
+          "message": "Science Keywords: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.datacenters",
+          "message": "Data Centers: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations",
+          "message": "Locations: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects",
+          "message": "Projects: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers",
+          "message": "Providers: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.platforms[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "distribution.format",
+          "message": "Distribution format is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:distributionFormat/gmd:MD_Format/gmd:name"
+        }
+      ]
+    },
+    {
+      "file": "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
+      "sourceShape": "ISO 19115-3 (mdb / -3)",
+      "importOk": true,
+      "mergeOk": true,
+      "parseOk": true,
+      "lenientErrors": 9,
+      "lenientWarns": 5,
+      "strictErrors": 11,
+      "strictWarns": 4,
+      "catalogErrors": 15,
+      "catalogWarns": 4,
+      "pipelineError": null,
+      "iso2PreviewFails": [],
+      "previewLen": 34217,
+      "previewRoundtripPartial": true,
+      "xmllintOk": true,
+      "lenientByStep": {
+        "mission": {
+          "e": 3,
+          "w": 3
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 5,
+          "w": 2
+        },
+        "distribution": {
+          "e": 1,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 5,
+          "w": 2
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 5,
+          "w": 2
+        },
+        "distribution": {
+          "e": 1,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "lenientIssues": [
+        {
+          "field": "mission.abstract",
+          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.abstract",
+          "message": "Abstract uses acronym \"MDBC\"; expand it on first use when possible.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.endDate",
+          "message": "End date is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement"
+        },
+        {
+          "field": "mission.individualName",
+          "message": "Individual name is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName"
+        },
+        {
+          "field": "mission.purpose",
+          "message": "Purpose (dataset) is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:purpose"
+        },
+        {
+          "field": "mission.ror",
+          "message": "No ROR selected (recommended for organization linkage)",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        },
+        {
+          "field": "keywords.sciencekeywords",
+          "message": "Science Keywords: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.datacenters",
+          "message": "Data Centers: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations",
+          "message": "Locations: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects",
+          "message": "Projects: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers",
+          "message": "Providers: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.platforms[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "distribution.format",
+          "message": "Distribution format is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:distributionFormat/gmd:MD_Format/gmd:name"
+        }
+      ]
+    },
+    {
+      "file": "NRS_Raw_Data.xml",
+      "sourceShape": "ISO 19115-2 style (gmi:MI_Metadata)",
+      "importOk": true,
+      "mergeOk": true,
+      "parseOk": true,
+      "lenientErrors": 1,
+      "lenientWarns": 21,
+      "strictErrors": 2,
+      "strictWarns": 20,
+      "catalogErrors": 4,
+      "catalogWarns": 20,
+      "pipelineError": null,
+      "iso2PreviewFails": [],
+      "previewLen": 24450,
+      "previewRoundtripPartial": true,
+      "xmllintOk": true,
+      "lenientByStep": {
+        "mission": {
+          "e": 1,
+          "w": 3
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 18
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 2,
+          "w": 2
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 18
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "lenientIssues": [
+        {
+          "field": "mission.abstract",
+          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.abstract",
+          "message": "Abstract uses acronym \"PMEL\"; expand it on first use when possible.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.accession",
+          "message": "NCEI Accession must be alphanumeric",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
+        },
+        {
+          "field": "mission.ror",
+          "message": "No ROR selected (recommended for organization linkage)",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        },
+        {
+          "field": "keywords.sciencekeywords[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[2].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[3].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[4].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[5].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[6].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[7].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.datacenters[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.platforms[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[2].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[3].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ]
+    },
+    {
+      "file": "SAMPLE_Populated.xml",
+      "sourceShape": "ISO 19115-2 style (gmi:MI_Metadata)",
+      "importOk": true,
+      "mergeOk": true,
+      "parseOk": true,
+      "lenientErrors": 2,
+      "lenientWarns": 15,
+      "strictErrors": 2,
+      "strictWarns": 15,
+      "catalogErrors": 2,
+      "catalogWarns": 15,
+      "pipelineError": null,
+      "iso2PreviewFails": [],
+      "previewLen": 28901,
+      "previewRoundtripPartial": true,
+      "xmllintOk": true,
+      "lenientByStep": {
+        "mission": {
+          "e": 2,
+          "w": 2
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 13
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 2,
+          "w": 2
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 13
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "lenientIssues": [
+        {
+          "field": "mission.abstract",
+          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.abstract",
+          "message": "Abstract uses acronym \"TPOS\"; expand it on first use when possible.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.startDate",
+          "message": "Creation / Start date is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement"
+        },
+        {
+          "field": "mission.endDate",
+          "message": "End date is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement"
+        },
+        {
+          "field": "keywords.sciencekeywords[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.datacenters[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.datacenters[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.platforms[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[2].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[3].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ]
+    },
+    {
+      "file": "gov.noaa.nmfs.inport.52208.xml",
+      "sourceShape": "ISO 19115-2 style (gmi:MI_Metadata)",
+      "importOk": true,
+      "mergeOk": true,
+      "parseOk": true,
+      "lenientErrors": 5,
+      "lenientWarns": 24,
+      "strictErrors": 7,
+      "strictWarns": 23,
+      "catalogErrors": 10,
+      "catalogWarns": 23,
+      "pipelineError": null,
+      "iso2PreviewFails": [],
+      "previewLen": 18306,
+      "previewRoundtripPartial": true,
+      "xmllintOk": true,
+      "lenientByStep": {
+        "mission": {
+          "e": 1,
+          "w": 3
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 2,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 2,
+          "w": 21
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 3,
+          "w": 2
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 2,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 2,
+          "w": 21
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "lenientIssues": [
+        {
+          "field": "mission.abstract",
+          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.abstract",
+          "message": "Abstract uses acronym \"PIFSC\"; expand it on first use when possible.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.purpose",
+          "message": "Purpose (dataset) is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:purpose"
+        },
+        {
+          "field": "mission.ror",
+          "message": "No ROR selected (recommended for organization linkage)",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        },
+        {
+          "field": "sensors[0].type",
+          "message": "Sensor 1: type is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:contentInfo/gmi:MI_CoverageDescription/gmd:attributeDescription"
+        },
+        {
+          "field": "sensors[0].variable",
+          "message": "Sensor 1: observed variable is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:contentInfo/gmi:MI_CoverageDescription/gmd:name"
+        },
+        {
+          "field": "keywords.platforms",
+          "message": "Platforms: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments",
+          "message": "Instruments: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[2].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[3].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[4].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[5].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[6].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[7].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[8].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[9].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[10].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[11].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.datacenters[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[2].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[3].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[4].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[5].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ]
+    },
+    {
+      "file": "gov.noaa.nmfs.inport.5619.xml",
+      "sourceShape": "ISO 19115-2 style (gmi:MI_Metadata)",
+      "importOk": true,
+      "mergeOk": true,
+      "parseOk": true,
+      "lenientErrors": 5,
+      "lenientWarns": 18,
+      "strictErrors": 7,
+      "strictWarns": 17,
+      "catalogErrors": 11,
+      "catalogWarns": 17,
+      "pipelineError": null,
+      "iso2PreviewFails": [],
+      "previewLen": 17391,
+      "previewRoundtripPartial": true,
+      "xmllintOk": true,
+      "lenientByStep": {
+        "mission": {
+          "e": 0,
+          "w": 3
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 2,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 2,
+          "w": 15
+        },
+        "distribution": {
+          "e": 1,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 2,
+          "w": 2
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 2,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 2,
+          "w": 15
+        },
+        "distribution": {
+          "e": 1,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "lenientIssues": [
+        {
+          "field": "mission.abstract",
+          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.abstract",
+          "message": "Abstract uses acronym \"ID\"; expand it on first use when possible.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.ror",
+          "message": "No ROR selected (recommended for organization linkage)",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        },
+        {
+          "field": "sensors[0].type",
+          "message": "Sensor 1: type is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:contentInfo/gmi:MI_CoverageDescription/gmd:attributeDescription"
+        },
+        {
+          "field": "sensors[0].variable",
+          "message": "Sensor 1: observed variable is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:contentInfo/gmi:MI_CoverageDescription/gmd:name"
+        },
+        {
+          "field": "keywords.platforms",
+          "message": "Platforms: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments",
+          "message": "Instruments: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[2].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[3].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[4].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[5].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[6].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[7].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[8].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[9].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[10].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.datacenters[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "distribution.format",
+          "message": "Distribution format is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:distributionFormat/gmd:MD_Format/gmd:name"
+        }
+      ]
+    },
+    {
+      "file": "gov.noaa.nmfs.inport.5687.xml",
+      "sourceShape": "ISO 19115-2 style (gmi:MI_Metadata)",
+      "importOk": true,
+      "mergeOk": true,
+      "parseOk": true,
+      "lenientErrors": 4,
+      "lenientWarns": 16,
+      "strictErrors": 6,
+      "strictWarns": 15,
+      "catalogErrors": 10,
+      "catalogWarns": 15,
+      "pipelineError": null,
+      "iso2PreviewFails": [],
+      "previewLen": 22181,
+      "previewRoundtripPartial": true,
+      "xmllintOk": true,
+      "lenientByStep": {
+        "mission": {
+          "e": 0,
+          "w": 3
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 2,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 2,
+          "w": 13
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 2,
+          "w": 2
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 2,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 2,
+          "w": 13
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "lenientIssues": [
+        {
+          "field": "mission.abstract",
+          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.abstract",
+          "message": "Abstract uses acronym \"NOT\"; expand it on first use when possible.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.ror",
+          "message": "No ROR selected (recommended for organization linkage)",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        },
+        {
+          "field": "sensors[0].type",
+          "message": "Sensor 1: type is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:contentInfo/gmi:MI_CoverageDescription/gmd:attributeDescription"
+        },
+        {
+          "field": "sensors[0].variable",
+          "message": "Sensor 1: observed variable is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:contentInfo/gmi:MI_CoverageDescription/gmd:name"
+        },
+        {
+          "field": "keywords.platforms",
+          "message": "Platforms: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments",
+          "message": "Instruments: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[2].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[3].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[4].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[5].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[6].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[7].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.datacenters[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ]
+    },
+    {
+      "file": "gov.noaa.nmfs.inport.62654.xml",
+      "sourceShape": "ISO 19115-2 style (gmi:MI_Metadata)",
+      "importOk": true,
+      "mergeOk": true,
+      "parseOk": true,
+      "lenientErrors": 6,
+      "lenientWarns": 47,
+      "strictErrors": 8,
+      "strictWarns": 46,
+      "catalogErrors": 12,
+      "catalogWarns": 46,
+      "pipelineError": null,
+      "iso2PreviewFails": [],
+      "previewLen": 20417,
+      "previewRoundtripPartial": true,
+      "xmllintOk": true,
+      "lenientByStep": {
+        "mission": {
+          "e": 1,
+          "w": 2
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 2,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 2,
+          "w": 45
+        },
+        "distribution": {
+          "e": 1,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 3,
+          "w": 1
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 2,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 2,
+          "w": 45
+        },
+        "distribution": {
+          "e": 1,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "lenientIssues": [
+        {
+          "field": "mission.abstract",
+          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.startDate",
+          "message": "Creation / Start date is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement"
+        },
+        {
+          "field": "mission.ror",
+          "message": "No ROR selected (recommended for organization linkage)",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        },
+        {
+          "field": "sensors[0].type",
+          "message": "Sensor 1: type is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:contentInfo/gmi:MI_CoverageDescription/gmd:attributeDescription"
+        },
+        {
+          "field": "sensors[0].variable",
+          "message": "Sensor 1: observed variable is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:contentInfo/gmi:MI_CoverageDescription/gmd:name"
+        },
+        {
+          "field": "keywords.platforms",
+          "message": "Platforms: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments",
+          "message": "Instruments: at least one keyword is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[2].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[3].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[4].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[5].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[6].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[7].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[8].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[9].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[10].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[11].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[12].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[13].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[14].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[15].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[16].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[17].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[18].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[19].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[20].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[21].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[22].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[23].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[24].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[25].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[26].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[27].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[28].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[29].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[30].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[31].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.sciencekeywords[32].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.datacenters[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[2].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[3].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[4].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[5].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[6].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[7].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.locations[8].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "distribution.format",
+          "message": "Distribution format is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:distributionFormat/gmd:MD_Format/gmd:name"
+        }
+      ]
+    },
+    {
+      "file": "uxs_test.xml",
+      "sourceShape": "ISO 19115-2 style (gmi:MI_Metadata)",
+      "importOk": true,
+      "mergeOk": true,
+      "parseOk": true,
+      "lenientErrors": 0,
+      "lenientWarns": 58,
+      "strictErrors": 1,
+      "strictWarns": 58,
+      "catalogErrors": 4,
+      "catalogWarns": 58,
+      "pipelineError": null,
+      "iso2PreviewFails": [],
+      "previewLen": 95496,
+      "previewRoundtripPartial": true,
+      "xmllintOk": true,
+      "lenientByStep": {
+        "mission": {
+          "e": 0,
+          "w": 2
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 56
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 1,
+          "w": 2
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 56
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "lenientIssues": [
+        {
+          "field": "mission.abstract",
+          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "mission.abstract",
+          "message": "Abstract uses acronym \"CPO\"; expand it on first use when possible.",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
+        },
+        {
+          "field": "keywords.sciencekeywords[25].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.platforms[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.platforms[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[24].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[25].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[26].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[27].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[28].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.instruments[29].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.projects[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[1].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[2].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[3].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[4].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[5].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[6].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[7].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[8].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[9].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[10].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[11].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[12].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[13].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[14].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[15].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[16].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[17].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[18].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[19].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[20].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[21].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[22].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[23].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[24].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[25].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[26].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[27].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[28].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[29].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[30].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[31].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[32].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[33].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[34].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[35].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[36].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[37].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[38].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[39].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[40].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[41].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[42].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[43].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[44].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        },
+        {
+          "field": "keywords.providers[45].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ]
+    }
+  ]
+}

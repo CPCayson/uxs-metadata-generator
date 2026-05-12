@@ -1,0 +1,4983 @@
+{
+  "generatedAt": "2026-05-11T16:20:36.649Z",
+  "sourceXml": "../MANTA End User Testing/samples/uxs_test.xml",
+  "importWarnings": [],
+  "summary": {
+    "leafPaths": 565,
+    "filled": 333,
+    "empty": 232,
+    "sameAsDefault": 107,
+    "changedFromDefault": 458
+  },
+  "byStep": {
+    "6-distribution": {
+      "filled": 22,
+      "empty": 14,
+      "sameAsDefault": 21,
+      "total": 36
+    },
+    "5-keywords": {
+      "filled": 198,
+      "empty": 63,
+      "sameAsDefault": 0,
+      "total": 261
+    },
+    "1-mission": {
+      "filled": 41,
+      "empty": 36,
+      "sameAsDefault": 39,
+      "total": 77
+    },
+    "meta": {
+      "filled": 4,
+      "empty": 4,
+      "sameAsDefault": 6,
+      "total": 8
+    },
+    "2-platform": {
+      "filled": 3,
+      "empty": 16,
+      "sameAsDefault": 16,
+      "total": 19
+    },
+    "3-sensors": {
+      "filled": 60,
+      "empty": 84,
+      "sameAsDefault": 7,
+      "total": 144
+    },
+    "4-spatial": {
+      "filled": 5,
+      "empty": 15,
+      "sameAsDefault": 18,
+      "total": 20
+    }
+  },
+  "emptyPaths": [
+    "distribution.awsBucket",
+    "distribution.awsPrefix",
+    "distribution.distributionFileFormat",
+    "distribution.distributorContactUrl",
+    "distribution.distributorIndividualName",
+    "distribution.finalNotes",
+    "distribution.nceiDistributorContactHref",
+    "distribution.nceiDistributorContactTitle",
+    "distribution.nceiMetadataContactHref",
+    "distribution.nceiMetadataContactTitle",
+    "distribution.parentProject",
+    "distribution.publication",
+    "distribution.templateCategory",
+    "distribution.templateName",
+    "keywords.datacenters",
+    "keywords.instruments",
+    "keywords.instruments[24].uuid",
+    "keywords.instruments[25].uuid",
+    "keywords.instruments[26].uuid",
+    "keywords.instruments[27].uuid",
+    "keywords.instruments[28].uuid",
+    "keywords.instruments[29].uuid",
+    "keywords.locations",
+    "keywords.platforms",
+    "keywords.platforms[0].uuid",
+    "keywords.platforms[1].uuid",
+    "keywords.projects",
+    "keywords.projects[1].uuid",
+    "keywords.providers",
+    "keywords.providers[0].uuid",
+    "keywords.providers[10].uuid",
+    "keywords.providers[11].uuid",
+    "keywords.providers[12].uuid",
+    "keywords.providers[13].uuid",
+    "keywords.providers[14].uuid",
+    "keywords.providers[15].uuid",
+    "keywords.providers[16].uuid",
+    "keywords.providers[17].uuid",
+    "keywords.providers[18].uuid",
+    "keywords.providers[19].uuid",
+    "keywords.providers[1].uuid",
+    "keywords.providers[20].uuid",
+    "keywords.providers[21].uuid",
+    "keywords.providers[22].uuid",
+    "keywords.providers[23].uuid",
+    "keywords.providers[24].uuid",
+    "keywords.providers[25].uuid",
+    "keywords.providers[26].uuid",
+    "keywords.providers[27].uuid",
+    "keywords.providers[28].uuid",
+    "keywords.providers[29].uuid",
+    "keywords.providers[2].uuid",
+    "keywords.providers[30].uuid",
+    "keywords.providers[31].uuid",
+    "keywords.providers[32].uuid",
+    "keywords.providers[33].uuid",
+    "keywords.providers[34].uuid",
+    "keywords.providers[35].uuid",
+    "keywords.providers[36].uuid",
+    "keywords.providers[37].uuid",
+    "keywords.providers[38].uuid",
+    "keywords.providers[39].uuid",
+    "keywords.providers[3].uuid",
+    "keywords.providers[40].uuid",
+    "keywords.providers[41].uuid",
+    "keywords.providers[42].uuid",
+    "keywords.providers[43].uuid",
+    "keywords.providers[44].uuid",
+    "keywords.providers[45].uuid",
+    "keywords.providers[4].uuid",
+    "keywords.providers[5].uuid",
+    "keywords.providers[6].uuid",
+    "keywords.providers[7].uuid",
+    "keywords.providers[8].uuid",
+    "keywords.providers[9].uuid",
+    "keywords.sciencekeywords",
+    "keywords.sciencekeywords[25].uuid",
+    "mission.alternateTitle",
+    "mission.associatedPublicationCode",
+    "mission.associatedPublicationDate",
+    "mission.associatedPublicationTitle",
+    "mission.citationOriginatorIndividualName",
+    "mission.citationOriginatorOrganisationName",
+    "mission.contactAddress",
+    "mission.contactPhone",
+    "mission.doi",
+    "mission.otherCiteAs",
+    "mission.parentProjectCode",
+    "mission.parentProjectDate",
+    "mission.parentProjectTitle",
+    "mission.relatedDataUrl",
+    "mission.relatedDataUrlDescription",
+    "mission.relatedDataUrlTitle",
+    "mission.relatedDatasetCode",
+    "mission.relatedDatasetDate",
+    "mission.relatedDatasetOrg",
+    "mission.relatedDatasetTitle",
+    "mission.ror",
+    "mission.temporalExtentIntervalUnit",
+    "mission.temporalExtentIntervalValue",
+    "mission.topicCategories",
+    "mission.uxsContext.deploymentId",
+    "mission.uxsContext.deploymentName",
+    "mission.uxsContext.diveId",
+    "mission.uxsContext.diveName",
+    "mission.uxsContext.narrative",
+    "mission.uxsContext.operationOutcome",
+    "mission.uxsContext.runId",
+    "mission.uxsContext.runName",
+    "mission.uxsContext.sortieId",
+    "mission.uxsContext.sortieName",
+    "mission.vmax",
+    "mission.vmin",
+    "platform.customPlatformType",
+    "platform.deploymentDate",
+    "platform.height",
+    "platform.length",
+    "platform.manufacturer",
+    "platform.material",
+    "platform.model",
+    "platform.navigationSystem",
+    "platform.operationalArea",
+    "platform.platformName",
+    "platform.powerSource",
+    "platform.sensorMounts",
+    "platform.serialNumber",
+    "platform.speed",
+    "platform.weight",
+    "platform.width",
+    "sensors[0].beamCount",
+    "sensors[0].confidenceInterval",
+    "sensors[0].depthRating",
+    "sensors[0].firmware",
+    "sensors[0].frequency",
+    "sensors[0].operationMode",
+    "sensors[0].uncertainty",
+    "sensors[10].beamCount",
+    "sensors[10].confidenceInterval",
+    "sensors[10].depthRating",
+    "sensors[10].firmware",
+    "sensors[10].frequency",
+    "sensors[10].operationMode",
+    "sensors[10].uncertainty",
+    "sensors[11].beamCount",
+    "sensors[11].confidenceInterval",
+    "sensors[11].depthRating",
+    "sensors[11].firmware",
+    "sensors[11].frequency",
+    "sensors[11].operationMode",
+    "sensors[11].uncertainty",
+    "sensors[1].beamCount",
+    "sensors[1].confidenceInterval",
+    "sensors[1].depthRating",
+    "sensors[1].firmware",
+    "sensors[1].frequency",
+    "sensors[1].operationMode",
+    "sensors[1].uncertainty",
+    "sensors[2].beamCount",
+    "sensors[2].confidenceInterval",
+    "sensors[2].depthRating",
+    "sensors[2].firmware",
+    "sensors[2].frequency",
+    "sensors[2].operationMode",
+    "sensors[2].uncertainty",
+    "sensors[3].beamCount",
+    "sensors[3].confidenceInterval",
+    "sensors[3].depthRating",
+    "sensors[3].firmware",
+    "sensors[3].frequency",
+    "sensors[3].operationMode",
+    "sensors[3].uncertainty",
+    "sensors[4].beamCount",
+    "sensors[4].confidenceInterval",
+    "sensors[4].depthRating",
+    "sensors[4].firmware",
+    "sensors[4].frequency",
+    "sensors[4].operationMode",
+    "sensors[4].uncertainty",
+    "sensors[5].beamCount",
+    "sensors[5].confidenceInterval",
+    "sensors[5].depthRating",
+    "sensors[5].firmware",
+    "sensors[5].frequency",
+    "sensors[5].operationMode",
+    "sensors[5].uncertainty",
+    "sensors[6].beamCount",
+    "sensors[6].confidenceInterval",
+    "sensors[6].depthRating",
+    "sensors[6].firmware",
+    "sensors[6].frequency",
+    "sensors[6].operationMode",
+    "sensors[6].uncertainty",
+    "sensors[7].beamCount",
+    "sensors[7].confidenceInterval",
+    "sensors[7].depthRating",
+    "sensors[7].firmware",
+    "sensors[7].frequency",
+    "sensors[7].operationMode",
+    "sensors[7].uncertainty",
+    "sensors[8].beamCount",
+    "sensors[8].confidenceInterval",
+    "sensors[8].depthRating",
+    "sensors[8].firmware",
+    "sensors[8].frequency",
+    "sensors[8].operationMode",
+    "sensors[8].uncertainty",
+    "sensors[9].beamCount",
+    "sensors[9].confidenceInterval",
+    "sensors[9].depthRating",
+    "sensors[9].firmware",
+    "sensors[9].frequency",
+    "sensors[9].operationMode",
+    "sensors[9].uncertainty",
+    "sourceProvenance.importedAt",
+    "sourceProvenance.originalFilename",
+    "sourceProvenance.originalUuid",
+    "sourceProvenance.sourceId",
+    "spatial.accuracyStandard",
+    "spatial.accuracyValue",
+    "spatial.dimensions",
+    "spatial.errorLevel",
+    "spatial.errorValue",
+    "spatial.geographicDescription",
+    "spatial.gridCellGeometry",
+    "spatial.gridColumnResolution",
+    "spatial.gridColumnSize",
+    "spatial.gridRowResolution",
+    "spatial.gridRowSize",
+    "spatial.gridVerticalResolution",
+    "spatial.gridVerticalSize",
+    "spatial.trajectorySampling",
+    "spatial.verticalCrsUrl"
+  ],
+  "filledPaths": [
+    "distribution.distributionFeesText",
+    "distribution.distributionFormatName",
+    "distribution.distributionOrderingInstructions",
+    "distribution.distributorEmail",
+    "distribution.distributorOrganisationName",
+    "distribution.downloadLinkDescription",
+    "distribution.downloadLinkName",
+    "distribution.downloadProtocol",
+    "distribution.downloadUrl",
+    "distribution.format",
+    "distribution.landingUrl",
+    "distribution.license",
+    "distribution.metadataLandingDescription",
+    "distribution.metadataLandingLinkName",
+    "distribution.metadataLandingUrl",
+    "distribution.metadataMaintenanceFrequency",
+    "distribution.metadataStandard",
+    "distribution.metadataVersion",
+    "distribution.nceiFileIdPrefix",
+    "distribution.omitRootReferenceSystemInfo",
+    "distribution.outputLocation",
+    "distribution.useNceiMetadataContactXlink",
+    "keywords.datacenters[0].label",
+    "keywords.datacenters[0].uuid",
+    "keywords.datacenters[1].label",
+    "keywords.datacenters[1].uuid",
+    "keywords.datacenters[2].label",
+    "keywords.datacenters[2].uuid",
+    "keywords.datacenters[3].label",
+    "keywords.datacenters[3].uuid",
+    "keywords.instruments[0].label",
+    "keywords.instruments[0].uuid",
+    "keywords.instruments[10].label",
+    "keywords.instruments[10].uuid",
+    "keywords.instruments[11].label",
+    "keywords.instruments[11].uuid",
+    "keywords.instruments[12].label",
+    "keywords.instruments[12].uuid",
+    "keywords.instruments[13].label",
+    "keywords.instruments[13].uuid",
+    "keywords.instruments[14].label",
+    "keywords.instruments[14].uuid",
+    "keywords.instruments[15].label",
+    "keywords.instruments[15].uuid",
+    "keywords.instruments[16].label",
+    "keywords.instruments[16].uuid",
+    "keywords.instruments[17].label",
+    "keywords.instruments[17].uuid",
+    "keywords.instruments[18].label",
+    "keywords.instruments[18].uuid",
+    "keywords.instruments[19].label",
+    "keywords.instruments[19].uuid",
+    "keywords.instruments[1].label",
+    "keywords.instruments[1].uuid",
+    "keywords.instruments[20].label",
+    "keywords.instruments[20].uuid",
+    "keywords.instruments[21].label",
+    "keywords.instruments[21].uuid",
+    "keywords.instruments[22].label",
+    "keywords.instruments[22].uuid",
+    "keywords.instruments[23].label",
+    "keywords.instruments[23].uuid",
+    "keywords.instruments[24].label",
+    "keywords.instruments[25].label",
+    "keywords.instruments[26].label",
+    "keywords.instruments[27].label",
+    "keywords.instruments[28].label",
+    "keywords.instruments[29].label",
+    "keywords.instruments[2].label",
+    "keywords.instruments[2].uuid",
+    "keywords.instruments[3].label",
+    "keywords.instruments[3].uuid",
+    "keywords.instruments[4].label",
+    "keywords.instruments[4].uuid",
+    "keywords.instruments[5].label",
+    "keywords.instruments[5].uuid",
+    "keywords.instruments[6].label",
+    "keywords.instruments[6].uuid",
+    "keywords.instruments[7].label",
+    "keywords.instruments[7].uuid",
+    "keywords.instruments[8].label",
+    "keywords.instruments[8].uuid",
+    "keywords.instruments[9].label",
+    "keywords.instruments[9].uuid",
+    "keywords.locations[0].label",
+    "keywords.locations[0].uuid",
+    "keywords.locations[1].label",
+    "keywords.locations[1].uuid",
+    "keywords.platforms[0].label",
+    "keywords.platforms[1].label",
+    "keywords.projects[0].label",
+    "keywords.projects[0].uuid",
+    "keywords.projects[1].label",
+    "keywords.providers[0].label",
+    "keywords.providers[10].label",
+    "keywords.providers[11].label",
+    "keywords.providers[12].label",
+    "keywords.providers[13].label",
+    "keywords.providers[14].label",
+    "keywords.providers[15].label",
+    "keywords.providers[16].label",
+    "keywords.providers[17].label",
+    "keywords.providers[18].label",
+    "keywords.providers[19].label",
+    "keywords.providers[1].label",
+    "keywords.providers[20].label",
+    "keywords.providers[21].label",
+    "keywords.providers[22].label",
+    "keywords.providers[23].label",
+    "keywords.providers[24].label",
+    "keywords.providers[25].label",
+    "keywords.providers[26].label",
+    "keywords.providers[27].label",
+    "keywords.providers[28].label",
+    "keywords.providers[29].label",
+    "keywords.providers[2].label",
+    "keywords.providers[30].label",
+    "keywords.providers[31].label",
+    "keywords.providers[32].label",
+    "keywords.providers[33].label",
+    "keywords.providers[34].label",
+    "keywords.providers[35].label",
+    "keywords.providers[36].label",
+    "keywords.providers[37].label",
+    "keywords.providers[38].label",
+    "keywords.providers[39].label",
+    "keywords.providers[3].label",
+    "keywords.providers[40].label",
+    "keywords.providers[41].label",
+    "keywords.providers[42].label",
+    "keywords.providers[43].label",
+    "keywords.providers[44].label",
+    "keywords.providers[45].label",
+    "keywords.providers[4].label",
+    "keywords.providers[5].label",
+    "keywords.providers[6].label",
+    "keywords.providers[7].label",
+    "keywords.providers[8].label",
+    "keywords.providers[9].label",
+    "keywords.sciencekeywords[0].label",
+    "keywords.sciencekeywords[0].uuid",
+    "keywords.sciencekeywords[10].label",
+    "keywords.sciencekeywords[10].uuid",
+    "keywords.sciencekeywords[11].label",
+    "keywords.sciencekeywords[11].uuid",
+    "keywords.sciencekeywords[12].label",
+    "keywords.sciencekeywords[12].uuid",
+    "keywords.sciencekeywords[13].label",
+    "keywords.sciencekeywords[13].uuid",
+    "keywords.sciencekeywords[14].label",
+    "keywords.sciencekeywords[14].uuid",
+    "keywords.sciencekeywords[15].label",
+    "keywords.sciencekeywords[15].uuid",
+    "keywords.sciencekeywords[16].label",
+    "keywords.sciencekeywords[16].uuid",
+    "keywords.sciencekeywords[17].label",
+    "keywords.sciencekeywords[17].uuid",
+    "keywords.sciencekeywords[18].label",
+    "keywords.sciencekeywords[18].uuid",
+    "keywords.sciencekeywords[19].label",
+    "keywords.sciencekeywords[19].uuid",
+    "keywords.sciencekeywords[1].label",
+    "keywords.sciencekeywords[1].uuid",
+    "keywords.sciencekeywords[20].label",
+    "keywords.sciencekeywords[20].uuid",
+    "keywords.sciencekeywords[21].label",
+    "keywords.sciencekeywords[21].uuid",
+    "keywords.sciencekeywords[22].label",
+    "keywords.sciencekeywords[22].uuid",
+    "keywords.sciencekeywords[23].label",
+    "keywords.sciencekeywords[23].uuid",
+    "keywords.sciencekeywords[24].label",
+    "keywords.sciencekeywords[24].uuid",
+    "keywords.sciencekeywords[25].label",
+    "keywords.sciencekeywords[26].label",
+    "keywords.sciencekeywords[26].uuid",
+    "keywords.sciencekeywords[27].label",
+    "keywords.sciencekeywords[27].uuid",
+    "keywords.sciencekeywords[28].label",
+    "keywords.sciencekeywords[28].uuid",
+    "keywords.sciencekeywords[29].label",
+    "keywords.sciencekeywords[29].uuid",
+    "keywords.sciencekeywords[2].label",
+    "keywords.sciencekeywords[2].uuid",
+    "keywords.sciencekeywords[30].label",
+    "keywords.sciencekeywords[30].uuid",
+    "keywords.sciencekeywords[31].label",
+    "keywords.sciencekeywords[31].uuid",
+    "keywords.sciencekeywords[32].label",
+    "keywords.sciencekeywords[32].uuid",
+    "keywords.sciencekeywords[33].label",
+    "keywords.sciencekeywords[33].uuid",
+    "keywords.sciencekeywords[34].label",
+    "keywords.sciencekeywords[34].uuid",
+    "keywords.sciencekeywords[35].label",
+    "keywords.sciencekeywords[35].uuid",
+    "keywords.sciencekeywords[36].label",
+    "keywords.sciencekeywords[36].uuid",
+    "keywords.sciencekeywords[37].label",
+    "keywords.sciencekeywords[37].uuid",
+    "keywords.sciencekeywords[38].label",
+    "keywords.sciencekeywords[38].uuid",
+    "keywords.sciencekeywords[39].label",
+    "keywords.sciencekeywords[39].uuid",
+    "keywords.sciencekeywords[3].label",
+    "keywords.sciencekeywords[3].uuid",
+    "keywords.sciencekeywords[40].label",
+    "keywords.sciencekeywords[40].uuid",
+    "keywords.sciencekeywords[4].label",
+    "keywords.sciencekeywords[4].uuid",
+    "keywords.sciencekeywords[5].label",
+    "keywords.sciencekeywords[5].uuid",
+    "keywords.sciencekeywords[6].label",
+    "keywords.sciencekeywords[6].uuid",
+    "keywords.sciencekeywords[7].label",
+    "keywords.sciencekeywords[7].uuid",
+    "keywords.sciencekeywords[8].label",
+    "keywords.sciencekeywords[8].uuid",
+    "keywords.sciencekeywords[9].label",
+    "keywords.sciencekeywords[9].uuid",
+    "mission.abstract",
+    "mission.accessConstraints",
+    "mission.accessConstraintsCode",
+    "mission.accession",
+    "mission.characterSet",
+    "mission.citationAuthorIndividualName",
+    "mission.citationAuthorOrganisationName",
+    "mission.citationPrincipalInvestigatorIndividualName",
+    "mission.citationPublisherOrganisationName",
+    "mission.citationResourceProviderIndividualName",
+    "mission.citeAs",
+    "mission.contactUrl",
+    "mission.dataLicensePreset",
+    "mission.distributionLiability",
+    "mission.east",
+    "mission.email",
+    "mission.endDate",
+    "mission.fileId",
+    "mission.graphicOverviewHref",
+    "mission.graphicOverviewTitle",
+    "mission.individualName",
+    "mission.language",
+    "mission.licenseUrl",
+    "mission.metadataRecordDate",
+    "mission.north",
+    "mission.org",
+    "mission.publicationDate",
+    "mission.purpose",
+    "mission.ror.id",
+    "mission.ror.label",
+    "mission.scopeCode",
+    "mission.south",
+    "mission.startDate",
+    "mission.status",
+    "mission.supplementalInformation",
+    "mission.title",
+    "mission.topicCategories[0]",
+    "mission.topicCategories[1]",
+    "mission.topicCategories[2]",
+    "mission.uxsContext.primaryLayer",
+    "mission.west",
+    "mode",
+    "platform.platformDesc",
+    "platform.platformId",
+    "platform.platformType",
+    "sensors[0].localId",
+    "sensors[0].modelId",
+    "sensors[0].sensorId",
+    "sensors[0].type",
+    "sensors[0].variable",
+    "sensors[10].localId",
+    "sensors[10].modelId",
+    "sensors[10].sensorId",
+    "sensors[10].type",
+    "sensors[10].variable",
+    "sensors[11].localId",
+    "sensors[11].modelId",
+    "sensors[11].sensorId",
+    "sensors[11].type",
+    "sensors[11].variable",
+    "sensors[1].localId",
+    "sensors[1].modelId",
+    "sensors[1].sensorId",
+    "sensors[1].type",
+    "sensors[1].variable",
+    "sensors[2].localId",
+    "sensors[2].modelId",
+    "sensors[2].sensorId",
+    "sensors[2].type",
+    "sensors[2].variable",
+    "sensors[3].localId",
+    "sensors[3].modelId",
+    "sensors[3].sensorId",
+    "sensors[3].type",
+    "sensors[3].variable",
+    "sensors[4].localId",
+    "sensors[4].modelId",
+    "sensors[4].sensorId",
+    "sensors[4].type",
+    "sensors[4].variable",
+    "sensors[5].localId",
+    "sensors[5].modelId",
+    "sensors[5].sensorId",
+    "sensors[5].type",
+    "sensors[5].variable",
+    "sensors[6].localId",
+    "sensors[6].modelId",
+    "sensors[6].sensorId",
+    "sensors[6].type",
+    "sensors[6].variable",
+    "sensors[7].localId",
+    "sensors[7].modelId",
+    "sensors[7].sensorId",
+    "sensors[7].type",
+    "sensors[7].variable",
+    "sensors[8].localId",
+    "sensors[8].modelId",
+    "sensors[8].sensorId",
+    "sensors[8].type",
+    "sensors[8].variable",
+    "sensors[9].localId",
+    "sensors[9].modelId",
+    "sensors[9].sensorId",
+    "sensors[9].type",
+    "sensors[9].variable",
+    "sourceProvenance.exportPreviewIsoFamily",
+    "sourceProvenance.importIsoXmlFamily",
+    "sourceProvenance.sourceType",
+    "spatial.hasTrajectory",
+    "spatial.lineageProcessSteps",
+    "spatial.lineageStatement",
+    "spatial.referenceSystem",
+    "spatial.useGridRepresentation"
+  ],
+  "changedPaths": [
+    {
+      "path": "distribution.distributionFeesText",
+      "merged": "In most cases, electronic downloads of the data are free. However, fees may apply for custom orders, data certifications, copies of analog materials, and data distribution on physical media."
+    },
+    {
+      "path": "distribution.distributionFormatName",
+      "merged": "Originator data format"
+    },
+    {
+      "path": "distribution.distributionOrderingInstructions",
+      "merged": "Data in this archival information package are not currently available for public download from NCEI. Please contact NCEI directly for access to these data."
+    },
+    {
+      "path": "distribution.distributorEmail",
+      "merged": "ncei.info@noaa.gov"
+    },
+    {
+      "path": "distribution.distributorOrganisationName",
+      "merged": "NOAA National Centers for Environmental Information"
+    },
+    {
+      "path": "distribution.downloadLinkDescription",
+      "merged": "Navigate directly to the URL for a descriptive web page with download links."
+    },
+    {
+      "path": "distribution.downloadLinkName",
+      "merged": "NCEI Dataset Landing Page"
+    },
+    {
+      "path": "distribution.downloadUrl",
+      "merged": "https://www.ncei.noaa.gov/archive/accession/0297635"
+    },
+    {
+      "path": "distribution.format",
+      "merged": "Originator data format"
+    },
+    {
+      "path": "distribution.landingUrl",
+      "merged": "https://www.ncei.noaa.gov/contact"
+    },
+    {
+      "path": "distribution.license",
+      "merged": "Terms of use described in ISO metadata resourceConstraints (imported summary)"
+    },
+    {
+      "path": "distribution.metadataLandingDescription",
+      "merged": "Navigate directly to the URL for a descriptive web page."
+    },
+    {
+      "path": "distribution.metadataLandingLinkName",
+      "merged": "Descriptive Information"
+    },
+    {
+      "path": "distribution.metadataLandingUrl",
+      "merged": "https://www.ncei.noaa.gov/archive/accession/oas/297635"
+    },
+    {
+      "path": "distribution.metadataStandard",
+      "merged": "ISO 19115-2 Geographic Information - Metadata - Part 2: Extensions for Imagery and Gridded Data"
+    },
+    {
+      "path": "keywords.datacenters"
+    },
+    {
+      "path": "keywords.datacenters[0].label",
+      "merged": "US DOC; NOAA; OAR; Pacific Marine Environmental Laboratory"
+    },
+    {
+      "path": "keywords.datacenters[0].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/institution/details/976"
+    },
+    {
+      "path": "keywords.datacenters[1].label",
+      "merged": "US DOC; NOAA; NESDIS; National Centers for Environmental Information"
+    },
+    {
+      "path": "keywords.datacenters[1].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/institution/details/1730"
+    },
+    {
+      "path": "keywords.datacenters[2].label",
+      "merged": "DOC/NOAA/NESDIS/NCEI > National Centers for Environmental Information, NESDIS, NOAA, U.S. Department of Commerce"
+    },
+    {
+      "path": "keywords.datacenters[2].uuid",
+      "merged": "e59896e0-3b4d-43ea-9348-f1f456305d05"
+    },
+    {
+      "path": "keywords.datacenters[3].label",
+      "merged": "DOC/NOAA/OAR/PMEL > Pacific Marine Environmental Laboratory, OAR, NOAA, U.S. Department of Commerce"
+    },
+    {
+      "path": "keywords.datacenters[3].uuid",
+      "merged": "8b9573fe-8097-41b7-9c0a-38627e8d7810"
+    },
+    {
+      "path": "keywords.instruments"
+    },
+    {
+      "path": "keywords.instruments[0].label",
+      "merged": "anemometer"
+    },
+    {
+      "path": "keywords.instruments[0].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/169"
+    },
+    {
+      "path": "keywords.instruments[10].label",
+      "merged": "temperature sensor"
+    },
+    {
+      "path": "keywords.instruments[10].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/174"
+    },
+    {
+      "path": "keywords.instruments[11].label",
+      "merged": "thermometer"
+    },
+    {
+      "path": "keywords.instruments[11].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/76"
+    },
+    {
+      "path": "keywords.instruments[12].label",
+      "merged": "ANEMOMETERS > ANEMOMETERS"
+    },
+    {
+      "path": "keywords.instruments[12].uuid",
+      "merged": "d0cf9340-dc51-447f-a151-f6cdad265d9a"
+    },
+    {
+      "path": "keywords.instruments[13].label",
+      "merged": "BAROMETERS > BAROMETERS"
+    },
+    {
+      "path": "keywords.instruments[13].uuid",
+      "merged": "0bf12743-3ab8-4be7-9b48-b565723ed0ad"
+    },
+    {
+      "path": "keywords.instruments[14].label",
+      "merged": "CLOCKS"
+    },
+    {
+      "path": "keywords.instruments[14].uuid",
+      "merged": "8742da0d-37b0-4807-8f6b-fc9fd0a82c39"
+    },
+    {
+      "path": "keywords.instruments[15].label",
+      "merged": "CTD > Conductivity, Temperature, Depth"
+    },
+    {
+      "path": "keywords.instruments[15].uuid",
+      "merged": "01cc0beb-7c9a-40ed-ad86-0661b41aee53"
+    },
+    {
+      "path": "keywords.instruments[16].label",
+      "merged": "FLUOROMETERS > FLUOROMETERS"
+    },
+    {
+      "path": "keywords.instruments[16].uuid",
+      "merged": "e904c3c7-0111-4d09-bb01-2b7bea9b4d3f"
+    },
+    {
+      "path": "keywords.instruments[17].label",
+      "merged": "GPS RECEIVERS > GPS RECEIVERS"
+    },
+    {
+      "path": "keywords.instruments[17].uuid",
+      "merged": "029feed6-79dc-4316-b8ac-be8f1e557f89"
+    },
+    {
+      "path": "keywords.instruments[18].label",
+      "merged": "GPSP > Global Positioning System Payload"
+    },
+    {
+      "path": "keywords.instruments[18].uuid",
+      "merged": "688f088b-7ae9-45c3-abc4-cdb881a8fec3"
+    },
+    {
+      "path": "keywords.instruments[19].label",
+      "merged": "HUMIDITY SENSORS > HUMIDITY SENSORS"
+    },
+    {
+      "path": "keywords.instruments[19].uuid",
+      "merged": "b2da7ee4-a58c-43cc-a1da-016b3e7c306a"
+    },
+    {
+      "path": "keywords.instruments[1].label",
+      "merged": "barometer"
+    },
+    {
+      "path": "keywords.instruments[1].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/172"
+    },
+    {
+      "path": "keywords.instruments[20].label",
+      "merged": "OXYGEN METERS > OXYGEN METERS"
+    },
+    {
+      "path": "keywords.instruments[20].uuid",
+      "merged": "fdcfecd6-9731-450e-94e8-5bc4c04e22a2"
+    },
+    {
+      "path": "keywords.instruments[21].label",
+      "merged": "RADIOMETERS"
+    },
+    {
+      "path": "keywords.instruments[21].uuid",
+      "merged": "184150ce-100e-485b-87db-839615af3d1a"
+    },
+    {
+      "path": "keywords.instruments[22].label",
+      "merged": "TEMPERATURE SENSORS > TEMPERATURE SENSORS"
+    },
+    {
+      "path": "keywords.instruments[22].uuid",
+      "merged": "aa953a14-4581-47f8-a5b3-c8dd50904ee0"
+    },
+    {
+      "path": "keywords.instruments[23].label",
+      "merged": "THERMOMETERS > THERMOMETERS"
+    },
+    {
+      "path": "keywords.instruments[23].uuid",
+      "merged": "1cf3fcba-3195-45b8-a14c-dbaf7111b6df"
+    },
+    {
+      "path": "keywords.instruments[24].label",
+      "merged": "AT/RH"
+    },
+    {
+      "path": "keywords.instruments[24].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.instruments[25].label",
+      "merged": "IMU"
+    },
+    {
+      "path": "keywords.instruments[25].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.instruments[26].label",
+      "merged": "IR Thermometer"
+    },
+    {
+      "path": "keywords.instruments[26].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.instruments[27].label",
+      "merged": "Inertial Navigation System"
+    },
+    {
+      "path": "keywords.instruments[27].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.instruments[28].label",
+      "merged": "Onboard Computer"
+    },
+    {
+      "path": "keywords.instruments[28].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.instruments[29].label",
+      "merged": "Oxygen Optode"
+    },
+    {
+      "path": "keywords.instruments[29].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.instruments[2].label",
+      "merged": "clock"
+    },
+    {
+      "path": "keywords.instruments[2].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/122"
+    },
+    {
+      "path": "keywords.instruments[3].label",
+      "merged": "CTD"
+    },
+    {
+      "path": "keywords.instruments[3].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/8"
+    },
+    {
+      "path": "keywords.instruments[4].label",
+      "merged": "fluorometer"
+    },
+    {
+      "path": "keywords.instruments[4].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/13"
+    },
+    {
+      "path": "keywords.instruments[5].label",
+      "merged": "GPS"
+    },
+    {
+      "path": "keywords.instruments[5].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/54"
+    },
+    {
+      "path": "keywords.instruments[6].label",
+      "merged": "GPSP"
+    },
+    {
+      "path": "keywords.instruments[6].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/148"
+    },
+    {
+      "path": "keywords.instruments[7].label",
+      "merged": "humidity sensor"
+    },
+    {
+      "path": "keywords.instruments[7].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/173"
+    },
+    {
+      "path": "keywords.instruments[8].label",
+      "merged": "oxygen sensor"
+    },
+    {
+      "path": "keywords.instruments[8].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/27"
+    },
+    {
+      "path": "keywords.instruments[9].label",
+      "merged": "radiometer"
+    },
+    {
+      "path": "keywords.instruments[9].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/64"
+    },
+    {
+      "path": "keywords.locations"
+    },
+    {
+      "path": "keywords.locations[0].label",
+      "merged": "Equatorial Pacific Ocean"
+    },
+    {
+      "path": "keywords.locations[0].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/seaname/details/187"
+    },
+    {
+      "path": "keywords.locations[1].label",
+      "merged": "OCEAN > PACIFIC OCEAN"
+    },
+    {
+      "path": "keywords.locations[1].uuid",
+      "merged": "a19e4450-64c4-4687-9080-cebded8a90eb"
+    },
+    {
+      "path": "keywords.platforms"
+    },
+    {
+      "path": "keywords.platforms[0].label",
+      "merged": "5801952"
+    },
+    {
+      "path": "keywords.platforms[0].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.platforms[1].label",
+      "merged": "Saildrone 1005"
+    },
+    {
+      "path": "keywords.platforms[1].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.projects"
+    },
+    {
+      "path": "keywords.projects[0].label",
+      "merged": "TROPICAL PACIFIC (TROPAC)"
+    },
+    {
+      "path": "keywords.projects[0].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/project/details/392"
+    },
+    {
+      "path": "keywords.projects[1].label",
+      "merged": "TPOS-2020 Saildrone Pilot Study"
+    },
+    {
+      "path": "keywords.projects[1].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers"
+    },
+    {
+      "path": "keywords.providers[0].label",
+      "merged": "AIR TEMPERATURE - MEAN"
+    },
+    {
+      "path": "keywords.providers[0].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[10].label",
+      "merged": "Distance 1005_1006"
+    },
+    {
+      "path": "keywords.providers[10].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[11].label",
+      "merged": "Distance 1005_1029"
+    },
+    {
+      "path": "keywords.providers[11].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[12].label",
+      "merged": "Distance 1005_1030"
+    },
+    {
+      "path": "keywords.providers[12].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[13].label",
+      "merged": "Distance 1006_1029"
+    },
+    {
+      "path": "keywords.providers[13].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[14].label",
+      "merged": "Distance 1006_1030"
+    },
+    {
+      "path": "keywords.providers[14].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[15].label",
+      "merged": "Distance 1029_1030"
+    },
+    {
+      "path": "keywords.providers[15].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[16].label",
+      "merged": "Downward wind speed - MEAN"
+    },
+    {
+      "path": "keywords.providers[16].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[17].label",
+      "merged": "Downward wind speed - SD"
+    },
+    {
+      "path": "keywords.providers[17].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[18].label",
+      "merged": "Heading"
+    },
+    {
+      "path": "keywords.providers[18].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[19].label",
+      "merged": "Heading - Wing"
+    },
+    {
+      "path": "keywords.providers[19].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[1].label",
+      "merged": "AIR TEMPERATURE - SD"
+    },
+    {
+      "path": "keywords.providers[1].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[20].label",
+      "merged": "OPTICAL BACKSCATTER - 650 nm - Mean"
+    },
+    {
+      "path": "keywords.providers[20].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[21].label",
+      "merged": "OPTICAL BACKSCATTER - 650 nm - SD"
+    },
+    {
+      "path": "keywords.providers[21].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[22].label",
+      "merged": "OXYGEN - PERCENT SATURATION - MEAN"
+    },
+    {
+      "path": "keywords.providers[22].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[23].label",
+      "merged": "OXYGEN - PERCENT SATURATION - SD"
+    },
+    {
+      "path": "keywords.providers[23].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[24].label",
+      "merged": "Oxygen Concentration - MEAN"
+    },
+    {
+      "path": "keywords.providers[24].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[25].label",
+      "merged": "Oxygen Concentration - SD"
+    },
+    {
+      "path": "keywords.providers[25].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[26].label",
+      "merged": "Pitch"
+    },
+    {
+      "path": "keywords.providers[26].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[27].label",
+      "merged": "RELATIVE HUMIDITY - MEAN"
+    },
+    {
+      "path": "keywords.providers[27].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[28].label",
+      "merged": "RELATIVE HUMIDITY - SD"
+    },
+    {
+      "path": "keywords.providers[28].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[29].label",
+      "merged": "Roll"
+    },
+    {
+      "path": "keywords.providers[29].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[2].label",
+      "merged": "BAROMETRIC PRESSURE - MEAN"
+    },
+    {
+      "path": "keywords.providers[2].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[30].label",
+      "merged": "SALINITY - MEAN"
+    },
+    {
+      "path": "keywords.providers[30].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[31].label",
+      "merged": "SALINITY - SD"
+    },
+    {
+      "path": "keywords.providers[31].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[32].label",
+      "merged": "SEA SURFACE TEMPERATURE SD"
+    },
+    {
+      "path": "keywords.providers[32].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[33].label",
+      "merged": "Skin Temperature - MEAN"
+    },
+    {
+      "path": "keywords.providers[33].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[34].label",
+      "merged": "Skin Temperature - SD"
+    },
+    {
+      "path": "keywords.providers[34].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[35].label",
+      "merged": "Time"
+    },
+    {
+      "path": "keywords.providers[35].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[36].label",
+      "merged": "WATER TEMPERATURE - MEAN"
+    },
+    {
+      "path": "keywords.providers[36].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[37].label",
+      "merged": "WATER TEMPERATURE - SD"
+    },
+    {
+      "path": "keywords.providers[37].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[38].label",
+      "merged": "WIND GUST - MEAN"
+    },
+    {
+      "path": "keywords.providers[38].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[39].label",
+      "merged": "WIND GUST - SD"
+    },
+    {
+      "path": "keywords.providers[39].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[3].label",
+      "merged": "BAROMETRIC PRESSURE - SD"
+    },
+    {
+      "path": "keywords.providers[3].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[40].label",
+      "merged": "Wind speed - east-west component (U) - MEAN"
+    },
+    {
+      "path": "keywords.providers[40].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[41].label",
+      "merged": "Wind speed - east-west component (U) - SD"
+    },
+    {
+      "path": "keywords.providers[41].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[42].label",
+      "merged": "Wind speed - north-south component (V) - MEAN"
+    },
+    {
+      "path": "keywords.providers[42].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[43].label",
+      "merged": "Wind speed - north-south component (V) - SD"
+    },
+    {
+      "path": "keywords.providers[43].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[44].label",
+      "merged": "Wing Angle"
+    },
+    {
+      "path": "keywords.providers[44].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[45].label",
+      "merged": "other"
+    },
+    {
+      "path": "keywords.providers[45].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[4].label",
+      "merged": "CDOM concentration - MEAN"
+    },
+    {
+      "path": "keywords.providers[4].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[5].label",
+      "merged": "CDOM concentration SD"
+    },
+    {
+      "path": "keywords.providers[5].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[6].label",
+      "merged": "CHLOROPHYLL Concentration - SD"
+    },
+    {
+      "path": "keywords.providers[6].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[7].label",
+      "merged": "CONDUCTIVITY - Mean"
+    },
+    {
+      "path": "keywords.providers[7].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[8].label",
+      "merged": "CONDUCTIVITY -SD"
+    },
+    {
+      "path": "keywords.providers[8].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.providers[9].label",
+      "merged": "Chlorophyll concentration - MEAN"
+    },
+    {
+      "path": "keywords.providers[9].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.sciencekeywords"
+    },
+    {
+      "path": "keywords.sciencekeywords[0].label",
+      "merged": "AIR TEMPERATURE"
+    },
+    {
+      "path": "keywords.sciencekeywords[0].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/3"
+    },
+    {
+      "path": "keywords.sciencekeywords[10].label",
+      "merged": "LONGWAVE IRRADIANCE"
+    },
+    {
+      "path": "keywords.sciencekeywords[10].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/606"
+    },
+    {
+      "path": "keywords.sciencekeywords[11].label",
+      "merged": "OPTICAL BACKSCATTER"
+    },
+    {
+      "path": "keywords.sciencekeywords[11].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/233"
+    },
+    {
+      "path": "keywords.sciencekeywords[12].label",
+      "merged": "OXYGEN - PERCENT SATURATION"
+    },
+    {
+      "path": "keywords.sciencekeywords[12].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/244"
+    },
+    {
+      "path": "keywords.sciencekeywords[13].label",
+      "merged": "PERCENT OXYGEN"
+    },
+    {
+      "path": "keywords.sciencekeywords[13].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/256"
+    },
+    {
+      "path": "keywords.sciencekeywords[14].label",
+      "merged": "RELATIVE HUMIDITY"
+    },
+    {
+      "path": "keywords.sciencekeywords[14].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/306"
+    },
+    {
+      "path": "keywords.sciencekeywords[15].label",
+      "merged": "SALINITY"
+    },
+    {
+      "path": "keywords.sciencekeywords[15].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/307"
+    },
+    {
+      "path": "keywords.sciencekeywords[16].label",
+      "merged": "SHORTWAVE IRRADIANCE"
+    },
+    {
+      "path": "keywords.sciencekeywords[16].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/605"
+    },
+    {
+      "path": "keywords.sciencekeywords[17].label",
+      "merged": "speed over ground"
+    },
+    {
+      "path": "keywords.sciencekeywords[17].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/741"
+    },
+    {
+      "path": "keywords.sciencekeywords[18].label",
+      "merged": "WATER TEMPERATURE"
+    },
+    {
+      "path": "keywords.sciencekeywords[18].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/373"
+    },
+    {
+      "path": "keywords.sciencekeywords[19].label",
+      "merged": "WIND DIRECTION"
+    },
+    {
+      "path": "keywords.sciencekeywords[19].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/431"
+    },
+    {
+      "path": "keywords.sciencekeywords[1].label",
+      "merged": "BAROMETRIC PRESSURE"
+    },
+    {
+      "path": "keywords.sciencekeywords[1].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/38"
+    },
+    {
+      "path": "keywords.sciencekeywords[20].label",
+      "merged": "WIND GUST"
+    },
+    {
+      "path": "keywords.sciencekeywords[20].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/436"
+    },
+    {
+      "path": "keywords.sciencekeywords[21].label",
+      "merged": "WIND SPEED"
+    },
+    {
+      "path": "keywords.sciencekeywords[21].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/437"
+    },
+    {
+      "path": "keywords.sciencekeywords[22].label",
+      "merged": "Wind speed - east-west component (U)"
+    },
+    {
+      "path": "keywords.sciencekeywords[22].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/701"
+    },
+    {
+      "path": "keywords.sciencekeywords[23].label",
+      "merged": "Wind speed - north-south component (V)"
+    },
+    {
+      "path": "keywords.sciencekeywords[23].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/702"
+    },
+    {
+      "path": "keywords.sciencekeywords[24].label",
+      "merged": "in situ"
+    },
+    {
+      "path": "keywords.sciencekeywords[24].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/obstype/details/63"
+    },
+    {
+      "path": "keywords.sciencekeywords[25].label",
+      "merged": "oceanography"
+    },
+    {
+      "path": "keywords.sciencekeywords[25].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.sciencekeywords[26].label",
+      "merged": "EARTH SCIENCE > ATMOSPHERE > ATMOSPHERIC PRESSURE"
+    },
+    {
+      "path": "keywords.sciencekeywords[26].uuid",
+      "merged": "08fd82a1-4370-46a2-82ea-94c0f91498a7"
+    },
+    {
+      "path": "keywords.sciencekeywords[27].label",
+      "merged": "EARTH SCIENCE > ATMOSPHERE > ATMOSPHERIC TEMPERATURE"
+    },
+    {
+      "path": "keywords.sciencekeywords[27].uuid",
+      "merged": "35e1f93b-99b3-4430-b477-0ecafa80d67a"
+    },
+    {
+      "path": "keywords.sciencekeywords[28].label",
+      "merged": "EARTH SCIENCE > ATMOSPHERE > ATMOSPHERIC WATER VAPOR > WATER VAPOR INDICATORS > HUMIDITY > RELATIVE HUMIDITY"
+    },
+    {
+      "path": "keywords.sciencekeywords[28].uuid",
+      "merged": "a249c68f-8249-4285-aad2-020b3c5aefc3"
+    },
+    {
+      "path": "keywords.sciencekeywords[29].label",
+      "merged": "EARTH SCIENCE > ATMOSPHERE > ATMOSPHERIC WINDS > SURFACE WINDS"
+    },
+    {
+      "path": "keywords.sciencekeywords[29].uuid",
+      "merged": "10685919-bc01-43e7-901a-b62ac44627f3"
+    },
+    {
+      "path": "keywords.sciencekeywords[2].label",
+      "merged": "CHLOROPHYLL A CONCENTRATION"
+    },
+    {
+      "path": "keywords.sciencekeywords[2].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/86"
+    },
+    {
+      "path": "keywords.sciencekeywords[30].label",
+      "merged": "EARTH SCIENCE > ATMOSPHERE > ATMOSPHERIC WINDS > SURFACE WINDS > U/V WIND COMPONENTS"
+    },
+    {
+      "path": "keywords.sciencekeywords[30].uuid",
+      "merged": "1e9bb112-5dc0-47a5-8c8a-b9cb07ece7c5"
+    },
+    {
+      "path": "keywords.sciencekeywords[31].label",
+      "merged": "EARTH SCIENCE > ATMOSPHERE > ATMOSPHERIC WINDS > SURFACE WINDS > WIND DIRECTION"
+    },
+    {
+      "path": "keywords.sciencekeywords[31].uuid",
+      "merged": "e987550e-d443-48eb-93eb-0bc47a62d4b4"
+    },
+    {
+      "path": "keywords.sciencekeywords[32].label",
+      "merged": "EARTH SCIENCE > ATMOSPHERE > ATMOSPHERIC WINDS > SURFACE WINDS > WIND SPEED"
+    },
+    {
+      "path": "keywords.sciencekeywords[32].uuid",
+      "merged": "a92f49f3-e2ee-4ef4-b064-39311ffb95d3"
+    },
+    {
+      "path": "keywords.sciencekeywords[33].label",
+      "merged": "EARTH SCIENCE > OCEANS > OCEAN CHEMISTRY > CHLOROPHYLL"
+    },
+    {
+      "path": "keywords.sciencekeywords[33].uuid",
+      "merged": "7989eae1-8ea3-4039-af0c-9130de145449"
+    },
+    {
+      "path": "keywords.sciencekeywords[34].label",
+      "merged": "EARTH SCIENCE > OCEANS > OCEAN CHEMISTRY > ORGANIC MATTER"
+    },
+    {
+      "path": "keywords.sciencekeywords[34].uuid",
+      "merged": "b2bdeb71-81b5-43e6-a8b1-b09c215c8d1a"
+    },
+    {
+      "path": "keywords.sciencekeywords[35].label",
+      "merged": "EARTH SCIENCE > OCEANS > OCEAN CHEMISTRY > OXYGEN"
+    },
+    {
+      "path": "keywords.sciencekeywords[35].uuid",
+      "merged": "90aa8838-79bd-4b28-b518-8217e863c385"
+    },
+    {
+      "path": "keywords.sciencekeywords[36].label",
+      "merged": "EARTH SCIENCE > OCEANS > OCEAN OPTICS"
+    },
+    {
+      "path": "keywords.sciencekeywords[36].uuid",
+      "merged": "457883c4-b30c-4d26-bed8-6c2887ebbc90"
+    },
+    {
+      "path": "keywords.sciencekeywords[37].label",
+      "merged": "EARTH SCIENCE > OCEANS > OCEAN OPTICS > IRRADIANCE"
+    },
+    {
+      "path": "keywords.sciencekeywords[37].uuid",
+      "merged": "40aacf7a-aba0-4ba2-bf85-ea7c39c3322c"
+    },
+    {
+      "path": "keywords.sciencekeywords[38].label",
+      "merged": "EARTH SCIENCE > OCEANS > OCEAN TEMPERATURE > WATER TEMPERATURE"
+    },
+    {
+      "path": "keywords.sciencekeywords[38].uuid",
+      "merged": "46206e8c-8def-406f-9e62-da4e74633a58"
+    },
+    {
+      "path": "keywords.sciencekeywords[39].label",
+      "merged": "EARTH SCIENCE > OCEANS > SALINITY/DENSITY > CONDUCTIVITY"
+    },
+    {
+      "path": "keywords.sciencekeywords[39].uuid",
+      "merged": "7041e51c-e2de-405a-b154-6016f624f54f"
+    },
+    {
+      "path": "keywords.sciencekeywords[3].label",
+      "merged": "Chromophoric Dissolved Organic Matter (CDOM)"
+    },
+    {
+      "path": "keywords.sciencekeywords[3].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/623"
+    },
+    {
+      "path": "keywords.sciencekeywords[40].label",
+      "merged": "EARTH SCIENCE > OCEANS > SALINITY/DENSITY > SALINITY"
+    },
+    {
+      "path": "keywords.sciencekeywords[40].uuid",
+      "merged": "7e95b5fc-1d58-431a-af36-948b29fa870d"
+    },
+    {
+      "path": "keywords.sciencekeywords[4].label",
+      "merged": "CONDUCTIVITY"
+    },
+    {
+      "path": "keywords.sciencekeywords[4].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/91"
+    },
+    {
+      "path": "keywords.sciencekeywords[5].label",
+      "merged": "course over ground"
+    },
+    {
+      "path": "keywords.sciencekeywords[5].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/740"
+    },
+    {
+      "path": "keywords.sciencekeywords[6].label",
+      "merged": "DISSOLVED OXYGEN"
+    },
+    {
+      "path": "keywords.sciencekeywords[6].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/116"
+    },
+    {
+      "path": "keywords.sciencekeywords[7].label",
+      "merged": "irradiance"
+    },
+    {
+      "path": "keywords.sciencekeywords[7].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/461"
+    },
+    {
+      "path": "keywords.sciencekeywords[8].label",
+      "merged": "LATITUDE"
+    },
+    {
+      "path": "keywords.sciencekeywords[8].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/590"
+    },
+    {
+      "path": "keywords.sciencekeywords[9].label",
+      "merged": "LONGITUDE"
+    },
+    {
+      "path": "keywords.sciencekeywords[9].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/591"
+    },
+    {
+      "path": "mission.abstract",
+      "merged": "This file contains the real time data from the Saildrone core sensors for the Pacific Marine Environmental Laboratory (PMEL) TPOS 2018 Mission (Mission 2) to the central equatorial Pacific (0, 140W). These data have not been Quality Control (QC)\\ufffdd. This was the second of three missions funded by NOAA Office of Oceanic and Atmospheric Research (OAR)/CPO/GOMO and NOAA/OMAO as a pilot study for the Tropical Pacific Observing System (TPOS)-2020 project. The drone were each equipped with full atmospheric and ocean core sensor suite, and an Acoustic Doppler Current Profiler (ADCP) (not included in this file). The vehicle was deployed out of Honolulu, HI on October 3, 2018. After sailing near a PMEL Carbon mooring in Kaneohe Bay, HI, the drone proceeded to the Tropical Atmosphere/Ocean (TAO) mooring at 9N, 140W. Navigation issues caused the mission to be aborted early (mid-December 2018), before further science tasks could be completed."
+    },
+    {
+      "path": "mission.accessConstraints",
+      "merged": "otherRestrictions"
+    },
+    {
+      "path": "mission.accessConstraintsCode",
+      "merged": "otherRestrictions"
+    },
+    {
+      "path": "mission.accession",
+      "merged": "0297635"
+    },
+    {
+      "path": "mission.citationAuthorIndividualName",
+      "merged": "Zhang, Dongxiao"
+    },
+    {
+      "path": "mission.citationAuthorOrganisationName",
+      "merged": "UW Joint Institute for the Study of Atmosphere and Ocean (JISAO)"
+    },
+    {
+      "path": "mission.citationPrincipalInvestigatorIndividualName",
+      "merged": "Meghan F. Cronin"
+    },
+    {
+      "path": "mission.citationPublisherOrganisationName",
+      "merged": "NOAA National Centers for Environmental Information"
+    },
+    {
+      "path": "mission.citationResourceProviderIndividualName",
+      "merged": "Andrew Evans"
+    },
+    {
+      "path": "mission.citeAs",
+      "merged": "Distribution liability: NOAA and NCEI make no warranty, expressed or implied, regarding these data, nor does the fact of distribution constitute such a warranty. NOAA and NCEI cannot assume liability for any damages caused by any errors or omissions in these data. If appropriate, NCEI can only certify that the data it distributes are an authentic copy of the records that were accepted for inclusion in the NCEI archives."
+    },
+    {
+      "path": "mission.contactUrl",
+      "merged": "https://www.ncei.noaa.gov/contact"
+    },
+    {
+      "path": "mission.distributionLiability",
+      "merged": "Use liability: NOAA and NCEI cannot provide any warranty as to the accuracy, reliability, or completeness of furnished data. Users assume responsibility to determine the usability of these data. The user is responsible for the results of any application of this data for other than its intended purpose."
+    },
+    {
+      "path": "mission.east",
+      "merged": "-141.730752"
+    },
+    {
+      "path": "mission.email",
+      "merged": "ncei.info@noaa.gov"
+    },
+    {
+      "path": "mission.endDate",
+      "merged": "2019-01-27"
+    },
+    {
+      "path": "mission.fileId",
+      "merged": "gov.noaa.nodc:0297635"
+    },
+    {
+      "path": "mission.graphicOverviewHref",
+      "merged": "https://www.ncei.noaa.gov/access/metadata/landing-page/bin/gfx?id=gov.noaa.nodc:0297635"
+    },
+    {
+      "path": "mission.graphicOverviewTitle",
+      "merged": "Graphic not available."
+    },
+    {
+      "path": "mission.individualName",
+      "merged": "Zhang, Dongxiao"
+    },
+    {
+      "path": "mission.licenseUrl",
+      "merged": "https://www.ncei.noaa.gov/archive/accession/0297635"
+    },
+    {
+      "path": "mission.metadataRecordDate",
+      "merged": "2025-01-30T17:16"
+    },
+    {
+      "path": "mission.north",
+      "merged": "21.411176"
+    },
+    {
+      "path": "mission.org",
+      "merged": "NOAA National Centers for Environmental Information"
+    },
+    {
+      "path": "mission.publicationDate",
+      "merged": "2025-01-28"
+    },
+    {
+      "path": "mission.purpose",
+      "merged": "This file contains the real time data from the Saildrone core sensors for the Pacific Marine Environmental Laboratory (PMEL) TPOS 2018 Mission (Mission 2) to the central equatorial Pacific (0, 140W). These data have not been Quality Control (QC)\\ufffdd. This was the second of three missions funded by NOAA Office of Oceanic and Atmospheric Research (OAR)/CPO/GOMO and NOAA/OMAO as a pilot study for the Tropical Pacific Observing System (TPOS)-2020 project. The drone were each equipped with full atmospheric and ocean core sensor suite, and an Acoustic Doppler Current Profiler (ADCP) (not included in this file). The vehicle was deployed out of Honolulu, HI on October 3, 2018. After sailing near a PMEL Carbon mooring in Kaneohe Bay, HI, the drone proceeded to the Tropical Atmosphere/Ocean (TAO) mooring at 9N, 140W. Navigation issues caused the mission to be aborted early (mid-December 2018), before further science tasks could be com"
+    },
+    {
+      "path": "mission.ror"
+    },
+    {
+      "path": "mission.ror.id",
+      "merged": "https://ror.org/04r0wrp59"
+    },
+    {
+      "path": "mission.ror.label",
+      "merged": "NOAA National Centers for Environmental Information"
+    },
+    {
+      "path": "mission.south",
+      "merged": "-1.1468039"
+    },
+    {
+      "path": "mission.startDate",
+      "merged": "2018-10-03"
+    },
+    {
+      "path": "mission.status",
+      "merged": "pending"
+    },
+    {
+      "path": "mission.supplementalInformation",
+      "merged": "The PIs were Dr. Meghan Cronin (NOAA PMEL), Dr. Dongxiao Zhang (UW Joint Institue for the Study of Atmoshere and Ocean (JISAO)), Dr. Adrienne Sutton (NOAA PMEL), and Mr. Christian Meinig (NOAA PMEL). Mr. Nathan Anderson contributed to the metadata creation."
+    },
+    {
+      "path": "mission.title",
+      "merged": "Saildrone PMEL TPOS 2018 Mission, drone 1005 (NCEI Accession 0297635)"
+    },
+    {
+      "path": "mission.topicCategories"
+    },
+    {
+      "path": "mission.topicCategories[0]",
+      "merged": "environment"
+    },
+    {
+      "path": "mission.topicCategories[1]",
+      "merged": "oceans"
+    },
+    {
+      "path": "mission.topicCategories[2]",
+      "merged": "climatologyMeteorologyAtmosphere"
+    },
+    {
+      "path": "mission.west",
+      "merged": "-157.9788288"
+    },
+    {
+      "path": "platform.platformDesc",
+      "merged": "5801952"
+    },
+    {
+      "path": "platform.platformId",
+      "merged": "5801952"
+    },
+    {
+      "path": "platform.platformType",
+      "merged": "5801952"
+    },
+    {
+      "path": "sensors[0].localId",
+      "merged": "anemometer"
+    },
+    {
+      "path": "sensors[0].modelId",
+      "merged": "anemometer"
+    },
+    {
+      "path": "sensors[0].sensorId",
+      "merged": "anemometer"
+    },
+    {
+      "path": "sensors[0].type",
+      "merged": "anemometer"
+    },
+    {
+      "path": "sensors[0].variable",
+      "merged": "measures wind speed\nAn anemometer is an instrument that measures wind speed. Note that an aerovane (insttypes_id 175) is an anemometer which has a tail and a propeller to measure the speed and direction of the wind."
+    },
+    {
+      "path": "sensors[10].beamCount",
+      "merged": ""
+    },
+    {
+      "path": "sensors[10].confidenceInterval",
+      "merged": ""
+    },
+    {
+      "path": "sensors[10].depthRating",
+      "merged": ""
+    },
+    {
+      "path": "sensors[10].firmware",
+      "merged": ""
+    },
+    {
+      "path": "sensors[10].frequency",
+      "merged": ""
+    },
+    {
+      "path": "sensors[10].localId",
+      "merged": "temperature sensor"
+    },
+    {
+      "path": "sensors[10].modelId",
+      "merged": "temperature sensor"
+    },
+    {
+      "path": "sensors[10].operationMode",
+      "merged": ""
+    },
+    {
+      "path": "sensors[10].sensorId",
+      "merged": "temperature sensor"
+    },
+    {
+      "path": "sensors[10].type",
+      "merged": "temperature sensor"
+    },
+    {
+      "path": "sensors[10].uncertainty",
+      "merged": ""
+    },
+    {
+      "path": "sensors[10].variable",
+      "merged": "A sensor used to measure temperature."
+    },
+    {
+      "path": "sensors[11].beamCount",
+      "merged": ""
+    },
+    {
+      "path": "sensors[11].confidenceInterval",
+      "merged": ""
+    },
+    {
+      "path": "sensors[11].depthRating",
+      "merged": ""
+    },
+    {
+      "path": "sensors[11].firmware",
+      "merged": ""
+    },
+    {
+      "path": "sensors[11].frequency",
+      "merged": ""
+    },
+    {
+      "path": "sensors[11].localId",
+      "merged": "thermometer"
+    },
+    {
+      "path": "sensors[11].modelId",
+      "merged": "thermometer"
+    },
+    {
+      "path": "sensors[11].operationMode",
+      "merged": ""
+    },
+    {
+      "path": "sensors[11].sensorId",
+      "merged": "thermometer"
+    },
+    {
+      "path": "sensors[11].type",
+      "merged": "thermometer"
+    },
+    {
+      "path": "sensors[11].uncertainty",
+      "merged": ""
+    },
+    {
+      "path": "sensors[11].variable",
+      "merged": "generic thermometer or reversing thermometer\nuse thermometer when temperature is a data type, but the exact\ninstrument used to measure temperature is unknown"
+    },
+    {
+      "path": "sensors[1].beamCount",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].confidenceInterval",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].depthRating",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].firmware",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].frequency",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].localId",
+      "merged": "barometer"
+    },
+    {
+      "path": "sensors[1].modelId",
+      "merged": "barometer"
+    },
+    {
+      "path": "sensors[1].operationMode",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].sensorId",
+      "merged": "barometer"
+    },
+    {
+      "path": "sensors[1].type",
+      "merged": "barometer"
+    },
+    {
+      "path": "sensors[1].uncertainty",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].variable",
+      "merged": "Barometers are instruments for measuring atmospheric pressure;\ntwo types include mercury barometers and aneroid barometers."
+    },
+    {
+      "path": "sensors[2].beamCount",
+      "merged": ""
+    },
+    {
+      "path": "sensors[2].confidenceInterval",
+      "merged": ""
+    },
+    {
+      "path": "sensors[2].depthRating",
+      "merged": ""
+    },
+    {
+      "path": "sensors[2].firmware",
+      "merged": ""
+    },
+    {
+      "path": "sensors[2].frequency",
+      "merged": ""
+    },
+    {
+      "path": "sensors[2].localId",
+      "merged": "clock"
+    },
+    {
+      "path": "sensors[2].modelId",
+      "merged": "clock"
+    },
+    {
+      "path": "sensors[2].operationMode",
+      "merged": ""
+    },
+    {
+      "path": "sensors[2].sensorId",
+      "merged": "clock"
+    },
+    {
+      "path": "sensors[2].type",
+      "merged": "clock"
+    },
+    {
+      "path": "sensors[2].uncertainty",
+      "merged": ""
+    },
+    {
+      "path": "sensors[2].variable",
+      "merged": "An instrument for measuring time."
+    },
+    {
+      "path": "sensors[3].beamCount",
+      "merged": ""
+    },
+    {
+      "path": "sensors[3].confidenceInterval",
+      "merged": ""
+    },
+    {
+      "path": "sensors[3].depthRating",
+      "merged": ""
+    },
+    {
+      "path": "sensors[3].firmware",
+      "merged": ""
+    },
+    {
+      "path": "sensors[3].frequency",
+      "merged": ""
+    },
+    {
+      "path": "sensors[3].localId",
+      "merged": "CTD"
+    },
+    {
+      "path": "sensors[3].modelId",
+      "merged": "CTD"
+    },
+    {
+      "path": "sensors[3].operationMode",
+      "merged": ""
+    },
+    {
+      "path": "sensors[3].sensorId",
+      "merged": "CTD"
+    },
+    {
+      "path": "sensors[3].type",
+      "merged": "CTD"
+    },
+    {
+      "path": "sensors[3].uncertainty",
+      "merged": ""
+    },
+    {
+      "path": "sensors[3].variable",
+      "merged": "Conductivity-Temperature-Depth probe"
+    },
+    {
+      "path": "sensors[4].beamCount",
+      "merged": ""
+    },
+    {
+      "path": "sensors[4].confidenceInterval",
+      "merged": ""
+    },
+    {
+      "path": "sensors[4].depthRating",
+      "merged": ""
+    },
+    {
+      "path": "sensors[4].firmware",
+      "merged": ""
+    },
+    {
+      "path": "sensors[4].frequency",
+      "merged": ""
+    },
+    {
+      "path": "sensors[4].localId",
+      "merged": "fluorometer"
+    },
+    {
+      "path": "sensors[4].modelId",
+      "merged": "fluorometer"
+    },
+    {
+      "path": "sensors[4].operationMode",
+      "merged": ""
+    },
+    {
+      "path": "sensors[4].sensorId",
+      "merged": "fluorometer"
+    },
+    {
+      "path": "sensors[4].type",
+      "merged": "fluorometer"
+    },
+    {
+      "path": "sensors[4].uncertainty",
+      "merged": ""
+    },
+    {
+      "path": "sensors[4].variable",
+      "merged": "fluorometer"
+    },
+    {
+      "path": "sensors[5].beamCount",
+      "merged": ""
+    },
+    {
+      "path": "sensors[5].confidenceInterval",
+      "merged": ""
+    },
+    {
+      "path": "sensors[5].depthRating",
+      "merged": ""
+    },
+    {
+      "path": "sensors[5].firmware",
+      "merged": ""
+    },
+    {
+      "path": "sensors[5].frequency",
+      "merged": ""
+    },
+    {
+      "path": "sensors[5].localId",
+      "merged": "GPS"
+    },
+    {
+      "path": "sensors[5].modelId",
+      "merged": "GPS"
+    },
+    {
+      "path": "sensors[5].operationMode",
+      "merged": ""
+    },
+    {
+      "path": "sensors[5].sensorId",
+      "merged": "GPS"
+    },
+    {
+      "path": "sensors[5].type",
+      "merged": "GPS"
+    },
+    {
+      "path": "sensors[5].uncertainty",
+      "merged": ""
+    },
+    {
+      "path": "sensors[5].variable",
+      "merged": "Global Positioning System receiver\nsatellite-based instrument used for geo-location, positioning and navigation"
+    },
+    {
+      "path": "sensors[6].beamCount",
+      "merged": ""
+    },
+    {
+      "path": "sensors[6].confidenceInterval",
+      "merged": ""
+    },
+    {
+      "path": "sensors[6].depthRating",
+      "merged": ""
+    },
+    {
+      "path": "sensors[6].firmware",
+      "merged": ""
+    },
+    {
+      "path": "sensors[6].frequency",
+      "merged": ""
+    },
+    {
+      "path": "sensors[6].localId",
+      "merged": "GPSP"
+    },
+    {
+      "path": "sensors[6].modelId",
+      "merged": "GPSP"
+    },
+    {
+      "path": "sensors[6].operationMode",
+      "merged": ""
+    },
+    {
+      "path": "sensors[6].sensorId",
+      "merged": "GPSP"
+    },
+    {
+      "path": "sensors[6].type",
+      "merged": "GPSP"
+    },
+    {
+      "path": "sensors[6].uncertainty",
+      "merged": ""
+    },
+    {
+      "path": "sensors[6].variable",
+      "merged": "Global Positioning System space Payload\nThe GPSP uses the Global Positioning System (GPS) to determine the satellite's position by triangulation, in the same way that GPS fixes are obtained on Earth. At least three GPS satellites determine a mobile object's (in this case the satellite's) exact position at a given instant. Positional data are then integrated into an orbit determination model to track the satellite's trajectory continuously.\nJason-2 is a French-U.S. satellite launched in 2008 designed to measure rising sea levels and track the effects of climate change. Jason-2 data are being archived by the NODC as part of the Comprehensive Large Array-data Stewardship System (CLASS)."
+    },
+    {
+      "path": "sensors[7].beamCount",
+      "merged": ""
+    },
+    {
+      "path": "sensors[7].confidenceInterval",
+      "merged": ""
+    },
+    {
+      "path": "sensors[7].depthRating",
+      "merged": ""
+    },
+    {
+      "path": "sensors[7].firmware",
+      "merged": ""
+    },
+    {
+      "path": "sensors[7].frequency",
+      "merged": ""
+    },
+    {
+      "path": "sensors[7].localId",
+      "merged": "humidity sensor"
+    },
+    {
+      "path": "sensors[7].modelId",
+      "merged": "humidity sensor"
+    },
+    {
+      "path": "sensors[7].operationMode",
+      "merged": ""
+    },
+    {
+      "path": "sensors[7].sensorId",
+      "merged": "humidity sensor"
+    },
+    {
+      "path": "sensors[7].type",
+      "merged": "humidity sensor"
+    },
+    {
+      "path": "sensors[7].uncertainty",
+      "merged": ""
+    },
+    {
+      "path": "sensors[7].variable",
+      "merged": "HUMIDITY SENSORS are devices that receive a signal or stimulus\n(as heat or pressure or light or motion etc.) and responds to\nit, in this case humidity or some measure of the water vapor\ncontent of air."
+    },
+    {
+      "path": "sensors[8].beamCount",
+      "merged": ""
+    },
+    {
+      "path": "sensors[8].confidenceInterval",
+      "merged": ""
+    },
+    {
+      "path": "sensors[8].depthRating",
+      "merged": ""
+    },
+    {
+      "path": "sensors[8].firmware",
+      "merged": ""
+    },
+    {
+      "path": "sensors[8].frequency",
+      "merged": ""
+    },
+    {
+      "path": "sensors[8].localId",
+      "merged": "oxygen sensor"
+    },
+    {
+      "path": "sensors[8].modelId",
+      "merged": "oxygen sensor"
+    },
+    {
+      "path": "sensors[8].operationMode",
+      "merged": ""
+    },
+    {
+      "path": "sensors[8].sensorId",
+      "merged": "oxygen sensor"
+    },
+    {
+      "path": "sensors[8].type",
+      "merged": "oxygen sensor"
+    },
+    {
+      "path": "sensors[8].uncertainty",
+      "merged": ""
+    },
+    {
+      "path": "sensors[8].variable",
+      "merged": "Any instrument that measures oxygen content in a compound."
+    },
+    {
+      "path": "sensors[9].beamCount",
+      "merged": ""
+    },
+    {
+      "path": "sensors[9].confidenceInterval",
+      "merged": ""
+    },
+    {
+      "path": "sensors[9].depthRating",
+      "merged": ""
+    },
+    {
+      "path": "sensors[9].firmware",
+      "merged": ""
+    },
+    {
+      "path": "sensors[9].frequency",
+      "merged": ""
+    },
+    {
+      "path": "sensors[9].localId",
+      "merged": "radiometer"
+    },
+    {
+      "path": "sensors[9].modelId",
+      "merged": "radiometer"
+    },
+    {
+      "path": "sensors[9].operationMode",
+      "merged": ""
+    },
+    {
+      "path": "sensors[9].sensorId",
+      "merged": "radiometer"
+    },
+    {
+      "path": "sensors[9].type",
+      "merged": "radiometer"
+    },
+    {
+      "path": "sensors[9].uncertainty",
+      "merged": ""
+    },
+    {
+      "path": "sensors[9].variable",
+      "merged": "radiometer"
+    },
+    {
+      "path": "sourceProvenance.exportPreviewIsoFamily",
+      "merged": "19115-2"
+    },
+    {
+      "path": "sourceProvenance.importIsoXmlFamily",
+      "merged": "19115-2"
+    },
+    {
+      "path": "spatial.lineageProcessSteps",
+      "merged": "Parameter or Variable: LATITUDE (measured); \nUnits: degrees N; \nObservation Category: in situ; \nSampling Instrument: GPS.\n\nParameter or Variable: LONGITUDE (measured); \nUnits: degrees E; \nObservation Category: in situ; \nSampling Instrument: GPS.\n\nParameter or Variable: Time (measured); \nUnits: secon; \nObservation Category: in situ; \nSampling Instrument: clock; \nSampling and Analyzing Method: seconds since 1970-01-01T00:00:00Z.\n\nParameter or Variable: WIND DIRECTION (measured); \nUnits: degree; \nObservation Category: in situ; \nSampling Instrument: anemometer.\n\nParameter or Variable: WIND SPEED (measured); \nUnits: meters per second; \nObservation Category: in situ; \nSampling Instrument: anemometer.\n\nParameter or Variable: SEA SURFACE TEMPERATURE SD (calculated); \nUnits: degrees C; \nObservation Category: other; \nSampling Instrument: Oxygen optode; \nSampling and Analyzing Method: Standard deviation of measured sea water temperature.\n\nParameter or Variable: Chlorophyll concentration - MEAN (calculated); \nUnits: microgram/liter; \nObservation Category: other; \nSampling Instrument: Fluorometer; \nSampling and Analyzing Method: Mean of mass concentration of chlorophyll in sea water.\n\nParameter or Variable: RELATIVE HUMIDITY - MEAN (calculated); \nUnits: percent; \nObservation Category: other; \nSampling Instrument: AT/RH; \nSampling and Analyzing Method: Mean of relative humidity observations.\n\nParameter or Variable: CDOM concentration  - MEAN (calculated); \nUnits: ppb; \nObservation Category: other; \nSampling Instrument: fluorometer; \nSampling and Analyzing Method: Mean of Concentration of colored dissolved organic matter in sea water expressed as equivalent mass fraction of quinine sulfate dihydrate observations.\n\nParameter or Variable: Oxygen Concentration - SD (calculated); \nUnits: micromole/liter; \nObservation Category: other; \nSampling Instrument: Oxygen Optode; \nSampling and Analyzing Method: Standard deviation of mole concentration of dissolved molecular oxygen in sea water observations.\n\nParameter or Variable: BAROMETRIC PRESSURE - MEAN (calculated); \nUnits: hPa; \nObservation Category: other; \nSampling Instrument: barometer; \nSampling and Analyzing Method: Mean of air pressure observations.\n\nParameter or Variable: Wind speed - east-west component (U) - MEAN (calculated); \nUnits: meters per second; \nObservation Category: other; \nSampling Instrument: anemometer; \nSampling and Analyzing Method: Mean of observed eastward wind speed.\n\nParameter or Variable: SALINITY - MEAN (calculated); \nUnits: PSS-78; \nObservation Category: other; \nSampling Instrument: CTD; \nSampling and Analyzing Method: Mean of observed practical salinity.\n\nParameter or Variable: SALINITY - SD (calculated); \nUnits: PSS-78; \nObservation Category: other; \nSampling Instrument: CTD; \nSampling and Analyzing Method: Standard deviation of observed practical salinity.\n\nParameter or Variable: AIR TEMPERATURE - MEAN (calculated); \nUnits: degrees C; \nObservation Category: other; \nSampling Instrument: AT/RH; \nSampling and Analyzing Method: Mean of air temperature observations.\n\nParameter or Variable: CHLOROPHYLL Concentration - SD (calculated); \nUnits: microgram/liter; \nObservation Category: other; \nSampling Instrument: fluorometer; \nSampling and Analyzing Method: Standard deviation of observed mass concentration of chlorophyll in sea water.\n\nParameter or Variable: OXYGEN - PERCENT SATURATION - MEAN (calculated); \nUnits: percent; \nObservation Category: other; \nSampling Instrument: Oxygen Optode; \nSampling and Analyzing Method: Mean of observed fractional saturation of oxygen in sea water.\n\nParameter or Variable: CDOM concentration SD (calculated); \nUnits: ppb; \nObservation Category: other; \nSampling Instrument: fluorometer; \nSampling and Analyzing Method: Standard deviation of observed concentration of colored dissolved organic matter in sea water expressed as equivalent mass fraction of quinine sulfate dihydrate.\n\nParameter or Variable: CONDUCTIVITY - Mean (calculated); \nUnits: milliS cm-1; \nObservation Category: other; \nSampling Instrument: CTD; \nSampling and Analyzing Method: Mean of observed seawater conductivity.\n\nParameter or Variable: OPTICAL BACKSCATTER - 650 nm - Mean (calculated); \nUnits: (m sr)-1; \nObservation Category: other; \nSampling Instrument: fluorometer; \nSampling and Analyzing Method: Mean of observed backscatter at 650 nm.\n\nParameter or Variable: Skin Temperature - MEAN (calculated); \nUnits: degrees C; \nObservation Category: other; \nSampling Instrument: IR Thermometer; \nSampling and Analyzing Method: Mean of observed sea surface skin temperature.\n\nParameter or Variable: OXYGEN - PERCENT SATURATION - SD (calculated); \nUnits: percent; \nObservation Category: other; \nSampling Instrument: Oxygen Optode; \nSampling and Analyzing Method: Standard deviation of observed fractional saturation of oxygen in sea water.\n\nParameter or Variable: Oxygen Concentration - MEAN (calculated); \nUnits: micromole/liter; \nObservation Category: other; \nSampling Instrument: oxygen sensor; \nSampling and Analyzing Method: Mean of observed mole concentration of dissolved molecular oxygen in sea water.\n\nParameter or Variable: WATER TEMPERATURE - MEAN (calculated); \nUnits: degrees C; \nObservation Category: other; \nSampling Instrument: Oxygen Optode; \nSampling and Analyzing Method: Mean of observed sea water temperature.\n\nParameter or Variable: WATER TEMPERATURE - SD (calculated); \nUnits: degrees C; \nObservation Category: other; \nSampling Instrument: CTD; \nSampling and Analyzing Method: Standard deviation of sea water temperature measured by CTD.\n\nParameter or Variable: AIR TEMPERATURE - SD (calculated); \nUnits: degrees C; \nObservation Category: other; \nSampling Instrument: AT/RH; \nSampling and Analyzing Method: Standard deviation of air temperature observations.\n\nParameter or Variable: WATER TEMPERATURE - MEAN (calculated); \nUnits: degrees C; \nObservation Category: other; \nSampling Instrument: CTD; \nSampling and Analyzing Method: Mean of sea water temperature measurements by CTD.\n\nParameter or Variable: CONDUCTIVITY -SD (calculated); \nUnits: milliS cm-1; \nObservation Category: other; \nSampling Instrument: CTD; \nSampling and Analyzing Method: Standard deviation of observed sea water electrical conductivity.\n\nParameter or Variable: Pitch (measured); \nUnits: degree; \nObservation Category: in situ; \nSampling Instrument: Inertial Navigation System; \nSampling and Analyzing Method: platform pitch angle.\n\nParameter or Variable: Wing Angle (measured); \nUnits: degree; \nObservation Category: in situ; \nSampling Instrument: Onboard Computer; \nSampling and Analyzing Method: Angle of saildrone wing.\n\nParameter or Variable: Skin Temperature - SD (calculated); \nUnits: degrees C; \nObservation Category: other; \nSampling Instrument: IR Thermometer; \nSampling and Analyzing Method: Standard deviation of observed sea surface skin temperature.\n\nParameter or Variable: Wind speed - north-south component (V) - SD (calculated); \nUnits: m s-1; \nObservation Category: other; \nSampling Instrument: anemometer; \nSampling and Analyzing Method: Standard deviation of observed northward wind speeds.\n\nParameter or Variable: RELATIVE HUMIDITY - SD (calculated); \nUnits: percent; \nObservation Category: other; \nSampling Instrument: AT/RH; \nSampling and Analyzing Method: Standard deviation of observed relative humidity.\n\nParameter or Variable: WIND GUST - SD (calculated); \nUnits: m s-1; \nObservation Category: other; \nSampling Instrument: anemometer; \nSampling and Analyzing Method: Standard deviation of measured wind gusts.\n\nParameter or Variable: WIND GUST - MEAN (calculated); \nUnits: m s-1; \nObservation Category: other; \nSampling Instrument: anemometer; \nSampling and Analyzing Method: Mean of observed wind speed gusts.\n\nParameter or Variable: OPTICAL BACKSCATTER - 650 nm - SD (calculated); \nUnits: (m sr)-1; \nObservation Category: other; \nSampling Instrument: fluorometer; \nSampling and Analyzing Method: Standard deviation of observed optical backscatter at 650nm.\n\nParameter or Variable: BAROMETRIC PRESSURE - SD (calculated); \nUnits: hPa; \nObservation Category: other; \nSampling Instrument: barometer; \nSampling and Analyzing Method: Standard deviation of observed barometric air pressure.\n\nParameter or Variable: Wind speed - north-south component (V) - MEAN (calculated); \nUnits: m s-1; \nObservation Category: other; \nSampling Instrument: anemometer; \nSampling and Analyzing Method: Standard deviation of observed northward wind speed.\n\nParameter or Variable: Wind speed - east-west component (U) - SD (calculated); \nUnits: m s-1; \nObservation Category: other; \nSampling Instrument: anemometer; \nSampling and Analyzing Method: Standard deviation of observed eastward wind speed.\n\nParameter or Variable: speed over ground (measured); \nUnits: m s-1; \nObservation Category: in situ; \nSampling Instrument: IMU; \nSampling and Analyzing Method: Platform speed over ground.\n\nParameter or Variable: Roll (measured); \nUnits: degree; \nObservation Category: in situ; \nSampling Instrument: Inertial Navigation System; \nSampling and Analyzing Method: Platform roll.\n\nParameter or Variable: Heading (measured); \nUnits: degrees T; \nObservation Category: in situ; \nSampling Instrument: Inertial Navigation System; \nSampling and Analyzing Method: Platform heading or yaw angle.\n\nParameter or Variable: course over ground (measured); \nUnits: degrees T; \nObservation Category: in situ; \nSampling Instrument: Inertial Navigation System; \nSampling and Analyzing Method: Platform course over ground.\n\nParameter or Variable: Heading - Wing (measured); \nUnits: degrees T; \nObservation Category: in situ; \nSampling Instrument: Inertial Navigation System; \nSampling and Analyzing Method: Heading of platform's wing or \"sail\".\n\nParameter or Variable: Downward wind speed - MEAN (calculated); \nUnits: m s-1; \nObservation Category: other; \nSampling Instrument: anemometer; \nSampling and Analyzing Method: Mean of observed downward wind velocities.\n\nParameter or Variable: Downward wind speed - SD (calculated); \nUnits: m s-1; \nObservation Category: other; \nSampling Instrument: anemometer; \nSampling and Analyzing Method: Standard deviation of observed downward wind velocities.\n\nParameter or Variable: Distance 1005_1029 (measured); \nUnits: km; \nObservation Category: in situ; \nSampling Instrument: IMU; \nSampling and Analyzing Method: Distance between Saildrone 1005 and Saildrone 1029.\n\nParameter or Variable: Distance 1005_1030 (measured); \nUnits: km; \nObservation Category: in situ; \nSampling Instrument: IMU; \nSampling and Analyzing Method: Distance between Saildrone 1005 and Saildrone 1030.\n\nParameter or Variable: Distance 1029_1030 (measured); \nUnits: km; \nObservation Category: in situ; \nSampling Instrument: IMU; \nSampling and Analyzing Method: Distance between Saildrone 1029 and Saildrone 1030.\n\nParameter or Variable: Distance 1005_1006 (measured); \nUnits: km; \nObservation Category: in situ; \nSampling Instrument: IMU; \nSampling and Analyzing Method: Distance between Saildrone 1005 and Saildrone 1006.\n\nParameter or Variable: Distance 1006_1029 (measured); \nUnits: km; \nObservation Category: in situ; \nSampling Instrument: IMU; \nSampling and Analyzing Method: Distance between Saildrone 1006 and Saildrone 1029.\n\nParameter or Variable: Distance 1006_1030 (measured); \nUnits: km; \nObservation Category: in situ; \nSampling Instrument: IMU; \nSampling and Analyzing Method: Distance between Saildrone 1006 and Saildrone 1030."
+    },
+    {
+      "path": "spatial.lineageStatement",
+      "merged": "Parameter or Variable: LATITUDE (measured); \nUnits: degrees N; \nObservation Category: in situ; \nSampling Instrument: GPS.\n\nParameter or Variable: LONGITUDE (measured); \nUnits: degrees E; \nObservation Category: in situ; \nSampling Instrument: GPS.\n\nParameter or Variable: Time (measured); \nUnits: secon; \nObservation Category: in situ; \nSampling Instrument: clock; \nSampling and Analyzing Method: seconds since 1970-01-01T00:00:00Z.\n\nParameter or Variable: WIND DIRECTION (measured); \nUnits: degree; \nObservation Category: in situ; \nSampling Instrument: anemometer.\n\nParameter or Variable: WIND SPEED (measured); \nUnits: meters per second; \nObservation Category: in situ; \nSampling Instrument: anemometer.\n\nParameter or Variable: SEA SURFACE TEMPERATURE SD (calculated); \nUnits: degrees C; \nObservation Category: other; \nSampling Instrument: Oxygen optode; \nSampling and Analyzing Method: Standard deviation of measured sea water temperature.\n\nParameter or Variable: Chlorophyll concentration - MEAN (calculated); \nUnits: microgram/liter; \nObservation Category: other; \nSampling Instrument: Fluorometer; \nSampling and Analyzing Method: Mean of mass concentration of chlorophyll in sea water.\n\nParameter or Variable: RELATIVE HUMIDITY - MEAN (calculated); \nUnits: percent; \nObservation Category: other; \nSampling Instrument: AT/RH; \nSampling and Analyzing Method: Mean of relative humidity observations.\n\nParameter or Variable: CDOM concentration  - MEAN (calculated); \nUnits: ppb; \nObservation Category: other; \nSampling Instrument: fluorometer; \nSampling and Analyzing Method: Mean of Concentration of colored dissolved organic matter in sea water expressed as equivalent mass fraction of quinine sulfate dihydrate observations.\n\nParameter or Variable: Oxygen Concentration - SD (calculated); \nUnits: micromole/liter; \nObservation Category: other; \nSampling Instrument: Oxygen Optode; \nSampling and Analyzing Method: Standard deviation of mole concentration of dissolved molecular oxygen in sea water observations.\n\nParameter or Variable: BAROMETRIC PRESSURE - MEAN (calculated); \nUnits: hPa; \nObservation Category: other; \nSampling Instrument: barometer; \nSampling and Analyzing Method: Mean of air pressure observations.\n\nParameter or Variable: Wind speed - east-west component (U) - MEAN (calculated); \nUnits: meters per second; \nObservation Category: other; \nSampling Instrument: anemometer; \nSampling and Analyzing Method: Mean of observed eastward wind speed.\n\nParameter or Variable: SALINITY - MEAN (calculated); \nUnits: PSS-78; \nObservation Category: other; \nSampling Instrument: CTD; \nSampling and Analyzing Method: Mean of observed practical salinity.\n\nParameter or Variable: SALINITY - SD (calculated); \nUnits: PSS-78; \nObservation Category: other; \nSampling Instrument: CTD; \nSampling and Analyzing Method: Standard deviation of observed practical salinity.\n\nParameter or Variable: AIR TEMPERATURE - MEAN (calculated); \nUnits: degrees C; \nObservation Category: other; \nSampling Instrument: AT/RH; \nSampling and Analyzing Method: Mean of air temperature observations.\n\nParameter or Variable: CHLOROPHYLL Concentration - SD (calculated); \nUnits: microgram/liter; \nObservation Category: other; \nSampling Instrument: fluorometer; \nSampling and Analyzing Method: Standard deviation of observed mass concentration of chlorophyll in sea water.\n\nParameter or Variable: OXYGEN - PERCENT SATURATION - MEAN (calculated); \nUnits: percent; \nObservation Category: other; \nSampling Instrument: Oxygen Optode; \nSampling and Analyzing Method: Mean of observed fractional saturation of oxygen in sea water.\n\nParameter or Variable: CDOM concentration SD (calculated); \nUnits: ppb; \nObservation Category: other; \nSampling Instrument: fluorometer; \nSampling and Analyzing Method: Standard deviation of observed concentration of colored dissolved organic matter in sea water expressed as equivalent mass fraction of quinine sulfate dihydrate.\n\nParameter or Variable: CONDUCTIVITY - Mean (calculated); \nUnits: milliS cm-1; \nObservation Category: other; \nSampling Instrument: CTD; \nSampling and Analyzing Method: Mean of observed seawater conductivity.\n\nParameter or Variable: OPTICAL BACKSCATTER - 650 nm - Mean (calculated); \nUnits: (m sr)-1; \nObservation Category: other; \nSampling Instrument: fluorometer; \nSampling and Analyzing Method: Mean of observed backscatter at 650 nm.\n\nParameter or Variable: Skin Temperature - MEAN (calculated); \nUnits: degrees C; \nObservation Category: other; \nSampling Instrument: IR Thermometer; \nSampling and Analyzing Method: Mean of observed sea surface skin temperature.\n\nParameter or Variable: OXYGEN - PERCENT SATURATION - SD (calculated); \nUnits: percent; \nObservation Category: other; \nSampling Instrument: Oxygen Optode; \nSampling and Analyzing Method: Standard deviation of observed fractional saturation of oxygen in sea water.\n\nParameter or Variable: Oxygen Concentration - MEAN (calculated); \nUnits: micromole/liter; \nObservation Category: other; \nSampling Instrument: oxygen sensor; \nSampling and Analyzing Method: Mean of observed mole concentration of dissolved molecular oxygen in sea water.\n\nParameter or Variable: WATER TEMPERATURE - MEAN (calculated); \nUnits: degrees C; \nObservation Category: other; \nSampling Instrument: Oxygen Optode; \nSampling and Analyzing Method: Mean of observed sea water temperature.\n\nParameter or Variable: WATER TEMPERATURE - SD (calculated); \nUnits: degrees C; \nObservation Category: other; \nSampling Instrument: CTD; \nSampling and Analyzing Method: Standard deviation of sea water temperature measured by CTD.\n\nParameter or Variable: AIR TEMPERATURE - SD (calculated); \nUnits: degrees C; \nObservation Category: other; \nSampling Instrument: AT/RH; \nSampling and Analyzing Method: Standard deviation of air temperature observations.\n\nParameter or Variable: WATER TEMPERATURE - MEAN (calculated); \nUnits: degrees C; \nObservation Category: other; \nSampling Instrument: CTD; \nSampling and Analyzing Method: Mean of sea water temperature measurements by CTD.\n\nParameter or Variable: CONDUCTIVITY -SD (calculated); \nUnits: milliS cm-1; \nObservation Category: other; \nSampling Instrument: CTD; \nSampling and Analyzing Method: Standard deviation of observed sea water electrical conductivity.\n\nParameter or Variable: Pitch (measured); \nUnits: degree; \nObservation Category: in situ; \nSampling Instrument: Inertial Navigation System; \nSampling and Analyzing Method: platform pitch angle.\n\nParameter or Variable: Wing Angle (measured); \nUnits: degree; \nObservation Category: in situ; \nSampling Instrument: Onboard Computer; \nSampling and Analyzing Method: Angle of saildrone wing.\n\nParameter or Variable: Skin Temperature - SD (calculated); \nUnits: degrees C; \nObservation Category: other; \nSampling Instrument: IR Thermometer; \nSampling and Analyzing Method: Standard deviation of observed sea surface skin temperature.\n\nParameter or Variable: Wind speed - north-south component (V) - SD (calculated); \nUnits: m s-1; \nObservation Category: other; \nSampling Instrument: anemometer; \nSampling and Analyzing Method: Standard deviation of observed northward wind speeds.\n\nParameter or Variable: RELATIVE HUMIDITY - SD (calculated); \nUnits: percent; \nObservation Category: other; \nSampling Instrument: AT/RH; \nSampling and Analyzing Method: Standard deviation of observed relative humidity.\n\nParameter or Variable: WIND GUST - SD (calculated); \nUnits: m s-1; \nObservation Category: other; \nSampling Instrument: anemometer; \nSampling and Analyzing Method: Standard deviation of measured wind gusts.\n\nParameter or Variable: WIND GUST - MEAN (calculated); \nUnits: m s-1; \nObservation Category: other; \nSampling Instrument: anemometer; \nSampling and Analyzing Method: Mean of observed wind speed gusts.\n\nParameter or Variable: OPTICAL BACKSCATTER - 650 nm - SD (calculated); \nUnits: (m sr)-1; \nObservation Category: other; \nSampling Instrument: fluorometer; \nSampling and Analyzing Method: Standard deviation of observed optical backscatter at 650nm.\n\nParameter or Variable: BAROMETRIC PRESSURE - SD (calculated); \nUnits: hPa; \nObservation Category: other; \nSampling Instrument: barometer; \nSampling and Analyzing Method: Standard deviation of observed barometric air pressure.\n\nParameter or Variable: Wind speed - north-south component (V) - MEAN (calculated); \nUnits: m s-1; \nObservation Category: other; \nSampling Instrument: anemometer; \nSampling and Analyzing Method: Standard deviation of observed northward wind speed.\n\nParameter or Variable: Wind speed - east-west component (U) - SD (calculated); \nUnits: m s-1; \nObservation Category: other; \nSampling Instrument: anemometer; \nSampling and Analyzing Method: Standard deviation of observed eastward wind speed.\n\nParameter or Variable: speed over ground (measured); \nUnits: m s-1; \nObservation Category: in situ; \nSampling Instrument: IMU; \nSampling and Analyzing Method: Platform speed over ground.\n\nParameter or Variable: Roll (measured); \nUnits: degree; \nObservation Category: in situ; \nSampling Instrument: Inertial Navigation System; \nSampling and Analyzing Method: Platform roll.\n\nParameter or Variable: Heading (measured); \nUnits: degrees T; \nObservation Category: in situ; \nSampling Instrument: Inertial Navigation System; \nSampling and Analyzing Method: Platform heading or yaw angle.\n\nParameter or Variable: course over ground (measured); \nUnits: degrees T; \nObservation Category: in situ; \nSampling Instrument: Inertial Navigation System; \nSampling and Analyzing Method: Platform course over ground.\n\nParameter or Variable: Heading - Wing (measured); \nUnits: degrees T; \nObservation Category: in situ; \nSampling Instrument: Inertial Navigation System; \nSampling and Analyzing Method: Heading of platform's wing or \"sail\".\n\nParameter or Variable: Downward wind speed - MEAN (calculated); \nUnits: m s-1; \nObservation Category: other; \nSampling Instrument: anemometer; \nSampling and Analyzing Method: Mean of observed downward wind velocities.\n\nParameter or Variable: Downward wind speed - SD (calculated); \nUnits: m s-1; \nObservation Category: other; \nSampling Instrument: anemometer; \nSampling and Analyzing Method: Standard deviation of observed downward wind velocities.\n\nParameter or Variable: Distance 1005_1029 (measured); \nUnits: km; \nObservation Category: in situ; \nSampling Instrument: IMU; \nSampling and Analyzing Method: Distance between Saildrone 1005 and Saildrone 1029.\n\nParameter or Variable: Distance 1005_1030 (measured); \nUnits: km; \nObservation Category: in situ; \nSampling Instrument: IMU; \nSampling and Analyzing Method: Distance between Saildrone 1005 and Saildrone 1030.\n\nParameter or Variable: Distance 1029_1030 (measured); \nUnits: km; \nObservation Category: in situ; \nSampling Instrument: IMU; \nSampling and Analyzing Method: Distance between Saildrone 1029 and Saildrone 1030.\n\nParameter or Variable: Distance 1005_1006 (measured); \nUnits: km; \nObservation Category: in situ; \nSampling Instrument: IMU; \nSampling and Analyzing Method: Distance between Saildrone 1005 and Saildrone 1006.\n\nParameter or Variable: Distance 1006_1029 (measured); \nUnits: km; \nObservation Category: in situ; \nSampling Instrument: IMU; \nSampling and Analyzing Method: Distance between Saildrone 1006 and Saildrone 1029.\n\nParameter or Variable: Distance 1006_1030 (measured); \nUnits: km; \nObservation Category: in situ; \nSampling Instrument: IMU; \nSampling and Analyzing Method: Distance between Saildrone 1006 and Saildrone 1030."
+    }
+  ],
+  "detailSample": [
+    {
+      "path": "distribution.awsBucket",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.awsPrefix",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.distributionFeesText",
+      "merged": "In most cases, electronic downloads of the data are free. However, fees may apply for custom orders, data certifications, copies of analog materials, and data distribution on physical media.",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.distributionFileFormat",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.distributionFormatName",
+      "merged": "Originator data format",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.distributionOrderingInstructions",
+      "merged": "Data in this archival information package are not currently available for public download from NCEI. Please contact NCEI directly for access to these data.",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.distributorContactUrl",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.distributorEmail",
+      "merged": "ncei.info@noaa.gov",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.distributorIndividualName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.distributorOrganisationName",
+      "merged": "NOAA National Centers for Environmental Information",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.downloadLinkDescription",
+      "merged": "Navigate directly to the URL for a descriptive web page with download links.",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.downloadLinkName",
+      "merged": "NCEI Dataset Landing Page",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.downloadProtocol",
+      "merged": "HTTPS",
+      "default": "HTTPS",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.downloadUrl",
+      "merged": "https://www.ncei.noaa.gov/archive/accession/0297635",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.finalNotes",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.format",
+      "merged": "Originator data format",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.landingUrl",
+      "merged": "https://www.ncei.noaa.gov/contact",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.license",
+      "merged": "Terms of use described in ISO metadata resourceConstraints (imported summary)",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.metadataLandingDescription",
+      "merged": "Navigate directly to the URL for a descriptive web page.",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.metadataLandingLinkName",
+      "merged": "Descriptive Information",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.metadataLandingUrl",
+      "merged": "https://www.ncei.noaa.gov/archive/accession/oas/297635",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.metadataMaintenanceFrequency",
+      "merged": "asNeeded",
+      "default": "asNeeded",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.metadataStandard",
+      "merged": "ISO 19115-2 Geographic Information - Metadata - Part 2: Extensions for Imagery and Gridded Data",
+      "default": "ISO 19115-2 Imagery and Gridded Data",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.metadataVersion",
+      "merged": "ISO 19115-2:2009(E)",
+      "default": "ISO 19115-2:2009(E)",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.nceiDistributorContactHref",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.nceiDistributorContactTitle",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.nceiFileIdPrefix",
+      "merged": true,
+      "default": true,
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.nceiMetadataContactHref",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.nceiMetadataContactTitle",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.omitRootReferenceSystemInfo",
+      "merged": false,
+      "default": false,
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.outputLocation",
+      "merged": "download",
+      "default": "download",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.parentProject",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.publication",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.templateCategory",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.templateName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.useNceiMetadataContactXlink",
+      "merged": false,
+      "default": false,
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "keywords.datacenters",
+      "default": [],
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.datacenters[0].label",
+      "merged": "US DOC; NOAA; OAR; Pacific Marine Environmental Laboratory",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.datacenters[0].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/institution/details/976",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.datacenters[1].label",
+      "merged": "US DOC; NOAA; NESDIS; National Centers for Environmental Information",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.datacenters[1].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/institution/details/1730",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.datacenters[2].label",
+      "merged": "DOC/NOAA/NESDIS/NCEI > National Centers for Environmental Information, NESDIS, NOAA, U.S. Department of Commerce",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.datacenters[2].uuid",
+      "merged": "e59896e0-3b4d-43ea-9348-f1f456305d05",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.datacenters[3].label",
+      "merged": "DOC/NOAA/OAR/PMEL > Pacific Marine Environmental Laboratory, OAR, NOAA, U.S. Department of Commerce",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.datacenters[3].uuid",
+      "merged": "8b9573fe-8097-41b7-9c0a-38627e8d7810",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments",
+      "default": [],
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[0].label",
+      "merged": "anemometer",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[0].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/169",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[10].label",
+      "merged": "temperature sensor",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[10].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/174",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[11].label",
+      "merged": "thermometer",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[11].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/76",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[12].label",
+      "merged": "ANEMOMETERS > ANEMOMETERS",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[12].uuid",
+      "merged": "d0cf9340-dc51-447f-a151-f6cdad265d9a",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[13].label",
+      "merged": "BAROMETERS > BAROMETERS",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[13].uuid",
+      "merged": "0bf12743-3ab8-4be7-9b48-b565723ed0ad",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[14].label",
+      "merged": "CLOCKS",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[14].uuid",
+      "merged": "8742da0d-37b0-4807-8f6b-fc9fd0a82c39",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[15].label",
+      "merged": "CTD > Conductivity, Temperature, Depth",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[15].uuid",
+      "merged": "01cc0beb-7c9a-40ed-ad86-0661b41aee53",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[16].label",
+      "merged": "FLUOROMETERS > FLUOROMETERS",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[16].uuid",
+      "merged": "e904c3c7-0111-4d09-bb01-2b7bea9b4d3f",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[17].label",
+      "merged": "GPS RECEIVERS > GPS RECEIVERS",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[17].uuid",
+      "merged": "029feed6-79dc-4316-b8ac-be8f1e557f89",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[18].label",
+      "merged": "GPSP > Global Positioning System Payload",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[18].uuid",
+      "merged": "688f088b-7ae9-45c3-abc4-cdb881a8fec3",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[19].label",
+      "merged": "HUMIDITY SENSORS > HUMIDITY SENSORS",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[19].uuid",
+      "merged": "b2da7ee4-a58c-43cc-a1da-016b3e7c306a",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[1].label",
+      "merged": "barometer",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[1].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/172",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[20].label",
+      "merged": "OXYGEN METERS > OXYGEN METERS",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[20].uuid",
+      "merged": "fdcfecd6-9731-450e-94e8-5bc4c04e22a2",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[21].label",
+      "merged": "RADIOMETERS",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[21].uuid",
+      "merged": "184150ce-100e-485b-87db-839615af3d1a",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[22].label",
+      "merged": "TEMPERATURE SENSORS > TEMPERATURE SENSORS",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[22].uuid",
+      "merged": "aa953a14-4581-47f8-a5b3-c8dd50904ee0",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[23].label",
+      "merged": "THERMOMETERS > THERMOMETERS",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[23].uuid",
+      "merged": "1cf3fcba-3195-45b8-a14c-dbaf7111b6df",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[24].label",
+      "merged": "AT/RH",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[24].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[25].label",
+      "merged": "IMU",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[25].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[26].label",
+      "merged": "IR Thermometer",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[26].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[27].label",
+      "merged": "Inertial Navigation System",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[27].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[28].label",
+      "merged": "Onboard Computer",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[28].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[29].label",
+      "merged": "Oxygen Optode",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[29].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[2].label",
+      "merged": "clock",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[2].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/122",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[3].label",
+      "merged": "CTD",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[3].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/8",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[4].label",
+      "merged": "fluorometer",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[4].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/13",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[5].label",
+      "merged": "GPS",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[5].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/54",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[6].label",
+      "merged": "GPSP",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[6].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/148",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[7].label",
+      "merged": "humidity sensor",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[7].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/173",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[8].label",
+      "merged": "oxygen sensor",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[8].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/27",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[9].label",
+      "merged": "radiometer",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[9].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/64",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.locations",
+      "default": [],
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.locations[0].label",
+      "merged": "Equatorial Pacific Ocean",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.locations[0].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/seaname/details/187",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.locations[1].label",
+      "merged": "OCEAN > PACIFIC OCEAN",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.locations[1].uuid",
+      "merged": "a19e4450-64c4-4687-9080-cebded8a90eb",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.platforms",
+      "default": [],
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.platforms[0].label",
+      "merged": "5801952",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.platforms[0].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.platforms[1].label",
+      "merged": "Saildrone 1005",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.platforms[1].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.projects",
+      "default": [],
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.projects[0].label",
+      "merged": "TROPICAL PACIFIC (TROPAC)",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.projects[0].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/project/details/392",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.projects[1].label",
+      "merged": "TPOS-2020 Saildrone Pilot Study",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.projects[1].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers",
+      "default": [],
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[0].label",
+      "merged": "AIR TEMPERATURE - MEAN",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[0].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[10].label",
+      "merged": "Distance 1005_1006",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[10].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[11].label",
+      "merged": "Distance 1005_1029",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[11].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[12].label",
+      "merged": "Distance 1005_1030",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[12].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[13].label",
+      "merged": "Distance 1006_1029",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[13].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[14].label",
+      "merged": "Distance 1006_1030",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[14].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[15].label",
+      "merged": "Distance 1029_1030",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[15].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[16].label",
+      "merged": "Downward wind speed - MEAN",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[16].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[17].label",
+      "merged": "Downward wind speed - SD",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[17].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[18].label",
+      "merged": "Heading",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[18].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[19].label",
+      "merged": "Heading - Wing",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[19].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[1].label",
+      "merged": "AIR TEMPERATURE - SD",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[1].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[20].label",
+      "merged": "OPTICAL BACKSCATTER - 650 nm - Mean",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[20].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[21].label",
+      "merged": "OPTICAL BACKSCATTER - 650 nm - SD",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[21].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[22].label",
+      "merged": "OXYGEN - PERCENT SATURATION - MEAN",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[22].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[23].label",
+      "merged": "OXYGEN - PERCENT SATURATION - SD",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[23].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[24].label",
+      "merged": "Oxygen Concentration - MEAN",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[24].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[25].label",
+      "merged": "Oxygen Concentration - SD",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[25].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[26].label",
+      "merged": "Pitch",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[26].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[27].label",
+      "merged": "RELATIVE HUMIDITY - MEAN",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[27].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[28].label",
+      "merged": "RELATIVE HUMIDITY - SD",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[28].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[29].label",
+      "merged": "Roll",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[29].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[2].label",
+      "merged": "BAROMETRIC PRESSURE - MEAN",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[2].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[30].label",
+      "merged": "SALINITY - MEAN",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[30].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[31].label",
+      "merged": "SALINITY - SD",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[31].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[32].label",
+      "merged": "SEA SURFACE TEMPERATURE SD",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[32].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[33].label",
+      "merged": "Skin Temperature - MEAN",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[33].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[34].label",
+      "merged": "Skin Temperature - SD",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[34].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[35].label",
+      "merged": "Time",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[35].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[36].label",
+      "merged": "WATER TEMPERATURE - MEAN",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[36].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[37].label",
+      "merged": "WATER TEMPERATURE - SD",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[37].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[38].label",
+      "merged": "WIND GUST - MEAN",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[38].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[39].label",
+      "merged": "WIND GUST - SD",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[39].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[3].label",
+      "merged": "BAROMETRIC PRESSURE - SD",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[3].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[40].label",
+      "merged": "Wind speed - east-west component (U) - MEAN",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[40].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[41].label",
+      "merged": "Wind speed - east-west component (U) - SD",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[41].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[42].label",
+      "merged": "Wind speed - north-south component (V) - MEAN",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[42].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[43].label",
+      "merged": "Wind speed - north-south component (V) - SD",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[43].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[44].label",
+      "merged": "Wing Angle",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[44].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[45].label",
+      "merged": "other",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[45].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[4].label",
+      "merged": "CDOM concentration - MEAN",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[4].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[5].label",
+      "merged": "CDOM concentration SD",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[5].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[6].label",
+      "merged": "CHLOROPHYLL Concentration - SD",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[6].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[7].label",
+      "merged": "CONDUCTIVITY - Mean",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[7].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[8].label",
+      "merged": "CONDUCTIVITY -SD",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[8].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[9].label",
+      "merged": "Chlorophyll concentration - MEAN",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.providers[9].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords",
+      "default": [],
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[0].label",
+      "merged": "AIR TEMPERATURE",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[0].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/3",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[10].label",
+      "merged": "LONGWAVE IRRADIANCE",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[10].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/606",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[11].label",
+      "merged": "OPTICAL BACKSCATTER",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[11].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/233",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[12].label",
+      "merged": "OXYGEN - PERCENT SATURATION",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[12].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/244",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[13].label",
+      "merged": "PERCENT OXYGEN",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[13].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/256",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[14].label",
+      "merged": "RELATIVE HUMIDITY",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[14].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/306",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[15].label",
+      "merged": "SALINITY",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[15].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/307",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[16].label",
+      "merged": "SHORTWAVE IRRADIANCE",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[16].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/605",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[17].label",
+      "merged": "speed over ground",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[17].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/741",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[18].label",
+      "merged": "WATER TEMPERATURE",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[18].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/373",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[19].label",
+      "merged": "WIND DIRECTION",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[19].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/431",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[1].label",
+      "merged": "BAROMETRIC PRESSURE",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[1].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/38",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[20].label",
+      "merged": "WIND GUST",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[20].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/436",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[21].label",
+      "merged": "WIND SPEED",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[21].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/437",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[22].label",
+      "merged": "Wind speed - east-west component (U)",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[22].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/701",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[23].label",
+      "merged": "Wind speed - north-south component (V)",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[23].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/702",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[24].label",
+      "merged": "in situ",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[24].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/obstype/details/63",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[25].label",
+      "merged": "oceanography",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[25].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[26].label",
+      "merged": "EARTH SCIENCE > ATMOSPHERE > ATMOSPHERIC PRESSURE",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[26].uuid",
+      "merged": "08fd82a1-4370-46a2-82ea-94c0f91498a7",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[27].label",
+      "merged": "EARTH SCIENCE > ATMOSPHERE > ATMOSPHERIC TEMPERATURE",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[27].uuid",
+      "merged": "35e1f93b-99b3-4430-b477-0ecafa80d67a",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[28].label",
+      "merged": "EARTH SCIENCE > ATMOSPHERE > ATMOSPHERIC WATER VAPOR > WATER VAPOR INDICATORS > HUMIDITY > RELATIVE HUMIDITY",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[28].uuid",
+      "merged": "a249c68f-8249-4285-aad2-020b3c5aefc3",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[29].label",
+      "merged": "EARTH SCIENCE > ATMOSPHERE > ATMOSPHERIC WINDS > SURFACE WINDS",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[29].uuid",
+      "merged": "10685919-bc01-43e7-901a-b62ac44627f3",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[2].label",
+      "merged": "CHLOROPHYLL A CONCENTRATION",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[2].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/86",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[30].label",
+      "merged": "EARTH SCIENCE > ATMOSPHERE > ATMOSPHERIC WINDS > SURFACE WINDS > U/V WIND COMPONENTS",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[30].uuid",
+      "merged": "1e9bb112-5dc0-47a5-8c8a-b9cb07ece7c5",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[31].label",
+      "merged": "EARTH SCIENCE > ATMOSPHERE > ATMOSPHERIC WINDS > SURFACE WINDS > WIND DIRECTION",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[31].uuid",
+      "merged": "e987550e-d443-48eb-93eb-0bc47a62d4b4",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[32].label",
+      "merged": "EARTH SCIENCE > ATMOSPHERE > ATMOSPHERIC WINDS > SURFACE WINDS > WIND SPEED",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[32].uuid",
+      "merged": "a92f49f3-e2ee-4ef4-b064-39311ffb95d3",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[33].label",
+      "merged": "EARTH SCIENCE > OCEANS > OCEAN CHEMISTRY > CHLOROPHYLL",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[33].uuid",
+      "merged": "7989eae1-8ea3-4039-af0c-9130de145449",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[34].label",
+      "merged": "EARTH SCIENCE > OCEANS > OCEAN CHEMISTRY > ORGANIC MATTER",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[34].uuid",
+      "merged": "b2bdeb71-81b5-43e6-a8b1-b09c215c8d1a",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[35].label",
+      "merged": "EARTH SCIENCE > OCEANS > OCEAN CHEMISTRY > OXYGEN",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[35].uuid",
+      "merged": "90aa8838-79bd-4b28-b518-8217e863c385",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[36].label",
+      "merged": "EARTH SCIENCE > OCEANS > OCEAN OPTICS",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[36].uuid",
+      "merged": "457883c4-b30c-4d26-bed8-6c2887ebbc90",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[37].label",
+      "merged": "EARTH SCIENCE > OCEANS > OCEAN OPTICS > IRRADIANCE",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[37].uuid",
+      "merged": "40aacf7a-aba0-4ba2-bf85-ea7c39c3322c",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[38].label",
+      "merged": "EARTH SCIENCE > OCEANS > OCEAN TEMPERATURE > WATER TEMPERATURE",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[38].uuid",
+      "merged": "46206e8c-8def-406f-9e62-da4e74633a58",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[39].label",
+      "merged": "EARTH SCIENCE > OCEANS > SALINITY/DENSITY > CONDUCTIVITY",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[39].uuid",
+      "merged": "7041e51c-e2de-405a-b154-6016f624f54f",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[3].label",
+      "merged": "Chromophoric Dissolved Organic Matter (CDOM)",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[3].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/623",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[40].label",
+      "merged": "EARTH SCIENCE > OCEANS > SALINITY/DENSITY > SALINITY",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[40].uuid",
+      "merged": "7e95b5fc-1d58-431a-af36-948b29fa870d",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[4].label",
+      "merged": "CONDUCTIVITY",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[4].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/91",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[5].label",
+      "merged": "course over ground",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[5].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/740",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[6].label",
+      "merged": "DISSOLVED OXYGEN",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[6].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/116",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[7].label",
+      "merged": "irradiance",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[7].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/461",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[8].label",
+      "merged": "LATITUDE",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[8].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/590",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[9].label",
+      "merged": "LONGITUDE",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.sciencekeywords[9].uuid",
+      "merged": "https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/591",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.abstract",
+      "merged": "This file contains the real time data from the Saildrone core sensors for the Pacific Marine Environmental Laboratory (PMEL) TPOS 2018 Mission (Mission 2) to the central equatorial Pacific (0, 140W). These data have not been Quality Control (QC)\\ufffdd. This was the second of three missions funded by NOAA Office of Oceanic and Atmospheric Research (OAR)/CPO/GOMO and NOAA/OMAO as a pilot study for the Tropical Pacific Observing System (TPOS)-2020 project. The drone were each equipped with full atmospheric and ocean core sensor suite, and an Acoustic Doppler Current Profiler (ADCP) (not included in this file). The vehicle was deployed out of Honolulu, HI on October 3, 2018. After sailing near a PMEL Carbon mooring in Kaneohe Bay, HI, the drone proceeded to the Tropical Atmosphere/Ocean (TAO) mooring at 9N, 140W. Navigation issues caused the mission to be aborted early (mid-December 2018), before further science tasks could be completed.",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.accessConstraints",
+      "merged": "otherRestrictions",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.accessConstraintsCode",
+      "merged": "otherRestrictions",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.accession",
+      "merged": "0297635",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.alternateTitle",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.associatedPublicationCode",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.associatedPublicationDate",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.associatedPublicationTitle",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.characterSet",
+      "merged": "utf8",
+      "default": "utf8",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.citationAuthorIndividualName",
+      "merged": "Zhang, Dongxiao",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.citationAuthorOrganisationName",
+      "merged": "UW Joint Institute for the Study of Atmosphere and Ocean (JISAO)",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.citationOriginatorIndividualName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.citationOriginatorOrganisationName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.citationPrincipalInvestigatorIndividualName",
+      "merged": "Meghan F. Cronin",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.citationPublisherOrganisationName",
+      "merged": "NOAA National Centers for Environmental Information",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.citationResourceProviderIndividualName",
+      "merged": "Andrew Evans",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.citeAs",
+      "merged": "Distribution liability: NOAA and NCEI make no warranty, expressed or implied, regarding these data, nor does the fact of distribution constitute such a warranty. NOAA and NCEI cannot assume liability for any damages caused by any errors or omissions in these data. If appropriate, NCEI can only certify that the data it distributes are an authentic copy of the records that were accepted for inclusion in the NCEI archives.",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.contactAddress",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.contactPhone",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.contactUrl",
+      "merged": "https://www.ncei.noaa.gov/contact",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.dataLicensePreset",
+      "merged": "custom",
+      "default": "custom",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.distributionLiability",
+      "merged": "Use liability: NOAA and NCEI cannot provide any warranty as to the accuracy, reliability, or completeness of furnished data. Users assume responsibility to determine the usability of these data. The user is responsible for the results of any application of this data for other than its intended purpose.",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.doi",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.east",
+      "merged": "-141.730752",
+      "default": "180",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.email",
+      "merged": "ncei.info@noaa.gov",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.endDate",
+      "merged": "2019-01-27",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.fileId",
+      "merged": "gov.noaa.nodc:0297635",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.graphicOverviewHref",
+      "merged": "https://www.ncei.noaa.gov/access/metadata/landing-page/bin/gfx?id=gov.noaa.nodc:0297635",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.graphicOverviewTitle",
+      "merged": "Graphic not available.",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.individualName",
+      "merged": "Zhang, Dongxiao",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.language",
+      "merged": "eng",
+      "default": "eng",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.licenseUrl",
+      "merged": "https://www.ncei.noaa.gov/archive/accession/0297635",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.metadataRecordDate",
+      "merged": "2025-01-30T17:16",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.north",
+      "merged": "21.411176",
+      "default": "90",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.org",
+      "merged": "NOAA National Centers for Environmental Information",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.otherCiteAs",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.parentProjectCode",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.parentProjectDate",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.parentProjectTitle",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.publicationDate",
+      "merged": "2025-01-28",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.purpose",
+      "merged": "This file contains the real time data from the Saildrone core sensors for the Pacific Marine Environmental Laboratory (PMEL) TPOS 2018 Mission (Mission 2) to the central equatorial Pacific (0, 140W). These data have not been Quality Control (QC)\\ufffdd. This was the second of three missions funded by NOAA Office of Oceanic and Atmospheric Research (OAR)/CPO/GOMO and NOAA/OMAO as a pilot study for the Tropical Pacific Observing System (TPOS)-2020 project. The drone were each equipped with full atmospheric and ocean core sensor suite, and an Acoustic Doppler Current Profiler (ADCP) (not included in this file). The vehicle was deployed out of Honolulu, HI on October 3, 2018. After sailing near a PMEL Carbon mooring in Kaneohe Bay, HI, the drone proceeded to the Tropical Atmosphere/Ocean (TAO) mooring at 9N, 140W. Navigation issues caused the mission to be aborted early (mid-December 2018), before further science tasks could be com",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.relatedDataUrl",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.relatedDataUrlDescription",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.relatedDataUrlTitle",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.relatedDatasetCode",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.relatedDatasetDate",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.relatedDatasetOrg",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.relatedDatasetTitle",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.ror",
+      "default": null,
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.ror.id",
+      "merged": "https://ror.org/04r0wrp59",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.ror.label",
+      "merged": "NOAA National Centers for Environmental Information",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.scopeCode",
+      "merged": "dataset",
+      "default": "dataset",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.south",
+      "merged": "-1.1468039",
+      "default": "-90",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.startDate",
+      "merged": "2018-10-03",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.status",
+      "merged": "pending",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.supplementalInformation",
+      "merged": "The PIs were Dr. Meghan Cronin (NOAA PMEL), Dr. Dongxiao Zhang (UW Joint Institue for the Study of Atmoshere and Ocean (JISAO)), Dr. Adrienne Sutton (NOAA PMEL), and Mr. Christian Meinig (NOAA PMEL). Mr. Nathan Anderson contributed to the metadata creation.",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.temporalExtentIntervalUnit",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.temporalExtentIntervalValue",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.title",
+      "merged": "Saildrone PMEL TPOS 2018 Mission, drone 1005 (NCEI Accession 0297635)",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.topicCategories",
+      "default": [],
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.topicCategories[0]",
+      "merged": "environment",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.topicCategories[1]",
+      "merged": "oceans",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.topicCategories[2]",
+      "merged": "climatologyMeteorologyAtmosphere",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.uxsContext.deploymentId",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.deploymentName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.diveId",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.diveName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.narrative",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.operationOutcome",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.primaryLayer",
+      "merged": "datasetProduct",
+      "default": "datasetProduct",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.runId",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.runName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.sortieId",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.sortieName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.vmax",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.vmin",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.west",
+      "merged": "-157.9788288",
+      "default": "-180",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mode",
+      "merged": "lenient",
+      "default": "lenient",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.customPlatformType",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.deploymentDate",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.height",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.length",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.manufacturer",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.material",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.model",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.navigationSystem",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.operationalArea",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.platformDesc",
+      "merged": "5801952",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "platform.platformId",
+      "merged": "5801952",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "platform.platformName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.platformType",
+      "merged": "5801952",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "platform.powerSource",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.sensorMounts",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.serialNumber",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.speed",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.weight",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.width",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].beamCount",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].confidenceInterval",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].depthRating",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].firmware",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].frequency",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].localId",
+      "merged": "anemometer",
+      "default": "sen_1778516436646",
+      "filled": true,
+      "sameAsDefault": false
+    }
+  ],
+  "truncatedDetail": true
+}

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Scroll Lab</title>
+<style>
+  /* Reset */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* Simulate the app shell */
+  html, body {
+    height: 100%;
+    overflow: hidden; /* lock page scroll */
+  }
+
+  .app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+
+  .header {
+    flex-shrink: 0;
+    height: 80px;
+    background: #1e293b;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    font-family: sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+
+  /* This is #pilot-main equivalent */
+  .main {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden; /* NOT auto — locked */
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* 3-column grid */
+  .grid {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 260px 1fr 340px;
+    gap: 1rem;
+    padding: 1rem;
+    overflow: hidden;
+  }
+
+  /* Both rails: fill height, scroll internally */
+  .rail {
+    background: #f1f5f9;
+    border-radius: 12px;
+    overflow-y: auto;
+    padding: 1rem;
+    font-family: sans-serif;
+    font-size: 0.85rem;
+  }
+
+  /* Center form: fills height, scrolls internally */
+  .center {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    overflow-y: auto;
+    padding: 1.5rem;
+    font-family: sans-serif;
+    min-height: 0;
+  }
+
+  /* Form content — naturally tall */
+  .field { margin-bottom: 1.5rem; }
+  .field label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px; color: #475569; }
+  .field input, .field textarea {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.9rem;
+  }
+  .field textarea { height: 80px; resize: vertical; }
+  .section-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #94a3b8;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">Scroll Lab — left/right rails fixed, center scrolls</div>
+  <div class="main">
+    <div class="grid">
+
+      <!-- Left rail -->
+      <div class="rail">
+        <div class="section-title">Left Rail</div>
+        <p>This rail is fixed in place.</p>
+        <br>
+        <p>Issues (67)</p>
+        <br>
+        <p>• Field A missing</p>
+        <p>• Field B required</p>
+        <p>• Field C invalid</p>
+        <p>• Field D missing</p>
+        <p>• Field E required</p>
+        <p>• Field F invalid</p>
+        <p>• Field G missing</p>
+        <p>• Field H required</p>
+      </div>
+
+      <!-- Center form — long, scrollable -->
+      <div class="center">
+        <div class="section-title">// Mission</div>
+        <div class="field"><label>Title *</label><input type="text" placeholder="Enter title"></div>
+        <div class="field"><label>Abstract *</label><textarea placeholder="Enter abstract"></textarea></div>
+        <div class="field"><label>Purpose</label><textarea placeholder="Enter purpose"></textarea></div>
+        <div class="field"><label>File Identifier *</label><input type="text" placeholder="gov.noaa.ncei.uxs:..."></div>
+        <div class="field"><label>Status *</label><input type="text" placeholder="completed"></div>
+
+        <div class="section-title">// Identification</div>
+        <div class="field"><label>Alternate Title</label><input type="text"></div>
+        <div class="field"><label>Topic Category *</label><input type="text" placeholder="oceans"></div>
+        <div class="field"><label>Language *</label><input type="text" placeholder="eng"></div>
+        <div class="field"><label>Credit</label><textarea placeholder="Enter credit"></textarea></div>
+
+        <div class="section-title">// Temporal Extent</div>
+        <div class="field"><label>Start Date *</label><input type="date"></div>
+        <div class="field"><label>End Date</label><input type="date"></div>
+        <div class="field"><label>Publication Date</label><input type="date"></div>
+
+        <div class="section-title">// Contact</div>
+        <div class="field"><label>Individual Name *</label><input type="text"></div>
+        <div class="field"><label>Organisation *</label><input type="text"></div>
+        <div class="field"><label>Email *</label><input type="email"></div>
+        <div class="field"><label>Role *</label><input type="text" placeholder="pointOfContact"></div>
+        <div class="field"><label>Phone</label><input type="text"></div>
+        <div class="field"><label>Address</label><textarea></textarea></div>
+
+        <div class="section-title">// Spatial</div>
+        <div class="field"><label>West Bound *</label><input type="number" placeholder="-180"></div>
+        <div class="field"><label>East Bound *</label><input type="number" placeholder="180"></div>
+        <div class="field"><label>South Bound *</label><input type="number" placeholder="-90"></div>
+        <div class="field"><label>North Bound *</label><input type="number" placeholder="90"></div>
+
+        <div class="section-title">// Keywords</div>
+        <div class="field"><label>Theme Keywords *</label><textarea placeholder="One per line"></textarea></div>
+        <div class="field"><label>Place Keywords</label><textarea placeholder="One per line"></textarea></div>
+        <div class="field"><label>Instrument Keywords</label><textarea placeholder="One per line"></textarea></div>
+
+        <div class="section-title">// Constraints</div>
+        <div class="field"><label>Use Limitation</label><textarea></textarea></div>
+        <div class="field"><label>Access Constraints</label><input type="text"></div>
+        <div class="field"><label>Use Constraints</label><input type="text"></div>
+      </div>
+
+      <!-- Right rail -->
+      <div class="rail">
+        <div class="section-title">Right Rail</div>
+        <p>This rail is also fixed.</p>
+        <br>
+        <p>Live XML preview here.</p>
+        <br>
+        <pre style="font-size:0.7rem;color:#475569">&lt;gmi:MI_Metadata&gt;
+  &lt;gmd:fileIdentifier&gt;
+    &lt;gco:CharacterString/&gt;
+  &lt;/gmd:fileIdentifier&gt;
+  &lt;gmd:language&gt;
+    &lt;gco:CharacterString&gt;
+      eng
+    &lt;/gco:CharacterString&gt;
+  &lt;/gmd:language&gt;
+&lt;/gmi:MI_Metadata&gt;</pre>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

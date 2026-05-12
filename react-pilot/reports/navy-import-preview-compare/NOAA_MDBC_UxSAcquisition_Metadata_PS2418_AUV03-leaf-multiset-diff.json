@@ -1,0 +1,2364 @@
+{
+  "generatedAt": "2026-05-11T16:18:40.608Z",
+  "sourceXml": "../MANTA End User Testing/samples/NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
+  "counts": {
+    "probesConsidered": 20,
+    "missingAfterImport": 0,
+    "missingOriginalVsPreviewXml": 0,
+    "originalXmlChars": 66207,
+    "previewXmlChars": 34369,
+    "fullLeafEntriesOriginal": 192,
+    "fullLeafEntriesPreview": 143,
+    "fullLeafMultisetDiffRows": 335,
+    "fullLeafOnlyInOriginalRows": 192,
+    "fullLeafOnlyInPreviewRows": 143
+  },
+  "multisetDiffSample": [
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/acquisitionRequirement/MI_Requirement/expiryDate/DateTime\t2000-01-01T00:00:00Z",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/acquisitionRequirement/MI_Requirement/expiryDate/DateTime",
+      "text": "2000-01-01T00:00:00Z",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/acquisitionRequirement/MI_Requirement/identifier/MD_Identifier/code/CharacterString\tThe purpose of AUV acquisition within MC252 will be to provide detailed, contemporary information and products within this region. Additionally, this expedition will focus on characterizing deep coral ecosystem conditions, extent, type, and abundance (topography, biology and geomorphology) within a salt dome complex to inform predictive habitat modeling product development. AUV surveys (each approximately 20 km2 will be conducted at locations to validate and inform the interpretation of acoustic signatures from previously collected ship-based multibeam system surveys..",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/acquisitionRequirement/MI_Requirement/identifier/MD_Identifier/code/CharacterString",
+      "text": "The purpose of AUV acquisition within MC252 will be to provide detailed, contemporary information and products within this region. Additionally, this expedition will focus on characterizing deep coral ecosystem conditions, extent, type, and abundance (topography, biology and geomorphology) within a salt dome complex to inform predictive habitat modeling product development. AUV surveys (each approximately 20 km2 will be conducted at locations to validate and inform the interpretation of acous…",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/acquisitionRequirement/MI_Requirement/priority/MI_PriorityCode\thighImportance",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/acquisitionRequirement/MI_Requirement/priority/MI_PriorityCode",
+      "text": "highImportance",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/acquisitionRequirement/MI_Requirement/requestedDate/MI_RequestedDate/latestAcceptableDate/DateTime\t2000-01-01T00:00:00Z",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/acquisitionRequirement/MI_Requirement/requestedDate/MI_RequestedDate/latestAcceptableDate/DateTime",
+      "text": "2000-01-01T00:00:00Z",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/acquisitionRequirement/MI_Requirement/requestedDate/MI_RequestedDate/requestedDateOfCollection/DateTime\t2000-01-01T00:00:00Z",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/acquisitionRequirement/MI_Requirement/requestedDate/MI_RequestedDate/requestedDateOfCollection/DateTime",
+      "text": "2000-01-01T00:00:00Z",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/operation/MI_Operation/description/CharacterString\tAUV acquisition within MC252 will be to provide detailed, contemporary information and products within this region. Additionally, this expedition will focus on characterizing deep coral ecosystem conditions, extent, type, and abundance (topography, biology and geomorphology) within a salt dome complex to inform predictive habitat modeling product development.",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/operation/MI_Operation/description/CharacterString",
+      "text": "AUV acquisition within MC252 will be to provide detailed, contemporary information and products within this region. Additionally, this expedition will focus on characterizing deep coral ecosystem conditions, extent, type, and abundance (topography, biology and geomorphology) within a salt dome complex to inform predictive habitat modeling product development.",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/operation/MI_Operation/identifier/MD_Identifier/code/CharacterString\tPS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/operation/MI_Operation/identifier/MD_Identifier/code/CharacterString",
+      "text": "PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/operation/MI_Operation/significantEvent/MI_Event/context/MI_ContextCode\tacquisition",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/operation/MI_Operation/significantEvent/MI_Event/context/MI_ContextCode",
+      "text": "acquisition",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/operation/MI_Operation/significantEvent/MI_Event/identifier/MD_Identifier/code/CharacterString\tArrival at survey areas",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/operation/MI_Operation/significantEvent/MI_Event/identifier/MD_Identifier/code/CharacterString",
+      "text": "Arrival at survey areas",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/operation/MI_Operation/significantEvent/MI_Event/sequence/MI_SequenceCode\tstart",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/operation/MI_Operation/significantEvent/MI_Event/sequence/MI_SequenceCode",
+      "text": "start",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/operation/MI_Operation/significantEvent/MI_Event/time/DateTime\t2024-05-07T00:03:27",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/operation/MI_Operation/significantEvent/MI_Event/time/DateTime",
+      "text": "2024-05-07T00:03:27",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/operation/MI_Operation/significantEvent/MI_Event/trigger/MI_TriggerCode\tautomatic",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/operation/MI_Operation/significantEvent/MI_Event/trigger/MI_TriggerCode",
+      "text": "automatic",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/description/CharacterString\tEagle Ray Deep Water Mapping AUV",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/description/CharacterString",
+      "text": "Eagle Ray Deep Water Mapping AUV",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/identifier/MD_Identifier/code/CharacterString\tPS Eagle Ray",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/identifier/MD_Identifier/code/CharacterString",
+      "text": "PS Eagle Ray",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/description/CharacterString\tParoscientific Digiquartz Series 8000 Pressure Sensor Uncertainty Estimate - 0.2m Confidence Interval - RMS 0.01% Typical Accuracy (Total depth of 2200m)",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/description/CharacterString",
+      "text": "Paroscientific Digiquartz Series 8000 Pressure Sensor Uncertainty Estimate - 0.2m Confidence Interval - RMS 0.01% Typical Accuracy (Total depth of 2200m)",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString\thttps://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString",
+      "text": "https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString\tPS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString",
+      "text": "PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString\tArrived at mission area",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString",
+      "text": "Arrived at mission area",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode\tutf8",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode",
+      "text": "utf8",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode\tEnglish",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode",
+      "text": "English",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tParoscientific Pressure Sensor",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "Paroscientific Pressure Sensor",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/otherPropertyType/RecordType\tSensor Markup Language ParameterList",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/otherPropertyType/RecordType",
+      "text": "Sensor Markup Language ParameterList",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/type/CharacterString\tParoscientific Digiquartz Series 8000 Pressure Sensor",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/type/CharacterString",
+      "text": "Paroscientific Digiquartz Series 8000 Pressure Sensor",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/description/CharacterString\tOFG Self-compensating Magnetometer (SCM) Depth rated 6000m",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/description/CharacterString",
+      "text": "OFG Self-compensating Magnetometer (SCM) Depth rated 6000m",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString\thttps://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString",
+      "text": "https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString\tPS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString",
+      "text": "PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString\tArrived at mission area",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString",
+      "text": "Arrived at mission area",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode\tutf8",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode",
+      "text": "utf8",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode\tEnglish",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode",
+      "text": "English",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tOFG Magnetometer",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "OFG Magnetometer",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/otherPropertyType/RecordType\tSensor Markup Language ParameterList",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/otherPropertyType/RecordType",
+      "text": "Sensor Markup Language ParameterList",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/type/CharacterString\tOFG Self-compensating Magnetometer (SCM)",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/type/CharacterString",
+      "text": "OFG Self-compensating Magnetometer (SCM)",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/description/CharacterString\tSBE 49 FastCAT CTD Sensor Operation Mode 1 hz Uncertainty Estimate =/- 0.002 deg C; =/- 0.0003 S/m for conductivity; 0.1% for pressure Confidence Interval RMS",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/description/CharacterString",
+      "text": "SBE 49 FastCAT CTD Sensor Operation Mode 1 hz Uncertainty Estimate =/- 0.002 deg C; =/- 0.0003 S/m for conductivity; 0.1% for pressure Confidence Interval RMS",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString\thttps://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString",
+      "text": "https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString\tPS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString",
+      "text": "PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString\tArrived at mission area",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString",
+      "text": "Arrived at mission area",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode\tutf8",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode",
+      "text": "utf8",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode\tEnglish",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode",
+      "text": "English",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tSBE CTD Sensor",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "SBE CTD Sensor",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/otherPropertyType/RecordType\tSensor Markup Language ParameterList",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/otherPropertyType/RecordType",
+      "text": "Sensor Markup Language ParameterList",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/type/CharacterString\tSBE 49 FastCAT CTD Sensor",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/type/CharacterString",
+      "text": "SBE 49 FastCAT CTD Sensor",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/description/CharacterString\tMasterclock GNSS Receiver GMR Series 1000 Operation mode - Internal Clock Uncertainty Estimate - Correction time: +/-60 ns of UTC Accurate to reference within +/- 15ns of UTC, Time drift per year (max): +3 sec/year",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/description/CharacterString",
+      "text": "Masterclock GNSS Receiver GMR Series 1000 Operation mode - Internal Clock Uncertainty Estimate - Correction time: +/-60 ns of UTC Accurate to reference within +/- 15ns of UTC, Time drift per year (max): +3 sec/year",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString\thttps://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString",
+      "text": "https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString\tPS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString",
+      "text": "PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString\tArrived at mission area",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString",
+      "text": "Arrived at mission area",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode\tutf8",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode",
+      "text": "utf8",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode\tEnglish",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode",
+      "text": "English",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tMasterclock GNSS Receiver",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "Masterclock GNSS Receiver",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/otherPropertyType/RecordType\tSensor Markup Language ParameterList",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/otherPropertyType/RecordType",
+      "text": "Sensor Markup Language ParameterList",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/type/CharacterString\tMasterclock GNSS Receiver GMR Series 1000",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/type/CharacterString",
+      "text": "Masterclock GNSS Receiver GMR Series 1000",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/description/CharacterString\tNorbit WBMS MBES 200 and 400 kHz 512 beams 0.9 degrees x 0.9 degrees",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/description/CharacterString",
+      "text": "Norbit WBMS MBES 200 and 400 kHz 512 beams 0.9 degrees x 0.9 degrees",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString\thttps://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString",
+      "text": "https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString\tPS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString",
+      "text": "PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString\tArrived at mission area",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString",
+      "text": "Arrived at mission area",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode\tutf8",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode",
+      "text": "utf8",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode\tEnglish",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode",
+      "text": "English",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tNorbit MBES",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "Norbit MBES",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/otherPropertyType/RecordType\tSensor Markup Language ParameterList",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/otherPropertyType/RecordType",
+      "text": "Sensor Markup Language ParameterList",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/type/CharacterString\tNorbit WBMS MBES",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/type/CharacterString",
+      "text": "Norbit WBMS MBES",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/description/CharacterString\tGeoacoustic Subbottom Profiler based on GeoPulse model 1.5 kHz",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/description/CharacterString",
+      "text": "Geoacoustic Subbottom Profiler based on GeoPulse model 1.5 kHz",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString\thttps://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString",
+      "text": "https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString\tPS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString",
+      "text": "PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString\tArrived at mission area",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString",
+      "text": "Arrived at mission area",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode\tutf8",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode",
+      "text": "utf8",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode\tEnglish",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode",
+      "text": "English",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tGeoacoustic Subbottom Profiler",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "Geoacoustic Subbottom Profiler",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/otherPropertyType/RecordType\tSensor Markup Language ParameterList",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/otherPropertyType/RecordType",
+      "text": "Sensor Markup Language ParameterList",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/type/CharacterString\tGeoacoustic Subbottom Profiler based on GeoPulse model",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/type/CharacterString",
+      "text": "Geoacoustic Subbottom Profiler based on GeoPulse model",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/description/CharacterString\tExail Phins C7 INS Operation Mode - Position Accuracy Roll and Pitch Uncertainty Estimate - 0.010 deg Confidence Interval - RMS Use with GNSS or USBL and DVL",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/description/CharacterString",
+      "text": "Exail Phins C7 INS Operation Mode - Position Accuracy Roll and Pitch Uncertainty Estimate - 0.010 deg Confidence Interval - RMS Use with GNSS or USBL and DVL",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString\thttps://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString",
+      "text": "https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString\tPS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString",
+      "text": "PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString\tArrived at mission area",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString",
+      "text": "Arrived at mission area",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode\tutf8",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode",
+      "text": "utf8",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode\tEnglish",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode",
+      "text": "English",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tExail INS",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "Exail INS",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/otherPropertyType/RecordType\tSensor Markup Language ParameterList",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/otherPropertyType/RecordType",
+      "text": "Sensor Markup Language ParameterList",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/type/CharacterString\tExail Phins C7 INS",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/type/CharacterString",
+      "text": "Exail Phins C7 INS",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/description/CharacterString\tNortek 500 DVL Operation Mode - Long-term Accuracy Uncertainty Estimate - +/- 0.1% / +/- 0.1 cm/s Confidence Interval - RMS Depth and Speed",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/description/CharacterString",
+      "text": "Nortek 500 DVL Operation Mode - Long-term Accuracy Uncertainty Estimate - +/- 0.1% / +/- 0.1 cm/s Confidence Interval - RMS Depth and Speed",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString\thttps://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString",
+      "text": "https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString\tPS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString",
+      "text": "PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString\tArrived at mission area",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString",
+      "text": "Arrived at mission area",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode\tutf8",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode",
+      "text": "utf8",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode\tEnglish",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode",
+      "text": "English",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tNortek DVL",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "Nortek DVL",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/otherPropertyType/RecordType\tSensor Markup Language ParameterList",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/otherPropertyType/RecordType",
+      "text": "Sensor Markup Language ParameterList",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/type/CharacterString\tNortek 500 DVL",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/type/CharacterString",
+      "text": "Nortek 500 DVL",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/description/CharacterString\tSonardyne Ranger2 USBL Operation Mode - slant range system accuracy Uncertainty Estimate - 0.04% Confidence Interval - RMS Sampling rate 1 Hz and frequency of 19-34 kHz or 14-19.5 kHz",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/description/CharacterString",
+      "text": "Sonardyne Ranger2 USBL Operation Mode - slant range system accuracy Uncertainty Estimate - 0.04% Confidence Interval - RMS Sampling rate 1 Hz and frequency of 19-34 kHz or 14-19.5 kHz",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString\thttps://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString",
+      "text": "https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString\tPS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString",
+      "text": "PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString\tArrived at mission area",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString",
+      "text": "Arrived at mission area",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode\tutf8",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode",
+      "text": "utf8",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode\tEnglish",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode",
+      "text": "English",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tSonardyne USBL",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "Sonardyne USBL",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/otherPropertyType/RecordType\tSensor Markup Language ParameterList",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/otherPropertyType/RecordType",
+      "text": "Sensor Markup Language ParameterList",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/type/CharacterString\tSonardyne Ranger2 USBL",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/type/CharacterString",
+      "text": "Sonardyne Ranger2 USBL",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/description/CharacterString\tSonardyne AVTrack6 USBL Transponder Operation Mode - Depth Sensor Uncertainty Estimate - +/- 0.5% full scale Confidence Interval - RMS Range precision better than 15mm",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/description/CharacterString",
+      "text": "Sonardyne AVTrack6 USBL Transponder Operation Mode - Depth Sensor Uncertainty Estimate - +/- 0.5% full scale Confidence Interval - RMS Range precision better than 15mm",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString\thttps://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString",
+      "text": "https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString\tPS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString",
+      "text": "PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString\tArrived at mission area",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString",
+      "text": "Arrived at mission area",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode\tutf8",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode",
+      "text": "utf8",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode\tEnglish",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode",
+      "text": "English",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tSonardyne USBL Transponder",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "Sonardyne USBL Transponder",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/otherPropertyType/RecordType\tSensor Markup Language ParameterList",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/otherPropertyType/RecordType",
+      "text": "Sensor Markup Language ParameterList",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/type/CharacterString\tSonardyne AVTrack6 USBL Transponder",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/type/CharacterString",
+      "text": "Sonardyne AVTrack6 USBL Transponder",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/capabilities/capability/CapabilityList/DataRecord/field[1]/QuantityRange/value\t0 90",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/capabilities/capability/CapabilityList/DataRecord/field[1]/QuantityRange/value",
+      "text": "0 90",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/capabilities/capability/CapabilityList/DataRecord/field[2]/QuantityRange/value\t-90 90",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/capabilities/capability/CapabilityList/DataRecord/field[2]/QuantityRange/value",
+      "text": "-90 90",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/capabilities/capability/CapabilityList/DataRecord/field[3]/Quantity/value\t-180 180",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/capabilities/capability/CapabilityList/DataRecord/field[3]/Quantity/value",
+      "text": "-180 180",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/capabilities/capability/CapabilityList/DataRecord/field[4]/Quantity/value\t0 360",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/capabilities/capability/CapabilityList/DataRecord/field[4]/Quantity/value",
+      "text": "0 360",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/capabilities/capability/CapabilityList/DataRecord/field[5]/Quantity/value\t0 360",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/capabilities/capability/CapabilityList/DataRecord/field[5]/Quantity/value",
+      "text": "0 360",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/capabilities/capability/CapabilityList/DataRecord/field[6]/Quantity/value\t0 360",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/capabilities/capability/CapabilityList/DataRecord/field[6]/Quantity/value",
+      "text": "0 360",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/capabilities/capability/CapabilityList/DataRecord/field[7]/Quantity/value\t1",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/capabilities/capability/CapabilityList/DataRecord/field[7]/Quantity/value",
+      "text": "1",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/capabilities/capability/CapabilityList/DataRecord/field[8]/Quantity/value\t0 99",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/capabilities/capability/CapabilityList/DataRecord/field[8]/Quantity/value",
+      "text": "0 99",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/capabilities/capability/CapabilityList/DataRecord/label\tMeasurement Properties",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/capabilities/capability/CapabilityList/DataRecord/label",
+      "text": "Measurement Properties",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/characteristics/CharacteristicList/characteristic/DataRecord/field/DataRecord/field[1]/Quantity/value\t907",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/characteristics/CharacteristicList/characteristic/DataRecord/field/DataRecord/field[1]/Quantity/value",
+      "text": "907",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/characteristics/CharacteristicList/characteristic/DataRecord/field/DataRecord/field[2]/Quantity/value\t5",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/characteristics/CharacteristicList/characteristic/DataRecord/field/DataRecord/field[2]/Quantity/value",
+      "text": "5",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/characteristics/CharacteristicList/characteristic/DataRecord/field/DataRecord/field[3]/Quantity/value\t0.7",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/characteristics/CharacteristicList/characteristic/DataRecord/field/DataRecord/field[3]/Quantity/value",
+      "text": "0.7",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/characteristics/CharacteristicList/characteristic/DataRecord/field/DataRecord/field[4]/Quantity/value\t0.7",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/characteristics/CharacteristicList/characteristic/DataRecord/field/DataRecord/field[4]/Quantity/value",
+      "text": "0.7",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/characteristics/CharacteristicList/characteristic/DataRecord/field/DataRecord/field[5]/Category/value\tFiberglass",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/characteristics/CharacteristicList/characteristic/DataRecord/field/DataRecord/field[5]/Category/value",
+      "text": "Fiberglass",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/characteristics/CharacteristicList/characteristic/DataRecord/label\tPhysical Properties",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/characteristics/CharacteristicList/characteristic/DataRecord/label",
+      "text": "Physical Properties",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/position/DataArray/elementCount/Count/value\t620640",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/position/DataArray/elementCount/Count/value",
+      "text": "620640",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/position/DataArray/elementType/DataRecord/field[1]/Time/label\t4.5 per second",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/position/DataArray/elementType/DataRecord/field[1]/Time/label",
+      "text": "4.5 per second",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/position/DataArray/elementType/DataRecord/field[2]/Vector/label\tNorthern Gulf of Mexico in the vicinity of Macondo wellhead and impact area including the Gloria Dome",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/position/DataArray/elementType/DataRecord/field[2]/Vector/label",
+      "text": "Northern Gulf of Mexico in the vicinity of Macondo wellhead and impact area including the Gloria Dome",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/position/DataArray/values\t88° 25.92753' W 28° 43.32011' N 88° 25.92753' W 28° 39.29200' N 88° 30.19532' W 28° 39.29200' N 88° 30.19532' W 28° 43.32011' N",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/position/DataArray/values",
+      "text": "88° 25.92753' W 28° 43.32011' N 88° 25.92753' W 28° 39.29200' N 88° 30.19532' W 28° 39.29200' N 88° 30.19532' W 28° 43.32011' N",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/sponsor/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/electronicMailAddress/CharacterString\terrol.ronje@noaa.gov",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/sponsor/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/electronicMailAddress/CharacterString",
+      "text": "errol.ronje@noaa.gov",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/sponsor/CI_Responsibility/party/CI_Organisation/name/CharacterString\tNOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/sponsor/CI_Responsibility/party/CI_Organisation/name/CharacterString",
+      "text": "NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/scope/MD_Scope/extent/EX_Extent/description/CharacterString\tNorthern Gulf of Mexico",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/scope/MD_Scope/extent/EX_Extent/description/CharacterString",
+      "text": "Northern Gulf of Mexico",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/scope/MD_Scope/level/MD_ScopeCode\tDataset",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/scope/MD_Scope/level/MD_ScopeCode",
+      "text": "Dataset",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/scope/MD_Scope/levelDescription/MD_ScopeDescription/other/CharacterString\tAUV surveys (each approximately 20 km2 will be conducted at locations to validate and inform the interpretation of acoustic signatures from previously collected ship-based multibeam system surveys.",
+      "path": "MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/scope/MD_Scope/levelDescription/MD_ScopeDescription/other/CharacterString",
+      "text": "AUV surveys (each approximately 20 km2 will be conducted at locations to validate and inform the interpretation of acoustic signatures from previously collected ship-based multibeam system surveys.",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/administrativeArea/CharacterString\tMS",
+      "path": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/administrativeArea/CharacterString",
+      "text": "MS",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/city/CharacterString\tStennis Space Center",
+      "path": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/city/CharacterString",
+      "text": "Stennis Space Center",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/country/CharacterString\tUSA",
+      "path": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/country/CharacterString",
+      "text": "USA",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/deliveryPoint[1]/CharacterString\tSuite 1003",
+      "path": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/deliveryPoint[1]/CharacterString",
+      "text": "Suite 1003",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/deliveryPoint[2]/CharacterString\t1021 Balch Boulevard",
+      "path": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/deliveryPoint[2]/CharacterString",
+      "text": "1021 Balch Boulevard",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/electronicMailAddress/CharacterString\tandrew.evans@noaa.gov",
+      "path": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/electronicMailAddress/CharacterString",
+      "text": "andrew.evans@noaa.gov",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/postalCode/CharacterString\t39529",
+      "path": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/postalCode/CharacterString",
+      "text": "39529",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/description/CharacterString\tThe MDBC Portfolio comprises four coordinated projects. The Portfolio Deliverables site provides access to documents and products created to inform and support this effort at the portfolio level, including those designated as deliverables by the MDBC Portfolio.",
+      "path": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/description/CharacterString",
+      "text": "The MDBC Portfolio comprises four coordinated projects. The Portfolio Deliverables site provides access to documents and products created to inform and support this effort at the portfolio level, including those designated as deliverables by the MDBC Portfolio.",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/function/CI_OnLineFunctionCode\tinformation",
+      "path": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/function/CI_OnLineFunctionCode",
+      "text": "information",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/linkage/CharacterString\thttps://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "path": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/linkage/CharacterString",
+      "text": "https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/name/CharacterString\tMESOPHOTIC AND DEEP BENTHIC COMMUNITIES PORTFOLIO",
+      "path": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/name/CharacterString",
+      "text": "MESOPHOTIC AND DEEP BENTHIC COMMUNITIES PORTFOLIO",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/phone/CI_Telephone/number/CharacterString\t(601) 207-2323",
+      "path": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/phone/CI_Telephone/number/CharacterString",
+      "text": "(601) 207-2323",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/name/CharacterString\tNOAA - NCEI",
+      "path": "MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/name/CharacterString",
+      "text": "NOAA - NCEI",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/contact/CI_Responsibility/role/CI_RoleCode\tpointOfContact",
+      "path": "MD_Metadata/contact/CI_Responsibility/role/CI_RoleCode",
+      "text": "pointOfContact",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/dataQualityInfo/DQ_DataQuality/report[1]/DQ_GriddedDataPositionalAccuracy/result/DQ_QuantitativeResult/value/Record/Quantity/label\tIHO Map Accuracy Standard",
+      "path": "MD_Metadata/dataQualityInfo/DQ_DataQuality/report[1]/DQ_GriddedDataPositionalAccuracy/result/DQ_QuantitativeResult/value/Record/Quantity/label",
+      "text": "IHO Map Accuracy Standard",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/dataQualityInfo/DQ_DataQuality/report[1]/DQ_GriddedDataPositionalAccuracy/result/DQ_QuantitativeResult/value/Record/Quantity/value\t1.0",
+      "path": "MD_Metadata/dataQualityInfo/DQ_DataQuality/report[1]/DQ_GriddedDataPositionalAccuracy/result/DQ_QuantitativeResult/value/Record/Quantity/value",
+      "text": "1.0",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/dataQualityInfo/DQ_DataQuality/report[2]/DQ_AbsoluteExternalPositionalAccuracy/result/DQ_QuantitativeResult/value/Record/Quantity/label\tAbsolute Linear Error at 90% Significance Level of Biased Vertical Data (Alternative 2)",
+      "path": "MD_Metadata/dataQualityInfo/DQ_DataQuality/report[2]/DQ_AbsoluteExternalPositionalAccuracy/result/DQ_QuantitativeResult/value/Record/Quantity/label",
+      "text": "Absolute Linear Error at 90% Significance Level of Biased Vertical Data (Alternative 2)",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/dataQualityInfo/DQ_DataQuality/report[2]/DQ_AbsoluteExternalPositionalAccuracy/result/DQ_QuantitativeResult/value/Record/Quantity/value\t1.5",
+      "path": "MD_Metadata/dataQualityInfo/DQ_DataQuality/report[2]/DQ_AbsoluteExternalPositionalAccuracy/result/DQ_QuantitativeResult/value/Record/Quantity/value",
+      "text": "1.5",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/dataQualityInfo/DQ_DataQuality/scope/MD_Scope/levelDescription/MD_ScopeDescription/other/CharacterString\tcell",
+      "path": "MD_Metadata/dataQualityInfo/DQ_DataQuality/scope/MD_Scope/levelDescription/MD_ScopeDescription/other/CharacterString",
+      "text": "cell",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/dateInfo/CI_Date/date/DateTime\t2024-05-09T21:16:39Z",
+      "path": "MD_Metadata/dateInfo/CI_Date/date/DateTime",
+      "text": "2024-05-09T21:16:39Z",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/dateInfo/CI_Date/dateType/CI_DateTypeCode\tcreation",
+      "path": "MD_Metadata/dateInfo/CI_Date/dateType/CI_DateTypeCode",
+      "text": "creation",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/defaultLocale/PT_Locale/characterEncoding/MD_CharacterSetCode\tutf8",
+      "path": "MD_Metadata/defaultLocale/PT_Locale/characterEncoding/MD_CharacterSetCode",
+      "text": "utf8",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/defaultLocale/PT_Locale/language/LanguageCode\tEnglish",
+      "path": "MD_Metadata/defaultLocale/PT_Locale/language/LanguageCode",
+      "text": "English",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/abstract/CharacterString\tThe MDBC Mapping, Groundtruthing and Modeling team along with USM will conduct AUV acquisition at multiple deepwater dome sites for 11 operational days using the RV Point Sur. The mission will focus on two objectives - 1) Collect high-resolution multibeam bathymetry and backscatter over Macondo wellhead and impact area (MC252) using the USM Eagle Ray (ER) AUV, 2) collect high resolution data at other proximal dome features where significant feature anomalies of been identified from existing data",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/abstract/CharacterString",
+      "text": "The MDBC Mapping, Groundtruthing and Modeling team along with USM will conduct AUV acquisition at multiple deepwater dome sites for 11 operational days using the RV Point Sur. The mission will focus on two objectives - 1) Collect high-resolution multibeam bathymetry and backscatter over Macondo wellhead and impact area (MC252) using the USM Eagle Ray (ER) AUV, 2) collect high resolution data at other proximal dome features where significant feature anomalies of been identified from existing data",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/alternateTitle/CharacterString\tPS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/alternateTitle/CharacterString",
+      "text": "PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date/CI_Date/date/DateTime\t2024-05-08T01:17:27Z",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date/CI_Date/date/DateTime",
+      "text": "2024-05-08T01:17:27Z",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/identifier/MD_Identifier/authority/CI_Citation/date/CI_Date/date/DateTime\t2024-05-08T01:17:27Z",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/identifier/MD_Identifier/authority/CI_Citation/date/CI_Date/date/DateTime",
+      "text": "2024-05-08T01:17:27Z",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/identifier/MD_Identifier/authority/CI_Citation/title/CharacterString\tUniversity of Southern Mississippi",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/identifier/MD_Identifier/authority/CI_Citation/title/CharacterString",
+      "text": "University of Southern Mississippi",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/title/CharacterString\tPoint Sur 2024 Leg 18 Eagle Ray MultiBeam Sonar Data AUV Dive 03",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/title/CharacterString",
+      "text": "Point Sur 2024 Leg 18 Eagle Ray MultiBeam Sonar Data AUV Dive 03",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/administrativeArea/CharacterString\tMS",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/administrativeArea/CharacterString",
+      "text": "MS",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/city/CharacterString\tStennis Space Center",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/city/CharacterString",
+      "text": "Stennis Space Center",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/country/CharacterString\tUSA",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/country/CharacterString",
+      "text": "USA",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/deliveryPoint[1]/CharacterString\tSuite 1003",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/deliveryPoint[1]/CharacterString",
+      "text": "Suite 1003",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/deliveryPoint[2]/CharacterString\t1021 Balch Boulevard",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/deliveryPoint[2]/CharacterString",
+      "text": "1021 Balch Boulevard",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/electronicMailAddress/CharacterString\terrol.ronje@noaa.gov",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/electronicMailAddress/CharacterString",
+      "text": "errol.ronje@noaa.gov",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/postalCode/CharacterString\t39529",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/postalCode/CharacterString",
+      "text": "39529",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/description/CharacterString\tThe MDBC Portfolio comprises four coordinated projects. The Portfolio Deliverables site provides access to documents and products created to inform and support this effort at the portfolio level, including those designated as deliverables by the MDBC Portfolio.",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/description/CharacterString",
+      "text": "The MDBC Portfolio comprises four coordinated projects. The Portfolio Deliverables site provides access to documents and products created to inform and support this effort at the portfolio level, including those designated as deliverables by the MDBC Portfolio.",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/function/CI_OnLineFunctionCode\tinformation",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/function/CI_OnLineFunctionCode",
+      "text": "information",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/linkage/CharacterString\thttps://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/linkage/CharacterString",
+      "text": "https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/name/CharacterString\tMESOPHOTIC AND DEEP BENTHIC COMMUNITIES PORTFOLIO",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/name/CharacterString",
+      "text": "MESOPHOTIC AND DEEP BENTHIC COMMUNITIES PORTFOLIO",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/phone/CI_Telephone/number/CharacterString\t+17692421590",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/phone/CI_Telephone/number/CharacterString",
+      "text": "+17692421590",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/name/CharacterString\tNOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/name/CharacterString",
+      "text": "NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/role/CI_RoleCode\tpointOfContact",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/role/CI_RoleCode",
+      "text": "pointOfContact",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints[1]/MD_SecurityConstraints/classificationSystem/CharacterString\tUSA",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints[1]/MD_SecurityConstraints/classificationSystem/CharacterString",
+      "text": "USA",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints[1]/MD_SecurityConstraints/handlingDescription/CharacterString\tData should not be distributed beyond members of the Science Team which collected the data or other MDBC project members with written consent from the project manager until data is released for public accessibility",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints[1]/MD_SecurityConstraints/handlingDescription/CharacterString",
+      "text": "Data should not be distributed beyond members of the Science Team which collected the data or other MDBC project members with written consent from the project manager until data is released for public accessibility",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints[2]/MD_LegalConstraints/accessConstraints/MD_RestrictionCode\totherRestrictions",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints[2]/MD_LegalConstraints/accessConstraints/MD_RestrictionCode",
+      "text": "otherRestrictions",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints[2]/MD_LegalConstraints/otherConstraints/CharacterString\tDistribution liability: NOAA and NCEI make no warranty, expressed or implied, regarding these data, nor does the fact of distribution constitute such a warranty. NOAA and NCEI cannot assume liability for any damages caused by any errors or omissions in these data. If appropriate, NCEI can only certify that the data it distributes are an authentic copy of the records that were accepted for inclusion in the NCEI archives.",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints[2]/MD_LegalConstraints/otherConstraints/CharacterString",
+      "text": "Distribution liability: NOAA and NCEI make no warranty, expressed or implied, regarding these data, nor does the fact of distribution constitute such a warranty. NOAA and NCEI cannot assume liability for any damages caused by any errors or omissions in these data. If appropriate, NCEI can only certify that the data it distributes are an authentic copy of the records that were accepted for inclusion in the NCEI archives.",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints[2]/MD_LegalConstraints/useConstraints/MD_RestrictionCode\tconfidential",
+      "path": "MD_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints[2]/MD_LegalConstraints/useConstraints/MD_RestrictionCode",
+      "text": "confidential",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/metadataIdentifier/MD_Identifier/code/CharacterString\tPS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z_MD",
+      "path": "MD_Metadata/metadataIdentifier/MD_Identifier/code/CharacterString",
+      "text": "PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z_MD",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/metadataScope/MD_MetadataScope/name/CharacterString\tPS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "path": "MD_Metadata/metadataScope/MD_MetadataScope/name/CharacterString",
+      "text": "PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/metadataScope/MD_MetadataScope/resourceScope/MD_ScopeCode\tdataset",
+      "path": "MD_Metadata/metadataScope/MD_MetadataScope/resourceScope/MD_ScopeCode",
+      "text": "dataset",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/metadataStandard/CI_Citation/alternateTitle/CharacterString\tISOTC211",
+      "path": "MD_Metadata/metadataStandard/CI_Citation/alternateTitle/CharacterString",
+      "text": "ISOTC211",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/metadataStandard/CI_Citation/edition/CharacterString\t2:2019/Amd 1:2022",
+      "path": "MD_Metadata/metadataStandard/CI_Citation/edition/CharacterString",
+      "text": "2:2019/Amd 1:2022",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/metadataStandard/CI_Citation/title/CharacterString\tISO 19115 Geographic Information - Metadata",
+      "path": "MD_Metadata/metadataStandard/CI_Citation/title/CharacterString",
+      "text": "ISO 19115 Geographic Information - Metadata",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/referenceSystemInfo/MD_ReferenceSystem/referenceSystemIdentifier/MD_Identifier/code/CharacterString\tWGS84E_2D",
+      "path": "MD_Metadata/referenceSystemInfo/MD_ReferenceSystem/referenceSystemIdentifier/MD_Identifier/code/CharacterString",
+      "text": "WGS84E_2D",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/referenceSystemInfo/MD_ReferenceSystem/referenceSystemIdentifier/MD_Identifier/codeSpace/CharacterString\thttp://standards.iso.org/iso/19115/-3/mrs/1.0",
+      "path": "MD_Metadata/referenceSystemInfo/MD_ReferenceSystem/referenceSystemIdentifier/MD_Identifier/codeSpace/CharacterString",
+      "text": "http://standards.iso.org/iso/19115/-3/mrs/1.0",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/spatialRepresentationInfo/MD_Georectified/checkPointAvailability/Boolean\ttrue",
+      "path": "MD_Metadata/spatialRepresentationInfo/MD_Georectified/checkPointAvailability/Boolean",
+      "text": "true",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/spatialRepresentationInfo/MD_Georectified/cornerPoints[1]/Point/coordinates\t88° 25.92753' W 28° 43.32011' N",
+      "path": "MD_Metadata/spatialRepresentationInfo/MD_Georectified/cornerPoints[1]/Point/coordinates",
+      "text": "88° 25.92753' W 28° 43.32011' N",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/spatialRepresentationInfo/MD_Georectified/cornerPoints[2]/Point/coordinates\t88° 25.92753' W 28° 39.29200' N",
+      "path": "MD_Metadata/spatialRepresentationInfo/MD_Georectified/cornerPoints[2]/Point/coordinates",
+      "text": "88° 25.92753' W 28° 39.29200' N",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/spatialRepresentationInfo/MD_Georectified/cornerPoints[3]/Point/coordinates\t88° 30.19532' W 28° 39.29200' N",
+      "path": "MD_Metadata/spatialRepresentationInfo/MD_Georectified/cornerPoints[3]/Point/coordinates",
+      "text": "88° 30.19532' W 28° 39.29200' N",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/spatialRepresentationInfo/MD_Georectified/cornerPoints[4]/Point/coordinates\t88° 30.19532' W 28° 43.32011' N",
+      "path": "MD_Metadata/spatialRepresentationInfo/MD_Georectified/cornerPoints[4]/Point/coordinates",
+      "text": "88° 30.19532' W 28° 43.32011' N",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/spatialRepresentationInfo/MD_Georectified/numberOfDimensions/Integer\t3",
+      "path": "MD_Metadata/spatialRepresentationInfo/MD_Georectified/numberOfDimensions/Integer",
+      "text": "3",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/spatialRepresentationInfo/MD_Georectified/pointInPixel/MD_PixelOrientationCode\tlowerLeft",
+      "path": "MD_Metadata/spatialRepresentationInfo/MD_Georectified/pointInPixel/MD_PixelOrientationCode",
+      "text": "lowerLeft",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MD_Metadata/spatialRepresentationInfo/MD_Georectified/transformationParameterAvailability/Boolean\ttrue",
+      "path": "MD_Metadata/spatialRepresentationInfo/MD_Georectified/transformationParameterAvailability/Boolean",
+      "text": "true",
+      "onlyIn": "original",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/description/CharacterString\tParoscientific Digiquartz Series 8000 Pressure Sensor Uncertainty Estimate - 0.2m Confidence Interval - RMS 0.01% Typical Accuracy (Total depth of 2200m)",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/description/CharacterString",
+      "text": "Paroscientific Digiquartz Series 8000 Pressure Sensor Uncertainty Estimate - 0.2m Confidence Interval - RMS 0.01% Typical Accuracy (Total depth of 2200m)",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tParoscientific Pressure Sensor",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "Paroscientific Pressure Sensor",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/type/CharacterString\tParoscientific Digiquartz Series 8000 Pressure Sensor",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/type/CharacterString",
+      "text": "Paroscientific Digiquartz Series 8000 Pressure Sensor",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[10]/MI_Instrument/description/CharacterString\tOFG Self-compensating Magnetometer (SCM) Depth rated 6000m",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[10]/MI_Instrument/description/CharacterString",
+      "text": "OFG Self-compensating Magnetometer (SCM) Depth rated 6000m",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[10]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tOFG Magnetometer",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[10]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "OFG Magnetometer",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[10]/MI_Instrument/type/CharacterString\tOFG Self-compensating Magnetometer (SCM)",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[10]/MI_Instrument/type/CharacterString",
+      "text": "OFG Self-compensating Magnetometer (SCM)",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/description/CharacterString\tSBE 49 FastCAT CTD Sensor Operation Mode 1 hz Uncertainty Estimate =/- 0.002 deg C; =/- 0.0003 S/m for conductivity; 0.1% for pressure Confidence Interval RMS",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/description/CharacterString",
+      "text": "SBE 49 FastCAT CTD Sensor Operation Mode 1 hz Uncertainty Estimate =/- 0.002 deg C; =/- 0.0003 S/m for conductivity; 0.1% for pressure Confidence Interval RMS",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tSBE CTD Sensor",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "SBE CTD Sensor",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/type/CharacterString\tSBE 49 FastCAT CTD Sensor",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/type/CharacterString",
+      "text": "SBE 49 FastCAT CTD Sensor",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[3]/MI_Instrument/description/CharacterString\tMasterclock GNSS Receiver GMR Series 1000 Operation mode - Internal Clock Uncertainty Estimate - Correction time: +/-60 ns of UTC Accurate to reference within +/- 15ns of UTC, Time drift per year (max): +3 sec/year",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[3]/MI_Instrument/description/CharacterString",
+      "text": "Masterclock GNSS Receiver GMR Series 1000 Operation mode - Internal Clock Uncertainty Estimate - Correction time: +/-60 ns of UTC Accurate to reference within +/- 15ns of UTC, Time drift per year (max): +3 sec/year",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[3]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tMasterclock GNSS Receiver",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[3]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "Masterclock GNSS Receiver",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[3]/MI_Instrument/type/CharacterString\tMasterclock GNSS Receiver GMR Series 1000",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[3]/MI_Instrument/type/CharacterString",
+      "text": "Masterclock GNSS Receiver GMR Series 1000",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[4]/MI_Instrument/description/CharacterString\tNorbit WBMS MBES 200 and 400 kHz 512 beams 0.9 degrees x 0.9 degrees",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[4]/MI_Instrument/description/CharacterString",
+      "text": "Norbit WBMS MBES 200 and 400 kHz 512 beams 0.9 degrees x 0.9 degrees",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[4]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tNorbit MBES",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[4]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "Norbit MBES",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[4]/MI_Instrument/type/CharacterString\tNorbit WBMS MBES",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[4]/MI_Instrument/type/CharacterString",
+      "text": "Norbit WBMS MBES",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[5]/MI_Instrument/description/CharacterString\tGeoacoustic Subbottom Profiler based on GeoPulse model 1.5 kHz",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[5]/MI_Instrument/description/CharacterString",
+      "text": "Geoacoustic Subbottom Profiler based on GeoPulse model 1.5 kHz",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[5]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tGeoacoustic Subbottom Profiler",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[5]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "Geoacoustic Subbottom Profiler",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[5]/MI_Instrument/type/CharacterString\tGeoacoustic Subbottom Profiler based on GeoPulse model",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[5]/MI_Instrument/type/CharacterString",
+      "text": "Geoacoustic Subbottom Profiler based on GeoPulse model",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[6]/MI_Instrument/description/CharacterString\tExail Phins C7 INS Operation Mode - Position Accuracy Roll and Pitch Uncertainty Estimate - 0.010 deg Confidence Interval - RMS Use with GNSS or USBL and DVL",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[6]/MI_Instrument/description/CharacterString",
+      "text": "Exail Phins C7 INS Operation Mode - Position Accuracy Roll and Pitch Uncertainty Estimate - 0.010 deg Confidence Interval - RMS Use with GNSS or USBL and DVL",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[6]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tExail INS",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[6]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "Exail INS",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[6]/MI_Instrument/type/CharacterString\tExail Phins C7 INS",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[6]/MI_Instrument/type/CharacterString",
+      "text": "Exail Phins C7 INS",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[7]/MI_Instrument/description/CharacterString\tNortek 500 DVL Operation Mode - Long-term Accuracy Uncertainty Estimate - +/- 0.1% / +/- 0.1 cm/s Confidence Interval - RMS Depth and Speed",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[7]/MI_Instrument/description/CharacterString",
+      "text": "Nortek 500 DVL Operation Mode - Long-term Accuracy Uncertainty Estimate - +/- 0.1% / +/- 0.1 cm/s Confidence Interval - RMS Depth and Speed",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[7]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tNortek DVL",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[7]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "Nortek DVL",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[7]/MI_Instrument/type/CharacterString\tNortek 500 DVL",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[7]/MI_Instrument/type/CharacterString",
+      "text": "Nortek 500 DVL",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[8]/MI_Instrument/description/CharacterString\tSonardyne Ranger2 USBL Operation Mode - slant range system accuracy Uncertainty Estimate - 0.04% Confidence Interval - RMS Sampling rate 1 Hz and frequency of 19-34 kHz or 14-19.5 kHz",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[8]/MI_Instrument/description/CharacterString",
+      "text": "Sonardyne Ranger2 USBL Operation Mode - slant range system accuracy Uncertainty Estimate - 0.04% Confidence Interval - RMS Sampling rate 1 Hz and frequency of 19-34 kHz or 14-19.5 kHz",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[8]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tSonardyne USBL",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[8]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "Sonardyne USBL",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[8]/MI_Instrument/type/CharacterString\tSonardyne Ranger2 USBL",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[8]/MI_Instrument/type/CharacterString",
+      "text": "Sonardyne Ranger2 USBL",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[9]/MI_Instrument/description/CharacterString\tSonardyne AVTrack6 USBL Transponder Operation Mode - Depth Sensor Uncertainty Estimate - +/- 0.5% full scale Confidence Interval - RMS Range precision better than 15mm",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[9]/MI_Instrument/description/CharacterString",
+      "text": "Sonardyne AVTrack6 USBL Transponder Operation Mode - Depth Sensor Uncertainty Estimate - +/- 0.5% full scale Confidence Interval - RMS Range precision better than 15mm",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[9]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tSonardyne USBL Transponder",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[9]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "Sonardyne USBL Transponder",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[9]/MI_Instrument/type/CharacterString\tSonardyne AVTrack6 USBL Transponder",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[9]/MI_Instrument/type/CharacterString",
+      "text": "Sonardyne AVTrack6 USBL Transponder",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/description/CharacterString\tEagle Ray Deep Water Mapping AUV",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/description/CharacterString",
+      "text": "Eagle Ray Deep Water Mapping AUV",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/identifier/MD_Identifier/code/CharacterString\tPS Eagle Ray",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/identifier/MD_Identifier/code/CharacterString",
+      "text": "PS Eagle Ray",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/description/CharacterString\tParoscientific Digiquartz Series 8000 Pressure Sensor Uncertainty Estimate - 0.2m Confidence Interval - RMS 0.01% Typical Accuracy (Total depth of 2200m)",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/description/CharacterString",
+      "text": "Paroscientific Digiquartz Series 8000 Pressure Sensor Uncertainty Estimate - 0.2m Confidence Interval - RMS 0.01% Typical Accuracy (Total depth of 2200m)",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tParoscientific Pressure Sensor",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "Paroscientific Pressure Sensor",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/type/CharacterString\tParoscientific Digiquartz Series 8000 Pressure Sensor",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/type/CharacterString",
+      "text": "Paroscientific Digiquartz Series 8000 Pressure Sensor",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/description/CharacterString\tOFG Self-compensating Magnetometer (SCM) Depth rated 6000m",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/description/CharacterString",
+      "text": "OFG Self-compensating Magnetometer (SCM) Depth rated 6000m",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tOFG Magnetometer",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "OFG Magnetometer",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/type/CharacterString\tOFG Self-compensating Magnetometer (SCM)",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/type/CharacterString",
+      "text": "OFG Self-compensating Magnetometer (SCM)",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/description/CharacterString\tSBE 49 FastCAT CTD Sensor Operation Mode 1 hz Uncertainty Estimate =/- 0.002 deg C; =/- 0.0003 S/m for conductivity; 0.1% for pressure Confidence Interval RMS",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/description/CharacterString",
+      "text": "SBE 49 FastCAT CTD Sensor Operation Mode 1 hz Uncertainty Estimate =/- 0.002 deg C; =/- 0.0003 S/m for conductivity; 0.1% for pressure Confidence Interval RMS",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tSBE CTD Sensor",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "SBE CTD Sensor",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/type/CharacterString\tSBE 49 FastCAT CTD Sensor",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/type/CharacterString",
+      "text": "SBE 49 FastCAT CTD Sensor",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/description/CharacterString\tMasterclock GNSS Receiver GMR Series 1000 Operation mode - Internal Clock Uncertainty Estimate - Correction time: +/-60 ns of UTC Accurate to reference within +/- 15ns of UTC, Time drift per year (max): +3 sec/year",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/description/CharacterString",
+      "text": "Masterclock GNSS Receiver GMR Series 1000 Operation mode - Internal Clock Uncertainty Estimate - Correction time: +/-60 ns of UTC Accurate to reference within +/- 15ns of UTC, Time drift per year (max): +3 sec/year",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tMasterclock GNSS Receiver",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "Masterclock GNSS Receiver",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/type/CharacterString\tMasterclock GNSS Receiver GMR Series 1000",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/type/CharacterString",
+      "text": "Masterclock GNSS Receiver GMR Series 1000",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/description/CharacterString\tNorbit WBMS MBES 200 and 400 kHz 512 beams 0.9 degrees x 0.9 degrees",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/description/CharacterString",
+      "text": "Norbit WBMS MBES 200 and 400 kHz 512 beams 0.9 degrees x 0.9 degrees",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tNorbit MBES",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "Norbit MBES",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/type/CharacterString\tNorbit WBMS MBES",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/type/CharacterString",
+      "text": "Norbit WBMS MBES",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/description/CharacterString\tGeoacoustic Subbottom Profiler based on GeoPulse model 1.5 kHz",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/description/CharacterString",
+      "text": "Geoacoustic Subbottom Profiler based on GeoPulse model 1.5 kHz",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tGeoacoustic Subbottom Profiler",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "Geoacoustic Subbottom Profiler",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/type/CharacterString\tGeoacoustic Subbottom Profiler based on GeoPulse model",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/type/CharacterString",
+      "text": "Geoacoustic Subbottom Profiler based on GeoPulse model",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/description/CharacterString\tExail Phins C7 INS Operation Mode - Position Accuracy Roll and Pitch Uncertainty Estimate - 0.010 deg Confidence Interval - RMS Use with GNSS or USBL and DVL",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/description/CharacterString",
+      "text": "Exail Phins C7 INS Operation Mode - Position Accuracy Roll and Pitch Uncertainty Estimate - 0.010 deg Confidence Interval - RMS Use with GNSS or USBL and DVL",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tExail INS",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "Exail INS",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/type/CharacterString\tExail Phins C7 INS",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/type/CharacterString",
+      "text": "Exail Phins C7 INS",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/description/CharacterString\tNortek 500 DVL Operation Mode - Long-term Accuracy Uncertainty Estimate - +/- 0.1% / +/- 0.1 cm/s Confidence Interval - RMS Depth and Speed",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/description/CharacterString",
+      "text": "Nortek 500 DVL Operation Mode - Long-term Accuracy Uncertainty Estimate - +/- 0.1% / +/- 0.1 cm/s Confidence Interval - RMS Depth and Speed",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tNortek DVL",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "Nortek DVL",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/type/CharacterString\tNortek 500 DVL",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/type/CharacterString",
+      "text": "Nortek 500 DVL",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/description/CharacterString\tSonardyne Ranger2 USBL Operation Mode - slant range system accuracy Uncertainty Estimate - 0.04% Confidence Interval - RMS Sampling rate 1 Hz and frequency of 19-34 kHz or 14-19.5 kHz",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/description/CharacterString",
+      "text": "Sonardyne Ranger2 USBL Operation Mode - slant range system accuracy Uncertainty Estimate - 0.04% Confidence Interval - RMS Sampling rate 1 Hz and frequency of 19-34 kHz or 14-19.5 kHz",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tSonardyne USBL",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "Sonardyne USBL",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/type/CharacterString\tSonardyne Ranger2 USBL",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/type/CharacterString",
+      "text": "Sonardyne Ranger2 USBL",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/description/CharacterString\tSonardyne AVTrack6 USBL Transponder Operation Mode - Depth Sensor Uncertainty Estimate - +/- 0.5% full scale Confidence Interval - RMS Range precision better than 15mm",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/description/CharacterString",
+      "text": "Sonardyne AVTrack6 USBL Transponder Operation Mode - Depth Sensor Uncertainty Estimate - +/- 0.5% full scale Confidence Interval - RMS Range precision better than 15mm",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/identifier/MD_Identifier/code/CharacterString\tSonardyne USBL Transponder",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/identifier/MD_Identifier/code/CharacterString",
+      "text": "Sonardyne USBL Transponder",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/type/CharacterString\tSonardyne AVTrack6 USBL Transponder",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/type/CharacterString",
+      "text": "Sonardyne AVTrack6 USBL Transponder",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/pointOfContact/CI_ResponsibleParty/organisationName/CharacterString\tNOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/pointOfContact/CI_ResponsibleParty/organisationName/CharacterString",
+      "text": "NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/pointOfContact/CI_ResponsibleParty/role/CI_RoleCode\tpointOfContact",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/pointOfContact/CI_ResponsibleParty/role/CI_RoleCode",
+      "text": "pointOfContact",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/type/CharacterString\tEagle Ray Deep Water Mapping AUV",
+      "path": "MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/type/CharacterString",
+      "text": "Eagle Ray Deep Water Mapping AUV",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[1]/attributeDescription/CharacterString\tParoscientific Digiquartz Series 8000 Pressure Sensor",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[1]/attributeDescription/CharacterString",
+      "text": "Paroscientific Digiquartz Series 8000 Pressure Sensor",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[1]/identifier/MD_Identifier/code/CharacterString\tParoscientific Pressure Sensor",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[1]/identifier/MD_Identifier/code/CharacterString",
+      "text": "Paroscientific Pressure Sensor",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[1]/name/CharacterString\tParoscientific Digiquartz Series 8000 Pressure Sensor Uncertainty Estimate - 0.2m Confidence Interval - RMS 0.01% Typical Accuracy (Total depth of 2200m)",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[1]/name/CharacterString",
+      "text": "Paroscientific Digiquartz Series 8000 Pressure Sensor Uncertainty Estimate - 0.2m Confidence Interval - RMS 0.01% Typical Accuracy (Total depth of 2200m)",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[10]/attributeDescription/CharacterString\tOFG Self-compensating Magnetometer (SCM)",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[10]/attributeDescription/CharacterString",
+      "text": "OFG Self-compensating Magnetometer (SCM)",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[10]/identifier/MD_Identifier/code/CharacterString\tOFG Magnetometer",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[10]/identifier/MD_Identifier/code/CharacterString",
+      "text": "OFG Magnetometer",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[10]/name/CharacterString\tOFG Self-compensating Magnetometer (SCM) Depth rated 6000m",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[10]/name/CharacterString",
+      "text": "OFG Self-compensating Magnetometer (SCM) Depth rated 6000m",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[2]/attributeDescription/CharacterString\tSBE 49 FastCAT CTD Sensor",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[2]/attributeDescription/CharacterString",
+      "text": "SBE 49 FastCAT CTD Sensor",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[2]/identifier/MD_Identifier/code/CharacterString\tSBE CTD Sensor",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[2]/identifier/MD_Identifier/code/CharacterString",
+      "text": "SBE CTD Sensor",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[2]/name/CharacterString\tSBE 49 FastCAT CTD Sensor Operation Mode 1 hz Uncertainty Estimate =/- 0.002 deg C; =/- 0.0003 S/m for conductivity; 0.1% for pressure Confidence Interval RMS",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[2]/name/CharacterString",
+      "text": "SBE 49 FastCAT CTD Sensor Operation Mode 1 hz Uncertainty Estimate =/- 0.002 deg C; =/- 0.0003 S/m for conductivity; 0.1% for pressure Confidence Interval RMS",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[3]/attributeDescription/CharacterString\tMasterclock GNSS Receiver GMR Series 1000",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[3]/attributeDescription/CharacterString",
+      "text": "Masterclock GNSS Receiver GMR Series 1000",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[3]/identifier/MD_Identifier/code/CharacterString\tMasterclock GNSS Receiver",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[3]/identifier/MD_Identifier/code/CharacterString",
+      "text": "Masterclock GNSS Receiver",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[3]/name/CharacterString\tMasterclock GNSS Receiver GMR Series 1000 Operation mode - Internal Clock Uncertainty Estimate - Correction time: +/-60 ns of UTC Accurate to reference within +/- 15ns of UTC, Time drift per year (max): +3 sec/year",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[3]/name/CharacterString",
+      "text": "Masterclock GNSS Receiver GMR Series 1000 Operation mode - Internal Clock Uncertainty Estimate - Correction time: +/-60 ns of UTC Accurate to reference within +/- 15ns of UTC, Time drift per year (max): +3 sec/year",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[4]/attributeDescription/CharacterString\tNorbit WBMS MBES",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[4]/attributeDescription/CharacterString",
+      "text": "Norbit WBMS MBES",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[4]/identifier/MD_Identifier/code/CharacterString\tNorbit MBES",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[4]/identifier/MD_Identifier/code/CharacterString",
+      "text": "Norbit MBES",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[4]/name/CharacterString\tNorbit WBMS MBES 200 and 400 kHz 512 beams 0.9 degrees x 0.9 degrees",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[4]/name/CharacterString",
+      "text": "Norbit WBMS MBES 200 and 400 kHz 512 beams 0.9 degrees x 0.9 degrees",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[5]/attributeDescription/CharacterString\tGeoacoustic Subbottom Profiler based on GeoPulse model",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[5]/attributeDescription/CharacterString",
+      "text": "Geoacoustic Subbottom Profiler based on GeoPulse model",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[5]/identifier/MD_Identifier/code/CharacterString\tGeoacoustic Subbottom Profiler",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[5]/identifier/MD_Identifier/code/CharacterString",
+      "text": "Geoacoustic Subbottom Profiler",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[5]/name/CharacterString\tGeoacoustic Subbottom Profiler based on GeoPulse model 1.5 kHz",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[5]/name/CharacterString",
+      "text": "Geoacoustic Subbottom Profiler based on GeoPulse model 1.5 kHz",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[6]/attributeDescription/CharacterString\tExail Phins C7 INS",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[6]/attributeDescription/CharacterString",
+      "text": "Exail Phins C7 INS",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[6]/identifier/MD_Identifier/code/CharacterString\tExail INS",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[6]/identifier/MD_Identifier/code/CharacterString",
+      "text": "Exail INS",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[6]/name/CharacterString\tExail Phins C7 INS Operation Mode - Position Accuracy Roll and Pitch Uncertainty Estimate - 0.010 deg Confidence Interval - RMS Use with GNSS or USBL and DVL",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[6]/name/CharacterString",
+      "text": "Exail Phins C7 INS Operation Mode - Position Accuracy Roll and Pitch Uncertainty Estimate - 0.010 deg Confidence Interval - RMS Use with GNSS or USBL and DVL",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[7]/attributeDescription/CharacterString\tNortek 500 DVL",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[7]/attributeDescription/CharacterString",
+      "text": "Nortek 500 DVL",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[7]/identifier/MD_Identifier/code/CharacterString\tNortek DVL",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[7]/identifier/MD_Identifier/code/CharacterString",
+      "text": "Nortek DVL",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[7]/name/CharacterString\tNortek 500 DVL Operation Mode - Long-term Accuracy Uncertainty Estimate - +/- 0.1% / +/- 0.1 cm/s Confidence Interval - RMS Depth and Speed",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[7]/name/CharacterString",
+      "text": "Nortek 500 DVL Operation Mode - Long-term Accuracy Uncertainty Estimate - +/- 0.1% / +/- 0.1 cm/s Confidence Interval - RMS Depth and Speed",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[8]/attributeDescription/CharacterString\tSonardyne Ranger2 USBL",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[8]/attributeDescription/CharacterString",
+      "text": "Sonardyne Ranger2 USBL",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[8]/identifier/MD_Identifier/code/CharacterString\tSonardyne USBL",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[8]/identifier/MD_Identifier/code/CharacterString",
+      "text": "Sonardyne USBL",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[8]/name/CharacterString\tSonardyne Ranger2 USBL Operation Mode - slant range system accuracy Uncertainty Estimate - 0.04% Confidence Interval - RMS Sampling rate 1 Hz and frequency of 19-34 kHz or 14-19.5 kHz",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[8]/name/CharacterString",
+      "text": "Sonardyne Ranger2 USBL Operation Mode - slant range system accuracy Uncertainty Estimate - 0.04% Confidence Interval - RMS Sampling rate 1 Hz and frequency of 19-34 kHz or 14-19.5 kHz",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[9]/attributeDescription/CharacterString\tSonardyne AVTrack6 USBL Transponder",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[9]/attributeDescription/CharacterString",
+      "text": "Sonardyne AVTrack6 USBL Transponder",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[9]/identifier/MD_Identifier/code/CharacterString\tSonardyne USBL Transponder",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[9]/identifier/MD_Identifier/code/CharacterString",
+      "text": "Sonardyne USBL Transponder",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/contentInfo/MI_CoverageDescription[9]/name/CharacterString\tSonardyne AVTrack6 USBL Transponder Operation Mode - Depth Sensor Uncertainty Estimate - +/- 0.5% full scale Confidence Interval - RMS Range precision better than 15mm",
+      "path": "MI_Metadata/contentInfo/MI_CoverageDescription[9]/name/CharacterString",
+      "text": "Sonardyne AVTrack6 USBL Transponder Operation Mode - Depth Sensor Uncertainty Estimate - +/- 0.5% full scale Confidence Interval - RMS Range precision better than 15mm",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/dataQualityInfo/DQ_DataQuality/report[1]/DQ_QuantitativeAttributeAccuracy/result/DQ_QuantitativeResult/value/Record/Quantity/Decimal\t1",
+      "path": "MI_Metadata/dataQualityInfo/DQ_DataQuality/report[1]/DQ_QuantitativeAttributeAccuracy/result/DQ_QuantitativeResult/value/Record/Quantity/Decimal",
+      "text": "1",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/dataQualityInfo/DQ_DataQuality/report[1]/DQ_QuantitativeAttributeAccuracy/result/DQ_QuantitativeResult/value/Record/Quantity/uom\tm",
+      "path": "MI_Metadata/dataQualityInfo/DQ_DataQuality/report[1]/DQ_QuantitativeAttributeAccuracy/result/DQ_QuantitativeResult/value/Record/Quantity/uom",
+      "text": "m",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/dataQualityInfo/DQ_DataQuality/report[1]/DQ_QuantitativeAttributeAccuracy/result/DQ_QuantitativeResult/valueType/RecordType\tIHO Map Accuracy Standard",
+      "path": "MI_Metadata/dataQualityInfo/DQ_DataQuality/report[1]/DQ_QuantitativeAttributeAccuracy/result/DQ_QuantitativeResult/valueType/RecordType",
+      "text": "IHO Map Accuracy Standard",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/dataQualityInfo/DQ_DataQuality/report[2]/DQ_AbsoluteExternalPositionalAccuracy/result/DQ_QuantitativeResult/value/Record/Quantity/Decimal\t1.5",
+      "path": "MI_Metadata/dataQualityInfo/DQ_DataQuality/report[2]/DQ_AbsoluteExternalPositionalAccuracy/result/DQ_QuantitativeResult/value/Record/Quantity/Decimal",
+      "text": "1.5",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/dataQualityInfo/DQ_DataQuality/report[2]/DQ_AbsoluteExternalPositionalAccuracy/result/DQ_QuantitativeResult/value/Record/Quantity/uom\tm",
+      "path": "MI_Metadata/dataQualityInfo/DQ_DataQuality/report[2]/DQ_AbsoluteExternalPositionalAccuracy/result/DQ_QuantitativeResult/value/Record/Quantity/uom",
+      "text": "m",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/dataQualityInfo/DQ_DataQuality/report[2]/DQ_AbsoluteExternalPositionalAccuracy/result/DQ_QuantitativeResult/valueType/RecordType\tAbsolute Linear Error at 90% Significance Level of Biased Vertical Data (Alternative 2)",
+      "path": "MI_Metadata/dataQualityInfo/DQ_DataQuality/report[2]/DQ_AbsoluteExternalPositionalAccuracy/result/DQ_QuantitativeResult/valueType/RecordType",
+      "text": "Absolute Linear Error at 90% Significance Level of Biased Vertical Data (Alternative 2)",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/dataQualityInfo/DQ_DataQuality/scope/DQ_Scope/level/MD_ScopeCode\tdataset",
+      "path": "MI_Metadata/dataQualityInfo/DQ_DataQuality/scope/DQ_Scope/level/MD_ScopeCode",
+      "text": "dataset",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/dateStamp/DateTime\t2024-05-09T21:16",
+      "path": "MI_Metadata/dateStamp/DateTime",
+      "text": "2024-05-09T21:16",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/distributionInfo/MD_Distribution/transferOptions/MD_DigitalTransferOptions/onLine/CI_OnlineResource/linkage/URL\thttps://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "path": "MI_Metadata/distributionInfo/MD_Distribution/transferOptions/MD_DigitalTransferOptions/onLine/CI_OnlineResource/linkage/URL",
+      "text": "https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/fileIdentifier/CharacterString\tgov.noaa.ncei.uxs:PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z_MD",
+      "path": "MI_Metadata/fileIdentifier/CharacterString",
+      "text": "gov.noaa.ncei.uxs:PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z_MD",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/hierarchyLevel/MD_ScopeCode\tdataset",
+      "path": "MI_Metadata/hierarchyLevel/MD_ScopeCode",
+      "text": "dataset",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/abstract/CharacterString\tThe MDBC Mapping, Groundtruthing and Modeling team along with USM will conduct AUV acquisition at multiple deepwater dome sites for 11 operational days using the RV Point Sur. The mission will focus on two objectives - 1) Collect high-resolution multibeam bathymetry and backscatter over Macondo wellhead and impact area (MC252) using the USM Eagle Ray (ER) AUV, 2) collect high resolution data at other proximal dome features where significant feature anomalies of been identified from existing data",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/abstract/CharacterString",
+      "text": "The MDBC Mapping, Groundtruthing and Modeling team along with USM will conduct AUV acquisition at multiple deepwater dome sites for 11 operational days using the RV Point Sur. The mission will focus on two objectives - 1) Collect high-resolution multibeam bathymetry and backscatter over Macondo wellhead and impact area (MC252) using the USM Eagle Ray (ER) AUV, 2) collect high resolution data at other proximal dome features where significant feature anomalies of been identified from existing data",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/characterSet/MD_CharacterSetCode\tutf8",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/characterSet/MD_CharacterSetCode",
+      "text": "utf8",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/alternateTitle/CharacterString\tPS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/alternateTitle/CharacterString",
+      "text": "PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[1]/CI_Date/date/DateTime\t2024-05-07T00:03",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[1]/CI_Date/date/DateTime",
+      "text": "2024-05-07T00:03",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[1]/CI_Date/dateType/CI_DateTypeCode\tcreation",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[1]/CI_Date/dateType/CI_DateTypeCode",
+      "text": "creation",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[2]/CI_Date/date/DateTime\t2024-05-08T01:17",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[2]/CI_Date/date/DateTime",
+      "text": "2024-05-08T01:17",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[2]/CI_Date/dateType/CI_DateTypeCode\tpublication",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[2]/CI_Date/dateType/CI_DateTypeCode",
+      "text": "publication",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/identifier/MD_Identifier/code/CharacterString\tinsert DOI or UIUD or reference to parent data collection",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/identifier/MD_Identifier/code/CharacterString",
+      "text": "insert DOI or UIUD or reference to parent data collection",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/title/CharacterString\tPoint Sur 2024 Leg 18 Eagle Ray MultiBeam Sonar Data AUV Dive 03",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/title/CharacterString",
+      "text": "Point Sur 2024 Leg 18 Eagle Ray MultiBeam Sonar Data AUV Dive 03",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword/CharacterString\tEagle Ray Deep Water Mapping AUV",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword/CharacterString",
+      "text": "Eagle Ray Deep Water Mapping AUV",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString\tGCMD platforms",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString",
+      "text": "GCMD platforms",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/keyword/CharacterString\tParoscientific Digiquartz Series 8000 Pressure Sensor",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/keyword/CharacterString",
+      "text": "Paroscientific Digiquartz Series 8000 Pressure Sensor",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString\tGCMD instruments",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString",
+      "text": "GCMD instruments",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[3]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString\tPlatform instance",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[3]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString",
+      "text": "Platform instance",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[3]/MD_Keywords/type/MD_KeywordTypeCode\tplatform",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[3]/MD_Keywords/type/MD_KeywordTypeCode",
+      "text": "platform",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/eastBoundLongitude/Decimal\t180",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/eastBoundLongitude/Decimal",
+      "text": "180",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/northBoundLatitude/Decimal\t90",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/northBoundLatitude/Decimal",
+      "text": "90",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/southBoundLatitude/Decimal\t-90",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/southBoundLatitude/Decimal",
+      "text": "-90",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/westBoundLongitude/Decimal\t-180",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/westBoundLongitude/Decimal",
+      "text": "-180",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/temporalElement/EX_TemporalExtent/extent/TimePeriod/beginPosition\t2024-05-07T00:03",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/temporalElement/EX_TemporalExtent/extent/TimePeriod/beginPosition",
+      "text": "2024-05-07T00:03",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/language/LanguageCode\teng",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/language/LanguageCode",
+      "text": "eng",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/contactInfo/CI_Contact/address[1]/CI_Address/electronicMailAddress/CharacterString\terrol.ronje@noaa.gov",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/contactInfo/CI_Contact/address[1]/CI_Address/electronicMailAddress/CharacterString",
+      "text": "errol.ronje@noaa.gov",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/contactInfo/CI_Contact/address[2]/CI_Address/deliveryPoint/CharacterString\tSuite 1003",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/contactInfo/CI_Contact/address[2]/CI_Address/deliveryPoint/CharacterString",
+      "text": "Suite 1003",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/linkage/URL\thttps://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/linkage/URL",
+      "text": "https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/contactInfo/CI_Contact/phone/CI_Telephone/voice/CharacterString\t+17692421590",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/contactInfo/CI_Contact/phone/CI_Telephone/voice/CharacterString",
+      "text": "+17692421590",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/organisationName/CharacterString\tNOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/organisationName/CharacterString",
+      "text": "NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints/MD_LegalConstraints/accessConstraints/MD_RestrictionCode\totherRestrictions",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints/MD_LegalConstraints/accessConstraints/MD_RestrictionCode",
+      "text": "otherRestrictions",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints/MD_LegalConstraints/otherConstraints[1]/CharacterString\totherRestrictions",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints/MD_LegalConstraints/otherConstraints[1]/CharacterString",
+      "text": "otherRestrictions",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints/MD_LegalConstraints/otherConstraints[2]/CharacterString\tDistribution liability: NOAA and NCEI make no warranty, expressed or implied, regarding these data, nor does the fact of distribution constitute such a warranty. NOAA and NCEI cannot assume liability for any damages caused by any errors or omissions in these data. If appropriate, NCEI can only certify that the data it distributes are an authentic copy of the records that were accepted for inclusion in the NCEI archives.",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints/MD_LegalConstraints/otherConstraints[2]/CharacterString",
+      "text": "Distribution liability: NOAA and NCEI make no warranty, expressed or implied, regarding these data, nor does the fact of distribution constitute such a warranty. NOAA and NCEI cannot assume liability for any damages caused by any errors or omissions in these data. If appropriate, NCEI can only certify that the data it distributes are an authentic copy of the records that were accepted for inclusion in the NCEI archives.",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints/MD_LegalConstraints/otherConstraints[3]/CharacterString\tData license: https://www.ncei.noaa.gov/",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints/MD_LegalConstraints/otherConstraints[3]/CharacterString",
+      "text": "Data license: https://www.ncei.noaa.gov/",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/resourceMaintenance/MD_MaintenanceInformation/maintenanceAndUpdateFrequency/MD_MaintenanceFrequencyCode\tasNeeded",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/resourceMaintenance/MD_MaintenanceInformation/maintenanceAndUpdateFrequency/MD_MaintenanceFrequencyCode",
+      "text": "asNeeded",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/status/MD_ProgressCode\tcompleted",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/status/MD_ProgressCode",
+      "text": "completed",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/identificationInfo/MD_DataIdentification/supplementalInformation/CharacterString\tUxS operational layer: Dataset or product",
+      "path": "MI_Metadata/identificationInfo/MD_DataIdentification/supplementalInformation/CharacterString",
+      "text": "UxS operational layer: Dataset or product",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/metadataStandardName/CharacterString\tISO 19115 Geographic Information - Metadata",
+      "path": "MI_Metadata/metadataStandardName/CharacterString",
+      "text": "ISO 19115 Geographic Information - Metadata",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/metadataStandardVersion/CharacterString\t2:2019/Amd 1:2022",
+      "path": "MI_Metadata/metadataStandardVersion/CharacterString",
+      "text": "2:2019/Amd 1:2022",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/referenceSystemInfo/MD_ReferenceSystem/referenceSystemIdentifier/RS_Identifier/code/CharacterString\tWGS84E_2D",
+      "path": "MI_Metadata/referenceSystemInfo/MD_ReferenceSystem/referenceSystemIdentifier/RS_Identifier/code/CharacterString",
+      "text": "WGS84E_2D",
+      "onlyIn": "preview",
+      "count": 1
+    },
+    {
+      "fingerprint": "MI_Metadata/spatialRepresentationInfo/MD_Georectified/numberOfDimensions/Integer\t3",
+      "path": "MI_Metadata/spatialRepresentationInfo/MD_Georectified/numberOfDimensions/Integer",
+      "text": "3",
+      "onlyIn": "preview",
+      "count": 1
+    }
+  ],
+  "truncated": false
+}

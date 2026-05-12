@@ -1,0 +1,653 @@
+--- /Users/connorcayson/Downloads/uSX/react-pilot/reports/navy-import-preview-compare/ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z-original.xml	2026-05-11 11:17:31
++++ /Users/connorcayson/Downloads/uSX/react-pilot/reports/navy-import-preview-compare/ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z-preview-from-import.xml	2026-05-11 11:17:31
+@@ -1,290 +1,360 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<MD_Metadata xmlns="http://standards.iso.org/iso/19115/-3/mdb/2.0">
+-  <metadataIdentifier>
+-    <MD_Identifier xmlns="http://standards.iso.org/iso/19115/-3/mcc/1.0">
+-      <code>
+-        <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z</CharacterString>
+-      </code>
+-    </MD_Identifier>
+-  </metadataIdentifier>
+-  <defaultLocale>
+-    <PT_Locale xmlns="http://standards.iso.org/iso/19115/-3/lan/1.0">
+-      <language>
+-        <LanguageCode>eng</LanguageCode>
+-      </language>
+-      <characterEncoding>
+-        <MD_CharacterSetCode>utf8</MD_CharacterSetCode>
+-      </characterEncoding>
+-    </PT_Locale>
+-  </defaultLocale>
+-  <metadataScope>
+-    <MD_MetadataScope>
+-      <resourceScope>
+-        <MD_ScopeCode xmlns="http://standards.iso.org/iso/19115/-3/mcc/1.0">dataset</MD_ScopeCode>
+-      </resourceScope>
+-    </MD_MetadataScope>
+-  </metadataScope>
+-  <contact>
+-    <CI_Responsibility xmlns="http://standards.iso.org/iso/19115/-3/cit/2.0">
+-      <role>
+-        <CI_RoleCode>pointOfContact</CI_RoleCode>
+-      </role>
+-      <party>
+-        <CI_Organisation>
+-          <name>
+-            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT</CharacterString>
+-          </name>
+-          <contactInfo>
+-            <CI_Contact>
+-              <phone>
+-                <CI_Telephone>
+-                  <number>
+-                    <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">(555) 555-5555</CharacterString>
+-                  </number>
+-                </CI_Telephone>
+-              </phone>
+-              <address>
+-                <CI_Address>
+-                  <deliveryPoint>
+-                    <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">Suite 1003, 1021 Balch Boulevard, Stennis Space Center, MS 39529, USA</CharacterString>
+-                  </deliveryPoint>
+-                  <electronicMailAddress>
+-                    <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">errol.ronje@noaa.gov</CharacterString>
+-                  </electronicMailAddress>
+-                </CI_Address>
+-              </address>
+-              <onlineResource>
+-                <CI_OnlineResource>
+-                  <linkage>
+-                    <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio</CharacterString>
+-                  </linkage>
+-                </CI_OnlineResource>
+-              </onlineResource>
+-            </CI_Contact>
+-          </contactInfo>
+-        </CI_Organisation>
+-      </party>
+-    </CI_Responsibility>
+-  </contact>
+-  <dateInfo>
+-    <CI_Date xmlns="http://standards.iso.org/iso/19115/-3/cit/2.0">
+-      <date>
+-        <DateTime xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">2025-07-27T00:48:00.000Z</DateTime>
+-      </date>
+-      <dateType>
+-        <CI_DateTypeCode>creation</CI_DateTypeCode>
+-      </dateType>
+-    </CI_Date>
+-  </dateInfo>
+-  <metadataStandard>
+-    <CI_Citation xmlns="http://standards.iso.org/iso/19115/-3/cit/2.0">
+-      <title>
+-        <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">ISO 19115-3</CharacterString>
+-      </title>
+-      <edition>
+-        <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">2.0</CharacterString>
+-      </edition>
+-    </CI_Citation>
+-  </metadataStandard>
+-  <referenceSystemInfo>
+-    <MD_ReferenceSystem xmlns="http://standards.iso.org/iso/19115/-3/mrs/1.0">
+-      <referenceSystemIdentifier>
+-        <MD_Identifier xmlns="http://standards.iso.org/iso/19115/-3/mcc/1.0">
+-          <code>
+-            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">EPSG:4326</CharacterString>
+-          </code>
+-        </MD_Identifier>
+-      </referenceSystemIdentifier>
+-    </MD_ReferenceSystem>
+-  </referenceSystemInfo>
+-  <identificationInfo>
+-    <MD_DataIdentification xmlns="http://standards.iso.org/iso/19115/-3/mri/1.0">
+-      <citation>
+-        <CI_Citation xmlns="http://standards.iso.org/iso/19115/-3/cit/2.0">
+-          <title>
+-            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">RV Expedition 2025 LEG 01 REMUS620 KRAKEN SAS MGM Dive 05</CharacterString>
+-          </title>
+-          <alternateTitle>
+-            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z</CharacterString>
+-          </alternateTitle>
+-          <date>
+-            <CI_Date>
+-              <date>
+-                <DateTime xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">2025-07-27T00:48:00.000Z</DateTime>
+-              </date>
+-              <dateType>
+-                <CI_DateTypeCode>creation</CI_DateTypeCode>
+-              </dateType>
+-            </CI_Date>
+-          </date>
+-          <date>
+-            <CI_Date>
+-              <date>
+-                <DateTime xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">2025-07-27T07:47:00.000Z</DateTime>
+-              </date>
+-              <dateType>
+-                <CI_DateTypeCode>completion</CI_DateTypeCode>
+-              </dateType>
+-            </CI_Date>
+-          </date>
+-        </CI_Citation>
+-      </citation>
+-      <abstract>
+-        <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">The MDBC Mapping, Ground truthing and Modeling team along with USM will conduct UUV missions to collect synthetic aperture sonar data using the REMUS 620 platform equipped with the KRAKEN Sonar sensor and other oceanographic equipment</CharacterString>
+-      </abstract>
+-      <status>
+-        <MD_ProgressCode xmlns="http://standards.iso.org/iso/19115/-3/mcc/1.0">ongoing</MD_ProgressCode>
+-      </status>
+-      <pointOfContact>
+-        <CI_Responsibility xmlns="http://standards.iso.org/iso/19115/-3/cit/2.0">
+-          <role>
+-            <CI_RoleCode>pointOfContact</CI_RoleCode>
+-          </role>
+-          <party>
+-            <CI_Organisation>
+-              <name>
+-                <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT</CharacterString>
+-              </name>
+-              <contactInfo />
+-            </CI_Organisation>
+-          </party>
+-        </CI_Responsibility>
+-      </pointOfContact>
+-      <extent>
+-        <EX_Extent xmlns="http://standards.iso.org/iso/19115/-3/gex/1.0">
+-          <geographicElement>
+-            <EX_GeographicBoundingBox>
+-              <westBoundLongitude>
+-                <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">-87.15895078704915</CharacterString>
+-              </westBoundLongitude>
+-              <eastBoundLongitude>
+-                <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">-87.31786719161755</CharacterString>
+-              </eastBoundLongitude>
+-              <southBoundLatitude>
+-                <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">29.843156926151266</CharacterString>
+-              </southBoundLatitude>
+-              <northBoundLatitude>
+-                <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">29.930553243137695</CharacterString>
+-              </northBoundLatitude>
+-            </EX_GeographicBoundingBox>
+-          </geographicElement>
+-        </EX_Extent>
+-      </extent>
+-    </MD_DataIdentification>
+-  </identificationInfo>
+-  <acquisitionInformation>
+-    <MI_AcquisitionInformation xmlns="http://standards.iso.org/iso/19115/-3/mac/2.0">
+-      <instrument>
+-        <MI_Instrument>
+-          <identifier>
+-            <MD_Identifier xmlns="http://standards.iso.org/iso/19115/-3/mcc/1.0">
+-              <code>
+-                <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">PHINS INS</CharacterString>
+-              </code>
+-            </MD_Identifier>
+-          </identifier>
+-          <type>
+-            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">Inertial Navigation System</CharacterString>
+-          </type>
+-          <description>
+-            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">Manufacturer: Exail; Model: iXBlue 6000; Firmware: NAV_SUBSEA_1_7_7.a</CharacterString>
+-          </description>
+-        </MI_Instrument>
+-      </instrument>
+-      <instrument>
+-        <MI_Instrument>
+-          <identifier>
+-            <MD_Identifier xmlns="http://standards.iso.org/iso/19115/-3/mcc/1.0">
+-              <code>
+-                <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">Kraken SAS</CharacterString>
+-              </code>
+-            </MD_Identifier>
+-          </identifier>
+-          <type>
+-            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">Synthetic Aperture Sonar</CharacterString>
+-          </type>
+-          <description>
+-            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">Manufacturer: Kraken Robotics</CharacterString>
+-          </description>
+-        </MI_Instrument>
+-      </instrument>
+-      <instrument>
+-        <MI_Instrument>
+-          <identifier>
+-            <MD_Identifier xmlns="http://standards.iso.org/iso/19115/-3/mcc/1.0">
+-              <code>
+-                <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">PDVL 300</CharacterString>
+-              </code>
+-            </MD_Identifier>
+-          </identifier>
+-          <type>
+-            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">Doppler Velocity Logger</CharacterString>
+-          </type>
+-        </MI_Instrument>
+-      </instrument>
+-      <instrument>
+-        <MI_Instrument>
+-          <identifier>
+-            <MD_Identifier xmlns="http://standards.iso.org/iso/19115/-3/mcc/1.0">
+-              <code>
+-                <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">RDI ADCP</CharacterString>
+-              </code>
+-            </MD_Identifier>
+-          </identifier>
+-          <type>
+-            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">Acoustic Doppler Current Profiler</CharacterString>
+-          </type>
+-          <description>
+-            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">Manufacturer: Teledyne Marine RD Instruments; Firmware: 83.3</CharacterString>
+-          </description>
+-        </MI_Instrument>
+-      </instrument>
+-      <instrument>
+-        <MI_Instrument>
+-          <identifier>
+-            <MD_Identifier xmlns="http://standards.iso.org/iso/19115/-3/mcc/1.0">
+-              <code>
+-                <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">AML CTD</CharacterString>
+-              </code>
+-            </MD_Identifier>
+-          </identifier>
+-          <type>
+-            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">Conductivity, Temperature, Depth Sensor</CharacterString>
+-          </type>
+-          <description>
+-            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">Manufacturer: AML Oceanographic; Firmware: 83.3</CharacterString>
+-          </description>
+-        </MI_Instrument>
+-      </instrument>
+-      <platform>
+-        <MI_Platform>
+-          <identifier>
+-            <MD_Identifier xmlns="http://standards.iso.org/iso/19115/-3/mcc/1.0">
+-              <code>
+-                <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">REMUS620_401</CharacterString>
+-              </code>
+-            </MD_Identifier>
+-          </identifier>
+-          <description>
+-            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">Platform: REMUS 620 by HII Model: REMUS 620</CharacterString>
+-          </description>
+-          <description>
+-            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">Specifications: Weight: 300 kg, Length: 3.25 m, Width: 0.5 m, Height: 0.5 m</CharacterString>
+-          </description>
+-        </MI_Platform>
+-      </platform>
+-    </MI_AcquisitionInformation>
+-  </acquisitionInformation>
+-  <dataQualityInfo>
+-    <DQ_DataQuality xmlns="http://standards.iso.org/iso/19157/-2/mdq/1.0">
+-      <scope>
+-        <DQ_Scope>
+-          <level>
+-            <MD_ScopeCode xmlns="http://standards.iso.org/iso/19115/-3/mcc/1.0">dataset</MD_ScopeCode>
+-          </level>
+-        </DQ_Scope>
+-      </scope>
+-    </DQ_DataQuality>
+-  </dataQualityInfo>
+-</MD_Metadata>
+-
++<?xml version="1.0" encoding="UTF-8"?>
++<gmi:MI_Metadata xmlns:gmd="http://www.isotc211.org/2005/gmd"
++                 xmlns:gco="http://www.isotc211.org/2005/gco"
++                 xmlns:gmi="http://www.isotc211.org/2005/gmi"
++                 xmlns:gmx="http://www.isotc211.org/2005/gmx"
++                 xmlns:gml="http://www.opengis.net/gml/3.2"
++                 xmlns:xlink="http://www.w3.org/1999/xlink"
++                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++                 xsi:schemaLocation="http://www.isotc211.org/2005/gmi http://schemas.opengis.net/iso/19115/-2/gmi/1.0/gmi.xsd">
++  <!-- gmd:parentIdentifier is intentionally omitted here.
++       Only BEDI granule profiles (hierarchyLevel=dataset with a parent collection)
++       should emit parentIdentifier.  Mission and collection records are
++       standalone; adding parentIdentifier to them would create incorrect
++       collection-granule relationships in CoMET and OneStop. -->
++  <gmd:fileIdentifier>
++    <gco:CharacterString>gov.noaa.ncei.uxs:EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z</gco:CharacterString>
++  </gmd:fileIdentifier>
++  <gmd:dateStamp><gco:DateTime>2026-05-11T16:17:31Z</gco:DateTime></gmd:dateStamp>
++  <gmd:hierarchyLevel>
++    <gmd:MD_ScopeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/MD_ScopeCode.xml#MD_ScopeCode" codeListValue="dataset">dataset</gmd:MD_ScopeCode>
++  </gmd:hierarchyLevel>
++  <gmd:metadataStandardName>
++    <gco:CharacterString>ISO 19115-3</gco:CharacterString>
++  </gmd:metadataStandardName>
++  <gmd:metadataStandardVersion>
++    <gco:CharacterString>2.0</gco:CharacterString>
++  </gmd:metadataStandardVersion>
++  <gmd:referenceSystemInfo>
++    <gmd:MD_ReferenceSystem>
++      <gmd:referenceSystemIdentifier>
++        <gmd:RS_Identifier>
++          <gmd:code><gco:CharacterString>EPSG:4326</gco:CharacterString></gmd:code>
++        </gmd:RS_Identifier>
++      </gmd:referenceSystemIdentifier>
++    </gmd:MD_ReferenceSystem>
++  </gmd:referenceSystemInfo>
++  <gmd:identificationInfo>
++    <gmd:MD_DataIdentification>
++      <gmd:citation>
++        <gmd:CI_Citation>
++          <gmd:title><gco:CharacterString>RV Expedition 2025 LEG 01 REMUS620 KRAKEN SAS MGM Dive 05</gco:CharacterString></gmd:title>
++          <gmd:alternateTitle><gco:CharacterString>EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z</gco:CharacterString></gmd:alternateTitle>
++          <gmd:date><gmd:CI_Date><gmd:date><gco:DateTime>2025-07-27T00:48</gco:DateTime></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/CI_DateTypeCode.xml#CI_DateTypeCode" codeListValue="creation">creation</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>
++          <gmd:date><gmd:CI_Date><gmd:date><gco:DateTime>2025-07-27T07:47</gco:DateTime></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeListValue="completion">completion</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>
++          
++          
++          
++          
++        </gmd:CI_Citation>
++      </gmd:citation>
++      <gmd:abstract><gco:CharacterString>The MDBC Mapping, Ground truthing and Modeling team along with USM will conduct UUV missions to collect synthetic aperture sonar data using the REMUS 620 platform equipped with the KRAKEN Sonar sensor and other oceanographic equipment</gco:CharacterString></gmd:abstract>
++      <gmd:purpose><gco:CharacterString></gco:CharacterString></gmd:purpose>
++      <gmd:supplementalInformation><gco:CharacterString>UxS operational layer: Dataset or product</gco:CharacterString></gmd:supplementalInformation>
++      <gmd:extent>
++        <gmd:EX_Extent>
++          <gmd:geographicElement>
++            <gmd:EX_GeographicBoundingBox>
++              <gmd:westBoundLongitude><gco:Decimal>-87.15895078704915</gco:Decimal></gmd:westBoundLongitude>
++              <gmd:eastBoundLongitude><gco:Decimal>-87.31786719161755</gco:Decimal></gmd:eastBoundLongitude>
++              <gmd:southBoundLatitude><gco:Decimal>29.843156926151266</gco:Decimal></gmd:southBoundLatitude>
++              <gmd:northBoundLatitude><gco:Decimal>29.930553243137695</gco:Decimal></gmd:northBoundLatitude>
++            </gmd:EX_GeographicBoundingBox>
++          </gmd:geographicElement>
++          <gmd:temporalElement>
++            <gmd:EX_TemporalExtent>
++              <gmd:extent>
++                <gml:TimePeriod gml:id="tp1">
++                  <gml:beginPosition>2025-07-27T00:48</gml:beginPosition>
++                  <gml:endPosition>2025-07-27T07:47</gml:endPosition>
++                </gml:TimePeriod>
++              </gmd:extent>
++            </gmd:EX_TemporalExtent>
++          </gmd:temporalElement>
++        </gmd:EX_Extent>
++      </gmd:extent>
++      <gmd:pointOfContact>
++        <gmd:CI_ResponsibleParty>
++          <gmd:individualName><gco:CharacterString></gco:CharacterString></gmd:individualName>
++          <gmd:organisationName><gco:CharacterString>NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT</gco:CharacterString></gmd:organisationName>
++          <gmd:contactInfo>
++            <gmd:CI_Contact>
++              <gmd:address>
++                <gmd:CI_Address>
++                  <gmd:electronicMailAddress><gco:CharacterString></gco:CharacterString></gmd:electronicMailAddress>
++                </gmd:CI_Address>
++              </gmd:address>
++              
++            </gmd:CI_Contact>
++          </gmd:contactInfo>
++        </gmd:CI_ResponsibleParty>
++      </gmd:pointOfContact>
++    <!-- sciencekeywords -->
++    <!-- datacenters -->
++    <gmd:descriptiveKeywords>
++      <gmd:MD_Keywords>
++        <gmd:keyword>
++          <gco:CharacterString>Platform: REMUS 620 by HII Model: REMUS 620</gco:CharacterString>
++        </gmd:keyword>
++        <gmd:thesaurusName>
++          <gmd:CI_Citation>
++            <gmd:title><gco:CharacterString>GCMD platforms</gco:CharacterString></gmd:title>
++          </gmd:CI_Citation>
++        </gmd:thesaurusName>
++      </gmd:MD_Keywords>
++    </gmd:descriptiveKeywords>
++    <gmd:descriptiveKeywords>
++      <gmd:MD_Keywords>
++        <gmd:keyword>
++          <gco:CharacterString>Inertial Navigation System</gco:CharacterString>
++        </gmd:keyword>
++        <gmd:thesaurusName>
++          <gmd:CI_Citation>
++            <gmd:title><gco:CharacterString>GCMD instruments</gco:CharacterString></gmd:title>
++          </gmd:CI_Citation>
++        </gmd:thesaurusName>
++      </gmd:MD_Keywords>
++    </gmd:descriptiveKeywords>
++    <!-- locations -->
++    <!-- projects -->
++    <!-- providers -->
++
++      <gmd:descriptiveKeywords>
++        <gmd:MD_Keywords>
++          <gmd:type>
++            <gmd:MD_KeywordTypeCode>platform</gmd:MD_KeywordTypeCode>
++          </gmd:type>
++          <gmd:thesaurusName>
++            <gmd:CI_Citation>
++              <gmd:title><gco:CharacterString>Platform instance</gco:CharacterString></gmd:title>
++            </gmd:CI_Citation>
++          </gmd:thesaurusName>
++        </gmd:MD_Keywords>
++      </gmd:descriptiveKeywords>
++      <gmd:status>
++        <gmd:MD_ProgressCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ProgressCode" codeListValue="ongoing">ongoing</gmd:MD_ProgressCode>
++      </gmd:status>
++      <gmd:language>
++        <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/php/code_list.php" codeListValue="eng">eng</gmd:LanguageCode>
++      </gmd:language>
++      <gmd:characterSet>
++        <gmd:MD_CharacterSetCode codeListValue="utf8">utf8</gmd:MD_CharacterSetCode>
++      </gmd:characterSet>
++      <gmd:resourceMaintenance>
++        <gmd:MD_MaintenanceInformation>
++          <gmd:maintenanceAndUpdateFrequency>
++            <gmd:MD_MaintenanceFrequencyCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/MD_MaintenanceFrequencyCode.xml#MD_MaintenanceFrequencyCode" codeListValue="asNeeded">asNeeded</gmd:MD_MaintenanceFrequencyCode>
++          </gmd:maintenanceAndUpdateFrequency>
++        </gmd:MD_MaintenanceInformation>
++      </gmd:resourceMaintenance>
++    </gmd:MD_DataIdentification>
++  </gmd:identificationInfo>
++  <gmi:acquisitionInformation>
++    <gmi:MI_AcquisitionInformation>
++      <gmi:platform>
++        <gmi:MI_Platform id="platform">
++          <gmd:identifier>
++            <gmd:MD_Identifier>
++              <gmd:code><gco:CharacterString>REMUS620_401</gco:CharacterString></gmd:code>
++            </gmd:MD_Identifier>
++          </gmd:identifier>
++          <gmd:description>
++            <gco:CharacterString>Platform: REMUS 620 by HII Model: REMUS 620</gco:CharacterString>
++          </gmd:description>
++          <gmi:type>
++            <gco:CharacterString>Unmanned Underwater Vehicle</gco:CharacterString>
++          </gmi:type>
++          
++          
++          <gmi:instrument>
++            <gmi:MI_Instrument>
++              <gmd:identifier>
++                <gmd:MD_Identifier>
++                  <gmd:code><gco:CharacterString>PHINS INS</gco:CharacterString></gmd:code>
++                </gmd:MD_Identifier>
++              </gmd:identifier>
++              <gmi:type><gco:CharacterString>Inertial Navigation System</gco:CharacterString></gmi:type>
++              <gmd:description><gco:CharacterString>Manufacturer: Exail; Model: iXBlue 6000; Firmware: NAV_SUBSEA_1_7_7.a</gco:CharacterString></gmd:description>
++            </gmi:MI_Instrument>
++          </gmi:instrument>
++          <gmi:instrument>
++            <gmi:MI_Instrument>
++              <gmd:identifier>
++                <gmd:MD_Identifier>
++                  <gmd:code><gco:CharacterString>Kraken SAS</gco:CharacterString></gmd:code>
++                </gmd:MD_Identifier>
++              </gmd:identifier>
++              <gmi:type><gco:CharacterString>Synthetic Aperture Sonar</gco:CharacterString></gmi:type>
++              <gmd:description><gco:CharacterString>Manufacturer: Kraken Robotics</gco:CharacterString></gmd:description>
++            </gmi:MI_Instrument>
++          </gmi:instrument>
++          <gmi:instrument>
++            <gmi:MI_Instrument>
++              <gmd:identifier>
++                <gmd:MD_Identifier>
++                  <gmd:code><gco:CharacterString>PDVL 300</gco:CharacterString></gmd:code>
++                </gmd:MD_Identifier>
++              </gmd:identifier>
++              <gmi:type><gco:CharacterString>Doppler Velocity Logger</gco:CharacterString></gmi:type>
++            </gmi:MI_Instrument>
++          </gmi:instrument>
++          <gmi:instrument>
++            <gmi:MI_Instrument>
++              <gmd:identifier>
++                <gmd:MD_Identifier>
++                  <gmd:code><gco:CharacterString>RDI ADCP</gco:CharacterString></gmd:code>
++                </gmd:MD_Identifier>
++              </gmd:identifier>
++              <gmi:type><gco:CharacterString>Acoustic Doppler Current Profiler</gco:CharacterString></gmi:type>
++              <gmd:description><gco:CharacterString>Manufacturer: Teledyne Marine RD Instruments; Firmware: 83.3</gco:CharacterString></gmd:description>
++            </gmi:MI_Instrument>
++          </gmi:instrument>
++          <gmi:instrument>
++            <gmi:MI_Instrument>
++              <gmd:identifier>
++                <gmd:MD_Identifier>
++                  <gmd:code><gco:CharacterString>AML CTD</gco:CharacterString></gmd:code>
++                </gmd:MD_Identifier>
++              </gmd:identifier>
++              <gmi:type><gco:CharacterString>Conductivity, Temperature, Depth Sensor</gco:CharacterString></gmi:type>
++              <gmd:description><gco:CharacterString>Manufacturer: AML Oceanographic; Firmware: 83.3</gco:CharacterString></gmd:description>
++            </gmi:MI_Instrument>
++          </gmi:instrument>
++        </gmi:MI_Platform>
++      </gmi:platform>
++      <gmi:instrument>
++        <gmi:MI_Instrument id="instrument_1" xlink:href="#platform">
++          <gmd:identifier>
++            <gmd:MD_Identifier>
++              <gmd:code><gco:CharacterString>PHINS INS</gco:CharacterString></gmd:code>
++            </gmd:MD_Identifier>
++          </gmd:identifier>
++          <gmi:type><gco:CharacterString>Inertial Navigation System</gco:CharacterString></gmi:type>
++          <gmd:description><gco:CharacterString>Manufacturer: Exail; Model: iXBlue 6000; Firmware: NAV_SUBSEA_1_7_7.a</gco:CharacterString></gmd:description>
++        </gmi:MI_Instrument>
++      </gmi:instrument>
++      <gmi:instrument>
++        <gmi:MI_Instrument id="instrument_2" xlink:href="#platform">
++          <gmd:identifier>
++            <gmd:MD_Identifier>
++              <gmd:code><gco:CharacterString>Kraken SAS</gco:CharacterString></gmd:code>
++            </gmd:MD_Identifier>
++          </gmd:identifier>
++          <gmi:type><gco:CharacterString>Synthetic Aperture Sonar</gco:CharacterString></gmi:type>
++          <gmd:description><gco:CharacterString>Manufacturer: Kraken Robotics</gco:CharacterString></gmd:description>
++        </gmi:MI_Instrument>
++      </gmi:instrument>
++      <gmi:instrument>
++        <gmi:MI_Instrument id="instrument_3" xlink:href="#platform">
++          <gmd:identifier>
++            <gmd:MD_Identifier>
++              <gmd:code><gco:CharacterString>PDVL 300</gco:CharacterString></gmd:code>
++            </gmd:MD_Identifier>
++          </gmd:identifier>
++          <gmi:type><gco:CharacterString>Doppler Velocity Logger</gco:CharacterString></gmi:type>
++        </gmi:MI_Instrument>
++      </gmi:instrument>
++      <gmi:instrument>
++        <gmi:MI_Instrument id="instrument_4" xlink:href="#platform">
++          <gmd:identifier>
++            <gmd:MD_Identifier>
++              <gmd:code><gco:CharacterString>RDI ADCP</gco:CharacterString></gmd:code>
++            </gmd:MD_Identifier>
++          </gmd:identifier>
++          <gmi:type><gco:CharacterString>Acoustic Doppler Current Profiler</gco:CharacterString></gmi:type>
++          <gmd:description><gco:CharacterString>Manufacturer: Teledyne Marine RD Instruments; Firmware: 83.3</gco:CharacterString></gmd:description>
++        </gmi:MI_Instrument>
++      </gmi:instrument>
++      <gmi:instrument>
++        <gmi:MI_Instrument id="instrument_5" xlink:href="#platform">
++          <gmd:identifier>
++            <gmd:MD_Identifier>
++              <gmd:code><gco:CharacterString>AML CTD</gco:CharacterString></gmd:code>
++            </gmd:MD_Identifier>
++          </gmd:identifier>
++          <gmi:type><gco:CharacterString>Conductivity, Temperature, Depth Sensor</gco:CharacterString></gmi:type>
++          <gmd:description><gco:CharacterString>Manufacturer: AML Oceanographic; Firmware: 83.3</gco:CharacterString></gmd:description>
++        </gmi:MI_Instrument>
++      </gmi:instrument>
++    </gmi:MI_AcquisitionInformation>
++  </gmi:acquisitionInformation>
++
++  <gmd:contentInfo>
++  <gmi:MI_CoverageDescription>
++    <gmd:identifier>
++      <gmd:MD_Identifier>
++        <gmd:code><gco:CharacterString>PHINS INS</gco:CharacterString></gmd:code>
++      </gmd:MD_Identifier>
++    </gmd:identifier>
++    <gmd:attributeDescription><gco:CharacterString>Inertial Navigation System</gco:CharacterString></gmd:attributeDescription>
++    <gmd:name><gco:CharacterString>Manufacturer: Exail; Model: iXBlue 6000; Firmware: NAV_SUBSEA_1_7_7.a</gco:CharacterString></gmd:name>
++    
++  </gmi:MI_CoverageDescription>
++  <gmi:MI_CoverageDescription>
++    <gmd:identifier>
++      <gmd:MD_Identifier>
++        <gmd:code><gco:CharacterString>Kraken SAS</gco:CharacterString></gmd:code>
++      </gmd:MD_Identifier>
++    </gmd:identifier>
++    <gmd:attributeDescription><gco:CharacterString>Synthetic Aperture Sonar</gco:CharacterString></gmd:attributeDescription>
++    <gmd:name><gco:CharacterString>Manufacturer: Kraken Robotics</gco:CharacterString></gmd:name>
++    
++  </gmi:MI_CoverageDescription>
++  <gmi:MI_CoverageDescription>
++    <gmd:identifier>
++      <gmd:MD_Identifier>
++        <gmd:code><gco:CharacterString>PDVL 300</gco:CharacterString></gmd:code>
++      </gmd:MD_Identifier>
++    </gmd:identifier>
++    <gmd:attributeDescription><gco:CharacterString>Doppler Velocity Logger</gco:CharacterString></gmd:attributeDescription>
++    <gmd:name><gco:CharacterString></gco:CharacterString></gmd:name>
++    
++  </gmi:MI_CoverageDescription>
++  <gmi:MI_CoverageDescription>
++    <gmd:identifier>
++      <gmd:MD_Identifier>
++        <gmd:code><gco:CharacterString>RDI ADCP</gco:CharacterString></gmd:code>
++      </gmd:MD_Identifier>
++    </gmd:identifier>
++    <gmd:attributeDescription><gco:CharacterString>Acoustic Doppler Current Profiler</gco:CharacterString></gmd:attributeDescription>
++    <gmd:name><gco:CharacterString>Manufacturer: Teledyne Marine RD Instruments; Firmware: 83.3</gco:CharacterString></gmd:name>
++    
++  </gmi:MI_CoverageDescription>
++  <gmi:MI_CoverageDescription>
++    <gmd:identifier>
++      <gmd:MD_Identifier>
++        <gmd:code><gco:CharacterString>AML CTD</gco:CharacterString></gmd:code>
++      </gmd:MD_Identifier>
++    </gmd:identifier>
++    <gmd:attributeDescription><gco:CharacterString>Conductivity, Temperature, Depth Sensor</gco:CharacterString></gmd:attributeDescription>
++    <gmd:name><gco:CharacterString>Manufacturer: AML Oceanographic; Firmware: 83.3</gco:CharacterString></gmd:name>
++    
++  </gmi:MI_CoverageDescription>
++  </gmd:contentInfo>
++  <gmd:distributionInfo>
++    <gmd:MD_Distribution>
++      <gmd:distributor>
++        <gmd:MD_Distributor>
++          <gmd:distributorContact xlink:title="NCEI (distributor)"/>
++        </gmd:MD_Distributor>
++      </gmd:distributor>
++      <gmd:distributionFormat>
++        <gmd:MD_Format>
++          <gmd:name><gco:CharacterString></gco:CharacterString></gmd:name>
++          
++        </gmd:MD_Format>
++      </gmd:distributionFormat>
++      
++      <gmd:transferOptions>
++        <gmd:MD_DigitalTransferOptions>
++          
++          <gmd:onLine><gmd:CI_OnlineResource><gmd:linkage><gmd:URL>https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio</gmd:URL></gmd:linkage></gmd:CI_OnlineResource></gmd:onLine>
++          
++        </gmd:MD_DigitalTransferOptions>
++      </gmd:transferOptions>
++    </gmd:MD_Distribution>
++  </gmd:distributionInfo>
++  <!-- workflow: outputLocation=download -->
++  <!-- metadataMaintenanceFrequency: asNeeded -->
++  <!-- output flags: useNceiMetadataContactXlink=false omitRootReferenceSystemInfo=false -->
++</gmi:MI_Metadata>

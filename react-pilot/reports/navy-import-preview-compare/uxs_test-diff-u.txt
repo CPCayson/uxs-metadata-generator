@@ -1,0 +1,1267 @@
+--- /Users/connorcayson/Downloads/uSX/react-pilot/reports/navy-import-preview-compare/uxs_test-original.xml	2026-05-11 11:20:36
++++ /Users/connorcayson/Downloads/uSX/react-pilot/reports/navy-import-preview-compare/uxs_test-preview-from-import.xml	2026-05-11 11:20:36
+@@ -1,1838 +1,584 @@
+-<?xml version="1.0" encoding="UTF-8"?><gmi:MI_Metadata xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gmi="http://www.isotc211.org/2005/gmi" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:gsr="http://www.isotc211.org/2005/gsr" xmlns:gss="http://www.isotc211.org/2005/gss" xmlns:gts="http://www.isotc211.org/2005/gts" xmlns:srv="http://www.isotc211.org/2005/srv" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.isotc211.org/2005/gmi https://data.noaa.gov/resources/iso19139/schema.xsd" uuid="cde1d9f9-deef-46a6-a7d4-6e92afd61e8f">
++<?xml version="1.0" encoding="UTF-8"?>
++<gmi:MI_Metadata xmlns:gmd="http://www.isotc211.org/2005/gmd"
++                 xmlns:gco="http://www.isotc211.org/2005/gco"
++                 xmlns:gmi="http://www.isotc211.org/2005/gmi"
++                 xmlns:gmx="http://www.isotc211.org/2005/gmx"
++                 xmlns:gml="http://www.opengis.net/gml/3.2"
++                 xmlns:xlink="http://www.w3.org/1999/xlink"
++                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++                 xsi:schemaLocation="http://www.isotc211.org/2005/gmi http://schemas.opengis.net/iso/19115/-2/gmi/1.0/gmi.xsd">
++  <!-- gmd:parentIdentifier is intentionally omitted here.
++       Only BEDI granule profiles (hierarchyLevel=dataset with a parent collection)
++       should emit parentIdentifier.  Mission and collection records are
++       standalone; adding parentIdentifier to them would create incorrect
++       collection-granule relationships in CoMET and OneStop. -->
+   <gmd:fileIdentifier>
+-    <gco:CharacterString>gov.noaa.nodc:0297635</gco:CharacterString>
++    <gco:CharacterString>gov.noaa.ncei.uxs:gov.noaa.nodc:0297635</gco:CharacterString>
+   </gmd:fileIdentifier>
+-  <gmd:language>
+-    <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/php/code_list.php" codeListValue="eng">eng</gmd:LanguageCode>
+-  </gmd:language>
+-  <gmd:characterSet>
+-    <gmd:MD_CharacterSetCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8">utf8</gmd:MD_CharacterSetCode>
+-  </gmd:characterSet>
++  <gmd:dateStamp><gco:DateTime>2025-01-30T17:16</gco:DateTime></gmd:dateStamp>
+   <gmd:hierarchyLevel>
+-    <gmd:MD_ScopeCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#MD_ScopeCode" codeListValue="dataset">dataset</gmd:MD_ScopeCode>
++    <gmd:MD_ScopeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/MD_ScopeCode.xml#MD_ScopeCode" codeListValue="dataset">dataset</gmd:MD_ScopeCode>
+   </gmd:hierarchyLevel>
+-  <gmd:contact>
+-    <gmd:CI_ResponsibleParty>
+-      <gmd:organisationName>
+-        <gco:CharacterString>NOAA National Centers for Environmental Information</gco:CharacterString>
+-      </gmd:organisationName>
+-      <gmd:contactInfo>
+-        <gmd:CI_Contact>
+-          <gmd:address>
+-            <gmd:CI_Address>
+-              <gmd:electronicMailAddress>
+-                <gco:CharacterString>ncei.info@noaa.gov</gco:CharacterString>
+-              </gmd:electronicMailAddress>
+-            </gmd:CI_Address>
+-          </gmd:address>
+-          <gmd:onlineResource>
+-            <gmd:CI_OnlineResource>
+-              <gmd:linkage>
+-                <gmd:URL>https://www.ncei.noaa.gov/contact</gmd:URL>
+-              </gmd:linkage>
+-              <gmd:protocol>
+-                <gco:CharacterString>HTTPS</gco:CharacterString>
+-              </gmd:protocol>
+-              <gmd:name>
+-                <gco:CharacterString>NOAA Contact Information</gco:CharacterString>
+-              </gmd:name>
+-              <gmd:description>
+-                <gco:CharacterString>Information for contacts at NCEI.</gco:CharacterString>
+-              </gmd:description>
+-              <gmd:function>
+-                <gmd:CI_OnLineFunctionCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="information">information</gmd:CI_OnLineFunctionCode>
+-              </gmd:function>
+-            </gmd:CI_OnlineResource>
+-          </gmd:onlineResource>
+-        </gmd:CI_Contact>
+-      </gmd:contactInfo>
+-      <gmd:role>
+-        <gmd:CI_RoleCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="custodian">custodian</gmd:CI_RoleCode>
+-      </gmd:role>
+-    </gmd:CI_ResponsibleParty>
+-  </gmd:contact>
+-  <gmd:dateStamp>
+-    <gco:DateTime>2025-01-30T17:16:30Z</gco:DateTime>
+-  </gmd:dateStamp>
+   <gmd:metadataStandardName>
+     <gco:CharacterString>ISO 19115-2 Geographic Information - Metadata - Part 2: Extensions for Imagery and Gridded Data</gco:CharacterString>
+   </gmd:metadataStandardName>
+   <gmd:metadataStandardVersion>
+     <gco:CharacterString>ISO 19115-2:2009(E)</gco:CharacterString>
+   </gmd:metadataStandardVersion>
++  <gmd:referenceSystemInfo>
++    <gmd:MD_ReferenceSystem>
++      <gmd:referenceSystemIdentifier>
++        <gmd:RS_Identifier>
++          <gmd:code><gco:CharacterString>EPSG:4326</gco:CharacterString></gmd:code>
++        </gmd:RS_Identifier>
++      </gmd:referenceSystemIdentifier>
++    </gmd:MD_ReferenceSystem>
++  </gmd:referenceSystemInfo>
+   <gmd:identificationInfo>
+     <gmd:MD_DataIdentification>
+       <gmd:citation>
+         <gmd:CI_Citation>
+-          <gmd:title>
+-            <gco:CharacterString>Saildrone PMEL TPOS 2018 Mission, drone 1005 (NCEI Accession 0297635)</gco:CharacterString>
+-          </gmd:title>
+-          <gmd:date>
+-            <gmd:CI_Date>
+-              <gmd:date>
+-                <gco:Date>2025-01-28</gco:Date>
+-              </gmd:date>
+-              <gmd:dateType>
+-                <gmd:CI_DateTypeCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication">publication</gmd:CI_DateTypeCode>
+-              </gmd:dateType>
+-            </gmd:CI_Date>
+-          </gmd:date>
+-          <gmd:edition gco:nilReason="inapplicable"/>
+-          <gmd:identifier>
+-            <gmd:MD_Identifier>
+-              <gmd:authority>
+-                <gmd:CI_Citation>
+-                  <gmd:title>
+-                    <gco:CharacterString>NOAA National Centers for Environmental Information</gco:CharacterString>
+-                  </gmd:title>
+-                  <gmd:date gco:nilReason="inapplicable"/>
+-                </gmd:CI_Citation>
+-              </gmd:authority>
+-              <gmd:code>
+-                <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/accession/0297635" xlink:actuate="onRequest" xlink:title="NCEI Dataset ID">gov.noaa.nodc:0297635</gmx:Anchor>
+-              </gmd:code>
+-            </gmd:MD_Identifier>
+-          </gmd:identifier>
+-          <gmd:identifier>
+-            <gmd:MD_Identifier>
+-              <gmd:authority>
+-                <gmd:CI_Citation>
+-                  <gmd:title>
+-                    <gco:CharacterString>NCEI Archive Management System</gco:CharacterString>
+-                  </gmd:title>
+-                  <gmd:date gco:nilReason="inapplicable"/>
+-                </gmd:CI_Citation>
+-              </gmd:authority>
+-              <gmd:code>
+-                <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/accession/0297635" xlink:actuate="onRequest" xlink:title="NCEI Accession ID">0297635</gmx:Anchor>
+-              </gmd:code>
+-            </gmd:MD_Identifier>
+-          </gmd:identifier>
+-          <gmd:citedResponsibleParty>
+-            <gmd:CI_ResponsibleParty>
+-              <gmd:organisationName>
+-                <gmx:Anchor xlink:href="https://ror.org/04r0wrp59" xlink:actuate="onRequest">NOAA National Centers for Environmental Information</gmx:Anchor>
+-              </gmd:organisationName>
+-              <gmd:contactInfo>
+-                <gmd:CI_Contact>
+-                  <gmd:address>
+-                    <gmd:CI_Address>
+-                      <gmd:electronicMailAddress>
+-                        <gco:CharacterString>ncei.info@noaa.gov</gco:CharacterString>
+-                      </gmd:electronicMailAddress>
+-                    </gmd:CI_Address>
+-                  </gmd:address>
+-                  <gmd:onlineResource>
+-                    <gmd:CI_OnlineResource>
+-                      <gmd:linkage>
+-                        <gmd:URL>https://www.ncei.noaa.gov/contact</gmd:URL>
+-                      </gmd:linkage>
+-                      <gmd:protocol>
+-                        <gco:CharacterString>HTTPS</gco:CharacterString>
+-                      </gmd:protocol>
+-                      <gmd:name>
+-                        <gco:CharacterString>NCEI Contact Information</gco:CharacterString>
+-                      </gmd:name>
+-                      <gmd:description>
+-                        <gco:CharacterString>Information for contacts at NCEI.</gco:CharacterString>
+-                      </gmd:description>
+-                      <gmd:function>
+-                        <gmd:CI_OnLineFunctionCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="information">information</gmd:CI_OnLineFunctionCode>
+-                      </gmd:function>
+-                    </gmd:CI_OnlineResource>
+-                  </gmd:onlineResource>
+-                </gmd:CI_Contact>
+-              </gmd:contactInfo>
+-              <gmd:role>
+-                <gmd:CI_RoleCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="publisher">publisher</gmd:CI_RoleCode>
+-              </gmd:role>
+-            </gmd:CI_ResponsibleParty>
+-          </gmd:citedResponsibleParty>
+-          <gmd:citedResponsibleParty>
+-            <gmd:CI_ResponsibleParty>
+-              <gmd:individualName>
+-                <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/person/details/5925" xlink:actuate="onRequest">Andrew Evans</gmx:Anchor>
+-              </gmd:individualName>
+-              <gmd:organisationName>
+-                <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/institution/details/1730" xlink:actuate="onRequest">US DOC; NOAA; NESDIS; National Centers for Environmental Information (NCEI)</gmx:Anchor>
+-              </gmd:organisationName>
+-              <gmd:contactInfo>
+-                <gmd:CI_Contact>
+-                  <gmd:address>
+-                    <gmd:CI_Address>
+-                      <gmd:electronicMailAddress>
+-                        <gco:CharacterString>andrew.evans@noaa.gov</gco:CharacterString>
+-                      </gmd:electronicMailAddress>
+-                    </gmd:CI_Address>
+-                  </gmd:address>
+-                </gmd:CI_Contact>
+-              </gmd:contactInfo>
+-              <gmd:role>
+-                <gmd:CI_RoleCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="resourceProvider">resourceProvider</gmd:CI_RoleCode>
+-              </gmd:role>
+-            </gmd:CI_ResponsibleParty>
+-          </gmd:citedResponsibleParty>
+-          <gmd:citedResponsibleParty>
+-            <gmd:CI_ResponsibleParty>
+-              <gmd:organisationName>
+-                <gmx:Anchor xlink:href="https://ror.org/04r0wrp59" xlink:actuate="onRequest">US DOC; NOAA; NESDIS; National Centers for Environmental Information (NCEI)</gmx:Anchor>
+-              </gmd:organisationName>
+-              <gmd:role>
+-                <gmd:CI_RoleCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="resourceProvider">resourceProvider</gmd:CI_RoleCode>
+-              </gmd:role>
+-            </gmd:CI_ResponsibleParty>
+-          </gmd:citedResponsibleParty>
+-          <gmd:citedResponsibleParty>
+-            <gmd:CI_ResponsibleParty>
+-              <gmd:individualName>
+-                <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/person/details/4737" xlink:actuate="onRequest">Meghan F. Cronin</gmx:Anchor>
+-              </gmd:individualName>
+-              <gmd:organisationName>
+-                <gmx:Anchor xlink:href="https://ror.org/03crn0n59" xlink:actuate="onRequest">US DOC; NOAA; OAR; Pacific Marine Environmental Laboratory (PMEL)</gmx:Anchor>
+-              </gmd:organisationName>
+-              <gmd:contactInfo>
+-                <gmd:CI_Contact>
+-                  <gmd:address>
+-                    <gmd:CI_Address>
+-                      <gmd:electronicMailAddress>
+-                        <gco:CharacterString>meghan.f.cronin@noaa.gov</gco:CharacterString>
+-                      </gmd:electronicMailAddress>
+-                    </gmd:CI_Address>
+-                  </gmd:address>
+-                  <gmd:onlineResource>
+-                    <gmd:CI_OnlineResource>
+-                      <gmd:linkage>
+-                        <gmd:URL>https://www.pmel.noaa.gov/</gmd:URL>
+-                      </gmd:linkage>
+-                      <gmd:protocol>
+-                        <gco:CharacterString>HTTPS</gco:CharacterString>
+-                      </gmd:protocol>
+-                      <gmd:name>
+-                        <gco:CharacterString>NOAA Pacific Marine Environmental Laboratory website</gco:CharacterString>
+-                      </gmd:name>
+-                      <gmd:description>
+-                        <gco:CharacterString>Institution web page</gco:CharacterString>
+-                      </gmd:description>
+-                      <gmd:function>
+-                        <gmd:CI_OnLineFunctionCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="information">information</gmd:CI_OnLineFunctionCode>
+-                      </gmd:function>
+-                    </gmd:CI_OnlineResource>
+-                  </gmd:onlineResource>
+-                </gmd:CI_Contact>
+-              </gmd:contactInfo>
+-              <gmd:role>
+-                <gmd:CI_RoleCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="principalInvestigator">principalInvestigator</gmd:CI_RoleCode>
+-              </gmd:role>
+-            </gmd:CI_ResponsibleParty>
+-          </gmd:citedResponsibleParty>
+-          <gmd:citedResponsibleParty>
+-            <gmd:CI_ResponsibleParty>
+-              <gmd:individualName>
+-                <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/person/details/5486" xlink:actuate="onRequest">Dongxiao Zhang</gmx:Anchor>
+-              </gmd:individualName>
+-              <gmd:organisationName>
+-                <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/institution/details/2085" xlink:actuate="onRequest">University of Washington Joint Institute for the Study of the Atmosphere and Ocean (JISAO)</gmx:Anchor>
+-              </gmd:organisationName>
+-              <gmd:contactInfo>
+-                <gmd:CI_Contact>
+-                  <gmd:address>
+-                    <gmd:CI_Address>
+-                      <gmd:electronicMailAddress>
+-                        <gco:CharacterString>dongxiao.zhang@noaa.gov</gco:CharacterString>
+-                      </gmd:electronicMailAddress>
+-                    </gmd:CI_Address>
+-                  </gmd:address>
+-                  <gmd:onlineResource>
+-                    <gmd:CI_OnlineResource>
+-                      <gmd:linkage>
+-                        <gmd:URL>https://cicoes.uw.edu/</gmd:URL>
+-                      </gmd:linkage>
+-                      <gmd:protocol>
+-                        <gco:CharacterString>HTTPS</gco:CharacterString>
+-                      </gmd:protocol>
+-                      <gmd:name>
+-                        <gco:CharacterString>Joint Institute for the Study of the Atmosphere and Ocean website</gco:CharacterString>
+-                      </gmd:name>
+-                      <gmd:description>
+-                        <gco:CharacterString>Institution web page</gco:CharacterString>
+-                      </gmd:description>
+-                      <gmd:function>
+-                        <gmd:CI_OnLineFunctionCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="information">information</gmd:CI_OnLineFunctionCode>
+-                      </gmd:function>
+-                    </gmd:CI_OnlineResource>
+-                  </gmd:onlineResource>
+-                </gmd:CI_Contact>
+-              </gmd:contactInfo>
+-              <gmd:role>
+-                <gmd:CI_RoleCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="principalInvestigator">principalInvestigator</gmd:CI_RoleCode>
+-              </gmd:role>
+-            </gmd:CI_ResponsibleParty>
+-          </gmd:citedResponsibleParty>
++          <gmd:title><gco:CharacterString>Saildrone PMEL TPOS 2018 Mission, drone 1005 (NCEI Accession 0297635)</gco:CharacterString></gmd:title>
++          
++          <gmd:date><gmd:CI_Date><gmd:date><gco:Date>2018-10-03</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/CI_DateTypeCode.xml#CI_DateTypeCode" codeListValue="creation">creation</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>
++          <gmd:date><gmd:CI_Date><gmd:date><gco:Date>2025-01-28</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeListValue="publication">publication</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>
++          <gmd:date><gmd:CI_Date><gmd:date><gco:Date>2019-01-27</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeListValue="completion">completion</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>
++          
++          
++          <gmd:identifier><gmd:MD_Identifier><gmd:code><gco:CharacterString>0297635</gco:CharacterString></gmd:code></gmd:MD_Identifier></gmd:identifier>
++                    <gmd:citedResponsibleParty>
++        <gmd:CI_ResponsibleParty>
++          <gmd:individualName><gco:CharacterString>Zhang, Dongxiao</gco:CharacterString></gmd:individualName>
++          <gmd:organisationName><gco:CharacterString>UW Joint Institute for the Study of Atmosphere and Ocean (JISAO)</gco:CharacterString></gmd:organisationName>
++          <gmd:role><gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/CI_RoleCode.xml#CI_RoleCode" codeListValue="author">author</gmd:CI_RoleCode></gmd:role>
++        </gmd:CI_ResponsibleParty>
++      </gmd:citedResponsibleParty>
+           <gmd:citedResponsibleParty>
+-            <gmd:CI_ResponsibleParty>
+-              <gmd:individualName>
+-                <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/person/details/4939" xlink:actuate="onRequest">Adrienne Sutton</gmx:Anchor>
+-              </gmd:individualName>
+-              <gmd:organisationName>
+-                <gmx:Anchor xlink:href="https://ror.org/03crn0n59" xlink:actuate="onRequest">US DOC; NOAA; OAR; Pacific Marine Environmental Laboratory (PMEL)</gmx:Anchor>
+-              </gmd:organisationName>
+-              <gmd:contactInfo>
+-                <gmd:CI_Contact>
+-                  <gmd:address>
+-                    <gmd:CI_Address>
+-                      <gmd:electronicMailAddress>
+-                        <gco:CharacterString>adrienne.sutton@noaa.gov</gco:CharacterString>
+-                      </gmd:electronicMailAddress>
+-                    </gmd:CI_Address>
+-                  </gmd:address>
+-                  <gmd:onlineResource>
+-                    <gmd:CI_OnlineResource>
+-                      <gmd:linkage>
+-                        <gmd:URL>https://www.pmel.noaa.gov/</gmd:URL>
+-                      </gmd:linkage>
+-                      <gmd:protocol>
+-                        <gco:CharacterString>HTTPS</gco:CharacterString>
+-                      </gmd:protocol>
+-                      <gmd:name>
+-                        <gco:CharacterString>NOAA Pacific Marine Environmental Laboratory website</gco:CharacterString>
+-                      </gmd:name>
+-                      <gmd:description>
+-                        <gco:CharacterString>Institution web page</gco:CharacterString>
+-                      </gmd:description>
+-                      <gmd:function>
+-                        <gmd:CI_OnLineFunctionCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="information">information</gmd:CI_OnLineFunctionCode>
+-                      </gmd:function>
+-                    </gmd:CI_OnlineResource>
+-                  </gmd:onlineResource>
+-                </gmd:CI_Contact>
+-              </gmd:contactInfo>
+-              <gmd:role>
+-                <gmd:CI_RoleCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="principalInvestigator">principalInvestigator</gmd:CI_RoleCode>
+-              </gmd:role>
+-            </gmd:CI_ResponsibleParty>
+-          </gmd:citedResponsibleParty>
+-          <gmd:citedResponsibleParty>
+-            <gmd:CI_ResponsibleParty>
+-              <gmd:individualName>
+-                <gco:CharacterString>Christian Meinig</gco:CharacterString>
+-              </gmd:individualName>
+-              <gmd:organisationName>
+-                <gmx:Anchor xlink:href="https://ror.org/03crn0n59" xlink:actuate="onRequest">US DOC; NOAA; OAR; Pacific Marine Environmental Laboratory (PMEL)</gmx:Anchor>
+-              </gmd:organisationName>
+-              <gmd:contactInfo>
+-                <gmd:CI_Contact>
+-                  <gmd:address>
+-                    <gmd:CI_Address>
+-                      <gmd:electronicMailAddress>
+-                        <gco:CharacterString>christian.meinig@noaa.gov</gco:CharacterString>
+-                      </gmd:electronicMailAddress>
+-                    </gmd:CI_Address>
+-                  </gmd:address>
+-                  <gmd:onlineResource>
+-                    <gmd:CI_OnlineResource>
+-                      <gmd:linkage>
+-                        <gmd:URL>https://www.pmel.noaa.gov/</gmd:URL>
+-                      </gmd:linkage>
+-                      <gmd:protocol>
+-                        <gco:CharacterString>HTTPS</gco:CharacterString>
+-                      </gmd:protocol>
+-                      <gmd:name>
+-                        <gco:CharacterString>NOAA Pacific Marine Environmental Laboratory website</gco:CharacterString>
+-                      </gmd:name>
+-                      <gmd:description>
+-                        <gco:CharacterString>Institution web page</gco:CharacterString>
+-                      </gmd:description>
+-                      <gmd:function>
+-                        <gmd:CI_OnLineFunctionCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="information">information</gmd:CI_OnLineFunctionCode>
+-                      </gmd:function>
+-                    </gmd:CI_OnlineResource>
+-                  </gmd:onlineResource>
+-                </gmd:CI_Contact>
+-              </gmd:contactInfo>
+-              <gmd:role>
+-                <gmd:CI_RoleCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="principalInvestigator">principalInvestigator</gmd:CI_RoleCode>
+-              </gmd:role>
+-            </gmd:CI_ResponsibleParty>
+-          </gmd:citedResponsibleParty>
+-          <gmd:citedResponsibleParty>
+-            <gmd:CI_ResponsibleParty>
+-              <gmd:individualName>
+-                <gco:CharacterString>Eugene Berger</gco:CharacterString>
+-              </gmd:individualName>
+-              <gmd:organisationName>
+-                <gmx:Anchor xlink:href="https://ror.org/03crn0n59" xlink:actuate="onRequest">US DOC; NOAA; OAR; Pacific Marine Environmental Laboratory (PMEL)</gmx:Anchor>
+-              </gmd:organisationName>
+-              <gmd:contactInfo>
+-                <gmd:CI_Contact>
+-                  <gmd:address>
+-                    <gmd:CI_Address>
+-                      <gmd:electronicMailAddress>
+-                        <gco:CharacterString>oar.pmel.data@noaa.gov</gco:CharacterString>
+-                      </gmd:electronicMailAddress>
+-                    </gmd:CI_Address>
+-                  </gmd:address>
+-                  <gmd:onlineResource>
+-                    <gmd:CI_OnlineResource>
+-                      <gmd:linkage>
+-                        <gmd:URL>https://www.pmel.noaa.gov/</gmd:URL>
+-                      </gmd:linkage>
+-                      <gmd:protocol>
+-                        <gco:CharacterString>HTTPS</gco:CharacterString>
+-                      </gmd:protocol>
+-                      <gmd:name>
+-                        <gco:CharacterString>NOAA Pacific Marine Environmental Laboratory website</gco:CharacterString>
+-                      </gmd:name>
+-                      <gmd:description>
+-                        <gco:CharacterString>Institution web page</gco:CharacterString>
+-                      </gmd:description>
+-                      <gmd:function>
+-                        <gmd:CI_OnLineFunctionCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="information">information</gmd:CI_OnLineFunctionCode>
+-                      </gmd:function>
+-                    </gmd:CI_OnlineResource>
+-                  </gmd:onlineResource>
+-                </gmd:CI_Contact>
+-              </gmd:contactInfo>
+-              <gmd:role>
+-                <gmd:CI_RoleCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="pointOfContact">pointOfContact</gmd:CI_RoleCode>
+-              </gmd:role>
+-            </gmd:CI_ResponsibleParty>
+-          </gmd:citedResponsibleParty>
+-          <gmd:citedResponsibleParty>
+-            <gmd:CI_ResponsibleParty>
+-              <gmd:individualName>
+-                <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/person/details/5486" xlink:actuate="onRequest">Zhang, Dongxiao</gmx:Anchor>
+-              </gmd:individualName>
+-              <gmd:organisationName>
+-                <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/institution/details/2085" xlink:actuate="onRequest">UW Joint Institute for the Study of Atmosphere and Ocean (JISAO)</gmx:Anchor>
+-              </gmd:organisationName>
+-              <gmd:contactInfo>
+-                <gmd:CI_Contact>
+-                  <gmd:onlineResource>
+-                    <gmd:CI_OnlineResource>
+-                      <gmd:linkage>
+-                        <gmd:URL>https://cicoes.uw.edu/</gmd:URL>
+-                      </gmd:linkage>
+-                      <gmd:protocol>
+-                        <gco:CharacterString>HTTPS</gco:CharacterString>
+-                      </gmd:protocol>
+-                      <gmd:name>
+-                        <gco:CharacterString>Joint Institute for the Study of the Atmosphere and Ocean website</gco:CharacterString>
+-                      </gmd:name>
+-                      <gmd:description>
+-                        <gco:CharacterString>Institution web page</gco:CharacterString>
+-                      </gmd:description>
+-                      <gmd:function>
+-                        <gmd:CI_OnLineFunctionCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="information">information</gmd:CI_OnLineFunctionCode>
+-                      </gmd:function>
+-                    </gmd:CI_OnlineResource>
+-                  </gmd:onlineResource>
+-                </gmd:CI_Contact>
+-              </gmd:contactInfo>
+-              <gmd:role>
+-                <gmd:CI_RoleCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author">author</gmd:CI_RoleCode>
+-              </gmd:role>
+-            </gmd:CI_ResponsibleParty>
+-          </gmd:citedResponsibleParty>
+-          <gmd:citedResponsibleParty>
+-            <gmd:CI_ResponsibleParty>
+-              <gmd:individualName>
+-                <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/person/details/4737" xlink:actuate="onRequest">Cronin, Meghan F.</gmx:Anchor>
+-              </gmd:individualName>
+-              <gmd:organisationName>
+-                <gmx:Anchor xlink:href="https://ror.org/03crn0n59" xlink:actuate="onRequest">US DOC; NOAA; OAR; Pacific Marine Environmental Laboratory</gmx:Anchor>
+-              </gmd:organisationName>
+-              <gmd:contactInfo>
+-                <gmd:CI_Contact>
+-                  <gmd:onlineResource>
+-                    <gmd:CI_OnlineResource>
+-                      <gmd:linkage>
+-                        <gmd:URL>https://www.pmel.noaa.gov/</gmd:URL>
+-                      </gmd:linkage>
+-                      <gmd:protocol>
+-                        <gco:CharacterString>HTTPS</gco:CharacterString>
+-                      </gmd:protocol>
+-                      <gmd:name>
+-                        <gco:CharacterString>NOAA Pacific Marine Environmental Laboratory website</gco:CharacterString>
+-                      </gmd:name>
+-                      <gmd:description>
+-                        <gco:CharacterString>Institution web page</gco:CharacterString>
+-                      </gmd:description>
+-                      <gmd:function>
+-                        <gmd:CI_OnLineFunctionCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="information">information</gmd:CI_OnLineFunctionCode>
+-                      </gmd:function>
+-                    </gmd:CI_OnlineResource>
+-                  </gmd:onlineResource>
+-                </gmd:CI_Contact>
+-              </gmd:contactInfo>
+-              <gmd:role>
+-                <gmd:CI_RoleCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author">author</gmd:CI_RoleCode>
+-              </gmd:role>
+-            </gmd:CI_ResponsibleParty>
+-          </gmd:citedResponsibleParty>
+-          <gmd:citedResponsibleParty>
+-            <gmd:CI_ResponsibleParty>
+-              <gmd:individualName>
+-                <gco:CharacterString>Meinig, Christian</gco:CharacterString>
+-              </gmd:individualName>
+-              <gmd:organisationName>
+-                <gmx:Anchor xlink:href="https://ror.org/03crn0n59" xlink:actuate="onRequest">US DOC; NOAA; OAR; Pacific Marine Environmental Laboratory</gmx:Anchor>
+-              </gmd:organisationName>
+-              <gmd:contactInfo>
+-                <gmd:CI_Contact>
+-                  <gmd:onlineResource>
+-                    <gmd:CI_OnlineResource>
+-                      <gmd:linkage>
+-                        <gmd:URL>https://www.pmel.noaa.gov/</gmd:URL>
+-                      </gmd:linkage>
+-                      <gmd:protocol>
+-                        <gco:CharacterString>HTTPS</gco:CharacterString>
+-                      </gmd:protocol>
+-                      <gmd:name>
+-                        <gco:CharacterString>NOAA Pacific Marine Environmental Laboratory website</gco:CharacterString>
+-                      </gmd:name>
+-                      <gmd:description>
+-                        <gco:CharacterString>Institution web page</gco:CharacterString>
+-                      </gmd:description>
+-                      <gmd:function>
+-                        <gmd:CI_OnLineFunctionCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="information">information</gmd:CI_OnLineFunctionCode>
+-                      </gmd:function>
+-                    </gmd:CI_OnlineResource>
+-                  </gmd:onlineResource>
+-                </gmd:CI_Contact>
+-              </gmd:contactInfo>
+-              <gmd:role>
+-                <gmd:CI_RoleCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author">author</gmd:CI_RoleCode>
+-              </gmd:role>
+-            </gmd:CI_ResponsibleParty>
+-          </gmd:citedResponsibleParty>
+-          <gmd:citedResponsibleParty>
+-            <gmd:CI_ResponsibleParty>
+-              <gmd:individualName>
+-                <gco:CharacterString>Farrar, J. Thomas</gco:CharacterString>
+-              </gmd:individualName>
+-              <gmd:organisationName>
+-                <gmx:Anchor xlink:href="https://ror.org/03zbnzt98" xlink:actuate="onRequest">Woods Hole Oceanographic Institution</gmx:Anchor>
+-              </gmd:organisationName>
+-              <gmd:contactInfo>
+-                <gmd:CI_Contact>
+-                  <gmd:onlineResource>
+-                    <gmd:CI_OnlineResource>
+-                      <gmd:linkage>
+-                        <gmd:URL>http://www.whoi.edu</gmd:URL>
+-                      </gmd:linkage>
+-                      <gmd:protocol>
+-                        <gco:CharacterString>HTTP</gco:CharacterString>
+-                      </gmd:protocol>
+-                      <gmd:name>
+-                        <gco:CharacterString>Woods Hole Oceanographic Institution website</gco:CharacterString>
+-                      </gmd:name>
+-                      <gmd:description>
+-                        <gco:CharacterString>Institution web page</gco:CharacterString>
+-                      </gmd:description>
+-                      <gmd:function>
+-                        <gmd:CI_OnLineFunctionCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="information">information</gmd:CI_OnLineFunctionCode>
+-                      </gmd:function>
+-                    </gmd:CI_OnlineResource>
+-                  </gmd:onlineResource>
+-                </gmd:CI_Contact>
+-              </gmd:contactInfo>
+-              <gmd:role>
+-                <gmd:CI_RoleCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author">author</gmd:CI_RoleCode>
+-              </gmd:role>
+-            </gmd:CI_ResponsibleParty>
+-          </gmd:citedResponsibleParty>
+-          <gmd:citedResponsibleParty>
+-            <gmd:CI_ResponsibleParty>
+-              <gmd:individualName>
+-                <gco:CharacterString>Jenkins, Richard</gco:CharacterString>
+-              </gmd:individualName>
+-              <gmd:organisationName>
+-                <gco:CharacterString>Saildrone, Inc.</gco:CharacterString>
+-              </gmd:organisationName>
+-              <gmd:role>
+-                <gmd:CI_RoleCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author">author</gmd:CI_RoleCode>
+-              </gmd:role>
+-            </gmd:CI_ResponsibleParty>
+-          </gmd:citedResponsibleParty>
+-          <gmd:citedResponsibleParty>
+-            <gmd:CI_ResponsibleParty>
+-              <gmd:individualName>
+-                <gco:CharacterString>Peacock, David</gco:CharacterString>
+-              </gmd:individualName>
+-              <gmd:organisationName>
+-                <gco:CharacterString>Saildrone, Inc.</gco:CharacterString>
+-              </gmd:organisationName>
+-              <gmd:role>
+-                <gmd:CI_RoleCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author">author</gmd:CI_RoleCode>
+-              </gmd:role>
+-            </gmd:CI_ResponsibleParty>
+-          </gmd:citedResponsibleParty>
+-          <gmd:citedResponsibleParty>
+-            <gmd:CI_ResponsibleParty>
+-              <gmd:individualName>
+-                <gco:CharacterString>Keene, Jennifer</gco:CharacterString>
+-              </gmd:individualName>
+-              <gmd:organisationName>
+-                <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/institution/details/2085" xlink:actuate="onRequest">UW Joint Institute for the Study of Atmosphere and Ocean (JISAO)</gmx:Anchor>
+-              </gmd:organisationName>
+-              <gmd:contactInfo>
+-                <gmd:CI_Contact>
+-                  <gmd:onlineResource>
+-                    <gmd:CI_OnlineResource>
+-                      <gmd:linkage>
+-                        <gmd:URL>https://cicoes.uw.edu/</gmd:URL>
+-                      </gmd:linkage>
+-                      <gmd:protocol>
+-                        <gco:CharacterString>HTTPS</gco:CharacterString>
+-                      </gmd:protocol>
+-                      <gmd:name>
+-                        <gco:CharacterString>Joint Institute for the Study of the Atmosphere and Ocean website</gco:CharacterString>
+-                      </gmd:name>
+-                      <gmd:description>
+-                        <gco:CharacterString>Institution web page</gco:CharacterString>
+-                      </gmd:description>
+-                      <gmd:function>
+-                        <gmd:CI_OnLineFunctionCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="information">information</gmd:CI_OnLineFunctionCode>
+-                      </gmd:function>
+-                    </gmd:CI_OnlineResource>
+-                  </gmd:onlineResource>
+-                </gmd:CI_Contact>
+-              </gmd:contactInfo>
+-              <gmd:role>
+-                <gmd:CI_RoleCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author">author</gmd:CI_RoleCode>
+-              </gmd:role>
+-            </gmd:CI_ResponsibleParty>
+-          </gmd:citedResponsibleParty>
+-          <gmd:citedResponsibleParty>
+-            <gmd:CI_ResponsibleParty>
+-              <gmd:individualName>
+-                <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/person/details/4939" xlink:actuate="onRequest">Sutton, Adrienne</gmx:Anchor>
+-              </gmd:individualName>
+-              <gmd:organisationName>
+-                <gmx:Anchor xlink:href="https://ror.org/03crn0n59" xlink:actuate="onRequest">US DOC; NOAA; OAR; Pacific Marine Environmental Laboratory</gmx:Anchor>
+-              </gmd:organisationName>
+-              <gmd:contactInfo>
+-                <gmd:CI_Contact>
+-                  <gmd:onlineResource>
+-                    <gmd:CI_OnlineResource>
+-                      <gmd:linkage>
+-                        <gmd:URL>https://www.pmel.noaa.gov/</gmd:URL>
+-                      </gmd:linkage>
+-                      <gmd:protocol>
+-                        <gco:CharacterString>HTTPS</gco:CharacterString>
+-                      </gmd:protocol>
+-                      <gmd:name>
+-                        <gco:CharacterString>NOAA Pacific Marine Environmental Laboratory website</gco:CharacterString>
+-                      </gmd:name>
+-                      <gmd:description>
+-                        <gco:CharacterString>Institution web page</gco:CharacterString>
+-                      </gmd:description>
+-                      <gmd:function>
+-                        <gmd:CI_OnLineFunctionCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="information">information</gmd:CI_OnLineFunctionCode>
+-                      </gmd:function>
+-                    </gmd:CI_OnlineResource>
+-                  </gmd:onlineResource>
+-                </gmd:CI_Contact>
+-              </gmd:contactInfo>
+-              <gmd:role>
+-                <gmd:CI_RoleCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author">author</gmd:CI_RoleCode>
+-              </gmd:role>
+-            </gmd:CI_ResponsibleParty>
+-          </gmd:citedResponsibleParty>
+-          <gmd:citedResponsibleParty>
+-            <gmd:CI_ResponsibleParty>
+-              <gmd:individualName>
+-                <gco:CharacterString>Yang, Qiong</gco:CharacterString>
+-              </gmd:individualName>
+-              <gmd:organisationName>
+-                <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/institution/details/2085" xlink:actuate="onRequest">UW Joint Institute for the Study of Atmosphere and Ocean (JISAO)</gmx:Anchor>
+-              </gmd:organisationName>
+-              <gmd:contactInfo>
+-                <gmd:CI_Contact>
+-                  <gmd:onlineResource>
+-                    <gmd:CI_OnlineResource>
+-                      <gmd:linkage>
+-                        <gmd:URL>https://cicoes.uw.edu/</gmd:URL>
+-                      </gmd:linkage>
+-                      <gmd:protocol>
+-                        <gco:CharacterString>HTTPS</gco:CharacterString>
+-                      </gmd:protocol>
+-                      <gmd:name>
+-                        <gco:CharacterString>Joint Institute for the Study of the Atmosphere and Ocean website</gco:CharacterString>
+-                      </gmd:name>
+-                      <gmd:description>
+-                        <gco:CharacterString>Institution web page</gco:CharacterString>
+-                      </gmd:description>
+-                      <gmd:function>
+-                        <gmd:CI_OnLineFunctionCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="information">information</gmd:CI_OnLineFunctionCode>
+-                      </gmd:function>
+-                    </gmd:CI_OnlineResource>
+-                  </gmd:onlineResource>
+-                </gmd:CI_Contact>
+-              </gmd:contactInfo>
+-              <gmd:role>
+-                <gmd:CI_RoleCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author">author</gmd:CI_RoleCode>
+-              </gmd:role>
+-            </gmd:CI_ResponsibleParty>
+-          </gmd:citedResponsibleParty>
+-          <gmd:citedResponsibleParty>
+-            <gmd:CI_ResponsibleParty>
+-              <gmd:organisationName>
+-                <gmx:Anchor xlink:href="https://ror.org/03crn0n59" xlink:actuate="onRequest">NOAA Pacific Marine Environmental Laboratory</gmx:Anchor>
+-              </gmd:organisationName>
+-              <gmd:contactInfo>
+-                <gmd:CI_Contact>
+-                  <gmd:onlineResource>
+-                    <gmd:CI_OnlineResource>
+-                      <gmd:linkage>
+-                        <gmd:URL>https://www.pmel.noaa.gov/</gmd:URL>
+-                      </gmd:linkage>
+-                      <gmd:protocol>
+-                        <gco:CharacterString>HTTPS</gco:CharacterString>
+-                      </gmd:protocol>
+-                      <gmd:name>
+-                        <gco:CharacterString>NOAA Pacific Marine Environmental Laboratory website</gco:CharacterString>
+-                      </gmd:name>
+-                      <gmd:description>
+-                        <gco:CharacterString>Institution web page</gco:CharacterString>
+-                      </gmd:description>
+-                      <gmd:function>
+-                        <gmd:CI_OnLineFunctionCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="information">information</gmd:CI_OnLineFunctionCode>
+-                      </gmd:function>
+-                    </gmd:CI_OnlineResource>
+-                  </gmd:onlineResource>
+-                </gmd:CI_Contact>
+-              </gmd:contactInfo>
+-              <gmd:role>
+-                <gmd:CI_RoleCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author">author</gmd:CI_RoleCode>
+-              </gmd:role>
+-            </gmd:CI_ResponsibleParty>
+-          </gmd:citedResponsibleParty>
+-          <gmd:citedResponsibleParty>
+-            <gmd:CI_ResponsibleParty>
+-              <gmd:organisationName>
+-                <gmx:Anchor xlink:href="https://ror.org/02kgve346" xlink:actuate="onRequest">NOAA Office of Oceanic and Atmospheric Research</gmx:Anchor>
+-              </gmd:organisationName>
+-              <gmd:contactInfo>
+-                <gmd:CI_Contact>
+-                  <gmd:onlineResource>
+-                    <gmd:CI_OnlineResource>
+-                      <gmd:linkage>
+-                        <gmd:URL>https://research.noaa.gov/</gmd:URL>
+-                      </gmd:linkage>
+-                      <gmd:protocol>
+-                        <gco:CharacterString>HTTPS</gco:CharacterString>
+-                      </gmd:protocol>
+-                      <gmd:name>
+-                        <gco:CharacterString>NOAA Research website</gco:CharacterString>
+-                      </gmd:name>
+-                      <gmd:description>
+-                        <gco:CharacterString>Institution web page</gco:CharacterString>
+-                      </gmd:description>
+-                      <gmd:function>
+-                        <gmd:CI_OnLineFunctionCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="information">information</gmd:CI_OnLineFunctionCode>
+-                      </gmd:function>
+-                    </gmd:CI_OnlineResource>
+-                  </gmd:onlineResource>
+-                </gmd:CI_Contact>
+-              </gmd:contactInfo>
+-              <gmd:role>
+-                <gmd:CI_RoleCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author">author</gmd:CI_RoleCode>
+-              </gmd:role>
+-            </gmd:CI_ResponsibleParty>
+-          </gmd:citedResponsibleParty>
+-          <gmd:citedResponsibleParty>
+-            <gmd:CI_ResponsibleParty>
+-              <gmd:organisationName>
+-                <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/institution/details/1405" xlink:actuate="onRequest">NOAA Office of Marine and Aviation Operations</gmx:Anchor>
+-              </gmd:organisationName>
+-              <gmd:contactInfo>
+-                <gmd:CI_Contact>
+-                  <gmd:onlineResource>
+-                    <gmd:CI_OnlineResource>
+-                      <gmd:linkage>
+-                        <gmd:URL>https://www.omao.noaa.gov/</gmd:URL>
+-                      </gmd:linkage>
+-                      <gmd:protocol>
+-                        <gco:CharacterString>HTTPS</gco:CharacterString>
+-                      </gmd:protocol>
+-                      <gmd:name>
+-                        <gco:CharacterString>NOAA Office of Marine and Aviation Operations website</gco:CharacterString>
+-                      </gmd:name>
+-                      <gmd:description>
+-                        <gco:CharacterString>Institution web page</gco:CharacterString>
+-                      </gmd:description>
+-                      <gmd:function>
+-                        <gmd:CI_OnLineFunctionCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="information">information</gmd:CI_OnLineFunctionCode>
+-                      </gmd:function>
+-                    </gmd:CI_OnlineResource>
+-                  </gmd:onlineResource>
+-                </gmd:CI_Contact>
+-              </gmd:contactInfo>
+-              <gmd:role>
+-                <gmd:CI_RoleCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author">author</gmd:CI_RoleCode>
+-              </gmd:role>
+-            </gmd:CI_ResponsibleParty>
+-          </gmd:citedResponsibleParty>
+-          <gmd:citedResponsibleParty>
+-            <gmd:CI_ResponsibleParty>
+-              <gmd:organisationName>
+-                <gmx:Anchor xlink:href="https://ror.org/03crn0n59" xlink:actuate="onRequest">US DOC; NOAA; OAR; Pacific Marine Environmental Laboratory (PMEL)</gmx:Anchor>
+-              </gmd:organisationName>
+-              <gmd:contactInfo>
+-                <gmd:CI_Contact>
+-                  <gmd:onlineResource>
+-                    <gmd:CI_OnlineResource>
+-                      <gmd:linkage>
+-                        <gmd:URL>https://www.pmel.noaa.gov/</gmd:URL>
+-                      </gmd:linkage>
+-                      <gmd:protocol>
+-                        <gco:CharacterString>HTTPS</gco:CharacterString>
+-                      </gmd:protocol>
+-                      <gmd:name>
+-                        <gco:CharacterString>NOAA Pacific Marine Environmental Laboratory website</gco:CharacterString>
+-                      </gmd:name>
+-                      <gmd:description>
+-                        <gco:CharacterString>Institution web page</gco:CharacterString>
+-                      </gmd:description>
+-                      <gmd:function>
+-                        <gmd:CI_OnLineFunctionCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="information">information</gmd:CI_OnLineFunctionCode>
+-                      </gmd:function>
+-                    </gmd:CI_OnlineResource>
+-                  </gmd:onlineResource>
+-                </gmd:CI_Contact>
+-              </gmd:contactInfo>
+-              <gmd:role>
+-                <gmd:CI_RoleCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="contributor">contributor</gmd:CI_RoleCode>
+-              </gmd:role>
+-            </gmd:CI_ResponsibleParty>
+-          </gmd:citedResponsibleParty>
+-          <gmd:presentationForm>
+-            <gmd:CI_PresentationFormCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_PresentationFormCode" codeListValue="tableDigital">tableDigital</gmd:CI_PresentationFormCode>
+-          </gmd:presentationForm>
+-        </gmd:CI_Citation>
+-      </gmd:citation>
+-      <gmd:abstract>
+-        <gco:CharacterString>This file contains the real time data from the Saildrone core sensors for the Pacific Marine Environmental Laboratory (PMEL) TPOS 2018 Mission (Mission 2) to the central equatorial Pacific (0, 140W). These data have not been Quality Control (QC)\ufffdd. This was the second of three missions funded by NOAA Office of Oceanic and Atmospheric Research (OAR)/CPO/GOMO and NOAA/OMAO as a pilot study for the Tropical Pacific Observing System (TPOS)-2020 project. The drone were each equipped with full atmospheric and ocean core sensor suite, and an Acoustic Doppler Current Profiler (ADCP) (not included in this file). The vehicle was deployed out of Honolulu, HI on October 3, 2018. After sailing near a PMEL Carbon mooring in Kaneohe Bay, HI, the drone proceeded to the Tropical Atmosphere/Ocean (TAO) mooring at 9N, 140W. Navigation issues caused the mission to be aborted early (mid-December 2018), before further science tasks could be completed.</gco:CharacterString>
+-      </gmd:abstract>
+-      <gmd:purpose>
+-        <gco:CharacterString>This file contains the real time data from the Saildrone core sensors for the Pacific Marine Environmental Laboratory (PMEL) TPOS 2018 Mission (Mission 2) to the central equatorial Pacific (0, 140W). These data have not been Quality Control (QC)\ufffdd. This was the second of three missions funded by NOAA Office of Oceanic and Atmospheric Research (OAR)/CPO/GOMO and NOAA/OMAO as a pilot study for the Tropical Pacific Observing System (TPOS)-2020 project. The drone were each equipped with full atmospheric and ocean core sensor suite, and an Acoustic Doppler Current Profiler (ADCP) (not included in this file). The vehicle was deployed out of Honolulu, HI on October 3, 2018. After sailing near a PMEL Carbon mooring in Kaneohe Bay, HI, the drone proceeded to the Tropical Atmosphere/Ocean (TAO) mooring at 9N, 140W. Navigation issues caused the mission to be aborted early (mid-December 2018), before further science tasks could be com</gco:CharacterString>
+-      </gmd:purpose>
+-      <gmd:credit>
+-        <gco:CharacterString>Funding Agency: US DOC; NOAA; Office of Marine and Aviation Operations</gco:CharacterString>
+-      </gmd:credit>
+-      <gmd:credit>
+-        <gco:CharacterString>Funding Agency: US DOC; NOAA; Office of Oceanic and Atmospheric Research</gco:CharacterString>
+-      </gmd:credit>
+-      <gmd:status>
+-        <gmd:MD_ProgressCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#MD_ProgressCode" codeListValue="pending">pending</gmd:MD_ProgressCode>
+-      </gmd:status>
+-      <gmd:pointOfContact>
+-        <gmd:CI_ResponsibleParty>
+-          <gmd:organisationName>
+-            <gmx:Anchor xlink:href="https://ror.org/04r0wrp59" xlink:actuate="onRequest">NOAA National Centers for Environmental Information</gmx:Anchor>
+-          </gmd:organisationName>
++        <gmd:CI_ResponsibleParty>
++          <gmd:organisationName><gco:CharacterString>NOAA National Centers for Environmental Information</gco:CharacterString></gmd:organisationName>
++          <gmd:role><gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/CI_RoleCode.xml#CI_RoleCode" codeListValue="publisher">publisher</gmd:CI_RoleCode></gmd:role>
++        </gmd:CI_ResponsibleParty>
++      </gmd:citedResponsibleParty>
++          
++        </gmd:CI_Citation>
++      </gmd:citation>
++      <gmd:abstract><gco:CharacterString>This file contains the real time data from the Saildrone core sensors for the Pacific Marine Environmental Laboratory (PMEL) TPOS 2018 Mission (Mission 2) to the central equatorial Pacific (0, 140W). These data have not been Quality Control (QC)\ufffdd. This was the second of three missions funded by NOAA Office of Oceanic and Atmospheric Research (OAR)/CPO/GOMO and NOAA/OMAO as a pilot study for the Tropical Pacific Observing System (TPOS)-2020 project. The drone were each equipped with full atmospheric and ocean core sensor suite, and an Acoustic Doppler Current Profiler (ADCP) (not included in this file). The vehicle was deployed out of Honolulu, HI on October 3, 2018. After sailing near a PMEL Carbon mooring in Kaneohe Bay, HI, the drone proceeded to the Tropical Atmosphere/Ocean (TAO) mooring at 9N, 140W. Navigation issues caused the mission to be aborted early (mid-December 2018), before further science tasks could be completed.</gco:CharacterString></gmd:abstract>
++      <gmd:purpose><gco:CharacterString>This file contains the real time data from the Saildrone core sensors for the Pacific Marine Environmental Laboratory (PMEL) TPOS 2018 Mission (Mission 2) to the central equatorial Pacific (0, 140W). These data have not been Quality Control (QC)\ufffdd. This was the second of three missions funded by NOAA Office of Oceanic and Atmospheric Research (OAR)/CPO/GOMO and NOAA/OMAO as a pilot study for the Tropical Pacific Observing System (TPOS)-2020 project. The drone were each equipped with full atmospheric and ocean core sensor suite, and an Acoustic Doppler Current Profiler (ADCP) (not included in this file). The vehicle was deployed out of Honolulu, HI on October 3, 2018. After sailing near a PMEL Carbon mooring in Kaneohe Bay, HI, the drone proceeded to the Tropical Atmosphere/Ocean (TAO) mooring at 9N, 140W. Navigation issues caused the mission to be aborted early (mid-December 2018), before further science tasks could be com</gco:CharacterString></gmd:purpose>
++      <gmd:supplementalInformation><gco:CharacterString>The PIs were Dr. Meghan Cronin (NOAA PMEL), Dr. Dongxiao Zhang (UW Joint Institue for the Study of Atmoshere and Ocean (JISAO)), Dr. Adrienne Sutton (NOAA PMEL), and Mr. Christian Meinig (NOAA PMEL). Mr. Nathan Anderson contributed to the metadata creation.
++UxS operational layer: Dataset or product</gco:CharacterString></gmd:supplementalInformation>
++      <gmd:extent>
++        <gmd:EX_Extent>
++          <gmd:geographicElement>
++            <gmd:EX_GeographicBoundingBox>
++              <gmd:westBoundLongitude><gco:Decimal>-157.9788288</gco:Decimal></gmd:westBoundLongitude>
++              <gmd:eastBoundLongitude><gco:Decimal>-141.730752</gco:Decimal></gmd:eastBoundLongitude>
++              <gmd:southBoundLatitude><gco:Decimal>-1.1468039</gco:Decimal></gmd:southBoundLatitude>
++              <gmd:northBoundLatitude><gco:Decimal>21.411176</gco:Decimal></gmd:northBoundLatitude>
++            </gmd:EX_GeographicBoundingBox>
++          </gmd:geographicElement>
++          <gmd:temporalElement>
++            <gmd:EX_TemporalExtent>
++              <gmd:extent>
++                <gml:TimePeriod gml:id="tp1">
++                  <gml:beginPosition>2018-10-03</gml:beginPosition>
++                  <gml:endPosition>2019-01-27</gml:endPosition>
++                </gml:TimePeriod>
++              </gmd:extent>
++            </gmd:EX_TemporalExtent>
++          </gmd:temporalElement>
++        </gmd:EX_Extent>
++      </gmd:extent>
++      <gmd:pointOfContact>
++        <gmd:CI_ResponsibleParty>
++          <gmd:individualName><gco:CharacterString>Zhang, Dongxiao</gco:CharacterString></gmd:individualName>
++          <gmd:organisationName><gco:CharacterString>NOAA National Centers for Environmental Information</gco:CharacterString></gmd:organisationName>
+           <gmd:contactInfo>
+             <gmd:CI_Contact>
+               <gmd:address>
+                 <gmd:CI_Address>
+-                  <gmd:electronicMailAddress>
+-                    <gco:CharacterString>ncei.info@noaa.gov</gco:CharacterString>
+-                  </gmd:electronicMailAddress>
++                  <gmd:electronicMailAddress><gco:CharacterString>ncei.info@noaa.gov</gco:CharacterString></gmd:electronicMailAddress>
+                 </gmd:CI_Address>
+               </gmd:address>
+-              <gmd:onlineResource>
+-                <gmd:CI_OnlineResource>
+-                  <gmd:linkage>
+-                    <gmd:URL>https://www.ncei.noaa.gov/contact</gmd:URL>
+-                  </gmd:linkage>
+-                  <gmd:protocol>
+-                    <gco:CharacterString>HTTPS</gco:CharacterString>
+-                  </gmd:protocol>
+-                  <gmd:name>
+-                    <gco:CharacterString>NCEI Contact Information</gco:CharacterString>
+-                  </gmd:name>
+-                  <gmd:description>
+-                    <gco:CharacterString>Information for contacts at NCEI.</gco:CharacterString>
+-                  </gmd:description>
+-                  <gmd:function>
+-                    <gmd:CI_OnLineFunctionCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="information">information</gmd:CI_OnLineFunctionCode>
+-                  </gmd:function>
+-                </gmd:CI_OnlineResource>
+-              </gmd:onlineResource>
++              <gmd:onlineResource><gmd:CI_OnlineResource><gmd:linkage><gmd:URL>https://www.ncei.noaa.gov/contact</gmd:URL></gmd:linkage></gmd:CI_OnlineResource></gmd:onlineResource>
+             </gmd:CI_Contact>
+           </gmd:contactInfo>
+-          <gmd:role>
+-            <gmd:CI_RoleCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="pointOfContact">pointOfContact</gmd:CI_RoleCode>
+-          </gmd:role>
++    <gmd:party>
++      <gmd:CI_Organisation>
++        <gmd:name><gco:CharacterString>NOAA National Centers for Environmental Information</gco:CharacterString></gmd:name>
++        <gmd:identifier>
++          <gmd:MD_Identifier>
++            <gmd:code><gco:CharacterString>https://ror.org/04r0wrp59</gco:CharacterString></gmd:code>
++          </gmd:MD_Identifier>
++        </gmd:identifier>
++      </gmd:CI_Organisation>
++    </gmd:party>
+         </gmd:CI_ResponsibleParty>
+       </gmd:pointOfContact>
+-      <gmd:resourceMaintenance>
+-        <gmd:MD_MaintenanceInformation>
+-          <gmd:maintenanceAndUpdateFrequency>
+-            <gmd:MD_MaintenanceFrequencyCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#MD_MaintenanceFrequencyCode" codeListValue="asNeeded">asNeeded</gmd:MD_MaintenanceFrequencyCode>
+-          </gmd:maintenanceAndUpdateFrequency>
+-        </gmd:MD_MaintenanceInformation>
+-      </gmd:resourceMaintenance>
+-      <gmd:graphicOverview>
+-        <gmd:MD_BrowseGraphic>
+-          <gmd:fileName>
+-            <gco:CharacterString>https://www.ncei.noaa.gov/access/metadata/landing-page/bin/gfx?id=gov.noaa.nodc:0297635</gco:CharacterString>
+-          </gmd:fileName>
+-          <gmd:fileDescription>
+-            <gco:CharacterString>Graphic not available.</gco:CharacterString>
+-          </gmd:fileDescription>
+-          <gmd:fileType>
+-            <gco:CharacterString>PNG</gco:CharacterString>
+-          </gmd:fileType>
+-        </gmd:MD_BrowseGraphic>
+-      </gmd:graphicOverview>
+-      <gmd:descriptiveKeywords>
+-        <gmd:MD_Keywords>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/accession/0297635" xlink:actuate="onRequest">0297635</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:thesaurusName>
+-            <gmd:CI_Citation>
+-              <gmd:title>
+-                <gco:CharacterString>NCEI ACCESSION NUMBER</gco:CharacterString>
+-              </gmd:title>
+-              <gmd:date>
+-                <gmd:CI_Date>
+-                  <gmd:date>
+-                    <gco:Date>2024-08-08</gco:Date>
+-                  </gmd:date>
+-                  <gmd:dateType>
+-                    <gmd:CI_DateTypeCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication">publication</gmd:CI_DateTypeCode>
+-                  </gmd:dateType>
+-                </gmd:CI_Date>
+-              </gmd:date>
+-            </gmd:CI_Citation>
+-          </gmd:thesaurusName>
+-        </gmd:MD_Keywords>
+-      </gmd:descriptiveKeywords>
+-      <gmd:descriptiveKeywords>
+-        <gmd:MD_Keywords>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/3" xlink:actuate="onRequest">AIR TEMPERATURE</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/38" xlink:actuate="onRequest">BAROMETRIC PRESSURE</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/86" xlink:actuate="onRequest">CHLOROPHYLL A CONCENTRATION</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/623" xlink:actuate="onRequest">Chromophoric Dissolved Organic Matter (CDOM)</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/91" xlink:actuate="onRequest">CONDUCTIVITY</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/740" xlink:actuate="onRequest">course over ground</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/116" xlink:actuate="onRequest">DISSOLVED OXYGEN</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/461" xlink:actuate="onRequest">irradiance</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/590" xlink:actuate="onRequest">LATITUDE</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/591" xlink:actuate="onRequest">LONGITUDE</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/606" xlink:actuate="onRequest">LONGWAVE IRRADIANCE</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/233" xlink:actuate="onRequest">OPTICAL BACKSCATTER</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/244" xlink:actuate="onRequest">OXYGEN - PERCENT SATURATION</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/256" xlink:actuate="onRequest">PERCENT OXYGEN</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/306" xlink:actuate="onRequest">RELATIVE HUMIDITY</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/307" xlink:actuate="onRequest">SALINITY</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/605" xlink:actuate="onRequest">SHORTWAVE IRRADIANCE</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/741" xlink:actuate="onRequest">speed over ground</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/373" xlink:actuate="onRequest">WATER TEMPERATURE</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/431" xlink:actuate="onRequest">WIND DIRECTION</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/436" xlink:actuate="onRequest">WIND GUST</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/437" xlink:actuate="onRequest">WIND SPEED</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/701" xlink:actuate="onRequest">Wind speed - east-west component (U)</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/datatype/details/702" xlink:actuate="onRequest">Wind speed - north-south component (V)</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:type>
+-            <gmd:MD_KeywordTypeCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="theme">theme</gmd:MD_KeywordTypeCode>
+-          </gmd:type>
+-          <gmd:thesaurusName>
+-            <gmd:CI_Citation>
+-              <gmd:title>
+-                <gco:CharacterString>NODC DATA TYPES THESAURUS</gco:CharacterString>
+-              </gmd:title>
+-              <gmd:date gco:nilReason="inapplicable"/>
+-            </gmd:CI_Citation>
+-          </gmd:thesaurusName>
+-        </gmd:MD_Keywords>
+-      </gmd:descriptiveKeywords>
+-      <gmd:descriptiveKeywords>
+-        <gmd:MD_Keywords>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/169" xlink:actuate="onRequest">anemometer</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/172" xlink:actuate="onRequest">barometer</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/122" xlink:actuate="onRequest">clock</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/8" xlink:actuate="onRequest">CTD</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/13" xlink:actuate="onRequest">fluorometer</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/54" xlink:actuate="onRequest">GPS</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/148" xlink:actuate="onRequest">GPSP</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/173" xlink:actuate="onRequest">humidity sensor</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/27" xlink:actuate="onRequest">oxygen sensor</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/64" xlink:actuate="onRequest">radiometer</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/174" xlink:actuate="onRequest">temperature sensor</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/insttype/details/76" xlink:actuate="onRequest">thermometer</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:type>
+-            <gmd:MD_KeywordTypeCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="instrument">instrument</gmd:MD_KeywordTypeCode>
+-          </gmd:type>
+-          <gmd:thesaurusName>
+-            <gmd:CI_Citation>
+-              <gmd:title>
+-                <gco:CharacterString>NODC INSTRUMENT TYPES THESAURUS</gco:CharacterString>
+-              </gmd:title>
+-              <gmd:date gco:nilReason="inapplicable"/>
+-            </gmd:CI_Citation>
+-          </gmd:thesaurusName>
+-        </gmd:MD_Keywords>
+-      </gmd:descriptiveKeywords>
+-      <gmd:descriptiveKeywords>
+-        <gmd:MD_Keywords>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/obstype/details/63" xlink:actuate="onRequest">in situ</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:type>
+-            <gmd:MD_KeywordTypeCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="theme">theme</gmd:MD_KeywordTypeCode>
+-          </gmd:type>
+-          <gmd:thesaurusName>
+-            <gmd:CI_Citation>
+-              <gmd:title>
+-                <gco:CharacterString>NODC OBSERVATION TYPES THESAURUS</gco:CharacterString>
+-              </gmd:title>
+-              <gmd:date gco:nilReason="inapplicable"/>
+-            </gmd:CI_Citation>
+-          </gmd:thesaurusName>
+-        </gmd:MD_Keywords>
+-      </gmd:descriptiveKeywords>
+-      <gmd:descriptiveKeywords>
+-        <gmd:MD_Keywords>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/institution/details/976" xlink:actuate="onRequest">US DOC; NOAA; OAR; Pacific Marine Environmental Laboratory</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:type>
+-            <gmd:MD_KeywordTypeCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="dataCentre">dataCentre</gmd:MD_KeywordTypeCode>
+-          </gmd:type>
+-          <gmd:thesaurusName>
+-            <gmd:CI_Citation>
+-              <gmd:title>
+-                <gco:CharacterString>NODC COLLECTING INSTITUTION NAMES THESAURUS</gco:CharacterString>
+-              </gmd:title>
+-              <gmd:date gco:nilReason="inapplicable"/>
+-            </gmd:CI_Citation>
+-          </gmd:thesaurusName>
+-        </gmd:MD_Keywords>
+-      </gmd:descriptiveKeywords>
+-      <gmd:descriptiveKeywords>
+-        <gmd:MD_Keywords>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/institution/details/1730" xlink:actuate="onRequest">US DOC; NOAA; NESDIS; National Centers for Environmental Information</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:type>
+-            <gmd:MD_KeywordTypeCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="dataCentre">dataCentre</gmd:MD_KeywordTypeCode>
+-          </gmd:type>
+-          <gmd:thesaurusName>
+-            <gmd:CI_Citation>
+-              <gmd:title>
+-                <gco:CharacterString>NODC SUBMITTING INSTITUTION NAMES THESAURUS</gco:CharacterString>
+-              </gmd:title>
+-              <gmd:date gco:nilReason="inapplicable"/>
+-            </gmd:CI_Citation>
+-          </gmd:thesaurusName>
+-        </gmd:MD_Keywords>
+-      </gmd:descriptiveKeywords>
+-      <gmd:descriptiveKeywords>
+-        <gmd:MD_Keywords>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/project/details/392" xlink:actuate="onRequest">TROPICAL PACIFIC (TROPAC)</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:type>
+-            <gmd:MD_KeywordTypeCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="project">project</gmd:MD_KeywordTypeCode>
+-          </gmd:type>
+-          <gmd:thesaurusName>
+-            <gmd:CI_Citation>
+-              <gmd:title>
+-                <gco:CharacterString>NODC PROJECT NAMES THESAURUS</gco:CharacterString>
+-              </gmd:title>
+-              <gmd:date gco:nilReason="inapplicable"/>
+-            </gmd:CI_Citation>
+-          </gmd:thesaurusName>
+-        </gmd:MD_Keywords>
+-      </gmd:descriptiveKeywords>
+-      <gmd:descriptiveKeywords>
+-        <gmd:MD_Keywords>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/seaname/details/187" xlink:actuate="onRequest">Equatorial Pacific Ocean</gmx:Anchor>
+-          </gmd:keyword>
+-          <gmd:type>
+-            <gmd:MD_KeywordTypeCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="place">place</gmd:MD_KeywordTypeCode>
+-          </gmd:type>
+-          <gmd:thesaurusName>
+-            <gmd:CI_Citation>
+-              <gmd:title>
+-                <gco:CharacterString>NODC SEA AREA NAMES THESAURUS</gco:CharacterString>
+-              </gmd:title>
+-              <gmd:date gco:nilReason="inapplicable"/>
+-            </gmd:CI_Citation>
+-          </gmd:thesaurusName>
+-        </gmd:MD_Keywords>
+-      </gmd:descriptiveKeywords>
+-      <gmd:descriptiveKeywords>
+-        <gmd:MD_Keywords>
+-          <gmd:keyword>
+-            <gco:CharacterString>oceanography</gco:CharacterString>
+-          </gmd:keyword>
+-          <gmd:type>
+-            <gmd:MD_KeywordTypeCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="theme">theme</gmd:MD_KeywordTypeCode>
+-          </gmd:type>
+-          <gmd:thesaurusName>
+-            <gmd:CI_Citation>
+-              <gmd:title>
+-                <gco:CharacterString>WMO_CategoryCode</gco:CharacterString>
+-              </gmd:title>
+-              <gmd:date>
+-                <gmd:CI_Date>
+-                  <gmd:date>
+-                    <gco:Date>2012-09-15</gco:Date>
+-                  </gmd:date>
+-                  <gmd:dateType>
+-                    <gmd:CI_DateTypeCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication">publication</gmd:CI_DateTypeCode>
+-                  </gmd:dateType>
+-                </gmd:CI_Date>
+-              </gmd:date>
+-            </gmd:CI_Citation>
+-          </gmd:thesaurusName>
+-        </gmd:MD_Keywords>
+-      </gmd:descriptiveKeywords>
+-      <gmd:descriptiveKeywords>
+-        <gmd:MD_Keywords>
+-          <gmd:keyword>
+-            <gmx:Anchor xlink:href="https://gcmd.earthdata.nasa.gov/kms/concept/e59896e0-3b4d-43ea-9348-f1f456305d05" xlink:actuate="onRequest">D
+… (truncated)

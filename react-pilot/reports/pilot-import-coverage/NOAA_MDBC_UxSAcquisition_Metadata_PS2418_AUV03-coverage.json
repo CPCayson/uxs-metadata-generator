@@ -1,0 +1,2837 @@
+{
+  "generatedAt": "2026-05-11T16:18:40.518Z",
+  "sourceXml": "../MANTA End User Testing/samples/NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
+  "importWarnings": [],
+  "summary": {
+    "leafPaths": 284,
+    "filled": 106,
+    "empty": 178,
+    "sameAsDefault": 130,
+    "changedFromDefault": 154
+  },
+  "byStep": {
+    "6-distribution": {
+      "filled": 10,
+      "empty": 26,
+      "sameAsDefault": 32,
+      "total": 36
+    },
+    "5-keywords": {
+      "filled": 2,
+      "empty": 9,
+      "sameAsDefault": 5,
+      "total": 11
+    },
+    "1-mission": {
+      "filled": 27,
+      "empty": 43,
+      "sameAsDefault": 52,
+      "total": 70
+    },
+    "meta": {
+      "filled": 4,
+      "empty": 4,
+      "sameAsDefault": 6,
+      "total": 8
+    },
+    "2-platform": {
+      "filled": 4,
+      "empty": 15,
+      "sameAsDefault": 15,
+      "total": 19
+    },
+    "3-sensors": {
+      "filled": 50,
+      "empty": 70,
+      "sameAsDefault": 7,
+      "total": 120
+    },
+    "4-spatial": {
+      "filled": 9,
+      "empty": 11,
+      "sameAsDefault": 13,
+      "total": 20
+    }
+  },
+  "emptyPaths": [
+    "distribution.awsBucket",
+    "distribution.awsPrefix",
+    "distribution.distributionFeesText",
+    "distribution.distributionFileFormat",
+    "distribution.distributionFormatName",
+    "distribution.distributionOrderingInstructions",
+    "distribution.distributorContactUrl",
+    "distribution.distributorEmail",
+    "distribution.distributorIndividualName",
+    "distribution.distributorOrganisationName",
+    "distribution.downloadLinkDescription",
+    "distribution.downloadLinkName",
+    "distribution.downloadUrl",
+    "distribution.finalNotes",
+    "distribution.format",
+    "distribution.metadataLandingDescription",
+    "distribution.metadataLandingLinkName",
+    "distribution.metadataLandingUrl",
+    "distribution.nceiDistributorContactHref",
+    "distribution.nceiDistributorContactTitle",
+    "distribution.nceiMetadataContactHref",
+    "distribution.nceiMetadataContactTitle",
+    "distribution.parentProject",
+    "distribution.publication",
+    "distribution.templateCategory",
+    "distribution.templateName",
+    "keywords.datacenters",
+    "keywords.instruments",
+    "keywords.instruments[0].uuid",
+    "keywords.locations",
+    "keywords.platforms",
+    "keywords.platforms[0].uuid",
+    "keywords.projects",
+    "keywords.providers",
+    "keywords.sciencekeywords",
+    "mission.associatedPublicationCode",
+    "mission.associatedPublicationDate",
+    "mission.associatedPublicationTitle",
+    "mission.citationAuthorIndividualName",
+    "mission.citationAuthorOrganisationName",
+    "mission.citationOriginatorIndividualName",
+    "mission.citationOriginatorOrganisationName",
+    "mission.citationPublisherOrganisationName",
+    "mission.citeAs",
+    "mission.doi",
+    "mission.endDate",
+    "mission.graphicOverviewHref",
+    "mission.graphicOverviewTitle",
+    "mission.individualName",
+    "mission.otherCiteAs",
+    "mission.parentProjectCode",
+    "mission.parentProjectDate",
+    "mission.parentProjectTitle",
+    "mission.purpose",
+    "mission.relatedDataUrl",
+    "mission.relatedDataUrlDescription",
+    "mission.relatedDataUrlTitle",
+    "mission.relatedDatasetCode",
+    "mission.relatedDatasetDate",
+    "mission.relatedDatasetOrg",
+    "mission.relatedDatasetTitle",
+    "mission.ror",
+    "mission.supplementalInformation",
+    "mission.temporalExtentIntervalUnit",
+    "mission.temporalExtentIntervalValue",
+    "mission.topicCategories",
+    "mission.uxsContext.deploymentId",
+    "mission.uxsContext.deploymentName",
+    "mission.uxsContext.diveId",
+    "mission.uxsContext.diveName",
+    "mission.uxsContext.narrative",
+    "mission.uxsContext.operationOutcome",
+    "mission.uxsContext.runId",
+    "mission.uxsContext.runName",
+    "mission.uxsContext.sortieId",
+    "mission.uxsContext.sortieName",
+    "mission.vmax",
+    "mission.vmin",
+    "platform.customPlatformType",
+    "platform.deploymentDate",
+    "platform.height",
+    "platform.length",
+    "platform.material",
+    "platform.model",
+    "platform.navigationSystem",
+    "platform.operationalArea",
+    "platform.platformName",
+    "platform.powerSource",
+    "platform.sensorMounts",
+    "platform.serialNumber",
+    "platform.speed",
+    "platform.weight",
+    "platform.width",
+    "sensors[0].beamCount",
+    "sensors[0].confidenceInterval",
+    "sensors[0].depthRating",
+    "sensors[0].firmware",
+    "sensors[0].frequency",
+    "sensors[0].operationMode",
+    "sensors[0].uncertainty",
+    "sensors[1].beamCount",
+    "sensors[1].confidenceInterval",
+    "sensors[1].depthRating",
+    "sensors[1].firmware",
+    "sensors[1].frequency",
+    "sensors[1].operationMode",
+    "sensors[1].uncertainty",
+    "sensors[2].beamCount",
+    "sensors[2].confidenceInterval",
+    "sensors[2].depthRating",
+    "sensors[2].firmware",
+    "sensors[2].frequency",
+    "sensors[2].operationMode",
+    "sensors[2].uncertainty",
+    "sensors[3].beamCount",
+    "sensors[3].confidenceInterval",
+    "sensors[3].depthRating",
+    "sensors[3].firmware",
+    "sensors[3].frequency",
+    "sensors[3].operationMode",
+    "sensors[3].uncertainty",
+    "sensors[4].beamCount",
+    "sensors[4].confidenceInterval",
+    "sensors[4].depthRating",
+    "sensors[4].firmware",
+    "sensors[4].frequency",
+    "sensors[4].operationMode",
+    "sensors[4].uncertainty",
+    "sensors[5].beamCount",
+    "sensors[5].confidenceInterval",
+    "sensors[5].depthRating",
+    "sensors[5].firmware",
+    "sensors[5].frequency",
+    "sensors[5].operationMode",
+    "sensors[5].uncertainty",
+    "sensors[6].beamCount",
+    "sensors[6].confidenceInterval",
+    "sensors[6].depthRating",
+    "sensors[6].firmware",
+    "sensors[6].frequency",
+    "sensors[6].operationMode",
+    "sensors[6].uncertainty",
+    "sensors[7].beamCount",
+    "sensors[7].confidenceInterval",
+    "sensors[7].depthRating",
+    "sensors[7].firmware",
+    "sensors[7].frequency",
+    "sensors[7].operationMode",
+    "sensors[7].uncertainty",
+    "sensors[8].beamCount",
+    "sensors[8].confidenceInterval",
+    "sensors[8].depthRating",
+    "sensors[8].firmware",
+    "sensors[8].frequency",
+    "sensors[8].operationMode",
+    "sensors[8].uncertainty",
+    "sensors[9].beamCount",
+    "sensors[9].confidenceInterval",
+    "sensors[9].depthRating",
+    "sensors[9].firmware",
+    "sensors[9].frequency",
+    "sensors[9].operationMode",
+    "sensors[9].uncertainty",
+    "sourceProvenance.importedAt",
+    "sourceProvenance.originalFilename",
+    "sourceProvenance.originalUuid",
+    "sourceProvenance.sourceId",
+    "spatial.geographicDescription",
+    "spatial.gridColumnResolution",
+    "spatial.gridColumnSize",
+    "spatial.gridRowResolution",
+    "spatial.gridRowSize",
+    "spatial.gridVerticalResolution",
+    "spatial.gridVerticalSize",
+    "spatial.lineageProcessSteps",
+    "spatial.lineageStatement",
+    "spatial.trajectorySampling",
+    "spatial.verticalCrsUrl"
+  ],
+  "filledPaths": [
+    "distribution.downloadProtocol",
+    "distribution.landingUrl",
+    "distribution.license",
+    "distribution.metadataMaintenanceFrequency",
+    "distribution.metadataStandard",
+    "distribution.metadataVersion",
+    "distribution.nceiFileIdPrefix",
+    "distribution.omitRootReferenceSystemInfo",
+    "distribution.outputLocation",
+    "distribution.useNceiMetadataContactXlink",
+    "keywords.instruments[0].label",
+    "keywords.platforms[0].label",
+    "mission.abstract",
+    "mission.accessConstraints",
+    "mission.accessConstraintsCode",
+    "mission.accession",
+    "mission.alternateTitle",
+    "mission.characterSet",
+    "mission.contactAddress",
+    "mission.contactPhone",
+    "mission.contactUrl",
+    "mission.dataLicensePreset",
+    "mission.distributionLiability",
+    "mission.east",
+    "mission.email",
+    "mission.fileId",
+    "mission.language",
+    "mission.licenseUrl",
+    "mission.metadataRecordDate",
+    "mission.north",
+    "mission.org",
+    "mission.publicationDate",
+    "mission.scopeCode",
+    "mission.south",
+    "mission.startDate",
+    "mission.status",
+    "mission.title",
+    "mission.uxsContext.primaryLayer",
+    "mission.west",
+    "mode",
+    "platform.manufacturer",
+    "platform.platformDesc",
+    "platform.platformId",
+    "platform.platformType",
+    "sensors[0].localId",
+    "sensors[0].modelId",
+    "sensors[0].sensorId",
+    "sensors[0].type",
+    "sensors[0].variable",
+    "sensors[1].localId",
+    "sensors[1].modelId",
+    "sensors[1].sensorId",
+    "sensors[1].type",
+    "sensors[1].variable",
+    "sensors[2].localId",
+    "sensors[2].modelId",
+    "sensors[2].sensorId",
+    "sensors[2].type",
+    "sensors[2].variable",
+    "sensors[3].localId",
+    "sensors[3].modelId",
+    "sensors[3].sensorId",
+    "sensors[3].type",
+    "sensors[3].variable",
+    "sensors[4].localId",
+    "sensors[4].modelId",
+    "sensors[4].sensorId",
+    "sensors[4].type",
+    "sensors[4].variable",
+    "sensors[5].localId",
+    "sensors[5].modelId",
+    "sensors[5].sensorId",
+    "sensors[5].type",
+    "sensors[5].variable",
+    "sensors[6].localId",
+    "sensors[6].modelId",
+    "sensors[6].sensorId",
+    "sensors[6].type",
+    "sensors[6].variable",
+    "sensors[7].localId",
+    "sensors[7].modelId",
+    "sensors[7].sensorId",
+    "sensors[7].type",
+    "sensors[7].variable",
+    "sensors[8].localId",
+    "sensors[8].modelId",
+    "sensors[8].sensorId",
+    "sensors[8].type",
+    "sensors[8].variable",
+    "sensors[9].localId",
+    "sensors[9].modelId",
+    "sensors[9].sensorId",
+    "sensors[9].type",
+    "sensors[9].variable",
+    "sourceProvenance.exportPreviewIsoFamily",
+    "sourceProvenance.importIsoXmlFamily",
+    "sourceProvenance.sourceType",
+    "spatial.accuracyStandard",
+    "spatial.accuracyValue",
+    "spatial.dimensions",
+    "spatial.errorLevel",
+    "spatial.errorValue",
+    "spatial.gridCellGeometry",
+    "spatial.hasTrajectory",
+    "spatial.referenceSystem",
+    "spatial.useGridRepresentation"
+  ],
+  "changedPaths": [
+    {
+      "path": "distribution.landingUrl",
+      "merged": "https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio"
+    },
+    {
+      "path": "distribution.license",
+      "merged": "Terms of use described in ISO metadata resourceConstraints (imported summary)"
+    },
+    {
+      "path": "distribution.metadataStandard",
+      "merged": "ISO 19115 Geographic Information - Metadata"
+    },
+    {
+      "path": "distribution.metadataVersion",
+      "merged": "2:2019/Amd 1:2022"
+    },
+    {
+      "path": "keywords.instruments"
+    },
+    {
+      "path": "keywords.instruments[0].label",
+      "merged": "Paroscientific Digiquartz Series 8000 Pressure Sensor"
+    },
+    {
+      "path": "keywords.instruments[0].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.platforms"
+    },
+    {
+      "path": "keywords.platforms[0].label",
+      "merged": "Eagle Ray Deep Water Mapping AUV"
+    },
+    {
+      "path": "keywords.platforms[0].uuid",
+      "merged": ""
+    },
+    {
+      "path": "mission.abstract",
+      "merged": "The MDBC Mapping, Groundtruthing and Modeling team along with USM will conduct AUV acquisition at \n\t\t\t\t\t\t\t\t\t multiple deepwater dome sites for 11 operational days using the RV Point Sur.  The mission will \n\t\t\t\t\t\t\t\t\t focus on two objectives - 1) Collect high-resolution multibeam bathymetry and backscatter over \n\t\t\t\t\t\t\t\t\t Macondo wellhead and impact area (MC252) using the USM Eagle Ray (ER) AUV, 2) collect high resolution \n\t\t\t\t\t\t\t\t\t data at other proximal dome features where significant feature anomalies of been identified from existing\n\t\t\t\t\t\t\t\t\t data"
+    },
+    {
+      "path": "mission.accessConstraints",
+      "merged": "otherRestrictions"
+    },
+    {
+      "path": "mission.accessConstraintsCode",
+      "merged": "otherRestrictions"
+    },
+    {
+      "path": "mission.accession",
+      "merged": "insert DOI or UIUD or reference to parent data collection"
+    },
+    {
+      "path": "mission.alternateTitle",
+      "merged": "PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z"
+    },
+    {
+      "path": "mission.contactAddress",
+      "merged": "Suite 1003"
+    },
+    {
+      "path": "mission.contactPhone",
+      "merged": "+17692421590"
+    },
+    {
+      "path": "mission.contactUrl",
+      "merged": "https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio"
+    },
+    {
+      "path": "mission.distributionLiability",
+      "merged": "Distribution liability: NOAA and NCEI make no warranty,\n\t\t\t\t\t\t\texpressed or implied, regarding these data, nor does the fact of\n\t\t\t\t\t\t\tdistribution constitute such a warranty. NOAA and NCEI cannot assume\n\t\t\t\t\t\t\tliability for any damages caused by any errors or omissions in these\n\t\t\t\t\t\t\tdata. If appropriate, NCEI can only certify that the data it distributes\n\t\t\t\t\t\t\tare an authentic copy of the records that were accepted for inclusion in the NCEI archives."
+    },
+    {
+      "path": "mission.email",
+      "merged": "errol.ronje@noaa.gov"
+    },
+    {
+      "path": "mission.fileId",
+      "merged": "PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z_MD"
+    },
+    {
+      "path": "mission.licenseUrl",
+      "merged": "https://www.ncei.noaa.gov/"
+    },
+    {
+      "path": "mission.metadataRecordDate",
+      "merged": "2024-05-09T21:16"
+    },
+    {
+      "path": "mission.org",
+      "merged": "NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT"
+    },
+    {
+      "path": "mission.publicationDate",
+      "merged": "2024-05-08T01:17"
+    },
+    {
+      "path": "mission.startDate",
+      "merged": "2024-05-07T00:03"
+    },
+    {
+      "path": "mission.status",
+      "merged": "completed"
+    },
+    {
+      "path": "mission.title",
+      "merged": "Point Sur 2024 Leg 18 Eagle Ray MultiBeam Sonar Data AUV Dive 03"
+    },
+    {
+      "path": "platform.manufacturer",
+      "merged": "NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT"
+    },
+    {
+      "path": "platform.platformDesc",
+      "merged": "Eagle Ray Deep Water Mapping AUV"
+    },
+    {
+      "path": "platform.platformId",
+      "merged": "PS Eagle Ray"
+    },
+    {
+      "path": "platform.platformType",
+      "merged": "Eagle Ray Deep Water Mapping AUV"
+    },
+    {
+      "path": "sensors[0].localId",
+      "merged": "Paroscientific Pressure Sensor"
+    },
+    {
+      "path": "sensors[0].modelId",
+      "merged": "Paroscientific Pressure Sensor"
+    },
+    {
+      "path": "sensors[0].sensorId",
+      "merged": "Paroscientific Pressure Sensor"
+    },
+    {
+      "path": "sensors[0].type",
+      "merged": "Paroscientific Digiquartz Series 8000 Pressure Sensor"
+    },
+    {
+      "path": "sensors[0].variable",
+      "merged": "Paroscientific Digiquartz Series 8000 Pressure Sensor\nUncertainty Estimate - 0.2m\nConfidence Interval - RMS\n0.01% Typical Accuracy (Total depth of 2200m)"
+    },
+    {
+      "path": "sensors[1].beamCount",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].confidenceInterval",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].depthRating",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].firmware",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].frequency",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].localId",
+      "merged": "SBE CTD Sensor"
+    },
+    {
+      "path": "sensors[1].modelId",
+      "merged": "SBE CTD Sensor"
+    },
+    {
+      "path": "sensors[1].operationMode",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].sensorId",
+      "merged": "SBE CTD Sensor"
+    },
+    {
+      "path": "sensors[1].type",
+      "merged": "SBE 49 FastCAT CTD Sensor"
+    },
+    {
+      "path": "sensors[1].uncertainty",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].variable",
+      "merged": "SBE 49 FastCAT CTD Sensor\nOperation Mode 1 hz\nUncertainty Estimate =/- 0.002 deg C; =/- 0.0003 S/m for conductivity; 0.1% for pressure\nConfidence Interval RMS"
+    },
+    {
+      "path": "sensors[2].beamCount",
+      "merged": ""
+    },
+    {
+      "path": "sensors[2].confidenceInterval",
+      "merged": ""
+    },
+    {
+      "path": "sensors[2].depthRating",
+      "merged": ""
+    },
+    {
+      "path": "sensors[2].firmware",
+      "merged": ""
+    },
+    {
+      "path": "sensors[2].frequency",
+      "merged": ""
+    },
+    {
+      "path": "sensors[2].localId",
+      "merged": "Masterclock GNSS Receiver"
+    },
+    {
+      "path": "sensors[2].modelId",
+      "merged": "Masterclock GNSS Receiver"
+    },
+    {
+      "path": "sensors[2].operationMode",
+      "merged": ""
+    },
+    {
+      "path": "sensors[2].sensorId",
+      "merged": "Masterclock GNSS Receiver"
+    },
+    {
+      "path": "sensors[2].type",
+      "merged": "Masterclock GNSS Receiver GMR Series 1000"
+    },
+    {
+      "path": "sensors[2].uncertainty",
+      "merged": ""
+    },
+    {
+      "path": "sensors[2].variable",
+      "merged": "Masterclock GNSS Receiver GMR Series 1000\nOperation mode - Internal Clock\nUncertainty Estimate - Correction time: +/-60 ns of UTC\nAccurate to reference within +/- 15ns of UTC, Time drift per year (max): +3 sec/year"
+    },
+    {
+      "path": "sensors[3].beamCount",
+      "merged": ""
+    },
+    {
+      "path": "sensors[3].confidenceInterval",
+      "merged": ""
+    },
+    {
+      "path": "sensors[3].depthRating",
+      "merged": ""
+    },
+    {
+      "path": "sensors[3].firmware",
+      "merged": ""
+    },
+    {
+      "path": "sensors[3].frequency",
+      "merged": ""
+    },
+    {
+      "path": "sensors[3].localId",
+      "merged": "Norbit MBES"
+    },
+    {
+      "path": "sensors[3].modelId",
+      "merged": "Norbit MBES"
+    },
+    {
+      "path": "sensors[3].operationMode",
+      "merged": ""
+    },
+    {
+      "path": "sensors[3].sensorId",
+      "merged": "Norbit MBES"
+    },
+    {
+      "path": "sensors[3].type",
+      "merged": "Norbit WBMS MBES"
+    },
+    {
+      "path": "sensors[3].uncertainty",
+      "merged": ""
+    },
+    {
+      "path": "sensors[3].variable",
+      "merged": "Norbit WBMS MBES\n200 and 400 kHz\n512 beams\n0.9 degrees x 0.9 degrees"
+    },
+    {
+      "path": "sensors[4].beamCount",
+      "merged": ""
+    },
+    {
+      "path": "sensors[4].confidenceInterval",
+      "merged": ""
+    },
+    {
+      "path": "sensors[4].depthRating",
+      "merged": ""
+    },
+    {
+      "path": "sensors[4].firmware",
+      "merged": ""
+    },
+    {
+      "path": "sensors[4].frequency",
+      "merged": ""
+    },
+    {
+      "path": "sensors[4].localId",
+      "merged": "Geoacoustic Subbottom Profiler"
+    },
+    {
+      "path": "sensors[4].modelId",
+      "merged": "Geoacoustic Subbottom Profiler"
+    },
+    {
+      "path": "sensors[4].operationMode",
+      "merged": ""
+    },
+    {
+      "path": "sensors[4].sensorId",
+      "merged": "Geoacoustic Subbottom Profiler"
+    },
+    {
+      "path": "sensors[4].type",
+      "merged": "Geoacoustic Subbottom Profiler based on GeoPulse model"
+    },
+    {
+      "path": "sensors[4].uncertainty",
+      "merged": ""
+    },
+    {
+      "path": "sensors[4].variable",
+      "merged": "Geoacoustic Subbottom Profiler based on GeoPulse model\n1.5 kHz"
+    },
+    {
+      "path": "sensors[5].beamCount",
+      "merged": ""
+    },
+    {
+      "path": "sensors[5].confidenceInterval",
+      "merged": ""
+    },
+    {
+      "path": "sensors[5].depthRating",
+      "merged": ""
+    },
+    {
+      "path": "sensors[5].firmware",
+      "merged": ""
+    },
+    {
+      "path": "sensors[5].frequency",
+      "merged": ""
+    },
+    {
+      "path": "sensors[5].localId",
+      "merged": "Exail INS"
+    },
+    {
+      "path": "sensors[5].modelId",
+      "merged": "Exail INS"
+    },
+    {
+      "path": "sensors[5].operationMode",
+      "merged": ""
+    },
+    {
+      "path": "sensors[5].sensorId",
+      "merged": "Exail INS"
+    },
+    {
+      "path": "sensors[5].type",
+      "merged": "Exail Phins C7 INS"
+    },
+    {
+      "path": "sensors[5].uncertainty",
+      "merged": ""
+    },
+    {
+      "path": "sensors[5].variable",
+      "merged": "Exail Phins C7 INS\nOperation Mode - Position Accuracy\nRoll and Pitch\nUncertainty Estimate - 0.010 deg\nConfidence Interval - RMS\nUse with GNSS or USBL and DVL"
+    },
+    {
+      "path": "sensors[6].beamCount",
+      "merged": ""
+    },
+    {
+      "path": "sensors[6].confidenceInterval",
+      "merged": ""
+    },
+    {
+      "path": "sensors[6].depthRating",
+      "merged": ""
+    },
+    {
+      "path": "sensors[6].firmware",
+      "merged": ""
+    },
+    {
+      "path": "sensors[6].frequency",
+      "merged": ""
+    },
+    {
+      "path": "sensors[6].localId",
+      "merged": "Nortek DVL"
+    },
+    {
+      "path": "sensors[6].modelId",
+      "merged": "Nortek DVL"
+    },
+    {
+      "path": "sensors[6].operationMode",
+      "merged": ""
+    },
+    {
+      "path": "sensors[6].sensorId",
+      "merged": "Nortek DVL"
+    },
+    {
+      "path": "sensors[6].type",
+      "merged": "Nortek 500 DVL"
+    },
+    {
+      "path": "sensors[6].uncertainty",
+      "merged": ""
+    },
+    {
+      "path": "sensors[6].variable",
+      "merged": "Nortek 500 DVL\nOperation Mode - Long-term Accuracy\nUncertainty Estimate - +/- 0.1% / +/- 0.1 cm/s\nConfidence Interval - RMS\nDepth and Speed"
+    },
+    {
+      "path": "sensors[7].beamCount",
+      "merged": ""
+    },
+    {
+      "path": "sensors[7].confidenceInterval",
+      "merged": ""
+    },
+    {
+      "path": "sensors[7].depthRating",
+      "merged": ""
+    },
+    {
+      "path": "sensors[7].firmware",
+      "merged": ""
+    },
+    {
+      "path": "sensors[7].frequency",
+      "merged": ""
+    },
+    {
+      "path": "sensors[7].localId",
+      "merged": "Sonardyne USBL"
+    },
+    {
+      "path": "sensors[7].modelId",
+      "merged": "Sonardyne USBL"
+    },
+    {
+      "path": "sensors[7].operationMode",
+      "merged": ""
+    },
+    {
+      "path": "sensors[7].sensorId",
+      "merged": "Sonardyne USBL"
+    },
+    {
+      "path": "sensors[7].type",
+      "merged": "Sonardyne Ranger2 USBL"
+    },
+    {
+      "path": "sensors[7].uncertainty",
+      "merged": ""
+    },
+    {
+      "path": "sensors[7].variable",
+      "merged": "Sonardyne Ranger2 USBL\nOperation Mode - slant range system accuracy\nUncertainty Estimate - 0.04%\nConfidence Interval - RMS\nSampling rate 1 Hz and frequency of 19-34 kHz or 14-19.5 kHz"
+    },
+    {
+      "path": "sensors[8].beamCount",
+      "merged": ""
+    },
+    {
+      "path": "sensors[8].confidenceInterval",
+      "merged": ""
+    },
+    {
+      "path": "sensors[8].depthRating",
+      "merged": ""
+    },
+    {
+      "path": "sensors[8].firmware",
+      "merged": ""
+    },
+    {
+      "path": "sensors[8].frequency",
+      "merged": ""
+    },
+    {
+      "path": "sensors[8].localId",
+      "merged": "Sonardyne USBL Transponder"
+    },
+    {
+      "path": "sensors[8].modelId",
+      "merged": "Sonardyne USBL Transponder"
+    },
+    {
+      "path": "sensors[8].operationMode",
+      "merged": ""
+    },
+    {
+      "path": "sensors[8].sensorId",
+      "merged": "Sonardyne USBL Transponder"
+    },
+    {
+      "path": "sensors[8].type",
+      "merged": "Sonardyne AVTrack6 USBL Transponder"
+    },
+    {
+      "path": "sensors[8].uncertainty",
+      "merged": ""
+    },
+    {
+      "path": "sensors[8].variable",
+      "merged": "Sonardyne AVTrack6 USBL Transponder\nOperation Mode - Depth Sensor\nUncertainty Estimate - +/- 0.5% full scale\nConfidence Interval - RMS\nRange precision better than 15mm"
+    },
+    {
+      "path": "sensors[9].beamCount",
+      "merged": ""
+    },
+    {
+      "path": "sensors[9].confidenceInterval",
+      "merged": ""
+    },
+    {
+      "path": "sensors[9].depthRating",
+      "merged": ""
+    },
+    {
+      "path": "sensors[9].firmware",
+      "merged": ""
+    },
+    {
+      "path": "sensors[9].frequency",
+      "merged": ""
+    },
+    {
+      "path": "sensors[9].localId",
+      "merged": "OFG Magnetometer"
+    },
+    {
+      "path": "sensors[9].modelId",
+      "merged": "OFG Magnetometer"
+    },
+    {
+      "path": "sensors[9].operationMode",
+      "merged": ""
+    },
+    {
+      "path": "sensors[9].sensorId",
+      "merged": "OFG Magnetometer"
+    },
+    {
+      "path": "sensors[9].type",
+      "merged": "OFG Self-compensating Magnetometer (SCM)"
+    },
+    {
+      "path": "sensors[9].uncertainty",
+      "merged": ""
+    },
+    {
+      "path": "sensors[9].variable",
+      "merged": "OFG Self-compensating Magnetometer (SCM)\nDepth rated 6000m"
+    },
+    {
+      "path": "sourceProvenance.exportPreviewIsoFamily",
+      "merged": "19115-2"
+    },
+    {
+      "path": "sourceProvenance.importIsoXmlFamily",
+      "merged": "19115-3"
+    },
+    {
+      "path": "spatial.accuracyStandard",
+      "merged": "IHO Map Accuracy Standard"
+    },
+    {
+      "path": "spatial.accuracyValue",
+      "merged": "1.0"
+    },
+    {
+      "path": "spatial.dimensions",
+      "merged": "3"
+    },
+    {
+      "path": "spatial.errorLevel",
+      "merged": "Absolute Linear Error at 90% Significance Level\n\t\t\t\t\t\t\t\t\t\t\tof Biased Vertical Data (Alternative 2)"
+    },
+    {
+      "path": "spatial.errorValue",
+      "merged": "1.5"
+    },
+    {
+      "path": "spatial.gridCellGeometry",
+      "merged": "grid"
+    },
+    {
+      "path": "spatial.referenceSystem",
+      "merged": "WGS84E_2D"
+    }
+  ],
+  "detailSample": [
+    {
+      "path": "distribution.awsBucket",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.awsPrefix",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.distributionFeesText",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.distributionFileFormat",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.distributionFormatName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.distributionOrderingInstructions",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.distributorContactUrl",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.distributorEmail",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.distributorIndividualName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.distributorOrganisationName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.downloadLinkDescription",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.downloadLinkName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.downloadProtocol",
+      "merged": "HTTPS",
+      "default": "HTTPS",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.downloadUrl",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.finalNotes",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.format",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.landingUrl",
+      "merged": "https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.license",
+      "merged": "Terms of use described in ISO metadata resourceConstraints (imported summary)",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.metadataLandingDescription",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.metadataLandingLinkName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.metadataLandingUrl",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.metadataMaintenanceFrequency",
+      "merged": "asNeeded",
+      "default": "asNeeded",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.metadataStandard",
+      "merged": "ISO 19115 Geographic Information - Metadata",
+      "default": "ISO 19115-2 Imagery and Gridded Data",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.metadataVersion",
+      "merged": "2:2019/Amd 1:2022",
+      "default": "ISO 19115-2:2009(E)",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.nceiDistributorContactHref",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.nceiDistributorContactTitle",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.nceiFileIdPrefix",
+      "merged": true,
+      "default": true,
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.nceiMetadataContactHref",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.nceiMetadataContactTitle",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.omitRootReferenceSystemInfo",
+      "merged": false,
+      "default": false,
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.outputLocation",
+      "merged": "download",
+      "default": "download",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.parentProject",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.publication",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.templateCategory",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.templateName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.useNceiMetadataContactXlink",
+      "merged": false,
+      "default": false,
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "keywords.datacenters",
+      "merged": [],
+      "default": [],
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "keywords.instruments",
+      "default": [],
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[0].label",
+      "merged": "Paroscientific Digiquartz Series 8000 Pressure Sensor",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[0].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.locations",
+      "merged": [],
+      "default": [],
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "keywords.platforms",
+      "default": [],
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.platforms[0].label",
+      "merged": "Eagle Ray Deep Water Mapping AUV",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.platforms[0].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.projects",
+      "merged": [],
+      "default": [],
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "keywords.providers",
+      "merged": [],
+      "default": [],
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "keywords.sciencekeywords",
+      "merged": [],
+      "default": [],
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.abstract",
+      "merged": "The MDBC Mapping, Groundtruthing and Modeling team along with USM will conduct AUV acquisition at \n\t\t\t\t\t\t\t\t\t multiple deepwater dome sites for 11 operational days using the RV Point Sur.  The mission will \n\t\t\t\t\t\t\t\t\t focus on two objectives - 1) Collect high-resolution multibeam bathymetry and backscatter over \n\t\t\t\t\t\t\t\t\t Macondo wellhead and impact area (MC252) using the USM Eagle Ray (ER) AUV, 2) collect high resolution \n\t\t\t\t\t\t\t\t\t data at other proximal dome features where significant feature anomalies of been identified from existing\n\t\t\t\t\t\t\t\t\t data",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.accessConstraints",
+      "merged": "otherRestrictions",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.accessConstraintsCode",
+      "merged": "otherRestrictions",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.accession",
+      "merged": "insert DOI or UIUD or reference to parent data collection",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.alternateTitle",
+      "merged": "PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.associatedPublicationCode",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.associatedPublicationDate",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.associatedPublicationTitle",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.characterSet",
+      "merged": "utf8",
+      "default": "utf8",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.citationAuthorIndividualName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.citationAuthorOrganisationName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.citationOriginatorIndividualName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.citationOriginatorOrganisationName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.citationPublisherOrganisationName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.citeAs",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.contactAddress",
+      "merged": "Suite 1003",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.contactPhone",
+      "merged": "+17692421590",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.contactUrl",
+      "merged": "https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.dataLicensePreset",
+      "merged": "custom",
+      "default": "custom",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.distributionLiability",
+      "merged": "Distribution liability: NOAA and NCEI make no warranty,\n\t\t\t\t\t\t\texpressed or implied, regarding these data, nor does the fact of\n\t\t\t\t\t\t\tdistribution constitute such a warranty. NOAA and NCEI cannot assume\n\t\t\t\t\t\t\tliability for any damages caused by any errors or omissions in these\n\t\t\t\t\t\t\tdata. If appropriate, NCEI can only certify that the data it distributes\n\t\t\t\t\t\t\tare an authentic copy of the records that were accepted for inclusion in the NCEI archives.",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.doi",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.east",
+      "merged": "180",
+      "default": "180",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.email",
+      "merged": "errol.ronje@noaa.gov",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.endDate",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.fileId",
+      "merged": "PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z_MD",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.graphicOverviewHref",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.graphicOverviewTitle",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.individualName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.language",
+      "merged": "eng",
+      "default": "eng",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.licenseUrl",
+      "merged": "https://www.ncei.noaa.gov/",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.metadataRecordDate",
+      "merged": "2024-05-09T21:16",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.north",
+      "merged": "90",
+      "default": "90",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.org",
+      "merged": "NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.otherCiteAs",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.parentProjectCode",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.parentProjectDate",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.parentProjectTitle",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.publicationDate",
+      "merged": "2024-05-08T01:17",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.purpose",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.relatedDataUrl",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.relatedDataUrlDescription",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.relatedDataUrlTitle",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.relatedDatasetCode",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.relatedDatasetDate",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.relatedDatasetOrg",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.relatedDatasetTitle",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.ror",
+      "merged": null,
+      "default": null,
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.scopeCode",
+      "merged": "dataset",
+      "default": "dataset",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.south",
+      "merged": "-90",
+      "default": "-90",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.startDate",
+      "merged": "2024-05-07T00:03",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.status",
+      "merged": "completed",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.supplementalInformation",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.temporalExtentIntervalUnit",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.temporalExtentIntervalValue",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.title",
+      "merged": "Point Sur 2024 Leg 18 Eagle Ray MultiBeam Sonar Data AUV Dive 03",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.topicCategories",
+      "merged": [],
+      "default": [],
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.deploymentId",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.deploymentName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.diveId",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.diveName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.narrative",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.operationOutcome",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.primaryLayer",
+      "merged": "datasetProduct",
+      "default": "datasetProduct",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.runId",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.runName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.sortieId",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.sortieName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.vmax",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.vmin",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.west",
+      "merged": "-180",
+      "default": "-180",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mode",
+      "merged": "lenient",
+      "default": "lenient",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.customPlatformType",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.deploymentDate",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.height",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.length",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.manufacturer",
+      "merged": "NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "platform.material",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.model",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.navigationSystem",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.operationalArea",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.platformDesc",
+      "merged": "Eagle Ray Deep Water Mapping AUV",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "platform.platformId",
+      "merged": "PS Eagle Ray",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "platform.platformName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.platformType",
+      "merged": "Eagle Ray Deep Water Mapping AUV",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "platform.powerSource",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.sensorMounts",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.serialNumber",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.speed",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.weight",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.width",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].beamCount",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].confidenceInterval",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].depthRating",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].firmware",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].frequency",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].localId",
+      "merged": "Paroscientific Pressure Sensor",
+      "default": "sen_1778516320516",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[0].modelId",
+      "merged": "Paroscientific Pressure Sensor",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[0].operationMode",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].sensorId",
+      "merged": "Paroscientific Pressure Sensor",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[0].type",
+      "merged": "Paroscientific Digiquartz Series 8000 Pressure Sensor",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[0].uncertainty",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].variable",
+      "merged": "Paroscientific Digiquartz Series 8000 Pressure Sensor\nUncertainty Estimate - 0.2m\nConfidence Interval - RMS\n0.01% Typical Accuracy (Total depth of 2200m)",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].beamCount",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].confidenceInterval",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].depthRating",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].firmware",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].frequency",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].localId",
+      "merged": "SBE CTD Sensor",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].modelId",
+      "merged": "SBE CTD Sensor",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].operationMode",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].sensorId",
+      "merged": "SBE CTD Sensor",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].type",
+      "merged": "SBE 49 FastCAT CTD Sensor",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].uncertainty",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].variable",
+      "merged": "SBE 49 FastCAT CTD Sensor\nOperation Mode 1 hz\nUncertainty Estimate =/- 0.002 deg C; =/- 0.0003 S/m for conductivity; 0.1% for pressure\nConfidence Interval RMS",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[2].beamCount",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[2].confidenceInterval",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[2].depthRating",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[2].firmware",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[2].frequency",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[2].localId",
+      "merged": "Masterclock GNSS Receiver",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[2].modelId",
+      "merged": "Masterclock GNSS Receiver",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[2].operationMode",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[2].sensorId",
+      "merged": "Masterclock GNSS Receiver",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[2].type",
+      "merged": "Masterclock GNSS Receiver GMR Series 1000",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[2].uncertainty",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[2].variable",
+      "merged": "Masterclock GNSS Receiver GMR Series 1000\nOperation mode - Internal Clock\nUncertainty Estimate - Correction time: +/-60 ns of UTC\nAccurate to reference within +/- 15ns of UTC, Time drift per year (max): +3 sec/year",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[3].beamCount",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[3].confidenceInterval",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[3].depthRating",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[3].firmware",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[3].frequency",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[3].localId",
+      "merged": "Norbit MBES",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[3].modelId",
+      "merged": "Norbit MBES",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[3].operationMode",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[3].sensorId",
+      "merged": "Norbit MBES",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[3].type",
+      "merged": "Norbit WBMS MBES",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[3].uncertainty",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[3].variable",
+      "merged": "Norbit WBMS MBES\n200 and 400 kHz\n512 beams\n0.9 degrees x 0.9 degrees",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[4].beamCount",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[4].confidenceInterval",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[4].depthRating",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[4].firmware",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[4].frequency",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[4].localId",
+      "merged": "Geoacoustic Subbottom Profiler",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[4].modelId",
+      "merged": "Geoacoustic Subbottom Profiler",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[4].operationMode",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[4].sensorId",
+      "merged": "Geoacoustic Subbottom Profiler",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[4].type",
+      "merged": "Geoacoustic Subbottom Profiler based on GeoPulse model",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[4].uncertainty",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[4].variable",
+      "merged": "Geoacoustic Subbottom Profiler based on GeoPulse model\n1.5 kHz",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[5].beamCount",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[5].confidenceInterval",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[5].depthRating",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[5].firmware",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[5].frequency",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[5].localId",
+      "merged": "Exail INS",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[5].modelId",
+      "merged": "Exail INS",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[5].operationMode",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[5].sensorId",
+      "merged": "Exail INS",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[5].type",
+      "merged": "Exail Phins C7 INS",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[5].uncertainty",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[5].variable",
+      "merged": "Exail Phins C7 INS\nOperation Mode - Position Accuracy\nRoll and Pitch\nUncertainty Estimate - 0.010 deg\nConfidence Interval - RMS\nUse with GNSS or USBL and DVL",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[6].beamCount",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[6].confidenceInterval",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[6].depthRating",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[6].firmware",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[6].frequency",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[6].localId",
+      "merged": "Nortek DVL",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[6].modelId",
+      "merged": "Nortek DVL",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[6].operationMode",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[6].sensorId",
+      "merged": "Nortek DVL",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[6].type",
+      "merged": "Nortek 500 DVL",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[6].uncertainty",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[6].variable",
+      "merged": "Nortek 500 DVL\nOperation Mode - Long-term Accuracy\nUncertainty Estimate - +/- 0.1% / +/- 0.1 cm/s\nConfidence Interval - RMS\nDepth and Speed",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[7].beamCount",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[7].confidenceInterval",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[7].depthRating",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[7].firmware",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[7].frequency",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[7].localId",
+      "merged": "Sonardyne USBL",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[7].modelId",
+      "merged": "Sonardyne USBL",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[7].operationMode",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[7].sensorId",
+      "merged": "Sonardyne USBL",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[7].type",
+      "merged": "Sonardyne Ranger2 USBL",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[7].uncertainty",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[7].variable",
+      "merged": "Sonardyne Ranger2 USBL\nOperation Mode - slant range system accuracy\nUncertainty Estimate - 0.04%\nConfidence Interval - RMS\nSampling rate 1 Hz and frequency of 19-34 kHz or 14-19.5 kHz",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[8].beamCount",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[8].confidenceInterval",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[8].depthRating",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[8].firmware",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[8].frequency",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[8].localId",
+      "merged": "Sonardyne USBL Transponder",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[8].modelId",
+      "merged": "Sonardyne USBL Transponder",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[8].operationMode",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[8].sensorId",
+      "merged": "Sonardyne USBL Transponder",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[8].type",
+      "merged": "Sonardyne AVTrack6 USBL Transponder",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[8].uncertainty",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[8].variable",
+      "merged": "Sonardyne AVTrack6 USBL Transponder\nOperation Mode - Depth Sensor\nUncertainty Estimate - +/- 0.5% full scale\nConfidence Interval - RMS\nRange precision better than 15mm",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[9].beamCount",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[9].confidenceInterval",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[9].depthRating",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[9].firmware",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[9].frequency",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[9].localId",
+      "merged": "OFG Magnetometer",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[9].modelId",
+      "merged": "OFG Magnetometer",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[9].operationMode",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[9].sensorId",
+      "merged": "OFG Magnetometer",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[9].type",
+      "merged": "OFG Self-compensating Magnetometer (SCM)",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[9].uncertainty",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[9].variable",
+      "merged": "OFG Self-compensating Magnetometer (SCM)\nDepth rated 6000m",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sourceProvenance.exportPreviewIsoFamily",
+      "merged": "19115-2",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sourceProvenance.importIsoXmlFamily",
+      "merged": "19115-3",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sourceProvenance.importedAt",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sourceProvenance.originalFilename",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sourceProvenance.originalUuid",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sourceProvenance.sourceId",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sourceProvenance.sourceType",
+      "merged": "manual",
+      "default": "manual",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.accuracyStandard",
+      "merged": "IHO Map Accuracy Standard",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "spatial.accuracyValue",
+      "merged": "1.0",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "spatial.dimensions",
+      "merged": "3",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "spatial.errorLevel",
+      "merged": "Absolute Linear Error at 90% Significance Level\n\t\t\t\t\t\t\t\t\t\t\tof Biased Vertical Data (Alternative 2)",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "spatial.errorValue",
+      "merged": "1.5",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "spatial.geographicDescription",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.gridCellGeometry",
+      "merged": "grid",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "spatial.gridColumnResolution",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.gridColumnSize",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.gridRowResolution",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.gridRowSize",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.gridVerticalResolution",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.gridVerticalSize",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.hasTrajectory",
+      "merged": false,
+      "default": false,
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.lineageProcessSteps",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.lineageStatement",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.referenceSystem",
+      "merged": "WGS84E_2D",
+      "default": "EPSG:4326",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "spatial.trajectorySampling",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.useGridRepresentation",
+      "merged": false,
+      "default": false,
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.verticalCrsUrl",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    }
+  ],
+  "truncatedDetail": false
+}

@@ -1,0 +1,94 @@
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/description/CharacterString	BRIEF DESCRIPTION OF INSTRUMENT
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/type/CharacterString	TYPE OF INSTRUMENT
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/description/CharacterString	BRIEF DESCRIPTION OF INSTRUMENT
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	INSTRUMENT_ID
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/type/CharacterString	TYPE OF INSTRUMENT
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/description/CharacterString	BRIEF DESCRIPTION OF PLATFORM
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/identifier/MD_Identifier/code/CharacterString	PLATFORM_ID
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/description/CharacterString	BRIEF DESCRIPTION OF INSTRUMENT
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	{INSTRUMENT_ID}}
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/type/CharacterString	TYPE OF INSTRUMENT
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/description/CharacterString	BRIEF DESCRIPTION OF INSTRUMENT
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	INSTRUMENT_ID
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/type/CharacterString	TYPE OF INSTRUMENT
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/type/CharacterString	Short_Name
+1	MI_Metadata/contentInfo/MI_CoverageDescription[1]/attributeDescription/CharacterString	TYPE OF INSTRUMENT
+1	MI_Metadata/contentInfo/MI_CoverageDescription[1]/identifier/MD_Identifier/code/CharacterString	{INSTRUMENT_ID}}
+1	MI_Metadata/contentInfo/MI_CoverageDescription[1]/name/CharacterString	BRIEF DESCRIPTION OF INSTRUMENT
+1	MI_Metadata/contentInfo/MI_CoverageDescription[2]/attributeDescription/CharacterString	TYPE OF INSTRUMENT
+1	MI_Metadata/contentInfo/MI_CoverageDescription[2]/identifier/MD_Identifier/code/CharacterString	INSTRUMENT_ID
+1	MI_Metadata/contentInfo/MI_CoverageDescription[2]/name/CharacterString	BRIEF DESCRIPTION OF INSTRUMENT
+1	MI_Metadata/dateStamp/DateTime	2025-09-23T18:47
+1	MI_Metadata/distributionInfo/MD_Distribution/distributionFormat/MD_Format/name/CharacterString	format name
+1	MI_Metadata/distributionInfo/MD_Distribution/distributionOrderProcess/MD_StandardOrderProcess/fees/CharacterString	In most cases, electronic downloads of the data are free. However, fees may apply for custom orders, data certifications, copies of analog materials, and data distribution on physical media.
+1	MI_Metadata/distributionInfo/MD_Distribution/distributionOrderProcess/MD_StandardOrderProcess/orderingInstructions/CharacterString	Contact NCEI for other distribution options and instructions.
+1	MI_Metadata/distributionInfo/MD_Distribution/transferOptions/MD_DigitalTransferOptions/onLine[1]/CI_OnlineResource/linkage/URL	https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/Unique Identifier Assigned to Metadata Record/html/
+1	MI_Metadata/distributionInfo/MD_Distribution/transferOptions/MD_DigitalTransferOptions/onLine[2]/CI_OnlineResource/linkage/URL	https://www.ncei.noaa.gov/access/uxs-template-pending-file
+1	MI_Metadata/distributionInfo/MD_Distribution/transferOptions/MD_DigitalTransferOptions/onLine[2]/CI_OnlineResource/protocol/CharacterString	HTTPS
+1	MI_Metadata/fileIdentifier/CharacterString	gov.noaa.ncei.uxs:Unique Identifier Assigned to Metadata Record
+1	MI_Metadata/identificationInfo/MD_DataIdentification/abstract/CharacterString	Not a scientific abstract. Describe dataset, goals of mission.
+1	MI_Metadata/identificationInfo/MD_DataIdentification/aggregationInfo[1]/MD_AggregateInformation/aggregateDataSetName/CI_Citation/date/CI_Date/date/Date	9999-09-09
+1	MI_Metadata/identificationInfo/MD_DataIdentification/aggregationInfo[1]/MD_AggregateInformation/aggregateDataSetName/CI_Citation/identifier/MD_Identifier/code/CharacterString	PROJECT ID
+1	MI_Metadata/identificationInfo/MD_DataIdentification/aggregationInfo[1]/MD_AggregateInformation/aggregateDataSetName/CI_Citation/title/CharacterString	TITLE OF PROJECT
+1	MI_Metadata/identificationInfo/MD_DataIdentification/aggregationInfo[2]/MD_AggregateInformation/aggregateDataSetName/CI_Citation/date/CI_Date/date/Date	9999-09-09
+1	MI_Metadata/identificationInfo/MD_DataIdentification/aggregationInfo[2]/MD_AggregateInformation/aggregateDataSetName/CI_Citation/identifier/MD_Identifier/code/CharacterString	dataset identifier
+1	MI_Metadata/identificationInfo/MD_DataIdentification/aggregationInfo[2]/MD_AggregateInformation/aggregateDataSetName/CI_Citation/title/CharacterString	related dataset title
+1	MI_Metadata/identificationInfo/MD_DataIdentification/aggregationInfo[3]/MD_AggregateInformation/aggregateDataSetName/CI_Citation/date/CI_Date/date/Date	9999-09-09
+1	MI_Metadata/identificationInfo/MD_DataIdentification/aggregationInfo[3]/MD_AggregateInformation/aggregateDataSetName/CI_Citation/title/CharacterString	TITLE OF PUBLICATION
+1	MI_Metadata/identificationInfo/MD_DataIdentification/characterSet/MD_CharacterSetCode	utf8
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[1]/CI_ResponsibleParty/individualName/CharacterString	POC for Dataset
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[1]/CI_ResponsibleParty/organisationName/CharacterString	POC's Org
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[3]/CI_ResponsibleParty/individualName/CharacterString	POC for Dataset
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/citedResponsibleParty[3]/CI_ResponsibleParty/organisationName/CharacterString	POC's Org
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[1]/CI_Date/date/Date	9999-01-01
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[2]/CI_Date/date/Date	2024-10-11
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[3]/CI_Date/date/Date	9999-01-02
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[3]/CI_Date/dateType/CI_DateTypeCode	completion
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/identifier[1]/MD_Identifier/code/CharacterString	10.25923/ncei.uxs.template.pending
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/identifier[2]/MD_Identifier/code/CharacterString	DOI
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/title/CharacterString	Aquisition (data collection) entity should be globally unique
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword/CharacterString	Earth Science > Topic > Term > Variable_Level_1
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString	GCMD sciencekeywords
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/keyword[1]/CharacterString	DOC/NOAA/NESDIS/NCEI > National Centers for Environmental Information, NESDIS, NOAA, U.S. Department of Commerce
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/keyword[2]/CharacterString	Short_Name > Long_Name
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString	GCMD datacenters
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[3]/MD_Keywords/keyword/CharacterString	Short_Name > Long_Name
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[3]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString	GCMD platforms
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/keyword/CharacterString	Short_Name > Long_Name
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[4]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString	GCMD instruments
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[5]/MD_Keywords/keyword/CharacterString	Location_Category > Location_Type > Location_Subregion1
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[5]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString	GCMD locations
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[6]/MD_Keywords/keyword/CharacterString	Short_Name > Long_Name
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[6]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString	GCMD projects
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[1]/CharacterString	DOC/NOAA/NESDIS/NCEI > National Centers for Environmental Information, NESDIS, NOAA, U.S. Department of Commerce
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/keyword[2]/CharacterString	Short_Name > Long_Name
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[7]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString	GCMD providers
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[8]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString	Platform instance
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[8]/MD_Keywords/type/MD_KeywordTypeCode	platform
+1	MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/description/CharacterString	BRIEF DESCRIPTION OF EXTENT
+1	MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/eastBoundLongitude/Decimal	180
+1	MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/northBoundLatitude/Decimal	90
+1	MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/southBoundLatitude/Decimal	-90
+1	MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/westBoundLongitude/Decimal	-180
+1	MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/temporalElement/EX_TemporalExtent/extent/TimePeriod/beginPosition	9999-01-01
+1	MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/temporalElement/EX_TemporalExtent/extent/TimePeriod/endPosition	9999-01-02
+1	MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/verticalElement/EX_VerticalExtent/maximumValue/Real	99
+1	MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/verticalElement/EX_VerticalExtent/minimumValue/Real	99
+1	MI_Metadata/identificationInfo/MD_DataIdentification/language/LanguageCode	eng; USA
+1	MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/contactInfo/CI_Contact/address/CI_Address/electronicMailAddress/CharacterString	metadata.help@noaa.gov
+1	MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/linkage/URL	https://www.ncei.noaa.gov
+1	MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/individualName/CharacterString	Metadata contact (replace with responsible party)
+1	MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/organisationName/CharacterString	NOAA National Centers for Environmental Information
+1	MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/party/CI_Organisation/identifier/MD_Identifier/code/CharacterString	https://ror.org/04r0wrp59
+1	MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/party/CI_Organisation/name/CharacterString	NOAA National Centers for Environmental Information
+1	MI_Metadata/identificationInfo/MD_DataIdentification/purpose/CharacterString	Not a scientific abstract. Describe collection purpose/overarching project.
+1	MI_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints[1]/MD_LegalConstraints/otherConstraints[1]/CharacterString	CITE AS STATEMENT
+1	MI_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints[1]/MD_LegalConstraints/otherConstraints[2]/CharacterString	OTHER CITE AS STATEMENTS (e.g. reference papers)
+1	MI_Metadata/identificationInfo/MD_DataIdentification/supplementalInformation/CharacterString	any other information UxS operational layer: Dataset or product
+1	MI_Metadata/referenceSystemInfo/MD_ReferenceSystem/referenceSystemIdentifier/RS_Identifier/code/CharacterString	EPSG:4326
+1	MI_Metadata/spatialRepresentationInfo/MD_GridSpatialRepresentation/axisDimensionProperties[1]/MD_Dimension/dimensionSize/Integer	99
+1	MI_Metadata/spatialRepresentationInfo/MD_GridSpatialRepresentation/axisDimensionProperties[1]/MD_Dimension/resolution/CharacterString	99
+1	MI_Metadata/spatialRepresentationInfo/MD_GridSpatialRepresentation/axisDimensionProperties[2]/MD_Dimension/dimensionSize/Integer	99
+1	MI_Metadata/spatialRepresentationInfo/MD_GridSpatialRepresentation/axisDimensionProperties[2]/MD_Dimension/resolution/CharacterString	99
+1	MI_Metadata/spatialRepresentationInfo/MD_GridSpatialRepresentation/axisDimensionProperties[3]/MD_Dimension/dimensionSize/Integer	99
+1	MI_Metadata/spatialRepresentationInfo/MD_GridSpatialRepresentation/axisDimensionProperties[3]/MD_Dimension/resolution/CharacterString	99

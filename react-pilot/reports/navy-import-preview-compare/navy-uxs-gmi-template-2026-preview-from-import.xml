@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gmi:MI_Metadata xmlns:gmd="http://www.isotc211.org/2005/gmd"
+                 xmlns:gco="http://www.isotc211.org/2005/gco"
+                 xmlns:gmi="http://www.isotc211.org/2005/gmi"
+                 xmlns:gmx="http://www.isotc211.org/2005/gmx"
+                 xmlns:gml="http://www.opengis.net/gml/3.2"
+                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://www.isotc211.org/2005/gmi http://schemas.opengis.net/iso/19115/-2/gmi/1.0/gmi.xsd">
+  <!-- gmd:parentIdentifier is intentionally omitted here.
+       Only BEDI granule profiles (hierarchyLevel=dataset with a parent collection)
+       should emit parentIdentifier.  Mission and collection records are
+       standalone; adding parentIdentifier to them would create incorrect
+       collection-granule relationships in CoMET and OneStop. -->
+  <gmd:fileIdentifier>
+    <gco:CharacterString>gov.noaa.ncei.uxs:Unique Identifier Assigned to Metadata Record</gco:CharacterString>
+  </gmd:fileIdentifier>
+  <gmd:dateStamp><gco:DateTime>2025-09-23T18:47</gco:DateTime></gmd:dateStamp>
+  <gmd:hierarchyLevel>
+    <gmd:MD_ScopeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/MD_ScopeCode.xml#MD_ScopeCode" codeListValue="dataset">dataset</gmd:MD_ScopeCode>
+  </gmd:hierarchyLevel>
+  <gmd:metadataStandardName>
+    <gco:CharacterString>ISO 19115-2 Geographic Information - Metadata - Part 2: Extensions for Imagery and Gridded Data</gco:CharacterString>
+  </gmd:metadataStandardName>
+  <gmd:metadataStandardVersion>
+    <gco:CharacterString>ISO 19115-2:2009(E)</gco:CharacterString>
+  </gmd:metadataStandardVersion>
+  <gmd:referenceSystemInfo>
+    <gmd:MD_ReferenceSystem>
+      <gmd:referenceSystemIdentifier>
+        <gmd:RS_Identifier>
+          <gmd:code><gco:CharacterString>EPSG:4326</gco:CharacterString></gmd:code>
+        </gmd:RS_Identifier>
+      </gmd:referenceSystemIdentifier>
+    </gmd:MD_ReferenceSystem>
+  </gmd:referenceSystemInfo>
+  <gmd:contact xlink:href="https://data.noaa.gov/docucomp/440b3ac2-64a5-46e2-9846-38305718b644" xlink:title="NCEI (pointOfContact)"/>
+  <gmd:identificationInfo>
+    <gmd:MD_DataIdentification>
+      <gmd:citation>
+        <gmd:CI_Citation>
+          <gmd:title><gco:CharacterString>Aquisition (data collection) entity should be globally unique</gco:CharacterString></gmd:title>
+          
+          <gmd:date><gmd:CI_Date><gmd:date><gco:Date>9999-01-01</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/CI_DateTypeCode.xml#CI_DateTypeCode" codeListValue="creation">creation</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>
+          <gmd:date><gmd:CI_Date><gmd:date><gco:Date>2024-10-11</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeListValue="publication">publication</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>
+          <gmd:date><gmd:CI_Date><gmd:date><gco:Date>9999-01-02</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeListValue="completion">completion</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>
+          
+          <gmd:identifier><gmd:MD_Identifier><gmd:code><gco:CharacterString>10.25923/ncei.uxs.template.pending</gco:CharacterString></gmd:code></gmd:MD_Identifier></gmd:identifier>
+          <gmd:identifier><gmd:MD_Identifier><gmd:code><gco:CharacterString>DOI</gco:CharacterString></gmd:code></gmd:MD_Identifier></gmd:identifier>
+                    <gmd:citedResponsibleParty>
+        <gmd:CI_ResponsibleParty>
+          <gmd:individualName><gco:CharacterString>POC for Dataset</gco:CharacterString></gmd:individualName>
+          <gmd:organisationName><gco:CharacterString>POC's Org</gco:CharacterString></gmd:organisationName>
+          <gmd:role><gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/CI_RoleCode.xml#CI_RoleCode" codeListValue="author">author</gmd:CI_RoleCode></gmd:role>
+        </gmd:CI_ResponsibleParty>
+      </gmd:citedResponsibleParty>
+          <gmd:citedResponsibleParty>
+        <gmd:CI_ResponsibleParty>
+          <gmd:organisationName><gco:CharacterString>NOAA National Centers for Environmental Information</gco:CharacterString></gmd:organisationName>
+          <gmd:role><gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/CI_RoleCode.xml#CI_RoleCode" codeListValue="publisher">publisher</gmd:CI_RoleCode></gmd:role>
+        </gmd:CI_ResponsibleParty>
+      </gmd:citedResponsibleParty>
+          <gmd:citedResponsibleParty>
+        <gmd:CI_ResponsibleParty>
+          <gmd:individualName><gco:CharacterString>POC for Dataset</gco:CharacterString></gmd:individualName>
+          <gmd:organisationName><gco:CharacterString>POC's Org</gco:CharacterString></gmd:organisationName>
+          <gmd:role><gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/CI_RoleCode.xml#CI_RoleCode" codeListValue="originator">originator</gmd:CI_RoleCode></gmd:role>
+        </gmd:CI_ResponsibleParty>
+      </gmd:citedResponsibleParty>
+          
+        </gmd:CI_Citation>
+      </gmd:citation>
+      <gmd:abstract><gco:CharacterString>Not a scientific abstract. Describe dataset, goals of mission.</gco:CharacterString></gmd:abstract>
+      <gmd:purpose><gco:CharacterString>Not a scientific abstract. Describe collection purpose/overarching project.</gco:CharacterString></gmd:purpose>
+      <gmd:supplementalInformation><gco:CharacterString>any other information
+UxS operational layer: Dataset or product</gco:CharacterString></gmd:supplementalInformation>
+      <gmd:extent>
+        <gmd:EX_Extent>
+          <gmd:description><gco:CharacterString>BRIEF DESCRIPTION OF EXTENT</gco:CharacterString></gmd:description>
+          <gmd:geographicElement>
+            <gmd:EX_GeographicBoundingBox>
+              <gmd:westBoundLongitude><gco:Decimal>-180</gco:Decimal></gmd:westBoundLongitude>
+              <gmd:eastBoundLongitude><gco:Decimal>180</gco:Decimal></gmd:eastBoundLongitude>
+              <gmd:southBoundLatitude><gco:Decimal>-90</gco:Decimal></gmd:southBoundLatitude>
+              <gmd:northBoundLatitude><gco:Decimal>90</gco:Decimal></gmd:northBoundLatitude>
+            </gmd:EX_GeographicBoundingBox>
+          </gmd:geographicElement>
+          <gmd:temporalElement>
+            <gmd:EX_TemporalExtent>
+              <gmd:extent>
+                <gml:TimePeriod gml:id="tp1">
+                  <gml:beginPosition>9999-01-01</gml:beginPosition>
+                  <gml:endPosition>9999-01-02</gml:endPosition>
+                  <!-- timeInterval: 99 day -->
+                </gml:TimePeriod>
+              </gmd:extent>
+            </gmd:EX_TemporalExtent>
+          </gmd:temporalElement>
+          <gmd:verticalElement>
+            <gmd:EX_VerticalExtent>
+              <gmd:minimumValue><gco:Real>99</gco:Real></gmd:minimumValue>
+              <gmd:maximumValue><gco:Real>99</gco:Real></gmd:maximumValue>
+            </gmd:EX_VerticalExtent>
+          </gmd:verticalElement>
+        </gmd:EX_Extent>
+      </gmd:extent>
+      <gmd:pointOfContact>
+        <gmd:CI_ResponsibleParty>
+          <gmd:individualName><gco:CharacterString>Metadata contact (replace with responsible party)</gco:CharacterString></gmd:individualName>
+          <gmd:organisationName><gco:CharacterString>NOAA National Centers for Environmental Information</gco:CharacterString></gmd:organisationName>
+          <gmd:contactInfo>
+            <gmd:CI_Contact>
+              <gmd:address>
+                <gmd:CI_Address>
+                  <gmd:electronicMailAddress><gco:CharacterString>metadata.help@noaa.gov</gco:CharacterString></gmd:electronicMailAddress>
+                </gmd:CI_Address>
+              </gmd:address>
+              <gmd:onlineResource><gmd:CI_OnlineResource><gmd:linkage><gmd:URL>https://www.ncei.noaa.gov</gmd:URL></gmd:linkage></gmd:CI_OnlineResource></gmd:onlineResource>
+            </gmd:CI_Contact>
+          </gmd:contactInfo>
+    <gmd:party>
+      <gmd:CI_Organisation>
+        <gmd:name><gco:CharacterString>NOAA National Centers for Environmental Information</gco:CharacterString></gmd:name>
+        <gmd:identifier>
+          <gmd:MD_Identifier>
+            <gmd:code><gco:CharacterString>https://ror.org/04r0wrp59</gco:CharacterString></gmd:code>
+          </gmd:MD_Identifier>
+        </gmd:identifier>
+      </gmd:CI_Organisation>
+    </gmd:party>
+        </gmd:CI_ResponsibleParty>
+      </gmd:pointOfContact>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>Earth Science &gt; Topic &gt; Term &gt; Variable_Level_1</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD sciencekeywords</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>DOC/NOAA/NESDIS/NCEI &gt; National Centers for Environmental Information, NESDIS, NOAA, U.S. Department of Commerce</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:keyword>
+          <gco:CharacterString>Short_Name &gt; Long_Name</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD datacenters</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>Short_Name &gt; Long_Name</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD platforms</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>Short_Name &gt; Long_Name</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD instruments</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>Location_Category &gt; Location_Type &gt; Location_Subregion1</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD locations</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>Short_Name &gt; Long_Name</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD projects</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>DOC/NOAA/NESDIS/NCEI &gt; National Centers for Environmental Information, NESDIS, NOAA, U.S. Department of Commerce</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:keyword>
+          <gco:CharacterString>Short_Name &gt; Long_Name</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+
+      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:type>
+            <gmd:MD_KeywordTypeCode>platform</gmd:MD_KeywordTypeCode>
+          </gmd:type>
+          <gmd:thesaurusName>
+            <gmd:CI_Citation>
+              <gmd:title><gco:CharacterString>Platform instance</gco:CharacterString></gmd:title>
+            </gmd:CI_Citation>
+          </gmd:thesaurusName>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:status>
+        <gmd:MD_ProgressCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ProgressCode" codeListValue="completed">completed</gmd:MD_ProgressCode>
+      </gmd:status>
+      <gmd:language>
+        <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/php/code_list.php" codeListValue="eng; USA">eng; USA</gmd:LanguageCode>
+      </gmd:language>
+      <gmd:characterSet>
+        <gmd:MD_CharacterSetCode codeListValue="utf8">utf8</gmd:MD_CharacterSetCode>
+      </gmd:characterSet>
+      <gmd:topicCategory>
+        <gmd:MD_TopicCategoryCode>oceans</gmd:MD_TopicCategoryCode>
+      </gmd:topicCategory>
+      <gmd:topicCategory>
+        <gmd:MD_TopicCategoryCode>climatologyMeteorologyAtmosphere</gmd:MD_TopicCategoryCode>
+      </gmd:topicCategory>
+      <gmd:topicCategory>
+        <gmd:MD_TopicCategoryCode>elevation</gmd:MD_TopicCategoryCode>
+      </gmd:topicCategory>
+      <gmd:topicCategory>
+        <gmd:MD_TopicCategoryCode>geoscientificInformation</gmd:MD_TopicCategoryCode>
+      </gmd:topicCategory>
+      <gmd:topicCategory>
+        <gmd:MD_TopicCategoryCode>inlandWaters</gmd:MD_TopicCategoryCode>
+      </gmd:topicCategory>
+      <gmd:resourceMaintenance>
+        <gmd:MD_MaintenanceInformation>
+          <gmd:maintenanceAndUpdateFrequency>
+            <gmd:MD_MaintenanceFrequencyCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/MD_MaintenanceFrequencyCode.xml#MD_MaintenanceFrequencyCode" codeListValue="asNeeded">asNeeded</gmd:MD_MaintenanceFrequencyCode>
+          </gmd:maintenanceAndUpdateFrequency>
+        </gmd:MD_MaintenanceInformation>
+      </gmd:resourceMaintenance>
+      <gmd:graphicOverview xlink:href="https://data.noaa.gov/docucomp/401b6d95-a542-4309-bf52-8c9b20caeccd" xlink:title="Default NOAA logo"/>
+      <gmd:resourceConstraints>
+        <gmd:MD_LegalConstraints>
+          <gmd:otherConstraints><gco:CharacterString>CITE AS STATEMENT</gco:CharacterString></gmd:otherConstraints>
+          <gmd:otherConstraints><gco:CharacterString>OTHER CITE AS STATEMENTS (e.g. reference papers)</gco:CharacterString></gmd:otherConstraints>
+        </gmd:MD_LegalConstraints>
+      </gmd:resourceConstraints>
+      <gmd:resourceConstraints xlink:href="https://data.noaa.gov/docucomp/10bb305d-f440-4b92-8c1c-759dd543bc51" xlink:title="Data License Statement" />
+      <gmd:aggregationInfo>
+        <gmd:MD_AggregateInformation>
+          <gmd:aggregateDataSetName>
+            <gmd:CI_Citation>
+              <gmd:title><gco:CharacterString>TITLE OF PROJECT</gco:CharacterString></gmd:title>
+              <gmd:date><gmd:CI_Date><gmd:date><gco:Date>9999-09-09</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeListValue="publication">publication</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>
+              <gmd:identifier><gmd:MD_Identifier><gmd:code><gco:CharacterString>PROJECT ID</gco:CharacterString></gmd:code></gmd:MD_Identifier></gmd:identifier>
+            </gmd:CI_Citation>
+          </gmd:aggregateDataSetName>
+          <gmd:associationType>
+            <gmd:DS_AssociationTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/DS_AssociationTypeCode.xml#DS_AssociationTypeCode" codeListValue="largerWorkCitation">largerWorkCitation</gmd:DS_AssociationTypeCode>
+          </gmd:associationType>
+          <gmd:initiativeType>
+            <gmd:DS_InitiativeTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/DS_InitiativeTypeCode.xml#DS_InitiativeTypeCode" codeListValue="project">project</gmd:DS_InitiativeTypeCode>
+          </gmd:initiativeType>
+        </gmd:MD_AggregateInformation>
+      </gmd:aggregationInfo>
+      <gmd:aggregationInfo>
+        <gmd:MD_AggregateInformation>
+          <gmd:aggregateDataSetIdentifier>
+            <gmd:MD_Identifier gco:nilReason="missing"/>
+          </gmd:aggregateDataSetIdentifier>
+          <gmd:aggregateDataSetName>
+            <gmd:CI_Citation>
+              <gmd:title><gco:CharacterString>related dataset title</gco:CharacterString></gmd:title>
+              <gmd:date><gmd:CI_Date><gmd:date><gco:Date>9999-09-09</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeListValue="publication">publication</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>
+              <gmd:identifier><gmd:MD_Identifier><gmd:code><gco:CharacterString>dataset identifier</gco:CharacterString></gmd:code></gmd:MD_Identifier></gmd:identifier>
+              
+              
+            </gmd:CI_Citation>
+          </gmd:aggregateDataSetName>
+          <gmd:associationType>
+            <gmd:DS_AssociationTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/DS_AssociationTypeCode.xml#DS_AssociationTypeCode" codeListValue="crossReference">crossReference</gmd:DS_AssociationTypeCode>
+          </gmd:associationType>
+        </gmd:MD_AggregateInformation>
+      </gmd:aggregationInfo>
+      <gmd:aggregationInfo>
+        <gmd:MD_AggregateInformation>
+          <gmd:aggregateDataSetName>
+            <gmd:CI_Citation>
+              <gmd:title><gco:CharacterString>TITLE OF PUBLICATION</gco:CharacterString></gmd:title>
+              <gmd:date><gmd:CI_Date><gmd:date><gco:Date>9999-09-09</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeListValue="publication">publication</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>
+              
+            </gmd:CI_Citation>
+          </gmd:aggregateDataSetName>
+          <gmd:associationType>
+            <gmd:DS_AssociationTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/DS_AssociationTypeCode.xml#DS_AssociationTypeCode" codeListValue="crossReference">crossReference</gmd:DS_AssociationTypeCode>
+          </gmd:associationType>
+          <gmd:initiativeType>
+            <gmd:DS_InitiativeTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/DS_InitiativeTypeCode.xml#DS_InitiativeTypeCode" codeListValue="sciencePaper">sciencePaper</gmd:DS_InitiativeTypeCode>
+          </gmd:initiativeType>
+        </gmd:MD_AggregateInformation>
+      </gmd:aggregationInfo>
+    </gmd:MD_DataIdentification>
+  </gmd:identificationInfo>
+  <gmd:spatialRepresentationInfo>
+    <gmd:MD_GridSpatialRepresentation>
+      <gmd:numberOfDimensions>
+        <gco:Integer>3</gco:Integer>
+      </gmd:numberOfDimensions>
+      <gmd:axisDimensionProperties>
+        <gmd:MD_Dimension>
+          <gmd:dimensionName>
+            <gmd:MD_DimensionNameTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/MD_DimensionNameTypeCode.xml#MD_DimensionNameTypeCode" codeListValue="column">column</gmd:MD_DimensionNameTypeCode>
+          </gmd:dimensionName>
+          <gmd:dimensionSize><gco:Integer>99</gco:Integer></gmd:dimensionSize>
+          <gmd:resolution><gco:CharacterString>99</gco:CharacterString></gmd:resolution>
+        </gmd:MD_Dimension>
+      </gmd:axisDimensionProperties>
+      <gmd:axisDimensionProperties>
+        <gmd:MD_Dimension>
+          <gmd:dimensionName>
+            <gmd:MD_DimensionNameTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/MD_DimensionNameTypeCode.xml#MD_DimensionNameTypeCode" codeListValue="row">row</gmd:MD_DimensionNameTypeCode>
+          </gmd:dimensionName>
+          <gmd:dimensionSize><gco:Integer>99</gco:Integer></gmd:dimensionSize>
+          <gmd:resolution><gco:CharacterString>99</gco:CharacterString></gmd:resolution>
+        </gmd:MD_Dimension>
+      </gmd:axisDimensionProperties>
+      <gmd:axisDimensionProperties>
+        <gmd:MD_Dimension>
+          <gmd:dimensionName>
+            <gmd:MD_DimensionNameTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/MD_DimensionNameTypeCode.xml#MD_DimensionNameTypeCode" codeListValue="vertical">vertical</gmd:MD_DimensionNameTypeCode>
+          </gmd:dimensionName>
+          <gmd:dimensionSize><gco:Integer>99</gco:Integer></gmd:dimensionSize>
+          <gmd:resolution><gco:CharacterString>99</gco:CharacterString></gmd:resolution>
+        </gmd:MD_Dimension>
+      </gmd:axisDimensionProperties>
+      <gmd:cellGeometry>
+        <gmd:MD_CellGeometryCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/MD_CellGeometryCode.xml#MD_CellGeometryCode" codeListValue="area">area</gmd:MD_CellGeometryCode>
+      </gmd:cellGeometry>
+    </gmd:MD_GridSpatialRepresentation>
+  </gmd:spatialRepresentationInfo>
+  <gmi:acquisitionInformation>
+    <gmi:MI_AcquisitionInformation>
+      <gmi:platform>
+        <gmi:MI_Platform id="platform">
+          <gmd:identifier>
+            <gmd:MD_Identifier>
+              <gmd:code><gco:CharacterString>PLATFORM_ID</gco:CharacterString></gmd:code>
+            </gmd:MD_Identifier>
+          </gmd:identifier>
+          <gmd:description>
+            <gco:CharacterString>BRIEF DESCRIPTION OF PLATFORM</gco:CharacterString>
+          </gmd:description>
+          <gmi:type>
+            <gco:CharacterString>Short_Name</gco:CharacterString>
+          </gmi:type>
+          
+          
+          <gmi:instrument>
+            <gmi:MI_Instrument>
+              <gmd:identifier>
+                <gmd:MD_Identifier>
+                  <gmd:code><gco:CharacterString>{INSTRUMENT_ID}}</gco:CharacterString></gmd:code>
+                </gmd:MD_Identifier>
+              </gmd:identifier>
+              <gmi:type><gco:CharacterString>TYPE OF INSTRUMENT</gco:CharacterString></gmi:type>
+              <gmd:description><gco:CharacterString>BRIEF DESCRIPTION OF INSTRUMENT</gco:CharacterString></gmd:description>
+            </gmi:MI_Instrument>
+          </gmi:instrument>
+          <gmi:instrument>
+            <gmi:MI_Instrument>
+              <gmd:identifier>
+                <gmd:MD_Identifier>
+                  <gmd:code><gco:CharacterString>INSTRUMENT_ID</gco:CharacterString></gmd:code>
+                </gmd:MD_Identifier>
+              </gmd:identifier>
+              <gmi:type><gco:CharacterString>TYPE OF INSTRUMENT</gco:CharacterString></gmi:type>
+              <gmd:description><gco:CharacterString>BRIEF DESCRIPTION OF INSTRUMENT</gco:CharacterString></gmd:description>
+            </gmi:MI_Instrument>
+          </gmi:instrument>
+        </gmi:MI_Platform>
+      </gmi:platform>
+      <gmi:instrument>
+        <gmi:MI_Instrument id="instrument_1" xlink:href="#platform">
+          <gmd:identifier>
+            <gmd:MD_Identifier>
+              <gmd:code><gco:CharacterString>{INSTRUMENT_ID}}</gco:CharacterString></gmd:code>
+            </gmd:MD_Identifier>
+          </gmd:identifier>
+          <gmi:type><gco:CharacterString>TYPE OF INSTRUMENT</gco:CharacterString></gmi:type>
+          <gmd:description><gco:CharacterString>BRIEF DESCRIPTION OF INSTRUMENT</gco:CharacterString></gmd:description>
+        </gmi:MI_Instrument>
+      </gmi:instrument>
+      <gmi:instrument>
+        <gmi:MI_Instrument id="instrument_2" xlink:href="#platform">
+          <gmd:identifier>
+            <gmd:MD_Identifier>
+              <gmd:code><gco:CharacterString>INSTRUMENT_ID</gco:CharacterString></gmd:code>
+            </gmd:MD_Identifier>
+          </gmd:identifier>
+          <gmi:type><gco:CharacterString>TYPE OF INSTRUMENT</gco:CharacterString></gmi:type>
+          <gmd:description><gco:CharacterString>BRIEF DESCRIPTION OF INSTRUMENT</gco:CharacterString></gmd:description>
+        </gmi:MI_Instrument>
+      </gmi:instrument>
+    </gmi:MI_AcquisitionInformation>
+  </gmi:acquisitionInformation>
+
+  <gmd:contentInfo>
+  <gmi:MI_CoverageDescription>
+    <gmd:identifier>
+      <gmd:MD_Identifier>
+        <gmd:code><gco:CharacterString>{INSTRUMENT_ID}}</gco:CharacterString></gmd:code>
+      </gmd:MD_Identifier>
+    </gmd:identifier>
+    <gmd:attributeDescription><gco:CharacterString>TYPE OF INSTRUMENT</gco:CharacterString></gmd:attributeDescription>
+    <gmd:name><gco:CharacterString>BRIEF DESCRIPTION OF INSTRUMENT</gco:CharacterString></gmd:name>
+    
+  </gmi:MI_CoverageDescription>
+  <gmi:MI_CoverageDescription>
+    <gmd:identifier>
+      <gmd:MD_Identifier>
+        <gmd:code><gco:CharacterString>INSTRUMENT_ID</gco:CharacterString></gmd:code>
+      </gmd:MD_Identifier>
+    </gmd:identifier>
+    <gmd:attributeDescription><gco:CharacterString>TYPE OF INSTRUMENT</gco:CharacterString></gmd:attributeDescription>
+    <gmd:name><gco:CharacterString>BRIEF DESCRIPTION OF INSTRUMENT</gco:CharacterString></gmd:name>
+    
+  </gmi:MI_CoverageDescription>
+  </gmd:contentInfo>
+  <gmd:distributionInfo>
+    <gmd:MD_Distribution>
+      <gmd:distributor>
+        <gmd:MD_Distributor>
+          <gmd:distributorContact xlink:href="https://data.noaa.gov/docucomp/440b3ac2-64a5-46e2-9846-38305718b644" xlink:title="NCEI (distributor)"/>
+        </gmd:MD_Distributor>
+      </gmd:distributor>
+      <gmd:distributionFormat>
+        <gmd:MD_Format>
+          <gmd:name><gco:CharacterString>format name</gco:CharacterString></gmd:name>
+          
+        </gmd:MD_Format>
+      </gmd:distributionFormat>
+      <gmd:distributionOrderProcess><gmd:MD_StandardOrderProcess><gmd:fees><gco:CharacterString>In most cases, electronic downloads of the data are free. However, fees may apply for custom orders, data certifications, copies of analog materials, and data distribution on physical media.</gco:CharacterString></gmd:fees><gmd:orderingInstructions><gco:CharacterString>Contact NCEI for other distribution options and instructions.</gco:CharacterString></gmd:orderingInstructions></gmd:MD_StandardOrderProcess></gmd:distributionOrderProcess>
+      <gmd:transferOptions>
+        <gmd:MD_DigitalTransferOptions>
+          
+          <gmd:onLine><gmd:CI_OnlineResource><gmd:linkage><gmd:URL>https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/Unique Identifier Assigned to Metadata Record/html/</gmd:URL></gmd:linkage></gmd:CI_OnlineResource></gmd:onLine>
+          <gmd:onLine><gmd:CI_OnlineResource><gmd:linkage><gmd:URL>https://www.ncei.noaa.gov/access/uxs-template-pending-file</gmd:URL></gmd:linkage><gmd:protocol><gco:CharacterString>HTTPS</gco:CharacterString></gmd:protocol></gmd:CI_OnlineResource></gmd:onLine>
+        </gmd:MD_DigitalTransferOptions>
+      </gmd:transferOptions>
+    </gmd:MD_Distribution>
+  </gmd:distributionInfo>
+  <!-- workflow: outputLocation=download -->
+  <!-- metadataMaintenanceFrequency: asNeeded -->
+  <!-- output flags: useNceiMetadataContactXlink=true omitRootReferenceSystemInfo=false -->
+</gmi:MI_Metadata>

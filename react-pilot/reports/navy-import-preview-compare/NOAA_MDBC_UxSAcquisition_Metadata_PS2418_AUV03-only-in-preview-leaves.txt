@@ -1,0 +1,143 @@
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/description/CharacterString	Paroscientific Digiquartz Series 8000 Pressure Sensor Uncertainty Estimate - 0.2m Confidence Interval - RMS 0.01% Typical Accuracy (Total depth of 2200m)
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	Paroscientific Pressure Sensor
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/type/CharacterString	Paroscientific Digiquartz Series 8000 Pressure Sensor
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[10]/MI_Instrument/description/CharacterString	OFG Self-compensating Magnetometer (SCM) Depth rated 6000m
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[10]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	OFG Magnetometer
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[10]/MI_Instrument/type/CharacterString	OFG Self-compensating Magnetometer (SCM)
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/description/CharacterString	SBE 49 FastCAT CTD Sensor Operation Mode 1 hz Uncertainty Estimate =/- 0.002 deg C; =/- 0.0003 S/m for conductivity; 0.1% for pressure Confidence Interval RMS
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	SBE CTD Sensor
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/type/CharacterString	SBE 49 FastCAT CTD Sensor
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[3]/MI_Instrument/description/CharacterString	Masterclock GNSS Receiver GMR Series 1000 Operation mode - Internal Clock Uncertainty Estimate - Correction time: +/-60 ns of UTC Accurate to reference within +/- 15ns of UTC, Time drift per year (max): +3 sec/year
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[3]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	Masterclock GNSS Receiver
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[3]/MI_Instrument/type/CharacterString	Masterclock GNSS Receiver GMR Series 1000
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[4]/MI_Instrument/description/CharacterString	Norbit WBMS MBES 200 and 400 kHz 512 beams 0.9 degrees x 0.9 degrees
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[4]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	Norbit MBES
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[4]/MI_Instrument/type/CharacterString	Norbit WBMS MBES
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[5]/MI_Instrument/description/CharacterString	Geoacoustic Subbottom Profiler based on GeoPulse model 1.5 kHz
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[5]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	Geoacoustic Subbottom Profiler
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[5]/MI_Instrument/type/CharacterString	Geoacoustic Subbottom Profiler based on GeoPulse model
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[6]/MI_Instrument/description/CharacterString	Exail Phins C7 INS Operation Mode - Position Accuracy Roll and Pitch Uncertainty Estimate - 0.010 deg Confidence Interval - RMS Use with GNSS or USBL and DVL
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[6]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	Exail INS
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[6]/MI_Instrument/type/CharacterString	Exail Phins C7 INS
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[7]/MI_Instrument/description/CharacterString	Nortek 500 DVL Operation Mode - Long-term Accuracy Uncertainty Estimate - +/- 0.1% / +/- 0.1 cm/s Confidence Interval - RMS Depth and Speed
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[7]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	Nortek DVL
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[7]/MI_Instrument/type/CharacterString	Nortek 500 DVL
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[8]/MI_Instrument/description/CharacterString	Sonardyne Ranger2 USBL Operation Mode - slant range system accuracy Uncertainty Estimate - 0.04% Confidence Interval - RMS Sampling rate 1 Hz and frequency of 19-34 kHz or 14-19.5 kHz
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[8]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	Sonardyne USBL
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[8]/MI_Instrument/type/CharacterString	Sonardyne Ranger2 USBL
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[9]/MI_Instrument/description/CharacterString	Sonardyne AVTrack6 USBL Transponder Operation Mode - Depth Sensor Uncertainty Estimate - +/- 0.5% full scale Confidence Interval - RMS Range precision better than 15mm
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[9]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	Sonardyne USBL Transponder
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[9]/MI_Instrument/type/CharacterString	Sonardyne AVTrack6 USBL Transponder
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/description/CharacterString	Eagle Ray Deep Water Mapping AUV
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/identifier/MD_Identifier/code/CharacterString	PS Eagle Ray
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/description/CharacterString	Paroscientific Digiquartz Series 8000 Pressure Sensor Uncertainty Estimate - 0.2m Confidence Interval - RMS 0.01% Typical Accuracy (Total depth of 2200m)
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	Paroscientific Pressure Sensor
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/type/CharacterString	Paroscientific Digiquartz Series 8000 Pressure Sensor
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/description/CharacterString	OFG Self-compensating Magnetometer (SCM) Depth rated 6000m
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	OFG Magnetometer
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/type/CharacterString	OFG Self-compensating Magnetometer (SCM)
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/description/CharacterString	SBE 49 FastCAT CTD Sensor Operation Mode 1 hz Uncertainty Estimate =/- 0.002 deg C; =/- 0.0003 S/m for conductivity; 0.1% for pressure Confidence Interval RMS
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	SBE CTD Sensor
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/type/CharacterString	SBE 49 FastCAT CTD Sensor
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/description/CharacterString	Masterclock GNSS Receiver GMR Series 1000 Operation mode - Internal Clock Uncertainty Estimate - Correction time: +/-60 ns of UTC Accurate to reference within +/- 15ns of UTC, Time drift per year (max): +3 sec/year
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	Masterclock GNSS Receiver
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/type/CharacterString	Masterclock GNSS Receiver GMR Series 1000
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/description/CharacterString	Norbit WBMS MBES 200 and 400 kHz 512 beams 0.9 degrees x 0.9 degrees
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	Norbit MBES
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/type/CharacterString	Norbit WBMS MBES
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/description/CharacterString	Geoacoustic Subbottom Profiler based on GeoPulse model 1.5 kHz
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	Geoacoustic Subbottom Profiler
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/type/CharacterString	Geoacoustic Subbottom Profiler based on GeoPulse model
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/description/CharacterString	Exail Phins C7 INS Operation Mode - Position Accuracy Roll and Pitch Uncertainty Estimate - 0.010 deg Confidence Interval - RMS Use with GNSS or USBL and DVL
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	Exail INS
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/type/CharacterString	Exail Phins C7 INS
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/description/CharacterString	Nortek 500 DVL Operation Mode - Long-term Accuracy Uncertainty Estimate - +/- 0.1% / +/- 0.1 cm/s Confidence Interval - RMS Depth and Speed
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	Nortek DVL
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/type/CharacterString	Nortek 500 DVL
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/description/CharacterString	Sonardyne Ranger2 USBL Operation Mode - slant range system accuracy Uncertainty Estimate - 0.04% Confidence Interval - RMS Sampling rate 1 Hz and frequency of 19-34 kHz or 14-19.5 kHz
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	Sonardyne USBL
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/type/CharacterString	Sonardyne Ranger2 USBL
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/description/CharacterString	Sonardyne AVTrack6 USBL Transponder Operation Mode - Depth Sensor Uncertainty Estimate - +/- 0.5% full scale Confidence Interval - RMS Range precision better than 15mm
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	Sonardyne USBL Transponder
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/type/CharacterString	Sonardyne AVTrack6 USBL Transponder
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/pointOfContact/CI_ResponsibleParty/organisationName/CharacterString	NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/pointOfContact/CI_ResponsibleParty/role/CI_RoleCode	pointOfContact
+1	MI_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/type/CharacterString	Eagle Ray Deep Water Mapping AUV
+1	MI_Metadata/contentInfo/MI_CoverageDescription[1]/attributeDescription/CharacterString	Paroscientific Digiquartz Series 8000 Pressure Sensor
+1	MI_Metadata/contentInfo/MI_CoverageDescription[1]/identifier/MD_Identifier/code/CharacterString	Paroscientific Pressure Sensor
+1	MI_Metadata/contentInfo/MI_CoverageDescription[1]/name/CharacterString	Paroscientific Digiquartz Series 8000 Pressure Sensor Uncertainty Estimate - 0.2m Confidence Interval - RMS 0.01% Typical Accuracy (Total depth of 2200m)
+1	MI_Metadata/contentInfo/MI_CoverageDescription[10]/attributeDescription/CharacterString	OFG Self-compensating Magnetometer (SCM)
+1	MI_Metadata/contentInfo/MI_CoverageDescription[10]/identifier/MD_Identifier/code/CharacterString	OFG Magnetometer
+1	MI_Metadata/contentInfo/MI_CoverageDescription[10]/name/CharacterString	OFG Self-compensating Magnetometer (SCM) Depth rated 6000m
+1	MI_Metadata/contentInfo/MI_CoverageDescription[2]/attributeDescription/CharacterString	SBE 49 FastCAT CTD Sensor
+1	MI_Metadata/contentInfo/MI_CoverageDescription[2]/identifier/MD_Identifier/code/CharacterString	SBE CTD Sensor
+1	MI_Metadata/contentInfo/MI_CoverageDescription[2]/name/CharacterString	SBE 49 FastCAT CTD Sensor Operation Mode 1 hz Uncertainty Estimate =/- 0.002 deg C; =/- 0.0003 S/m for conductivity; 0.1% for pressure Confidence Interval RMS
+1	MI_Metadata/contentInfo/MI_CoverageDescription[3]/attributeDescription/CharacterString	Masterclock GNSS Receiver GMR Series 1000
+1	MI_Metadata/contentInfo/MI_CoverageDescription[3]/identifier/MD_Identifier/code/CharacterString	Masterclock GNSS Receiver
+1	MI_Metadata/contentInfo/MI_CoverageDescription[3]/name/CharacterString	Masterclock GNSS Receiver GMR Series 1000 Operation mode - Internal Clock Uncertainty Estimate - Correction time: +/-60 ns of UTC Accurate to reference within +/- 15ns of UTC, Time drift per year (max): +3 sec/year
+1	MI_Metadata/contentInfo/MI_CoverageDescription[4]/attributeDescription/CharacterString	Norbit WBMS MBES
+1	MI_Metadata/contentInfo/MI_CoverageDescription[4]/identifier/MD_Identifier/code/CharacterString	Norbit MBES
+1	MI_Metadata/contentInfo/MI_CoverageDescription[4]/name/CharacterString	Norbit WBMS MBES 200 and 400 kHz 512 beams 0.9 degrees x 0.9 degrees
+1	MI_Metadata/contentInfo/MI_CoverageDescription[5]/attributeDescription/CharacterString	Geoacoustic Subbottom Profiler based on GeoPulse model
+1	MI_Metadata/contentInfo/MI_CoverageDescription[5]/identifier/MD_Identifier/code/CharacterString	Geoacoustic Subbottom Profiler
+1	MI_Metadata/contentInfo/MI_CoverageDescription[5]/name/CharacterString	Geoacoustic Subbottom Profiler based on GeoPulse model 1.5 kHz
+1	MI_Metadata/contentInfo/MI_CoverageDescription[6]/attributeDescription/CharacterString	Exail Phins C7 INS
+1	MI_Metadata/contentInfo/MI_CoverageDescription[6]/identifier/MD_Identifier/code/CharacterString	Exail INS
+1	MI_Metadata/contentInfo/MI_CoverageDescription[6]/name/CharacterString	Exail Phins C7 INS Operation Mode - Position Accuracy Roll and Pitch Uncertainty Estimate - 0.010 deg Confidence Interval - RMS Use with GNSS or USBL and DVL
+1	MI_Metadata/contentInfo/MI_CoverageDescription[7]/attributeDescription/CharacterString	Nortek 500 DVL
+1	MI_Metadata/contentInfo/MI_CoverageDescription[7]/identifier/MD_Identifier/code/CharacterString	Nortek DVL
+1	MI_Metadata/contentInfo/MI_CoverageDescription[7]/name/CharacterString	Nortek 500 DVL Operation Mode - Long-term Accuracy Uncertainty Estimate - +/- 0.1% / +/- 0.1 cm/s Confidence Interval - RMS Depth and Speed
+1	MI_Metadata/contentInfo/MI_CoverageDescription[8]/attributeDescription/CharacterString	Sonardyne Ranger2 USBL
+1	MI_Metadata/contentInfo/MI_CoverageDescription[8]/identifier/MD_Identifier/code/CharacterString	Sonardyne USBL
+1	MI_Metadata/contentInfo/MI_CoverageDescription[8]/name/CharacterString	Sonardyne Ranger2 USBL Operation Mode - slant range system accuracy Uncertainty Estimate - 0.04% Confidence Interval - RMS Sampling rate 1 Hz and frequency of 19-34 kHz or 14-19.5 kHz
+1	MI_Metadata/contentInfo/MI_CoverageDescription[9]/attributeDescription/CharacterString	Sonardyne AVTrack6 USBL Transponder
+1	MI_Metadata/contentInfo/MI_CoverageDescription[9]/identifier/MD_Identifier/code/CharacterString	Sonardyne USBL Transponder
+1	MI_Metadata/contentInfo/MI_CoverageDescription[9]/name/CharacterString	Sonardyne AVTrack6 USBL Transponder Operation Mode - Depth Sensor Uncertainty Estimate - +/- 0.5% full scale Confidence Interval - RMS Range precision better than 15mm
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/report[1]/DQ_QuantitativeAttributeAccuracy/result/DQ_QuantitativeResult/value/Record/Quantity/Decimal	1
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/report[1]/DQ_QuantitativeAttributeAccuracy/result/DQ_QuantitativeResult/value/Record/Quantity/uom	m
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/report[1]/DQ_QuantitativeAttributeAccuracy/result/DQ_QuantitativeResult/valueType/RecordType	IHO Map Accuracy Standard
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/report[2]/DQ_AbsoluteExternalPositionalAccuracy/result/DQ_QuantitativeResult/value/Record/Quantity/Decimal	1.5
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/report[2]/DQ_AbsoluteExternalPositionalAccuracy/result/DQ_QuantitativeResult/value/Record/Quantity/uom	m
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/report[2]/DQ_AbsoluteExternalPositionalAccuracy/result/DQ_QuantitativeResult/valueType/RecordType	Absolute Linear Error at 90% Significance Level of Biased Vertical Data (Alternative 2)
+1	MI_Metadata/dataQualityInfo/DQ_DataQuality/scope/DQ_Scope/level/MD_ScopeCode	dataset
+1	MI_Metadata/dateStamp/DateTime	2024-05-09T21:16
+1	MI_Metadata/distributionInfo/MD_Distribution/transferOptions/MD_DigitalTransferOptions/onLine/CI_OnlineResource/linkage/URL	https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio
+1	MI_Metadata/fileIdentifier/CharacterString	gov.noaa.ncei.uxs:PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z_MD
+1	MI_Metadata/hierarchyLevel/MD_ScopeCode	dataset
+1	MI_Metadata/identificationInfo/MD_DataIdentification/abstract/CharacterString	The MDBC Mapping, Groundtruthing and Modeling team along with USM will conduct AUV acquisition at multiple deepwater dome sites for 11 operational days using the RV Point Sur. The mission will focus on two objectives - 1) Collect high-resolution multibeam bathymetry and backscatter over Macondo wellhead and impact area (MC252) using the USM Eagle Ray (ER) AUV, 2) collect high resolution data at other proximal dome features where significant feature anomalies of been identified from existing data
+1	MI_Metadata/identificationInfo/MD_DataIdentification/characterSet/MD_CharacterSetCode	utf8
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/alternateTitle/CharacterString	PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[1]/CI_Date/date/DateTime	2024-05-07T00:03
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[1]/CI_Date/dateType/CI_DateTypeCode	creation
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[2]/CI_Date/date/DateTime	2024-05-08T01:17
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[2]/CI_Date/dateType/CI_DateTypeCode	publication
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/identifier/MD_Identifier/code/CharacterString	insert DOI or UIUD or reference to parent data collection
+1	MI_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/title/CharacterString	Point Sur 2024 Leg 18 Eagle Ray MultiBeam Sonar Data AUV Dive 03
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/keyword/CharacterString	Eagle Ray Deep Water Mapping AUV
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[1]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString	GCMD platforms
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/keyword/CharacterString	Paroscientific Digiquartz Series 8000 Pressure Sensor
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[2]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString	GCMD instruments
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[3]/MD_Keywords/thesaurusName/CI_Citation/title/CharacterString	Platform instance
+1	MI_Metadata/identificationInfo/MD_DataIdentification/descriptiveKeywords[3]/MD_Keywords/type/MD_KeywordTypeCode	platform
+1	MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/eastBoundLongitude/Decimal	180
+1	MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/northBoundLatitude/Decimal	90
+1	MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/southBoundLatitude/Decimal	-90
+1	MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/westBoundLongitude/Decimal	-180
+1	MI_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/temporalElement/EX_TemporalExtent/extent/TimePeriod/beginPosition	2024-05-07T00:03
+1	MI_Metadata/identificationInfo/MD_DataIdentification/language/LanguageCode	eng
+1	MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/contactInfo/CI_Contact/address[1]/CI_Address/electronicMailAddress/CharacterString	errol.ronje@noaa.gov
+1	MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/contactInfo/CI_Contact/address[2]/CI_Address/deliveryPoint/CharacterString	Suite 1003
+1	MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/linkage/URL	https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio
+1	MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/contactInfo/CI_Contact/phone/CI_Telephone/voice/CharacterString	+17692421590
+1	MI_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_ResponsibleParty/organisationName/CharacterString	NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT
+1	MI_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints/MD_LegalConstraints/accessConstraints/MD_RestrictionCode	otherRestrictions
+1	MI_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints/MD_LegalConstraints/otherConstraints[1]/CharacterString	otherRestrictions
+1	MI_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints/MD_LegalConstraints/otherConstraints[2]/CharacterString	Distribution liability: NOAA and NCEI make no warranty, expressed or implied, regarding these data, nor does the fact of distribution constitute such a warranty. NOAA and NCEI cannot assume liability for any damages caused by any errors or omissions in these data. If appropriate, NCEI can only certify that the data it distributes are an authentic copy of the records that were accepted for inclusion in the NCEI archives.
+1	MI_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints/MD_LegalConstraints/otherConstraints[3]/CharacterString	Data license: https://www.ncei.noaa.gov/
+1	MI_Metadata/identificationInfo/MD_DataIdentification/resourceMaintenance/MD_MaintenanceInformation/maintenanceAndUpdateFrequency/MD_MaintenanceFrequencyCode	asNeeded
+1	MI_Metadata/identificationInfo/MD_DataIdentification/status/MD_ProgressCode	completed
+1	MI_Metadata/identificationInfo/MD_DataIdentification/supplementalInformation/CharacterString	UxS operational layer: Dataset or product
+1	MI_Metadata/metadataStandardName/CharacterString	ISO 19115 Geographic Information - Metadata
+1	MI_Metadata/metadataStandardVersion/CharacterString	2:2019/Amd 1:2022
+1	MI_Metadata/referenceSystemInfo/MD_ReferenceSystem/referenceSystemIdentifier/RS_Identifier/code/CharacterString	WGS84E_2D
+1	MI_Metadata/spatialRepresentationInfo/MD_Georectified/numberOfDimensions/Integer	3

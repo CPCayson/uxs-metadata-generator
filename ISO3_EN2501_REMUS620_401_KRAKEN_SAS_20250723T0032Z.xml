@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MD_Metadata xmlns="http://standards.iso.org/iso/19115/-3/mdb/2.0">
+  <metadataIdentifier>
+    <MD_Identifier xmlns="http://standards.iso.org/iso/19115/-3/mcc/1.0">
+      <code>
+        <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">EN2501_REMUS620_401_KRAKEN_SAS_202507023T0116Z</CharacterString>
+      </code>
+    </MD_Identifier>
+  </metadataIdentifier>
+  <defaultLocale>
+    <PT_Locale xmlns="http://standards.iso.org/iso/19115/-3/lan/1.0">
+      <language>
+        <LanguageCode>eng</LanguageCode>
+      </language>
+      <characterEncoding>
+        <MD_CharacterSetCode>utf8</MD_CharacterSetCode>
+      </characterEncoding>
+    </PT_Locale>
+  </defaultLocale>
+  <metadataScope>
+    <MD_MetadataScope>
+      <resourceScope>
+        <MD_ScopeCode xmlns="http://standards.iso.org/iso/19115/-3/mcc/1.0">dataset</MD_ScopeCode>
+      </resourceScope>
+    </MD_MetadataScope>
+  </metadataScope>
+  <contact>
+    <CI_Responsibility xmlns="http://standards.iso.org/iso/19115/-3/cit/2.0">
+      <role>
+        <CI_RoleCode>pointOfContact</CI_RoleCode>
+      </role>
+      <party>
+        <CI_Organisation>
+          <name>
+            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT</CharacterString>
+          </name>
+          <contactInfo>
+            <CI_Contact>
+              <phone>
+                <CI_Telephone>
+                  <number>
+                    <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">(555) 555-5555</CharacterString>
+                  </number>
+                </CI_Telephone>
+              </phone>
+              <address>
+                <CI_Address>
+                  <deliveryPoint>
+                    <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">Suite 1003, 1021 Balch Boulevard, Stennis Space Center, MS 39529, USA</CharacterString>
+                  </deliveryPoint>
+                  <electronicMailAddress>
+                    <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">errol.ronje@noaa.gov</CharacterString>
+                  </electronicMailAddress>
+                </CI_Address>
+              </address>
+              <onlineResource>
+                <CI_OnlineResource>
+                  <linkage>
+                    <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio</CharacterString>
+                  </linkage>
+                </CI_OnlineResource>
+              </onlineResource>
+            </CI_Contact>
+          </contactInfo>
+        </CI_Organisation>
+      </party>
+    </CI_Responsibility>
+  </contact>
+  <dateInfo>
+    <CI_Date xmlns="http://standards.iso.org/iso/19115/-3/cit/2.0">
+      <date>
+        <DateTime xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">2025-07-23T05:32:00.000Z</DateTime>
+      </date>
+      <dateType>
+        <CI_DateTypeCode>creation</CI_DateTypeCode>
+      </dateType>
+    </CI_Date>
+  </dateInfo>
+  <metadataStandard>
+    <CI_Citation xmlns="http://standards.iso.org/iso/19115/-3/cit/2.0">
+      <title>
+        <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">ISO 19115-3</CharacterString>
+      </title>
+      <edition>
+        <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">2.0</CharacterString>
+      </edition>
+    </CI_Citation>
+  </metadataStandard>
+  <referenceSystemInfo>
+    <MD_ReferenceSystem xmlns="http://standards.iso.org/iso/19115/-3/mrs/1.0">
+      <referenceSystemIdentifier>
+        <MD_Identifier xmlns="http://standards.iso.org/iso/19115/-3/mcc/1.0">
+          <code>
+            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">EPSG:4326</CharacterString>
+          </code>
+        </MD_Identifier>
+      </referenceSystemIdentifier>
+    </MD_ReferenceSystem>
+  </referenceSystemInfo>
+  <identificationInfo>
+    <MD_DataIdentification xmlns="http://standards.iso.org/iso/19115/-3/mri/1.0">
+      <citation>
+        <CI_Citation xmlns="http://standards.iso.org/iso/19115/-3/cit/2.0">
+          <title>
+            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">RV Expedition 2025 LEG 01 REMUS620 KRAKEN SAS MGM Dive 01</CharacterString>
+          </title>
+          <alternateTitle>
+            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">EN2501_REMUS620_401_KRAKEN_SAS_202507023T0116Z</CharacterString>
+          </alternateTitle>
+          <date>
+            <CI_Date>
+              <date>
+                <DateTime xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">2025-07-23T05:32:00.000Z</DateTime>
+              </date>
+              <dateType>
+                <CI_DateTypeCode>creation</CI_DateTypeCode>
+              </dateType>
+            </CI_Date>
+          </date>
+          <date>
+            <CI_Date>
+              <date>
+                <DateTime xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">2025-07-23T18:16:00.000Z</DateTime>
+              </date>
+              <dateType>
+                <CI_DateTypeCode>completion</CI_DateTypeCode>
+              </dateType>
+            </CI_Date>
+          </date>
+        </CI_Citation>
+      </citation>
+      <abstract>
+        <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">The MDBC Mapping, Ground truthing and Modeling team along with USM will conduct UUV missions to collect synthetic aperture sonar data using the REMUS 620 platform equipped with the KRAKEN Sonar sensor and other oceanographic equipment</CharacterString>
+      </abstract>
+      <status>
+        <MD_ProgressCode xmlns="http://standards.iso.org/iso/19115/-3/mcc/1.0">ongoing</MD_ProgressCode>
+      </status>
+      <pointOfContact>
+        <CI_Responsibility xmlns="http://standards.iso.org/iso/19115/-3/cit/2.0">
+          <role>
+            <CI_RoleCode>pointOfContact</CI_RoleCode>
+          </role>
+          <party>
+            <CI_Organisation>
+              <name>
+                <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT</CharacterString>
+              </name>
+              <contactInfo />
+            </CI_Organisation>
+          </party>
+        </CI_Responsibility>
+      </pointOfContact>
+      <extent>
+        <EX_Extent xmlns="http://standards.iso.org/iso/19115/-3/gex/1.0">
+          <geographicElement>
+            <EX_GeographicBoundingBox>
+              <westBoundLongitude>
+                <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">-87.12298583812589</CharacterString>
+              </westBoundLongitude>
+              <eastBoundLongitude>
+                <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">-87.24584907117764</CharacterString>
+              </eastBoundLongitude>
+              <southBoundLatitude>
+                <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">29.892576066532285</CharacterString>
+              </southBoundLatitude>
+              <northBoundLatitude>
+                <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">29.952103569624114</CharacterString>
+              </northBoundLatitude>
+            </EX_GeographicBoundingBox>
+          </geographicElement>
+        </EX_Extent>
+      </extent>
+    </MD_DataIdentification>
+  </identificationInfo>
+  <acquisitionInformation>
+    <MI_AcquisitionInformation xmlns="http://standards.iso.org/iso/19115/-3/mac/2.0">
+      <instrument>
+        <MI_Instrument>
+          <identifier>
+            <MD_Identifier xmlns="http://standards.iso.org/iso/19115/-3/mcc/1.0">
+              <code>
+                <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">PHINS INS</CharacterString>
+              </code>
+            </MD_Identifier>
+          </identifier>
+          <type>
+            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">Inertial Navigation System</CharacterString>
+          </type>
+          <description>
+            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">Manufacturer: Exail; Model: iXBlue 6000; S/N: PH4063; Firmware: NAV_SUBSEA_1_7_7.a; Calibration Date: 2025-07-23</CharacterString>
+          </description>
+        </MI_Instrument>
+      </instrument>
+      <instrument>
+        <MI_Instrument>
+          <identifier>
+            <MD_Identifier xmlns="http://standards.iso.org/iso/19115/-3/mcc/1.0">
+              <code>
+                <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">AML CTD</CharacterString>
+              </code>
+            </MD_Identifier>
+          </identifier>
+          <type>
+            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">Conductivity, Temperature, Depth Sensor</CharacterString>
+          </type>
+          <description>
+            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">Manufacturer: AML Oceanographic; Firmware: 83.30</CharacterString>
+          </description>
+        </MI_Instrument>
+      </instrument>
+      <instrument>
+        <MI_Instrument>
+          <identifier>
+            <MD_Identifier xmlns="http://standards.iso.org/iso/19115/-3/mcc/1.0">
+              <code>
+                <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">RDI ADCP</CharacterString>
+              </code>
+            </MD_Identifier>
+          </identifier>
+          <type>
+            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">Acoustic Doppler Current Profiler</CharacterString>
+          </type>
+          <description>
+            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">Manufacturer: Teledyne Marine RD Instruments; Firmware: 83.30</CharacterString>
+          </description>
+        </MI_Instrument>
+      </instrument>
+      <instrument>
+        <MI_Instrument>
+          <identifier>
+            <MD_Identifier xmlns="http://standards.iso.org/iso/19115/-3/mcc/1.0">
+              <code>
+                <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">PDVL 300</CharacterString>
+              </code>
+            </MD_Identifier>
+          </identifier>
+          <type>
+            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">Doppler Velocity Logger</CharacterString>
+          </type>
+        </MI_Instrument>
+      </instrument>
+      <instrument>
+        <MI_Instrument>
+          <identifier>
+            <MD_Identifier xmlns="http://standards.iso.org/iso/19115/-3/mcc/1.0">
+              <code>
+                <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">Kraken SAS</CharacterString>
+              </code>
+            </MD_Identifier>
+          </identifier>
+          <type>
+            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">Synthetic Aperture Sonar</CharacterString>
+          </type>
+          <description>
+            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">Manufacturer: Kraken Robotics</CharacterString>
+          </description>
+        </MI_Instrument>
+      </instrument>
+      <platform>
+        <MI_Platform>
+          <identifier>
+            <MD_Identifier xmlns="http://standards.iso.org/iso/19115/-3/mcc/1.0">
+              <code>
+                <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">REMUS620_401</CharacterString>
+              </code>
+            </MD_Identifier>
+          </identifier>
+          <description>
+            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">Platform: REMUS 620 by HII Model: REMUS 620</CharacterString>
+          </description>
+          <description>
+            <CharacterString xmlns="http://standards.iso.org/iso/19115/-3/gco/1.0">Specifications: Weight: 300 kg, Length: 3.25 m, Width: 0.5 m, Height: 0.5 m</CharacterString>
+          </description>
+        </MI_Platform>
+      </platform>
+    </MI_AcquisitionInformation>
+  </acquisitionInformation>
+  <dataQualityInfo>
+    <DQ_DataQuality xmlns="http://standards.iso.org/iso/19157/-2/mdq/1.0">
+      <scope>
+        <DQ_Scope>
+          <level>
+            <MD_ScopeCode xmlns="http://standards.iso.org/iso/19115/-3/mcc/1.0">dataset</MD_ScopeCode>
+          </level>
+        </DQ_Scope>
+      </scope>
+    </DQ_DataQuality>
+  </dataQualityInfo>
+</MD_Metadata>
+

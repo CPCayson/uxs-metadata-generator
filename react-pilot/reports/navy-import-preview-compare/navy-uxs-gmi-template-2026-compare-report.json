@@ -1,0 +1,107 @@
+{
+  "generatedAt": "2026-05-11T16:06:47.001Z",
+  "sourceXml": "fixtures/mission/navy-uxs-gmi-template-2026.xml",
+  "importWarnings": [
+    "Navy UxS template placeholders detected: provisional values were applied for empty/invalid catalog fields (DOI, ROR, email, URLs, accession, provider keyword, download URL, platform type). Replace with real metadata before publication."
+  ],
+  "counts": {
+    "probesConsidered": 20,
+    "missingAfterImport": 0,
+    "missingOriginalVsPreviewXml": 0,
+    "originalXmlChars": 55716,
+    "previewXmlChars": 27118,
+    "fullLeafEntriesOriginal": 65,
+    "fullLeafEntriesPreview": 124,
+    "fullLeafMultisetDiffRows": 129,
+    "fullLeafOnlyInOriginalRows": 35,
+    "fullLeafOnlyInPreviewRows": 94
+  },
+  "missingAfterImport": [],
+  "missingOriginalVsPreviewXml": [],
+  "originalProbes": {
+    "fileId": "gov.noaa.ncei.uxs:{{Unique Identifier Assigned to Metadata Record}}",
+    "title": "{{Aquisition (data collection) entity should be globally unique}}",
+    "abstract": "{{Not a scientific abstract. Describe dataset, goals of mission.}}",
+    "purpose": "{{Not a scientific abstract. Describe collection purpose/overarching project.}}",
+    "supplementalInformation": "{{any other information}}",
+    "status": "completed",
+    "citationDatesJoined": "creation:{{2024-10-11}}|publication:{{2024-10-11}}",
+    "west": "{{-180}}",
+    "east": "{{180}}",
+    "south": "{{-90}}",
+    "north": "{{90}}",
+    "geographicDescription": "{{BRIEF DESCRIPTION OF EXTENT}}",
+    "vmin": "{{99}}",
+    "vmax": "{{99}}",
+    "temporalStart": "{{9999-01-01}}",
+    "temporalEnd": "{{9999-01-02}}",
+    "keywordLeafCount": 1,
+    "sensorInstrumentBlocks": 0,
+    "metadataStandardName": "ISO 19115-2 Geographic Information - Metadata - Part 2: Extensions for Imagery and Gridded Data",
+    "metadataStandardVersion": "ISO 19115-2:2009(E)"
+  },
+  "importedProbes": {
+    "fileId": "Unique Identifier Assigned to Metadata Record",
+    "title": "Aquisition (data collection) entity should be globally unique",
+    "abstract": "Not a scientific abstract. Describe dataset, goals of mission.",
+    "purpose": "Not a scientific abstract. Describe collection purpose/overarching project.",
+    "supplementalInformation": "any other information",
+    "status": "completed",
+    "citationDatesJoined": "pub:2024-10-11|start:9999-01-01|end:9999-01-02",
+    "west": "-180",
+    "east": "180",
+    "south": "-90",
+    "north": "90",
+    "geographicDescription": "BRIEF DESCRIPTION OF EXTENT",
+    "vmin": "99",
+    "vmax": "99",
+    "temporalStart": "9999-01-01",
+    "temporalEnd": "9999-01-02",
+    "keywordLeafCount": 9,
+    "sensorInstrumentBlocks": 2,
+    "metadataStandardName": "ISO 19115-2 Geographic Information - Metadata - Part 2: Extensions for Imagery and Gridded Data",
+    "metadataStandardVersion": "ISO 19115-2:2009(E)"
+  },
+  "previewProbes": {
+    "fileId": "gov.noaa.ncei.uxs:Unique Identifier Assigned to Metadata Record",
+    "title": "Aquisition (data collection) entity should be globally unique",
+    "abstract": "Not a scientific abstract. Describe dataset, goals of mission.",
+    "purpose": "Not a scientific abstract. Describe collection purpose/overarching project.",
+    "supplementalInformation": "any other information UxS operational layer: Dataset or product",
+    "status": "completed",
+    "citationDatesJoined": "creation:9999-01-01|publication:2024-10-11|completion:9999-01-02",
+    "west": "-180",
+    "east": "180",
+    "south": "-90",
+    "north": "90",
+    "geographicDescription": "BRIEF DESCRIPTION OF EXTENT",
+    "vmin": "99",
+    "vmax": "99",
+    "temporalStart": "9999-01-01",
+    "temporalEnd": "9999-01-02",
+    "keywordLeafCount": 9,
+    "sensorInstrumentBlocks": 0,
+    "metadataStandardName": "ISO 19115-2 Geographic Information - Metadata - Part 2: Extensions for Imagery and Gridded Data",
+    "metadataStandardVersion": "ISO 19115-2:2009(E)"
+  },
+  "writtenFiles": {
+    "originalCopy": "reports/navy-import-preview-compare/navy-uxs-gmi-template-2026-original.xml",
+    "previewFromImport": "reports/navy-import-preview-compare/navy-uxs-gmi-template-2026-preview-from-import.xml",
+    "unifiedDiff": "reports/navy-import-preview-compare/navy-uxs-gmi-template-2026-diff-u.txt",
+    "leafMultisetDiff": "reports/navy-import-preview-compare/navy-uxs-gmi-template-2026-leaf-multiset-diff.json",
+    "onlyInOriginalLeaves": "reports/navy-import-preview-compare/navy-uxs-gmi-template-2026-only-in-original-leaves.txt",
+    "onlyInPreviewLeaves": "reports/navy-import-preview-compare/navy-uxs-gmi-template-2026-only-in-preview-leaves.txt"
+  },
+  "xmllint": {
+    "original": {
+      "ok": true,
+      "status": 0,
+      "stderr": ""
+    },
+    "preview": {
+      "ok": true,
+      "status": 0,
+      "stderr": ""
+    }
+  }
+}

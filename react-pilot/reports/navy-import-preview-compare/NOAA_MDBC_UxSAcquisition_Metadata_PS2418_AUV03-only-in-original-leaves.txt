@@ -1,0 +1,192 @@
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/acquisitionRequirement/MI_Requirement/expiryDate/DateTime	2000-01-01T00:00:00Z
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/acquisitionRequirement/MI_Requirement/identifier/MD_Identifier/code/CharacterString	The purpose of AUV acquisition within MC252 will be to provide detailed, contemporary information and products within this region. Additionally, this expedition will focus on characterizing deep coral ecosystem conditions, extent, type, and abundance (topography, biology and geomorphology) within a salt dome complex to inform predictive habitat modeling product development. AUV surveys (each approximately 20 km2 will be conducted at locations to validate and inform the interpretation of acous…
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/acquisitionRequirement/MI_Requirement/priority/MI_PriorityCode	highImportance
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/acquisitionRequirement/MI_Requirement/requestedDate/MI_RequestedDate/latestAcceptableDate/DateTime	2000-01-01T00:00:00Z
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/acquisitionRequirement/MI_Requirement/requestedDate/MI_RequestedDate/requestedDateOfCollection/DateTime	2000-01-01T00:00:00Z
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/operation/MI_Operation/description/CharacterString	AUV acquisition within MC252 will be to provide detailed, contemporary information and products within this region. Additionally, this expedition will focus on characterizing deep coral ecosystem conditions, extent, type, and abundance (topography, biology and geomorphology) within a salt dome complex to inform predictive habitat modeling product development.
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/operation/MI_Operation/identifier/MD_Identifier/code/CharacterString	PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/operation/MI_Operation/significantEvent/MI_Event/context/MI_ContextCode	acquisition
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/operation/MI_Operation/significantEvent/MI_Event/identifier/MD_Identifier/code/CharacterString	Arrival at survey areas
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/operation/MI_Operation/significantEvent/MI_Event/sequence/MI_SequenceCode	start
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/operation/MI_Operation/significantEvent/MI_Event/time/DateTime	2024-05-07T00:03:27
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/operation/MI_Operation/significantEvent/MI_Event/trigger/MI_TriggerCode	automatic
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/description/CharacterString	Eagle Ray Deep Water Mapping AUV
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/identifier/MD_Identifier/code/CharacterString	PS Eagle Ray
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/description/CharacterString	Paroscientific Digiquartz Series 8000 Pressure Sensor Uncertainty Estimate - 0.2m Confidence Interval - RMS 0.01% Typical Accuracy (Total depth of 2200m)
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString	https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString	PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString	Arrived at mission area
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode	utf8
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode	English
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	Paroscientific Pressure Sensor
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/otherPropertyType/RecordType	Sensor Markup Language ParameterList
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[1]/MI_Instrument/type/CharacterString	Paroscientific Digiquartz Series 8000 Pressure Sensor
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/description/CharacterString	OFG Self-compensating Magnetometer (SCM) Depth rated 6000m
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString	https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString	PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString	Arrived at mission area
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode	utf8
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode	English
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	OFG Magnetometer
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/otherPropertyType/RecordType	Sensor Markup Language ParameterList
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[10]/MI_Instrument/type/CharacterString	OFG Self-compensating Magnetometer (SCM)
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/description/CharacterString	SBE 49 FastCAT CTD Sensor Operation Mode 1 hz Uncertainty Estimate =/- 0.002 deg C; =/- 0.0003 S/m for conductivity; 0.1% for pressure Confidence Interval RMS
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString	https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString	PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString	Arrived at mission area
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode	utf8
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode	English
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	SBE CTD Sensor
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/otherPropertyType/RecordType	Sensor Markup Language ParameterList
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[2]/MI_Instrument/type/CharacterString	SBE 49 FastCAT CTD Sensor
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/description/CharacterString	Masterclock GNSS Receiver GMR Series 1000 Operation mode - Internal Clock Uncertainty Estimate - Correction time: +/-60 ns of UTC Accurate to reference within +/- 15ns of UTC, Time drift per year (max): +3 sec/year
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString	https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString	PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString	Arrived at mission area
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode	utf8
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode	English
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	Masterclock GNSS Receiver
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/otherPropertyType/RecordType	Sensor Markup Language ParameterList
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[3]/MI_Instrument/type/CharacterString	Masterclock GNSS Receiver GMR Series 1000
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/description/CharacterString	Norbit WBMS MBES 200 and 400 kHz 512 beams 0.9 degrees x 0.9 degrees
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString	https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString	PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString	Arrived at mission area
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode	utf8
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode	English
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	Norbit MBES
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/otherPropertyType/RecordType	Sensor Markup Language ParameterList
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[4]/MI_Instrument/type/CharacterString	Norbit WBMS MBES
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/description/CharacterString	Geoacoustic Subbottom Profiler based on GeoPulse model 1.5 kHz
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString	https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString	PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString	Arrived at mission area
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode	utf8
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode	English
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	Geoacoustic Subbottom Profiler
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/otherPropertyType/RecordType	Sensor Markup Language ParameterList
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[5]/MI_Instrument/type/CharacterString	Geoacoustic Subbottom Profiler based on GeoPulse model
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/description/CharacterString	Exail Phins C7 INS Operation Mode - Position Accuracy Roll and Pitch Uncertainty Estimate - 0.010 deg Confidence Interval - RMS Use with GNSS or USBL and DVL
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString	https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString	PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString	Arrived at mission area
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode	utf8
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode	English
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	Exail INS
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/otherPropertyType/RecordType	Sensor Markup Language ParameterList
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[6]/MI_Instrument/type/CharacterString	Exail Phins C7 INS
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/description/CharacterString	Nortek 500 DVL Operation Mode - Long-term Accuracy Uncertainty Estimate - +/- 0.1% / +/- 0.1 cm/s Confidence Interval - RMS Depth and Speed
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString	https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString	PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString	Arrived at mission area
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode	utf8
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode	English
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	Nortek DVL
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/otherPropertyType/RecordType	Sensor Markup Language ParameterList
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[7]/MI_Instrument/type/CharacterString	Nortek 500 DVL
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/description/CharacterString	Sonardyne Ranger2 USBL Operation Mode - slant range system accuracy Uncertainty Estimate - 0.04% Confidence Interval - RMS Sampling rate 1 Hz and frequency of 19-34 kHz or 14-19.5 kHz
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString	https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString	PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString	Arrived at mission area
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode	utf8
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode	English
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	Sonardyne USBL
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/otherPropertyType/RecordType	Sensor Markup Language ParameterList
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[8]/MI_Instrument/type/CharacterString	Sonardyne Ranger2 USBL
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/description/CharacterString	Sonardyne AVTrack6 USBL Transponder Operation Mode - Depth Sensor Uncertainty Estimate - +/- 0.5% full scale Confidence Interval - RMS Range precision better than 15mm
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/onlineResource/CI_OnlineResource/linkage/CharacterString	https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/history/MI_InstrumentationEventList/citation/CI_Citation/title/CharacterString	PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/history/MI_InstrumentationEventList/description/CharacterString	Arrived at mission area
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/characterEncoding/MD_CharacterSetCode	utf8
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/history/MI_InstrumentationEventList/locale/PT_Locale/language/LanguageCode	English
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	Sonardyne USBL Transponder
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/otherPropertyType/RecordType	Sensor Markup Language ParameterList
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/instrument[9]/MI_Instrument/type/CharacterString	Sonardyne AVTrack6 USBL Transponder
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/capabilities/capability/CapabilityList/DataRecord/field[1]/QuantityRange/value	0 90
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/capabilities/capability/CapabilityList/DataRecord/field[2]/QuantityRange/value	-90 90
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/capabilities/capability/CapabilityList/DataRecord/field[3]/Quantity/value	-180 180
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/capabilities/capability/CapabilityList/DataRecord/field[4]/Quantity/value	0 360
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/capabilities/capability/CapabilityList/DataRecord/field[5]/Quantity/value	0 360
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/capabilities/capability/CapabilityList/DataRecord/field[6]/Quantity/value	0 360
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/capabilities/capability/CapabilityList/DataRecord/field[7]/Quantity/value	1
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/capabilities/capability/CapabilityList/DataRecord/field[8]/Quantity/value	0 99
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/capabilities/capability/CapabilityList/DataRecord/label	Measurement Properties
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/characteristics/CharacteristicList/characteristic/DataRecord/field/DataRecord/field[1]/Quantity/value	907
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/characteristics/CharacteristicList/characteristic/DataRecord/field/DataRecord/field[2]/Quantity/value	5
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/characteristics/CharacteristicList/characteristic/DataRecord/field/DataRecord/field[3]/Quantity/value	0.7
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/characteristics/CharacteristicList/characteristic/DataRecord/field/DataRecord/field[4]/Quantity/value	0.7
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/characteristics/CharacteristicList/characteristic/DataRecord/field/DataRecord/field[5]/Category/value	Fiberglass
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/characteristics/CharacteristicList/characteristic/DataRecord/label	Physical Properties
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/position/DataArray/elementCount/Count/value	620640
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/position/DataArray/elementType/DataRecord/field[1]/Time/label	4.5 per second
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/position/DataArray/elementType/DataRecord/field[2]/Vector/label	Northern Gulf of Mexico in the vicinity of Macondo wellhead and impact area including the Gloria Dome
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/otherProperty/Record/position/DataArray/values	88° 25.92753' W 28° 43.32011' N 88° 25.92753' W 28° 39.29200' N 88° 30.19532' W 28° 39.29200' N 88° 30.19532' W 28° 43.32011' N
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/sponsor/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/electronicMailAddress/CharacterString	errol.ronje@noaa.gov
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/sponsor/CI_Responsibility/party/CI_Organisation/name/CharacterString	NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/scope/MD_Scope/extent/EX_Extent/description/CharacterString	Northern Gulf of Mexico
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/scope/MD_Scope/level/MD_ScopeCode	Dataset
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/scope/MD_Scope/levelDescription/MD_ScopeDescription/other/CharacterString	AUV surveys (each approximately 20 km2 will be conducted at locations to validate and inform the interpretation of acoustic signatures from previously collected ship-based multibeam system surveys.
+1	MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/administrativeArea/CharacterString	MS
+1	MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/city/CharacterString	Stennis Space Center
+1	MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/country/CharacterString	USA
+1	MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/deliveryPoint[1]/CharacterString	Suite 1003
+1	MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/deliveryPoint[2]/CharacterString	1021 Balch Boulevard
+1	MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/electronicMailAddress/CharacterString	andrew.evans@noaa.gov
+1	MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/postalCode/CharacterString	39529
+1	MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/description/CharacterString	The MDBC Portfolio comprises four coordinated projects. The Portfolio Deliverables site provides access to documents and products created to inform and support this effort at the portfolio level, including those designated as deliverables by the MDBC Portfolio.
+1	MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/function/CI_OnLineFunctionCode	information
+1	MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/linkage/CharacterString	https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio
+1	MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/name/CharacterString	MESOPHOTIC AND DEEP BENTHIC COMMUNITIES PORTFOLIO
+1	MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/phone/CI_Telephone/number/CharacterString	(601) 207-2323
+1	MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/name/CharacterString	NOAA - NCEI
+1	MD_Metadata/contact/CI_Responsibility/role/CI_RoleCode	pointOfContact
+1	MD_Metadata/dataQualityInfo/DQ_DataQuality/report[1]/DQ_GriddedDataPositionalAccuracy/result/DQ_QuantitativeResult/value/Record/Quantity/label	IHO Map Accuracy Standard
+1	MD_Metadata/dataQualityInfo/DQ_DataQuality/report[1]/DQ_GriddedDataPositionalAccuracy/result/DQ_QuantitativeResult/value/Record/Quantity/value	1.0
+1	MD_Metadata/dataQualityInfo/DQ_DataQuality/report[2]/DQ_AbsoluteExternalPositionalAccuracy/result/DQ_QuantitativeResult/value/Record/Quantity/label	Absolute Linear Error at 90% Significance Level of Biased Vertical Data (Alternative 2)
+1	MD_Metadata/dataQualityInfo/DQ_DataQuality/report[2]/DQ_AbsoluteExternalPositionalAccuracy/result/DQ_QuantitativeResult/value/Record/Quantity/value	1.5
+1	MD_Metadata/dataQualityInfo/DQ_DataQuality/scope/MD_Scope/levelDescription/MD_ScopeDescription/other/CharacterString	cell
+1	MD_Metadata/dateInfo/CI_Date/date/DateTime	2024-05-09T21:16:39Z
+1	MD_Metadata/dateInfo/CI_Date/dateType/CI_DateTypeCode	creation
+1	MD_Metadata/defaultLocale/PT_Locale/characterEncoding/MD_CharacterSetCode	utf8
+1	MD_Metadata/defaultLocale/PT_Locale/language/LanguageCode	English
+1	MD_Metadata/identificationInfo/MD_DataIdentification/abstract/CharacterString	The MDBC Mapping, Groundtruthing and Modeling team along with USM will conduct AUV acquisition at multiple deepwater dome sites for 11 operational days using the RV Point Sur. The mission will focus on two objectives - 1) Collect high-resolution multibeam bathymetry and backscatter over Macondo wellhead and impact area (MC252) using the USM Eagle Ray (ER) AUV, 2) collect high resolution data at other proximal dome features where significant feature anomalies of been identified from existing data
+1	MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/alternateTitle/CharacterString	PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z
+1	MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date/CI_Date/date/DateTime	2024-05-08T01:17:27Z
+1	MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/identifier/MD_Identifier/authority/CI_Citation/date/CI_Date/date/DateTime	2024-05-08T01:17:27Z
+1	MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/identifier/MD_Identifier/authority/CI_Citation/title/CharacterString	University of Southern Mississippi
+1	MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/title/CharacterString	Point Sur 2024 Leg 18 Eagle Ray MultiBeam Sonar Data AUV Dive 03
+1	MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/administrativeArea/CharacterString	MS
+1	MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/city/CharacterString	Stennis Space Center
+1	MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/country/CharacterString	USA
+1	MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/deliveryPoint[1]/CharacterString	Suite 1003
+1	MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/deliveryPoint[2]/CharacterString	1021 Balch Boulevard
+1	MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/electronicMailAddress/CharacterString	errol.ronje@noaa.gov
+1	MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/postalCode/CharacterString	39529
+1	MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/description/CharacterString	The MDBC Portfolio comprises four coordinated projects. The Portfolio Deliverables site provides access to documents and products created to inform and support this effort at the portfolio level, including those designated as deliverables by the MDBC Portfolio.
+1	MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/function/CI_OnLineFunctionCode	information
+1	MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/linkage/CharacterString	https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio
+1	MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/name/CharacterString	MESOPHOTIC AND DEEP BENTHIC COMMUNITIES PORTFOLIO
+1	MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/phone/CI_Telephone/number/CharacterString	+17692421590
+1	MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/name/CharacterString	NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT
+1	MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/role/CI_RoleCode	pointOfContact
+1	MD_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints[1]/MD_SecurityConstraints/classificationSystem/CharacterString	USA
+1	MD_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints[1]/MD_SecurityConstraints/handlingDescription/CharacterString	Data should not be distributed beyond members of the Science Team which collected the data or other MDBC project members with written consent from the project manager until data is released for public accessibility
+1	MD_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints[2]/MD_LegalConstraints/accessConstraints/MD_RestrictionCode	otherRestrictions
+1	MD_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints[2]/MD_LegalConstraints/otherConstraints/CharacterString	Distribution liability: NOAA and NCEI make no warranty, expressed or implied, regarding these data, nor does the fact of distribution constitute such a warranty. NOAA and NCEI cannot assume liability for any damages caused by any errors or omissions in these data. If appropriate, NCEI can only certify that the data it distributes are an authentic copy of the records that were accepted for inclusion in the NCEI archives.
+1	MD_Metadata/identificationInfo/MD_DataIdentification/resourceConstraints[2]/MD_LegalConstraints/useConstraints/MD_RestrictionCode	confidential
+1	MD_Metadata/metadataIdentifier/MD_Identifier/code/CharacterString	PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z_MD
+1	MD_Metadata/metadataScope/MD_MetadataScope/name/CharacterString	PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z
+1	MD_Metadata/metadataScope/MD_MetadataScope/resourceScope/MD_ScopeCode	dataset
+1	MD_Metadata/metadataStandard/CI_Citation/alternateTitle/CharacterString	ISOTC211
+1	MD_Metadata/metadataStandard/CI_Citation/edition/CharacterString	2:2019/Amd 1:2022
+1	MD_Metadata/metadataStandard/CI_Citation/title/CharacterString	ISO 19115 Geographic Information - Metadata
+1	MD_Metadata/referenceSystemInfo/MD_ReferenceSystem/referenceSystemIdentifier/MD_Identifier/code/CharacterString	WGS84E_2D
+1	MD_Metadata/referenceSystemInfo/MD_ReferenceSystem/referenceSystemIdentifier/MD_Identifier/codeSpace/CharacterString	http://standards.iso.org/iso/19115/-3/mrs/1.0
+1	MD_Metadata/spatialRepresentationInfo/MD_Georectified/checkPointAvailability/Boolean	true
+1	MD_Metadata/spatialRepresentationInfo/MD_Georectified/cornerPoints[1]/Point/coordinates	88° 25.92753' W 28° 43.32011' N
+1	MD_Metadata/spatialRepresentationInfo/MD_Georectified/cornerPoints[2]/Point/coordinates	88° 25.92753' W 28° 39.29200' N
+1	MD_Metadata/spatialRepresentationInfo/MD_Georectified/cornerPoints[3]/Point/coordinates	88° 30.19532' W 28° 39.29200' N
+1	MD_Metadata/spatialRepresentationInfo/MD_Georectified/cornerPoints[4]/Point/coordinates	88° 30.19532' W 28° 43.32011' N
+1	MD_Metadata/spatialRepresentationInfo/MD_Georectified/numberOfDimensions/Integer	3
+1	MD_Metadata/spatialRepresentationInfo/MD_Georectified/pointInPixel/MD_PixelOrientationCode	lowerLeft
+1	MD_Metadata/spatialRepresentationInfo/MD_Georectified/transformationParameterAvailability/Boolean	true

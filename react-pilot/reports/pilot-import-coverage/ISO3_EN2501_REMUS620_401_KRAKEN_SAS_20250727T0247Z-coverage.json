@@ -1,0 +1,2117 @@
+{
+  "generatedAt": "2026-05-11T16:17:31.191Z",
+  "sourceXml": "../MANTA End User Testing/samples/ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
+  "importWarnings": [],
+  "summary": {
+    "leafPaths": 224,
+    "filled": 62,
+    "empty": 162,
+    "sameAsDefault": 145,
+    "changedFromDefault": 79
+  },
+  "byStep": {
+    "6-distribution": {
+      "filled": 9,
+      "empty": 27,
+      "sameAsDefault": 33,
+      "total": 36
+    },
+    "5-keywords": {
+      "filled": 2,
+      "empty": 9,
+      "sameAsDefault": 5,
+      "total": 11
+    },
+    "1-mission": {
+      "filled": 17,
+      "empty": 53,
+      "sameAsDefault": 58,
+      "total": 70
+    },
+    "meta": {
+      "filled": 4,
+      "empty": 4,
+      "sameAsDefault": 6,
+      "total": 8
+    },
+    "2-platform": {
+      "filled": 3,
+      "empty": 16,
+      "sameAsDefault": 16,
+      "total": 19
+    },
+    "3-sensors": {
+      "filled": 24,
+      "empty": 36,
+      "sameAsDefault": 7,
+      "total": 60
+    },
+    "4-spatial": {
+      "filled": 3,
+      "empty": 17,
+      "sameAsDefault": 20,
+      "total": 20
+    }
+  },
+  "emptyPaths": [
+    "distribution.awsBucket",
+    "distribution.awsPrefix",
+    "distribution.distributionFeesText",
+    "distribution.distributionFileFormat",
+    "distribution.distributionFormatName",
+    "distribution.distributionOrderingInstructions",
+    "distribution.distributorContactUrl",
+    "distribution.distributorEmail",
+    "distribution.distributorIndividualName",
+    "distribution.distributorOrganisationName",
+    "distribution.downloadLinkDescription",
+    "distribution.downloadLinkName",
+    "distribution.downloadUrl",
+    "distribution.finalNotes",
+    "distribution.format",
+    "distribution.license",
+    "distribution.metadataLandingDescription",
+    "distribution.metadataLandingLinkName",
+    "distribution.metadataLandingUrl",
+    "distribution.nceiDistributorContactHref",
+    "distribution.nceiDistributorContactTitle",
+    "distribution.nceiMetadataContactHref",
+    "distribution.nceiMetadataContactTitle",
+    "distribution.parentProject",
+    "distribution.publication",
+    "distribution.templateCategory",
+    "distribution.templateName",
+    "keywords.datacenters",
+    "keywords.instruments",
+    "keywords.instruments[0].uuid",
+    "keywords.locations",
+    "keywords.platforms",
+    "keywords.platforms[0].uuid",
+    "keywords.projects",
+    "keywords.providers",
+    "keywords.sciencekeywords",
+    "mission.accessConstraints",
+    "mission.accessConstraintsCode",
+    "mission.accession",
+    "mission.associatedPublicationCode",
+    "mission.associatedPublicationDate",
+    "mission.associatedPublicationTitle",
+    "mission.citationAuthorIndividualName",
+    "mission.citationAuthorOrganisationName",
+    "mission.citationOriginatorIndividualName",
+    "mission.citationOriginatorOrganisationName",
+    "mission.citationPublisherOrganisationName",
+    "mission.citeAs",
+    "mission.contactAddress",
+    "mission.contactPhone",
+    "mission.contactUrl",
+    "mission.distributionLiability",
+    "mission.doi",
+    "mission.email",
+    "mission.graphicOverviewHref",
+    "mission.graphicOverviewTitle",
+    "mission.individualName",
+    "mission.licenseUrl",
+    "mission.metadataRecordDate",
+    "mission.otherCiteAs",
+    "mission.parentProjectCode",
+    "mission.parentProjectDate",
+    "mission.parentProjectTitle",
+    "mission.publicationDate",
+    "mission.purpose",
+    "mission.relatedDataUrl",
+    "mission.relatedDataUrlDescription",
+    "mission.relatedDataUrlTitle",
+    "mission.relatedDatasetCode",
+    "mission.relatedDatasetDate",
+    "mission.relatedDatasetOrg",
+    "mission.relatedDatasetTitle",
+    "mission.ror",
+    "mission.supplementalInformation",
+    "mission.temporalExtentIntervalUnit",
+    "mission.temporalExtentIntervalValue",
+    "mission.topicCategories",
+    "mission.uxsContext.deploymentId",
+    "mission.uxsContext.deploymentName",
+    "mission.uxsContext.diveId",
+    "mission.uxsContext.diveName",
+    "mission.uxsContext.narrative",
+    "mission.uxsContext.operationOutcome",
+    "mission.uxsContext.runId",
+    "mission.uxsContext.runName",
+    "mission.uxsContext.sortieId",
+    "mission.uxsContext.sortieName",
+    "mission.vmax",
+    "mission.vmin",
+    "platform.customPlatformType",
+    "platform.deploymentDate",
+    "platform.height",
+    "platform.length",
+    "platform.manufacturer",
+    "platform.material",
+    "platform.model",
+    "platform.navigationSystem",
+    "platform.operationalArea",
+    "platform.platformName",
+    "platform.powerSource",
+    "platform.sensorMounts",
+    "platform.serialNumber",
+    "platform.speed",
+    "platform.weight",
+    "platform.width",
+    "sensors[0].beamCount",
+    "sensors[0].confidenceInterval",
+    "sensors[0].depthRating",
+    "sensors[0].firmware",
+    "sensors[0].frequency",
+    "sensors[0].operationMode",
+    "sensors[0].uncertainty",
+    "sensors[1].beamCount",
+    "sensors[1].confidenceInterval",
+    "sensors[1].depthRating",
+    "sensors[1].firmware",
+    "sensors[1].frequency",
+    "sensors[1].operationMode",
+    "sensors[1].uncertainty",
+    "sensors[2].beamCount",
+    "sensors[2].confidenceInterval",
+    "sensors[2].depthRating",
+    "sensors[2].firmware",
+    "sensors[2].frequency",
+    "sensors[2].operationMode",
+    "sensors[2].uncertainty",
+    "sensors[2].variable",
+    "sensors[3].beamCount",
+    "sensors[3].confidenceInterval",
+    "sensors[3].depthRating",
+    "sensors[3].firmware",
+    "sensors[3].frequency",
+    "sensors[3].operationMode",
+    "sensors[3].uncertainty",
+    "sensors[4].beamCount",
+    "sensors[4].confidenceInterval",
+    "sensors[4].depthRating",
+    "sensors[4].firmware",
+    "sensors[4].frequency",
+    "sensors[4].operationMode",
+    "sensors[4].uncertainty",
+    "sourceProvenance.importedAt",
+    "sourceProvenance.originalFilename",
+    "sourceProvenance.originalUuid",
+    "sourceProvenance.sourceId",
+    "spatial.accuracyStandard",
+    "spatial.accuracyValue",
+    "spatial.dimensions",
+    "spatial.errorLevel",
+    "spatial.errorValue",
+    "spatial.geographicDescription",
+    "spatial.gridCellGeometry",
+    "spatial.gridColumnResolution",
+    "spatial.gridColumnSize",
+    "spatial.gridRowResolution",
+    "spatial.gridRowSize",
+    "spatial.gridVerticalResolution",
+    "spatial.gridVerticalSize",
+    "spatial.lineageProcessSteps",
+    "spatial.lineageStatement",
+    "spatial.trajectorySampling",
+    "spatial.verticalCrsUrl"
+  ],
+  "filledPaths": [
+    "distribution.downloadProtocol",
+    "distribution.landingUrl",
+    "distribution.metadataMaintenanceFrequency",
+    "distribution.metadataStandard",
+    "distribution.metadataVersion",
+    "distribution.nceiFileIdPrefix",
+    "distribution.omitRootReferenceSystemInfo",
+    "distribution.outputLocation",
+    "distribution.useNceiMetadataContactXlink",
+    "keywords.instruments[0].label",
+    "keywords.platforms[0].label",
+    "mission.abstract",
+    "mission.alternateTitle",
+    "mission.characterSet",
+    "mission.dataLicensePreset",
+    "mission.east",
+    "mission.endDate",
+    "mission.fileId",
+    "mission.language",
+    "mission.north",
+    "mission.org",
+    "mission.scopeCode",
+    "mission.south",
+    "mission.startDate",
+    "mission.status",
+    "mission.title",
+    "mission.uxsContext.primaryLayer",
+    "mission.west",
+    "mode",
+    "platform.platformDesc",
+    "platform.platformId",
+    "platform.platformType",
+    "sensors[0].localId",
+    "sensors[0].modelId",
+    "sensors[0].sensorId",
+    "sensors[0].type",
+    "sensors[0].variable",
+    "sensors[1].localId",
+    "sensors[1].modelId",
+    "sensors[1].sensorId",
+    "sensors[1].type",
+    "sensors[1].variable",
+    "sensors[2].localId",
+    "sensors[2].modelId",
+    "sensors[2].sensorId",
+    "sensors[2].type",
+    "sensors[3].localId",
+    "sensors[3].modelId",
+    "sensors[3].sensorId",
+    "sensors[3].type",
+    "sensors[3].variable",
+    "sensors[4].localId",
+    "sensors[4].modelId",
+    "sensors[4].sensorId",
+    "sensors[4].type",
+    "sensors[4].variable",
+    "sourceProvenance.exportPreviewIsoFamily",
+    "sourceProvenance.importIsoXmlFamily",
+    "sourceProvenance.sourceType",
+    "spatial.hasTrajectory",
+    "spatial.referenceSystem",
+    "spatial.useGridRepresentation"
+  ],
+  "changedPaths": [
+    {
+      "path": "distribution.landingUrl",
+      "merged": "https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio"
+    },
+    {
+      "path": "distribution.metadataStandard",
+      "merged": "ISO 19115-3"
+    },
+    {
+      "path": "distribution.metadataVersion",
+      "merged": "2.0"
+    },
+    {
+      "path": "keywords.instruments"
+    },
+    {
+      "path": "keywords.instruments[0].label",
+      "merged": "Inertial Navigation System"
+    },
+    {
+      "path": "keywords.instruments[0].uuid",
+      "merged": ""
+    },
+    {
+      "path": "keywords.platforms"
+    },
+    {
+      "path": "keywords.platforms[0].label",
+      "merged": "Platform: REMUS 620 by HII Model: REMUS 620"
+    },
+    {
+      "path": "keywords.platforms[0].uuid",
+      "merged": ""
+    },
+    {
+      "path": "mission.abstract",
+      "merged": "The MDBC Mapping, Ground truthing and Modeling team along with USM will conduct UUV missions to collect synthetic aperture sonar data using the REMUS 620 platform equipped with the KRAKEN Sonar sensor and other oceanographic equipment"
+    },
+    {
+      "path": "mission.alternateTitle",
+      "merged": "EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z"
+    },
+    {
+      "path": "mission.east",
+      "merged": "-87.31786719161755"
+    },
+    {
+      "path": "mission.endDate",
+      "merged": "2025-07-27T07:47"
+    },
+    {
+      "path": "mission.fileId",
+      "merged": "EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z"
+    },
+    {
+      "path": "mission.north",
+      "merged": "29.930553243137695"
+    },
+    {
+      "path": "mission.org",
+      "merged": "NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT"
+    },
+    {
+      "path": "mission.south",
+      "merged": "29.843156926151266"
+    },
+    {
+      "path": "mission.startDate",
+      "merged": "2025-07-27T00:48"
+    },
+    {
+      "path": "mission.status",
+      "merged": "ongoing"
+    },
+    {
+      "path": "mission.title",
+      "merged": "RV Expedition 2025 LEG 01 REMUS620 KRAKEN SAS MGM Dive 05"
+    },
+    {
+      "path": "mission.west",
+      "merged": "-87.15895078704915"
+    },
+    {
+      "path": "platform.platformDesc",
+      "merged": "Platform: REMUS 620 by HII Model: REMUS 620"
+    },
+    {
+      "path": "platform.platformId",
+      "merged": "REMUS620_401"
+    },
+    {
+      "path": "platform.platformType",
+      "merged": "Unmanned Underwater Vehicle"
+    },
+    {
+      "path": "sensors[0].localId",
+      "merged": "PHINS INS"
+    },
+    {
+      "path": "sensors[0].modelId",
+      "merged": "PHINS INS"
+    },
+    {
+      "path": "sensors[0].sensorId",
+      "merged": "PHINS INS"
+    },
+    {
+      "path": "sensors[0].type",
+      "merged": "Inertial Navigation System"
+    },
+    {
+      "path": "sensors[0].variable",
+      "merged": "Manufacturer: Exail; Model: iXBlue 6000; Firmware: NAV_SUBSEA_1_7_7.a"
+    },
+    {
+      "path": "sensors[1].beamCount",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].confidenceInterval",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].depthRating",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].firmware",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].frequency",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].localId",
+      "merged": "Kraken SAS"
+    },
+    {
+      "path": "sensors[1].modelId",
+      "merged": "Kraken SAS"
+    },
+    {
+      "path": "sensors[1].operationMode",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].sensorId",
+      "merged": "Kraken SAS"
+    },
+    {
+      "path": "sensors[1].type",
+      "merged": "Synthetic Aperture Sonar"
+    },
+    {
+      "path": "sensors[1].uncertainty",
+      "merged": ""
+    },
+    {
+      "path": "sensors[1].variable",
+      "merged": "Manufacturer: Kraken Robotics"
+    },
+    {
+      "path": "sensors[2].beamCount",
+      "merged": ""
+    },
+    {
+      "path": "sensors[2].confidenceInterval",
+      "merged": ""
+    },
+    {
+      "path": "sensors[2].depthRating",
+      "merged": ""
+    },
+    {
+      "path": "sensors[2].firmware",
+      "merged": ""
+    },
+    {
+      "path": "sensors[2].frequency",
+      "merged": ""
+    },
+    {
+      "path": "sensors[2].localId",
+      "merged": "PDVL 300"
+    },
+    {
+      "path": "sensors[2].modelId",
+      "merged": "PDVL 300"
+    },
+    {
+      "path": "sensors[2].operationMode",
+      "merged": ""
+    },
+    {
+      "path": "sensors[2].sensorId",
+      "merged": "PDVL 300"
+    },
+    {
+      "path": "sensors[2].type",
+      "merged": "Doppler Velocity Logger"
+    },
+    {
+      "path": "sensors[2].uncertainty",
+      "merged": ""
+    },
+    {
+      "path": "sensors[2].variable",
+      "merged": ""
+    },
+    {
+      "path": "sensors[3].beamCount",
+      "merged": ""
+    },
+    {
+      "path": "sensors[3].confidenceInterval",
+      "merged": ""
+    },
+    {
+      "path": "sensors[3].depthRating",
+      "merged": ""
+    },
+    {
+      "path": "sensors[3].firmware",
+      "merged": ""
+    },
+    {
+      "path": "sensors[3].frequency",
+      "merged": ""
+    },
+    {
+      "path": "sensors[3].localId",
+      "merged": "RDI ADCP"
+    },
+    {
+      "path": "sensors[3].modelId",
+      "merged": "RDI ADCP"
+    },
+    {
+      "path": "sensors[3].operationMode",
+      "merged": ""
+    },
+    {
+      "path": "sensors[3].sensorId",
+      "merged": "RDI ADCP"
+    },
+    {
+      "path": "sensors[3].type",
+      "merged": "Acoustic Doppler Current Profiler"
+    },
+    {
+      "path": "sensors[3].uncertainty",
+      "merged": ""
+    },
+    {
+      "path": "sensors[3].variable",
+      "merged": "Manufacturer: Teledyne Marine RD Instruments; Firmware: 83.3"
+    },
+    {
+      "path": "sensors[4].beamCount",
+      "merged": ""
+    },
+    {
+      "path": "sensors[4].confidenceInterval",
+      "merged": ""
+    },
+    {
+      "path": "sensors[4].depthRating",
+      "merged": ""
+    },
+    {
+      "path": "sensors[4].firmware",
+      "merged": ""
+    },
+    {
+      "path": "sensors[4].frequency",
+      "merged": ""
+    },
+    {
+      "path": "sensors[4].localId",
+      "merged": "AML CTD"
+    },
+    {
+      "path": "sensors[4].modelId",
+      "merged": "AML CTD"
+    },
+    {
+      "path": "sensors[4].operationMode",
+      "merged": ""
+    },
+    {
+      "path": "sensors[4].sensorId",
+      "merged": "AML CTD"
+    },
+    {
+      "path": "sensors[4].type",
+      "merged": "Conductivity, Temperature, Depth Sensor"
+    },
+    {
+      "path": "sensors[4].uncertainty",
+      "merged": ""
+    },
+    {
+      "path": "sensors[4].variable",
+      "merged": "Manufacturer: AML Oceanographic; Firmware: 83.3"
+    },
+    {
+      "path": "sourceProvenance.exportPreviewIsoFamily",
+      "merged": "19115-2"
+    },
+    {
+      "path": "sourceProvenance.importIsoXmlFamily",
+      "merged": "19115-3"
+    }
+  ],
+  "detailSample": [
+    {
+      "path": "distribution.awsBucket",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.awsPrefix",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.distributionFeesText",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.distributionFileFormat",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.distributionFormatName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.distributionOrderingInstructions",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.distributorContactUrl",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.distributorEmail",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.distributorIndividualName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.distributorOrganisationName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.downloadLinkDescription",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.downloadLinkName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.downloadProtocol",
+      "merged": "HTTPS",
+      "default": "HTTPS",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.downloadUrl",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.finalNotes",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.format",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.landingUrl",
+      "merged": "https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.license",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.metadataLandingDescription",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.metadataLandingLinkName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.metadataLandingUrl",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.metadataMaintenanceFrequency",
+      "merged": "asNeeded",
+      "default": "asNeeded",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.metadataStandard",
+      "merged": "ISO 19115-3",
+      "default": "ISO 19115-2 Imagery and Gridded Data",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.metadataVersion",
+      "merged": "2.0",
+      "default": "ISO 19115-2:2009(E)",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "distribution.nceiDistributorContactHref",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.nceiDistributorContactTitle",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.nceiFileIdPrefix",
+      "merged": true,
+      "default": true,
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.nceiMetadataContactHref",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.nceiMetadataContactTitle",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.omitRootReferenceSystemInfo",
+      "merged": false,
+      "default": false,
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.outputLocation",
+      "merged": "download",
+      "default": "download",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.parentProject",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.publication",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.templateCategory",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.templateName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "distribution.useNceiMetadataContactXlink",
+      "merged": false,
+      "default": false,
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "keywords.datacenters",
+      "merged": [],
+      "default": [],
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "keywords.instruments",
+      "default": [],
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[0].label",
+      "merged": "Inertial Navigation System",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.instruments[0].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.locations",
+      "merged": [],
+      "default": [],
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "keywords.platforms",
+      "default": [],
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.platforms[0].label",
+      "merged": "Platform: REMUS 620 by HII Model: REMUS 620",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.platforms[0].uuid",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "keywords.projects",
+      "merged": [],
+      "default": [],
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "keywords.providers",
+      "merged": [],
+      "default": [],
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "keywords.sciencekeywords",
+      "merged": [],
+      "default": [],
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.abstract",
+      "merged": "The MDBC Mapping, Ground truthing and Modeling team along with USM will conduct UUV missions to collect synthetic aperture sonar data using the REMUS 620 platform equipped with the KRAKEN Sonar sensor and other oceanographic equipment",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.accessConstraints",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.accessConstraintsCode",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.accession",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.alternateTitle",
+      "merged": "EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.associatedPublicationCode",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.associatedPublicationDate",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.associatedPublicationTitle",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.characterSet",
+      "merged": "utf8",
+      "default": "utf8",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.citationAuthorIndividualName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.citationAuthorOrganisationName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.citationOriginatorIndividualName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.citationOriginatorOrganisationName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.citationPublisherOrganisationName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.citeAs",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.contactAddress",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.contactPhone",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.contactUrl",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.dataLicensePreset",
+      "merged": "custom",
+      "default": "custom",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.distributionLiability",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.doi",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.east",
+      "merged": "-87.31786719161755",
+      "default": "180",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.email",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.endDate",
+      "merged": "2025-07-27T07:47",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.fileId",
+      "merged": "EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.graphicOverviewHref",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.graphicOverviewTitle",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.individualName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.language",
+      "merged": "eng",
+      "default": "eng",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.licenseUrl",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.metadataRecordDate",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.north",
+      "merged": "29.930553243137695",
+      "default": "90",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.org",
+      "merged": "NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.otherCiteAs",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.parentProjectCode",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.parentProjectDate",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.parentProjectTitle",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.publicationDate",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.purpose",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.relatedDataUrl",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.relatedDataUrlDescription",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.relatedDataUrlTitle",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.relatedDatasetCode",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.relatedDatasetDate",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.relatedDatasetOrg",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.relatedDatasetTitle",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.ror",
+      "merged": null,
+      "default": null,
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.scopeCode",
+      "merged": "dataset",
+      "default": "dataset",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.south",
+      "merged": "29.843156926151266",
+      "default": "-90",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.startDate",
+      "merged": "2025-07-27T00:48",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.status",
+      "merged": "ongoing",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.supplementalInformation",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.temporalExtentIntervalUnit",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.temporalExtentIntervalValue",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.title",
+      "merged": "RV Expedition 2025 LEG 01 REMUS620 KRAKEN SAS MGM Dive 05",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mission.topicCategories",
+      "merged": [],
+      "default": [],
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.deploymentId",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.deploymentName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.diveId",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.diveName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.narrative",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.operationOutcome",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.primaryLayer",
+      "merged": "datasetProduct",
+      "default": "datasetProduct",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.runId",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.runName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.sortieId",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.uxsContext.sortieName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.vmax",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.vmin",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "mission.west",
+      "merged": "-87.15895078704915",
+      "default": "-180",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "mode",
+      "merged": "lenient",
+      "default": "lenient",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.customPlatformType",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.deploymentDate",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.height",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.length",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.manufacturer",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.material",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.model",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.navigationSystem",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.operationalArea",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.platformDesc",
+      "merged": "Platform: REMUS 620 by HII Model: REMUS 620",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "platform.platformId",
+      "merged": "REMUS620_401",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "platform.platformName",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.platformType",
+      "merged": "Unmanned Underwater Vehicle",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "platform.powerSource",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.sensorMounts",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.serialNumber",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.speed",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.weight",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "platform.width",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].beamCount",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].confidenceInterval",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].depthRating",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].firmware",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].frequency",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].localId",
+      "merged": "PHINS INS",
+      "default": "sen_1778516251190",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[0].modelId",
+      "merged": "PHINS INS",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[0].operationMode",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].sensorId",
+      "merged": "PHINS INS",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[0].type",
+      "merged": "Inertial Navigation System",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[0].uncertainty",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sensors[0].variable",
+      "merged": "Manufacturer: Exail; Model: iXBlue 6000; Firmware: NAV_SUBSEA_1_7_7.a",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].beamCount",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].confidenceInterval",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].depthRating",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].firmware",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].frequency",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].localId",
+      "merged": "Kraken SAS",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].modelId",
+      "merged": "Kraken SAS",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].operationMode",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].sensorId",
+      "merged": "Kraken SAS",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].type",
+      "merged": "Synthetic Aperture Sonar",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].uncertainty",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[1].variable",
+      "merged": "Manufacturer: Kraken Robotics",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[2].beamCount",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[2].confidenceInterval",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[2].depthRating",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[2].firmware",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[2].frequency",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[2].localId",
+      "merged": "PDVL 300",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[2].modelId",
+      "merged": "PDVL 300",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[2].operationMode",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[2].sensorId",
+      "merged": "PDVL 300",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[2].type",
+      "merged": "Doppler Velocity Logger",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[2].uncertainty",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[2].variable",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[3].beamCount",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[3].confidenceInterval",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[3].depthRating",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[3].firmware",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[3].frequency",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[3].localId",
+      "merged": "RDI ADCP",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[3].modelId",
+      "merged": "RDI ADCP",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[3].operationMode",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[3].sensorId",
+      "merged": "RDI ADCP",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[3].type",
+      "merged": "Acoustic Doppler Current Profiler",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[3].uncertainty",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[3].variable",
+      "merged": "Manufacturer: Teledyne Marine RD Instruments; Firmware: 83.3",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[4].beamCount",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[4].confidenceInterval",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[4].depthRating",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[4].firmware",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[4].frequency",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[4].localId",
+      "merged": "AML CTD",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[4].modelId",
+      "merged": "AML CTD",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[4].operationMode",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[4].sensorId",
+      "merged": "AML CTD",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[4].type",
+      "merged": "Conductivity, Temperature, Depth Sensor",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[4].uncertainty",
+      "merged": "",
+      "filled": false,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sensors[4].variable",
+      "merged": "Manufacturer: AML Oceanographic; Firmware: 83.3",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sourceProvenance.exportPreviewIsoFamily",
+      "merged": "19115-2",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sourceProvenance.importIsoXmlFamily",
+      "merged": "19115-3",
+      "default": "",
+      "filled": true,
+      "sameAsDefault": false
+    },
+    {
+      "path": "sourceProvenance.importedAt",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sourceProvenance.originalFilename",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sourceProvenance.originalUuid",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sourceProvenance.sourceId",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "sourceProvenance.sourceType",
+      "merged": "manual",
+      "default": "manual",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.accuracyStandard",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.accuracyValue",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.dimensions",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.errorLevel",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.errorValue",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.geographicDescription",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.gridCellGeometry",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.gridColumnResolution",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.gridColumnSize",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.gridRowResolution",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.gridRowSize",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.gridVerticalResolution",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.gridVerticalSize",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.hasTrajectory",
+      "merged": false,
+      "default": false,
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.lineageProcessSteps",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.lineageStatement",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.referenceSystem",
+      "merged": "EPSG:4326",
+      "default": "EPSG:4326",
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.trajectorySampling",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.useGridRepresentation",
+      "merged": false,
+      "default": false,
+      "filled": true,
+      "sameAsDefault": true
+    },
+    {
+      "path": "spatial.verticalCrsUrl",
+      "merged": "",
+      "default": "",
+      "filled": false,
+      "sameAsDefault": true
+    }
+  ],
+  "truncatedDetail": false
+}

@@ -1,0 +1,1168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gmi:MI_Metadata xmlns:gmd="http://www.isotc211.org/2005/gmd"
+                 xmlns:gco="http://www.isotc211.org/2005/gco"
+                 xmlns:gmi="http://www.isotc211.org/2005/gmi"
+                 xmlns:gmx="http://www.isotc211.org/2005/gmx"
+                 xmlns:gml="http://www.opengis.net/gml/3.2"
+                 xmlns:xlink="http://www.w3.org/1999/xlink">
+  <!-- gmd:parentIdentifier is intentionally omitted here.
+       Only BEDI granule profiles (hierarchyLevel=dataset with a parent collection)
+       should emit parentIdentifier.  Mission and collection records are
+       standalone; adding parentIdentifier to them would create incorrect
+       collection-granule relationships in CoMET and OneStop. -->
+  <gmd:fileIdentifier>
+    <gco:CharacterString>gov.noaa.ncei.uxs:gov.noaa.ncei.oer:EX1904_COLLECTION</gco:CharacterString>
+  </gmd:fileIdentifier>
+  <gmd:dateStamp><gco:Date>2026-05-04</gco:Date></gmd:dateStamp>
+  <gmd:hierarchyLevel>
+    <gmd:MD_ScopeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/MD_ScopeCode.xml#MD_ScopeCode" codeListValue="fieldSession">fieldSession</gmd:MD_ScopeCode>
+  </gmd:hierarchyLevel>
+  <gmd:metadataStandardName>
+    <gco:CharacterString>ISO 19115-2 Geographic Information - Metadata - Part 2: Extensions for Imagery and Gridded Data</gco:CharacterString>
+  </gmd:metadataStandardName>
+  <gmd:metadataStandardVersion>
+    <gco:CharacterString>ISO 19115-2:2009(E)</gco:CharacterString>
+  </gmd:metadataStandardVersion>
+  <gmd:referenceSystemInfo>
+    <gmd:MD_ReferenceSystem>
+      <gmd:referenceSystemIdentifier>
+        <gmd:RS_Identifier>
+          <gmd:code><gco:CharacterString>EPSG:4326</gco:CharacterString></gmd:code>
+        </gmd:RS_Identifier>
+      </gmd:referenceSystemIdentifier>
+    </gmd:MD_ReferenceSystem>
+  </gmd:referenceSystemInfo>
+  <gmd:contact xlink:href="https://data.noaa.gov/docucomp/440b3ac2-64a5-46e2-9846-38305718b644" xlink:title="NCEI (pointOfContact)"/>
+  <gmd:identificationInfo>
+    <gmd:MD_DataIdentification>
+      <gmd:citation>
+        <gmd:CI_Citation>
+          <gmd:title><gco:CharacterString>Okeanos Explorer (EX1904): 2019 Technology Demonstrations</gco:CharacterString></gmd:title>
+          <gmd:alternateTitle><gco:CharacterString>2019 Technology Demonstrations</gco:CharacterString></gmd:alternateTitle>
+          <gmd:date><gmd:CI_Date><gmd:date><gco:Date>2019-07-18</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/CI_DateTypeCode.xml#CI_DateTypeCode" codeListValue="creation">creation</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>
+          
+          
+          <gmd:identifier><gmd:MD_Identifier><gmd:code><gco:CharacterString>Cruise ID:EX1904</gco:CharacterString></gmd:code></gmd:MD_Identifier></gmd:identifier>
+                    <gmd:citedResponsibleParty>
+        <gmd:CI_ResponsibleParty>
+          <gmd:organisationName><gco:CharacterString>NOAA Office of Ocean Exploration and Research</gco:CharacterString></gmd:organisationName>
+          <gmd:role><gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/CI_RoleCode.xml#CI_RoleCode" codeListValue="author">author</gmd:CI_RoleCode></gmd:role>
+        </gmd:CI_ResponsibleParty>
+      </gmd:citedResponsibleParty>
+          <gmd:citedResponsibleParty>
+        <gmd:CI_ResponsibleParty>
+          <gmd:organisationName><gco:CharacterString>NOAA National Centers for Environmental Information</gco:CharacterString></gmd:organisationName>
+          <gmd:role><gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/CI_RoleCode.xml#CI_RoleCode" codeListValue="publisher">publisher</gmd:CI_RoleCode></gmd:role>
+        </gmd:CI_ResponsibleParty>
+      </gmd:citedResponsibleParty>
+          
+        </gmd:CI_Citation>
+      </gmd:citation>
+      <gmd:abstract><gco:CharacterString>Operations will include the use of the ships deep-water mapping systems (Kongsberg EM 302 multibeam sonar, EK split-beam fisheries sonars, Knudsen 3260 chirp sub-bottom profiler sonar, and Teledyne Acoustic Doppler Current Profilers), XBTs in support of multibeam sonar mapping operations, the two-body ROV system Deep Discoverer and Seirios, and the ships high-bandwidth satellite connection for continuous real-time ship-to-shore communications. Technology demonstrations will include an integration/shakedown a REMUS 600 Autonomous Underwater Vehicle (AUV), deployment of a towed Kraken Robotics Katfish with Synthetic Aperture Sonar (SAS), integration of a Massachusetts Institute of Technology (MIT) 360 degree camera on Deep Discoverer, integration/testing of a Kraken Robotics SeaVision laser scanner on ROV Deep Discoverer and integration/testing of a One Way Travel Time Inverted Ultra Short Baseline (OWTTIUSBL) from the Woods Hole Oceanographic Institution (WHOI) on ROV Deep Discoverer. Operations are planned throughout the Northeast U.S. Continental Margin and on the Northeast U.S. continental shelf off of Virginia, Maryland, Delaware, New Jersey, New York, Rhode Island and Massachusetts.</gco:CharacterString></gmd:abstract>
+      <gmd:purpose><gco:CharacterString>Operations for this cruise will be conducted 24 hours/day and consist of demonstrations of emerging technology and of existing technology integration into the Okeanos' Continuing Operations (CONOPS), remotely operated vehicle (ROV) dives to support technology demonstrations, mapping using the ship's suite of deepwater sonars, and limited shore participation via telepresence. The expedition will commence on July 18, 2019 in Norfolk, Virginia (Marine Operations Center-Atlantic) and conclude on August 1, 2019 in Davisville, Rhode Island. The core objectives of this cruise will be to demonstrate, test, integrate and evaluate emerging and existing technology. Certain projects will be evaluated for their usefulness in meeting OER and partner data needs while others have the potential to benefit the larger oceanographic research community. NOAA will leverage internal, private and academic partnerships to meet cruise objectives. The secondary objectives of this cruise will be to provide authoritative and actionable data to regional stakeholders. For example, certain sites have historical/archeological significance, certain targets are currently being evaluated by NOAA Emergency Response Division / Office of Response &amp; Restoration as potentially polluting wrecks, ROV dives will attempt to target areas of known deep sea communities.</gco:CharacterString></gmd:purpose>
+      <gmd:supplementalInformation><gco:CharacterString>UxS operational layer: Dataset or product</gco:CharacterString></gmd:supplementalInformation>
+      <gmd:extent>
+        <gmd:EX_Extent>
+          <gmd:geographicElement>
+            <gmd:EX_GeographicBoundingBox>
+              <gmd:westBoundLongitude><gco:Decimal>-74.07</gco:Decimal></gmd:westBoundLongitude>
+              <gmd:eastBoundLongitude><gco:Decimal>-66.82</gco:Decimal></gmd:eastBoundLongitude>
+              <gmd:southBoundLatitude><gco:Decimal>36.72</gco:Decimal></gmd:southBoundLatitude>
+              <gmd:northBoundLatitude><gco:Decimal>41.3</gco:Decimal></gmd:northBoundLatitude>
+            </gmd:EX_GeographicBoundingBox>
+          </gmd:geographicElement>
+          <gmd:temporalElement>
+            <gmd:EX_TemporalExtent>
+              <gmd:extent>
+                <gml:TimePeriod gml:id="tp1">
+                  <gml:beginPosition>2019-07-18</gml:beginPosition>
+                  <gml:endPosition indeterminatePosition="unknown"/>
+                </gml:TimePeriod>
+              </gmd:extent>
+            </gmd:EX_TemporalExtent>
+          </gmd:temporalElement>
+        </gmd:EX_Extent>
+      </gmd:extent>
+      <gmd:pointOfContact>
+        <gmd:CI_ResponsibleParty>
+          <gmd:individualName><gco:CharacterString></gco:CharacterString></gmd:individualName>
+          <gmd:organisationName><gco:CharacterString></gco:CharacterString></gmd:organisationName>
+          <gmd:contactInfo>
+            <gmd:CI_Contact>
+              <gmd:address>
+                <gmd:CI_Address>
+                  <gmd:electronicMailAddress><gco:CharacterString></gco:CharacterString></gmd:electronicMailAddress>
+                </gmd:CI_Address>
+              </gmd:address>
+              
+            </gmd:CI_Contact>
+          </gmd:contactInfo>
+        </gmd:CI_ResponsibleParty>
+      </gmd:pointOfContact>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>Earth Science &gt; Oceans &gt; Marine Environment Monitoring</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD sciencekeywords</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>Earth Science &gt; Oceans &gt; Aquatic Sciences</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD sciencekeywords</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>Earth Science &gt; Oceans &gt; Bathymetry/Seafloor Topography &gt; Seafloor Topography</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD sciencekeywords</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>DOC/NOAA/NESDIS/NCEI &gt; National Centers for Environmental Information, NESDIS, NOAA, U.S. Department of Commerce</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD datacenters</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>DOC/NOAA/OAR/OER &gt; Office of Ocean Exploration and Research, Oceanic &amp; Atmospheric Research, NOAA, U.S. Department of Commerce</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD datacenters</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>Okeanos Explorer &gt; NOAA Ship Okeanos Explorer</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD platforms</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <!-- instruments -->
+    <!-- locations -->
+    <!-- projects -->
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>North Atlantic Ocean</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>Davisville</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>Hudson Canyon</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>Norfolk Canyon</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>Rhode Island</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>North Atlantic Ocean</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>archaeological</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>archaeology</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>Billy Mitchell Fleet</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>conservation</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>conserve</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>crm</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>cultural resource management</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>expedition</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>exploration</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>explorer</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>historic</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>Katfish</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>Kraken SeaVision</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>mapping survey</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>marine archaeology</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>marine education</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>maritime</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>maritime archaeology</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>MIT 360 camera</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>multibeam</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>multibeam backscatter</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>multibeam sonar</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>multi-beam sonar</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>nautical</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>nautical archaeology</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>noaa</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>noaa fleet</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>ocean</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>ocean discovery</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>ocean education</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>ocean exploration</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>ocean exploration and research</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>ocean literacy</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>ocean research</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>OER</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>okeanos</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>okeanos explorer</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>Pan Pennsylvania</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>preserve</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>protect</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>protection</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>R337</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>REMUS 600</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>science</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>scientific computing system</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>scientific mission</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>scientific research</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>SCS</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>sea</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>single beam sonar</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>singlebeam sonar</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>single-beam sonar</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>stewardship</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>sub-bottom profile</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>submerged cultural heritage</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>submerged cultural resource</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>systematic exploration</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>technology</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>transformational research</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>U-550</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>uch</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>undersea</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>underwater</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>underwater cultural heritage</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>USS Baltimore</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>USS Bass</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>USS Murphy</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>water column backscatter</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+    <gmd:descriptiveKeywords>
+      <gmd:MD_Keywords>
+        <gmd:keyword>
+          <gco:CharacterString>WHOI OWTTIUSBL</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:thesaurusName>
+          <gmd:CI_Citation>
+            <gmd:title><gco:CharacterString>GCMD providers</gco:CharacterString></gmd:title>
+          </gmd:CI_Citation>
+        </gmd:thesaurusName>
+      </gmd:MD_Keywords>
+    </gmd:descriptiveKeywords>
+
+      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:type>
+            <gmd:MD_KeywordTypeCode>platform</gmd:MD_KeywordTypeCode>
+          </gmd:type>
+          <gmd:thesaurusName>
+            <gmd:CI_Citation>
+              <gmd:title><gco:CharacterString>Platform instance</gco:CharacterString></gmd:title>
+            </gmd:CI_Citation>
+          </gmd:thesaurusName>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:status>
+        <gmd:MD_ProgressCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ProgressCode" codeListValue="completed">completed</gmd:MD_ProgressCode>
+      </gmd:status>
+      <gmd:language>
+        <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/php/code_list.php" codeListValue="eng; USA">eng; USA</gmd:LanguageCode>
+      </gmd:language>
+      <gmd:characterSet>
+        <gmd:MD_CharacterSetCode codeListValue="utf8">utf8</gmd:MD_CharacterSetCode>
+      </gmd:characterSet>
+      <gmd:topicCategory>
+        <gmd:MD_TopicCategoryCode>oceans</gmd:MD_TopicCategoryCode>
+      </gmd:topicCategory>
+      <gmd:topicCategory>
+        <gmd:MD_TopicCategoryCode>geoscientificInformation</gmd:MD_TopicCategoryCode>
+      </gmd:topicCategory>
+      <gmd:resourceMaintenance>
+        <gmd:MD_MaintenanceInformation>
+          <gmd:maintenanceAndUpdateFrequency>
+            <gmd:MD_MaintenanceFrequencyCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/MD_MaintenanceFrequencyCode.xml#MD_MaintenanceFrequencyCode" codeListValue="notPlanned">notPlanned</gmd:MD_MaintenanceFrequencyCode>
+          </gmd:maintenanceAndUpdateFrequency>
+        </gmd:MD_MaintenanceInformation>
+      </gmd:resourceMaintenance>
+      <gmd:resourceConstraints>
+        <gmd:MD_LegalConstraints>
+          <gmd:otherConstraints><gco:CharacterString>Cite as: NOAA Office of Ocean Exploration and Research. 2019: Okeanos Explorer (EX1904): 2019 Technology Demonstrations. [indicate subset used]. NOAA National Centers for Environmental Information. Accessed [date].</gco:CharacterString></gmd:otherConstraints>
+        </gmd:MD_LegalConstraints>
+      </gmd:resourceConstraints>
+      <gmd:resourceConstraints xlink:href="https://data.noaa.gov/docucomp/493b9ff1-4465-404d-bcdf-e0fe1cedb14f" xlink:title="Data License Statement" />
+    </gmd:MD_DataIdentification>
+  </gmd:identificationInfo>
+  <gmi:acquisitionInformation>
+    <gmi:MI_AcquisitionInformation>
+      <gmi:instrument>
+        <gmi:MI_Instrument id="instrument_1">
+          <gmi:type><gco:CharacterString>Operations aboard the cruise.</gco:CharacterString></gmi:type>
+        </gmi:MI_Instrument>
+      </gmi:instrument>
+    </gmi:MI_AcquisitionInformation>
+  </gmi:acquisitionInformation>
+
+  <gmd:contentInfo>
+  <gmi:MI_CoverageDescription>
+    <gmd:identifier>
+      <gmd:MD_Identifier>
+        <gmd:code><gco:CharacterString>sensor_1</gco:CharacterString></gmd:code>
+      </gmd:MD_Identifier>
+    </gmd:identifier>
+    <gmd:attributeDescription><gco:CharacterString>Operations aboard the cruise.</gco:CharacterString></gmd:attributeDescription>
+    <gmd:name><gco:CharacterString></gco:CharacterString></gmd:name>
+    
+  </gmi:MI_CoverageDescription>
+  </gmd:contentInfo>
+  <gmd:distributionInfo>
+    <gmd:MD_Distribution>
+      <gmd:distributor>
+        <gmd:MD_Distributor>
+          <gmd:distributorContact xlink:href="https://data.noaa.gov/docucomp/440b3ac2-64a5-46e2-9846-38305718b644" xlink:title="NCEI (distributor)"/>
+        </gmd:MD_Distributor>
+      </gmd:distributor>
+      <gmd:distributionFormat>
+        <gmd:MD_Format>
+          <gmd:name><gco:CharacterString></gco:CharacterString></gmd:name>
+          
+        </gmd:MD_Format>
+      </gmd:distributionFormat>
+      <gmd:distributionOrderProcess><gmd:MD_StandardOrderProcess><gmd:fees><gco:CharacterString>In most cases, electronic downloads of the data are free. However, fees may apply for custom orders, data certifications, copies of analog materials, and data distribution on physical media.</gco:CharacterString></gmd:fees><gmd:orderingInstructions><gco:CharacterString>Contact NCEI for other distribution options and instructions.</gco:CharacterString></gmd:orderingInstructions></gmd:MD_StandardOrderProcess></gmd:distributionOrderProcess>
+      <gmd:transferOptions>
+        <gmd:MD_DigitalTransferOptions>
+          
+          
+          <gmd:onLine><gmd:CI_OnlineResource><gmd:linkage><gmd:URL>https://data.noaa.gov/onestop/collections/details/e023a596-a61d-4a7c-98a4-22d03d1574a9</gmd:URL></gmd:linkage><gmd:name><gco:CharacterString>NCEI Dataset Landing Page</gco:CharacterString></gmd:name><gmd:protocol><gco:CharacterString>HTTPS</gco:CharacterString></gmd:protocol><gmd:description><gco:CharacterString>Navigate directly to the URL for a descriptive web page with download links.</gco:CharacterString></gmd:description></gmd:CI_OnlineResource></gmd:onLine>
+        </gmd:MD_DigitalTransferOptions>
+      </gmd:transferOptions>
+    </gmd:MD_Distribution>
+  </gmd:distributionInfo>
+  <!-- workflow: outputLocation=download -->
+  <!-- metadataMaintenanceFrequency: notPlanned -->
+  <!-- output flags: useNceiMetadataContactXlink=true omitRootReferenceSystemInfo=false -->
+</gmi:MI_Metadata>

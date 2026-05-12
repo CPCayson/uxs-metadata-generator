@@ -1,0 +1,47 @@
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/description/CharacterString	Manufacturer: Exail; Model: iXBlue 6000; Firmware: NAV_SUBSEA_1_7_7.a
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	PHINS INS
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[1]/MI_Instrument/type/CharacterString	Inertial Navigation System
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/description/CharacterString	Manufacturer: Kraken Robotics
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	Kraken SAS
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[2]/MI_Instrument/type/CharacterString	Synthetic Aperture Sonar
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[3]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	PDVL 300
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[3]/MI_Instrument/type/CharacterString	Doppler Velocity Logger
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[4]/MI_Instrument/description/CharacterString	Manufacturer: Teledyne Marine RD Instruments; Firmware: 83.3
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[4]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	RDI ADCP
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[4]/MI_Instrument/type/CharacterString	Acoustic Doppler Current Profiler
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[5]/MI_Instrument/description/CharacterString	Manufacturer: AML Oceanographic; Firmware: 83.3
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[5]/MI_Instrument/identifier/MD_Identifier/code/CharacterString	AML CTD
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/instrument[5]/MI_Instrument/type/CharacterString	Conductivity, Temperature, Depth Sensor
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/description[1]/CharacterString	Platform: REMUS 620 by HII Model: REMUS 620
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/description[2]/CharacterString	Specifications: Weight: 300 kg, Length: 3.25 m, Width: 0.5 m, Height: 0.5 m
+1	MD_Metadata/acquisitionInformation/MI_AcquisitionInformation/platform/MI_Platform/identifier/MD_Identifier/code/CharacterString	REMUS620_401
+1	MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/deliveryPoint/CharacterString	Suite 1003, 1021 Balch Boulevard, Stennis Space Center, MS 39529, USA
+1	MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/address/CI_Address/electronicMailAddress/CharacterString	errol.ronje@noaa.gov
+1	MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/onlineResource/CI_OnlineResource/linkage/CharacterString	https://www.diver.orr.noaa.gov/dwh-mdbc-portfolio
+1	MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/contactInfo/CI_Contact/phone/CI_Telephone/number/CharacterString	(555) 555-5555
+1	MD_Metadata/contact/CI_Responsibility/party/CI_Organisation/name/CharacterString	NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT
+1	MD_Metadata/contact/CI_Responsibility/role/CI_RoleCode	pointOfContact
+1	MD_Metadata/dataQualityInfo/DQ_DataQuality/scope/DQ_Scope/level/MD_ScopeCode	dataset
+1	MD_Metadata/dateInfo/CI_Date/date/DateTime	2025-07-27T00:48:00.000Z
+1	MD_Metadata/dateInfo/CI_Date/dateType/CI_DateTypeCode	creation
+1	MD_Metadata/defaultLocale/PT_Locale/characterEncoding/MD_CharacterSetCode	utf8
+1	MD_Metadata/defaultLocale/PT_Locale/language/LanguageCode	eng
+1	MD_Metadata/identificationInfo/MD_DataIdentification/abstract/CharacterString	The MDBC Mapping, Ground truthing and Modeling team along with USM will conduct UUV missions to collect synthetic aperture sonar data using the REMUS 620 platform equipped with the KRAKEN Sonar sensor and other oceanographic equipment
+1	MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/alternateTitle/CharacterString	EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z
+1	MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[1]/CI_Date/date/DateTime	2025-07-27T00:48:00.000Z
+1	MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[1]/CI_Date/dateType/CI_DateTypeCode	creation
+1	MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[2]/CI_Date/date/DateTime	2025-07-27T07:47:00.000Z
+1	MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/date[2]/CI_Date/dateType/CI_DateTypeCode	completion
+1	MD_Metadata/identificationInfo/MD_DataIdentification/citation/CI_Citation/title/CharacterString	RV Expedition 2025 LEG 01 REMUS620 KRAKEN SAS MGM Dive 05
+1	MD_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/eastBoundLongitude/CharacterString	-87.31786719161755
+1	MD_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/northBoundLatitude/CharacterString	29.930553243137695
+1	MD_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/southBoundLatitude/CharacterString	29.843156926151266
+1	MD_Metadata/identificationInfo/MD_DataIdentification/extent/EX_Extent/geographicElement/EX_GeographicBoundingBox/westBoundLongitude/CharacterString	-87.15895078704915
+1	MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/party/CI_Organisation/name/CharacterString	NOAA MESOPHOTIC DEEP BENTHIC COMMUNITIES RESTORATION PROJECT
+1	MD_Metadata/identificationInfo/MD_DataIdentification/pointOfContact/CI_Responsibility/role/CI_RoleCode	pointOfContact
+1	MD_Metadata/identificationInfo/MD_DataIdentification/status/MD_ProgressCode	ongoing
+1	MD_Metadata/metadataIdentifier/MD_Identifier/code/CharacterString	EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z
+1	MD_Metadata/metadataScope/MD_MetadataScope/resourceScope/MD_ScopeCode	dataset
+1	MD_Metadata/metadataStandard/CI_Citation/edition/CharacterString	2.0
+1	MD_Metadata/metadataStandard/CI_Citation/title/CharacterString	ISO 19115-3
+1	MD_Metadata/referenceSystemInfo/MD_ReferenceSystem/referenceSystemIdentifier/MD_Identifier/code/CharacterString	EPSG:4326

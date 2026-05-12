@@ -1,0 +1,643 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+======================================================================
+	"OER CRUISE LEVEL METADATA TEMPLATE", March 2026 - specifically for Okeanos Explorer.
+
+	This XML template for OER Cruise metadata conforms to  the ISO 19115-2:2009(E) geospatial metadata standard. 
+  Example content is provided within this template and should be replaced with actual content for the data that are being documented. 
+	Fields without comments and without brackets -{{example}}- contain default values. 
+	The template mmatches the NCEI Templatge as much as possible.
+
+	Authors:
+	For further information about this template, please contact 
+			DOC/NOAA/NESDIS/NCEI > National Centers for Environmental Information, NESDIS, NOAA, U.S. Department of Commerce 				
+				E-mail: OER.info.mgmt@noaa.gov
+
+	Distribution Liability:
+		NOAA makes no warranty, expressed or implied, regarding these data, nor does the fact of distribution constitute such a warranty. 
+		NOAA cannot assume liability for any damages caused by any errors or omissions in these templates.
+
+	Use Constraints:
+		The user is responsible for the results of any application of these templates for other than its
+		intended purpose. These templates cannot guarantee valid output. Additional editing
+		may need to be done in order to have valid records.
+
+	Revisions:
+	20260420  JVW - added data license docucomp component
+
+-->
+<gmi:MI_Metadata xmlns:gmi="http://www.isotc211.org/2005/gmi"
+  xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmd="http://www.isotc211.org/2005/gmd"
+  xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:gmx="http://www.isotc211.org/2005/gmx"
+  xmlns:gsr="http://www.isotc211.org/2005/gsr" xmlns:gss="http://www.isotc211.org/2005/gss"
+  xmlns:gts="http://www.isotc211.org/2005/gts" xmlns:srv="http://www.isotc211.org/2005/srv"
+  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.isotc211.org/2005/gmi https://data.noaa.gov/resources/iso19139/schema.xsd"
+  uuid="e023a596-a61d-4a7c-98a4-22d03d1574a9">
+  <gmd:fileIdentifier>
+    <gco:CharacterString>gov.noaa.ncei.oer:EX1904_COLLECTION</gco:CharacterString>
+  </gmd:fileIdentifier>
+  <gmd:hierarchyLevel>
+    <gmd:MD_ScopeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ScopeCode" codeListValue="fieldSession">fieldSession</gmd:MD_ScopeCode>
+  </gmd:hierarchyLevel>
+  <gmd:hierarchyLevelName>
+    <gco:CharacterString>Cruise Level Metadata</gco:CharacterString>
+  </gmd:hierarchyLevelName>
+  <gmd:contact xlink:href="https://data.noaa.gov/docucomp/440b3ac2-64a5-46e2-9846-38305718b644"
+    xlink:title="NCEI (pointOfContact)"/>
+  <gmd:dateStamp>
+    <gco:Date>2026-05-04</gco:Date>
+  </gmd:dateStamp>
+  <gmd:metadataStandardName>
+    <gco:CharacterString>ISO 19115-2 Geographic Information - Metadata - Part 2: Extensions for Imagery and Gridded Data</gco:CharacterString>
+  </gmd:metadataStandardName>
+  <gmd:metadataStandardVersion>
+    <gco:CharacterString>ISO 19115-2:2009(E)</gco:CharacterString>
+  </gmd:metadataStandardVersion>
+  <gmd:identificationInfo>
+    <gmd:MD_DataIdentification>
+      <gmd:citation>
+        <gmd:CI_Citation>
+          <gmd:title>
+            <gco:CharacterString>Okeanos Explorer (EX1904): 2019 Technology Demonstrations</gco:CharacterString>
+          </gmd:title>
+          <gmd:alternateTitle>
+            <gco:CharacterString>2019 Technology Demonstrations</gco:CharacterString>
+          </gmd:alternateTitle>
+          <gmd:alternateTitle>
+            <gco:CharacterString>EX1904</gco:CharacterString>
+          </gmd:alternateTitle>
+          <gmd:date>
+            <gmd:CI_Date>
+              <gmd:date>
+                <gco:Date>2019-07-18</gco:Date>
+              </gmd:date>
+              <gmd:dateType>
+                <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation">creation</gmd:CI_DateTypeCode>
+              </gmd:dateType>
+            </gmd:CI_Date>
+          </gmd:date>
+          <gmd:identifier>
+            <gmd:MD_Identifier>
+              <gmd:authority>
+                <gmd:CI_Citation>
+                  <gmd:title>
+                    <gco:CharacterString>Cruise ID</gco:CharacterString>
+                  </gmd:title>
+                  <gmd:date gco:nilReason="inapplicable"/>
+                </gmd:CI_Citation>
+              </gmd:authority>
+              <gmd:code>
+                <gco:CharacterString>Cruise ID:EX1904</gco:CharacterString>
+              </gmd:code>
+            </gmd:MD_Identifier>
+          </gmd:identifier>
+          <gmd:identifier>
+            <gmd:MD_Identifier>
+              <gmd:authority>
+                <gmd:CI_Citation>
+                  <gmd:title>
+                    <gco:CharacterString>NCEI Archive Management System</gco:CharacterString>
+                  </gmd:title>
+                  <gmd:date gco:nilReason="inapplicable"/>
+                </gmd:CI_Citation>
+              </gmd:authority>
+              <gmd:code>
+                <gco:CharacterString>NCEI Accession ID:https://accession.nodc.noaa.gov/0202533</gco:CharacterString>
+              </gmd:code>
+            </gmd:MD_Identifier>
+          </gmd:identifier>
+          <gmd:identifier>
+            <gmd:MD_Identifier>
+              <gmd:authority>
+                <gmd:CI_Citation>
+                  <gmd:title>
+                    <gco:CharacterString>NOAA National Centers for Environmental Information</gco:CharacterString>
+                  </gmd:title>
+                  <gmd:date gco:nilReason="inapplicable"/>
+                </gmd:CI_Citation>
+              </gmd:authority>
+              <gmd:code>
+                <gco:CharacterString>NCEI Metadata ID: gov.noaa.ncei.oer:EX1904_COLLECTION</gco:CharacterString>
+              </gmd:code>
+            </gmd:MD_Identifier>
+          </gmd:identifier>
+          <gmd:citedResponsibleParty>
+            <gmd:CI_ResponsibleParty>
+              <gmd:organisationName>
+                <gco:CharacterString>NOAA Office of Ocean Exploration and Research</gco:CharacterString>
+              </gmd:organisationName>
+              <gmd:role>
+                <gmd:CI_RoleCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author">author</gmd:CI_RoleCode>
+              </gmd:role>
+            </gmd:CI_ResponsibleParty>
+          </gmd:citedResponsibleParty>
+          <gmd:citedResponsibleParty>
+            <gmd:CI_ResponsibleParty>
+              <gmd:organisationName>
+                <gmx:Anchor xlink:href="https://ror.org/04r0wrp59" xlink:title="ROR ID" xlink:actuate="onRequest">NOAA National Centers for Environmental Information</gmx:Anchor>
+              </gmd:organisationName>
+              <gmd:role>
+                <gmd:CI_RoleCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="publisher">publisher</gmd:CI_RoleCode>
+              </gmd:role>
+            </gmd:CI_ResponsibleParty>
+          </gmd:citedResponsibleParty>
+        </gmd:CI_Citation>
+      </gmd:citation>
+      <gmd:abstract>
+        <gco:CharacterString>Operations will include the use of the ships deep-water mapping systems (Kongsberg EM 302 multibeam sonar, EK split-beam fisheries sonars, Knudsen 3260 chirp sub-bottom profiler sonar, and Teledyne Acoustic Doppler Current Profilers), XBTs in support of multibeam sonar mapping operations, the two-body ROV system Deep Discoverer and Seirios, and the ships high-bandwidth satellite connection for continuous real-time ship-to-shore communications. Technology demonstrations will include an integration/shakedown a REMUS 600 Autonomous Underwater Vehicle (AUV), deployment of a towed Kraken Robotics Katfish with Synthetic Aperture Sonar (SAS), integration of a Massachusetts Institute of Technology (MIT) 360 degree camera on Deep Discoverer, integration/testing of a Kraken Robotics SeaVision laser scanner on ROV Deep Discoverer and integration/testing of a One Way Travel Time Inverted Ultra Short Baseline (OWTTIUSBL) from the Woods Hole Oceanographic Institution (WHOI) on ROV Deep Discoverer. Operations are planned throughout the Northeast U.S. Continental Margin and on the Northeast U.S. continental shelf off of Virginia, Maryland, Delaware, New Jersey, New York, Rhode Island and Massachusetts.</gco:CharacterString>
+      </gmd:abstract>
+      <gmd:purpose>
+        <gco:CharacterString>Operations for this cruise will be conducted 24 hours/day and consist of demonstrations of emerging technology and of existing technology integration into the Okeanos' Continuing Operations (CONOPS), remotely operated vehicle (ROV) dives to support technology demonstrations, mapping using the ship's suite of deepwater sonars, and limited shore participation via telepresence. The expedition will commence on July 18, 2019 in Norfolk, Virginia (Marine Operations Center-Atlantic) and conclude on August 1, 2019 in Davisville, Rhode Island. The core objectives of this cruise will be to demonstrate, test, integrate and evaluate emerging and existing technology. Certain projects will be evaluated for their usefulness in meeting OER and partner data needs while others have the potential to benefit the larger oceanographic research community. NOAA will leverage internal, private and academic partnerships to meet cruise objectives. The secondary objectives of this cruise will be to provide authoritative and actionable data to regional stakeholders. For example, certain sites have historical/archeological significance, certain targets are currently being evaluated by NOAA Emergency Response Division / Office of Response &amp; Restoration as potentially polluting wrecks, ROV dives will attempt to target areas of known deep sea communities.</gco:CharacterString>
+      </gmd:purpose>
+      <gmd:status>
+        <gmd:MD_ProgressCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ProgressCode" codeListValue="completed">completed</gmd:MD_ProgressCode>
+      </gmd:status>
+      <gmd:status>
+        <gmd:MD_ProgressCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#MD_ProgressCode" codeListValue="historicalArchive">historicalArchive</gmd:MD_ProgressCode>
+      </gmd:status>
+      <gmd:pointOfContact
+        xlink:href="https://data.noaa.gov/docucomp/440b3ac2-64a5-46e2-9846-38305718b644"
+        xlink:title="NCEI (pointOfContact)"/>
+      <gmd:pointOfContact
+        xlink:href="https://data.noaa.gov/docucomp/ED9AF398-D6CF-A63A-D75D527D366248F3"
+        xlink:title="NOAA Ocean Exploration and Research (pointOfContact)"/> <gmd:pointOfContact 
+               xlink:href="https://data.noaa.gov/docucomp/5ce36bf0-13c6-11e7-9598-0800200c9a66" 
+               xlink:title="Michael White (pointOfContact)"/> <gmd:resourceMaintenance>
+        <gmd:MD_MaintenanceInformation>
+          <gmd:maintenanceAndUpdateFrequency>
+            <gmd:MD_MaintenanceFrequencyCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_MaintenanceFrequencyCode" codeListValue="notPlanned">notPlanned</gmd:MD_MaintenanceFrequencyCode>
+          </gmd:maintenanceAndUpdateFrequency>
+        </gmd:MD_MaintenanceInformation>
+      </gmd:resourceMaintenance>
+      <gmd:graphicOverview>
+        <gmd:MD_BrowseGraphic>
+          <gmd:fileName>
+            <gco:CharacterString>https://www.ncei.noaa.gov/data/oceans/oer/video/graphic/EX1904-BrowseGraphic.jpg</gco:CharacterString>
+          </gmd:fileName>
+          <gmd:fileDescription>
+            <gco:CharacterString>Graphical representation of the data.</gco:CharacterString>
+          </gmd:fileDescription>
+          <gmd:fileType>
+            <gco:CharacterString>JPEG</gco:CharacterString>
+          </gmd:fileType>
+        </gmd:MD_BrowseGraphic>
+      </gmd:graphicOverview>
+      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:keyword>
+            <gco:CharacterString>North Atlantic Ocean</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:keyword>
+            <gco:CharacterString></gco:CharacterString>
+          </gmd:keyword>
+          <gmd:keyword>
+            <gco:CharacterString></gco:CharacterString>
+          </gmd:keyword> 					<gmd:keyword><gco:CharacterString>Davisville</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>Hudson Canyon</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>Norfolk Canyon</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>Rhode Island</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>North Atlantic Ocean</gco:CharacterString></gmd:keyword> <gmd:type>
+            <gmd:MD_KeywordTypeCode codeList="https://www.ngdc.noaa.gov/metadata/published/xsd/schema/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="place">place</gmd:MD_KeywordTypeCode>
+          </gmd:type>
+          <gmd:thesaurusName>
+            <gmd:CI_Citation>
+              <gmd:title>
+                <gco:CharacterString>Provider Place Names</gco:CharacterString>
+              </gmd:title>
+              <gmd:date gco:nilReason="inapplicable"/>
+            </gmd:CI_Citation>
+          </gmd:thesaurusName>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:keyword>
+            <gco:CharacterString>Earth Science > Oceans > Marine Environment Monitoring</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:keyword>
+            <gco:CharacterString>Earth Science > Oceans > Aquatic Sciences</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:keyword>
+            <gco:CharacterString>Earth Science > Oceans > Bathymetry/Seafloor Topography > Seafloor Topography</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:type>
+            <gmd:MD_KeywordTypeCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="theme">theme</gmd:MD_KeywordTypeCode>
+          </gmd:type>
+          <gmd:thesaurusName
+            xlink:href="https://data.noaa.gov/docucomp/227737d0-428b-11df-9879-0800200c9a66"
+            xlink:title="Global Change Master Directory (GCMD) Science Keywords"/>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:descriptiveKeywords
+        xlink:href="https://data.noaa.gov/docucomp/5c633d5b-5d71-446a-bfd2-f1a7ce3dd234"
+        xlink:title="NOAA Office of Ocean Exploration and Research Program Discovery Keywords"/>
+      <gmd:descriptiveKeywords
+        xlink:href="https://data.noaa.gov/docucomp/5df6c9c2-c049-4bf9-b3ce-71ec171aa58d"
+        xlink:title="NOAA Ship Okeanos Explorer Program Discovery Keywords"/> <gmd:descriptiveKeywords 
+        xlink:href="https://data.noaa.gov/docucomp/376827e4-29ca-4700-8cf7-bd988c15a0d0" 
+        xlink:title="NOAA Office of Ocean Exploration and Research Marine Archaeology Keywords"/> <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords> 					<gmd:keyword><gco:CharacterString>archaeological</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>archaeology</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>Billy Mitchell Fleet</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>conservation</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>conserve</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>crm</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>cultural resource management</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>expedition</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>exploration</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>explorer</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>historic</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>Katfish</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>Kraken SeaVision</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>mapping survey</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>marine archaeology</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>marine education</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>maritime</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>maritime archaeology</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>MIT 360 camera</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>multibeam</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>multibeam backscatter</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>multibeam sonar</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>multi-beam sonar</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>nautical</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>nautical archaeology</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>noaa</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>noaa fleet</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>ocean</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>ocean discovery</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>ocean education</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>ocean exploration</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>ocean exploration and research</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>ocean literacy</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>ocean research</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>OER</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>okeanos</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>okeanos explorer</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>Pan Pennsylvania</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>preserve</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>protect</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>protection</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>R337</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>REMUS 600</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>science</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>scientific computing system</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>scientific mission</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>scientific research</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>SCS</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>sea</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>single beam sonar</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>singlebeam sonar</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>single-beam sonar</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>stewardship</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>sub-bottom profile</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>submerged cultural heritage</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>submerged cultural resource</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>systematic exploration</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>technology</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>transformational research</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>U-550</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>uch</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>undersea</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>underwater</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>underwater cultural heritage</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>USS Baltimore</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>USS Bass</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>USS Murphy</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>water column backscatter</gco:CharacterString></gmd:keyword>
+					<gmd:keyword><gco:CharacterString>WHOI OWTTIUSBL</gco:CharacterString></gmd:keyword> <gmd:type>
+            <gmd:MD_KeywordTypeCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="theme">theme</gmd:MD_KeywordTypeCode>
+          </gmd:type>
+          <gmd:thesaurusName>
+            <gmd:CI_Citation>
+              <gmd:title>
+                <gco:CharacterString>Provider Keywords</gco:CharacterString>
+              </gmd:title>
+              <gmd:date gco:nilReason="inapplicable"/>
+            </gmd:CI_Citation>
+          </gmd:thesaurusName>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords><gmd:keyword>
+            <gco:CharacterString>Okeanos Explorer > NOAA Ship Okeanos Explorer</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:type>
+            <gmd:MD_KeywordTypeCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="platform">platform</gmd:MD_KeywordTypeCode>
+          </gmd:type>
+          <gmd:thesaurusName
+            xlink:href="https://data.noaa.gov/docucomp/82A5DD195659CBECE040AC8C5AB41A40"
+            xlink:title="Global Change Master Directory (GCMD) Platform Keywords"/>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:keyword>
+            <gco:CharacterString>DOC/NOAA/NESDIS/NCEI &gt; National Centers for Environmental Information, NESDIS, NOAA, U.S. Department of Commerce</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:keyword>
+            <gco:CharacterString>DOC/NOAA/OAR/OER > Office of Ocean Exploration and Research, Oceanic &amp; Atmospheric Research, NOAA, U.S. Department of Commerce</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:type>
+            <gmd:MD_KeywordTypeCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="dataCentre">dataCentre</gmd:MD_KeywordTypeCode>
+          </gmd:type>
+          <gmd:thesaurusName
+            xlink:href="https://data.noaa.gov/docucomp/9f0de6e6-428b-11df-9879-0800200c9a66"
+            xlink:title="Global Change Master Directory (GCMD) Data Center Keywords"/>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:resourceConstraints xlink:href="https://data.noaa.gov/docucomp/493b9ff1-4465-404d-bcdf-e0fe1cedb14f" xlink:title="Data License Statement"/>
+      <gmd:resourceConstraints
+        xlink:href="https://data.noaa.gov/docucomp/dadd4ac3-2b9f-4db5-8603-71285b94c3d7"
+        xlink:title="Distribution Liability"/>
+      <gmd:resourceConstraints
+        xlink:href="https://data.noaa.gov/docucomp/e8163b1b-fb5a-4f4e-8d5c-ed06da10e21b"
+        xlink:title="Use Liability"/>
+      <gmd:resourceConstraints xlink:title="NCEI Data Citation Statement">
+        <gmd:MD_LegalConstraints>
+          <gmd:useLimitation>
+            <gmd:MD_RestrictionCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#MD_RestrictionCode" codeListValue="otherRestrictions">otherRestrictions</gmd:MD_RestrictionCode>
+          </gmd:useLimitation>
+          <gmd:otherConstraints>
+            <gco:CharacterString>Cite as: NOAA Office of Ocean Exploration and Research. 2019: Okeanos Explorer (EX1904): 2019 Technology Demonstrations. [indicate subset used]. NOAA National Centers for Environmental Information. Accessed [date].</gco:CharacterString>
+          </gmd:otherConstraints>          
+        </gmd:MD_LegalConstraints>
+      </gmd:resourceConstraints>
+      <gmd:resourceConstraints xlink:title="OER Statements">
+        <gmd:MD_Constraints>
+          <gmd:useLimitation>
+            <gco:CharacterString>Access Contraints: Data collected by this mission is accessible through the public domain as soon as possible after the mission end.  Use Constraints: Once accessed, use of these data shall be credited to the NOAA Office of Ocean Exploration and Research. The user is responsible for the results of any application of these data for other than its intended purpose</gco:CharacterString>
+          </gmd:useLimitation>
+        </gmd:MD_Constraints>
+      </gmd:resourceConstraints>
+      <gmd:language>
+        <gco:CharacterString>eng; USA</gco:CharacterString>
+      </gmd:language>
+      <gmd:topicCategory>
+        <gmd:MD_TopicCategoryCode>oceans</gmd:MD_TopicCategoryCode>
+      </gmd:topicCategory>
+      <gmd:topicCategory>
+        <gmd:MD_TopicCategoryCode>geoscientificInformation</gmd:MD_TopicCategoryCode>
+      </gmd:topicCategory>
+      <gmd:extent>
+        <gmd:EX_Extent>
+          <gmd:geographicElement>
+            <gmd:EX_GeographicBoundingBox id="boundingGeographicBoundingBox">
+              <gmd:westBoundLongitude>
+                <gco:Decimal>-74.07</gco:Decimal>
+              </gmd:westBoundLongitude>
+              <gmd:eastBoundLongitude>
+                <gco:Decimal>-66.82</gco:Decimal>
+              </gmd:eastBoundLongitude>
+              <gmd:southBoundLatitude>
+                <gco:Decimal>36.72</gco:Decimal>
+              </gmd:southBoundLatitude>
+              <gmd:northBoundLatitude>
+                <gco:Decimal>41.3</gco:Decimal>
+              </gmd:northBoundLatitude>
+            </gmd:EX_GeographicBoundingBox>
+          </gmd:geographicElement>
+        </gmd:EX_Extent>
+      </gmd:extent>
+      <gmd:extent>
+        <gmd:EX_Extent id="temporalExtent">
+          <gmd:description>
+            <gco:CharacterString>Cruise Start and End</gco:CharacterString>
+          </gmd:description>
+          <gmd:temporalElement>
+            <gmd:EX_SpatialTemporalExtent>
+              <gmd:extent>
+                <gml:TimeInstant gml:id="start">
+                  <gml:timePosition>2019-07-18</gml:timePosition>
+                </gml:TimeInstant>
+              </gmd:extent>
+              <gmd:spatialExtent>
+                <gmd:EX_GeographicDescription>
+                  <gmd:geographicIdentifier>
+                    <gmd:MD_Identifier>
+                      <gmd:authority>
+                        <gmd:CI_Citation>
+                          <gmd:title>
+                            <gco:CharacterString>University-National Oceanographic Laboratory System (UNOLS) Port Table</gco:CharacterString>
+                          </gmd:title>
+                          <gmd:date gco:nilReason="unknown"/>
+                        </gmd:CI_Citation>
+                      </gmd:authority>
+                      <gmd:code>
+                        <gco:CharacterString>Norfolk, VA</gco:CharacterString>
+                      </gmd:code>
+                    </gmd:MD_Identifier>
+                  </gmd:geographicIdentifier>
+                </gmd:EX_GeographicDescription>
+              </gmd:spatialExtent>
+            </gmd:EX_SpatialTemporalExtent>
+          </gmd:temporalElement>
+          <gmd:temporalElement>
+            <gmd:EX_SpatialTemporalExtent>
+              <gmd:extent>
+                <gml:TimeInstant gml:id="end">
+                  <gml:timePosition>2019-08-01</gml:timePosition>
+                </gml:TimeInstant>
+              </gmd:extent>
+              <gmd:spatialExtent>
+                <gmd:EX_GeographicDescription>
+                  <gmd:geographicIdentifier>
+                    <gmd:MD_Identifier>
+                      <gmd:authority>
+                        <gmd:CI_Citation>
+                          <gmd:title>
+                            <gco:CharacterString>University-National Oceanographic Laboratory System (UNOLS) Port Table</gco:CharacterString>
+                          </gmd:title>
+                          <gmd:date gco:nilReason="missing"/>
+                        </gmd:CI_Citation>
+                      </gmd:authority>
+                      <gmd:code>
+                        <gco:CharacterString>Davisville, RI</gco:CharacterString>
+                      </gmd:code>
+                    </gmd:MD_Identifier>
+                  </gmd:geographicIdentifier>
+                </gmd:EX_GeographicDescription>
+              </gmd:spatialExtent>
+            </gmd:EX_SpatialTemporalExtent>
+          </gmd:temporalElement>
+        </gmd:EX_Extent>
+      </gmd:extent>
+    </gmd:MD_DataIdentification>
+  </gmd:identificationInfo>
+  <gmd:contentInfo>
+    <gmi:MI_CoverageDescription>
+      <gmd:attributeDescription>
+        <gco:RecordType>Operations aboard the cruise.</gco:RecordType>
+      </gmd:attributeDescription>
+      <gmd:contentType>
+        <gmd:MD_CoverageContentTypeCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#MD_CoverageContentTypeCode" codeListValue="physicalMeasurement">physicalMeasurement</gmd:MD_CoverageContentTypeCode>
+      </gmd:contentType>
+      <gmi:rangeElementDescription>
+        <gmi:MI_RangeElementDescription>
+          <gmi:name>
+            <gco:CharacterString>Scientific Computing System</gco:CharacterString>
+          </gmi:name>
+          <gmi:definition>
+            <gco:CharacterString>The Scientific Computing System (SCS) provides; Navigation Data: Of any position or orientation system. Meterological data: sensors that measure atmospheric properties. Oceanographic data: Sensors that measure the physical and/or chemical properties of the ocean. Sonar data: Single-beam and Doppler Speed. Winches data: three winches output line out, line rate and line tension. Derived data: Sensors that are created in SCS for the purpose of manipulating existing data (i.e.different units, calculating other measurements like true wind).  </gco:CharacterString>
+          </gmi:definition>
+          <gmi:rangeElement gco:nilReason="inapplicable"/>
+        </gmi:MI_RangeElementDescription>
+      </gmi:rangeElementDescription>
+      <gmi:rangeElementDescription>
+        <gmi:MI_RangeElementDescription>
+          <gmi:name>
+            <gco:CharacterString>Sound Velocity Profile</gco:CharacterString>
+          </gmi:name>
+          <gmi:definition>
+            <gco:CharacterString>The XBT (Expendable Bathythermograph) measures temperature through the water column. XBT software calculates sound velocity, which is applied to the multibeam data for accurate measure of bathymetry.</gco:CharacterString>
+          </gmi:definition>
+          <gmi:rangeElement gco:nilReason="inapplicable"/>
+        </gmi:MI_RangeElementDescription>
+      </gmi:rangeElementDescription>  <gmi:rangeElementDescription>
+        <gmi:MI_RangeElementDescription>
+          <gmi:name>
+            <gco:CharacterString>Multibeam</gco:CharacterString>
+          </gmi:name>
+          <gmi:definition>
+            <gco:CharacterString>Images of the ocean floor provided by multibeam sonar are a key part of reconnaissance in the Okeanos Explorer exploration strategy for finding anomalies in the deep ocean, and also provide essential information for planning up‐close investigations that use the ship’s underwater robots.</gco:CharacterString>
+          </gmi:definition>
+          <gmi:rangeElement gco:nilReason="inapplicable"/>
+        </gmi:MI_RangeElementDescription>
+      </gmi:rangeElementDescription>
+      <gmi:rangeElementDescription>
+        <gmi:MI_RangeElementDescription>
+          <gmi:name>
+            <gco:CharacterString>Split Beam</gco:CharacterString>
+          </gmi:name>
+          <gmi:definition>
+            <gco:CharacterString>The split-beam echosounders, collect data over a broad range of frequencies, allowing us to distinguish between objects in the water column with more clarity and confidence.</gco:CharacterString>
+          </gmi:definition>
+          <gmi:rangeElement gco:nilReason="inapplicable"/>
+        </gmi:MI_RangeElementDescription>
+      </gmi:rangeElementDescription>
+      <gmi:rangeElementDescription>
+        <gmi:MI_RangeElementDescription>
+          <gmi:name>
+            <gco:CharacterString>Sub-bottom Profiler</gco:CharacterString>
+          </gmi:name>
+          <gmi:definition>
+            <gco:CharacterString>The sub-bottom profiling system installed in the hull of Okeanos is a type of ‘chirp’ instrument. Instead of emitting sound at a fixed frequency (rate at which a full sound wave is transmitted), a chirp system sweeps through a wide-frequency band (three to four kilohertz wide) that allows the outgoing signal to be more powerful and able to resolve geologic layering/features at a higher resolution.</gco:CharacterString>
+          </gmi:definition>
+          <gmi:rangeElement gco:nilReason="inapplicable"/>
+        </gmi:MI_RangeElementDescription>
+      </gmi:rangeElementDescription>
+      <gmi:rangeElementDescription>
+        <gmi:MI_RangeElementDescription>
+          <gmi:name>
+            <gco:CharacterString>Water Column Mapping</gco:CharacterString>
+          </gmi:name>
+          <gmi:definition>
+            <gco:CharacterString>Water column backscatter data collected during the mission is used to explore aspects of the marine environment that are found between the ocean surface and the sea floor.</gco:CharacterString>
+          </gmi:definition>
+          <gmi:rangeElement gco:nilReason="inapplicable"/>
+        </gmi:MI_RangeElementDescription>
+      </gmi:rangeElementDescription>
+    </gmi:MI_CoverageDescription>
+  </gmd:contentInfo>
+  <gmd:distributionInfo>
+    <gmd:MD_Distribution>
+      <gmd:distributor>
+        <gmd:MD_Distributor>
+          <gmd:distributorContact
+            xlink:href="https://data.noaa.gov/docucomp/440b3ac2-64a5-46e2-9846-38305718b644"
+            xlink:title="NCEI (distributor)"/>
+          <gmd:distributionOrderProcess>
+            <gmd:MD_StandardOrderProcess>
+              <gmd:fees>
+                <gco:CharacterString>In most cases, electronic downloads of the data are free. However, fees may apply for custom orders, data certifications, copies of analog materials, and data distribution on physical media.</gco:CharacterString>
+              </gmd:fees>
+              <gmd:orderingInstructions>
+                <gco:CharacterString>Contact NCEI for other distribution options and instructions.</gco:CharacterString>
+              </gmd:orderingInstructions>
+            </gmd:MD_StandardOrderProcess>
+          </gmd:distributionOrderProcess>
+          <gmd:distributorTransferOptions>
+            <gmd:MD_DigitalTransferOptions>
+              <gmd:onLine>
+                <gmd:CI_OnlineResource>
+                  <gmd:linkage>
+                    <gmd:URL>https://data.noaa.gov/onestop/collections/details/e023a596-a61d-4a7c-98a4-22d03d1574a9</gmd:URL>
+                  </gmd:linkage>
+                  <gmd:protocol>
+                    <gco:CharacterString>HTTPS</gco:CharacterString>
+                  </gmd:protocol>
+                  <gmd:applicationProfile>
+                    <gco:CharacterString>Web browser</gco:CharacterString>
+                  </gmd:applicationProfile>
+                  <gmd:name>
+                    <gco:CharacterString>NCEI Dataset Landing Page</gco:CharacterString>
+                  </gmd:name>
+                  <gmd:description>
+                    <gco:CharacterString>Navigate directly to the URL for a descriptive web page with download links.</gco:CharacterString>
+                  </gmd:description>
+                  <gmd:function>
+                    <gmd:CI_OnLineFunctionCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="information">information</gmd:CI_OnLineFunctionCode>
+                  </gmd:function>
+                </gmd:CI_OnlineResource>
+              </gmd:onLine>
+              <!--  Only need if has granules
+                <gmd:onLine>
+                <gmd:CI_OnlineResource>
+                  <gmd:linkage>
+                    <gmd:URL>https://data.noaa.gov/onestop/collections/granules/e023a596-a61d-4a7c-98a4-22d03d1574a9</gmd:URL>
+                  </gmd:linkage>
+                  <gmd:protocol>
+                    <gco:CharacterString>HTTPS</gco:CharacterString>
+                  </gmd:protocol>
+                  <gmd:applicationProfile>
+                    <gco:CharacterString>Web browser</gco:CharacterString>
+                  </gmd:applicationProfile>
+                  <gmd:name>
+                    <gco:CharacterString>Granule Search</gco:CharacterString>
+                  </gmd:name>
+                  <gmd:description>
+                    <gco:CharacterString>Search for data granules belonging to this collection (a granule is the smallest aggregation of data that can be independently described and retrieved).</gco:CharacterString>
+                  </gmd:description>
+                  <gmd:function>
+                    <gmd:CI_OnLineFunctionCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#CI_OnLineFunctionCode" codeListValue="search">search</gmd:CI_OnLineFunctionCode>
+                  </gmd:function>
+                </gmd:CI_OnlineResource>
+              </gmd:onLine>  -->
+            </gmd:MD_DigitalTransferOptions>
+          </gmd:distributorTransferOptions>
+        </gmd:MD_Distributor>
+      </gmd:distributor>
+    </gmd:MD_Distribution>
+  </gmd:distributionInfo>
+  <gmd:dataQualityInfo>
+    <gmd:DQ_DataQuality>
+      <gmd:scope>
+        <gmd:DQ_Scope id="datasetScope">
+          <gmd:level>
+            <gmd:MD_ScopeCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#MD_ScopeCode" codeListValue="dataset">dataset</gmd:MD_ScopeCode>
+          </gmd:level>
+        </gmd:DQ_Scope>
+      </gmd:scope>
+      <gmd:lineage/>
+    </gmd:DQ_DataQuality>
+  </gmd:dataQualityInfo>
+  <gmd:metadataMaintenance>
+    <gmd:MD_MaintenanceInformation>
+      <gmd:maintenanceAndUpdateFrequency>
+        <gmd:MD_MaintenanceFrequencyCode codeList="https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#MD_MaintenanceFrequencyCode" codeListValue="notPlanned">notPlanned</gmd:MD_MaintenanceFrequencyCode>
+      </gmd:maintenanceAndUpdateFrequency>
+    </gmd:MD_MaintenanceInformation>
+  </gmd:metadataMaintenance>
+  <gmi:acquisitionInformation>
+    <gmi:MI_AcquisitionInformation>
+      <gmi:platform xlink:href="https://data.noaa.gov/docucomp/66132cd0-6a9c-11e0-ae3e-0800200c9a66"
+        xlink:title="NOAA Ship Okeanos Explorer"/> <gmi:platform
+                xlink:href="https://data.noaa.gov/docucomp/b2972160-9841-11e0-aa80-0800200c9a66"
+                xlink:title="SEIRIOS Camera Sled"/><gmi:platform
+                xlink:href="https://data.noaa.gov/docucomp/66132cd0-6a9c-11e0-ae3e-0800200c9a66"
+                xlink:title="NOAA Ship Okeanos Explorer"/><gmi:platform
+                xlink:href="https://data.noaa.gov/docucomp/c4bf0240-e28b-11e2-a28f-0800200c9a66"
+                xlink:title="Deep Discoverer ROV"/>
+    </gmi:MI_AcquisitionInformation>
+  </gmi:acquisitionInformation>
+</gmi:MI_Metadata>
