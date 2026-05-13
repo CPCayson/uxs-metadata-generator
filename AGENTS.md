@@ -8,6 +8,7 @@ This file orients **automated agents** (Cursor, CI bots, swarm lanes) on how to 
 |------|------|
 | Repo root | Legacy HTML / Apps Script **reference only** for XML parity — not the runtime shell for the React pilot. |
 | `react-pilot/` | **Canonical** Vite app: `pilotState`, validation, wizard steps, Manta widget, lens overlay. |
+| `react-pilot/AGENT_CONTEXT.md` | **Manta Lens** product + agent semantics — validation tiers, evidence ladder, `MetadataFragment`, NCEI rules, LLM boundaries; load for Gemini (`/api/manta-intent`) and any agent endpoint. |
 | `react-pilot/netlify/functions/` | Same-origin `POST /api/db` when using Netlify / `netlify dev`. |
 | `schemas/`, `compiled_rules/`, `scripts/swarm/` | Rule pipeline (SWARM board); see `react-pilot/docs/SWARM_IMPLEMENTATION_BOARD.md`. |
 | `react-pilot/docs/EUT_LENIENT_SWARM.md` | **EUT lenient reduction** — parallel lanes (A–D) to drive down `audit:manta-samples` rollup via import/mapping; complements rule-pipeline SWARM. |
@@ -36,6 +37,10 @@ The template is **collection-level**; mission records are **dataset / acquisitio
 
 The React pilot **does not** preserve −3 XML verbatim on export. **`importPilotPartialStateFromXml`** accepts **both** ISO **19115-3** (`mdb` / `standards.iso.org/iso/19115/-3`) and **19115-2** (`gmi:MI_Metadata` / classic `gmd`). **`buildXmlPreview` / file export always emits ISO 19115-2-shaped GMI/GMD** (`react-pilot/src/lib/xmlPreviewBuilder.js`). So the canonical transfer is **3 → 2** (or **2 → 2**) through **`pilotState`**. Provenance: `sourceProvenance.importIsoXmlFamily` / `exportPreviewIsoFamily` in `xmlPilotImport.js` (`stampIsoImportProvenance`). XML preview surfaces a hint when the upload was −3 (`XmlPreviewPanel.jsx`).
 
+### Golden state (wizard ↔ XML preview)
+
+**`pilotState` is the single source of truth:** wizard fields and `buildXmlPreview(state)` must represent the same values. If lenient/strict/catalog checks and ISO-2 preview sanity pass on the merged state, but on-screen controls disagree with what the preview XML encodes for the same logical fields, that is a **UI or state-binding defect** — not an alternate “XML truth”.
+
 ## Commands agents should actually run
 
 ```bash
@@ -43,8 +48,10 @@ cd react-pilot && npm install && npm run verify:pilot   # lint + build + parser 
 cd react-pilot && npm run dev                          # Netlify dev (8888) + Vite — `/api/*` + CoMET same-origin
 cd react-pilot && npm run dev:vite                     # Vite only (5173); use `dev:with-api-proxy` if 8888 is up
 cd react-pilot && npm run dev:netlify                  # alias of `npm run dev` (Netlify dev)
-cd react-pilot && npm run audit:manta-samples          # EUT XML samples → import → validate → ISO-2 preview audit + lenient rollup JSON/MD/CSV (writes ../MANTA End User Testing/reports/)
-cd react-pilot && npm run verify:manta-eut-perfect    # same as verify:manta-pipeline **plus** exit 1 if any sample has lenient **errors** > 0 (UxS EUT “perfect” target)
+cd react-pilot && npm run audit:manta-samples          # EUT XML samples → import → validate (lenient+strict+catalog) → ISO-2 preview audit + lenient rollup JSON/MD/CSV (writes ../MANTA End User Testing/reports/)
+cd react-pilot && npm run verify:manta-eut-perfect     # verify-pipeline + fail if any lenient errors (golden lenient gate)
+cd react-pilot && npm run verify:manta-eut-strict       # same + fail if any **strict** errors (aspirational; samples not yet clean)
+cd react-pilot && npm run verify:manta-eut-catalog      # same + fail if any **catalog** errors (aspirational)
 cd react-pilot && npm run repomix                     # pack react-pilot → repomix-output.xml (LLM context; gitignored; see repomix.config.json)
 cd react-pilot && npm run repomix:critical            # ~15 critical files → repomix-critical-output.xml (~110k tokens; import/validate/preview)
 ```
@@ -94,8 +101,9 @@ See `react-pilot/docs/SWARM_IMPLEMENTATION_BOARD.md` for SWARM-A … SWARM-F own
 | 2026-05 | **Mission step density:** long helper copy moved from under inputs into `FieldHintTooltip` / `LabelWithHint` (`FieldHintTooltip.jsx`); `StepMission.jsx` panel titles and UxS/temporal/constraints/aggregation blocks use ⓘ bubbles; `LabelWithHint` default `aria-label` avoids `[object Object]` when `label` is JSX. |
 | 2026-05 | **Import sample report:** After XML **Apply** (header `XmlToolsBar` or wizard-start import), **Import report** downloads Markdown (`*-import-report.md`): parser warnings, validation issues, unset tracked paths (`pilotImportReportPaths.js`), line-diff table upload vs `buildXmlPreview` output (`pilotImportSampleReport.js`). Cleared on **Clear form**. |
 | 2026-05 | **ISO 19115-3 → 19115-2:** Documented in Agents; import accepts −3 or −2 XML; preview/export is always −2 via `pilotState`. Import sample report clarifies this when provenance stamps −3 uploads. |
-| 2026-05 | **`audit:manta-samples`:** Batch-runs `MANTA End User Testing/samples/*.xml` through import → merge → lenient/strict/**catalog** validate → `buildXmlPreview`, preview→import round-trip, optional **xmllint**; writes `manta-samples-iso2-audit.{md,json}` with per-sample **`lenientIssues[]`**, plus **`manta-samples-lenient-rollup.{json,md}`** and **`manta-samples-lenient-patterns.csv`** (cross-sample frequency). Optional **`--fail-if-lenient-errors`** for CI when samples must be clean. |
+| 2026-05 | **`audit:manta-samples`:** Batch-runs `MANTA End User Testing/samples/*.xml` through import → merge → lenient/strict/**catalog** validate → `buildXmlPreview`, preview→import round-trip, optional **xmllint**; writes `manta-samples-iso2-audit.{md,json}` with per-sample **`lenientIssues[]`**, **`strictIssues[]`**, **`catalogIssues[]`**, plus **`manta-samples-lenient-rollup.{json,md}`** and **`manta-samples-lenient-patterns.csv`** (cross-sample frequency). Optional **`--fail-if-lenient-errors`** / **`--fail-if-strict-errors`** / **`--fail-if-catalog-errors`** for CI gates. |
 | 2026-05 | **EUT lenient swarm:** `react-pilot/docs/EUT_LENIENT_SWARM.md` — parallel lanes EUT-A (keywords) / EUT-B (mission) / EUT-C (platform id/desc) / EUT-D (sensors + distribution format) to continue rolling up import fixes against `manta-samples-lenient-rollup.*`. |
 | 2026-05 | **Docs:** `react-pilot/docs/MANTA_ONE_APP_MISSION_XML_README.md` — **single canonical doc** (one-app + validation/swarm architecture, Part II §15–29); `docs/SWARM_VALIDATION_ARCHITECTURE_SNAPSHOT.txt` redirects there. `react-pilot/README.md` links the canonical doc. |
 | 2026-05 | **Lens symbiote (wrapped card, ref 05):** `LensSymbioteFrame.jsx` — ring wraps **field void + glass deck** (`min-height` 120px): insights column (Lens / guided / title / message / **Why?**), automations column (**fill** + abstract chips via `getLensChipsForIssue`), footer **Assistant / LLM** slot + **Safe defaults**; viewport **deck-top** flip. `AssistantShell.jsx` skips **inline glass** for the active symbiote field and wires callbacks mirroring inline strip. |
-| 2026-05 | **Default `npm run dev`:** Netlify dev on **8888** via `scripts/run-netlify-dev.mjs` (cwd always `react-pilot/` so `netlify/functions` loads from repo root too). **`[dev] command`** is **`npm run dev:vite`** (Vite on **5173** only — do not nest Netlify inside Netlify). Same-origin **`/api/db`** + **`/api/comet-proxy`**; explicit redirects in `netlify.toml`. |
+| 2026-05 | **Default `npm run dev`:** Netlify dev on **8888** via `scripts/run-netlify-dev.mjs` (cwd `react-pilot/`). Spawn passes **`--functions netlify/functions`** so the CLI does not look for an empty `uSX/netlify/functions` when the linked Netlify site’s base directory is the git repo root. **`[dev] command`** is **`npm run dev:vite`** (Vite on **5173** only). Same-origin **`/api/db`** + **`/api/comet-proxy`**; explicit redirects in `netlify.toml`. |
+| 2026-05 | **Golden state + stricter EUT gates:** `AGENTS.md` states wizard ↔ `buildXmlPreview` parity; `audit-manta-end-user-samples.mjs` `--verify-pipeline` prints **strict/catalog** issue totals; JSON rows add `strictIssues[]` / `catalogIssues[]`; optional `--fail-if-strict-errors` / `--fail-if-catalog-errors`; npm `verify:manta-eut-strict` / `verify:manta-eut-catalog`. |

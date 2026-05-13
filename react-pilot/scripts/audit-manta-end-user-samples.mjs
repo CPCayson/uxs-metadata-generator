@@ -4,9 +4,16 @@
  * import → merge → lenient / strict / catalog validate → buildXmlPreview (ISO 19115-2 mission output),
  * optional preview-round-trip import + xmllint --noout (verify-pilot parity).
  *
+ * **Golden state (single source of truth):** the merged `pilotState` after import is what the wizard binds and
+ * what `buildXmlPreview` serializes. If preview + validator look “green” but on-screen form fields disagree with
+ * the values encoded in the preview for the same logical paths, that indicates a **UI / binding bug** — not a
+ * separate “XML truth” vs “form truth”.
+ *
  * This is the **batch substitute** for clicking through every wizard step in the UI: validation runs on the full
  * merged `pilotState` (same engine as the form). “Perfect” ISO-2 means **lenient 0 errors**, empty ISO-2 structural
  * fails, preview round-trip parses, and well-formed XML — tighten with `--fail-if-lenient-errors` when ready.
+ * **Strict** and **catalog** modes always run for each sample (counts in JSON/MD); `--verify-pipeline` prints their
+ * totals; optional `--fail-if-strict-errors` / `--fail-if-catalog-errors` gate CI when those rubrics reach zero.
  *
  * Usage:
  *   npm run audit:manta-samples
@@ -15,6 +22,8 @@
  *   node scripts/audit-manta-end-user-samples.mjs --fail-if-lenient-errors
  *   node scripts/audit-manta-end-user-samples.mjs --verify-pipeline
  *   node scripts/audit-manta-end-user-samples.mjs --verify-pipeline --fail-if-lenient-errors   # EUT “perfect” gate (0 lenient errors @ samples/)
+ *   node scripts/audit-manta-end-user-samples.mjs --verify-pipeline --fail-if-lenient-errors --fail-if-strict-errors
+ *   node scripts/audit-manta-end-user-samples.mjs --verify-pipeline --fail-if-lenient-errors --fail-if-catalog-errors
  */
 import fs from 'node:fs'
 import os from 'node:os'
@@ -34,6 +43,8 @@ const SAMPLE_DIR = process.env.SAMPLE_DIR || DEFAULT_SAMPLES
 const SAMPLE_DIR_REL = path.relative(REPO_ROOT, path.resolve(SAMPLE_DIR)) || '.'
 
 const FAIL_IF_LENIENT_ERRORS = process.argv.includes('--fail-if-lenient-errors')
+const FAIL_IF_STRICT_ERRORS = process.argv.includes('--fail-if-strict-errors')
+const FAIL_IF_CATALOG_ERRORS = process.argv.includes('--fail-if-catalog-errors')
 /** Fast CI gate: no report files; exit 1 if any sample fails import, ISO-2 preview sanity, preview→import RT, or xmllint. */
 const VERIFY_PIPELINE = process.argv.includes('--verify-pipeline')
 
@@ -99,6 +110,19 @@ function formatStepTally(tally) {
     .filter(Boolean)
     .concat(tally.other?.e || tally.other?.w ? [`other:${tally.other.e}e/${tally.other.w}w`] : [])
     .join(' · ')
+}
+
+/** @param {Array<{ severity?: string, field?: string, message?: string, xpath?: string }>} issues */
+function slimValidatorErrorIssues(issues, max = 12) {
+  return (issues || [])
+    .filter((i) => i.severity === 'e')
+    .slice(0, max)
+    .map((i) => ({
+      field: String(i.field || ''),
+      message: String(i.message || ''),
+      severity: 'e',
+      xpath: i.xpath,
+    }))
 }
 
 /**
@@ -327,6 +351,10 @@ function main() {
       strictByStep: /** @type {Record<string, { e: number, w: number }>|null} */ (null),
       /** Full lenient issue list for rollup / CI drill-down */
       lenientIssues: /** @type {Array<{ field: string, message: string, severity: string, xpath?: string }>} */ ([]),
+      /** First strict-mode errors (same `pilotState` as lenient) for drill-down */
+      strictIssues: /** @type {Array<{ field: string, message: string, severity: string, xpath?: string }>} */ ([]),
+      /** First catalog-mode errors */
+      catalogIssues: /** @type {Array<{ field: string, message: string, severity: string, xpath?: string }>} */ ([]),
     }
 
     let parseResult
@@ -367,10 +395,12 @@ function main() {
       row.strictErrors = (vrS.issues || []).filter((i) => i.severity === 'e').length
       row.strictWarns = (vrS.issues || []).filter((i) => i.severity === 'w').length
       row.strictByStep = tallyIssuesByStep(vrS.issues || [])
+      row.strictIssues = slimValidatorErrorIssues(vrS.issues || [])
 
       const vrC = validatePilotState('catalog', fixed)
       row.catalogErrors = (vrC.issues || []).filter((i) => i.severity === 'e').length
       row.catalogWarns = (vrC.issues || []).filter((i) => i.severity === 'w').length
+      row.catalogIssues = slimValidatorErrorIssues(vrC.issues || [])
 
       row.mergeOk = true
 
@@ -399,9 +429,29 @@ function main() {
     const badXml = rows.filter((r) => r.mergeOk && r.xmllintOk === false).length
     const lenientBadRows = rows.filter((r) => r.mergeOk && (r.lenientErrors ?? 0) > 0)
     const badLenient = lenientBadRows.length
-    if (badImport || badPipeline || badIso || badRt || badXml || (FAIL_IF_LENIENT_ERRORS && badLenient)) {
+    const strictBadRows = rows.filter((r) => r.mergeOk && (r.strictErrors ?? 0) > 0)
+    const badStrict = strictBadRows.length
+    const catalogBadRows = rows.filter((r) => r.mergeOk && (r.catalogErrors ?? 0) > 0)
+    const badCatalog = catalogBadRows.length
+
+    const mergedOk = rows.filter((r) => r.mergeOk)
+    const sumStrictE = mergedOk.reduce((a, r) => a + (r.strictErrors ?? 0), 0)
+    const sumStrictW = mergedOk.reduce((a, r) => a + (r.strictWarns ?? 0), 0)
+    const sumCatE = mergedOk.reduce((a, r) => a + (r.catalogErrors ?? 0), 0)
+    const sumCatW = mergedOk.reduce((a, r) => a + (r.catalogWarns ?? 0), 0)
+
+    if (
+      badImport ||
+      badPipeline ||
+      badIso ||
+      badRt ||
+      badXml ||
+      (FAIL_IF_LENIENT_ERRORS && badLenient) ||
+      (FAIL_IF_STRICT_ERRORS && badStrict > 0) ||
+      (FAIL_IF_CATALOG_ERRORS && badCatalog > 0)
+    ) {
       console.error(
-        `verify-pipeline FAILED: import=${badImport} pipeline=${badPipeline} iso2Preview=${badIso} previewRt=${badRt} xmllint=${badXml} lenientErrSamples=${badLenient} (samples=${rows.length})`,
+        `verify-pipeline FAILED: import=${badImport} pipeline=${badPipeline} iso2Preview=${badIso} previewRt=${badRt} xmllint=${badXml} lenientErrSamples=${badLenient} strictErrSamples=${badStrict} catalogErrSamples=${badCatalog} (samples=${rows.length})`,
       )
       if (FAIL_IF_LENIENT_ERRORS && badLenient) {
         console.error(
@@ -413,6 +463,24 @@ function main() {
             .slice(0, 4)
             .map((i) => `${i.field}: ${i.message}`)
           console.error(`    ${r.file}: ${r.lenientErrors}e — ${top.join(' · ') || '(see reports)'}`)
+        }
+      }
+      if (FAIL_IF_STRICT_ERRORS && badStrict > 0) {
+        console.error(
+          `  --fail-if-strict-errors: ${badStrict} file(s) have strict-mode validation errors (Σe=${sumStrictE} Σw=${sumStrictW}).`,
+        )
+        for (const r of strictBadRows) {
+          const top = (r.strictIssues || []).slice(0, 4).map((i) => `${i.field}: ${i.message}`)
+          console.error(`    ${r.file}: ${r.strictErrors}e — ${top.join(' · ') || '(see reports)'}`)
+        }
+      }
+      if (FAIL_IF_CATALOG_ERRORS && badCatalog > 0) {
+        console.error(
+          `  --fail-if-catalog-errors: ${badCatalog} file(s) have catalog-mode validation errors (Σe=${sumCatE} Σw=${sumCatW}).`,
+        )
+        for (const r of catalogBadRows) {
+          const top = (r.catalogIssues || []).slice(0, 4).map((i) => `${i.field}: ${i.message}`)
+          console.error(`    ${r.file}: ${r.catalogErrors}e — ${top.join(' · ') || '(see reports)'}`)
         }
       }
       for (const r of rows) {
@@ -431,8 +499,14 @@ function main() {
       }
       process.exit(1)
     }
+    const modeNote = []
+    if (FAIL_IF_LENIENT_ERRORS) modeNote.push('lenient 0 errors')
+    if (FAIL_IF_STRICT_ERRORS) modeNote.push('strict 0 error samples')
+    if (FAIL_IF_CATALOG_ERRORS) modeNote.push('catalog 0 error samples')
     console.log(
-      `verify-pipeline: ${rows.length} MANTA samples — import, merge, ISO-19115-2 preview sanity, preview→import RT, xmllint OK${FAIL_IF_LENIENT_ERRORS ? ', lenient 0 errors' : ''}`,
+      `verify-pipeline: ${rows.length} MANTA samples — import, merge, ISO-19115-2 preview sanity, preview→import RT, xmllint OK` +
+        (modeNote.length ? `; ${modeNote.join('; ')}` : '') +
+        ` — validatePilotState totals: strict ${sumStrictE}e/${sumStrictW}w, catalog ${sumCatE}e/${sumCatW}w (${badStrict}/${rows.length} samples with strict errors, ${badCatalog}/${rows.length} with catalog errors; full rows in audit JSON when reports run)`,
     )
     process.exit(0)
   }
@@ -556,7 +630,7 @@ function main() {
   md.push('')
   md.push('## JSON')
   md.push('')
-  md.push(`Per-sample machine-readable (includes \`lenientIssues[]\`): \`${path.relative(REPO_ROOT, jsonPath)}\``)
+  md.push(`Per-sample machine-readable (includes \`lenientIssues[]\`, \`strictIssues[]\`, \`catalogIssues[]\`): \`${path.relative(REPO_ROOT, jsonPath)}\``)
 
   const mdPath = path.join(OUT_DIR, 'manta-samples-iso2-audit.md')
   fs.writeFileSync(mdPath, md.join('\n'))
@@ -572,12 +646,22 @@ function main() {
   const badRt = rows.filter((r) => r.mergeOk && !r.previewRoundtripPartial).length
   const badXml = rows.filter((r) => r.mergeOk && r.xmllintOk === false).length
   const badLenient = rows.filter((r) => r.mergeOk && r.lenientErrors > 0).length
+  const badStrict = rows.filter((r) => r.mergeOk && r.strictErrors > 0).length
+  const badCatalog = rows.filter((r) => r.mergeOk && r.catalogErrors > 0).length
   console.log(
-    `Summary: ${rows.length} files, pipeline problems: ${badPipeline}, lenient errors>0: ${badLenient}, ISO-2 preview gaps: ${badIso}, preview round-trip failed: ${badRt}, xmllint failed: ${badXml}`,
+    `Summary: ${rows.length} files, pipeline problems: ${badPipeline}, lenient errors>0: ${badLenient}, strict errors>0: ${badStrict}, catalog errors>0: ${badCatalog}, ISO-2 preview gaps: ${badIso}, preview round-trip failed: ${badRt}, xmllint failed: ${badXml}`,
   )
 
   if (FAIL_IF_LENIENT_ERRORS && badLenient > 0) {
     console.error('Failing because --fail-if-lenient-errors and one or more samples have lenient validation errors.')
+    process.exit(1)
+  }
+  if (FAIL_IF_STRICT_ERRORS && badStrict > 0) {
+    console.error('Failing because --fail-if-strict-errors and one or more samples have strict validation errors.')
+    process.exit(1)
+  }
+  if (FAIL_IF_CATALOG_ERRORS && badCatalog > 0) {
+    console.error('Failing because --fail-if-catalog-errors and one or more samples have catalog validation errors.')
     process.exit(1)
   }
 }

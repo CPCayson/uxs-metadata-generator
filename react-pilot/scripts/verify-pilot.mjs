@@ -25,6 +25,9 @@ import { NCEI_UXS_FILE_ID_PREFIX } from '../src/lib/nceiUxsFileId.js'
 import { buildXmlPreview } from '../src/lib/xmlPreviewBuilder.js'
 import { missionPreviewIso191152SanityFailures } from '../src/lib/iso191152PreviewSanity.js'
 import { importPilotPartialStateFromXml } from '../src/lib/xmlPilotImport.js'
+import { extractFragmentsFromIsoXml } from '../src/adapters/sources/IsoXmlFragmentExtractor.js'
+import { classifyInput } from '../src/features/intake/intakeClassifier.js'
+import { normalizeCruiseId, stampFingerprints } from '../src/core/identity/cruiseFingerprint.js'
 import {
   dedupeIssuesByFieldAndMessage,
   normalizeValidationIssue,
@@ -181,6 +184,138 @@ function checkSeededRoundtrip() {
   assert.equal(merged.distribution.metadataMaintenanceFrequency, seeded.distribution.metadataMaintenanceFrequency)
 
   return xml
+}
+
+function checkIsoXmlFragmentExtractor(goldenXml) {
+  assert.ok(typeof goldenXml === 'string' && goldenXml.length > 0, 'goldenXml must be seeded preview ISO XML')
+  const result = extractFragmentsFromIsoXml(goldenXml, 'verify-seeded-roundtrip.xml')
+  assert.equal(result.ok, true, 'extractor: ok should be true for golden record')
+  assert.ok(Array.isArray(result.fragments), 'extractor: fragments should be an array')
+  assert.ok(
+    result.fragments.length >= 10,
+    `extractor: should produce at least 10 fragments, got ${result.fragments.length}`,
+  )
+
+  for (const f of result.fragments) {
+    assert.ok(typeof f.id === 'string' && f.id.length > 0, `extractor: fragment missing id at ${f.fieldPath}`)
+    assert.equal(typeof f.fieldPath, 'string', `extractor: fragment missing fieldPath`)
+    assert.ok(
+      f.value !== null && f.value !== undefined && f.value !== '',
+      `extractor: fragment has empty value at ${f.fieldPath}`,
+    )
+    assert.equal(typeof f.evidence, 'string', `extractor: fragment missing evidence at ${f.fieldPath}`)
+    assert.equal(f.source?.kind, 'iso-xml', `extractor: fragment wrong source kind at ${f.fieldPath}`)
+    assert.ok(
+      typeof f.extractedAt === 'string' && f.extractedAt.length > 0,
+      `extractor: fragment missing extractedAt at ${f.fieldPath}`,
+    )
+    assert.ok(
+      typeof f.entityFingerprint === 'string' && f.entityFingerprint.length > 0,
+      `extractor: fragment missing entityFingerprint at ${f.fieldPath}`,
+    )
+  }
+
+  const titleFrag = result.fragments.find((f) => f.fieldPath === 'mission.title')
+  assert.ok(titleFrag, 'extractor: mission.title fragment should exist')
+  assert.ok(
+    typeof titleFrag.value === 'string' && titleFrag.value.length > 0,
+    'extractor: mission.title value should be non-empty',
+  )
+
+  assert.ok(result.partial && typeof result.partial === 'object', 'extractor: partial should be returned for backward compat')
+}
+
+function checkIntakeClassifierBediRegression() {
+  const bediXmlSnippet = `<?xml version="1.0"?>
+<gmi:MI_Metadata xmlns:gmi="http://www.isotc211.org/2005/gmi"
+  xmlns:gmd="http://www.isotc211.org/2005/gmd">
+  <gmd:fileIdentifier><gco:CharacterString>BEDI_BIOLUM2009_granule_001</gco:CharacterString></gmd:fileIdentifier>
+  <gmd:identificationInfo>
+    <gmd:MD_DataIdentification>
+      <gmd:citation><gmd:CI_Citation>
+        <gmd:title><gco:CharacterString>BEDI benthic dive granule test</gco:CharacterString></gmd:title>
+      </gmd:CI_Citation></gmd:citation>
+      <gmd:abstract><gco:CharacterString>BEDI collection benthic granule parentIdentifier</gco:CharacterString></gmd:abstract>
+    </gmd:MD_DataIdentification>
+  </gmd:identificationInfo>
+</gmi:MI_Metadata>`
+
+  const bediResult = classifyInput(bediXmlSnippet)
+  assert.ok(bediResult, 'classifier: BEDI snippet should classify')
+  assert.notEqual(
+    bediResult.profileId,
+    'mission',
+    `classifier: BEDI XML with gmi: should NOT route to mission, got ${bediResult.profileId}`,
+  )
+  assert.ok(
+    bediResult.profileId === 'bediGranule' || bediResult.profileId === 'bediCollection',
+    `classifier: BEDI XML should route to a BEDI profile, got ${bediResult.profileId}`,
+  )
+
+  const uxsXmlSnippet = `<?xml version="1.0"?>
+<gmi:MI_Metadata xmlns:gmi="http://www.isotc211.org/2005/gmi">
+  <gmd:abstract>UUV multibeam sonar seafloor mapping autonomous underwater vehicle</gmd:abstract>
+</gmi:MI_Metadata>`
+
+  const uxsResult = classifyInput(uxsXmlSnippet)
+  assert.ok(uxsResult, 'classifier: UxS snippet should classify')
+  assert.equal(
+    uxsResult.profileId,
+    'mission',
+    `classifier: UxS XML should route to mission, got ${uxsResult.profileId}`,
+  )
+}
+
+function checkCruiseFingerprintNormalization() {
+  const cases = [
+    ['gov.noaa.ncei.oer:BIOLUM2009', 'cruise:biolum2009'],
+    ['BIOLUM2009', 'cruise:biolum2009'],
+    ['Biolum2009', 'cruise:biolum2009'],
+    ['BIOLUM2009_VID_20090721_SIT_DIVE_JSL2-3681_TAPE1OF2_SEG1OF1', 'cruise:biolum2009'],
+    ['Biolum2009_VID_20090721_DIVE_JSL2-3681_SIT_TAPE1_SEG1', 'cruise:biolum2009'],
+    ['EX2306', 'cruise:ex2306'],
+    ['PS2418L0', 'cruise:ps2418l0'],
+    ['gov.noaa.nodc:0297635', 'cruise:0297635'],
+    ['gov.noaa.ncei.uxs:PS2418L0_ER_UUV01', 'cruise:ps2418l0-er-uuv01'],
+    [null, null],
+    ['', null],
+  ]
+
+  for (const [input, expected] of cases) {
+    const result = normalizeCruiseId(input)
+    assert.equal(
+      result,
+      expected,
+      `normalizeCruiseId(${JSON.stringify(input)}): expected ${expected}, got ${result}`,
+    )
+  }
+
+  const mockFragments = [
+    { fieldPath: 'mission.fileId', value: 'BIOLUM2009', entityFingerprint: '' },
+    { fieldPath: 'mission.title', value: 'BIOLUM 2009 Video', entityFingerprint: '' },
+    { fieldPath: 'mission.abstract', value: 'Benthic survey...', entityFingerprint: '' },
+  ]
+
+  stampFingerprints(mockFragments)
+
+  for (const f of mockFragments) {
+    assert.equal(
+      f.entityFingerprint,
+      'cruise:biolum2009',
+      `stampFingerprints: expected cruise:biolum2009 on ${f.fieldPath}, got ${f.entityFingerprint}`,
+    )
+  }
+
+  const onProdId = 'gov.noaa.ncei.oer:BIOLUM2009_VID_20090721_SIT_DIVE_JSL2-3681_TAPE1OF2_SEG1OF1'
+  const generatedId = 'Biolum2009_VID_20090721_DIVE_JSL2-3681_SIT_TAPE1_SEG1'
+
+  assert.equal(
+    normalizeCruiseId(onProdId),
+    normalizeCruiseId(generatedId),
+    `fingerprint conflict case: on-prod and generated should normalize to same key\n` +
+      `  on-prod:   ${normalizeCruiseId(onProdId)}\n` +
+      `  generated: ${normalizeCruiseId(generatedId)}`,
+  )
 }
 
 /**
@@ -364,11 +499,10 @@ function collectFixtureMissionXmlFiles(absDir) {
 }
 
 /**
- * For each `fixtures/mission/*.xml` that imports as ISO 19115-2: merged state should match after
- * `buildXmlPreview` → `importPilotPartialStateFromXml`. Preview is generator output (gmi root), not a byte mirror
- * of the original file; ISO 19115-3 sources are skipped here because preview normalizes to 19115-2.
+ * Ensures every XML in `MANTA End User Testing/samples` imports cleanly and preview→import RT stays healthy.
+ * The audit script runs **lenient**, **strict**, and **catalog** `validatePilotState` on each merged sample (see
+ * audit JSON rows or the `--verify-pipeline` log line for Σ counts).
  */
-/** Ensures every XML in `MANTA End User Testing/samples` imports cleanly and preview→import RT stays healthy. */
 function checkMantaEndUserSamplesPipeline() {
   const samplesDir = path.resolve(process.cwd(), '..', 'MANTA End User Testing', 'samples')
   if (!fs.existsSync(samplesDir)) {
@@ -383,6 +517,11 @@ function checkMantaEndUserSamplesPipeline() {
   assert.equal(r.status, 0, r.stderr || r.stdout || 'MANTA samples pipeline verify failed')
 }
 
+/**
+ * For each `fixtures/mission/*.xml` that imports as ISO 19115-2: merged state should match after
+ * `buildXmlPreview` → `importPilotPartialStateFromXml`. Preview is generator output (gmi root), not a byte mirror
+ * of the original file; ISO 19115-3 sources are skipped here because preview normalizes to 19115-2.
+ */
 function checkIso2MissionFixturePreviewStateRoundtrip() {
   const dir = path.join(process.cwd(), 'fixtures', 'mission')
   const files = collectFixtureMissionXmlFiles(dir)
@@ -1310,6 +1449,15 @@ async function main() {
   step('seeded preview roundtrip', () => {
     seededXml = checkSeededRoundtrip()
   })
+  step('IsoXmlFragmentExtractor (partial → fragments)', () => {
+    checkIsoXmlFragmentExtractor(seededXml)
+  })
+  step('intakeClassifier BEDI misroute regression', () => {
+    checkIntakeClassifierBediRegression()
+  })
+  step('cruiseFingerprint normalization + stamping', () => {
+    checkCruiseFingerprintNormalization()
+  })
   step('ISO 19115-2 mission preview output sanity', () => {
     assertMissionPreviewIso191152Sanity(seededXml)
   })
@@ -1942,6 +2090,123 @@ async function main() {
     )
     assert.equal(m.length, 2)
     assert.equal(m.find((r) => r.uuid === '1').label, 'y')
+  })
+  await asyncStep('reconcileFragments evidence ladder', async () => {
+    const { reconcileField, reconcileFragments, reconciledMapToPartial } = await import(
+      '../src/core/reconcile/reconcileFragments.js',
+    )
+
+    const makeFragment = (fieldPath, value, evidence, sourceId = 'test') => ({
+      id: `test-${Math.random()}`,
+      entityType: 'cruise',
+      entityFingerprint: 'cruise:biolum2009',
+      fieldPath,
+      value,
+      evidence,
+      source: { id: sourceId, kind: 'iso-xml', location: fieldPath },
+      extractedAt: new Date().toISOString(),
+    })
+
+    const titleFragments = [
+      makeFragment('mission.title', 'Generated Title', 'template-token-resolved', 'generated.xml'),
+      makeFragment('mission.title', 'On-Prod Title', 'on-prod-record', 'onprod.xml'),
+      makeFragment('mission.title', 'CSV Title', 'csv-column-mapped', 'export.csv'),
+    ]
+
+    const titleResult = reconcileField(titleFragments)
+    assert.equal(titleResult.value, 'On-Prod Title')
+    assert.equal(titleResult.hasConflict, true)
+    assert.equal(titleResult.conflicts.length, 2)
+    assert.equal(titleResult.locked, false)
+
+    const lockedFragment = makeFragment('mission.title', 'User Title', 'user-confirmed')
+    const lockedResult = reconcileField([lockedFragment])
+    assert.equal(lockedResult.locked, true)
+
+    const llmFragment = makeFragment('mission.abstract', 'AI generated abstract', 'llm-suggestion')
+    const isoFragment = makeFragment('mission.abstract', 'Real abstract', 'iso-xpath-exact')
+    const abstractResult = reconcileField([llmFragment, isoFragment])
+    assert.equal(abstractResult.isSuggestion, false)
+    assert.equal(abstractResult.value, 'Real abstract')
+
+    const llmOnlyResult = reconcileField([llmFragment])
+    assert.equal(llmOnlyResult.isSuggestion, true)
+
+    const mixedFragments = [
+      makeFragment('mission.title', 'Real Title', 'iso-xpath-exact'),
+      makeFragment('mission.abstract', 'AI Abstract', 'llm-suggestion'),
+    ]
+    const reconciledMap = reconcileFragments(mixedFragments)
+    const { partial, suggestions } = reconciledMapToPartial(reconciledMap)
+
+    assert.equal(partial?.mission?.title, 'Real Title')
+    assert.equal(partial?.mission?.abstract, undefined)
+    assert.equal(suggestions.length, 1)
+  })
+  await asyncStep('mergeWithEvidence base state protection', async () => {
+    const { mergeWithEvidence } = await import('../src/core/reconcile/mergeWithEvidence.js')
+
+    const basePilotState = {
+      mission: {
+        title: 'Existing Title',
+        abstract: '',
+      },
+    }
+
+    const incomingFragments = [
+      {
+        id: 'f1',
+        entityType: 'cruise',
+        entityFingerprint: 'cruise:test',
+        fieldPath: 'mission.title',
+        value: 'New Title from Import',
+        evidence: 'iso-xpath-exact',
+        source: { id: 'import.xml', kind: 'iso-xml', location: 'gmd:title' },
+        extractedAt: new Date().toISOString(),
+      },
+      {
+        id: 'f2',
+        entityType: 'cruise',
+        entityFingerprint: 'cruise:test',
+        fieldPath: 'mission.abstract',
+        value: 'New abstract from import',
+        evidence: 'iso-xpath-exact',
+        source: { id: 'import.xml', kind: 'iso-xml', location: 'gmd:abstract' },
+        extractedAt: new Date().toISOString(),
+      },
+    ]
+
+    const result = mergeWithEvidence(basePilotState, incomingFragments, {
+      baseEvidence: 'user-confirmed',
+    })
+
+    assert.equal(result.mergedState.mission.title, 'Existing Title')
+    assert.equal(result.mergedState.mission.abstract, 'New abstract from import')
+    assert.ok(result.skippedCount >= 1)
+  })
+  await asyncStep('useMultiSourceReconstruct (rebuild review data)', async () => {
+    const { buildMultiSourceReconstructResult, useMultiSourceReconstruct } = await import(
+      '../src/hooks/useMultiSourceReconstruct.js',
+    )
+    assert.equal(typeof buildMultiSourceReconstructResult, 'function')
+    assert.equal(typeof useMultiSourceReconstruct, 'function')
+    const base = { mission: { title: 'Base', abstract: '' } }
+    const fragments = [
+      {
+        id: 'a',
+        entityType: 'cruise',
+        entityFingerprint: 'cruise:x',
+        fieldPath: 'mission.title',
+        value: 'Incoming',
+        evidence: 'iso-xpath-exact',
+        source: { id: 'a.xml', kind: 'iso-xml', location: '/' },
+        extractedAt: new Date().toISOString(),
+      },
+    ]
+    const r = buildMultiSourceReconstructResult(base, fragments, { baseEvidence: 'user-confirmed' })
+    assert.ok(r.mergedState && typeof r.fragmentCount === 'number')
+    assert.equal(r.fragmentCount, 1)
+    assert.equal(r.sourceCount, 1)
   })
   step('Netlify /api/db legacy GeoJSON + DCAT + validate path', () => {
     const state = defaultPilotState()

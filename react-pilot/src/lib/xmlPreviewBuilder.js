@@ -1,3 +1,9 @@
+/**
+ * XML preview export (`buildXmlPreview`) is a **pure projection** of `pilotState` — the same object the wizard
+ * binds to fields. **Golden rule:** if `validatePilotState` + ISO-2 preview sanity pass on `buildXmlPreview(state)`
+ * but visible form values disagree with what the preview encodes for the same paths, treat that as a **UI /
+ * state-binding bug** (split sources of truth), not “good metadata”.
+ */
 import { getDataLicensePresetDef, normalizeDataLicensePresetKey } from './noaaLicensePresets.js'
 import { formatNceiUxsFileIdentifierForXml } from './nceiUxsFileId.js'
 import { buildAcquisitionInstrumentDescription } from './sensorInstrumentDescription.js'

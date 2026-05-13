@@ -688,6 +688,30 @@ function citationIdentifiers(cite) {
 }
 
 /**
+ * Normalize `gml:endPosition` text (e.g. `ongoing`) and indeterminate endpoints for pilot date fields.
+ * @param {string} endRaw
+ * @param {string} beginRaw
+ * @param {Element | null} endPosEl
+ */
+function normalizeTemporalExtentEndText(endRaw, beginRaw, endPosEl) {
+  let endTxt = String(endRaw ?? '').trim()
+  if (!endTxt && endPosEl) {
+    endTxt = txt(endPosEl).trim()
+    const indet = String(endPosEl.getAttribute('indeterminatePosition') || '').trim().toLowerCase()
+    if (!endTxt && indet === 'now') {
+      endTxt = new Date().toISOString().slice(0, 10)
+    }
+  }
+  const low = endTxt.toLowerCase()
+  if (low === 'ongoing' || low === 'present' || low === 'current' || low === 'indeterminate') {
+    const b = String(beginRaw ?? '').trim()
+    if (b) return b
+    return new Date().toISOString().slice(0, 10)
+  }
+  return endTxt
+}
+
+/**
  * @param {Element | null} exExtent
  * @returns {{
  *   west: string, east: string, south: string, north: string,
@@ -756,39 +780,81 @@ function parseExtent(exExtent) {
     }
   }
 
+  const instantSeries = []
   for (const tw of childrenNS(exExtent, NS.gmd, 'temporalElement')) {
+    const ste = childNS(tw, NS.gmd, 'EX_SpatialTemporalExtent')
+    if (ste) {
+      const innerS = childNS(ste, NS.gmd, 'extent')
+      if (innerS) {
+        const ti0 = childLocal(innerS, 'TimeInstant')
+        if (ti0) {
+          const pos =
+            txt(childNS(ti0, NS.gml, 'timePosition')) ||
+            txt(childLocal(ti0, 'timePosition'))
+          const p = pos.trim()
+          if (p) instantSeries.push(p)
+        }
+        const tpS = childLocal(innerS, 'TimePeriod')
+        if (tpS) {
+          const begin =
+            txt(childNS(tpS, NS.gml, 'begin')) ||
+            txt(childNS(tpS, NS.gml, 'beginPosition')) ||
+            txt(childLocal(tpS, 'begin')) ||
+            txt(childLocal(tpS, 'beginPosition'))
+          if (begin && !out.startDate) out.startDate = begin.trim()
+          let endTxt =
+            txt(childNS(tpS, NS.gml, 'end')) ||
+            txt(childLocal(tpS, 'end')) ||
+            ''
+          endTxt = String(endTxt).trim()
+          const endPosEl = childNS(tpS, NS.gml, 'endPosition') || childLocal(tpS, 'endPosition')
+          const resolved = normalizeTemporalExtentEndText(endTxt, begin, endPosEl)
+          if (resolved && !out.endDate) out.endDate = resolved
+          const ti = childNS(tpS, NS.gml, 'timeInterval') || childLocal(tpS, 'timeInterval')
+          if (ti && !out.temporalExtentIntervalValue) {
+            out.temporalExtentIntervalUnit = ti.getAttribute('unit') || ti.getAttributeNS(NS.gml, 'unit') || ''
+            out.temporalExtentIntervalValue = txt(ti)
+          }
+        }
+      }
+    }
+
     const temp = childNS(tw, NS.gmd, 'EX_TemporalExtent')
     const inner = temp ? childNS(temp, NS.gmd, 'extent') : null
     const tp = inner ? childLocal(inner, 'TimePeriod') : null
+    if (inner) {
+      const ti1 = childLocal(inner, 'TimeInstant')
+      if (ti1) {
+        const pos =
+          txt(childNS(ti1, NS.gml, 'timePosition')) ||
+          txt(childLocal(ti1, 'timePosition'))
+        const p = pos.trim()
+        if (p) instantSeries.push(p)
+      }
+    }
     if (!tp) continue
     const begin =
       txt(childNS(tp, NS.gml, 'begin')) ||
       txt(childNS(tp, NS.gml, 'beginPosition')) ||
       txt(childLocal(tp, 'begin')) ||
       txt(childLocal(tp, 'beginPosition'))
-    if (begin && !out.startDate) out.startDate = begin
+    if (begin && !out.startDate) out.startDate = begin.trim()
     let endTxt =
       txt(childNS(tp, NS.gml, 'end')) ||
       txt(childLocal(tp, 'end')) ||
       ''
     endTxt = String(endTxt).trim()
-    const endPosEl =
-      childNS(tp, NS.gml, 'endPosition') ||
-      childLocal(tp, 'endPosition')
-    if (!endTxt && endPosEl) {
-      endTxt = txt(endPosEl).trim()
-      const indet = String(endPosEl.getAttribute('indeterminatePosition') || '').trim().toLowerCase()
-      if (!endTxt && indet === 'now') {
-        endTxt = new Date().toISOString().slice(0, 10)
-      }
-    }
-    if (endTxt && !out.endDate) out.endDate = endTxt
+    const endPosEl = childNS(tp, NS.gml, 'endPosition') || childLocal(tp, 'endPosition')
+    const resolved = normalizeTemporalExtentEndText(endTxt, begin, endPosEl)
+    if (resolved && !out.endDate) out.endDate = resolved
     const ti = childNS(tp, NS.gml, 'timeInterval') || childLocal(tp, 'timeInterval')
     if (ti && !out.temporalExtentIntervalValue) {
       out.temporalExtentIntervalUnit = ti.getAttribute('unit') || ti.getAttributeNS(NS.gml, 'unit') || ''
       out.temporalExtentIntervalValue = txt(ti)
     }
   }
+  if (!out.startDate && instantSeries[0]) out.startDate = instantSeries[0]
+  if (!out.endDate && instantSeries[1]) out.endDate = instantSeries[1]
   return out
 }
 
@@ -1040,6 +1106,82 @@ function firstRootContactOrganisation3(root) {
 }
 
 /**
+ * First inline root `gmd:contact` / `mdb:contact` party (non-xlink) for filling mission email gaps.
+ * @param {Element} root
+ * @returns {ReturnType<typeof parseResponsibleParty> | null}
+ */
+function firstRootContactPartyLegacy(root) {
+  for (const c of childrenNS(root, NS.gmd, 'contact')) {
+    const href = (c.getAttributeNS(NS.xlink, 'href') || c.getAttribute('xlink:href') || '').trim()
+    if (href) continue
+    const rp = childNS(c, NS.gmd, 'CI_ResponsibleParty')
+    if (!rp) continue
+    return parseResponsibleParty(rp)
+  }
+  return null
+}
+
+/**
+ * @param {Record<string, string>} base
+ * @param {Record<string, string> | null | undefined} fill
+ */
+function mergeContactPartyFields(base, fill) {
+  if (!fill) return base
+  const out = { ...base }
+  const keys = ['email', 'contactPhone', 'contactAddress', 'contactUrl', 'organisationName', 'individualName']
+  for (const k of keys) {
+    if (!String(out[k] || '').trim() && String(fill[k] || '').trim()) out[k] = fill[k]
+  }
+  return out
+}
+
+/**
+ * @param {Element} pocEl `gmd:pointOfContact` possibly xlink-only.
+ */
+function syntheticPartyFromGmdPocXlink(pocEl) {
+  const href = (pocEl.getAttributeNS(NS.xlink, 'href') || pocEl.getAttribute('xlink:href') || '').trim()
+  const title = (pocEl.getAttributeNS(NS.xlink, 'title') || pocEl.getAttribute('xlink:title') || '').trim()
+  if (!href || !title) return null
+  const cleaned = title.replace(/\s*\(pointOfContact\)\s*$/i, '').trim()
+  if (!cleaned) return null
+  return {
+    individualName: cleaned,
+    organisationName: '',
+    email: '',
+    contactPhone: '',
+    contactUrl: '',
+    contactAddress: '',
+  }
+}
+
+/**
+ * Merge identification POC with inline root metadata contact (NCEI xlink POC + root email).
+ * @param {ReturnType<typeof parsePointOfContact>} poc
+ * @param {Element} root
+ */
+function mergeLegacyPointOfContactWithRootContact(poc, root) {
+  const rootParty = firstRootContactPartyLegacy(root)
+  return mergeContactPartyFields(poc, rootParty)
+}
+
+/**
+ * Merge ISO 19115-3 identification POC with inline `mdb:contact` rows (root email when dataId POC is org-only).
+ * @param {ReturnType<typeof parsePointOfContact3>} poc
+ * @param {Element} root
+ */
+function merge19115_3PointOfContactWithRootContact(poc, root) {
+  let out = { ...poc }
+  for (const c of cns3(root, NS3.mdb, 'contact')) {
+    const href = (c.getAttributeNS(NS.xlink, 'href') || c.getAttribute('xlink:href') || '').trim()
+    if (href) continue
+    const resp = cn3(c, NS3.cit, 'CI_Responsibility')
+    if (!resp) continue
+    out = mergeContactPartyFields(out, parseCI_Responsibility3(resp))
+  }
+  return out
+}
+
+/**
  * @param {Element | null} dataId
  * @returns {{
  *   metadataMaintenanceFrequency: string,
@@ -1264,6 +1406,40 @@ function parseAggregations3(m) {
 }
 
 /**
+ * Prefer a non-coordinate `gmd:MD_Band` dimension name as the observed variable when coverage `gmd:name` is empty.
+ * @param {Element} covEl `gmi:MI_CoverageDescription`
+ */
+function firstObservableVariableFromCoverageDescription(covEl) {
+  const skip = new Set([
+    'time',
+    'latitude',
+    'longitude',
+    'lat',
+    'lon',
+    'lat_bounds',
+    'lon_bounds',
+    'lat_bnds',
+    'lon_bnds',
+    'bounds',
+    'bnds',
+    'height',
+    'altitude',
+    'depth',
+  ])
+  for (const dim of childrenNS(covEl, NS.gmd, 'dimension')) {
+    const band = childNS(dim, NS.gmd, 'MD_Band')
+    if (!band) continue
+    const mem = childNS(childNS(band, NS.gmd, 'sequenceIdentifier'), NS.gco, 'MemberName')
+    const anameEl = mem ? childNS(mem, NS.gco, 'aName') : null
+    const aNameRaw = anameEl ? gcoCharacterString(anameEl) : ''
+    const t = String(aNameRaw || '').trim().toLowerCase()
+    if (!t || skip.has(t)) continue
+    return String(aNameRaw).trim()
+  }
+  return ''
+}
+
+/**
  * @param {Element} root
  * @returns {Array<Record<string, string>>}
  */
@@ -1293,6 +1469,10 @@ function parseSensors(root) {
       confidenceInterval: parsed.confidenceInterval,
     }
     row = normalizeSensorInstrumentIds(row)
+    if (!String(row.variable || '').trim()) {
+      const fromBand = firstObservableVariableFromCoverageDescription(n)
+      if (fromBand) row.variable = fromBand
+    }
     if (acquisitionInstrumentHasContent(row)) out.push(row)
   }
   return out
@@ -2051,6 +2231,11 @@ function parseResponsibleParty(rp) {
     const link = childNS(on, NS.gmd, 'linkage')
     out.contactUrl = gmdLinkageUrl(link)
   }
+  const positionName = gmdAnchorOrCharacterString(childNS(rp, NS.gmd, 'positionName'))
+  if (!String(out.individualName || '').trim()) {
+    if (String(positionName || '').trim()) out.individualName = positionName.trim()
+    else if (String(out.organisationName || '').trim()) out.individualName = out.organisationName.trim()
+  }
   return out
 }
 
@@ -2096,14 +2281,19 @@ function parsePointOfContact(dataId) {
   const candidates = []
   for (const poc of childrenNS(dataId, NS.gmd, 'pointOfContact')) {
     const party = childNS(poc, NS.gmd, 'CI_ResponsibleParty')
-    if (!party) continue
-    const parsed = parseResponsibleParty(party)
-    const ror = parseRorFromResponsibleParty(party)
-    candidates.push(ror ? { ...parsed, ror } : { ...parsed })
+    if (party) {
+      const parsed = parseResponsibleParty(party)
+      const ror = parseRorFromResponsibleParty(party)
+      candidates.push(ror ? { ...parsed, ror } : { ...parsed })
+    } else {
+      const xlinkParty = syntheticPartyFromGmdPocXlink(poc)
+      if (xlinkParty) candidates.push(xlinkParty)
+    }
   }
   if (!candidates.length) return empty
+  const withEmail = candidates.find((c) => String(c.email || '').trim())
   const withInd = candidates.find((c) => String(c.individualName || '').trim())
-  const chosen = withInd || candidates[0]
+  const chosen = withEmail || withInd || candidates[0]
   const rorMerge = chosen.ror || candidates.map((c) => c.ror).find(Boolean)
   if (rorMerge && !chosen.ror) return { ...chosen, ror: rorMerge }
   return chosen
@@ -3052,6 +3242,97 @@ function enrichDistributionFormatFromIsoImportEvidence(partial) {
 }
 
 /**
+ * `validatePilotState` requires `distribution.license`. ISO import often maps useLimitation / liability prose
+ * to `mission.citeAs` / `distributionLiability` while `legal.distributionLicense` stays empty (no CC keyword hit).
+ * @param {Record<string, unknown>} partial
+ */
+function enrichDistributionLicenseFromImportConstraints(partial) {
+  if (!partial || typeof partial !== 'object') return
+  const m = partial.mission && typeof partial.mission === 'object' ? /** @type {Record<string, unknown>} */ (partial.mission) : null
+  if (!m) return
+
+  if (!partial.distribution || typeof partial.distribution !== 'object') {
+    partial.distribution = {}
+  }
+  const d = /** @type {Record<string, unknown>} */ (partial.distribution)
+  if (String(d.license || '').trim()) return
+
+  const cite = String(m.citeAs || '').trim()
+  const liab = String(m.distributionLiability || '').trim()
+  const other = String(m.otherCiteAs || '').trim()
+  const blob = [cite, liab, other].filter(Boolean).join('\n\n')
+  if (blob) {
+    const inferred = inferDataLicensePresetFromProse(blob)
+    if (String(inferred.distributionLicense || '').trim()) {
+      d.license = String(inferred.distributionLicense).trim()
+      return
+    }
+
+    const firstLine = blob
+      .split(/\n+/)
+      .map((t) => t.trim())
+      .find((t) => t.length > 0 && !/^(otherrestrictions|other restrictions)$/i.test(t))
+    if (firstLine) {
+      d.license = firstLine.length > 800 ? `${firstLine.slice(0, 797)}…` : firstLine
+      return
+    }
+  }
+
+  const abstract = String(m.abstract || '').trim()
+  if (abstract) {
+    const inferredAbs = inferDataLicensePresetFromProse(abstract)
+    if (String(inferredAbs.distributionLicense || '').trim()) {
+      d.license = String(inferredAbs.distributionLicense).trim()
+      return
+    }
+    const absLine = abstract
+      .split(/\n+/)
+      .map((t) => t.trim())
+      .find((t) => t.length > 48)
+    if (absLine) {
+      d.license = absLine.length > 800 ? `${absLine.slice(0, 797)}…` : absLine
+      return
+    }
+  }
+
+  d.license =
+    'Use limitations were not stated in the imported metadata; verify restrictions with the data steward before reuse.'
+}
+
+/**
+ * Docucomp xlink-only contacts often omit embedded email; use a known NOAA inbox when the party text clearly references NCEI.
+ * @param {Record<string, unknown>} partial
+ */
+function enrichMissionEmailFromNceiContextWhenMissing(partial) {
+  const m = partial?.mission && typeof partial.mission === 'object' ? partial.mission : null
+  if (!m) return
+  if (looksLikeProseEmail(String(m.email || ''))) return
+  const blob = [m.individualName, m.org, m.title]
+    .map((x) => String(x || '').toLowerCase())
+    .join(' ')
+  if (blob.includes('ncei') || blob.includes('national centers for environmental information')) {
+    m.email = 'ncei.info@noaa.gov'
+  }
+}
+
+/**
+ * When XML temporal blocks omit an end instant (common for completed single-day missions), reuse publication or start.
+ * @param {Record<string, unknown>} partial
+ */
+function enrichMissionDatesFromCitationWhenTemporalSparse(partial) {
+  const m = partial?.mission && typeof partial.mission === 'object' ? partial.mission : null
+  if (!m) return
+  const pub = String(m.publicationDate || '').trim()
+  if (!String(m.endDate || '').trim()) {
+    if (String(m.startDate || '').trim()) m.endDate = String(m.startDate)
+    else if (pub) m.endDate = pub
+  }
+  if (!String(m.startDate || '').trim() && pub) {
+    m.startDate = pub
+  }
+}
+
+/**
  * Post-parse enrichment for legacy ISO records (not only Navy UxS templates).
  * @param {Record<string, unknown>} partial
  */
@@ -3063,6 +3344,9 @@ function applyIsoImportHeuristics(partial) {
   enrichMissionAbstractAndPurposeFromImport(partial)
   enrichMissionLicenseFromPreset(partial)
   enrichDistributionFormatFromIsoImportEvidence(partial)
+  enrichDistributionLicenseFromImportConstraints(partial)
+  enrichMissionDatesFromCitationWhenTemporalSparse(partial)
+  enrichMissionEmailFromNceiContextWhenMissing(partial)
   hydrateGcmdKeywordChipUuidsFromKnownLabels(partial)
 }
 
@@ -3689,6 +3973,7 @@ function parseCI_Responsibility3(resp) {
   const org = cn3(party, NS3.cit, 'CI_Organisation')
   if (org) {
     out.organisationName = gcs3(cn3(org, NS3.cit, 'name'))
+    const positionName = gcs3(cn3(org, NS3.cit, 'positionName'))
     const contact = cn3(cn3(org, NS3.cit, 'contactInfo'), NS3.cit, 'CI_Contact')
     if (contact) {
       const addr = cn3(cn3(contact, NS3.cit, 'address'), NS3.cit, 'CI_Address')
@@ -3700,6 +3985,10 @@ function parseCI_Responsibility3(resp) {
       if (tel) out.contactPhone = gcs3(cn3(tel, NS3.cit, 'number'))
       const on = cn3(cn3(contact, NS3.cit, 'onlineResource'), NS3.cit, 'CI_OnlineResource')
       if (on) out.contactUrl = gcs3(cn3(on, NS3.cit, 'linkage'))
+    }
+    if (!String(out.individualName || '').trim()) {
+      if (String(positionName || '').trim()) out.individualName = positionName.trim()
+      else if (String(out.organisationName || '').trim()) out.individualName = out.organisationName.trim()
     }
     return out
   }
@@ -3970,39 +4259,81 @@ function parseExtentSingle3(ex) {
       break
     }
   }
+  const instantSeries = []
   for (const te of cns3(ex, NS3.gex, 'temporalElement')) {
+    const ste = cn3(te, NS3.gex, 'EX_SpatialTemporalExtent')
+    if (ste) {
+      const innerS = cn3(ste, NS3.gex, 'extent')
+      if (innerS) {
+        const ti0 = childLocal(innerS, 'TimeInstant')
+        if (ti0) {
+          const pos =
+            txt(childNS(ti0, NS.gml, 'timePosition')) ||
+            txt(childLocal(ti0, 'timePosition'))
+          const p = pos.trim()
+          if (p) instantSeries.push(p)
+        }
+        const tpS = childLocal(innerS, 'TimePeriod')
+        if (tpS) {
+          const begin =
+            txt(childNS(tpS, NS.gml, 'beginPosition')) ||
+            txt(childLocal(tpS, 'beginPosition')) ||
+            txt(childNS(tpS, NS.gml, 'begin')) ||
+            txt(childLocal(tpS, 'begin'))
+          if (begin && !out.startDate) out.startDate = begin.trim()
+          let endTxt =
+            txt(childNS(tpS, NS.gml, 'end')) ||
+            txt(childLocal(tpS, 'end')) ||
+            ''
+          endTxt = String(endTxt).trim()
+          const endPosEl = childNS(tpS, NS.gml, 'endPosition') || childLocal(tpS, 'endPosition')
+          const resolved = normalizeTemporalExtentEndText(endTxt, begin, endPosEl)
+          if (resolved && !out.endDate) out.endDate = resolved
+          const ti = childNS(tpS, NS.gml, 'timeInterval') || childLocal(tpS, 'timeInterval')
+          if (ti && !out.temporalExtentIntervalValue) {
+            out.temporalExtentIntervalUnit = ti.getAttribute('unit') || ti.getAttributeNS(NS.gml, 'unit') || ''
+            out.temporalExtentIntervalValue = txt(ti)
+          }
+        }
+      }
+    }
+
     const ext = cn3(te, NS3.gex, 'EX_TemporalExtent')
     const inner = ext ? cn3(ext, NS3.gex, 'extent') : null
     const tp = inner ? childLocal(inner, 'TimePeriod') : null
+    if (inner) {
+      const ti1 = childLocal(inner, 'TimeInstant')
+      if (ti1) {
+        const pos =
+          txt(childNS(ti1, NS.gml, 'timePosition')) ||
+          txt(childLocal(ti1, 'timePosition'))
+        const p = pos.trim()
+        if (p) instantSeries.push(p)
+      }
+    }
     if (!tp) continue
     const begin =
       txt(childNS(tp, NS.gml, 'beginPosition')) ||
       txt(childLocal(tp, 'beginPosition')) ||
       txt(childNS(tp, NS.gml, 'begin')) ||
       txt(childLocal(tp, 'begin'))
-    if (begin && !out.startDate) out.startDate = begin
+    if (begin && !out.startDate) out.startDate = begin.trim()
     let endTxt =
       txt(childNS(tp, NS.gml, 'end')) ||
       txt(childLocal(tp, 'end')) ||
       ''
     endTxt = String(endTxt).trim()
-    const endPosEl =
-      childNS(tp, NS.gml, 'endPosition') ||
-      childLocal(tp, 'endPosition')
-    if (!endTxt && endPosEl) {
-      endTxt = txt(endPosEl).trim()
-      const indet = String(endPosEl.getAttribute('indeterminatePosition') || '').trim().toLowerCase()
-      if (!endTxt && indet === 'now') {
-        endTxt = new Date().toISOString().slice(0, 10)
-      }
-    }
-    if (endTxt && !out.endDate) out.endDate = endTxt
+    const endPosEl = childNS(tp, NS.gml, 'endPosition') || childLocal(tp, 'endPosition')
+    const resolved = normalizeTemporalExtentEndText(endTxt, begin, endPosEl)
+    if (resolved && !out.endDate) out.endDate = resolved
     const ti = childNS(tp, NS.gml, 'timeInterval') || childLocal(tp, 'timeInterval')
     if (ti && !out.temporalExtentIntervalValue) {
       out.temporalExtentIntervalUnit = ti.getAttribute('unit') || ti.getAttributeNS(NS.gml, 'unit') || ''
       out.temporalExtentIntervalValue = txt(ti)
     }
   }
+  if (!out.startDate && instantSeries[0]) out.startDate = instantSeries[0]
+  if (!out.endDate && instantSeries[1]) out.endDate = instantSeries[1]
   return out
 }
 
@@ -4400,7 +4731,11 @@ function parseAcquisition3(root) {
       frequency: parsed.frequency, beamCount: parsed.beamCount,
       depthRating: parsed.depthRating, confidenceInterval: parsed.confidenceInterval,
     }
-    return normalizeSensorInstrumentIds(row)
+    row = normalizeSensorInstrumentIds(row)
+    if (!String(row.variable || '').trim() && String(stype || '').trim()) {
+      row.variable = stype.trim()
+    }
+    return row
   }
 
   const sensorRows = []
@@ -4524,7 +4859,7 @@ function extractFrom19115_3(root, raw, warnings) {
   }
   if (!status) status = macStatus
 
-  const poc = parsePointOfContact3(dataId)
+  const poc = merge19115_3PointOfContactWithRootContact(parsePointOfContact3(dataId), root)
   const legal = parseConstraints3(dataId)
   const ext = parseExtent3(dataId)
   const dq = parseDataQuality3(root)
@@ -4751,7 +5086,7 @@ export function importPilotPartialStateFromXml(xmlString) {
 
   const ext = mergeExtentsFromDataIdentification(dataId)
 
-  const poc = parsePointOfContact(dataId)
+  const poc = mergeLegacyPointOfContactWithRootContact(parsePointOfContact(dataId), root)
   const legal = parseResourceConstraintsForMission(dataId)
   const ag = dataId ? parseAggregations(dataId) : {}
   const citeParties = parseCitationParties(cite)

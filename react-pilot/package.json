@@ -23,6 +23,8 @@
     "audit:manta-samples": "node scripts/audit-manta-end-user-samples.mjs",
     "verify:manta-pipeline": "node scripts/audit-manta-end-user-samples.mjs --verify-pipeline",
     "verify:manta-eut-perfect": "node scripts/audit-manta-end-user-samples.mjs --verify-pipeline --fail-if-lenient-errors",
+    "verify:manta-eut-strict": "node scripts/audit-manta-end-user-samples.mjs --verify-pipeline --fail-if-lenient-errors --fail-if-strict-errors",
+    "verify:manta-eut-catalog": "node scripts/audit-manta-end-user-samples.mjs --verify-pipeline --fail-if-lenient-errors --fail-if-catalog-errors",
     "compare:navy-preview": "node scripts/compare-navy-import-preview.mjs",
     "pilot:import-coverage": "node scripts/pilot-state-import-coverage.mjs",
     "validate:xml": "node scripts/validate-xml.mjs",

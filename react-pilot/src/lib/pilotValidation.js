@@ -3,6 +3,13 @@ import { canonicalMissionInstantForStorage, normalizeMissionInstantString } from
 import { normalizeDataLicensePresetKey } from './noaaLicensePresets.js'
 import { previewMetadataXPath } from './metadataXPath.js'
 
+/**
+ * Mission validation runs on the **same** `pilotState` the wizard edits and `buildXmlPreview` serializes.
+ * Lenient / strict / catalog are rubric depth tiers; preview sanity is structural. If preview checks pass but
+ * on-screen controls do not reflect the values encoded in the preview XML for the same mission paths, that is a
+ * **golden-state violation** (divergent bindings), not a third “metadata opinion”.
+ */
+
 /** @typedef {'e'|'w'} Severity */
 
 const SENSOR_KW_MAP = {

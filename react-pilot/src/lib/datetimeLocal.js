@@ -21,14 +21,40 @@ export function normalizeMissionInstantString(v) {
 }
 
 /**
+ * Coerce `YYYYMMDD` or bare `YYYY` (common in ISO XML) to `YYYY-MM-DD` when the calendar date is real.
+ * @param {string} raw
+ * @returns {string}
+ */
+function coerceIsoDateLikeToStorage(raw) {
+  const t = String(raw ?? '').trim()
+  if (!t) return ''
+  if (/^\d{4}-\d{2}-\d{2}$/.test(t)) return t
+  if (/^\d{8}$/.test(t)) {
+    const y = t.slice(0, 4)
+    const mo = t.slice(4, 6)
+    const da = t.slice(6, 8)
+    const iso = `${y}-${mo}-${da}`
+    const d = Date.parse(`${iso}T12:00:00`)
+    return Number.isFinite(d) ? iso : ''
+  }
+  if (/^\d{4}$/.test(t)) {
+    const y = Number(t)
+    if (y >= 1000 && y <= 9999) return `${t}-01-01`
+  }
+  return ''
+}
+
+/**
  * Return '' or a storage-friendly instant: `YYYY-MM-DD` or `YYYY-MM-DDTHH:mm` (no seconds, no TZ).
  * Unrecognized shapes become '' so controlled `datetime-local` inputs stay in sync with state.
  * @param {unknown} v
  * @returns {string}
  */
 export function canonicalMissionInstantForStorage(v) {
-  const s = normalizeMissionInstantString(v)
-  if (!s) return ''
+  const s0 = normalizeMissionInstantString(v)
+  if (!s0) return ''
+  const coerced = coerceIsoDateLikeToStorage(s0)
+  const s = coerced || s0
   if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s
   const m = s.match(/^(\d{4}-\d{2}-\d{2})T(\d{2}):(\d{2})(?::\d{2})?/)
   if (m) {
