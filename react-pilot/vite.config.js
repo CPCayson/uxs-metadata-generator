@@ -33,6 +33,26 @@ function viteApiDbDevStub() {
   }
 }
 
+const VITE_COMET_PROXY_STUB_MESSAGE =
+  'Netlify function `/api/comet-proxy` is not served by plain Vite. From `react-pilot/`, run `npm run dev:netlify` and open http://127.0.0.1:8888 (or the URL Netlify prints). Split setup: keep `dev:netlify` running, then either open 8888 only, or run plain Vite with `API_PROXY_TARGET=http://127.0.0.1:8888` in `.env.development.local` — see `.env.example`.'
+
+/** Plain Vite has no `comet-proxy` — avoid a bare 404/HTML so CoMET UI shows this JSON instead of the generic resolver error. */
+function viteApiCometProxyDevStub() {
+  const body = JSON.stringify({ ok: false, error: VITE_COMET_PROXY_STUB_MESSAGE })
+  return {
+    name: 'vite-api-comet-proxy-dev-stub',
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const path = req.url?.split('?')[0] ?? ''
+        if (!path.startsWith('/api/comet-proxy')) return next()
+        res.setHeader('Content-Type', 'application/json; charset=utf-8')
+        res.statusCode = 503
+        res.end(body)
+      })
+    },
+  }
+}
+
 /** Plain `vite` has no Netlify functions — stub `/api/onestop-stats` to avoid 404 noise (use `npm run dev:netlify` for full `/api/db`, etc.). */
 function viteOnestopStatsDevStub() {
   const body = JSON.stringify({
@@ -141,7 +161,7 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       react(),
-      ...(apiProxyTarget ? [] : [viteApiDbDevStub()]),
+      ...(apiProxyTarget ? [] : [viteApiDbDevStub(), viteApiCometProxyDevStub()]),
       viteOnestopStatsDevStub(),
       viteLegacyMainHtml(),
       viteNetlifySpaRedirects(),

@@ -36,7 +36,12 @@
  *   use COMET_SESSION_ID only as a server-side / headless fallback.
  */
 
-const DEFAULT_ALLOWED_ORIGINS = ['http://localhost:5173', 'http://127.0.0.1:5173']
+const DEFAULT_ALLOWED_ORIGINS = [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:8888',
+  'http://127.0.0.1:8888',
+]
 
 function corsHeaders(req) {
   const origin = req.headers.get('origin') ?? ''
