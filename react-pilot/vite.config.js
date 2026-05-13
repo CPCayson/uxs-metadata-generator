@@ -124,9 +124,10 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       port: Number(process.env.PORT) || 5173,
-      // If 5173 is taken, pick the next free port so `npm run dev` still starts.
-      // Netlify dev still targets 5173 via netlify.toml when this instance owns it.
-      strictPort: false,
+      // Must match netlify.toml [dev] targetPort (5173). If 5173 is busy, Vite picks
+      // 5174+ and Netlify Dev still proxies 5173 → blank page / empty MIME for modules.
+      // Plain `npm run dev` only: `VITE_RELAX_PORT=1` allows the next free port when 5173 is taken.
+      strictPort: process.env.VITE_RELAX_PORT === '1' ? false : true,
       host: true,
       open: process.env.VITE_OPEN === '0' ? false : true,
       ...(proxyNetlify ? { proxy: proxyNetlify } : {}),

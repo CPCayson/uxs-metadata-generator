@@ -4,11 +4,14 @@
 # Local dev: same-origin `/api/*` → functions (run from `react-pilot/`).
 # App URL: http://localhost:8888 (proxy). Vite alone: http://localhost:5173 (`npm run dev`).
 # Usage: `npm run dev:netlify` — use the URL Netlify prints if 8888 is taken.
+# Ensure nothing else is bound to 5173 (Vite must match `targetPort` or module loads fail on 8888).
 [dev]
+  # Explicit Vite detection so Netlify Dev proxies /@vite/*, /src/*, etc. to the
+  # framework server instead of treating them like static files or SPA rewrites.
+  framework = "vite"
   command = "npm run dev"
   port = 8888
   targetPort = 5173
-  publish = "dist"
   autoLaunch = false
 
 [build]
@@ -23,7 +26,9 @@
   status = 200
   force  = true
 
-# SPA: send all non-function paths to index.html so React Router / deep links work.
+# SPA: send non-API paths to index.html (production deploys). With `framework = "vite"`,
+# Netlify Dev should proxy module URLs to Vite on `targetPort` — do not add `/*` in
+# `public/_redirects` or every dev request (including /src/*.jsx) rewrites to HTML.
 [[redirects]]
   from   = "/*"
   to     = "/index.html"
