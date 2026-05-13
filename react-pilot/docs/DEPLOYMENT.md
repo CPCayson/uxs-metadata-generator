@@ -21,6 +21,12 @@ Start the proxy with **`npm run dev`** (from `react-pilot/`), set `COMET_SESSION
 COMET_USERNAME='…' COMET_PASSWORD='…' npm run validate:manta-samples-comet
 ```
 
+Or reuse an existing browser session (set **only** in your shell — never commit or paste into chat):
+
+```bash
+COMET_SESSION_ID='…' npm run validate:manta-samples-comet
+```
+
 Each file is run through the same **import → merge → preview** pipeline as the single-file script, then **CoMET `isoValidate`**.
 
 **CoMET ISO validate (no long-lived `COMET_SESSION_ID`):** With **`npm run dev`** running, from `react-pilot/`:

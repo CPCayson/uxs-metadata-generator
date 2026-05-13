@@ -3,10 +3,12 @@
  * MANTA EUT sample → import → merge → sanitize → buildXmlPreview → CoMET ISO validate
  * via netlify `comet-proxy` (same path as the app / `validateIsoXml` in `cometClient.js`).
  *
- * Obtains a fresh JSESSIONID each run (no long-lived `COMET_SESSION_ID` in env).
+ * Obtains a fresh JSESSIONID via COMET_USERNAME / COMET_PASSWORD, or uses COMET_SESSION_ID
+ * if set (no login call). Do not paste secrets into chat or commit them.
  *
  * Env:
- *   COMET_USERNAME, COMET_PASSWORD — forwarded as form login to proxy `action=login`
+ *   COMET_SESSION_ID — optional; JSESSIONID (skips login when set)
+ *   COMET_USERNAME, COMET_PASSWORD — required unless COMET_SESSION_ID is set
  *   COMET_PROXY_URL — optional; default `http://127.0.0.1:8888/api/comet-proxy` (base URL;
  *     login uses `?action=login`, validate uses `?action=isoValidate&filename=…`)
  *
@@ -55,8 +57,9 @@ Options:
   --help
 
 Env:
-  COMET_USERNAME     CoMET login (required)
-  COMET_PASSWORD     CoMET login (required)
+  COMET_SESSION_ID   Optional; JSESSIONID — skips login when set
+  COMET_USERNAME     CoMET login (required unless COMET_SESSION_ID)
+  COMET_PASSWORD     CoMET login (required unless COMET_SESSION_ID)
   COMET_PROXY_URL    Optional; default ${DEFAULT_COMET_PROXY_BASE}
 `)
 }
@@ -76,16 +79,21 @@ if (!fileArg) {
 
 const username = String(process.env.COMET_USERNAME || '').trim()
 const password = String(process.env.COMET_PASSWORD || '').trim()
-if (!username || !password) {
-  console.error('COMET_USERNAME and COMET_PASSWORD must both be set (use placeholders in docs, never commit real values).')
+const sessionFromEnv = String(process.env.COMET_SESSION_ID || '').trim()
+if (!sessionFromEnv && (!username || !password)) {
+  console.error('Set COMET_SESSION_ID, or COMET_USERNAME and COMET_PASSWORD (never commit real values).')
   process.exit(1)
 }
 
 const proxyBase = String(process.env.COMET_PROXY_URL || DEFAULT_COMET_PROXY_BASE).trim()
 
 try {
-  const jsessionid = await loginFreshSession(proxyBase, username, password)
-  console.log(`CoMET session: ok (${sessionPrefix(jsessionid)})`)
+  const jsessionid = sessionFromEnv || (await loginFreshSession(proxyBase, username, password))
+  console.log(
+    sessionFromEnv
+      ? `CoMET session: from COMET_SESSION_ID (${sessionPrefix(jsessionid)})`
+      : `CoMET session: ok (${sessionPrefix(jsessionid)})`,
+  )
 
   const xmlPath = path.resolve(process.cwd(), fileArg)
   const { isoXml, baseName } = await runSampleThroughPreview(xmlPath)

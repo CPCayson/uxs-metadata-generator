@@ -4,15 +4,18 @@
  * import → merge → sanitize → buildXmlPreview → CoMET `isoValidate` (same pipeline as
  * `validate-manta-sample-comet.mjs` / UI Tier 3).
  *
- * One CoMET login per run; reuses JSESSIONID for all files.
+ * One CoMET session per run (reused for all files): either COMET_SESSION_ID (JSESSIONID)
+ * or COMET_USERNAME + COMET_PASSWORD (form login). Do not paste secrets into chat or commit them.
  *
- * Env (required):
- *   COMET_USERNAME, COMET_PASSWORD
+ * Env (session — pick one):
+ *   COMET_SESSION_ID — JSESSIONID from an active CoMET browser session (skips login)
+ *   COMET_USERNAME + COMET_PASSWORD — form login via proxy `action=login`
  * Env (optional):
  *   COMET_PROXY_URL — default http://127.0.0.1:8888/api/comet-proxy
  *   SAMPLE_DIR — override samples folder
  *
  * Usage (from react-pilot/):
+ *   COMET_SESSION_ID='…' node scripts/validate-all-manta-samples-comet.mjs
  *   COMET_USERNAME='…' COMET_PASSWORD='…' node scripts/validate-all-manta-samples-comet.mjs
  */
 import fs from 'node:fs'
@@ -56,8 +59,10 @@ function summarize(parsed, bodyText, httpOk) {
 
 const username = String(process.env.COMET_USERNAME || '').trim()
 const password = String(process.env.COMET_PASSWORD || '').trim()
-if (!username || !password) {
-  console.error('Set COMET_USERNAME and COMET_PASSWORD (do not commit real credentials).')
+const sessionFromEnv = String(process.env.COMET_SESSION_ID || '').trim()
+
+if (!sessionFromEnv && (!username || !password)) {
+  console.error('Set COMET_SESSION_ID (JSESSIONID), or COMET_USERNAME and COMET_PASSWORD. Do not commit secrets.')
   process.exit(1)
 }
 
@@ -72,8 +77,12 @@ console.log(`Proxy:   ${proxyBase}`)
 
 let failed = 0
 try {
-  const jsessionid = await loginFreshSession(proxyBase, username, password)
-  console.log(`CoMET session: ok (${sessionPrefix(jsessionid)})\n`)
+  const jsessionid = sessionFromEnv || (await loginFreshSession(proxyBase, username, password))
+  console.log(
+    sessionFromEnv
+      ? `CoMET session: from COMET_SESSION_ID (${sessionPrefix(jsessionid)})\n`
+      : `CoMET session: ok (${sessionPrefix(jsessionid)})\n`,
+  )
 
   for (const xmlPath of files) {
     const base = path.basename(xmlPath)
