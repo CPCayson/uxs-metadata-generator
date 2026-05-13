@@ -13,18 +13,14 @@
  */
 
 import { useState, useCallback } from 'react'
-import { getRubricScore, resolveXlinks, validateIsoXml } from '../lib/cometClient.js'
+import { getRubricScore, resolveXlinks, validateIsoXml, extractCometIsoValidateErrorCount } from '../lib/cometClient.js'
 
 /**
  * @param {unknown} payload
  * @returns {number | null}
  */
 function cometIsoErrorCount(payload) {
-  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return null
-  const o = /** @type {Record<string, unknown>} */ (payload)
-  if (o.raw != null && o.error_count == null) return null
-  const n = Number.parseInt(String(o.error_count ?? '0'), 10)
-  return Number.isFinite(n) ? n : null
+  return extractCometIsoValidateErrorCount(payload)
 }
 
 /**
@@ -96,7 +92,7 @@ export function useCometValidator() {
         const count = cometIsoErrorCount(isoRes)
         if (count == null) {
           isoValid = false
-          isoErrors = ['CoMET ISO validate returned an unparseable response (missing error_count).']
+          isoErrors = ['CoMET ISO validate returned a response we could not score (see Network → isoValidate).']
         } else {
           isoValid = count === 0
           isoErrors = isoValid ? [] : isoErrorsFromValidatePayload(isoRes)

@@ -10,22 +10,25 @@ export function ValidationPill({ xmlData }) {
   useEffect(() => {
     if (!xmlData?.trim()) return undefined
 
-    const validate = async () => {
-      setIsLoading(true)
-      const result = await runStrictValidation(xmlData)
-      setIsLoading(false)
-
-      if (result.valid) {
-        setStatus('valid')
-        setErrors([])
-      } else {
-        setStatus('error')
-        setErrors(result.errors)
-      }
-    }
-
     const timer = setTimeout(() => {
-      void validate()
+      void (async () => {
+        setIsLoading(true)
+        try {
+          const result = await runStrictValidation(xmlData)
+          if (result.valid) {
+            setStatus('valid')
+            setErrors([])
+          } else {
+            setStatus('error')
+            setErrors(result.errors)
+          }
+        } catch (e) {
+          setStatus('error')
+          setErrors([e instanceof Error ? e.message : String(e)])
+        } finally {
+          setIsLoading(false)
+        }
+      })()
     }, 500)
     return () => clearTimeout(timer)
   }, [xmlData, runStrictValidation])

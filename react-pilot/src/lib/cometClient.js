@@ -533,6 +533,101 @@ export async function resolveXlinks(isoXml) {
   return body
 }
 
+const _COMET_EXTRACT_MAX_DEPTH = 10
+
+/**
+ * CoMET `/recordServices/validate` JSON shape varies by release. Normalize to a total
+ * error count for preflight / Tier 3 UI. Returns `null` only when the payload is not
+ * clearly interpretable (caller may show a JSON snippet).
+ *
+ * @param {unknown} payload
+ * @param {number} [depth]
+ * @returns {number | null}
+ */
+export function extractCometIsoValidateErrorCount(payload, depth = 0) {
+  if (payload == null) return null
+  if (typeof payload !== 'object') return null
+  if (Array.isArray(payload)) return payload.length
+  if (depth > _COMET_EXTRACT_MAX_DEPTH) return null
+
+  const o = /** @type {Record<string, unknown>} */ (payload)
+
+  if (typeof o.raw === 'string' && o.error_count == null) {
+    const raw = o.raw.trim()
+    if (!raw) return null
+    if (raw.startsWith('<!DOCTYPE') || raw.toLowerCase().startsWith('<html')) return null
+    if (raw.startsWith('{') || raw.startsWith('[')) {
+      try {
+        return extractCometIsoValidateErrorCount(JSON.parse(raw), depth + 1)
+      } catch {
+        return null
+      }
+    }
+    return null
+  }
+
+  const pickInt = (v) => {
+    const n = Number.parseInt(String(v ?? '').trim(), 10)
+    return Number.isFinite(n) ? n : null
+  }
+
+  for (const k of [
+    'error_count',
+    'errorCount',
+    'totalErrors',
+    'numErrors',
+    'num_errors',
+    'failureCount',
+    'failures',
+    'issueCount',
+    'issuesCount',
+  ]) {
+    if (!(k in o)) continue
+    const v = o[k]
+    const n = pickInt(v)
+    if (n != null) return n
+  }
+
+  for (const [k, v] of Object.entries(o)) {
+    if (!Array.isArray(v)) continue
+    if (/errors|issues|violations|failures|messages/i.test(k) && v.length > 0) {
+      if (k.toLowerCase() === 'messages') {
+        let errC = 0
+        for (const m of v) {
+          if (typeof m === 'string') continue
+          if (m && typeof m === 'object') {
+            const rec = /** @type {Record<string, unknown>} */ (m)
+            const sev = String(rec.severity ?? rec.level ?? rec.type ?? '').toLowerCase()
+            if (sev === 'error' || sev === 'fatal' || sev === 'err') errC += 1
+          }
+        }
+        if (errC > 0) return errC
+        continue
+      }
+      return v.length
+    }
+  }
+
+  const nests = ['validation', 'result', 'data', 'response', 'payload', 'output', 'report']
+  for (const k of nests) {
+    const inner = o[k]
+    if (inner && typeof inner === 'object' && !Array.isArray(inner)) {
+      const n = extractCometIsoValidateErrorCount(inner, depth + 1)
+      if (n != null) return n
+    }
+  }
+
+  const st = String(o.status ?? o.state ?? '').toUpperCase()
+  if (st === 'SUCCESS' || st === 'OK' || st === 'PASS' || st === 'PASSED') {
+    if (o.error_count == null && o.errorCount == null && !Array.isArray(o.errors)) return 0
+  }
+  if (o.success === true || o.valid === true) {
+    if (o.error_count == null && o.errorCount == null && !Array.isArray(o.errors)) return 0
+  }
+
+  return null
+}
+
 /**
  * Validate an ISO 19115-2 XML document against CoMET's schema/schematron rules.
  * This validates the *raw XML body*, not a saved record (use action=validate for that).

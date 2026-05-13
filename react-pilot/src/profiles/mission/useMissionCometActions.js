@@ -12,6 +12,7 @@ import {
   checkLinks,
   clearCometAuth,
   detectGaps,
+  extractCometIsoValidateErrorCount,
   extractUuid,
   fetchCometRecord,
   getCometAuthStatus,
@@ -67,11 +68,7 @@ export function cometPushDescriptionForProfile(profile, pilotState) {
  * @returns {number | null}
  */
 function cometErrorCount(payload) {
-  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return null
-  const o = /** @type {Record<string, unknown>} */ (payload)
-  if (o.raw != null && o.error_count == null) return null
-  const n = Number.parseInt(String(o.error_count ?? '0'), 10)
-  return Number.isFinite(n) ? n : null
+  return extractCometIsoValidateErrorCount(payload)
 }
 
 /**
@@ -396,7 +393,13 @@ export function useMissionCometActions({
         const validateResult = await validateIsoXml(xml, fn)
         const count = cometErrorCount(validateResult)
         if (count == null) {
-          steps.push({ id: 'validate', label: 'ISO validate', ok: false, detail: 'Unparseable CoMET validate response' })
+          const preview = JSON.stringify(validateResult).slice(0, 280)
+          steps.push({
+            id: 'validate',
+            label: 'ISO validate',
+            ok: false,
+            detail: `Unparseable CoMET validate response — ${preview}${preview.length >= 280 ? '…' : ''}`,
+          })
           overall = 'BLOCK'
           setPreflightSummary(buildPreflightSummary('BLOCK', steps))
           onStatus('Preflight blocked at ISO validate: CoMET response did not include an error count.')
