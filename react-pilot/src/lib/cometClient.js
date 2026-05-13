@@ -27,7 +27,6 @@
 
 import { metadataListFromCometSearchJson } from './cometSearchPayload.js'
 
-const PROXY = '/api/comet-proxy'
 const KNOWN_UUIDS_KEY = 'manta.comet.knownUuids'
 const COMET_RG_SESSION_KEY = 'manta.comet.recordGroup'
 const COMET_AUTH_KEY = 'manta.comet.auth.v1'
@@ -38,8 +37,33 @@ export const MANTA_COMET_SESSION_INVALIDATED_EVENT = 'manta:comet-session-invali
 
 let _lastSessionInvalidatedEmitAt = 0
 
-const PROXY_MISSING_HINT =
-  `CoMET proxy not found (404) at ${PROXY}. From react-pilot/, run \`npm run dev\` (Netlify dev, usually http://127.0.0.1:8888). If you use \`npm run dev:vite\` on :5173, either open 8888 for CoMET, or set API_PROXY_TARGET=http://127.0.0.1:8888 in .env.development.local while Netlify dev is up — see react-pilot/.env.example.`
+/**
+ * Netlify function URL for CoMET. Same-origin on production and on Netlify dev (:8888).
+ * On plain Vite (localhost :5173–5200), use absolute `http://127.0.0.1:8888/api/comet-proxy`
+ * so CoMET works while `npm run dev` (Netlify) is running — no `.env` required.
+ * Override with `VITE_COMET_PROXY_ORIGIN` if Netlify listens elsewhere.
+ *
+ * @returns {string}
+ */
+function cometProxyEndpoint() {
+  if (typeof import.meta !== 'undefined' && import.meta.env?.PROD) return '/api/comet-proxy'
+  const fromEnv =
+    typeof import.meta !== 'undefined' ? String(import.meta.env?.VITE_COMET_PROXY_ORIGIN || '').trim() : ''
+  if (fromEnv) return `${fromEnv.replace(/\/$/, '')}/api/comet-proxy`
+  if (typeof window !== 'undefined' && typeof import.meta !== 'undefined' && import.meta.env?.DEV) {
+    const { hostname, port } = window.location
+    const local = hostname === 'localhost' || hostname === '127.0.0.1'
+    const p = Number(port)
+    if (local && p >= 5173 && p <= 5200) {
+      return 'http://127.0.0.1:8888/api/comet-proxy'
+    }
+  }
+  return '/api/comet-proxy'
+}
+
+function cometProxyMissingHint() {
+  return `CoMET proxy not found (404) at ${cometProxyEndpoint()}. From react-pilot/, run \`npm run dev\` (Netlify dev, default http://127.0.0.1:8888). On plain Vite (:5173+), keep that process running so this URL exists — or set VITE_COMET_PROXY_ORIGIN in .env.development.local — see react-pilot/.env.example.`
+}
 
 /**
  * @param {string} url
@@ -69,7 +93,7 @@ async function fetchCometProxyWithoutClientSessions(url, init) {
     return await fetch(url, { ...init, headers: mergedHeaders })
   } catch (err) {
     const why = err instanceof Error ? err.message : String(err)
-    throw new Error(`CoMET request failed (network). Check that ${PROXY} is reachable. ${why}`)
+    throw new Error(`CoMET request failed (network). Check that ${cometProxyEndpoint()} is reachable. ${why}`)
   }
 }
 
@@ -110,7 +134,7 @@ async function _fetchCometProxy(url, init) {
     res = await fetch(url, { ...init, headers: mergedHeaders })
   } catch (err) {
     const why = err instanceof Error ? err.message : String(err)
-    throw new Error(`CoMET request failed (network). Check that ${PROXY} is reachable. ${why}`)
+    throw new Error(`CoMET request failed (network). Check that ${cometProxyEndpoint()} is reachable. ${why}`)
   }
 
   if (res.status === 401) {
@@ -145,7 +169,7 @@ function _detailForFailedResponse(status, bodyText) {
     if (j?.error) return String(j.error)
     if (j?.message) return String(j.message)
   } catch { /* */ }
-  if (status === 404) return PROXY_MISSING_HINT
+  if (status === 404) return cometProxyMissingHint()
   return slice.slice(0, 200) || `HTTP ${status}`
 }
 
@@ -162,7 +186,7 @@ function _detailForFailedResponse(status, bodyText) {
  */
 export async function loginToComet(username, password) {
   const body = new URLSearchParams({ username, password }).toString()
-  const res  = await fetchCometProxyWithoutClientSessions(`${PROXY}?action=login`, {
+  const res  = await fetchCometProxyWithoutClientSessions(`${cometProxyEndpoint()}?action=login`, {
     method:  'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body,
@@ -185,7 +209,7 @@ export async function loginToComet(username, password) {
  */
 export async function loginToMetaserver(username, password) {
   const body = new URLSearchParams({ username, password }).toString()
-  const res = await fetchCometProxyWithoutClientSessions(`${PROXY}?action=metaservLogin`, {
+  const res = await fetchCometProxyWithoutClientSessions(`${cometProxyEndpoint()}?action=metaservLogin`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body,
@@ -211,7 +235,7 @@ export async function loginToMetaserver(username, password) {
  * }>}
  */
 export async function getCometAuthStatus() {
-  const res = await _fetchCometProxy(`${PROXY}?action=sessionStatus`, { method: 'GET' })
+  const res = await _fetchCometProxy(`${cometProxyEndpoint()}?action=sessionStatus`, { method: 'GET' })
   const body = await res.text().catch(() => '{}')
   if (!res.ok) {
     throw new Error(`CoMET auth status failed (${res.status}): ${_detailForFailedResponse(res.status, body)}`)
@@ -239,7 +263,7 @@ export async function fetchCometRecord(uuidOrUrl) {
   const uuid = extractUuid(uuidOrUrl)
   if (!uuid) throw new Error('Invalid CoMET UUID or URL.')
 
-  const res = await _fetchCometProxy(`${PROXY}?action=get&uuid=${encodeURIComponent(uuid)}`, {
+  const res = await _fetchCometProxy(`${cometProxyEndpoint()}?action=get&uuid=${encodeURIComponent(uuid)}`, {
     headers: { Accept: 'application/xml' },
   })
 
@@ -281,7 +305,7 @@ export async function searchCometMetadata(opts) {
   if (opts.since) params.set('since', opts.since)
   if (opts.editState) params.set('editState', opts.editState)
 
-  const res = await _fetchCometProxy(`${PROXY}?${params}`, {
+  const res = await _fetchCometProxy(`${cometProxyEndpoint()}?${params}`, {
     method: 'GET',
     headers: { Accept: 'application/json' },
   })
@@ -400,14 +424,14 @@ export async function pushCometRecord(uuidOrUrl, isoXml, opts = {}) {
     // Update existing record via PUT /metadata/{uuid}
     const params = new URLSearchParams({ action: 'update', uuid })
     if (desc) params.set('description', desc)
-    endpoint = `${PROXY}?${params}`
+    endpoint = `${cometProxyEndpoint()}?${params}`
     method   = 'POST' // proxy translates to PUT
   } else {
     // Create new record via POST /metadata/import
     if (!rg)   throw new Error('recordGroup is required when creating a new CoMET record.')
     if (!desc) throw new Error('description (record title) is required when creating a new CoMET record.')
     const params = new URLSearchParams({ action: 'import', recordGroup: rg, description: desc })
-    endpoint = `${PROXY}?${params}`
+    endpoint = `${cometProxyEndpoint()}?${params}`
     method   = 'POST'
   }
 
@@ -457,7 +481,7 @@ export async function pushCometRecord(uuidOrUrl, isoXml, opts = {}) {
  */
 export async function getRubricScore(uuid, isoXml) {
   const filename = uuid ? `${uuid.slice(0, 8)}.xml` : 'record.xml'
-  const res = await _fetchCometProxy(`${PROXY}?action=rubric&filename=${encodeURIComponent(filename)}`, {
+  const res = await _fetchCometProxy(`${cometProxyEndpoint()}?action=rubric&filename=${encodeURIComponent(filename)}`, {
     method:  'POST',
     headers: { 'Content-Type': 'application/xml' },
     body:    isoXml,
@@ -495,7 +519,7 @@ export async function getRubricScore(uuid, isoXml) {
 export async function resolveXlinks(isoXml) {
   if (!isoXml?.trim()) throw new Error('resolveXlinks: no XML supplied.')
 
-  const res = await _fetchCometProxy(`${PROXY}?action=resolver`, {
+  const res = await _fetchCometProxy(`${cometProxyEndpoint()}?action=resolver`, {
     method:  'POST',
     headers: { 'Content-Type': 'application/xml', Accept: 'application/xml' },
     body:    isoXml,
@@ -521,7 +545,7 @@ export async function validateIsoXml(isoXml, filename = 'record.xml') {
   if (!isoXml?.trim()) throw new Error('validateIsoXml: no XML supplied.')
 
   const params = new URLSearchParams({ action: 'isoValidate', filename })
-  const res = await _fetchCometProxy(`${PROXY}?${params}`, {
+  const res = await _fetchCometProxy(`${cometProxyEndpoint()}?${params}`, {
     method:  'POST',
     headers: { 'Content-Type': 'application/xml', Accept: 'application/json' },
     body:    isoXml,
@@ -546,7 +570,7 @@ export async function validateIsoXml(isoXml, filename = 'record.xml') {
 export async function validateIsoXmlViaMetaserver(isoXml, filename = 'record.xml') {
   if (!isoXml?.trim()) throw new Error('validateIsoXmlViaMetaserver: no XML supplied.')
   const params = new URLSearchParams({ action: 'metaservValidate', filename })
-  const res = await _fetchCometProxy(`${PROXY}?${params}`, {
+  const res = await _fetchCometProxy(`${cometProxyEndpoint()}?${params}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/xml', Accept: '*/*' },
     body: isoXml,
@@ -569,7 +593,7 @@ export async function validateIsoXmlViaMetaserver(isoXml, filename = 'record.xml
 export async function checkLinks(isoXml) {
   if (!isoXml?.trim()) throw new Error('checkLinks: no XML supplied.')
 
-  const res = await _fetchCometProxy(`${PROXY}?action=linkcheck`, {
+  const res = await _fetchCometProxy(`${cometProxyEndpoint()}?action=linkcheck`, {
     method:  'POST',
     headers: { 'Content-Type': 'application/xml', Accept: 'application/json' },
     body:    isoXml,

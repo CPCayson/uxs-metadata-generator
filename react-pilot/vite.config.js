@@ -158,6 +158,8 @@ export default defineConfig(({ mode }) => {
     base: './',
     define: {
       'import.meta.env.VITE_APP_VERSION': JSON.stringify(pkg.version || '0.0.0'),
+      /** Optional override when Netlify dev is not on 127.0.0.1:8888 (see `cometClient.js`). */
+      'import.meta.env.VITE_COMET_PROXY_ORIGIN': JSON.stringify(String(env.VITE_COMET_PROXY_ORIGIN || '').trim()),
     },
     plugins: [
       react(),

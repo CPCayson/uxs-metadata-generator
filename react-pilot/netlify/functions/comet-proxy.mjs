@@ -43,6 +43,19 @@ const DEFAULT_ALLOWED_ORIGINS = [
   'http://127.0.0.1:8888',
 ]
 
+function isLocalhostDevViteOrigin(origin) {
+  if (!origin) return false
+  try {
+    const u = new URL(origin)
+    const h = u.hostname
+    if (h !== 'localhost' && h !== '127.0.0.1') return false
+    const p = u.port ? Number(u.port) : u.protocol === 'https:' ? 443 : 80
+    return p >= 5173 && p <= 5200
+  } catch {
+    return false
+  }
+}
+
 function corsHeaders(req) {
   const origin = req.headers.get('origin') ?? ''
   const fromEnv = String(process.env.COMET_PROXY_ALLOWED_ORIGINS || '')
@@ -50,7 +63,7 @@ function corsHeaders(req) {
     .map((v) => v.trim())
     .filter(Boolean)
   const allowlist = fromEnv.length ? fromEnv : DEFAULT_ALLOWED_ORIGINS
-  const allowed = origin && allowlist.includes(origin)
+  const allowed = origin && (allowlist.includes(origin) || isLocalhostDevViteOrigin(origin))
   return {
     ...(allowed ? { 'Access-Control-Allow-Origin': origin, Vary: 'Origin' } : {}),
     'Access-Control-Allow-Methods': 'GET, POST, PUT, OPTIONS',
