@@ -15,6 +15,14 @@ Canonical UI state remains **`pilotState`** in the browser. The adapter `pilotSt
 
 Start the proxy with **`npm run dev`** (from `react-pilot/`), set `COMET_SESSION_ID` to your JSESSIONID from the app or `action=login` (do not commit it). From `react-pilot/`: `COMET_SESSION_ID='…' node scripts/push-manta-sample-to-comet.mjs --file "../MANTA End User Testing/samples/foo.xml" --record-group YOUR_RG`. Use `--uuid …` instead of `--record-group` to update an existing record; optional `COMET_PROXY_URL` overrides the default `http://127.0.0.1:8888/api/comet-proxy`.
 
+**Batch (all EUT `samples/*.xml`):** with **`npm run dev`** running, from `react-pilot/`:
+
+```bash
+COMET_USERNAME='…' COMET_PASSWORD='…' npm run validate:manta-samples-comet
+```
+
+Each file is run through the same **import → merge → preview** pipeline as the single-file script, then **CoMET `isoValidate`**.
+
 **CoMET ISO validate (no long-lived `COMET_SESSION_ID`):** With **`npm run dev`** running, from `react-pilot/`:
 
 ```bash
