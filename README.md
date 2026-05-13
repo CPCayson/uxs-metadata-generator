@@ -48,6 +48,8 @@ From repo root, `npm --prefix react-pilot run publish` (or **`npm run pilot:publ
 
 **Fast verification from root:** run **`npm run pilot:verify`** to execute the React pilot verification chain (`lint` + `build` + XML roundtrip/fixture checks).
 
+**CoMET batch (EUT samples):** from repo root, with Netlify dev running under `react-pilot/` and `COMET_SESSION_ID` or `COMET_USERNAME`/`COMET_PASSWORD` set in your shell: **`npm run validate:manta-samples-comet`** (same as `npm run pilot:validate:manta-samples-comet`).
+
 ## Mission field map (core example)
 
 These fields are central to mission metadata capture and generation. Representative XML paths use **`gmd` / `gmi`** naming as in the Navy/NCEI-style template (see `OVERVIEW_TEMPLATE_ALIGNMENT.csv`).

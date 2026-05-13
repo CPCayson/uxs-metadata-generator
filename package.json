@@ -11,6 +11,8 @@
     "pilot:desktop:pack": "npm --prefix react-pilot run desktop:pack",
     "pilot:publish": "npm --prefix react-pilot run publish",
     "pilot:verify": "npm --prefix react-pilot run verify:pilot",
+    "pilot:validate:manta-samples-comet": "npm --prefix react-pilot run validate:manta-samples-comet",
+    "validate:manta-samples-comet": "npm --prefix react-pilot run validate:manta-samples-comet",
     "mcp:noaa:start": "npm --prefix mcp/noaa-metadata run start",
     "mcp:noaa:auth": "npm --prefix mcp/noaa-metadata run auth",
     "mcp:noaa:check": "npm --prefix mcp/noaa-metadata run check"
