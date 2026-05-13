@@ -3,6 +3,8 @@ import { countLineDiff, highlightXmlToHtml } from '../lib/xmlSyntaxHighlight'
 import { fieldKeyForElement, findFieldLineInXml, FIELD_ELEMENT_HINT } from '../lib/xmlFieldLineLocator'
 import { analyzeMissionPreviewXml } from '../lib/xmlPreviewStructuralHints.js'
 import FieldHintTooltip from './FieldHintTooltip.jsx'
+import { ValidationPill } from './ValidationPill.jsx'
+import { CometValidationPanel } from './CometValidationPanel.jsx'
 
 const ALL_FIELD_KEYS = Object.keys(FIELD_ELEMENT_HINT)
 
@@ -49,6 +51,23 @@ function XmlPreviewPanel({
     () => (previewXml ? String(previewXml).split('\n').length : 0),
     [previewXml],
   )
+
+  /** DOMParser well-formed check (same idea as `xmllint --noout` for structure; XSD validation stays external). */
+  const xmlWellFormed = useMemo(() => {
+    const x = String(previewXml || '').trim()
+    if (!x) return { ok: null, detail: '' }
+    try {
+      const doc = new DOMParser().parseFromString(x, 'application/xml')
+      const pe = doc.getElementsByTagName('parsererror')[0]
+      if (pe) {
+        const d = String(pe.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 160)
+        return { ok: false, detail: d }
+      }
+      return { ok: true, detail: '' }
+    } catch {
+      return { ok: false, detail: 'XML parser error' }
+    }
+  }, [previewXml])
 
   // Pre-compute per-line highlighted HTML + changed-set (vs last saved draft).
   const structuralHints = useMemo(
@@ -224,6 +243,19 @@ function XmlPreviewPanel({
           >
             {copyFlash ? 'Copied' : 'Copy XML'}
           </button>
+          {xmlWellFormed.ok != null ? (
+            <span
+              className={`fx-xml-pill${xmlWellFormed.ok ? ' fx-xml-pill--ok' : ' fx-xml-pill--bad'}`}
+              title={
+                xmlWellFormed.ok
+                  ? 'Well-formed XML (browser DOMParser). Tier 2 (below): NOAA XSD via xmllint-wasm. External xmllint/CoMET still available.'
+                  : xmlWellFormed.detail || 'Not well-formed'
+              }
+            >
+              <span className="fx-xml-pill-label">WF</span>
+              <span className="fx-xml-pill-value">{xmlWellFormed.ok ? 'ok' : 'err'}</span>
+            </span>
+          ) : null}
           <span className="fx-xml-pill">
             <span className="fx-xml-pill-label">L</span>
             <span className="fx-xml-pill-value">{canonicalLineCount}</span>
@@ -250,6 +282,12 @@ function XmlPreviewPanel({
               {expanded ? '⤡' : '⤢'}
             </button>
           ) : null}
+        </div>
+        <div className="fx-xml-tier2-wrap" style={{ padding: '4px 0 0 4px' }}>
+          <ValidationPill xmlData={previewXml} />
+        </div>
+        <div className="fx-xml-tier3-wrap" style={{ padding: '4px 0 0 4px' }}>
+          <CometValidationPanel xmlData={previewXml} />
         </div>
       </div>
 

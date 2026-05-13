@@ -2254,6 +2254,16 @@ li.manta-widget__result-item:hover {
     0 0 14px rgba(34, 211, 238, 0.35);
 }
 
+.fx-xml-pill--ok {
+  border-color: rgba(34, 197, 94, 0.45);
+  color: rgb(34 197 94);
+}
+
+.fx-xml-pill--bad {
+  border-color: rgba(248, 113, 113, 0.55);
+  color: rgb(248 113 113);
+}
+
 .fx-xml-copy-btn {
   appearance: none;
   border: 1px solid var(--fx-border-soft);

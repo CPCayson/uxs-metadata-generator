@@ -192,7 +192,7 @@ export const missionProfile = {
     iso2Export:     true,   // buildXmlPreview generates gmi:MI_Metadata
     xmlImport:      true,   // RawIsoAdapter → xmlPilotImport
     scannerPrefill: true,
-    contactLibrary: false,  // contact library not yet built
+    contactLibrary: true,
     cometPull:      true,   // fetchCometRecord + WizardShell CoMET load event
     cometPreflight: true,   // rubric proxied; resolver/validate/linkcheck in PR 3
     cometPush:      true,   // pushCometRecord + WizardShell handlePushToComet

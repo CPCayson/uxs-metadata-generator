@@ -6,6 +6,12 @@ This folder is the **canonical** metadata wizard: **`pilotState`**, validation, 
 
 Classic HTML / generator sources at the repo root (`Index.html`, `*.gs`, …) are **reference only** for XML/schema parity with `METADATA_FIELD_MAP.md`; they are not used by this React shell at runtime.
 
+## One-app mission XML workbench (single canonical doc)
+
+**Everything in one place:** product story, XML lineage, commands, validation layers, swarm / lane map, EUT audit, rule-pipeline npm, file index, **and** a **Repomix** code snapshot — **[docs/MANTA_ONE_APP_MISSION_XML_README.md](./docs/MANTA_ONE_APP_MISSION_XML_README.md)** (Part I + Part II). The old **`docs/SWARM_VALIDATION_ARCHITECTURE_SNAPSHOT.txt`** path is a short redirect to that file.
+
+**Packed source tree (LLM):** from `react-pilot/`, run **`npm run repomix`** → `repomix-output.xml`, or **`npm run repomix:critical`** → `repomix-critical-output.xml` (~15 core files, ~110k tokens — better for chat limits). See `repomix.config.json` / `repomix.critical.config.json`; outputs are gitignored. Pair with this README for architecture without the full diff.
+
 ## Purpose
 
 - Exercise dark/light theme and form layout in a component-based UI.

@@ -1541,27 +1541,13 @@ export default function AssistantShell({
     [splitFloat, activeTab, onCloseLens, onOpenLensOnly],
   )
 
-  const onLensFabShortcut = useCallback(() => {
-    if (!splitFloat) {
-      onToggleLens?.()
-      return
-    }
-    if (activeTab === 'lens' && lensMode) {
-      onCloseLens?.()
-      setActiveTab('ask')
-      return
-    }
-    setActiveTab('lens')
-    onOpenLensOnly?.()
-    setToolsFabSheetOpen(true)
-  }, [splitFloat, activeTab, lensMode, onCloseLens, onOpenLensOnly, onToggleLens])
-
   const fabDockTabs = splitFloat
     ? [
         {
           id: 'lens',
-          label: 'LENS',
-          dot: hasErrors ? 'error' : hasWarnings ? 'warn' : qualityResult ? 'ok' : null,
+          label: '⬡ LENS',
+          /** Status chips in the dock meta row carry errors / readiness — avoid duplicating on the tab dot. */
+          dot: null,
         },
         ...TABS_TOOLS,
       ]
@@ -2318,8 +2304,6 @@ export default function AssistantShell({
           errorsCount={errors.length}
           warningsCount={warnings.length}
           qualityScore={qualityResult?.score}
-          lensActive={lensMode && activeTab === 'lens'}
-          onToggleLens={onLensFabShortcut}
           workspaceDensity={workspaceDensity}
           onWorkspaceDensityChange={setWorkspaceDensity}
           tipFooter={toolsFabTipFooter}

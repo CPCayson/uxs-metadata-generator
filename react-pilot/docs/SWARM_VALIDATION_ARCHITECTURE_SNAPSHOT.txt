@@ -1,0 +1,13 @@
+================================================================================
+  REDIRECT — content merged into one canonical doc (do not edit here)
+================================================================================
+
+  All validation layers, swarm lanes, EUT audit, rule-pipeline npm, and the
+  file index previously in this file now live in:
+
+    react-pilot/docs/MANTA_ONE_APP_MISSION_XML_README.md
+    → Part II (sections 15–29)
+
+  This path is kept so bookmarks and grep hits still resolve.
+
+================================================================================

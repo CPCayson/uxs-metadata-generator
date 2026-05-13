@@ -1,0 +1,36 @@
+{
+  "output": {
+    "filePath": "repomix-critical-output.xml",
+    "style": "xml",
+    "headerText": "Manta react-pilot — CRITICAL PATH only (import, validate, preview, dates). Regenerate: npm run repomix:critical. Full architecture: docs/MANTA_ONE_APP_MISSION_XML_README.md Part II.",
+    "topFilesLength": 20,
+    "showLineNumbers": false
+  },
+  "include": [
+    "src/lib/xmlPilotImport.js",
+    "src/lib/xmlPreviewBuilder.js",
+    "src/lib/pilotValidation.js",
+    "src/lib/datetimeLocal.js",
+    "src/lib/metadataXPath.js",
+    "src/lib/noaaLicensePresets.js",
+    "src/lib/nceiUxsFileId.js",
+    "src/lib/sensorInstrumentDescription.js",
+    "src/lib/uxsOperationalModel.js",
+    "src/lib/gcmdKmsUrl.js",
+    "src/lib/iso191152PreviewSanity.js",
+    "src/lib/xmlPreviewStructuralHints.js",
+    "src/profiles/mission/missionValidationRules.js",
+    "src/components/XmlPreviewPanel.jsx",
+    "src/components/ValidationPanel.jsx"
+  ],
+  "ignore": {
+    "useGitignore": true,
+    "useDefaultPatterns": true,
+    "customPatterns": [
+      "repomix-output.*"
+    ]
+  },
+  "input": {
+    "maxFileSize": 10485760
+  }
+}

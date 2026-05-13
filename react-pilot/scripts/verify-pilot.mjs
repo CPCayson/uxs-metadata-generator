@@ -637,6 +637,100 @@ function checkNoaaFixtureImport() {
   }
 }
 
+function checkImportDistributionFormatInference() {
+  const samplesDir = path.resolve(process.cwd(), '../MANTA End User Testing/samples')
+  const mergeSample = (/** @type {string} */ xmlName) => {
+    const raw = fs.readFileSync(path.join(samplesDir, xmlName), 'utf8')
+    const parsed = importPilotPartialStateFromXml(raw, { originalFilename: xmlName })
+    assert.equal(parsed.ok, true, `${xmlName} should import`)
+    const merged = missionProfile.mergeLoaded(parsed.partial ?? {})
+    return missionProfile.sanitize(merged)
+  }
+
+  const iso3 = mergeSample('ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml')
+  assert.equal(
+    String(iso3.distribution?.format || '').trim(),
+    'NetCDF',
+    'ISO 19115-3 acquisition-only UxS sample should infer NetCDF when XML omits distributionInfo',
+  )
+
+  const mdbc = mergeSample('NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml')
+  assert.equal(
+    String(mdbc.distribution?.format || '').trim(),
+    'NetCDF',
+    'MDBC ISO-3 acquisition metadata without MD_Format should infer NetCDF from UxS context',
+  )
+
+  const ex19 = mergeSample('EX1904_collection.xml')
+  assert.match(
+    String(ex19.distribution?.format || ''),
+    /Various/i,
+    'OER *_COLLECTION cruise metadata without MD_Format should not default to NetCDF',
+  )
+
+  const ex23 = mergeSample('EX2306_COLLECTION.xml')
+  assert.match(
+    String(ex23.distribution?.format || ''),
+    /Various/i,
+    'EX2306 collection record should map catalog landing to Various format placeholder',
+  )
+
+  const inport = mergeSample('gov.noaa.nmfs.inport.5619.xml')
+  assert.match(
+    String(inport.distribution?.format || ''),
+    /Various/i,
+    'InPort record with inapplicable distributionInfo should still get a non-blocking format label',
+  )
+}
+
+function checkKeywordFacetImportRouting() {
+  const samplesDir = path.resolve(process.cwd(), '../MANTA End User Testing/samples')
+  const mergeSample = (/** @type {string} */ xmlName) => {
+    const raw = fs.readFileSync(path.join(samplesDir, xmlName), 'utf8')
+    const parsed = importPilotPartialStateFromXml(raw, { originalFilename: xmlName })
+    assert.equal(parsed.ok, true, `${xmlName} should import`)
+    const merged = missionProfile.mergeLoaded(parsed.partial ?? {})
+    return missionProfile.sanitize(merged)
+  }
+
+  const ex23 = mergeSample('EX2306_COLLECTION.xml')
+  assert.ok(
+    Array.isArray(ex23.keywords?.projects) && ex23.keywords.projects.length >= 1,
+    'EX2306: OER program discovery keyword blocks (wrapper xlink:title) should populate projects facet',
+  )
+  assert.ok(
+    Array.isArray(ex23.keywords?.sciencekeywords) && ex23.keywords.sciencekeywords.length >= 1,
+    'EX2306: GCMD science keyword block should still populate sciencekeywords',
+  )
+  assert.match(
+    String(ex23.keywords.sciencekeywords[0]?.uuid || ''),
+    /^[0-9a-f-]{36}$/i,
+    'EX2306: first science keyword chip should receive a GCMD concept UUID after import hydration',
+  )
+
+  const iso3 = mergeSample('ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml')
+  assert.ok(
+    Array.isArray(iso3.keywords?.projects) && iso3.keywords.projects.length >= 1,
+    'ISO-3 UxS acquisition import should infer at least one projects chip from parent project / distribution',
+  )
+  assert.ok(
+    String(iso3.spatial?.west || '').trim() && String(iso3.spatial?.east || '').trim(),
+    'ISO-3 import should mirror geographic bounding box onto partial.spatial (west/east) as well as mission.*',
+  )
+  const loc0 = Array.isArray(iso3.keywords?.locations) ? iso3.keywords.locations[0] : null
+  assert.ok(loc0 && String(loc0.label || '').trim(), 'ISO-3 REMUS sample should infer at least one locations keyword')
+  assert.match(
+    String(loc0.uuid || ''),
+    /^[0-9a-f-]{36}$/i,
+    'inferred locations chip should carry a GCMD-style concept UUID for preview anchors',
+  )
+  assert.match(
+    String(iso3.keywords?.sciencekeywords?.[0]?.uuid || ''),
+    /^[0-9a-f-]{36}$/i,
+    'ISO-3 REMUS: first science keyword should hydrate a GCMD UUID when label matches Earth Science > Oceans heuristics',
+  )
+}
+
 /**
  * Imports the NOAA/Navy UxS XML template, merges it into a mission state,
  * and reports all validation issues for each mode.
@@ -1242,6 +1336,12 @@ async function main() {
   })
   step('NOAA fixture import', () => {
     checkNoaaFixtureImport()
+  })
+  step('import distribution.format inference (EUT-D)', () => {
+    checkImportDistributionFormatInference()
+  })
+  step('import keyword facet routing + acquisition backfill (EUT-A)', () => {
+    checkKeywordFacetImportRouting()
   })
   step('NOAA fixture validation report', () => {
     reportNoaaFixtureValidation()

@@ -1,4 +1,28 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { earthdataSearchUrlForGcmdKeyword, gcmdConceptUrlFromUuid } from '../lib/gcmdKmsUrl.js'
+
+const KEYWORD_UUID_FIELD_RE = /^keywords\.(\w+)\[(\d+)\]\.uuid$/
+
+/**
+ * @param {string} field
+ * @param {object | undefined} pilotState
+ * @returns {{ conceptUrl: string, searchUrl: string } | null}
+ */
+function keywordUuidIssueLinks(field, pilotState) {
+  if (!pilotState?.keywords || typeof field !== 'string') return null
+  const m = field.match(KEYWORD_UUID_FIELD_RE)
+  if (!m) return null
+  const facet = m[1]
+  const idx = Number(m[2])
+  const list = pilotState.keywords[facet]
+  if (!Array.isArray(list) || Number.isNaN(idx) || idx < 0 || idx >= list.length) return null
+  const chip = list[idx]
+  const conceptUrl = gcmdConceptUrlFromUuid(String(chip?.uuid || ''))
+  const label = String(chip?.label || '').trim()
+  const searchUrl = !conceptUrl && label ? earthdataSearchUrlForGcmdKeyword(label) : ''
+  if (!conceptUrl && !searchUrl) return null
+  return { conceptUrl, searchUrl }
+}
 
 /**
  * @param {{
@@ -30,6 +54,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
  *   hideScoreChips?: boolean,
  *   railIntroProfileLabel?: string,
  *   validationIdle?: boolean,
+ *   pilotState?: object,
  * }} props
  */
 function displayIssueXpath(xpath) {
@@ -78,6 +103,7 @@ export default function ValidationPanel({
   hideScoreChips = false,
   railIntroProfileLabel = '',
   validationIdle = false,
+  pilotState,
 }) {
   const [issueFilter, setIssueFilter] = useState(/** @type {'all' | 'e' | 'w'} */ ('all'))
   const [issueNavIndex, setIssueNavIndex] = useState(0)
@@ -326,6 +352,7 @@ export default function ValidationPanel({
             {filteredIssues.map((iss, i) => {
               const label = getFieldLabel(iss.field)
               const navActive = i === issueNavIndex
+              const kwLinks = keywordUuidIssueLinks(iss.field, pilotState)
               return (
                 <li key={`${iss.field}-${i}`} className={iss.severity === 'e' ? 'issue-err' : 'issue-warn'}>
                   <button
@@ -347,6 +374,30 @@ export default function ValidationPanel({
                     <span className="issue-msg">{iss.message}</span>
                     {iss.xpath ? <code className="issue-xpath">{displayIssueXpath(iss.xpath)}</code> : null}
                   </button>
+                  {kwLinks ? (
+                    <div className="issue-row-extras" role="group" aria-label="Keyword KMS helpers">
+                      {kwLinks.conceptUrl ? (
+                        <a
+                          className="linkish issue-row-kms-link"
+                          href={kwLinks.conceptUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Open GCMD concept
+                        </a>
+                      ) : null}
+                      {kwLinks.searchUrl ? (
+                        <a
+                          className="linkish issue-row-kms-link"
+                          href={kwLinks.searchUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Search Earthdata
+                        </a>
+                      ) : null}
+                    </div>
+                  ) : null}
                 </li>
               )
             })}

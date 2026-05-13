@@ -1,0 +1,23 @@
+{
+  "output": {
+    "filePath": "repomix-output.xml",
+    "style": "xml",
+    "headerText": "Manta react-pilot — Repomix pack for LLM context. Regenerate: npm run repomix. Architecture: docs/MANTA_ONE_APP_MISSION_XML_README.md (Part II).",
+    "topFilesLength": 15,
+    "showLineNumbers": false
+  },
+  "ignore": {
+    "useGitignore": true,
+    "useDefaultPatterns": true,
+    "customPatterns": [
+      "reports/**",
+      "public/demo-records/**",
+      "public/**/*.svg",
+      "repomix-critical-output.*",
+      "**/*.map"
+    ]
+  },
+  "input": {
+    "maxFileSize": 5242880
+  }
+}

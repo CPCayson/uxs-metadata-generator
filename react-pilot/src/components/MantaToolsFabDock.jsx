@@ -1,7 +1,7 @@
 /**
- * Split-float Manta Tools: bottom FAB with ASK · SEARCH · LIVE · CoMET tabs;
+ * Split-float Manta Tools: bottom FAB with lens + ASK · SEARCH · LIVE · CoMET tabs;
  * active tab content renders in a sheet anchored above the bar.
- * Scanner lens toggle lives on the bar (`⬡ LENS`) — primary entry when split-float.
+ * When a tab with `id: 'lens'` is present, that tab is the only lens entry (no duplicate ⬡ button).
  */
 
 export default function MantaToolsFabDock({
@@ -16,7 +16,7 @@ export default function MantaToolsFabDock({
   errorsCount,
   warningsCount,
   qualityScore,
-  /** When true, lens overlay is open — button shows pressed state (toggle to close). */
+  /** When a standalone ⬡ LENS bar button is shown (no `lens` tab), reflects scanner on/off. */
   lensActive = false,
   onToggleLens,
   /** simple = calm wizard surface + Lens for detail; granular = full helper copy */
@@ -28,6 +28,9 @@ export default function MantaToolsFabDock({
   const issueTotal = errorsCount + warningsCount
   const hasErrors = errorsCount > 0
   const hasWarnings = warningsCount > 0
+  const hasLensTab = tabs.some((t) => t.id === 'lens')
+  /** Extra lens button only when there is no dedicated LENS tab (avoids two identical entry points). */
+  const showLensShortcutButton = typeof onToggleLens === 'function' && !hasLensTab
 
   const handleTab = (id) => {
     onTabChange(id)
@@ -127,7 +130,7 @@ export default function MantaToolsFabDock({
             <span aria-hidden="true">{sheetOpen ? '▼' : '▲'}</span>
           </button>
 
-          {typeof onToggleLens === 'function' ? (
+          {showLensShortcutButton ? (
             <button
               type="button"
               className={`manta-tools-fab-dock__lens${lensActive ? ' manta-tools-fab-dock__lens--active' : ''}`}
@@ -147,11 +150,6 @@ export default function MantaToolsFabDock({
             <span className="manta-tools-fab-dock__chip manta-tools-fab-dock__chip--info">
               {liveFieldCount} field{liveFieldCount === 1 ? '' : 's'}
             </span>
-            {lensActive ? (
-              <span className="manta-tools-fab-dock__chip manta-tools-fab-dock__chip--lens" title="Scanner overlay active">
-                Lens on
-              </span>
-            ) : null}
             {issueTotal > 0 ? (
               <span
                 className={[

@@ -6,6 +6,7 @@ import {
   formatUxsPilotMachineBlock,
   stripUxsPilotMachineBlock,
 } from './uxsOperationalModel.js'
+import { formatMissionInstantAsXsDateTime } from './datetimeLocal.js'
 
 /** @param {unknown} s */
 function esc(s) {
@@ -38,7 +39,7 @@ function buildCitedResponsiblePartyXml(roleCode, individualName, organisationNam
     )
   }
   lines.push(
-    `          <gmd:role><gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/CI_RoleCode.xml#CI_RoleCode" codeListValue="${esc(roleCode)}">${esc(roleCode)}</gmd:CI_RoleCode></gmd:role>`,
+    `          <gmd:role><gmd:CI_RoleCode codeList="${esc(CI_ROLE_CODE_CODELIST)}" codeListValue="${esc(roleCode)}">${esc(roleCode)}</gmd:CI_RoleCode></gmd:role>`,
   )
   return `          <gmd:citedResponsibleParty>
         <gmd:CI_ResponsibleParty>
@@ -83,6 +84,29 @@ function emitReal(value, tag) {
 /** World extent defaults — aligned with `defaultPilotState` / bbox validation fallbacks. */
 const PREVIEW_BBOX_FALLBACK = { west: '-180', east: '180', south: '-90', north: '90' }
 
+/** NOAA ISO 19139 gmx codelist anchors (align with NCEI template). */
+const GMX_CODELIST = 'https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#'
+const CI_DATE_TYPE_CODELIST = `${GMX_CODELIST}CI_DateTypeCode`
+const MD_CHARACTER_SET_CODELIST = `${GMX_CODELIST}MD_CharacterSetCode`
+const CI_ROLE_CODE_CODELIST = `${GMX_CODELIST}CI_RoleCode`
+const MD_SCOPE_CODE_CODELIST = `${GMX_CODELIST}MD_ScopeCode`
+const MD_PROGRESS_CODE_CODELIST = `${GMX_CODELIST}MD_ProgressCode`
+const MD_MAINTENANCE_FREQUENCY_CODELIST = `${GMX_CODELIST}MD_MaintenanceFrequencyCode`
+const MD_CELL_GEOMETRY_CODELIST = `${GMX_CODELIST}MD_CellGeometryCode`
+const MD_DIMENSION_NAME_CODELIST = `${GMX_CODELIST}MD_DimensionNameTypeCode`
+const DS_ASSOCIATION_TYPE_CODELIST = `${GMX_CODELIST}DS_AssociationTypeCode`
+const DS_INITIATIVE_TYPE_CODELIST = `${GMX_CODELIST}DS_InitiativeTypeCode`
+const MD_COVERAGE_CONTENT_TYPE_CODELIST = `${GMX_CODELIST}MD_CoverageContentTypeCode`
+const CI_ONLINE_FUNCTION_CODELIST = `${GMX_CODELIST}CI_OnLineFunctionCode`
+
+/**
+ * Minimal `gmd:date`/`CI_Date` for `CI_Citation` when no publication calendar is known (NCEI-style).
+ * @returns {string}
+ */
+function minimalCiPublicationDateXml() {
+  return `<gmd:date><gmd:CI_Date><gmd:date gco:nilReason="inapplicable"/><gmd:dateType><gmd:CI_DateTypeCode codeList="${esc(CI_DATE_TYPE_CODELIST)}" codeListValue="publication">publication</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>`
+}
+
 /** @param {unknown} v */
 function normalizePreviewNumericToken(v) {
   let s = String(v ?? '').trim()
@@ -117,11 +141,33 @@ function previewMissionBoundingDecimals(mission) {
   }
 }
 
-/** @param {string} v */
+/**
+ * Inner XML for `gmd:date` / `gmd:dateStamp` (`gco:Date` vs `gco:DateTime`), using XSD-complete
+ * `xs:dateTime` for any instant that includes a clock time (seconds appended when omitted).
+ */
 function gcoDateOrDateTimeInner(v) {
-  const s = String(v || '').trim()
-  if (!s) return ''
-  return s.includes('T') ? `<gco:DateTime>${esc(s)}</gco:DateTime>` : `<gco:Date>${esc(s)}</gco:Date>`
+  const raw = String(v ?? '').trim()
+  if (!raw) return ''
+  const norm = raw.replace(/^(\d{4}-\d{2}-\d{2})[ T](?=\d{2})/, '$1T')
+  if (/^\d{4}-\d{2}-\d{2}$/.test(norm)) {
+    return `<gco:Date>${esc(norm)}</gco:Date>`
+  }
+  if (norm.includes('T')) {
+    const xs = formatMissionInstantAsXsDateTime(norm)
+    if (!xs) return ''
+    return `<gco:DateTime>${esc(xs)}</gco:DateTime>`
+  }
+  return `<gco:Date>${esc(norm)}</gco:Date>`
+}
+
+/** `gml:beginPosition` / `gml:endPosition` text — same calendar vs instant rules as {@link gcoDateOrDateTimeInner}. */
+function gmlTemporalPositionText(v) {
+  const raw = String(v ?? '').trim()
+  if (!raw) return ''
+  const norm = raw.replace(/^(\d{4}-\d{2}-\d{2})[ T](?=\d{2})/, '$1T')
+  if (/^\d{4}-\d{2}-\d{2}$/.test(norm)) return esc(norm)
+  if (norm.includes('T')) return esc(formatMissionInstantAsXsDateTime(norm) || norm)
+  return esc(norm)
 }
 
 /** Default gmd:dateStamp when the form is blank — stable UTC “Z” instant for preview/export. */
@@ -230,7 +276,7 @@ function buildDataQualityInfoXml(sp) {
   const scopeBlock = `    <gmd:scope>
       <gmd:DQ_Scope>
         <gmd:level>
-          <gmd:MD_ScopeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/MD_ScopeCode.xml#MD_ScopeCode" codeListValue="dataset">dataset</gmd:MD_ScopeCode>
+          <gmd:MD_ScopeCode codeList="${esc(MD_SCOPE_CODE_CODELIST)}" codeListValue="dataset">dataset</gmd:MD_ScopeCode>
         </gmd:level>
       </gmd:DQ_Scope>
     </gmd:scope>`
@@ -282,7 +328,7 @@ function gridAxisXml(codeListValue, sizeVal, resVal) {
   return `      <gmd:axisDimensionProperties>
         <gmd:MD_Dimension>
           <gmd:dimensionName>
-            <gmd:MD_DimensionNameTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/MD_DimensionNameTypeCode.xml#MD_DimensionNameTypeCode" codeListValue="${esc(codeListValue)}">${esc(codeListValue)}</gmd:MD_DimensionNameTypeCode>
+            <gmd:MD_DimensionNameTypeCode codeList="${esc(MD_DIMENSION_NAME_CODELIST)}" codeListValue="${esc(codeListValue)}">${esc(codeListValue)}</gmd:MD_DimensionNameTypeCode>
           </gmd:dimensionName>
           ${sizeXml}
           ${resXml}
@@ -291,10 +337,12 @@ function gridAxisXml(codeListValue, sizeVal, resVal) {
 }
 
 /**
- * One `gmi:instrument` / `MI_Instrument` block (acquisition).
+ * One `gmi:instrument` / `MI_Instrument` block (acquisition). `xlink:href` is not emitted on
+ * `gmi:MI_Instrument` — ISO 19139 schema disallows it there; instruments nest under `MI_Platform`
+ * or appear as sibling `gmi:instrument` without platform xlink.
  * @param {object} s
  * @param {(x: unknown) => string} escFn
- * @param {{ outer: string, inner: string, instrumentId: string | null, xlinkToPlatform: boolean }} pads
+ * @param {{ outer: string, inner: string, instrumentId: string | null }} pads
  */
 function acquisitionInstrumentXmlBlock(s, escFn, pads) {
   const code = String(s.sensorId || s.modelId || '').trim()
@@ -304,24 +352,22 @@ function acquisitionInstrumentXmlBlock(s, escFn, pads) {
   const I = pads.inner
   const J = `${I}  `
   const idPart = pads.instrumentId ? ` id="${toXmlId(pads.instrumentId)}"` : ''
-  const xlinkPart = pads.xlinkToPlatform ? ' xlink:href="#platform"' : ''
-  const miOpenAttrs = `${idPart}${xlinkPart}`
+  const codeVal = code || 'notRecorded'
+  const typeVal = typ || code || 'notRecorded'
   /** @type {string[]} */
   const body = []
-  if (code) {
-    body.push(
-      `${J}<gmd:identifier>
+  body.push(
+    `${J}<gmi:identifier>
 ${J}  <gmd:MD_Identifier>
-${J}    <gmd:code><gco:CharacterString>${escFn(code)}</gco:CharacterString></gmd:code>
+${J}    <gmd:code><gco:CharacterString>${escFn(codeVal)}</gco:CharacterString></gmd:code>
 ${J}  </gmd:MD_Identifier>
-${J}</gmd:identifier>`,
-    )
-  }
-  if (typ) body.push(`${J}<gmi:type><gco:CharacterString>${escFn(typ)}</gco:CharacterString></gmi:type>`)
-  if (desc) body.push(`${J}<gmd:description><gco:CharacterString>${escFn(desc)}</gco:CharacterString></gmd:description>`)
+${J}</gmi:identifier>`,
+  )
+  body.push(`${J}<gmi:type><gco:CharacterString>${escFn(typeVal)}</gco:CharacterString></gmi:type>`)
+  if (desc.trim()) body.push(`${J}<gmi:description><gco:CharacterString>${escFn(desc)}</gco:CharacterString></gmi:description>`)
   const bodyStr = body.join('\n')
   return `${pads.outer}<gmi:instrument>
-${I}<gmi:MI_Instrument${miOpenAttrs}>
+${I}<gmi:MI_Instrument${idPart}>
 ${bodyStr}
 ${I}</gmi:MI_Instrument>
 ${pads.outer}</gmi:instrument>`
@@ -343,6 +389,8 @@ export function buildXmlPreview(state) {
 
   const omitRef = dist.omitRootReferenceSystemInfo
   const useNceiMeta = dist.useNceiMetadataContactXlink
+  const dateStampSource = String(m.metadataRecordDate || '').trim() || utcNowIsoZForDateStamp()
+  const dateStampXml = `  <gmd:dateStamp>${gcoDateOrDateTimeInner(dateStampSource)}</gmd:dateStamp>\n`
 
   /** One MD_Keywords block per facet with repeated gmd:keyword (matches common NCEI/GCMD patterns). */
   const kwBlock = (facet) => {
@@ -361,7 +409,7 @@ export function buildXmlPreview(state) {
       .filter(Boolean)
       .join('')
     if (!inner) return `    <!-- ${facet} -->\n`
-    return `    <gmd:descriptiveKeywords>\n      <gmd:MD_Keywords>\n${inner}        <gmd:thesaurusName>\n          <gmd:CI_Citation>\n            <gmd:title><gco:CharacterString>GCMD ${esc(facet)}</gco:CharacterString></gmd:title>\n          </gmd:CI_Citation>\n        </gmd:thesaurusName>\n      </gmd:MD_Keywords>\n    </gmd:descriptiveKeywords>\n`
+    return `    <gmd:descriptiveKeywords>\n      <gmd:MD_Keywords>\n${inner}        <gmd:thesaurusName>\n          <gmd:CI_Citation>\n            <gmd:title><gco:CharacterString>GCMD ${esc(facet)}</gco:CharacterString></gmd:title>\n            ${minimalCiPublicationDateXml()}\n          </gmd:CI_Citation>\n        </gmd:thesaurusName>\n      </gmd:MD_Keywords>\n    </gmd:descriptiveKeywords>\n`
   }
 
   const citationPartiesXml = [
@@ -387,7 +435,7 @@ export function buildXmlPreview(state) {
   const resourceMaintenanceXml = `      <gmd:resourceMaintenance>
         <gmd:MD_MaintenanceInformation>
           <gmd:maintenanceAndUpdateFrequency>
-            <gmd:MD_MaintenanceFrequencyCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/MD_MaintenanceFrequencyCode.xml#MD_MaintenanceFrequencyCode" codeListValue="${esc(maintFreq)}">${esc(maintFreq)}</gmd:MD_MaintenanceFrequencyCode>
+            <gmd:MD_MaintenanceFrequencyCode codeList="${esc(MD_MAINTENANCE_FREQUENCY_CODELIST)}" codeListValue="${esc(maintFreq)}">${esc(maintFreq)}</gmd:MD_MaintenanceFrequencyCode>
           </gmd:maintenanceAndUpdateFrequency>
         </gmd:MD_MaintenanceInformation>
       </gmd:resourceMaintenance>
@@ -395,44 +443,60 @@ export function buildXmlPreview(state) {
   const goHref = String(m.graphicOverviewHref || '').trim()
   const goTitle = String(m.graphicOverviewTitle || '').trim()
   const graphicOverviewXml = goHref
-    ? `      <gmd:graphicOverview xlink:href="${esc(goHref)}" xlink:title="${esc(goTitle || 'Graphic overview')}"/>
+    ? `      <gmd:graphicOverview>
+        <gmd:MD_BrowseGraphic>
+          <gmd:fileName><gco:CharacterString>${esc(goHref)}</gco:CharacterString></gmd:fileName>${
+            goTitle
+              ? `\n          <gmd:fileDescription><gco:CharacterString>${esc(goTitle)}</gco:CharacterString></gmd:fileDescription>`
+              : ''
+          }
+        </gmd:MD_BrowseGraphic>
+      </gmd:graphicOverview>
 `
     : ''
 
-  const sensorBlocks = sensors
-    .map(
-      (s, i) => {
-        const covDesc = buildAcquisitionInstrumentDescription(s, { includeVariableLine: false })
-        const attrDesc = String(s.type || s.variable || '').trim()
-        const attrDescXml = attrDesc
-          ? `<gmd:attributeDescription><gco:CharacterString>${esc(attrDesc)}</gco:CharacterString></gmd:attributeDescription>`
-          : ''
-        return `  <gmi:MI_CoverageDescription>
-    <gmd:identifier>
-      <gmd:MD_Identifier>
-        <gmd:code><gco:CharacterString>${esc(s.sensorId || s.modelId || `sensor_${i + 1}`)}</gco:CharacterString></gmd:code>
-      </gmd:MD_Identifier>
-    </gmd:identifier>
-    ${attrDescXml}
-    <gmd:name><gco:CharacterString>${esc(s.variable)}</gco:CharacterString></gmd:name>
-    ${covDesc ? `<gmd:description><gco:CharacterString>${esc(covDesc)}</gco:CharacterString></gmd:description>` : ''}
-  </gmi:MI_CoverageDescription>`
-      },
-    )
-    .join('\n')
-
-  const rorXml = m.ror?.id
-    ? `          <gmd:party>
-            <gmd:CI_Organisation>
-              <gmd:name><gco:CharacterString>${esc(m.org)}</gco:CharacterString></gmd:name>
-              <gmd:identifier>
-                <gmd:MD_Identifier>
-                  <gmd:code><gco:CharacterString>${esc(m.ror.id)}</gco:CharacterString></gmd:code>
-                </gmd:MD_Identifier>
-              </gmd:identifier>
-            </gmd:CI_Organisation>
-          </gmd:party>\n`
+  const sensorContentInfoXml = sensors.length
+    ? sensors
+        .map(
+          (s, i) => {
+            const covDesc = buildAcquisitionInstrumentDescription(s, { includeVariableLine: false })
+            const attrDesc =
+              String(s.type || s.variable || '').trim() ||
+              String(s.sensorId || s.modelId || '').trim() ||
+              'notRecorded'
+            const dimBits = [
+              String(s.variable || '').trim(),
+              String(s.sensorId || s.modelId || `sensor_${i + 1}`).trim(),
+              covDesc.trim(),
+            ].filter(Boolean)
+            const dimLabel = dimBits.length ? dimBits.join(' — ') : `Band ${i + 1}`
+            return `  <gmd:contentInfo>
+    <gmi:MI_CoverageDescription>
+    <gmd:attributeDescription><gco:RecordType>${esc(attrDesc)}</gco:RecordType></gmd:attributeDescription>
+    <gmd:contentType>
+      <gmd:MD_CoverageContentTypeCode codeList="${esc(MD_COVERAGE_CONTENT_TYPE_CODELIST)}" codeListValue="physicalMeasurement">physicalMeasurement</gmd:MD_CoverageContentTypeCode>
+    </gmd:contentType>
+    <gmd:dimension>
+      <gmd:MD_RangeDimension>
+        <gmd:descriptor><gco:CharacterString>${esc(dimLabel)}</gco:CharacterString></gmd:descriptor>
+      </gmd:MD_RangeDimension>
+    </gmd:dimension>
+  </gmi:MI_CoverageDescription>
+  </gmd:contentInfo>`
+          },
+        )
+        .join('\n')
     : ''
+
+  const rorIdRaw = m.ror?.id ? String(m.ror.id).trim().replace(/^https?:\/\/ror\.org\//i, '') : ''
+  const rorHrefAttr = rorIdRaw ? `https://ror.org/${encodeURIComponent(rorIdRaw)}` : ''
+  const organisationNameXml = rorHrefAttr
+    ? `          <gmd:organisationName>
+            <gmx:Anchor xlink:href="${esc(rorHrefAttr)}" xlink:title="ROR ID" xlink:actuate="onRequest">${esc(m.org)}</gmx:Anchor>
+          </gmd:organisationName>
+`
+    : `          <gmd:organisationName><gco:CharacterString>${esc(m.org)}</gco:CharacterString></gmd:organisationName>
+`
 
   /** ISO keyword block for the platform *instance* id — omit when empty (avoids useless empty MD_Keywords). */
   const platformInstanceFacetXml = (() => {
@@ -449,6 +513,7 @@ export function buildXmlPreview(state) {
           <gmd:thesaurusName>
             <gmd:CI_Citation>
               <gmd:title><gco:CharacterString>Platform instance</gco:CharacterString></gmd:title>
+              ${minimalCiPublicationDateXml()}
             </gmd:CI_Citation>
           </gmd:thesaurusName>
         </gmd:MD_Keywords>
@@ -458,17 +523,21 @@ export function buildXmlPreview(state) {
 
   const citationDates = [
     m.startDate
-      ? `<gmd:date><gmd:CI_Date><gmd:date>${gcoDateOrDateTimeInner(m.startDate)}</gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/CI_DateTypeCode.xml#CI_DateTypeCode" codeListValue="creation">creation</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>`
+      ? `<gmd:date><gmd:CI_Date><gmd:date>${gcoDateOrDateTimeInner(m.startDate)}</gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="${esc(CI_DATE_TYPE_CODELIST)}" codeListValue="creation">creation</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>`
       : '',
     m.publicationDate
-      ? `<gmd:date><gmd:CI_Date><gmd:date>${gcoDateOrDateTimeInner(m.publicationDate)}</gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeListValue="publication">publication</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>`
+      ? `<gmd:date><gmd:CI_Date><gmd:date>${gcoDateOrDateTimeInner(m.publicationDate)}</gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="${esc(CI_DATE_TYPE_CODELIST)}" codeListValue="publication">publication</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>`
       : '',
     m.endDate
-      ? `<gmd:date><gmd:CI_Date><gmd:date>${gcoDateOrDateTimeInner(m.endDate)}</gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeListValue="completion">completion</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>`
+      ? `<gmd:date><gmd:CI_Date><gmd:date>${gcoDateOrDateTimeInner(m.endDate)}</gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="${esc(CI_DATE_TYPE_CODELIST)}" codeListValue="completion">completion</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>`
       : '',
   ]
     .filter(Boolean)
     .join('\n          ')
+
+  const citationDatesResolved =
+    citationDates.trim() ||
+    minimalCiPublicationDateXml()
 
   const extentDescriptions = []
   if (sp.geographicDescription) {
@@ -501,19 +570,47 @@ export function buildXmlPreview(state) {
           </gmd:verticalElement>\n`
     : ''
 
-  const contactExtra = [
-    m.contactPhone
-      ? `<gmd:phone><gmd:CI_Telephone><gmd:voice><gco:CharacterString>${esc(m.contactPhone)}</gco:CharacterString></gmd:voice></gmd:CI_Telephone></gmd:phone>`
-      : '',
-    m.contactUrl
-      ? `<gmd:onlineResource><gmd:CI_OnlineResource><gmd:linkage><gmd:URL>${esc(m.contactUrl)}</gmd:URL></gmd:linkage></gmd:CI_OnlineResource></gmd:onlineResource>`
-      : '',
-    m.contactAddress
-      ? `<gmd:address><gmd:CI_Address><gmd:deliveryPoint><gco:CharacterString>${esc(m.contactAddress)}</gco:CharacterString></gmd:deliveryPoint></gmd:CI_Address></gmd:address>`
-      : '',
-  ]
-    .filter(Boolean)
-    .join('\n              ')
+  const phoneXml = m.contactPhone
+    ? `              <gmd:phone><gmd:CI_Telephone><gmd:voice><gco:CharacterString>${esc(m.contactPhone)}</gco:CharacterString></gmd:voice></gmd:CI_Telephone></gmd:phone>`
+    : ''
+  const addrDeliveryXml = m.contactAddress
+    ? `                  <gmd:deliveryPoint><gco:CharacterString>${esc(m.contactAddress)}</gco:CharacterString></gmd:deliveryPoint>`
+    : ''
+  const addrEmailXml = m.email
+    ? `                  <gmd:electronicMailAddress><gco:CharacterString>${esc(m.email)}</gco:CharacterString></gmd:electronicMailAddress>`
+    : ''
+  const addrInnerXml = [addrDeliveryXml, addrEmailXml].filter(Boolean).join('\n')
+  const addrBlockXml = addrInnerXml
+    ? `              <gmd:address>
+                <gmd:CI_Address>
+${addrInnerXml}
+                </gmd:CI_Address>
+              </gmd:address>`
+    : ''
+  const contactUrlXml = m.contactUrl
+    ? `              <gmd:onlineResource><gmd:CI_OnlineResource><gmd:linkage><gmd:URL>${esc(m.contactUrl)}</gmd:URL></gmd:linkage><gmd:protocol><gco:CharacterString>HTTPS</gco:CharacterString></gmd:protocol><gmd:function><gmd:CI_OnLineFunctionCode codeList="${esc(CI_ONLINE_FUNCTION_CODELIST)}" codeListValue="information">information</gmd:CI_OnLineFunctionCode></gmd:function></gmd:CI_OnlineResource></gmd:onlineResource>`
+    : ''
+  const resourceCiContactXml =
+    phoneXml || addrBlockXml || contactUrlXml
+      ? `          <gmd:contactInfo>
+            <gmd:CI_Contact>
+${phoneXml}
+${addrBlockXml}
+${contactUrlXml}
+            </gmd:CI_Contact>
+          </gmd:contactInfo>
+`
+      : ''
+
+  const resourcePointOfContactXml = `      <gmd:pointOfContact>
+        <gmd:CI_ResponsibleParty>
+          <gmd:individualName><gco:CharacterString>${esc(m.individualName)}</gco:CharacterString></gmd:individualName>
+${organisationNameXml}${resourceCiContactXml}          <gmd:role>
+            <gmd:CI_RoleCode codeList="${esc(CI_ROLE_CODE_CODELIST)}" codeListValue="pointOfContact">pointOfContact</gmd:CI_RoleCode>
+          </gmd:role>
+        </gmd:CI_ResponsibleParty>
+      </gmd:pointOfContact>
+`
 
   const dataQualityXml = buildDataQualityInfoXml(sp)
 
@@ -542,13 +639,60 @@ export function buildXmlPreview(state) {
   </gmd:metadataStandardVersion>
 `
 
-  const nceiMetaHref = String(dist.nceiMetadataContactHref || '').trim()
-  const nceiMetaTitle = String(dist.nceiMetadataContactTitle || 'NCEI (pointOfContact)').trim()
-  const contactRootXml =
-    useNceiMeta
-      ? `  <gmd:contact${nceiMetaHref ? ` xlink:href="${esc(nceiMetaHref)}"` : ''} xlink:title="${esc(nceiMetaTitle)}"/>
+  const fmtVersion = String(dist.distributionFileFormat ?? '').trim() || 'not recorded'
+  const onLineMetadata = dist.metadataLandingUrl
+    ? `<gmd:onLine><gmd:CI_OnlineResource><gmd:linkage><gmd:URL>${esc(dist.metadataLandingUrl)}</gmd:URL></gmd:linkage><gmd:protocol><gco:CharacterString>HTTPS</gco:CharacterString></gmd:protocol><gmd:name><gco:CharacterString>${esc(dist.metadataLandingLinkName || dist.downloadLinkName || 'metadata')}</gco:CharacterString></gmd:name>${dist.metadataLandingDescription ? `<gmd:description><gco:CharacterString>${esc(dist.metadataLandingDescription)}</gco:CharacterString></gmd:description>` : ''}<gmd:function><gmd:CI_OnLineFunctionCode codeList="${esc(CI_ONLINE_FUNCTION_CODELIST)}" codeListValue="information">information</gmd:CI_OnLineFunctionCode></gmd:function></gmd:CI_OnlineResource></gmd:onLine>`
+    : ''
+  const onLineLanding = dist.landingUrl
+    ? `<gmd:onLine><gmd:CI_OnlineResource><gmd:linkage><gmd:URL>${esc(dist.landingUrl)}</gmd:URL></gmd:linkage><gmd:protocol><gco:CharacterString>HTTPS</gco:CharacterString></gmd:protocol><gmd:function><gmd:CI_OnLineFunctionCode codeList="${esc(CI_ONLINE_FUNCTION_CODELIST)}" codeListValue="information">information</gmd:CI_OnLineFunctionCode></gmd:function></gmd:CI_OnlineResource></gmd:onLine>`
+    : ''
+  const onLineDownload = dist.downloadUrl
+    ? `<gmd:onLine><gmd:CI_OnlineResource><gmd:linkage><gmd:URL>${esc(dist.downloadUrl)}</gmd:URL></gmd:linkage><gmd:protocol><gco:CharacterString>${esc(dist.downloadProtocol || 'HTTPS')}</gco:CharacterString></gmd:protocol>${dist.downloadLinkName ? `<gmd:name><gco:CharacterString>${esc(dist.downloadLinkName)}</gco:CharacterString></gmd:name>` : ''}${dist.downloadLinkDescription ? `<gmd:description><gco:CharacterString>${esc(dist.downloadLinkDescription)}</gco:CharacterString></gmd:description>` : ''}<gmd:function><gmd:CI_OnLineFunctionCode codeList="${esc(CI_ONLINE_FUNCTION_CODELIST)}" codeListValue="download">download</gmd:CI_OnLineFunctionCode></gmd:function></gmd:CI_OnlineResource></gmd:onLine>`
+    : ''
+  const transferOptionsInner = [onLineMetadata, onLineLanding, onLineDownload].filter(Boolean).join('\n          ')
+  const transferOptionsBlock = transferOptionsInner.trim()
+    ? `      <gmd:transferOptions>
+        <gmd:MD_DigitalTransferOptions>
+          ${transferOptionsInner}
+        </gmd:MD_DigitalTransferOptions>
+      </gmd:transferOptions>
+`
+    : ''
+  const distributionFormatBlock = `      <gmd:distributionFormat>
+        <gmd:MD_Format>
+          <gmd:name><gco:CharacterString>${esc(dist.distributionFormatName || dist.format)}</gco:CharacterString></gmd:name>
+          <gmd:version><gco:CharacterString>${esc(fmtVersion)}</gco:CharacterString></gmd:version>
+        </gmd:MD_Format>
+      </gmd:distributionFormat>
+`
+  const distributionOrderProcessBlock =
+    dist.distributionFeesText || dist.distributionOrderingInstructions
+      ? `          <gmd:distributionOrderProcess><gmd:MD_StandardOrderProcess>${
+          dist.distributionFeesText
+            ? `<gmd:fees><gco:CharacterString>${esc(dist.distributionFeesText)}</gco:CharacterString></gmd:fees>`
+            : ''
+        }${
+          dist.distributionOrderingInstructions
+            ? `<gmd:orderingInstructions><gco:CharacterString>${esc(dist.distributionOrderingInstructions)}</gco:CharacterString></gmd:orderingInstructions>`
+            : ''
+        }</gmd:MD_StandardOrderProcess></gmd:distributionOrderProcess>
 `
       : ''
+
+  const nceiMetaHref = String(dist.nceiMetadataContactHref || '').trim()
+  const nceiMetaTitle = String(dist.nceiMetadataContactTitle || 'NCEI (pointOfContact)').trim()
+  const metadataContactXml = useNceiMeta
+    ? `  <gmd:contact${nceiMetaHref ? ` xlink:href="${esc(nceiMetaHref)}"` : ''} xlink:title="${esc(nceiMetaTitle)}"/>
+`
+    : `  <gmd:contact>
+    <gmd:CI_ResponsibleParty>
+          <gmd:individualName><gco:CharacterString>${esc(m.individualName)}</gco:CharacterString></gmd:individualName>
+${organisationNameXml}${resourceCiContactXml}          <gmd:role>
+            <gmd:CI_RoleCode codeList="${esc(CI_ROLE_CODE_CODELIST)}" codeListValue="pointOfContact">pointOfContact</gmd:CI_RoleCode>
+          </gmd:role>
+    </gmd:CI_ResponsibleParty>
+  </gmd:contact>
+`
 
   const nceiDistHref = String(dist.nceiDistributorContactHref || '').trim()
   const nceiDistTitle = String(dist.nceiDistributorContactTitle || 'NCEI (distributor)').trim()
@@ -585,17 +729,17 @@ export function buildXmlPreview(state) {
                   </gmd:address>
                   ${
                     distUrl
-                      ? `<gmd:onlineResource><gmd:CI_OnlineResource><gmd:linkage><gmd:URL>${esc(distUrl)}</gmd:URL></gmd:linkage></gmd:CI_OnlineResource></gmd:onlineResource>`
+                      ? `<gmd:onlineResource><gmd:CI_OnlineResource><gmd:linkage><gmd:URL>${esc(distUrl)}</gmd:URL></gmd:linkage><gmd:protocol><gco:CharacterString>HTTPS</gco:CharacterString></gmd:protocol><gmd:function><gmd:CI_OnLineFunctionCode codeList="${esc(CI_ONLINE_FUNCTION_CODELIST)}" codeListValue="information">information</gmd:CI_OnLineFunctionCode></gmd:function></gmd:CI_OnlineResource></gmd:onlineResource>`
                       : ''
                   }
                 </gmd:CI_Contact>
               </gmd:contactInfo>
               <gmd:role>
-                <gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/CI_RoleCode.xml#CI_RoleCode" codeListValue="distributor">distributor</gmd:CI_RoleCode>
+                <gmd:CI_RoleCode codeList="${esc(CI_ROLE_CODE_CODELIST)}" codeListValue="distributor">distributor</gmd:CI_RoleCode>
               </gmd:role>
             </gmd:CI_ResponsibleParty>
           </gmd:distributorContact>
-        </gmd:MD_Distributor>
+${distributionOrderProcessBlock}        </gmd:MD_Distributor>
       </gmd:distributor>
 `
       : ''
@@ -603,14 +747,14 @@ export function buildXmlPreview(state) {
     ? `      <gmd:distributor>
         <gmd:MD_Distributor>
           <gmd:distributorContact xlink:href="${esc(nceiDistHref)}" xlink:title="${esc(nceiDistTitle)}"/>
-        </gmd:MD_Distributor>
+${distributionOrderProcessBlock}        </gmd:MD_Distributor>
       </gmd:distributor>
 `
     : distributorInlineParty ||
       `      <gmd:distributor>
         <gmd:MD_Distributor>
           <gmd:distributorContact xlink:title="${esc(nceiDistTitle)}"/>
-        </gmd:MD_Distributor>
+${distributionOrderProcessBlock}        </gmd:MD_Distributor>
       </gmd:distributor>
 `
 
@@ -640,143 +784,103 @@ export function buildXmlPreview(state) {
     .filter(Boolean)
     .join('\n')
 
-  /** @type {Array<string>} */
-  const otherPropFields = []
-  if (String(p.weight || '').trim()) {
-    otherPropFields.push(`            <gmi:field name="Weight">
-              <gmi:Quantity>
-                <gco:Decimal>${esc(numericOrZeroForDq(p.weight))}</gco:Decimal>
-                <gco:uom>kg</gco:uom>
-              </gmi:Quantity>
-            </gmi:field>`)
-  }
-  if (String(p.length || '').trim()) {
-    otherPropFields.push(`            <gmi:field name="Length">
-              <gmi:Quantity>
-                <gco:Decimal>${esc(numericOrZeroForDq(p.length))}</gco:Decimal>
-                <gco:uom>m</gco:uom>
-              </gmi:Quantity>
-            </gmi:field>`)
-  }
-  if (String(p.width || '').trim()) {
-    otherPropFields.push(`            <gmi:field name="Width">
-              <gmi:Quantity>
-                <gco:Decimal>${esc(numericOrZeroForDq(p.width))}</gco:Decimal>
-                <gco:uom>m</gco:uom>
-              </gmi:Quantity>
-            </gmi:field>`)
-  }
-  if (String(p.height || '').trim()) {
-    otherPropFields.push(`            <gmi:field name="Height">
-              <gmi:Quantity>
-                <gco:Decimal>${esc(numericOrZeroForDq(p.height))}</gco:Decimal>
-                <gco:uom>m</gco:uom>
-              </gmi:Quantity>
-            </gmi:field>`)
-  }
-  if (String(p.material || '').trim()) {
-    otherPropFields.push(`            <gmi:field name="CasingMaterial">
-              <gmi:Category>
-                <gco:CharacterString>${esc(p.material)}</gco:CharacterString>
-              </gmi:Category>
-            </gmi:field>`)
-  }
-  if (String(p.speed || '').trim()) {
-    otherPropFields.push(`            <gmi:field name="SpeedOverWater">
-              <gmi:Quantity>
-                <gco:Decimal>${esc(numericOrZeroForDq(p.speed))}</gco:Decimal>
-                <gco:uom>m/s</gco:uom>
-              </gmi:Quantity>
-            </gmi:field>`)
-  }
-  if (String(p.operationalArea || '').trim()) {
-    otherPropFields.push(`            <gmi:field name="OperationalArea">
-              <gco:CharacterString>${esc(p.operationalArea)}</gco:CharacterString>
-            </gmi:field>`)
-  }
+  const hasInstrumentPayload = sensors.some((s) => {
+    const code = String(s.sensorId || s.modelId || '').trim()
+    const typ = String(s.type || '').trim()
+    const desc = buildAcquisitionInstrumentDescription(s)
+    return !!(code || typ || String(desc || '').trim())
+  })
 
-  const otherPropertyXml = otherPropFields.length
-    ? `          <gmi:otherProperty>
-            <gco:Record>
-              <gmi:otherProperty>
-                <gmi:CharacteristicList>
-                  <gmi:characteristic>
-                    <gmi:DataRecord>
-${otherPropFields.join('\n')}
-                    </gmi:DataRecord>
-                  </gmi:characteristic>
-                </gmi:CharacteristicList>
-              </gmi:otherProperty>
-            </gco:Record>
-          </gmi:otherProperty>`
-    : ''
-
-  const instrumentSections = sensors
-    .map((s, i) =>
-      acquisitionInstrumentXmlBlock(s, esc, {
-        outer: '      ',
-        inner: '        ',
-        instrumentId: `instrument_${i + 1}`,
-        xlinkToPlatform: hasPlatformPreview,
-      }),
-    )
-    .filter(Boolean)
+  /** Top-level `gmi:instrument` only when there is no platform block (otherwise instruments nest in `MI_Platform`). */
+  const instrumentSections = !hasPlatformPreview
+    ? sensors
+        .map((s, i) =>
+          acquisitionInstrumentXmlBlock(s, esc, {
+            outer: '      ',
+            inner: '        ',
+            instrumentId: `instrument_${i + 1}`,
+          }),
+        )
+        .filter(Boolean)
+    : []
 
   const nestedPlatformInstrumentsXml =
-    hasPlatformPreview && instrumentSections.length
+    hasPlatformPreview && hasInstrumentPayload
       ? sensors
           .map((s) =>
             acquisitionInstrumentXmlBlock(s, esc, {
               outer: '          ',
               inner: '            ',
               instrumentId: null,
-              xlinkToPlatform: false,
             }),
           )
           .filter(Boolean)
           .join('\n')
       : ''
 
-  const platformSection = hasPlatformPreview
-    ? `      <gmi:platform>
-        <gmi:MI_Platform id="platform">
-          ${
-            p.platformId
-              ? `<gmd:identifier>
-            <gmd:MD_Identifier>
-              <gmd:code><gco:CharacterString>${esc(p.platformId)}</gco:CharacterString></gmd:code>
-            </gmd:MD_Identifier>
-          </gmd:identifier>`
-              : ''
-          }
-          ${
-            platformDescCombined
-              ? `<gmd:description>
-            <gco:CharacterString>${esc(platformDescCombined)}</gco:CharacterString>
-          </gmd:description>`
-              : ''
-          }
-          ${
-            p.platformType || p.customPlatformType
-              ? `<gmi:type>
-            <gco:CharacterString>${esc(p.platformType || p.customPlatformType)}</gco:CharacterString>
-          </gmi:type>`
-              : ''
-          }
-          ${
-            p.manufacturer
-              ? `<gmd:pointOfContact>
+  const platformInstrumentPlaceholderXml = `          <gmi:instrument>
+            <gmi:MI_Instrument>
+              <gmi:identifier>
+                <gmd:MD_Identifier>
+                  <gmd:code><gco:CharacterString>notRecorded</gco:CharacterString></gmd:code>
+                </gmd:MD_Identifier>
+              </gmi:identifier>
+              <gmi:type><gco:CharacterString>unknown</gco:CharacterString></gmi:type>
+            </gmi:MI_Instrument>
+          </gmi:instrument>`
+
+  const nestedPlatformInstrumentsResolved = nestedPlatformInstrumentsXml.trim()
+    ? `${nestedPlatformInstrumentsXml}\n`
+    : platformInstrumentPlaceholderXml
+
+  const platformSpecsHuman = [
+    String(p.weight || '').trim() && `Weight: ${numericOrZeroForDq(p.weight)} kg`,
+    String(p.length || '').trim() && `Length: ${numericOrZeroForDq(p.length)} m`,
+    String(p.width || '').trim() && `Width: ${numericOrZeroForDq(p.width)} m`,
+    String(p.height || '').trim() && `Height: ${numericOrZeroForDq(p.height)} m`,
+    String(p.material || '').trim() && `Material: ${String(p.material).trim()}`,
+    String(p.speed || '').trim() && `Speed: ${numericOrZeroForDq(p.speed)} m/s`,
+    String(p.operationalArea || '').trim() && `Operational area: ${String(p.operationalArea).trim()}`,
+  ]
+    .filter(Boolean)
+    .join('\n')
+
+  const platformDescriptionFull = [
+    platformDescCombined,
+    p.platformType || p.customPlatformType
+      ? `Type: ${String(p.platformType || p.customPlatformType).trim()}`
+      : '',
+    p.manufacturer ? `Manufacturer: ${String(p.manufacturer).trim()}` : '',
+    platformSpecsHuman,
+  ]
+    .filter(Boolean)
+    .join('\n')
+    .trim() || 'not recorded'
+
+  const manufacturerSponsorXml = p.manufacturer
+    ? `          <gmd:sponsor>
             <gmd:CI_ResponsibleParty>
               <gmd:organisationName><gco:CharacterString>${esc(p.manufacturer)}</gco:CharacterString></gmd:organisationName>
               <gmd:role>
-                <gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/CI_RoleCode.xml#CI_RoleCode" codeListValue="pointOfContact">pointOfContact</gmd:CI_RoleCode>
+                <gmd:CI_RoleCode codeList="${esc(CI_ROLE_CODE_CODELIST)}" codeListValue="collaborator">collaborator</gmd:CI_RoleCode>
               </gmd:role>
             </gmd:CI_ResponsibleParty>
-          </gmd:pointOfContact>`
-              : ''
-          }
-          ${otherPropertyXml}
-${nestedPlatformInstrumentsXml ? `${nestedPlatformInstrumentsXml}\n` : ''}        </gmi:MI_Platform>
+          </gmd:sponsor>`
+    : ''
+
+  const platformSection = hasPlatformPreview
+    ? `      <gmi:platform>
+        <gmi:MI_Platform id="platform">
+          <gmi:identifier>
+            <gmd:MD_Identifier>
+              <gmd:code><gco:CharacterString>${esc(p.platformId || 'unknown')}</gco:CharacterString></gmd:code>
+            </gmd:MD_Identifier>
+          </gmi:identifier>
+          <gmi:description>
+            <gco:CharacterString>${esc(platformDescriptionFull)}</gco:CharacterString>
+          </gmi:description>
+${manufacturerSponsorXml}
+${nestedPlatformInstrumentsResolved}        </gmi:MI_Platform>
       </gmi:platform>
 `
     : ''
@@ -785,8 +889,8 @@ ${nestedPlatformInstrumentsXml ? `${nestedPlatformInstrumentsXml}\n` : ''}      
     hasPlatformPreview || instrumentSections.length
       ? `  <gmi:acquisitionInformation>
     <gmi:MI_AcquisitionInformation>
-${platformSection}${instrumentSections.join('\n')}
-    </gmi:MI_AcquisitionInformation>
+${instrumentSections.join('\n')}
+${platformSection}    </gmi:MI_AcquisitionInformation>
   </gmi:acquisitionInformation>\n`
       : ''
 
@@ -794,53 +898,55 @@ ${platformSection}${instrumentSections.join('\n')}
     'https://data.noaa.gov/resources/iso19139/schema/resources/Codelist/gmxCodelists.xml#MD_RestrictionCode'
   const presetKey = normalizeDataLicensePresetKey(m.dataLicensePreset)
   const licensePresetDef = getDataLicensePresetDef(m.dataLicensePreset)
-  const legalInner = []
+  /** ISO 19139 `MD_LegalConstraints` + base `MD_Constraints`: useLimitation, then accessConstraints, useConstraints, otherConstraints. */
+  const accessConstraintsXml = []
+  const useConstraintsXml = []
+  const useLimitationXml = []
+  const otherConstraintsXml = []
   const accessCode = String(m.accessConstraintsCode || '').trim()
   const accessNarrative = String(m.accessConstraints || '').trim()
   if (accessCode) {
-    legalInner.push(
+    accessConstraintsXml.push(
       `<gmd:accessConstraints><gmd:MD_RestrictionCode codeList="${esc(MD_RESTRICTION_CODELIST)}" codeListValue="${esc(accessCode)}">${esc(accessCode)}</gmd:MD_RestrictionCode></gmd:accessConstraints>`,
     )
-    if (accessNarrative) {
-      legalInner.push(
-        `<gmd:otherConstraints><gco:CharacterString>${esc(accessNarrative)}</gco:CharacterString></gmd:otherConstraints>`,
-      )
-    }
   } else if (accessNarrative) {
-    legalInner.push(
+    accessConstraintsXml.push(
       `<gmd:accessConstraints><gmd:MD_RestrictionCode codeList="${esc(MD_RESTRICTION_CODELIST)}" codeListValue="otherRestrictions">otherRestrictions</gmd:MD_RestrictionCode></gmd:accessConstraints>`,
     )
-    legalInner.push(
+  }
+  if (accessNarrative) {
+    otherConstraintsXml.push(
       `<gmd:otherConstraints><gco:CharacterString>${esc(accessNarrative)}</gco:CharacterString></gmd:otherConstraints>`,
     )
   }
   if (m.citeAs) {
-    legalInner.push(
+    useLimitationXml.push(
       `<gmd:useLimitation><gco:CharacterString>${esc(m.citeAs)}</gco:CharacterString></gmd:useLimitation>`,
     )
   }
   if (m.distributionLiability) {
-    legalInner.push(
+    otherConstraintsXml.push(
       `<gmd:otherConstraints><gco:CharacterString>${esc(m.distributionLiability)}</gco:CharacterString></gmd:otherConstraints>`,
     )
   }
   if (m.otherCiteAs) {
-    legalInner.push(
+    otherConstraintsXml.push(
       `<gmd:otherConstraints><gco:CharacterString>${esc(m.otherCiteAs)}</gco:CharacterString></gmd:otherConstraints>`,
     )
   }
   if (presetKey === 'custom' && m.licenseUrl) {
-    legalInner.push(
+    otherConstraintsXml.push(
       `<gmd:otherConstraints><gco:CharacterString>Data license: ${esc(m.licenseUrl)}</gco:CharacterString></gmd:otherConstraints>`,
     )
   }
   for (const a of licensePresetDef.anchors) {
-    legalInner.push(
+    otherConstraintsXml.push(
       `<gmd:otherConstraints><gmx:Anchor xlink:href="${esc(a.href)}" xlink:title="${esc(a.title)}" xlink:actuate="onRequest">${esc(a.text)}</gmx:Anchor></gmd:otherConstraints>`,
     )
   }
-  const legalXml = legalInner.length
-    ? `      <gmd:resourceConstraints>\n        <gmd:MD_LegalConstraints>\n          ${legalInner.join('\n          ')}\n        </gmd:MD_LegalConstraints>\n      </gmd:resourceConstraints>\n`
+  const legalPieces = [...useLimitationXml, ...accessConstraintsXml, ...useConstraintsXml, ...otherConstraintsXml]
+  const legalXml = legalPieces.length
+    ? `      <gmd:resourceConstraints>\n        <gmd:MD_LegalConstraints>\n          ${legalPieces.join('\n          ')}\n        </gmd:MD_LegalConstraints>\n      </gmd:resourceConstraints>\n`
     : ''
   const docucompHref = licensePresetDef.docucompHref && String(licensePresetDef.docucompHref).trim()
   const docucompXml = docucompHref
@@ -848,10 +954,19 @@ ${platformSection}${instrumentSections.join('\n')}
     : ''
 
   const aggBlocks = []
+  const aggCitationDatePublication = (/** @type {string} */ raw) => {
+    const s = String(raw || '').trim()
+    if (!s) {
+      return `<gmd:date><gmd:CI_Date><gmd:date gco:nilReason="inapplicable"/><gmd:dateType><gmd:CI_DateTypeCode codeList="${esc(CI_DATE_TYPE_CODELIST)}" codeListValue="publication">publication</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>`
+    }
+    if (s.includes('T')) {
+      return `<gmd:date><gmd:CI_Date><gmd:date>${gcoDateOrDateTimeInner(s)}</gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="${esc(CI_DATE_TYPE_CODELIST)}" codeListValue="publication">publication</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>`
+    }
+    return `<gmd:date><gmd:CI_Date><gmd:date><gco:Date>${esc(s)}</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeList="${esc(CI_DATE_TYPE_CODELIST)}" codeListValue="publication">publication</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>`
+  }
+
   if (m.parentProjectTitle) {
-    const dateXml = m.parentProjectDate
-      ? `<gmd:date><gmd:CI_Date><gmd:date><gco:Date>${esc(m.parentProjectDate)}</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeListValue="publication">publication</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>`
-      : ''
+    const dateXml = aggCitationDatePublication(String(m.parentProjectDate || '').trim())
     const idXml = m.parentProjectCode
       ? `<gmd:identifier><gmd:MD_Identifier><gmd:code><gco:CharacterString>${esc(m.parentProjectCode)}</gco:CharacterString></gmd:code></gmd:MD_Identifier></gmd:identifier>`
       : ''
@@ -865,10 +980,10 @@ ${platformSection}${instrumentSections.join('\n')}
             </gmd:CI_Citation>
           </gmd:aggregateDataSetName>
           <gmd:associationType>
-            <gmd:DS_AssociationTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/DS_AssociationTypeCode.xml#DS_AssociationTypeCode" codeListValue="largerWorkCitation">largerWorkCitation</gmd:DS_AssociationTypeCode>
+            <gmd:DS_AssociationTypeCode codeList="${esc(DS_ASSOCIATION_TYPE_CODELIST)}" codeListValue="largerWorkCitation">largerWorkCitation</gmd:DS_AssociationTypeCode>
           </gmd:associationType>
           <gmd:initiativeType>
-            <gmd:DS_InitiativeTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/DS_InitiativeTypeCode.xml#DS_InitiativeTypeCode" codeListValue="project">project</gmd:DS_InitiativeTypeCode>
+            <gmd:DS_InitiativeTypeCode codeList="${esc(DS_INITIATIVE_TYPE_CODELIST)}" codeListValue="project">project</gmd:DS_InitiativeTypeCode>
           </gmd:initiativeType>
         </gmd:MD_AggregateInformation>
       </gmd:aggregationInfo>`)
@@ -881,36 +996,34 @@ ${platformSection}${instrumentSections.join('\n')}
     m.relatedDatasetOrg ||
     m.relatedDataUrl
   ) {
-    const relDate = m.relatedDatasetDate
-      ? `<gmd:date><gmd:CI_Date><gmd:date><gco:Date>${esc(m.relatedDatasetDate)}</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeListValue="publication">publication</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>`
-      : ''
+    const relDate = aggCitationDatePublication(String(m.relatedDatasetDate || '').trim())
     const relId = m.relatedDatasetCode
       ? `<gmd:identifier><gmd:MD_Identifier><gmd:code><gco:CharacterString>${esc(m.relatedDatasetCode)}</gco:CharacterString></gmd:code></gmd:MD_Identifier></gmd:identifier>`
       : ''
-    const orgNote = m.relatedDatasetOrg
-      ? `<gmd:otherCitationDetails><gco:CharacterString>${esc(m.relatedDatasetOrg)}</gco:CharacterString></gmd:otherCitationDetails>`
+    const relatedDetailParts = []
+    if (m.relatedDatasetOrg) relatedDetailParts.push(String(m.relatedDatasetOrg).trim())
+    if (m.relatedDataUrl && String(m.relatedDataUrl).trim().startsWith('http')) {
+      const u = String(m.relatedDataUrl).trim()
+      const t = m.relatedDataUrlTitle ? String(m.relatedDataUrlTitle).trim() : ''
+      const d = m.relatedDataUrlDescription ? String(m.relatedDataUrlDescription).trim() : ''
+      relatedDetailParts.push([t && d ? `${t}: ${d}` : t || d || '', u].filter(Boolean).join(' ').trim() || u)
+    }
+    const relatedDetailsXml = relatedDetailParts.length
+      ? `<gmd:otherCitationDetails><gco:CharacterString>${esc(relatedDetailParts.join(' | '))}</gco:CharacterString></gmd:otherCitationDetails>`
       : ''
-    const onlineXml =
-      m.relatedDataUrl && String(m.relatedDataUrl).trim().startsWith('http')
-        ? `<gmd:onlineResource><gmd:CI_OnlineResource><gmd:linkage><gmd:URL>${esc(m.relatedDataUrl)}</gmd:URL></gmd:linkage>${m.relatedDataUrlTitle ? `<gmd:name><gco:CharacterString>${esc(m.relatedDataUrlTitle)}</gco:CharacterString></gmd:name>` : ''}${m.relatedDataUrlDescription ? `<gmd:description><gco:CharacterString>${esc(m.relatedDataUrlDescription)}</gco:CharacterString></gmd:description>` : ''}</gmd:CI_OnlineResource></gmd:onlineResource>`
-        : ''
     const relTitle = m.relatedDatasetTitle || 'Related dataset'
     aggBlocks.push(`      <gmd:aggregationInfo>
         <gmd:MD_AggregateInformation>
-          <gmd:aggregateDataSetIdentifier>
-            <gmd:MD_Identifier gco:nilReason="missing"/>
-          </gmd:aggregateDataSetIdentifier>
           <gmd:aggregateDataSetName>
             <gmd:CI_Citation>
               <gmd:title><gco:CharacterString>${esc(relTitle)}</gco:CharacterString></gmd:title>
               ${relDate}
               ${relId}
-              ${orgNote}
-              ${onlineXml}
+              ${relatedDetailsXml}
             </gmd:CI_Citation>
           </gmd:aggregateDataSetName>
           <gmd:associationType>
-            <gmd:DS_AssociationTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/DS_AssociationTypeCode.xml#DS_AssociationTypeCode" codeListValue="crossReference">crossReference</gmd:DS_AssociationTypeCode>
+            <gmd:DS_AssociationTypeCode codeList="${esc(DS_ASSOCIATION_TYPE_CODELIST)}" codeListValue="crossReference">crossReference</gmd:DS_AssociationTypeCode>
           </gmd:associationType>
         </gmd:MD_AggregateInformation>
       </gmd:aggregationInfo>`)
@@ -918,9 +1031,7 @@ ${platformSection}${instrumentSections.join('\n')}
 
   if (m.associatedPublicationTitle || m.associatedPublicationDate || m.associatedPublicationCode) {
     const pubTitle = m.associatedPublicationTitle || 'Associated publication'
-    const pubDate = m.associatedPublicationDate
-      ? `<gmd:date><gmd:CI_Date><gmd:date><gco:Date>${esc(m.associatedPublicationDate)}</gco:Date></gmd:date><gmd:dateType><gmd:CI_DateTypeCode codeListValue="publication">publication</gmd:CI_DateTypeCode></gmd:dateType></gmd:CI_Date></gmd:date>`
-      : ''
+    const pubDate = aggCitationDatePublication(String(m.associatedPublicationDate || '').trim())
     const pubId = m.associatedPublicationCode
       ? `<gmd:identifier><gmd:MD_Identifier><gmd:code><gco:CharacterString>${esc(m.associatedPublicationCode)}</gco:CharacterString></gmd:code></gmd:MD_Identifier></gmd:identifier>`
       : ''
@@ -934,10 +1045,10 @@ ${platformSection}${instrumentSections.join('\n')}
             </gmd:CI_Citation>
           </gmd:aggregateDataSetName>
           <gmd:associationType>
-            <gmd:DS_AssociationTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/DS_AssociationTypeCode.xml#DS_AssociationTypeCode" codeListValue="crossReference">crossReference</gmd:DS_AssociationTypeCode>
+            <gmd:DS_AssociationTypeCode codeList="${esc(DS_ASSOCIATION_TYPE_CODELIST)}" codeListValue="crossReference">crossReference</gmd:DS_AssociationTypeCode>
           </gmd:associationType>
           <gmd:initiativeType>
-            <gmd:DS_InitiativeTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/DS_InitiativeTypeCode.xml#DS_InitiativeTypeCode" codeListValue="sciencePaper">sciencePaper</gmd:DS_InitiativeTypeCode>
+            <gmd:DS_InitiativeTypeCode codeList="${esc(DS_INITIATIVE_TYPE_CODELIST)}" codeListValue="sciencePaper">sciencePaper</gmd:DS_InitiativeTypeCode>
           </gmd:initiativeType>
         </gmd:MD_AggregateInformation>
       </gmd:aggregationInfo>`)
@@ -961,7 +1072,7 @@ ${platformSection}${instrumentSections.join('\n')}
       </gmd:numberOfDimensions>
 ${axes.join('\n')}
       <gmd:cellGeometry>
-        <gmd:MD_CellGeometryCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/MD_CellGeometryCode.xml#MD_CellGeometryCode" codeListValue="${esc(cell)}">${esc(cell)}</gmd:MD_CellGeometryCode>
+        <gmd:MD_CellGeometryCode codeList="${esc(MD_CELL_GEOMETRY_CODELIST)}" codeListValue="${esc(cell)}">${esc(cell)}</gmd:MD_CellGeometryCode>
       </gmd:cellGeometry>
     </gmd:MD_GridSpatialRepresentation>
   </gmd:spatialRepresentationInfo>\n`
@@ -983,8 +1094,6 @@ ${dist.finalNotes ? `  <!-- finalNotes: ${esc(String(dist.finalNotes).trim())} -
 ` : ''}`
 
   const scopeToken = String(m.scopeCode || 'dataset').trim() || 'dataset'
-  const dateStampSource = String(m.metadataRecordDate || '').trim() || utcNowIsoZForDateStamp()
-  const dateStampXml = `  <gmd:dateStamp>${gcoDateOrDateTimeInner(dateStampSource)}</gmd:dateStamp>\n`
 
   const tiUnit = String(m.temporalExtentIntervalUnit || '').trim()
   const tiVal  = String(m.temporalExtentIntervalValue || '').trim()
@@ -996,15 +1105,34 @@ ${dist.finalNotes ? `  <!-- finalNotes: ${esc(String(dist.finalNotes).trim())} -
 
   const xmlFileId = formatNceiUxsFileIdentifierForXml(m.fileId, dist)
 
+  const supplementalInfoXml = (() => {
+    const userSup = stripUxsPilotMachineBlock(String(m.supplementalInformation || '')).trim()
+    const machine = formatUxsPilotMachineBlock(m.uxsContext)
+    const combined = [userSup, machine].filter(Boolean).join('\n\n')
+    return combined
+      ? `      <gmd:supplementalInformation><gco:CharacterString>${esc(combined)}</gco:CharacterString></gmd:supplementalInformation>\n`
+      : ''
+  })()
+
+  const distributionInfoXml = `  <gmd:distributionInfo>
+    <gmd:MD_Distribution>
+${distributionFormatBlock}${distributorXlinkXml}${transferOptionsBlock}    </gmd:MD_Distribution>
+  </gmd:distributionInfo>
+`
+
   return `<?xml version="1.0" encoding="UTF-8"?>
-<gmi:MI_Metadata xmlns:gmd="http://www.isotc211.org/2005/gmd"
+<gmi:MI_Metadata xmlns:gmi="http://www.isotc211.org/2005/gmi"
                  xmlns:gco="http://www.isotc211.org/2005/gco"
-                 xmlns:gmi="http://www.isotc211.org/2005/gmi"
-                 xmlns:gmx="http://www.isotc211.org/2005/gmx"
+                 xmlns:gmd="http://www.isotc211.org/2005/gmd"
                  xmlns:gml="http://www.opengis.net/gml/3.2"
+                 xmlns:gmx="http://www.isotc211.org/2005/gmx"
+                 xmlns:gsr="http://www.isotc211.org/2005/gsr"
+                 xmlns:gss="http://www.isotc211.org/2005/gss"
+                 xmlns:gts="http://www.isotc211.org/2005/gts"
+                 xmlns:srv="http://www.isotc211.org/2005/srv"
                  xmlns:xlink="http://www.w3.org/1999/xlink"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                 xsi:schemaLocation="http://www.isotc211.org/2005/gmi http://schemas.opengis.net/iso/19115/-2/gmi/1.0/gmi.xsd">
+                 xsi:schemaLocation="http://www.isotc211.org/2005/gmi https://data.noaa.gov/resources/iso19139/schema.xsd">
   <!-- gmd:parentIdentifier is intentionally omitted here.
        Only BEDI granule profiles (hierarchyLevel=dataset with a parent collection)
        should emit parentIdentifier.  Mission and collection records are
@@ -1013,16 +1141,16 @@ ${dist.finalNotes ? `  <!-- finalNotes: ${esc(String(dist.finalNotes).trim())} -
   <gmd:fileIdentifier>
     <gco:CharacterString>${esc(xmlFileId)}</gco:CharacterString>
   </gmd:fileIdentifier>
-${dateStampXml}  <gmd:hierarchyLevel>
-    <gmd:MD_ScopeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gml/Codelist/MD_ScopeCode.xml#MD_ScopeCode" codeListValue="${esc(scopeToken)}">${esc(scopeToken)}</gmd:MD_ScopeCode>
+  <gmd:hierarchyLevel>
+    <gmd:MD_ScopeCode codeList="${esc(MD_SCOPE_CODE_CODELIST)}" codeListValue="${esc(scopeToken)}">${esc(scopeToken)}</gmd:MD_ScopeCode>
   </gmd:hierarchyLevel>
-${metaStdXml}${refSystemXml}${contactRootXml}  <gmd:identificationInfo>
+${metadataContactXml}${dateStampXml}${metaStdXml}${spatialReprXml}${refSystemXml}  <gmd:identificationInfo>
     <gmd:MD_DataIdentification>
       <gmd:citation>
         <gmd:CI_Citation>
           <gmd:title><gco:CharacterString>${esc(m.title)}</gco:CharacterString></gmd:title>
           ${m.alternateTitle ? `<gmd:alternateTitle><gco:CharacterString>${esc(m.alternateTitle)}</gco:CharacterString></gmd:alternateTitle>` : ''}
-          ${citationDates.trim() ? `${citationDates}\n          ` : ''}
+          ${citationDatesResolved}
           ${m.doi ? `<gmd:identifier><gmd:MD_Identifier><gmd:code><gco:CharacterString>${esc(m.doi)}</gco:CharacterString></gmd:code></gmd:MD_Identifier></gmd:identifier>` : ''}
           ${m.accession ? `<gmd:identifier><gmd:MD_Identifier><gmd:code><gco:CharacterString>${esc(m.accession)}</gco:CharacterString></gmd:code></gmd:MD_Identifier></gmd:identifier>` : ''}
           ${citationPartiesXml ? `${citationPartiesXml}\n          ` : ''}
@@ -1030,15 +1158,16 @@ ${metaStdXml}${refSystemXml}${contactRootXml}  <gmd:identificationInfo>
       </gmd:citation>
       <gmd:abstract><gco:CharacterString>${esc(m.abstract)}</gco:CharacterString></gmd:abstract>
       <gmd:purpose><gco:CharacterString>${esc(m.purpose)}</gco:CharacterString></gmd:purpose>
-      ${(() => {
-        const userSup = stripUxsPilotMachineBlock(String(m.supplementalInformation || '')).trim()
-        const machine = formatUxsPilotMachineBlock(m.uxsContext)
-        const combined = [userSup, machine].filter(Boolean).join('\n\n')
-        return combined
-          ? `<gmd:supplementalInformation><gco:CharacterString>${esc(combined)}</gco:CharacterString></gmd:supplementalInformation>`
-          : ''
-      })()}
-      <gmd:extent>
+      <gmd:status>
+        <gmd:MD_ProgressCode codeList="${esc(MD_PROGRESS_CODE_CODELIST)}" codeListValue="${esc(progressCode)}">${esc(progressCode)}</gmd:MD_ProgressCode>
+      </gmd:status>
+${resourcePointOfContactXml}${resourceMaintenanceXml}${graphicOverviewXml}${kwBlock('sciencekeywords')}${kwBlock('datacenters')}${kwBlock('platforms')}${kwBlock('instruments')}${kwBlock('locations')}${kwBlock('projects')}${kwBlock('providers')}${platformInstanceFacetXml}${legalXml}${docucompXml}${aggXml}      <gmd:language>
+        <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/php/code_list.php" codeListValue="${esc(m.language)}">${esc(m.language)}</gmd:LanguageCode>
+      </gmd:language>
+      <gmd:characterSet>
+        <gmd:MD_CharacterSetCode codeList="${esc(MD_CHARACTER_SET_CODELIST)}" codeListValue="${esc(m.characterSet || 'utf8')}">${esc(m.characterSet || 'utf8')}</gmd:MD_CharacterSetCode>
+      </gmd:characterSet>
+${topicCategoriesXml ? `${topicCategoriesXml}\n` : ''}      <gmd:extent>
         <gmd:EX_Extent>
 ${extentDescXml}          <gmd:geographicElement>
             <gmd:EX_GeographicBoundingBox>
@@ -1053,10 +1182,10 @@ ${extentDescXml}          <gmd:geographicElement>
               <gmd:extent>
                 <gml:TimePeriod gml:id="tp1">
                   ${m.startDate
-                    ? `<gml:beginPosition>${esc(m.startDate)}</gml:beginPosition>`
+                    ? `<gml:beginPosition>${gmlTemporalPositionText(m.startDate)}</gml:beginPosition>`
                     : `<gml:beginPosition indeterminatePosition="unknown"/>`}
                   ${m.endDate
-                    ? `<gml:endPosition>${esc(m.endDate)}</gml:endPosition>`
+                    ? `<gml:endPosition>${gmlTemporalPositionText(m.endDate)}</gml:endPosition>`
                     : `<gml:endPosition indeterminatePosition="unknown"/>`}${timeIntervalXml}
                 </gml:TimePeriod>
               </gmd:extent>
@@ -1064,77 +1193,10 @@ ${extentDescXml}          <gmd:geographicElement>
           </gmd:temporalElement>
 ${verticalXml}        </gmd:EX_Extent>
       </gmd:extent>
-      <gmd:pointOfContact>
-        <gmd:CI_ResponsibleParty>
-          <gmd:individualName><gco:CharacterString>${esc(m.individualName)}</gco:CharacterString></gmd:individualName>
-          <gmd:organisationName><gco:CharacterString>${esc(m.org)}</gco:CharacterString></gmd:organisationName>
-${rorXml}          <gmd:contactInfo>
-            <gmd:CI_Contact>
-              <gmd:address>
-                <gmd:CI_Address>
-                  <gmd:electronicMailAddress><gco:CharacterString>${esc(m.email)}</gco:CharacterString></gmd:electronicMailAddress>
-                </gmd:CI_Address>
-              </gmd:address>
-              ${contactExtra}
-            </gmd:CI_Contact>
-          </gmd:contactInfo>
-        </gmd:CI_ResponsibleParty>
-      </gmd:pointOfContact>
-${kwBlock('sciencekeywords')}${kwBlock('datacenters')}${kwBlock('platforms')}${kwBlock('instruments')}${kwBlock('locations')}${kwBlock('projects')}${kwBlock('providers')}${platformInstanceFacetXml}
-      <gmd:status>
-        <gmd:MD_ProgressCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ProgressCode" codeListValue="${esc(progressCode)}">${esc(progressCode)}</gmd:MD_ProgressCode>
-      </gmd:status>
-      <gmd:language>
-        <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/php/code_list.php" codeListValue="${esc(m.language)}">${esc(m.language)}</gmd:LanguageCode>
-      </gmd:language>
-      <gmd:characterSet>
-        <gmd:MD_CharacterSetCode codeListValue="${esc(m.characterSet || 'utf8')}">${esc(m.characterSet || 'utf8')}</gmd:MD_CharacterSetCode>
-      </gmd:characterSet>
-${topicCategoriesXml ? `${topicCategoriesXml}\n` : ''}${resourceMaintenanceXml}${graphicOverviewXml}${legalXml}${docucompXml}${aggXml}    </gmd:MD_DataIdentification>
+${supplementalInfoXml}    </gmd:MD_DataIdentification>
   </gmd:identificationInfo>
-${spatialReprXml}${acquisitionXml ? `${acquisitionXml}\n` : ''}  <gmd:contentInfo>
-${sensorBlocks || '  <!-- sensors -->'}
-  </gmd:contentInfo>
-${dataQualityXml}  <gmd:distributionInfo>
-    <gmd:MD_Distribution>
-${distributorXlinkXml}      <gmd:distributionFormat>
-        <gmd:MD_Format>
-          <gmd:name><gco:CharacterString>${esc(dist.distributionFormatName || dist.format)}</gco:CharacterString></gmd:name>
-          ${dist.distributionFileFormat ? `<gmd:version><gco:CharacterString>${esc(dist.distributionFileFormat)}</gco:CharacterString></gmd:version>` : ''}
-        </gmd:MD_Format>
-      </gmd:distributionFormat>
-      ${dist.distributionFeesText || dist.distributionOrderingInstructions
-        ? `<gmd:distributionOrderProcess><gmd:MD_StandardOrderProcess>${
-            dist.distributionFeesText
-              ? `<gmd:fees><gco:CharacterString>${esc(dist.distributionFeesText)}</gco:CharacterString></gmd:fees>`
-              : ''
-          }${
-            dist.distributionOrderingInstructions
-              ? `<gmd:orderingInstructions><gco:CharacterString>${esc(dist.distributionOrderingInstructions)}</gco:CharacterString></gmd:orderingInstructions>`
-              : ''
-          }</gmd:MD_StandardOrderProcess></gmd:distributionOrderProcess>`
-        : ''}
-      <gmd:transferOptions>
-        <gmd:MD_DigitalTransferOptions>
-          ${dist.metadataLandingUrl ? `<gmd:onLine><gmd:CI_OnlineResource><gmd:linkage><gmd:URL>${esc(dist.metadataLandingUrl)}</gmd:URL></gmd:linkage><gmd:name><gco:CharacterString>${esc(dist.metadataLandingLinkName || dist.downloadLinkName || 'metadata')}</gco:CharacterString></gmd:name>${
-            dist.metadataLandingDescription
-              ? `<gmd:description><gco:CharacterString>${esc(dist.metadataLandingDescription)}</gco:CharacterString></gmd:description>`
-              : ''
-          }</gmd:CI_OnlineResource></gmd:onLine>` : ''}
-          ${dist.landingUrl ? `<gmd:onLine><gmd:CI_OnlineResource><gmd:linkage><gmd:URL>${esc(dist.landingUrl)}</gmd:URL></gmd:linkage></gmd:CI_OnlineResource></gmd:onLine>` : ''}
-          ${dist.downloadUrl ? `<gmd:onLine><gmd:CI_OnlineResource><gmd:linkage><gmd:URL>${esc(dist.downloadUrl)}</gmd:URL></gmd:linkage>${
-            dist.downloadLinkName
-              ? `<gmd:name><gco:CharacterString>${esc(dist.downloadLinkName)}</gco:CharacterString></gmd:name>`
-              : ''
-          }<gmd:protocol><gco:CharacterString>${esc(dist.downloadProtocol || 'HTTPS')}</gco:CharacterString></gmd:protocol>${
-            dist.downloadLinkDescription
-              ? `<gmd:description><gco:CharacterString>${esc(dist.downloadLinkDescription)}</gco:CharacterString></gmd:description>`
-              : ''
-          }</gmd:CI_OnlineResource></gmd:onLine>` : ''}
-        </gmd:MD_DigitalTransferOptions>
-      </gmd:transferOptions>
-    </gmd:MD_Distribution>
-  </gmd:distributionInfo>
+${sensorContentInfoXml}
+${distributionInfoXml}${dataQualityXml}${acquisitionXml ? `${acquisitionXml}` : ''}
 ${workflowComment}  <!-- metadataMaintenanceFrequency: ${esc(dist.metadataMaintenanceFrequency || 'asNeeded')} -->
   <!-- output flags: useNceiMetadataContactXlink=${useNceiMeta} omitRootReferenceSystemInfo=${omitRef} -->
 </gmi:MI_Metadata>

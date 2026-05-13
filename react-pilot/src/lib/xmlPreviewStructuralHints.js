@@ -14,9 +14,9 @@ export function analyzeMissionPreviewXml(xml) {
     messages.push(
       'No xsi:schemaLocation on the root element — many desktop validators require it; adding the GMI schema URL often removes hundreds of “cannot resolve” errors.',
     )
-  } else if (/xsi:schemaLocation\s*=\s*"[^"]*https:\/\/data\.noaa\.gov\/resources\/iso19139\/schema\.xsd/.test(head)) {
+  } else if (/schemas\.opengis\.net\/iso\/19115\/-2\/gmi\/1\.0\/gmi\.xsd/.test(head)) {
     messages.push(
-      'schemaLocation points at data.noaa.gov iso19139 — some offline validators still fail; try the OGC gmi.xsd URL from the preview header comment or use an online schema-aware validator.',
+      'schemaLocation uses the OGC gmi.xsd URL; NCEI UxS / collection template guidance uses https://data.noaa.gov/resources/iso19139/schema.xsd — align exports for NOAA downstream tooling.',
     )
   }
 

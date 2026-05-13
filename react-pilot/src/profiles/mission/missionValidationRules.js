@@ -14,7 +14,12 @@
  */
 
 import { normalizeMissionInstantString } from '../../lib/datetimeLocal.js'
-import { collectGcmdKeywordUuidWarnings, normalizeNceiAccessionToken, sensorRowIsInactive } from '../../lib/pilotValidation.js'
+import {
+  collectGcmdKeywordUuidWarnings,
+  isAcronymExplainedInAbstractText,
+  normalizeNceiAccessionToken,
+  sensorRowIsInactive,
+} from '../../lib/pilotValidation.js'
 import { buildUxsOperationalRelationship, getUxsLayerDefinition } from '../../lib/uxsOperationalModel.js'
 
 // ---- primitive validators (mirrored from pilotValidation.js) ----
@@ -121,10 +126,7 @@ function abstractQualityIssues(state) {
   }
   const acronyms = [...new Set(abstract.match(/\b[A-Z]{2,8}\b/g) || [])]
     .filter((token) => !COMMON_ABSTRACT_ACRONYMS.has(token))
-  const unexplained = acronyms.find((token) => {
-    const escaped = token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-    return !new RegExp(`\\([^)]*\\b${escaped}\\b[^)]*\\)`).test(abstract)
-  })
+  const unexplained = acronyms.find((token) => !isAcronymExplainedInAbstractText(abstract, token))
   if (unexplained) {
     issues.push({
       severity: 'w',

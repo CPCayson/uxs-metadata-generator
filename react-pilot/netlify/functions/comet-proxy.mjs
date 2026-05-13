@@ -20,7 +20,10 @@
  *
  * Environment variables (Netlify → Site config → Environment variables):
  *   COMET_BASE_URL      — https://data.noaa.gov/cedit  (no trailing slash)
- *   COMET_SESSION_ID    — JSESSIONID value from a valid CoMET session cookie.
+ *   COMET_SESSION_ID    — Optional JSESSIONID fallback when the browser does not
+ *                         send `X-Comet-JSessionId` (CI, scripts, or first paint).
+ *                         In the React app, a value from `action=login` is sent on
+ *                         that header and takes precedence over this env var.
  *   METASERVER_BASE_URL — https://data.noaa.gov/metaserver (no trailing slash; optional override)
  *   METASERVER_SESSION_ID — JSESSIONID for metaserver endpoints (optional; falls back to COMET_SESSION_ID)
  *
@@ -29,8 +32,8 @@
  *
  * Auth note:
  *   CoMET uses form-based session auth (JSESSIONID cookie), NOT Bearer tokens.
- *   Store the JSESSIONID as COMET_SESSION_ID. It expires when the session ends,
- *   so refresh it periodically or use the login action to re-authenticate.
+ *   Prefer in-browser login (`action=login`) so sessions rotate without redeploying;
+ *   use COMET_SESSION_ID only as a server-side / headless fallback.
  */
 
 const DEFAULT_ALLOWED_ORIGINS = ['http://localhost:5173', 'http://127.0.0.1:5173']
@@ -65,12 +68,13 @@ export default async (req) => {
 
   const COMET_BASE = (process.env.COMET_BASE_URL ?? 'https://data.noaa.gov/cedit').replace(/\/$/, '')
   const METASERVER_BASE = (process.env.METASERVER_BASE_URL ?? 'https://data.noaa.gov/metaserver').replace(/\/$/, '')
-  const SESSION_ID = process.env.COMET_SESSION_ID ?? ''
-  const METASERVER_SESSION_ID = process.env.METASERVER_SESSION_ID ?? SESSION_ID
-  const headerSessionId = req.headers.get('x-comet-jsessionid') ?? ''
-  const headerMetaserverSessionId = req.headers.get('x-metaserver-jsessionid') ?? ''
-  const effectiveSessionId = headerSessionId || SESSION_ID
-  const effectiveMetaserverSessionId = headerMetaserverSessionId || METASERVER_SESSION_ID
+  const envCometSession = (process.env.COMET_SESSION_ID ?? '').trim()
+  const envMetaserverSession = (process.env.METASERVER_SESSION_ID ?? '').trim() || envCometSession
+  const headerSessionId = (req.headers.get('x-comet-jsessionid') ?? '').trim()
+  const headerMetaserverSessionId = (req.headers.get('x-metaserver-jsessionid') ?? '').trim()
+  // Client header wins when non-empty so in-app login always overrides stale deploy env.
+  const effectiveSessionId = headerSessionId || envCometSession
+  const effectiveMetaserverSessionId = headerMetaserverSessionId || envMetaserverSession
 
   const url    = new URL(req.url)
   const action = url.searchParams.get('action') ?? ''
@@ -144,9 +148,9 @@ export default async (req) => {
         JSON.stringify({
           ok: true,
           hasCometSession: Boolean(effectiveSessionId),
-          cometSessionSource: headerSessionId ? 'header' : SESSION_ID ? 'env' : 'none',
+          cometSessionSource: headerSessionId ? 'header' : envCometSession ? 'env' : 'none',
           hasMetaserverSession: Boolean(effectiveMetaserverSessionId),
-          metaserverSessionSource: headerMetaserverSessionId ? 'header' : METASERVER_SESSION_ID ? 'env' : 'none',
+          metaserverSessionSource: headerMetaserverSessionId ? 'header' : envMetaserverSession ? 'env' : 'none',
         }),
         { status: 200, headers: { ...CORS, 'Content-Type': 'application/json' } },
       )
@@ -164,11 +168,11 @@ export default async (req) => {
 
       // 3xx = session expired — CoMET redirects to login page
       if (upstream.status >= 300 && upstream.status < 400) {
-        return jsonError(req, 'CoMET session expired. Refresh COMET_SESSION_ID in Netlify env vars and redeploy.', 401)
+        return jsonError(req, 'CoMET session expired or invalid. Log in again from the app (CoMET panel), or update COMET_SESSION_ID for server-only use.', 401)
       }
 
       if (upstream.status === 401 || upstream.status === 403) {
-        return jsonError(req, 'CoMET access denied. Check COMET_SESSION_ID and ensure your account has access to this record.', 401)
+        return jsonError(req, 'CoMET access denied. Log in again or verify your account can access this record.', 401)
       }
 
       if (upstream.status === 404) {
@@ -180,7 +184,7 @@ export default async (req) => {
 
       // If CoMET returned HTML (login page) instead of XML, session has expired
       if (body.trim().toLowerCase().startsWith('<!doctype') || body.trim().toLowerCase().startsWith('<html')) {
-        return jsonError(req, 'CoMET session expired. Refresh COMET_SESSION_ID in Netlify env vars and redeploy.', 401)
+        return jsonError(req, 'CoMET session expired or invalid. Log in again from the app, or refresh COMET_SESSION_ID for server-only use.', 401)
       }
 
       return new Response(body, { status: upstream.status, headers: { ...CORS, 'Content-Type': contentType } })

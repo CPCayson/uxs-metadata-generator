@@ -25,3 +25,8 @@ release
 *.njsproj
 *.sln
 *.sw?
+
+# Repomix LLM snapshot (regenerate: npm run repomix / npm run repomix:critical)
+repomix-output.*
+repomix-critical-output.*
+repopack-output.*

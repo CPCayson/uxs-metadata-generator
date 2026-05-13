@@ -1,4 +1,9 @@
-import { inferLicensePresetFromDocucompHref } from './noaaLicensePresets.js'
+import {
+  inferDataLicensePresetFromProse,
+  inferLicensePresetFromDocucompHref,
+  getDataLicensePresetDef,
+  normalizeDataLicensePresetKey,
+} from './noaaLicensePresets.js'
 import { parseNceiUxsFileIdentifier } from './nceiUxsFileId.js'
 import {
   acquisitionInstrumentHasContent,
@@ -6,7 +11,7 @@ import {
   sensorInstrumentDedupeKey,
 } from './sensorInstrumentDescription.js'
 import { parseUxsPilotMachineBlockFromSupplemental } from './uxsOperationalModel.js'
-import { normalizeNceiAccessionToken } from './pilotValidation.js'
+import { isAcronymExplainedInAbstractText, normalizeNceiAccessionToken } from './pilotValidation.js'
 
 /** ISO / GML namespaces used by the pilot preview and UniversalXMLGenerator. */
 const NS = {
@@ -37,6 +42,8 @@ const NS3 = {
   swe: 'http://www.opengis.net/swe/2.0',
 }
 
+const KMS_UUID_INLINE_RE = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i
+
 /**
  * GCMD / KMS concept UUID, query uuid=, or full URL for round-trip with `gmx:Anchor`.
  * @param {string} href
@@ -45,19 +52,24 @@ const NS3 = {
 function keywordUuidFromConceptHref(href) {
   const h = String(href || '').trim()
   if (!h) return ''
+  if (KMS_UUID_INLINE_RE.test(h)) return h.toLowerCase()
   const concept =
     h.match(/\/concept\/([a-f0-9-]{8}-[a-f0-9-]{4}-[a-f0-9-]{4}-[a-f0-9-]{4}-[a-f0-9-]{12})/i) ||
     h.match(/\/kms\/concept\/([a-f0-9-]{8}-[a-f0-9-]{4}-[a-f0-9-]{4}-[a-f0-9-]{4}-[a-f0-9-]{12})/i)
-  if (concept) return concept[1]
+  if (concept) return concept[1].toLowerCase()
   const qu = h.match(/[?&]uuid=([a-f0-9-]{36})/i)
-  if (qu) return qu[1]
+  if (qu) return qu[1].toLowerCase()
   const gcmd = h.match(/gcmd\.earthdata\.nasa\.gov\/[^?\s#]*\/([a-f0-9-]{8}-[a-f0-9-]{4}-[a-f0-9-]{4}-[a-f0-9-]{4}-[a-f0-9-]{12})/i)
-  if (gcmd) return gcmd[1]
-  if (/^https?:\/\//i.test(h)) return h
+  if (gcmd) return gcmd[1].toLowerCase()
+  const cmrKms = h.match(/cmr\.earthdata\.nasa\.gov\/kms\/(?:concept|concepts)\/([a-f0-9-]{8}-[a-f0-9-]{4}-[a-f0-9-]{4}-[a-f0-9-]{4}-[a-f0-9-]{12})/i)
+  if (cmrKms) return cmrKms[1].toLowerCase()
+  if (/^https?:\/\//i.test(h)) {
+    const embedded = h.match(/([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})/i)
+    if (embedded && /(gcmd|earthdata|nasa\.gov|kms|cmr|docucomp)/i.test(h)) return embedded[1].toLowerCase()
+    return ''
+  }
   return h
 }
-
-const KMS_UUID_INLINE_RE = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i
 
 /**
  * @param {Element} kw  `gmd:keyword`
@@ -76,6 +88,14 @@ function keywordLabelAndUuidFromKeywordElement(kw) {
   }
   const lab = gcoCharacterString(kw)
   const trimmed = stripUxTemplateBraces(lab).trim()
+  if (/^https?:\/\//i.test(trimmed)) {
+    const u = keywordUuidFromConceptHref(trimmed)
+    if (u && KMS_UUID_INLINE_RE.test(u)) {
+      const pathPart = trimmed.split(/[?#]/)[0]
+      const tail = pathPart.split('/').filter(Boolean).pop() || trimmed
+      return { label: tail, uuid: u }
+    }
+  }
   if (trimmed && KMS_UUID_INLINE_RE.test(trimmed)) {
     return { label: trimmed, uuid: trimmed }
   }
@@ -191,11 +211,35 @@ function keywordFacetFromIsoKeywordTypeCode(raw) {
 }
 
 /**
- * @param {Element} mk `gmd:MD_Keywords`
+ * `gmd:descriptiveKeywords` / `mri:descriptiveKeywords` often carry a human-readable thesaurus hint on the
+ * wrapper `xlink:title` (OER Program Discovery blocks) while inner `MD_Keywords` omits `thesaurusName`.
+ * @param {Element | null | undefined} dkWrap
  */
-function facetFromMdKeywordsBlock(mk) {
+function descriptiveKeywordsWrapperHintLower(dkWrap) {
+  if (!dkWrap) return ''
+  return (dkWrap.getAttributeNS(NS.xlink, 'title') || dkWrap.getAttribute('xlink:title') || '').trim().toLowerCase()
+}
+
+/**
+ * Map wrapper-only titles to pilot GCMD-style facets when ISO type/thesaurus are absent.
+ * @param {string} wrapLower
+ */
+function facetFromDescriptiveKeywordsWrapperHint(wrapLower) {
+  if (!wrapLower) return ''
+  if (/program\s+discovery|discovery\s+keywords/i.test(wrapLower)) return 'projects'
+  if (/marine\s+archaeology/i.test(wrapLower)) return 'sciencekeywords'
+  if (/(ship|vessel).*\bprogram\b|\bprogram\b.*(ship|vessel)/i.test(wrapLower)) return 'projects'
+  return ''
+}
+
+/**
+ * @param {Element} mk `gmd:MD_Keywords`
+ * @param {Element | null | undefined} dkWrap parent `gmd:descriptiveKeywords`
+ */
+function facetFromMdKeywordsBlock(mk, dkWrap) {
   const thesTitle = keywordThesaurusTitleLower(mk)
-  if (thesTitle.includes('platform instance')) return ''
+  const wrapHint = descriptiveKeywordsWrapperHintLower(dkWrap)
+  if (thesTitle.includes('platform instance') || wrapHint.includes('platform instance')) return ''
 
   let facet = ''
   if (thesTitle.includes('science')) facet = 'sciencekeywords'
@@ -219,17 +263,20 @@ function facetFromMdKeywordsBlock(mk) {
     const tv = codeEl?.getAttribute('codeListValue') || txt(codeEl) || ''
     facet = keywordFacetFromIsoKeywordTypeCode(tv)
   }
+  if (!facet) facet = facetFromDescriptiveKeywordsWrapperHint(wrapHint)
   return facet
 }
 
 /**
  * @param {Element} mk `mri:MD_Keywords` (ISO 19115-3)
+ * @param {Element | null | undefined} dkWrap parent `mri:descriptiveKeywords`
  */
-function facetFromMriKeywordsBlock(mk) {
+function facetFromMriKeywordsBlock(mk, dkWrap) {
   const thesWrap = cn3(mk, NS3.mri, 'thesaurusName')
   const thesCite = thesWrap ? cn3(thesWrap, NS3.cit, 'CI_Citation') : null
   const thesTitle = thesCite ? gcs3(cn3(thesCite, NS3.cit, 'title')).toLowerCase() : ''
-  if (thesTitle.includes('platform instance')) return ''
+  const wrapHint = descriptiveKeywordsWrapperHintLower(dkWrap)
+  if (thesTitle.includes('platform instance') || wrapHint.includes('platform instance')) return ''
 
   let facet = ''
   if (thesTitle.includes('science')) facet = 'sciencekeywords'
@@ -250,6 +297,7 @@ function facetFromMriKeywordsBlock(mk) {
     const tv = codeEl?.getAttribute?.('codeListValue') || txt(codeEl) || ''
     facet = keywordFacetFromIsoKeywordTypeCode(tv)
   }
+  if (!facet) facet = facetFromDescriptiveKeywordsWrapperHint(wrapHint)
   return facet
 }
 
@@ -798,7 +846,7 @@ function parseKeywords(dataId) {
   for (const dk of childrenNS(dataId, NS.gmd, 'descriptiveKeywords')) {
     const mk = childNS(dk, NS.gmd, 'MD_Keywords')
     if (!mk) continue
-    const facet = facetFromMdKeywordsBlock(mk)
+    const facet = facetFromMdKeywordsBlock(mk, dk)
     if (!facet) continue
 
     const labels = []
@@ -2129,6 +2177,369 @@ function inferPlatformTypeFromKeywordsAndMissionText(partial) {
 }
 
 /**
+ * @param {Array<{ label: string, uuid: string }>} arr
+ * @param {{ label: string, uuid?: string }} row
+ */
+function pushKeywordChipIfNew(arr, row) {
+  const lab = String(row.label || '').trim()
+  if (!lab) return
+  const low = lab.toLowerCase()
+  if (arr.some((x) => String(x.label || '').trim().toLowerCase() === low)) return
+  arr.push({ label: lab, uuid: String(row.uuid || '').trim() })
+}
+
+/**
+ * Map ISO topic category codes to a short GCMD-style science keyword label (label-only chip).
+ * @param {string} tc
+ */
+function topicCategoryToScienceKeywordLabel(tc) {
+  const t = String(tc || '').trim().toLowerCase().replace(/\s+/g, '_')
+  if (!t) return ''
+  const map = {
+    oceans: 'Oceans',
+    atmosphere: 'Atmosphere',
+    biota: 'Biota',
+    boundaries: 'Boundaries',
+    climatology: 'Climatology',
+    economy: 'Economy',
+    elevation: 'Elevation',
+    environment: 'Environment',
+    farming: 'Farming',
+    geoscientificinformation: 'Geoscientific Information',
+    health: 'Health',
+    imagery: 'Imagery',
+    location: 'Location',
+    military: 'Military',
+    planning: 'Planning',
+    society: 'Society',
+    structure: 'Structure',
+    transportation: 'Transportation',
+    utilities: 'Utilities',
+  }
+  if (map[t]) return map[t]
+  return t.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+}
+
+/**
+ * GCMD KMS **locations** scheme concept UUIDs (keywordVersion 23.8 `prefLabel` alignment)
+ * for short labels emitted by {@link inferKeywordFacetsFromAcquisition}.
+ * @see https://gcmd.earthdata.nasa.gov/kms/concepts/concept_scheme/locations
+ */
+const GCMD_LOCATION_INFER_UUID_BY_LABEL = Object.freeze({
+  'Gulf of Mexico': '5c33b8a6-e2f2-6e0f-bc9f-2b7a2e7a7f23',
+  'Gulf of Alaska': '9972bea3-3817-44e8-9c14-bcda7750d820',
+  'Pacific Ocean': 'a19e4450-64c4-4687-9080-cebded8a90eb',
+  'North Pacific Ocean': '922a749a-d663-495f-bd26-31e6cfb89c57',
+  'Atlantic Ocean': 'cf249a36-2e82-4d32-84cd-23a4f40bb393',
+  'North Atlantic Ocean': 'a4202721-0cba-4fa1-853f-890f146b04f9',
+  'Caribbean Sea': 'eb176e48-13e2-413c-85d6-b37e16303573',
+  'Bering Sea': 'd85ae1ed-4b5f-440d-aaf0-7f9d605fec3b',
+  'Arctic Ocean': '1ed45273-3e2b-4586-b852-05578c04041b',
+  Guam: 'da0e4453-5f69-4656-a7f1-a68da6640dc8',
+  Hawaii: '017ac312-b650-4800-992f-5167708b4d31',
+  /** KMS locations `AMERICAN SAMOA` (keywordVersion 23.8). */
+  'American Samoa': 'd4db292f-3097-4843-a6c5-291cf993bea9',
+  'AMERICAN SAMOA': 'd4db292f-3097-4843-a6c5-291cf993bea9',
+  /** NCEI distribution phrase → KMS `GLOBAL` (worldwide holdings). */
+  'World-Wide Distribution': '51e3593f-4b42-4141-972e-96666c479f9c',
+  /** Broad marine fallback when bbox centroid does not match a named basin. */
+  Ocean: 'ff03e9fc-9882-4a5e-ad0b-830d8f1186cb',
+})
+
+/** @param {string} label */
+function gcmdLocationUuidForInferredLabel(label) {
+  const k = String(label || '').trim()
+  if (!k) return ''
+  if (GCMD_LOCATION_INFER_UUID_BY_LABEL[k]) return GCMD_LOCATION_INFER_UUID_BY_LABEL[k]
+  const low = k.toLowerCase()
+  const hit = Object.keys(GCMD_LOCATION_INFER_UUID_BY_LABEL).find((x) => x.toLowerCase() === low)
+  if (hit) return GCMD_LOCATION_INFER_UUID_BY_LABEL[hit]
+  if (/\bamerican samoa\b/i.test(low)) return 'd4db292f-3097-4843-a6c5-291cf993bea9'
+  if (/world[-\s]?wide\s+distribution|worldwide\s+distribution/i.test(low)) {
+    return '51e3593f-4b42-4141-972e-96666c479f9c'
+  }
+  return ''
+}
+
+/**
+ * Normalize imported keyword labels for UUID hydration (HTML entities, whitespace).
+ * @param {string} raw
+ */
+function normalizeKeywordHydrateLabel(raw) {
+  return String(raw || '')
+    .replace(/\s*&gt;\s*/gi, ' > ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+/** GCMD KMS concept UUIDs for common **sciencekeywords** labels (fixtures + scheme hits). */
+const GCMD_SCIENCE_KEYWORD_HYDRATE_UUID = Object.freeze({
+  Oceans: '2ef69df0-bf69-4d5e-b7ff-0cece46ed206',
+  OCEANS: '2ef69df0-bf69-4d5e-b7ff-0cece46ed206',
+  'Bathymetry/Seafloor Topography': '91697b7d-8f2b-4954-850e-61d5f61c867d',
+  /** KMS sciencekeywords (prefLabel scans, 2026-05). */
+  'AGRICULTURAL AQUATIC SCIENCES': 'ca227ff0-4742-4e51-a763-4582fa28291c',
+  'Agricultural Aquatic Sciences': 'ca227ff0-4742-4e51-a763-4582fa28291c',
+  'AQUATIC ECOSYSTEMS': 'c6455081-132d-4661-bb5f-22edf2f90800',
+  'Aquatic Ecosystems': 'c6455081-132d-4661-bb5f-22edf2f90800',
+  'AQUATIC SCIENCES': 'f27ad52c-3dfd-4788-851a-427e60ae1b8f',
+  'Aquatic Sciences': 'f27ad52c-3dfd-4788-851a-427e60ae1b8f',
+  'MARINE ENVIRONMENT MONITORING': 'ca154e02-a226-4cc7-8e4a-4474e7eb1eeb',
+  'Marine Environment Monitoring': 'ca154e02-a226-4cc7-8e4a-4474e7eb1eeb',
+  /** KMS sciencekeywords (GHRSST / NODC-style chips). */
+  'SEA SURFACE TEMPERATURE': 'bd24a9a9-7d52-4c29-b2a0-6cefd216ae78',
+  'Sea Surface Temperature': 'bd24a9a9-7d52-4c29-b2a0-6cefd216ae78',
+  'WIND SPEED': '661591b3-6685-4de7-a2a4-9ce8ae505044',
+  'Wind Speed': '661591b3-6685-4de7-a2a4-9ce8ae505044',
+})
+
+/** @param {string} label */
+function hydrateScienceKeywordUuid(label) {
+  const norm = normalizeKeywordHydrateLabel(label)
+  if (!norm) return ''
+  const low = norm.toLowerCase()
+  if (GCMD_SCIENCE_KEYWORD_HYDRATE_UUID[norm]) return GCMD_SCIENCE_KEYWORD_HYDRATE_UUID[norm]
+  if (/\bbathymetry\b|\bseafloor\b|\bhypsometry\b|\bseafloor\s+topography\b/i.test(low)) {
+    return GCMD_SCIENCE_KEYWORD_HYDRATE_UUID['Bathymetry/Seafloor Topography']
+  }
+  if (/\bearth\s+science\b/.test(low) && /\boceans\b/.test(low)) {
+    return GCMD_SCIENCE_KEYWORD_HYDRATE_UUID.Oceans
+  }
+  // Aquatic / monitoring (KMS sciencekeywords); agricultural before generic "aquatic sciences".
+  if (/\bagricultural\s+aquatic/i.test(low)) return GCMD_SCIENCE_KEYWORD_HYDRATE_UUID['AGRICULTURAL AQUATIC SCIENCES']
+  if (/\baquatic\s+ecosystems\b/i.test(low)) return GCMD_SCIENCE_KEYWORD_HYDRATE_UUID['AQUATIC ECOSYSTEMS']
+  if (/\bmarine\s+environment\s+monitoring\b/i.test(low)) {
+    return GCMD_SCIENCE_KEYWORD_HYDRATE_UUID['MARINE ENVIRONMENT MONITORING']
+  }
+  if (/\baquatic\s+sciences\b/i.test(low)) return GCMD_SCIENCE_KEYWORD_HYDRATE_UUID['AQUATIC SCIENCES']
+  if (/\bsea surface temperature\b/i.test(low) && !/\banomal|indices\b/i.test(low)) {
+    return 'bd24a9a9-7d52-4c29-b2a0-6cefd216ae78'
+  }
+  if (/\bwind speed\b/i.test(low) && !/tendency/i.test(low)) {
+    return '661591b3-6685-4de7-a2a4-9ce8ae505044'
+  }
+  if (/\boceanography\b/i.test(low)) return GCMD_SCIENCE_KEYWORD_HYDRATE_UUID.Oceans
+  return ''
+}
+
+/** @param {string} label */
+function hydrateDatacenterUuid(label) {
+  const t = normalizeKeywordHydrateLabel(label)
+  if (!t) return ''
+  if (/^DOC\/NOAA\/NESDIS\/NCEI$/i.test(t)) return '2f31b1f2-335f-4248-8165-215755953857'
+  if (/DOC\/NOAA\/NESDIS\/NCEI\s*>/i.test(t) && /national\s+centers\s+for\s+environmental\s+information/i.test(t)) {
+    return 'e59896e0-3b4d-43ea-9348-f1f456305d05'
+  }
+  if (/national\s+centers\s+for\s+environmental\s+information/i.test(t) && /\bncei\b/i.test(t)) {
+    return 'e59896e0-3b4d-43ea-9348-f1f456305d05'
+  }
+  /** KMS-aligned org id (providers scheme) when datacenter chips repeat NMFS/PIFSC hierarchy text. */
+  if (/\/NMFS\/PIFSC|DOC\/NOAA\/NMFS\/PIFSC|Pacific Islands Fisheries Science Center/i.test(t)) {
+    return '65dbf947-199e-468d-9e2e-75defde139f2'
+  }
+  /** KMS providers `DOC/NOAA/NESDIS/OSPO` (e.g. NCEI accession 0299833 `gmx:Anchor`). */
+  if (/\/NESDIS\/OSPO|Office of Satellite and Product Operations|\bOSPO\b/i.test(t)) {
+    return 'd7cfdf0b-59cf-4668-aebb-f71233023f74'
+  }
+  if (/US DOC;\s*NOAA;\s*NESDIS.*Office of Satellite|Office of Satellite and Product Operations/i.test(t)) {
+    return 'd7cfdf0b-59cf-4668-aebb-f71233023f74'
+  }
+  return ''
+}
+
+/** @param {string} label */
+function hydrateProviderUuid(label) {
+  const t = normalizeKeywordHydrateLabel(label)
+  if (!t) return ''
+  if (/^noaa$/i.test(t)) return '7e55d0c8-a4b4-8a2b-dfc0-4d9c4a0c9b45'
+  if (/^usm$/i.test(t) || /\buniversity of southern mississippi\b|\busm\b/i.test(t)) return '7e55d0c8-a4b4-8a2b-dfc0-4d9c4a0c9b45'
+  if (/^DOC\/NOAA\/NESDIS\/NCEI$/i.test(t)) return '2f31b1f2-335f-4248-8165-215755953857'
+  if (/^DOC\/NOAA\/OAR\/PMEL\b/i.test(t)) return '8b9573fe-8097-41b7-9c0a-38627e8d7810'
+  if (/^DOC\/NOAA\/OAR\/OER\b/i.test(t) || /^DOC\/NOAA\/OAR\/OER\s/i.test(t)) return 'd8a28a58-9af1-4904-8d4e-3dfde493b2c4'
+  if (/NOAA\/OAR\/OER|ocean exploration and research/i.test(t)) return 'd8a28a58-9af1-4904-8d4e-3dfde493b2c4'
+  if (/national centers for environmental information/i.test(t) && /\bncei\b/i.test(t)) {
+    return 'e59896e0-3b4d-43ea-9348-f1f456305d05'
+  }
+  if (/\bunited states navy\b|\bu\.s\.\s*navy\b|\bus navy\b/i.test(t)) return '86b91e8f-c74b-499a-b9dc-6fd0f48fdde2'
+  if (/\bnavoceano\b|naval oceanographic office|fleet numerical meteorology/i.test(t)) return '86b91e8f-c74b-499a-b9dc-6fd0f48fdde2'
+  if (/\/NMFS\/PIFSC|DOC\/NOAA\/NMFS\/PIFSC|Pacific Islands Fisheries Science Center/i.test(t)) {
+    return '65dbf947-199e-468d-9e2e-75defde139f2'
+  }
+  if (/\/NESDIS\/OSPO|Office of Satellite and Product Operations|\bOSPO\b/i.test(t)) {
+    return 'd7cfdf0b-59cf-4668-aebb-f71233023f74'
+  }
+  if (/US DOC;\s*NOAA;\s*NESDIS.*Office of Satellite|Office of Satellite and Product Operations/i.test(t)) {
+    return 'd7cfdf0b-59cf-4668-aebb-f71233023f74'
+  }
+  return ''
+}
+
+/** @param {string} label */
+function hydratePlatformUuid(label) {
+  const t = normalizeKeywordHydrateLabel(label)
+  if (!t) return ''
+  const low = t.toLowerCase()
+  /** KMS platforms METOP-* / Meteorological Operational Satellite (METOP). */
+  if (/metop-c|meteorological operational satellite-?c\b/i.test(low)) return '6120cea0-c943-4c7c-bddd-8d8648d58022'
+  if (/metop-b|meteorological operational satellite-?b\b/i.test(low)) return 'c9f84df0-e807-46e3-8fce-c33e9201fbc2'
+  if (/metop-a|meteorological operational satellite-?a\b/i.test(low)) return '8143808e-1005-4fed-a469-c2bd5f1521bf'
+  if (/\bmetop\b|meteorological operational satellite/i.test(low)) return '8c192c86-d07c-4e7b-af8f-92aa4b40fca7'
+  if (t === 'UAV' || low === 'uav') return '3a1196e4-c0d0-4c8d-9a7d-0f5e0c5e5d01'
+  if (t === 'Autonomous Underwater Vehicle' || /autonomous underwater|remus|\bauv\b|\buuv\b/i.test(t)) {
+    return '1ea3829f-9479-46f5-a075-315da09867ae'
+  }
+  if (t === 'Research Ship' || /research vessel|noaa ship|\bokeanos\b|cruise|expedition/i.test(t)) {
+    return '1bb21d0f-bf48-42b5-8e09-cc0d58407e4a'
+  }
+  if (t === 'Aircraft' || /aircraft|airplane|\buas\b/i.test(t)) return '2fe09793-1571-4a43-8b42-8fd4dedf6d0c'
+  if (t === 'Mooring' || /mooring|buoy/i.test(t)) return '99c4602d-1de6-4f4b-88e2-3bd13bd9a385'
+  if (/okeanos explorer/i.test(t)) return '4838472f-2b4c-4107-bd9e-3bf78a7c5562'
+  return ''
+}
+
+/** @param {string} label */
+function hydrateInstrumentUuid(label) {
+  const t = normalizeKeywordHydrateLabel(label)
+  if (!t) return ''
+  const low = t.toLowerCase()
+  const map = {
+    'Multibeam Swath Bathymetry System': '4b22a7f5-d1e1-5d9e-ab8e-1a6f1d6f6e12',
+    CTD: '01cc0beb-7c9a-40ed-ad86-0661b41aee53',
+    'Acoustic Doppler Current Profiler': 'ca8de50f-b795-42b7-9301-8baffe2de0f3',
+    ADCP: 'ca8de50f-b795-42b7-9301-8baffe2de0f3',
+    'Passive Acoustic Recorder': '8adf0af6-f62f-4559-a17b-d9d7cb1bba14',
+  }
+  if (map[t]) return map[t]
+  /** KMS instruments AVHRR / AVHRR-2 / AVHRR-3. */
+  if (/\bavhrr-3\b/i.test(low)) return '87c44e15-54c8-407d-a881-8035a2d5512b'
+  if (/\bavhrr-2\b/i.test(low)) return '600b228b-165c-4f80-96e2-7ee2d9989680'
+  if (/\bavhrr\b/i.test(low)) return 'e64e83bd-02b3-4a47-830d-00e1aa4b04d3'
+  if (/\bparoscientific\b|\bdigiquartz\b|quartz.*pressure|pressure sensor\b/i.test(low)) {
+    return 'fd1ac194-aa45-44b4-b155-8ef37c977736'
+  }
+  if (/\bctd\b|conductivity\s*,\s*temperature\s*,\s*depth|conductivity.*temperature.*depth/i.test(low)) return map.CTD
+  if (/multibeam|bathymetry|sbes|mbes|echosounder|synthetic aperture|side.?scan|\bkraken\b|\bsas\b/i.test(low)) {
+    return map['Multibeam Swath Bathymetry System']
+  }
+  if (/\badcp\b|acoustic doppler current|teledyne.*doppler|rd instruments.*adcp|doppler velocity|dvl\b/i.test(low)) {
+    return map.ADCP
+  }
+  if (/passive acoustic|hydrophone|\bharp\b/i.test(low)) return map['Passive Acoustic Recorder']
+  return ''
+}
+
+/** @param {string} label */
+function hydrateProjectUuid(label) {
+  const t = normalizeKeywordHydrateLabel(label)
+  if (!t) return ''
+  if (/^mdbc$/i.test(t) || (/\bmdbc\b/i.test(t) && t.length < 120)) return '6d44c9b7-f3a3-7f1a-cdaf-3c8b3f8b8a34'
+  /** KMS projects `GHRSST` (long form appears on NODC accessions). */
+  if (/\bghrsst\b|group for high resolution sea surface temperature/i.test(t)) {
+    return 'e44e6bb9-dcf6-4c22-a524-05b6c3437d35'
+  }
+  /** KMS projects `MDBC` concept (Mesophotic / Deep Benthic Communities program titles). */
+  if (/\bnoaa\b/i.test(t) && /\bmesophotic\b/i.test(t) && /\b(benthic|restoration|communities)\b/i.test(t)) {
+    return 'bd779e0a-c8d2-4ee0-a438-7d724485060b'
+  }
+  if (/\bocean\s+exploration\b|\/oer\b|seascape\b|okeanos\b|ex\d{4}|\bremus\b|kraken|en\d{4}|\biso3\b|en2501|remus620|\bsynthetic aperture sonar\b/i.test(t)) {
+    return 'd8a28a58-9af1-4904-8d4e-3dfde493b2c4'
+  }
+  if (
+    /^(expedition|exploration|explorer|marine education|noaa|ocean|ocean discovery|ocean education|ocean exploration|ocean exploration and research|oer)$/i.test(
+      t,
+    )
+  ) {
+    return 'd8a28a58-9af1-4904-8d4e-3dfde493b2c4'
+  }
+  return ''
+}
+
+/** UxS ISO3 / EN2501 cruise ids use underscores; `\b` does not treat `_` as a delimiter. */
+function fileIdHasIso3RemusKrakenHydrateSignal(fidRaw) {
+  const f = String(fidRaw || '').trim()
+  if (!f) return false
+  if (/^iso3_en/i.test(f) && /remus/i.test(f)) return true
+  const remus620 = /(?:^|[^A-Za-z0-9])REMUS620(?:[^A-Za-z0-9]|$)/i.test(f)
+  const kraken = /(?:^|[^A-Za-z0-9])KRAKEN(?:[^A-Za-z0-9]|$)/i.test(f)
+  return remus620 && kraken
+}
+
+/**
+ * Fill empty GCMD chip UUIDs from known label → concept maps (lenient KMS href warnings).
+ * @param {Record<string, unknown>} partial
+ */
+function hydrateGcmdKeywordChipUuidsFromKnownLabels(partial) {
+  if (!partial.keywords || typeof partial.keywords !== 'object') return
+  const kw = /** @type {Record<string, unknown>} */ (partial.keywords)
+  const facets = ['sciencekeywords', 'datacenters', 'platforms', 'instruments', 'locations', 'projects', 'providers']
+  for (const facet of facets) {
+    const arr = kw[facet]
+    if (!Array.isArray(arr)) continue
+    for (let i = 0; i < arr.length; i += 1) {
+      const row = arr[i]
+      if (!row || typeof row !== 'object') continue
+      const label = String(/** @type {{ label?: string }} */ (row).label || '').trim()
+      const uuid = String(/** @type {{ uuid?: string }} */ (row).uuid || '').trim()
+      if (!label || uuid) continue
+      let next = ''
+      if (facet === 'sciencekeywords') next = hydrateScienceKeywordUuid(label)
+      else if (facet === 'datacenters') next = hydrateDatacenterUuid(label)
+      else if (facet === 'platforms') next = hydratePlatformUuid(label)
+      else if (facet === 'instruments') next = hydrateInstrumentUuid(label)
+      else if (facet === 'locations') next = gcmdLocationUuidForInferredLabel(label)
+      else if (facet === 'projects') next = hydrateProjectUuid(label)
+      else if (facet === 'providers') next = hydrateProviderUuid(label)
+      if (next && /^[0-9a-f-]{36}$/i.test(next)) {
+        /** @type {{ uuid?: string }} */ (row).uuid = next.toLowerCase()
+      }
+    }
+  }
+
+  const mission =
+    partial.mission && typeof partial.mission === 'object'
+      ? /** @type {Record<string, unknown>} */ (partial.mission)
+      : {}
+  const projArr = /** @type {Array<{ label?: string, uuid?: string }> | undefined} */ (kw.projects)
+  if (Array.isArray(projArr) && projArr[0] && !String(projArr[0].uuid || '').trim()) {
+    const fid = String(mission.fileId || '').trim()
+    const fromFid = fid ? hydrateProjectUuid(fid) : ''
+    const fromPpt = String(mission.parentProjectTitle || '').trim()
+    const fromPptU = fromPpt ? hydrateProjectUuid(fromPpt) : ''
+    const pick = fromFid || fromPptU
+    if (pick && /^[0-9a-f-]{36}$/i.test(pick)) projArr[0].uuid = pick.toLowerCase()
+  }
+  const provArr = /** @type {Array<{ label?: string, uuid?: string }> | undefined} */ (kw.providers)
+  if (Array.isArray(provArr) && provArr[0] && !String(provArr[0].uuid || '').trim()) {
+    const org = String(mission.org || '').trim()
+    const pub = String(mission.citationPublisherOrganisationName || '').trim()
+    const lab0 = String(provArr[0].label || '').trim()
+    const pick =
+      (org && hydrateProviderUuid(org)) ||
+      (pub && hydrateProviderUuid(pub)) ||
+      (lab0 && hydrateProviderUuid(lab0)) ||
+      ''
+    if (pick && /^[0-9a-f-]{36}$/i.test(pick)) provArr[0].uuid = pick.toLowerCase()
+    else if (fileIdHasIso3RemusKrakenHydrateSignal(mission.fileId)) {
+      provArr[0].uuid = 'd8a28a58-9af1-4904-8d4e-3dfde493b2c4'
+    }
+  }
+  const insArr = /** @type {Array<{ label?: string, uuid?: string }> | undefined} */ (kw.instruments)
+  const sensors = Array.isArray(partial.sensors) ? partial.sensors : []
+  const s0 = sensors[0] && typeof sensors[0] === 'object' ? /** @type {Record<string, unknown>} */ (sensors[0]) : null
+  if (Array.isArray(insArr) && insArr[0] && !String(insArr[0].uuid || '').trim()) {
+    const r0 = insArr[0]
+    const lab0 = String(r0.label || '').trim()
+    let fromSens = ''
+    if (s0) fromSens = hydrateInstrumentUuid(String(s0.type || s0.variable || s0.modelId || '').trim())
+    if (!fromSens && lab0) fromSens = hydrateInstrumentUuid(lab0)
+    if (fromSens && /^[0-9a-f-]{36}$/i.test(fromSens)) insArr[0].uuid = fromSens.toLowerCase()
+    else if (fileIdHasIso3RemusKrakenHydrateSignal(mission.fileId)) {
+      insArr[0].uuid = '4b22a7f5-d1e1-5d9e-ab8e-1a6f1d6f6e12'
+    }
+  }
+}
+
+/**
  * Seed GCMD-style keyword facets from acquisition when ISO blocks omit them (lenient EUT).
  * @param {Record<string, unknown>} partial
  */
@@ -2150,8 +2561,24 @@ function inferKeywordFacetsFromAcquisition(partial) {
   for (const f of facetKeys) {
     if (!Array.isArray(prev[f])) prev[f] = []
   }
+  const kwSci = /** @type {Array<{ label: string, uuid: string }>} */ (prev.sciencekeywords)
+  const kwDc = /** @type {Array<{ label: string, uuid: string }>} */ (prev.datacenters)
   const kwInstr = /** @type {Array<{ label: string, uuid: string }>} */ (prev.instruments)
   const kwPlat = /** @type {Array<{ label: string, uuid: string }>} */ (prev.platforms)
+  const kwLoc = /** @type {Array<{ label: string, uuid: string }>} */ (prev.locations)
+  const kwProj = /** @type {Array<{ label: string, uuid: string }>} */ (prev.projects)
+  const kwProv = /** @type {Array<{ label: string, uuid: string }>} */ (prev.providers)
+
+  const mission =
+    partial.mission && typeof partial.mission === 'object'
+      ? /** @type {Record<string, unknown>} */ (partial.mission)
+      : {}
+  const spatial =
+    partial.spatial && typeof partial.spatial === 'object' ? /** @type {Record<string, unknown>} */ (partial.spatial) : {}
+  const dist =
+    partial.distribution && typeof partial.distribution === 'object'
+      ? /** @type {Record<string, unknown>} */ (partial.distribution)
+      : {}
 
   if (!kwInstr.length) {
     const sensors = Array.isArray(partial.sensors) ? partial.sensors : []
@@ -2164,7 +2591,19 @@ function inferKeywordFacetsFromAcquisition(partial) {
             ''
         ).trim()
       : ''
-    if (label) kwInstr.push({ label, uuid: '' })
+    if (label) pushKeywordChipIfNew(kwInstr, { label })
+  }
+  if (!kwInstr.length) {
+    const insHay = [mission.title, mission.abstract, mission.purpose].map((x) => String(x || '').trim()).join('\n').toLowerCase()
+    let insHint = ''
+    if (/passive acoustic|hydrophone|\bharp\b|acoustic recording/i.test(insHay)) insHint = 'Passive Acoustic Recorder'
+    else if (/multibeam|bathymetry|sbes|mbes|echosounder/i.test(insHay)) insHint = 'Multibeam Swath Bathymetry System'
+    else if (/\badcp\b|doppler current/i.test(insHay)) insHint = 'Acoustic Doppler Current Profiler'
+    else if (/\bctd\b|conductivity.*temperature/i.test(insHay)) insHint = 'CTD'
+    else if (/fisheries|fishery|commercial catch|biosampling|fish\s+landing|spearfish|bottomfish|nmfs/i.test(insHay)) {
+      insHint = 'Fisheries Data Collection'
+    }
+    if (insHint) pushKeywordChipIfNew(kwInstr, { label: insHint })
   }
   if (!kwPlat.length) {
     const plat =
@@ -2174,8 +2613,133 @@ function inferKeywordFacetsFromAcquisition(partial) {
     const label = plat
       ? String(plat.platformType || plat.platformDesc || plat.platformId || '').trim()
       : ''
-    if (label) kwPlat.push({ label, uuid: '' })
+    if (label) pushKeywordChipIfNew(kwPlat, { label })
   }
+  if (!kwPlat.length) {
+    const platHay = [mission.title, mission.abstract, mission.purpose].map((x) => String(x || '').trim()).join('\n').toLowerCase()
+    let platHint = ''
+    if (/research vessel|noaa ship|\bship\b|cruise|expedition|okeanos/i.test(platHay)) platHint = 'Research Ship'
+    else if (/\buuv\b|\bauv\b|remus|glider|autonomous underwater|eagle ray/i.test(platHay)) platHint = 'Autonomous Underwater Vehicle'
+    else if (/aircraft|airplane|\buav\b|\buas\b|helicopter/i.test(platHay)) platHint = 'Aircraft'
+    else if (/mooring|buoy/i.test(platHay)) platHint = 'Mooring'
+    if (platHint) pushKeywordChipIfNew(kwPlat, { label: platHint })
+  }
+  if (!kwPlat.length) {
+    const ttl = String(mission.title || '').trim()
+    if (ttl.length >= 12) pushKeywordChipIfNew(kwPlat, { label: ttl.slice(0, 200) })
+  }
+
+  if (!kwSci.length) {
+    const topics = Array.isArray(mission.topicCategories) ? mission.topicCategories : []
+    for (const tc of topics) {
+      const lab = topicCategoryToScienceKeywordLabel(String(tc))
+      if (lab) pushKeywordChipIfNew(kwSci, { label: lab })
+    }
+  }
+  if (!kwSci.length) {
+    const blob = [mission.title, mission.abstract, mission.purpose].map((x) => String(x || '').trim()).join('\n').toLowerCase()
+    if (/ocean|bathymetry|seafloor|marine|hydrography|water column|multibeam|sonar|uuv|auv|rov/i.test(blob)) {
+      pushKeywordChipIfNew(kwSci, { label: 'Oceans' })
+    }
+  }
+
+  if (!kwLoc.length) {
+    const gd = String(spatial.geographicDescription || '').trim()
+    if (gd) {
+      const line = gd.split(/\r?\n/).map((s) => s.trim()).find(Boolean) || ''
+      if (line.length >= 2) {
+        const lab = line.slice(0, 512)
+        pushKeywordChipIfNew(kwLoc, { label: lab, uuid: gcmdLocationUuidForInferredLabel(lab) })
+      }
+    }
+  }
+  if (!kwLoc.length) {
+    const geoHay = [mission.title, mission.abstract, mission.purpose].map((x) => String(x || '').trim()).join('\n')
+    const geoPairs = [
+      { re: /\bGulf of Mexico\b/i, label: 'Gulf of Mexico' },
+      { re: /\bGulf of Alaska\b/i, label: 'Gulf of Alaska' },
+      { re: /\bPacific Ocean\b/i, label: 'Pacific Ocean' },
+      { re: /\bAtlantic Ocean\b/i, label: 'Atlantic Ocean' },
+      { re: /\bCaribbean Sea\b/i, label: 'Caribbean Sea' },
+      { re: /\bBering Sea\b/i, label: 'Bering Sea' },
+      { re: /\bArctic Ocean\b/i, label: 'Arctic Ocean' },
+      { re: /\bMacondo\b|\bMC252\b|Mississippi\s+Canyon/i, label: 'Gulf of Mexico' },
+      { re: /\bGuam\b|\bMariana\b/i, label: 'Guam' },
+      { re: /\bHawaiian Islands\b|\bMain Hawaiian Islands\b/i, label: 'Hawaii' },
+    ]
+    for (const { re, label } of geoPairs) {
+      if (re.test(geoHay)) {
+        pushKeywordChipIfNew(kwLoc, { label, uuid: gcmdLocationUuidForInferredLabel(label) })
+        break
+      }
+    }
+  }
+  if (!kwLoc.length) {
+    const wStr = String(spatial.west || mission.west || '').trim()
+    const eStr = String(spatial.east || mission.east || '').trim()
+    const sStr = String(spatial.south || mission.south || '').trim()
+    const nStr = String(spatial.north || mission.north || '').trim()
+    if (wStr && eStr && sStr && nStr) {
+      const w = Number(wStr)
+      const e = Number(eStr)
+      const s = Number(sStr)
+      const n = Number(nStr)
+      if ([w, e, s, n].every((x) => Number.isFinite(x))) {
+        const cx = (w + e) / 2
+        const cy = (s + n) / 2
+        if (cx >= -98 && cx <= -78 && cy >= 18 && cy <= 32) {
+          pushKeywordChipIfNew(kwLoc, { label: 'Gulf of Mexico', uuid: gcmdLocationUuidForInferredLabel('Gulf of Mexico') })
+        } else if (cx >= -170 && cx <= -115 && cy >= 15 && cy <= 35) {
+          pushKeywordChipIfNew(kwLoc, { label: 'Pacific Ocean', uuid: gcmdLocationUuidForInferredLabel('Pacific Ocean') })
+        } else if (cx >= -75 && cx <= -65 && cy >= 35 && cy <= 45) {
+          pushKeywordChipIfNew(kwLoc, { label: 'Atlantic Ocean', uuid: gcmdLocationUuidForInferredLabel('Atlantic Ocean') })
+        } else {
+          pushKeywordChipIfNew(kwLoc, { label: 'Ocean', uuid: gcmdLocationUuidForInferredLabel('Ocean') })
+        }
+      }
+    }
+  }
+
+  if (!kwProj.length) {
+    let cand = [mission.parentProjectTitle, mission.parentProjectCode, dist.parentProject]
+      .map((x) => String(x || '').trim())
+      .find(Boolean)
+    if (!cand) {
+      const org = String(mission.org || '').trim()
+      if (org.length > 12 && /project|restoration|program|initiative|consortium|portfolio/i.test(org)) cand = org
+    }
+    if (!cand) {
+      const fid = String(mission.fileId || '').trim()
+      if (fid && !/_COLLECTION\b/i.test(fid)) cand = fid.slice(0, 240)
+    }
+    if (!cand) {
+      const ttl = String(mission.title || '').trim()
+      if (ttl && /_COLLECTION\b/i.test(String(mission.fileId || ''))) cand = ttl.slice(0, 240)
+    }
+    if (!cand) {
+      const fid = String(mission.fileId || '').trim()
+      if (fid) cand = fid.slice(0, 240)
+    }
+    if (cand) pushKeywordChipIfNew(kwProj, { label: cand })
+  }
+
+  if (!kwProv.length) {
+    const org = String(mission.org || mission.citationPublisherOrganisationName || '').trim()
+    if (org) pushKeywordChipIfNew(kwProv, { label: org })
+  }
+
+  if (!kwDc.length) {
+    const hay = `${mission.org || ''} ${mission.citationPublisherOrganisationName || ''} ${String(mission.title || '').slice(0, 200)} ${String(mission.abstract || '').slice(0, 400)}`.toLowerCase()
+    if (
+      /ncei|national centers for environmental information|nesdis\/ncei|noaa national centers for environmental information/i.test(
+        hay,
+      ) ||
+      /noaa\s+mesophotic|mdbc|mesophotic\s+deep\s+benthic/i.test(hay)
+    ) {
+      pushKeywordChipIfNew(kwDc, { label: 'DOC/NOAA/NESDIS/NCEI > National Centers for Environmental Information' })
+    }
+  }
+
   partial.keywords = prev
 }
 
@@ -2226,6 +2790,268 @@ function inferPlatformIdDescFromKeywords(partial) {
 }
 
 /**
+ * NOAA / U.S. federal partner acronyms often seen in ISO abstracts. Values are appended in parentheses so
+ * {@link isAcronymExplainedInAbstractText} treats them as “on first use” glosses.
+ * Keys must match `[A-Z0-9]{3,12}` tokens only (avoid 2-letter ambiguity like “ID”, “OR”, “AS”).
+ */
+const NOAA_METADATA_ACRONYM_GLOSSES = /** @type {const} */ ({
+  FGBNMS: 'Flower Garden Banks National Marine Sanctuary',
+  PIFSC: 'NOAA Pacific Islands Fisheries Science Center',
+  SWFSC: 'NOAA Southwest Fisheries Science Center',
+  NWFSC: 'NOAA Northwest Fisheries Science Center',
+  NEFSC: 'NOAA Northeast Fisheries Science Center',
+  SEFSC: 'NOAA Southeast Fisheries Science Center',
+  AFSC: 'NOAA Alaska Fisheries Science Center',
+  PMEL: 'NOAA Pacific Marine Environmental Laboratory',
+  AOML: 'NOAA Atlantic Oceanographic and Meteorological Laboratory',
+  ESRL: 'NOAA Earth System Research Laboratories',
+  GFDL: 'NOAA Geophysical Fluid Dynamics Laboratory',
+  NSSL: 'NOAA National Severe Storms Laboratory',
+  MDBC: 'NOAA Marine Data and Buoy Center',
+  NDBC: 'NOAA National Data Buoy Center',
+  IOOS: 'U.S. Integrated Ocean Observing System',
+  OMAO: 'NOAA Office of Marine and Aviation Operations',
+  CIMAS: 'Cooperative Institute for Marine and Atmospheric Studies',
+  JIMAR: 'Joint Institute for Marine and Atmospheric Research',
+  CPO: 'NOAA Climate Program Office',
+  OAR: 'NOAA Oceanic and Atmospheric Research',
+  NOS: 'NOAA National Ocean Service',
+  NMFS: 'NOAA National Marine Fisheries Service',
+  PATMOS: 'NOAA PATMOS-x / Pathfinder Atmospheres–Extended products',
+  EHIS: 'NOAA environmental and health information systems (EHIS)',
+  UCSD: 'University of California San Diego',
+  USGS: 'U.S. Geological Survey',
+})
+
+/**
+ * @param {string} s
+ */
+function collapseInteriorWhitespace(s) {
+  return String(s ?? '').replace(/\s+/g, ' ').trim()
+}
+
+/**
+ * @param {string} supplementalUserText
+ * @returns {string}
+ */
+function inferPurposeLineFromSupplemental(supplementalUserText) {
+  const block = String(supplementalUserText || '').replace(/\r\n/g, '\n')
+  for (const line of block.split('\n')) {
+    const m = line.match(
+      /^\s*(purpose|study\s+objective|objective|dataset\s+purpose|collection\s+purpose)\s*[:=-]\s*(.+)$/i,
+    )
+    if (!m) continue
+    const v = collapseInteriorWhitespace(m[2]).slice(0, 2000)
+    if (v.length >= 12) return v
+  }
+  return ''
+}
+
+/**
+ * Uses the opening of `gmd:abstract` / `mri:abstract` (first ~200 chars, word-safe) when ISO purpose is empty.
+ *
+ * @param {string} abstract
+ * @returns {string}
+ */
+function inferPurposeFromAbstractOpening(abstract) {
+  let chunk = String(abstract || '').trim().slice(0, 200)
+  if (chunk.length < 25) return ''
+  const lastSpace = chunk.lastIndexOf(' ')
+  if (lastSpace >= 80 && lastSpace < chunk.length - 1) chunk = chunk.slice(0, lastSpace)
+  chunk = collapseInteriorWhitespace(chunk)
+  if (chunk.length < 25) return ''
+  return chunk.slice(0, 2000)
+}
+
+/**
+ * Appends parenthetical gloss segments for known NOAA-related acronyms that appear in the abstract but are not
+ * already explained in parentheses (same rule as abstract quality checks).
+ *
+ * @param {string} abstract
+ * @returns {string}
+ */
+function appendNoaaMetadataAcronymGlosses(abstract) {
+  const s = String(abstract || '').trim()
+  if (!s) return s
+  const tokens = Object.keys(NOAA_METADATA_ACRONYM_GLOSSES).sort((a, b) => b.length - a.length)
+  /** @type {string[]} */
+  const glossParts = []
+  for (const token of tokens) {
+    const expansion = NOAA_METADATA_ACRONYM_GLOSSES[/** @type {keyof typeof NOAA_METADATA_ACRONYM_GLOSSES} */ (token)]
+    const re = new RegExp(`\\b${token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`)
+    if (!re.test(s)) continue
+    if (isAcronymExplainedInAbstractText(s, token)) continue
+    glossParts.push(`${token}: ${expansion}`)
+  }
+  if (!glossParts.length) return s
+  const tail = glossParts.map((g) => `(${g})`).join(' ')
+  return `${s} ${tail}`
+}
+
+/**
+ * Fills `mission.purpose` when ISO purpose is blank and expands known-acronym glosses on `mission.abstract`.
+ *
+ * @param {Record<string, unknown>} partial
+ */
+function enrichMissionAbstractAndPurposeFromImport(partial) {
+  const m = partial.mission && typeof partial.mission === 'object' ? /** @type {Record<string, unknown>} */ (partial.mission) : null
+  if (!m) return
+  const rawAbstract = String(m.abstract || '').trim()
+  const sup = String(m.supplementalInformation || '').trim()
+  const hadPurpose = String(m.purpose || '').trim().length > 0
+  if (!hadPurpose) {
+    const fromSup = inferPurposeLineFromSupplemental(sup)
+    const fromAbs = fromSup ? '' : inferPurposeFromAbstractOpening(rawAbstract)
+    const inferred = fromSup || fromAbs
+    if (inferred) m.purpose = inferred
+  }
+  const glossed = appendNoaaMetadataAcronymGlosses(rawAbstract)
+  if (glossed && glossed !== rawAbstract) m.abstract = glossed
+}
+
+function enrichMissionLicenseFromPreset(partial) {
+  const m = partial.mission && typeof partial.mission === 'object' ? /** @type {Record<string, unknown>} */ (partial.mission) : null
+  if (!m) return
+  const preset = normalizeDataLicensePresetKey(m.dataLicensePreset)
+  if (String(m.licenseUrl || '').trim()) return
+  const def = getDataLicensePresetDef(preset)
+  const href = def?.docucompHref
+  if (href) m.licenseUrl = href
+}
+
+/**
+ * NCEI/OER cruise **collection** metadata often omits `MD_Format` while still describing instruments;
+ * do not infer a single product format (e.g. NetCDF) for those records.
+ * @param {Record<string, unknown>} partial
+ */
+function isLikelyNceiOerCollectionRecord(partial) {
+  const fid = String(/** @type {{ fileId?: string }} */ (partial?.mission || {}).fileId || '')
+  return /_COLLECTION\b/i.test(fid)
+}
+
+/**
+ * @param {unknown} dist
+ */
+function distributionUrlBlob(dist) {
+  if (!dist || typeof dist !== 'object') return ''
+  const d = /** @type {Record<string, unknown>} */ (dist)
+  return [d.downloadUrl, d.landingUrl, d.metadataLandingUrl, d.downloadLinkName]
+    .map((x) => String(x || '').trim())
+    .filter(Boolean)
+    .join(' ')
+}
+
+/**
+ * True when URLs look like landing / program pages without an obvious data-file extension.
+ * @param {string} urlBlob
+ */
+function urlsLookLikePortfolioLandingWithoutDataFile(urlBlob) {
+  const s = String(urlBlob || '').trim().toLowerCase()
+  if (!s) return true
+  if (/\.(nc|nc4|tif|tiff|csv|tsv|zip|las|laz|json|geojson|gpkg|kmz|kml)(\?|$|[#&])/i.test(s)) return false
+  if (/\b(thredds|dods|opendap|ncss|netcdfsubset|files\.ncei|data\.ncei|noaa\.gov\/data\/oceans\/.*\.nc)\b/i.test(s)) return false
+  return true
+}
+
+/**
+ * @param {unknown} mission
+ */
+function missionTextSuggestsUxSAcquisitionDataset(mission) {
+  if (!mission || typeof mission !== 'object') return false
+  const m = /** @type {Record<string, unknown>} */ (mission)
+  const blob = [m.title, m.abstract, m.purpose].map((x) => String(x || '').trim()).filter(Boolean).join('\n')
+  if (!blob) return false
+  return /\b(uuv|auv|remus|autonomous\s+underwater|unmanned\s+underwater|eagle\s*ray|norbit|kraken\s+sas|multibeam|bathymetry|synthetic\s+aperture\s+sonar|mapping\s+dive)\b/i.test(
+    blob,
+  )
+}
+
+/**
+ * @param {Record<string, unknown>} partial
+ */
+function partialHasInstrumentAcqContent(partial) {
+  const rows = partial?.sensors
+  if (!Array.isArray(rows) || !rows.length) return false
+  return rows.some((row) => {
+    if (!row || typeof row !== 'object') return false
+    const r = /** @type {Record<string, unknown>} */ (row)
+    return ['sensorId', 'modelId', 'type', 'variable', 'code'].some((k) => String(r[k] || '').trim().length > 0)
+  })
+}
+
+/**
+ * @param {string} blob
+ * @returns {string}
+ */
+function inferDistributionFormatLabelFromUrlBlob(blob) {
+  const s = String(blob || '').toLowerCase()
+  if (!s.trim()) return ''
+  if (/\.nc4(\?|$|[#&])|application\/x-netcdf|netcdf-?4\b/.test(s)) return 'NetCDF-4'
+  if (/\.nc(\?|$|[#&])|\bthredds\b|\bdods\b|\bopendap\b|\bncss\b|netcdfsubset/.test(s)) return 'NetCDF'
+  if (/\.(tif|tiff)(\?|$|[#&])|\bgeotiff\b/.test(s)) return 'GeoTIFF'
+  if (/\.csv(\?|$|[#&])|\btext\/csv\b/.test(s)) return 'CSV'
+  if (/\.geojson(\?|$|[#&])|\bapplication\/geo\+json\b/.test(s)) return 'GeoJSON'
+  if (/\.json(\?|$|[#&])|\bapplication\/json\b/.test(s)) return 'JSON'
+  if (/\.laz(\?|$|[#&])/.test(s)) return 'LAZ'
+  if (/\.las(\?|$|[#&])/.test(s)) return 'LAS'
+  if (/\.(gpkg|shp|zip)(\?|$|[#&])/.test(s)) return 'Shapefile or GIS package'
+  return ''
+}
+
+/**
+ * @param {unknown} mission
+ * @returns {string}
+ */
+function inferDistributionFormatLabelFromMissionProse(mission) {
+  if (!mission || typeof mission !== 'object') return ''
+  const m = /** @type {Record<string, unknown>} */ (mission)
+  const blob = [m.title, m.abstract, m.purpose, m.supplementalInformation].map((x) => String(x || '').trim()).filter(Boolean).join('\n')
+  if (!blob) return ''
+  const low = blob.toLowerCase()
+  if (/\bnetcdf[-\s]?4\b|\bnetcdf4\b/.test(low)) return 'NetCDF-4'
+  if (/\bnetcdf\b/.test(low)) return 'NetCDF'
+  if (/\bgeotiff\b|\bgeo[-\s]?tiff\b/.test(low)) return 'GeoTIFF'
+  if (/\bcsv\b/.test(low)) return 'CSV'
+  if (/\bgeojson\b/.test(low)) return 'GeoJSON'
+  return ''
+}
+
+/**
+ * Fills `distribution.format` when ISO omits `MD_Format` but URLs or UxS acquisition context give evidence
+ * (EUT-D / `distribution.format` rollup).
+ * @param {Record<string, unknown>} partial
+ */
+function enrichDistributionFormatFromIsoImportEvidence(partial) {
+  if (!partial || typeof partial !== 'object') return
+  const dist = partial.distribution && typeof partial.distribution === 'object' ? /** @type {Record<string, unknown>} */ (partial.distribution) : null
+  const fmt0 = String(dist?.format || '').trim()
+  if (fmt0) return
+
+  const urlBlob = distributionUrlBlob(dist)
+  let guess = inferDistributionFormatLabelFromUrlBlob(urlBlob)
+  if (!guess) guess = inferDistributionFormatLabelFromMissionProse(partial.mission)
+
+  const blockCollection = isLikelyNceiOerCollectionRecord(partial)
+  if (!guess && !blockCollection && partialHasInstrumentAcqContent(partial) && missionTextSuggestsUxSAcquisitionDataset(partial.mission)) {
+    if (!urlBlob.trim() || urlsLookLikePortfolioLandingWithoutDataFile(urlBlob)) guess = 'NetCDF'
+  }
+
+  if (!guess && dist && urlBlob.trim()) {
+    guess = 'Various (see data access)'
+  }
+
+  if (!guess) return
+
+  if (!partial.distribution || typeof partial.distribution !== 'object') {
+    partial.distribution = { format: guess, distributionFormatName: guess }
+    return
+  }
+  const d = /** @type {Record<string, unknown>} */ (partial.distribution)
+  d.format = guess
+  if (!String(d.distributionFormatName || '').trim()) d.distributionFormatName = guess
+}
+
+/**
  * Post-parse enrichment for legacy ISO records (not only Navy UxS templates).
  * @param {Record<string, unknown>} partial
  */
@@ -2234,6 +3060,10 @@ function applyIsoImportHeuristics(partial) {
   inferKeywordFacetsFromAcquisition(partial)
   inferPlatformTypeFromKeywordsAndMissionText(partial)
   inferPlatformIdDescFromKeywords(partial)
+  enrichMissionAbstractAndPurposeFromImport(partial)
+  enrichMissionLicenseFromPreset(partial)
+  enrichDistributionFormatFromIsoImportEvidence(partial)
+  hydrateGcmdKeywordChipUuidsFromKnownLabels(partial)
 }
 
 /**
@@ -2304,6 +3134,12 @@ function parseResourceConstraintsForMission(dataId) {
     }
   }
 
+  const licenseBlob = [out.citeAs, out.distributionLiability, out.otherCiteAs].filter(Boolean).join('\n\n')
+  const guessed = inferDataLicensePresetFromProse(licenseBlob)
+  if (!out.dataLicensePreset && guessed.preset) out.dataLicensePreset = guessed.preset
+  if (!out.licenseUrl && guessed.licenseUrl) out.licenseUrl = guessed.licenseUrl
+  if (!out.distributionLicense && guessed.distributionLicense) out.distributionLicense = guessed.distributionLicense
+
   return out
 }
 
@@ -2359,6 +3195,40 @@ function addSensorRowDeduped(rows, seen, row) {
   if (seen.has(key)) return
   seen.add(key)
   rows.push(row)
+}
+
+/**
+ * Parses compact `Weight: … kg` / `Length: … m` lines emitted by {@link buildXmlPreview} into `platformOut`
+ * when `gmi:otherProperty` is absent (schema-valid preview path).
+ * @param {string} descRaw
+ * @param {Record<string, string>} platformOut
+ */
+function parsePlatformSpecsLinesFromDescription(descRaw, platformOut) {
+  const s = String(descRaw || '').trim()
+  if (!s) return
+  /** @param {RegExp} re */
+  function pick(re) {
+    const m = s.match(re)
+    return m ? String(m[1] ?? '').trim() : ''
+  }
+  const w = pick(/Weight:\s*([0-9.+\-eE]+)\s*kg/im)
+  if (w && !platformOut.weight) platformOut.weight = w
+  const ptype = pick(/^Type:\s*([^\n]+)/im)
+  if (ptype && !platformOut.platformType) platformOut.platformType = ptype
+  const mfg = pick(/^Manufacturer:\s*([^\n]+)/im)
+  if (mfg && !platformOut.manufacturer) platformOut.manufacturer = mfg
+  const len = pick(/Length:\s*([0-9.+\-eE]+)\s*m/im)
+  if (len && !platformOut.length) platformOut.length = len
+  const wid = pick(/Width:\s*([0-9.+\-eE]+)\s*m/im)
+  if (wid && !platformOut.width) platformOut.width = wid
+  const h = pick(/Height:\s*([0-9.+\-eE]+)\s*m/im)
+  if (h && !platformOut.height) platformOut.height = h
+  const mat = pick(/Material:\s*([^\n]+)/im)
+  if (mat && !platformOut.material) platformOut.material = mat
+  const sp = pick(/Speed:\s*([0-9.+\-eE]+)\s*m\/s/im)
+  if (sp && !platformOut.speed) platformOut.speed = sp
+  const oa = pick(/Operational area:\s*([^\n]+)/im)
+  if (oa && !platformOut.operationalArea) platformOut.operationalArea = oa
 }
 
 /**
@@ -2446,9 +3316,12 @@ function parseAcquisitionInfo(root) {
       childNS(miPlat, NS.gmd, 'description') || childNS(miPlat, NS.gmi, 'description'),
     )
     if (descRaw) {
+      parsePlatformSpecsLinesFromDescription(descRaw, platformOut)
       const lines = descRaw.split('\n').map((l) => l.trim()).filter(Boolean)
+      const specLine = (l) =>
+        /^(type|manufacturer|weight|length|width|height|material|speed|operational area)\s*:/i.test(l)
       const modelLines = lines.filter((l) => l.toLowerCase().startsWith('model:'))
-      const rest = lines.filter((l) => !l.toLowerCase().startsWith('model:'))
+      const rest = lines.filter((l) => !l.toLowerCase().startsWith('model:') && !specLine(l))
       if (modelLines.length) {
         const m = modelLines[0].slice(modelLines[0].indexOf(':') + 1).trim()
         if (m) platformOut.model = m
@@ -2460,8 +3333,8 @@ function parseAcquisitionInfo(root) {
     }
     const typ = gcoCharacterString(childNS(miPlat, NS.gmi, 'type'))
     if (typ) platformOut.platformType = typ
-    const sponsor = childNS(miPlat, NS.gmd, 'pointOfContact')
-    const rp = sponsor ? childNS(sponsor, NS.gmd, 'CI_ResponsibleParty') : null
+    const sponsorWrap = childNS(miPlat, NS.gmd, 'sponsor') || childNS(miPlat, NS.gmd, 'pointOfContact')
+    const rp = sponsorWrap ? childNS(sponsorWrap, NS.gmd, 'CI_ResponsibleParty') : null
     const org = rp ? gcoCharacterString(childNS(rp, NS.gmd, 'organisationName')) : ''
     if (org) platformOut.manufacturer = org
     parsePlatformOtherProperty(miPlat, platformOut)
@@ -3019,6 +3892,10 @@ function parseConstraints3(dataId) {
         out.accessConstraints = txt(code) || out.accessConstraintsCode
       }
     }
+    const useLim3 = gcs3(cn3(legal, NS3.mco, 'useLimitation')) || ''
+    if (useLim3 && !/^(otherrestrictions|other restrictions)$/i.test(useLim3.trim())) {
+      if (!out.citeAs) out.citeAs = useLim3
+    }
     const proseOthers = []
     for (const c of legal.children || []) {
       if (c.localName !== 'otherConstraints') continue
@@ -3034,6 +3911,12 @@ function parseConstraints3(dataId) {
     if (proseOthers[0]) out.distributionLiability = proseOthers[0]
     if (proseOthers[1]) out.otherCiteAs = proseOthers[1]
   }
+
+  const licenseBlob3 = [out.citeAs, out.distributionLiability, out.otherCiteAs].filter(Boolean).join('\n\n')
+  const guessed3 = inferDataLicensePresetFromProse(licenseBlob3)
+  if (!out.dataLicensePreset && guessed3.preset) out.dataLicensePreset = guessed3.preset
+  if (!out.licenseUrl && guessed3.licenseUrl) out.licenseUrl = guessed3.licenseUrl
+  if (!out.distributionLicense && guessed3.distributionLicense) out.distributionLicense = guessed3.distributionLicense
 
   return out
 }
@@ -3265,7 +4148,7 @@ function parseMetadataStandard3(root) {
 function keywordLabelUuidFromMriKeyword(kw) {
   if (!kw) return { label: '', uuid: '' }
   for (const c of kw.children) {
-    if (c.localName === 'Anchor' && (c.namespaceURI === NS.gmx || !c.namespaceURI)) {
+    if (c.localName === 'Anchor') {
       const href = c.getAttributeNS(NS.xlink, 'href') || c.getAttribute('xlink:href') || ''
       const label =
         txt(c).trim() ||
@@ -3277,6 +4160,14 @@ function keywordLabelUuidFromMriKeyword(kw) {
     }
   }
   const lab = stripUxTemplateBraces(gcs3(kw)).trim() || txt(kw).trim()
+  if (/^https?:\/\//i.test(lab)) {
+    const u = keywordUuidFromConceptHref(lab)
+    if (u && KMS_UUID_INLINE_RE.test(u)) {
+      const pathPart = lab.split(/[?#]/)[0]
+      const tail = pathPart.split('/').filter(Boolean).pop() || lab
+      return { label: tail, uuid: u }
+    }
+  }
   return { label: lab, uuid: '' }
 }
 
@@ -3425,7 +4316,7 @@ function parseKeywords3(dataId) {
   for (const dk of cns3(dataId, NS3.mri, 'descriptiveKeywords')) {
     const mk = cn3(dk, NS3.mri, 'MD_Keywords')
     if (!mk) continue
-    const facet = facetFromMriKeywordsBlock(mk)
+    const facet = facetFromMriKeywordsBlock(mk, dk)
     if (!facet) continue
     const labels = []
     for (const kw of cns3(mk, NS3.mri, 'keyword')) {
@@ -3728,6 +4619,10 @@ function extractFrom19115_3(root, raw, warnings) {
     verticalCrsUrl: ext.verticalCrsUrl,
     hasTrajectory: ext.hasTrajectory,
     trajectorySampling: ext.trajectorySampling,
+    west: ext.west,
+    east: ext.east,
+    south: ext.south,
+    north: ext.north,
     accuracyStandard: dq.accuracyStandard,
     accuracyValue: dq.accuracyValue,
     errorLevel: dq.errorLevel,
@@ -3985,6 +4880,10 @@ export function importPilotPartialStateFromXml(xmlString) {
     verticalCrsUrl: ext.verticalCrsUrl,
     hasTrajectory: ext.hasTrajectory,
     trajectorySampling: ext.trajectorySampling,
+    west: ext.west,
+    east: ext.east,
+    south: ext.south,
+    north: ext.north,
     accuracyStandard: dq.accuracyStandard,
     accuracyValue: dq.accuracyValue,
     errorLevel: dq.errorLevel,

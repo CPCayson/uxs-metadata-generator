@@ -9,6 +9,10 @@
  * Env: XML_SCHEMA — used as default --schema when the flag is omitted (still need a file argument).
  *
  * Offline XSD chains: point libxml2 at a catalog so imports resolve (e.g. export XML_CATALOG_FILES=/path/to/catalog.xml).
+ *
+ * NOAA `https://data.noaa.gov/resources/iso19139/schema.xsd`: xmllint often cannot fetch this URL (TLS).
+ * For a one-off NCRMP preview check with a mirrored tree, use `npm run validate:preview-sample` (or set
+ * `NOAA_ISO19139_SCHEMA_DIR` to an existing local copy of the bundle).
  */
 
 import { spawnSync } from 'node:child_process'

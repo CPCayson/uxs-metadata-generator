@@ -30,9 +30,15 @@ export function missionPreviewIso191152SanityFailures(xml) {
     {
       id: 'schema.gmi',
       passed:
-        /http:\/\/www\.isotc211\.org\/2005\/gmi\s+http:\/\/schemas\.opengis\.net\/iso\/19115\/-2\/gmi\/1\.0\/gmi\.xsd/.test(
-          xml,
-        ),
+        /http:\/\/www\.isotc211\.org\/2005\/gmi\s+https:\/\/data\.noaa\.gov\/resources\/iso19139\/schema\.xsd/.test(xml),
+    },
+    {
+      id: 'root.namespace.iso191152',
+      passed:
+        /xmlns:gsr="http:\/\/www\.isotc211\.org\/2005\/gsr"/.test(xml) &&
+        /xmlns:gss="http:\/\/www\.isotc211\.org\/2005\/gss"/.test(xml) &&
+        /xmlns:gts="http:\/\/www\.isotc211\.org\/2005\/gts"/.test(xml) &&
+        /xmlns:srv="http:\/\/www\.isotc211\.org\/2005\/srv"/.test(xml),
     },
     {
       id: 'bbox.decimalTyped',

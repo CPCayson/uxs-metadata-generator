@@ -2,6 +2,8 @@
 
 Cross-reference: `npm run audit:manta-samples` → `MANTA End User Testing/reports/manta-samples-lenient-rollup.{md,json}`.
 
+**Full validation stack + lane map (V-RUN, E-EUT, R-RULES, xmllint, file index):** see **`MANTA_ONE_APP_MISSION_XML_README.md`** Part II (§15–29).
+
 These lanes split **remaining** lenient errors/warnings after platform-type + license import heuristics (see `xmlPilotImport.js`). Run lanes in parallel; merge via small focused PRs.
 
 ## SWARM-EUT-A — Keywords facets + UUID hydration
@@ -47,7 +49,8 @@ These lanes split **remaining** lenient errors/warnings after platform-type + li
 ## Progress (import code)
 
 - **EUT-C / EUT-D (partial):** `xmlPilotImport.js` now (a) scans **all** `distributionInfo` blocks for `MD_Format` with **gmdAnchorOrCharacterString** / `mccAnchorOrText` names, (b) **normalizes sensor id/model** from type/variable when instrument code is empty, (c) **xlink `gmi:platform` / `mac:platform`** → id + title, (d) **GCMD `keywords.platforms[0]`** and **mission title/abstract** backfill `platformId` / `platformDesc` (bugfix: do not return early when the platforms facet is empty). EUT rollup: **`platform.platformId` / `platform.platformDesc` → 0**; **`sensors[0].modelId` → 0**; **`distribution.format` still 8** samples (no `MD_Format` in XML — needs a product default or a different ISO path).
-- **Next:** EUT-A (keyword facets + UUIDs), EUT-B (mission purpose/dates/accession), optional safe default for `distribution.format` when missing.
+- **EUT-A (partial):** `applyIsoImportHeuristics` runs **`hydrateGcmdKeywordChipUuidsFromKnownLabels`** after acquisition-driven facet inference: label→KMS UUID maps for science/datacenter/platform/instrument/location/project/provider chips, plus row-0 fallbacks from `mission.fileId` / sensors. **Cruise-id matching** avoids JS `\b` on underscore-heavy identifiers (`EN2501_REMUS620_…_KRAKEN_…`): use `fileIdHasIso3RemusKrakenHydrateSignal` so ISO3 REMUS/Kraken samples pick up instrument (multibeam family) + provider (OER) UUIDs when the first keyword row is a non-GCMD label (e.g. INS / MDBC project string). **`verify-pilot`** extends keyword import routing checks (EX2306 science chip UUID, REMUS spatial + location/science UUID assertions). **Science keywords:** KMS-backed hydration for **Aquatic Sciences** / **Aquatic Ecosystems** / **Agricultural Aquatic Sciences** / **Marine Environment Monitoring** (`GCMD_SCIENCE_KEYWORD_HYDRATE_UUID` + phrase heuristics; agricultural checked before generic aquatic sciences).
+- **Next:** EUT-A (remaining per-chip UUIDs beyond row 0 / non-mapped labels), EUT-B (mission purpose/dates/accession), optional safe default for `distribution.format` when missing.
 
 ## Governance
 

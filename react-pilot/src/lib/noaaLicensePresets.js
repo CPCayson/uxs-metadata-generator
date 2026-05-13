@@ -60,3 +60,63 @@ export function inferLicensePresetFromDocucompHref(href) {
   if (h.indexOf('493b9ff1') !== -1) return 'ncei_cc0_internal_noaa'
   return ''
 }
+
+/**
+ * Infer NCEI data-license preset and a short **Use / license** summary from free-text
+ * `useLimitation` / `otherConstraints` blocks (common when records only expose “otherRestrictions” prose).
+ *
+ * @param {string} rawBlob
+ * @returns {{ preset: keyof typeof NOAA_DATA_LICENSE_PRESET_DEFS | '', distributionLicense: string, licenseUrl: string }}
+ */
+export function inferDataLicensePresetFromProse(rawBlob) {
+  const raw = String(rawBlob || '').trim()
+  if (!raw) return { preset: '', distributionLicense: '', licenseUrl: '' }
+  const t = raw.toLowerCase()
+
+  const ccBy4 =
+    /\bcc[\s_-]*by[\s_-]*4\b/i.test(raw) ||
+    /attribution[\s_-]*4(?:\.0)?/i.test(t) ||
+    /creativecommons\.org\/licenses\/by\/4/i.test(raw) ||
+    /\bcc\s*by\s*4\.0\b/i.test(t)
+  if (ccBy4) {
+    const k = /** @type {keyof typeof NOAA_DATA_LICENSE_PRESET_DEFS} */ ('ncei_cc_by_4')
+    const def = NOAA_DATA_LICENSE_PRESET_DEFS[k]
+    return {
+      preset: k,
+      distributionLicense: 'Creative Commons Attribution 4.0 International (CC BY 4.0)',
+      licenseUrl: def.docucompHref || '',
+    }
+  }
+
+  const cc0 =
+    /(?:^|[^a-z])cc0(?:[^a-z]|$)/i.test(raw) ||
+    /public\s+domain|creative\s+commons\s+zero|cc\s*-?\s*0\b/i.test(t) ||
+    /not\s+subject\s+to\s+copyright/i.test(t) ||
+    /no\s+copyright\s+claim/i.test(t)
+  if (cc0 && /noaa|ncei|federal|u\.s\.\s+government|united\s+states\s+government/i.test(t)) {
+    const k = /** @type {keyof typeof NOAA_DATA_LICENSE_PRESET_DEFS} */ ('ncei_cc0')
+    const def = NOAA_DATA_LICENSE_PRESET_DEFS[k]
+    return {
+      preset: k,
+      distributionLicense: 'CC0 / public domain (NOAA / U.S. Federal work)',
+      licenseUrl: def.docucompHref || '',
+    }
+  }
+  if (cc0) {
+    const k = /** @type {keyof typeof NOAA_DATA_LICENSE_PRESET_DEFS} */ ('cc0_acdo')
+    return {
+      preset: k,
+      distributionLicense: 'Creative Commons CC0 1.0 Universal (public domain dedication)',
+      licenseUrl: '',
+    }
+  }
+
+  if (/odbl|open\s+database\s+license/i.test(t)) {
+    return { preset: 'custom', distributionLicense: raw.split(/\n+/)[0].trim().slice(0, 280), licenseUrl: '' }
+  }
+  if (/\bapache[\s_-]?2\b/i.test(raw) || /\bmit\s+license\b/i.test(t)) {
+    return { preset: 'custom', distributionLicense: raw.split(/\n+/)[0].trim().slice(0, 280), licenseUrl: '' }
+  }
+
+  return { preset: '', distributionLicense: '', licenseUrl: '' }
+}

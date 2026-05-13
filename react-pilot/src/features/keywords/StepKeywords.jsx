@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { searchGcmdSchemeClient } from '../../lib/gcmdClient'
 import { gcmdConceptUrlFromUuid } from '../../lib/gcmdKmsUrl.js'
 import { runLensScanHeuristic } from '../../lib/lensScanHeuristic.js'
@@ -17,6 +17,9 @@ const FACETS = [
   { key: 'providers', label: 'Providers', scheme: 'providers' },
 ]
 
+/** Minimum KMS match score to auto-apply a concept UUID (bulk + per-chip). */
+const KMS_RESOLVE_MIN_SCORE = 0.72
+
 /**
  * @param {{
  *   mission?: object,
@@ -34,10 +37,13 @@ export default function StepKeywords({ mission = {}, keywords, onKeywordsChange,
   const [suggestStatus, setSuggestStatus] = useState('')
   const [suggestionRows, setSuggestionRows] = useState([])
   const [acceptedSuggestionKeys, setAcceptedSuggestionKeys] = useState(() => new Set())
-  // Chips currently animating out (keyed by `${facet}:${uuid}`).
+  // Chips currently animating out (keyed by `${facet}:idx:${index}`).
   // While in this set the DOM node stays mounted with the `--leaving`
   // class so CSS can play the disintegration before React unmounts it.
   const [leaving, setLeaving] = useState(() => new Set())
+  const [resolveBusy, setResolveBusy] = useState(false)
+  const [resolveStatus, setResolveStatus] = useState('')
+  const [perChipResolveBusy, setPerChipResolveBusy] = useState(() => ({}))
 
   const keywordMetadataIssues = useMemo(
     () =>
@@ -45,6 +51,90 @@ export default function StepKeywords({ mission = {}, keywords, onKeywordsChange,
         (i) => i && typeof i.field === 'string' && /^keywords\.\w+\[\d+\]\.uuid$/.test(i.field),
       ),
     [issues],
+  )
+
+  const missingKeywordUuidCount = useMemo(() => {
+    let n = 0
+    for (const { key } of FACETS) {
+      const list = Array.isArray(keywords[key]) ? keywords[key] : []
+      for (const r of list) {
+        if (String(r?.label || '').trim() && !String(r?.uuid || '').trim()) n += 1
+      }
+    }
+    return n
+  }, [keywords])
+
+  const resolveMissingKeywordUuids = useCallback(async () => {
+    setResolveBusy(true)
+    setResolveStatus('')
+    try {
+      const next = { ...keywords }
+      let updated = 0
+      for (const { key, scheme } of FACETS) {
+        const list = Array.isArray(next[key]) ? [...next[key]] : []
+        for (let i = 0; i < list.length; i += 1) {
+          const row = list[i]
+          const label = String(row?.label || '').trim()
+          const uuid = String(row?.uuid || '').trim()
+          if (!label || uuid) continue
+          const matches = await searchGcmdSchemeClient(scheme, label, { maxMatches: 10, maxPages: 2 })
+          const top = matches[0]
+          if (top && top.score >= KMS_RESOLVE_MIN_SCORE) {
+            list[i] = { label: top.prefLabel || label, uuid: top.uuid }
+            updated += 1
+          }
+        }
+        next[key] = list
+      }
+      onKeywordsChange(next)
+      setResolveStatus(
+        updated
+          ? `Resolved ${updated} label-only chip(s) with KMS top match (score ≥ ${KMS_RESOLVE_MIN_SCORE}).`
+          : 'No confident KMS match for missing UUIDs — refine labels or use per-facet search.',
+      )
+    } catch (err) {
+      setResolveStatus(err instanceof Error ? err.message : String(err))
+    } finally {
+      setResolveBusy(false)
+    }
+  }, [keywords, onKeywordsChange])
+
+  const resolveOneKeywordChip = useCallback(
+    async (facetKey, scheme, chipIndex) => {
+      const sk = `${facetKey}:${chipIndex}`
+      setPerChipResolveBusy((b) => ({ ...b, [sk]: true }))
+      setResolveStatus('')
+      try {
+        const list = Array.isArray(keywords[facetKey]) ? [...keywords[facetKey]] : []
+        const row = list[chipIndex]
+        if (!row) return
+        const label = String(row.label || '').trim()
+        const uuid = String(row.uuid || '').trim()
+        if (!label || uuid) return
+        const matches = await searchGcmdSchemeClient(scheme, label, { maxMatches: 10, maxPages: 2 })
+        const top = matches[0]
+        if (top && top.score >= KMS_RESOLVE_MIN_SCORE) {
+          list[chipIndex] = { label: top.prefLabel || label, uuid: top.uuid }
+          onKeywordsChange({ ...keywords, [facetKey]: list })
+          setResolveStatus(
+            `Resolved “${label.length > 44 ? `${label.slice(0, 44)}…` : label}” (${facetKey}).`,
+          )
+        } else {
+          setResolveStatus(
+            `No confident KMS match for “${label.length > 36 ? `${label.slice(0, 36)}…` : label}” — refine the label or use the facet search.`,
+          )
+        }
+      } catch (e) {
+        setResolveStatus(e instanceof Error ? e.message : String(e))
+      } finally {
+        setPerChipResolveBusy((b) => {
+          const n = { ...b }
+          delete n[sk]
+          return n
+        })
+      }
+    },
+    [keywords, onKeywordsChange],
   )
 
   function facetIssue(facetKey) {
@@ -98,22 +188,23 @@ export default function StepKeywords({ mission = {}, keywords, onKeywordsChange,
     setResults((r) => ({ ...r, [facetKey]: [] }))
   }
 
-  function removeKw(facetKey, uuid) {
-    const key = `${facetKey}:${uuid}`
-    // Already animating out — ignore double-clicks.
+  /**
+   * @param {string} facetKey
+   * @param {number} chipIndex
+   */
+  function removeKw(facetKey, chipIndex) {
+    const key = `${facetKey}:idx:${chipIndex}`
     if (leaving.has(key)) return
     setLeaving((prev) => {
       const next = new Set(prev)
       next.add(key)
       return next
     })
-    // Keep the chip mounted for the duration of the CSS leave animation,
-    // then actually remove it from the list.
     window.setTimeout(() => {
       const list = Array.isArray(keywords[facetKey]) ? keywords[facetKey] : []
       onKeywordsChange({
         ...keywords,
-        [facetKey]: list.filter((k) => k.uuid !== uuid),
+        [facetKey]: list.filter((_, i) => i !== chipIndex),
       })
       setLeaving((prev) => {
         const next = new Set(prev)
@@ -132,6 +223,7 @@ export default function StepKeywords({ mission = {}, keywords, onKeywordsChange,
       const env = await runLensScanHeuristic({
         title:     String(mission?.title || ''),
         abstract:  String(mission?.abstract || ''),
+        fileId:    String(mission?.fileId || ''),
         profileId: 'mission',
         uxsContext: mission?.uxsContext,
       })
@@ -276,29 +368,50 @@ export default function StepKeywords({ mission = {}, keywords, onKeywordsChange,
         for heuristic matches. Chip counts appear in the validation panel.
       </p>
 
-      {keywordMetadataIssues.length > 0 ? (
+      {(keywordMetadataIssues.length > 0 || missingKeywordUuidCount > 0) ? (
         <div className="keyword-metadata-bw" role="status" aria-label="Keyword metadata quality">
           <strong className="keyword-metadata-bw__title">Keyword metadata</strong>
           <p className="keyword-metadata-bw__lede">
             These warnings do not block export; they help ensure GCMD <code>gmx:Anchor</code> links resolve in the XML
             preview.
           </p>
-          <ul className="keyword-metadata-bw__list">
-            {keywordMetadataIssues.map((i, idx) => {
-              const label = getPilotFieldLabelFallback(i.field)
-              return (
-                <li key={`${i.field}-${idx}`}>
-                  <strong>{label}</strong>
-                  {label !== i.field ? (
-                    <span className="keyword-metadata-bw__path">
-                      <code>{i.field}</code>
-                    </span>
-                  ) : null}
-                  <span className="keyword-metadata-bw__msg"> — {i.message}</span>
-                </li>
-              )
-            })}
-          </ul>
+          {keywordMetadataIssues.length > 0 ? (
+            <ul className="keyword-metadata-bw__list">
+              {keywordMetadataIssues.map((i, idx) => {
+                const label = getPilotFieldLabelFallback(i.field)
+                return (
+                  <li key={`${i.field}-${idx}`}>
+                    <strong>{label}</strong>
+                    {label !== i.field ? (
+                      <span className="keyword-metadata-bw__path">
+                        <code>{i.field}</code>
+                      </span>
+                    ) : null}
+                    <span className="keyword-metadata-bw__msg"> — {i.message}</span>
+                  </li>
+                )
+              })}
+            </ul>
+          ) : (
+            <p className="hint" style={{ marginTop: '-0.25rem' }}>
+              {missingKeywordUuidCount} keyword chip{missingKeywordUuidCount === 1 ? '' : 's'} ha{missingKeywordUuidCount === 1 ? 's' : 've'} a label but no KMS concept UUID — use the button below to search GCMD and fill matches.
+            </p>
+          )}
+          <div className="keyword-metadata-bw__actions">
+            <button
+              type="button"
+              className="button button-secondary"
+              disabled={resolveBusy || missingKeywordUuidCount === 0}
+              onClick={() => void resolveMissingKeywordUuids()}
+            >
+              {resolveBusy ? 'Resolving…' : 'Search & resolve missing UUIDs (KMS)'}
+            </button>
+            {resolveStatus ? (
+              <p className="draft-meta" role="status" aria-live="polite">
+                {resolveStatus}
+              </p>
+            ) : null}
+          </div>
         </div>
       ) : null}
 
@@ -413,23 +526,60 @@ export default function StepKeywords({ mission = {}, keywords, onKeywordsChange,
               <div className="kw-token-field">
                 <div className="kw-token-field__inner chip-row">
                   {chips.map((c, chipIndex) => {
-                    const isLeaving = leaving.has(`${key}:${c.uuid}`)
+                    const leavingKey = `${key}:idx:${chipIndex}`
+                    const isLeaving = leaving.has(leavingKey)
                     const chipUuidIssue = issueForKeywordChip(key, chipIndex)
                     const removeHint = `Remove ${c.label}`
+                    const hasLabel = Boolean(String(c.label || '').trim())
+                    const hasUuid = Boolean(String(c.uuid || '').trim())
+                    const showKms = hasLabel && !hasUuid
+                    const gcmdConceptHref = hasUuid ? gcmdConceptUrlFromUuid(c.uuid) : ''
+                    const chipBusyKey = `${key}:${chipIndex}`
+                    const chipBusy = Boolean(perChipResolveBusy[chipBusyKey])
                     return (
-                      <button
-                        key={c.uuid}
-                        type="button"
-                        className={`kw-chip${isLeaving ? ' kw-chip--leaving' : ''}${chipUuidIssue ? ' kw-chip--uuid-warn' : ''}`}
+                      <span
+                        key={leavingKey}
+                        role="group"
+                        className={`kw-chip-cluster${isLeaving ? ' kw-chip-cluster--leaving' : ''}${chipUuidIssue ? ' kw-chip-cluster--uuid-warn' : ''}`}
                         data-pilot-field={`keywords.${key}[${chipIndex}].uuid`}
-                        onClick={() => removeKw(key, c.uuid)}
-                        disabled={isLeaving}
-                        aria-label={chipUuidIssue ? `${c.label} — ${chipUuidIssue.message} — ${removeHint}` : removeHint}
-                        title={chipUuidIssue ? chipUuidIssue.message : removeHint}
+                        aria-label={chipUuidIssue ? `${c.label} — ${chipUuidIssue.message}` : c.label}
+                        title={chipUuidIssue ? chipUuidIssue.message : undefined}
                       >
-                        <span className="kw-chip__label">{c.label}</span>
-                        <span className="kw-chip__x" aria-hidden>×</span>
-                      </button>
+                        <span className="kw-chip-cluster__label">{c.label}</span>
+                        {showKms ? (
+                          <button
+                            type="button"
+                            className="kw-chip-cluster__kms button button-secondary"
+                            disabled={chipBusy || resolveBusy}
+                            onClick={() => void resolveOneKeywordChip(key, scheme, chipIndex)}
+                            aria-label={`Search KMS for UUID: ${c.label}`}
+                          >
+                            {chipBusy ? '…' : 'KMS'}
+                          </button>
+                        ) : null}
+                        {gcmdConceptHref ? (
+                          <a
+                            className="kw-chip-cluster__open linkish"
+                            href={gcmdConceptHref}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={`Open GCMD KMS concept for ${c.label}`}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            GCMD
+                          </a>
+                        ) : null}
+                        <button
+                          type="button"
+                          className="kw-chip-cluster__remove"
+                          onClick={() => removeKw(key, chipIndex)}
+                          disabled={isLeaving}
+                          aria-label={chipUuidIssue ? `${c.label} — ${chipUuidIssue.message} — ${removeHint}` : removeHint}
+                          title={removeHint}
+                        >
+                          <span className="kw-chip-cluster__x" aria-hidden>×</span>
+                        </button>
+                      </span>
                     )
                   })}
                   <input

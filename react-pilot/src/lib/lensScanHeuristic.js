@@ -82,6 +82,32 @@ function stringifyUxsContextForSeeds(raw, cap = 900) {
 }
 
 /**
+ * @param {string} blob
+ * @returns {string} YYYY-MM-DDTHH:MM when a compact ISO-like instant is found
+ */
+function extractIsoLikeInstantFromBlob(blob) {
+  const t = String(blob || '')
+  const m1 = t.match(/\b(20\d{2})-([01]\d)-([0-3]\d)T([0-2]\d):([0-5]\d)\b/)
+  if (m1) return `${m1[1]}-${m1[2]}-${m1[3]}T${m1[4]}:${m1[5]}`
+  const m2 = t.match(/\b(20\d{2})([01]\d)([0-3]\d)T([0-2]\d)([0-5]\d)(?:Z)?\b/)
+  if (m2) return `${m2[1]}-${m2[2]}-${m2[3]}T${m2[4]}:${m2[5]}`
+  return ''
+}
+
+/**
+ * @param {string} blob
+ * @returns {string}
+ */
+function inferPlatformTypeHeuristic(blob) {
+  const u = String(blob || '').toUpperCase()
+  if (/\bAUV\b|\bUUV\b/.test(u)) return 'AUV'
+  if (/\bROV\b/.test(u)) return 'ROV'
+  if (/\bUAS\b|\bUAV\b/.test(u)) return 'UAV'
+  if (/\bUSV\b|\bASV\b/.test(u)) return 'USV'
+  return ''
+}
+
+/**
  * @param {string} source
  * @param {Set<string>} baseStop
  */
@@ -220,6 +246,7 @@ async function collectGcmdRowsFromWordsSafe(words, scheme, maxMatches) {
  *   xmlSnippet?: string,
  *   profileId?: string,
  *   uxsContext?: unknown,
+ *   fileId?: string,
  * }} input
  * @returns {Promise<import('../core/registry/types.js').ScannerSuggestionEnvelope>}
  */
@@ -232,6 +259,7 @@ export async function runLensScanHeuristic(input) {
   const abstract = String(input?.abstract || '').trim()
   const xmlSnippet = String(input?.xmlSnippet || '').trim()
   const uxsText = stringifyUxsContextForSeeds(input?.uxsContext, 1000)
+  const fileId = String(input?.fileId || '').trim()
   const seed = [
     title,
     abstract,
@@ -416,6 +444,31 @@ export async function runLensScanHeuristic(input) {
         source:    'gcmd-kms',
         model:     'lens-scan-heuristic/v2',
         evidence:  `sourceText="${seed.slice(0, 220)}"`,
+      })
+    }
+    const structuralBlob = [title, abstract, fileId, stripXmlToText(xmlSnippet).slice(0, 800)].filter(Boolean).join('\n')
+    const isoGuess = extractIsoLikeInstantFromBlob(structuralBlob)
+    const platType = inferPlatformTypeHeuristic(structuralBlob)
+    if (isoGuess) {
+      suggestions.push({
+        fieldPath: 'mission.startDate',
+        value: isoGuess,
+        confidence: 0.34,
+        label: 'Possible start instant from timestamp in title / file identifier / snippet',
+        source: 'lens-scan-heuristic',
+        model: 'structural-seed/v1',
+        evidence: `pattern=${isoGuess}`,
+      })
+    }
+    if (platType) {
+      suggestions.push({
+        fieldPath: 'platform.platformType',
+        value: platType,
+        confidence: 0.36,
+        label: 'Platform class inferred from vehicle acronyms in text',
+        source: 'lens-scan-heuristic',
+        model: 'structural-seed/v1',
+        evidence: `inferred=${platType}`,
       })
     }
     return {

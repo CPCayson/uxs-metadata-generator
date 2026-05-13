@@ -19,6 +19,7 @@ import {
   getRubricScore,
   loginToComet,
   loginToMetaserver,
+  MANTA_COMET_SESSION_INVALIDATED_EVENT,
   pushCometRecord,
   rememberCometUuid,
   resolveXlinks,
@@ -219,6 +220,22 @@ export function useMissionCometActions({
   useEffect(() => {
     void refreshAuthStatus()
   }, [refreshAuthStatus])
+
+  useEffect(() => {
+    /** @param {CustomEvent<{ kind?: string }>} e */
+    function onSessionInvalidated(e) {
+      const kind = e?.detail?.kind === 'metaserver' ? 'metaserver' : 'comet'
+      setAuthStatus(null)
+      if (kind === 'metaserver') {
+        onStatus('MetaServer session expired or was rejected. Log in again (MetaServer) from the CoMET panel.')
+      } else {
+        onStatus('CoMET session expired or was rejected. Log in again from the CoMET panel.')
+      }
+      void refreshAuthStatus()
+    }
+    window.addEventListener(MANTA_COMET_SESSION_INVALIDATED_EVENT, onSessionInvalidated)
+    return () => window.removeEventListener(MANTA_COMET_SESSION_INVALIDATED_EVENT, onSessionInvalidated)
+  }, [onStatus, refreshAuthStatus])
 
   const runCometLogin = useCallback(async () => {
     if (!cometUsername.trim() || !cometPassword) {

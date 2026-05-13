@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import { useFieldValidation } from '../../components/fields/useFieldValidation'
+import { validateIsoXml } from '../../lib/cometClient.js'
 
 /**
  * @param {{
@@ -11,6 +13,8 @@ import { useFieldValidation } from '../../components/fields/useFieldValidation'
  *   hostBridgeReady?: boolean,
  *   onSaveSheetTemplate?: () => void,
  *   sheetTemplateSaveDisabled?: boolean,
+ *   profile?: import('../../core/registry/types.js').EntityProfile,
+ *   pilotState?: object,
  * }} props
  */
 export default function StepDistribution({
@@ -23,11 +27,78 @@ export default function StepDistribution({
   hostBridgeReady = false,
   onSaveSheetTemplate,
   sheetTemplateSaveDisabled = false,
+  profile,
+  pilotState,
 }) {
   const { show, invalid } = useFieldValidation({ issues, touched, showAllErrors })
+  const [cometBusy, setCometBusy] = useState(false)
+  const [cometErr, setCometErr] = useState('')
+  const [cometSummary, setCometSummary] = useState('')
+
+  const showCometPreflight =
+    profile?.id === 'mission' &&
+    Boolean(profile?.capabilities?.cometPreflight) &&
+    typeof profile?.buildXmlPreview === 'function' &&
+    pilotState &&
+    typeof pilotState === 'object'
+
+  async function runCometIsoPreflight() {
+    if (!showCometPreflight) return
+    setCometBusy(true)
+    setCometErr('')
+    setCometSummary('')
+    try {
+      const xml = String(profile.buildXmlPreview(pilotState) || '')
+      if (!xml.trim()) {
+        setCometErr('Preview XML is empty.')
+        return
+      }
+      const res = await validateIsoXml(xml, 'manta-preview.xml')
+      const errCount = res?.errorCount ?? res?.errors ?? res?.total_ec
+      const score = res?.totalScore ?? res?.score
+      const parts = []
+      if (score != null) parts.push(`score: ${score}`)
+      if (errCount != null) parts.push(`errors: ${errCount}`)
+      setCometSummary(parts.length ? parts.join(' · ') : 'CoMET responded — see browser devtools / network for full JSON.')
+    } catch (e) {
+      setCometErr(e instanceof Error ? e.message : String(e))
+    } finally {
+      setCometBusy(false)
+    }
+  }
 
   return (
     <>
+      {showCometPreflight ? (
+        <section className="panel" aria-labelledby="comet-preflight-heading">
+          <h3 id="comet-preflight-heading" className="panel-title">
+            CoMET preflight (Discovery-ready)
+          </h3>
+          <p className="hint">
+            Runs NOAA CoMET ISO validation on the <strong>current live preview XML</strong> via the same-origin proxy
+            (<code>/api/comet-proxy</code>). Requires Netlify dev / deployed functions and a valid CoMET session.
+          </p>
+          <button
+            type="button"
+            className="button button-secondary"
+            disabled={cometBusy}
+            onClick={() => void runCometIsoPreflight()}
+          >
+            {cometBusy ? 'Validating…' : 'Run CoMET ISO validate on preview'}
+          </button>
+          {cometSummary ? (
+            <p className="draft-meta" role="status">
+              {cometSummary}
+            </p>
+          ) : null}
+          {cometErr ? (
+            <p className="field-error" role="alert">
+              {cometErr}
+            </p>
+          ) : null}
+        </section>
+      ) : null}
+
       <p className="card-intro">
         <strong>How the dataset is distributed</strong>: format, license, download and landing links, NCEI contact
         defaults, and optional save-as-template.

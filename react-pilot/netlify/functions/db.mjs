@@ -345,6 +345,7 @@ async function lensScan(_sql, args) {
     xmlSnippet: typeof p.xmlSnippet === 'string' ? p.xmlSnippet : '',
     profileId:  typeof p.profileId === 'string' ? p.profileId : '',
     uxsContext: p.uxsContext,
+    fileId:     typeof p.fileId === 'string' ? p.fileId : '',
   })
 }
 

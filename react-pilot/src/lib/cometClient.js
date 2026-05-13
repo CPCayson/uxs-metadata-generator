@@ -33,8 +33,60 @@ const COMET_RG_SESSION_KEY = 'manta.comet.recordGroup'
 const COMET_AUTH_KEY = 'manta.comet.auth.v1'
 const COMET_AUTH_TTL_MS = 1000 * 60 * 90 // 90 minutes
 
+/** Dispatched when stored client JSESSIONID is cleared after a 401 from the CoMET proxy (debounced). */
+export const MANTA_COMET_SESSION_INVALIDATED_EVENT = 'manta:comet-session-invalidated'
+
+let _lastSessionInvalidatedEmitAt = 0
+
 const PROXY_MISSING_HINT =
   `CoMET proxy not found (404) at ${PROXY}. Open the app via Netlify dev (usually http://localhost:8888), or run plain Vite with API_PROXY_TARGET=http://127.0.0.1:8888 in .env.development.local while netlify dev is up — see react-pilot/.env.example.`
+
+/**
+ * @param {string} url
+ * @returns {string}
+ */
+function cometProxyActionFromUrl(url) {
+  try {
+    const base = typeof window !== 'undefined' && window.location?.origin ? window.location.origin : 'http://localhost'
+    const u = new URL(url, base)
+    return String(u.searchParams.get('action') || '')
+  } catch {
+    return ''
+  }
+}
+
+/**
+ * Login requests must not attach a prior JSESSIONID so the proxy always forwards
+ * only password credentials to `wsLogin`.
+ *
+ * @param {string} url
+ * @param {Parameters<typeof fetch>[1]} [init]
+ * @returns {Promise<Response>}
+ */
+async function fetchCometProxyWithoutClientSessions(url, init) {
+  const mergedHeaders = { ...(init?.headers || {}) }
+  try {
+    return await fetch(url, { ...init, headers: mergedHeaders })
+  } catch (err) {
+    const why = err instanceof Error ? err.message : String(err)
+    throw new Error(`CoMET request failed (network). Check that ${PROXY} is reachable. ${why}`)
+  }
+}
+
+/**
+ * @param {'comet' | 'metaserver'} kind
+ */
+function emitSessionInvalidatedOnce(kind) {
+  if (typeof window === 'undefined') return
+  const now = Date.now()
+  if (now - _lastSessionInvalidatedEmitAt < 2500) return
+  _lastSessionInvalidatedEmitAt = now
+  try {
+    window.dispatchEvent(new CustomEvent(MANTA_COMET_SESSION_INVALIDATED_EVENT, { detail: { kind } }))
+  } catch {
+    /* ignore */
+  }
+}
 
 /**
  * @param {string} url
@@ -42,18 +94,39 @@ const PROXY_MISSING_HINT =
  * @returns {Promise<Response>}
  */
 async function _fetchCometProxy(url, init) {
-  const auth = readCometAuth()
+  const authBefore = readCometAuth()
+  const hadCometHeader = Boolean(String(authBefore.cometSessionId || '').trim())
+  const hadMetaHeader = Boolean(String(authBefore.metaserverSessionId || '').trim())
+  const action = cometProxyActionFromUrl(url)
+
   const mergedHeaders = {
     ...(init?.headers || {}),
   }
-  if (auth.cometSessionId) mergedHeaders['X-Comet-JSessionId'] = auth.cometSessionId
-  if (auth.metaserverSessionId) mergedHeaders['X-Metaserver-JSessionId'] = auth.metaserverSessionId
+  if (authBefore.cometSessionId) mergedHeaders['X-Comet-JSessionId'] = String(authBefore.cometSessionId).trim()
+  if (authBefore.metaserverSessionId) mergedHeaders['X-Metaserver-JSessionId'] = String(authBefore.metaserverSessionId).trim()
+
+  let res
   try {
-    return await fetch(url, { ...init, headers: mergedHeaders })
+    res = await fetch(url, { ...init, headers: mergedHeaders })
   } catch (err) {
     const why = err instanceof Error ? err.message : String(err)
     throw new Error(`CoMET request failed (network). Check that ${PROXY} is reachable. ${why}`)
   }
+
+  if (res.status === 401) {
+    const usedMetaserverOnly = action === 'metaservValidate'
+    if (usedMetaserverOnly && hadMetaHeader) {
+      const cur = readCometAuth()
+      writeCometAuth({ ...cur, metaserverSessionId: '' })
+      emitSessionInvalidatedOnce('metaserver')
+    } else if (!usedMetaserverOnly && hadCometHeader) {
+      const cur = readCometAuth()
+      writeCometAuth({ ...cur, cometSessionId: '' })
+      emitSessionInvalidatedOnce('comet')
+    }
+  }
+
+  return res
 }
 
 /**
@@ -80,8 +153,8 @@ function _detailForFailedResponse(status, bodyText) {
 
 /**
  * Authenticate with CoMET and return the JSESSIONID.
- * The caller is responsible for storing the session ID (e.g. sessionStorage)
- * and passing it to the Netlify env, or simply calling this once per session.
+ * On success, stores the session in sessionStorage and subsequent proxy calls
+ * send it as `X-Comet-JSessionId` (preferred over `COMET_SESSION_ID` on the server).
  *
  * @param {string} username  NOAA @noaa.gov email
  * @param {string} password
@@ -89,7 +162,7 @@ function _detailForFailedResponse(status, bodyText) {
  */
 export async function loginToComet(username, password) {
   const body = new URLSearchParams({ username, password }).toString()
-  const res  = await _fetchCometProxy(`${PROXY}?action=login`, {
+  const res  = await fetchCometProxyWithoutClientSessions(`${PROXY}?action=login`, {
     method:  'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body,
@@ -98,7 +171,7 @@ export async function loginToComet(username, password) {
   const out = { ok: !!data.ok, jsessionid: data.jsessionid ?? null }
   if (out.ok && out.jsessionid) {
     const cur = readCometAuth()
-    writeCometAuth({ ...cur, cometSessionId: out.jsessionid })
+    writeCometAuth({ ...cur, cometSessionId: String(out.jsessionid).trim() })
   }
   return out
 }
@@ -112,7 +185,7 @@ export async function loginToComet(username, password) {
  */
 export async function loginToMetaserver(username, password) {
   const body = new URLSearchParams({ username, password }).toString()
-  const res = await _fetchCometProxy(`${PROXY}?action=metaservLogin`, {
+  const res = await fetchCometProxyWithoutClientSessions(`${PROXY}?action=metaservLogin`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body,
@@ -121,7 +194,7 @@ export async function loginToMetaserver(username, password) {
   const out = { ok: !!data.ok, jsessionid: data.jsessionid ?? null }
   if (out.ok && out.jsessionid) {
     const cur = readCometAuth()
-    writeCometAuth({ ...cur, metaserverSessionId: out.jsessionid })
+    writeCometAuth({ ...cur, metaserverSessionId: String(out.jsessionid).trim() })
   }
   return out
 }
@@ -182,7 +255,7 @@ export async function fetchCometRecord(uuidOrUrl) {
   if (!text.trim()) return null
 
   if (!text.trim().startsWith('<')) {
-    throw new Error('CoMET returned a non-XML response. Your session may have expired — refresh COMET_SESSION_ID in Netlify.')
+    throw new Error('CoMET returned a non-XML response. Log in again from the CoMET panel, or refresh COMET_SESSION_ID for server-only deployments.')
   }
   return text
 }

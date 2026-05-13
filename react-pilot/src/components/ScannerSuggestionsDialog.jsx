@@ -422,6 +422,7 @@ export default function ScannerSuggestionsDialog({
           xmlSnippet: xmlish ? text.slice(0, 200000) : '',
           profileId:  scannerProfileId,
           uxsContext: pilotState?.mission?.uxsContext,
+          fileId:     String(pilotState?.mission?.fileId || ''),
         })
         setJsonText(JSON.stringify(env, null, 2))
         await ingestEnvelopeFromObject(env, `extension-${capture?.kind || 'capture'}`)
@@ -449,6 +450,7 @@ export default function ScannerSuggestionsDialog({
         abstract:  String(pilotState?.mission?.abstract || pilotState?.abstract || ''),
         profileId: scannerProfileId,
         uxsContext: pilotState?.mission?.uxsContext,
+        fileId:    String(pilotState?.mission?.fileId || ''),
       })
       setJsonText(JSON.stringify(env, null, 2))
       await ingestEnvelopeFromObject(env, 'scanner-dialog-heuristic')

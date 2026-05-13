@@ -2,6 +2,8 @@
 
 This board operationalizes the metadata workbench swarm into parallel lanes with concrete outputs.
 
+**React pilot validation layers, EUT audit, xmllint, file index (single canonical doc):** [MANTA_ONE_APP_MISSION_XML_README.md](./MANTA_ONE_APP_MISSION_XML_README.md) Part II (§15–29).
+
 **Mission profile (UxS) — step matrix, lane mapping, demo script:** [MISSION_SWARM_WORKBENCH.md](./MISSION_SWARM_WORKBENCH.md)
 
 ## SWARM-A — Schema Guardrails
