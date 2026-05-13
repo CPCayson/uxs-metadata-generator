@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { searchRorOrganizationsClient } from '../../lib/rorClient'
 import { fromDatetimeLocalValue, toDatetimeLocalValue } from '../../lib/datetimeLocal'
 import { useFieldValidation } from '../../components/fields/useFieldValidation'
@@ -28,6 +28,7 @@ import FieldHintTooltip, { LabelWithHint } from '../../components/FieldHintToolt
  *   onRefreshTemplateCatalog?: () => void,
  *   onApplySheetTemplate?: (name: string) => void,
  *   templateApplyDisabled?: boolean,
+ *   contactLibraryEnabled?: boolean,
  * }} props
  */
 export default function StepMission({
@@ -49,6 +50,7 @@ export default function StepMission({
   onRefreshTemplateCatalog,
   onApplySheetTemplate,
   templateApplyDisabled = false,
+  contactLibraryEnabled = false,
   pilotState = null,
   onSourceProvenanceClear,
   /** Workspace “Simple” density — shorter Mission intro; tuck optional UxS block behind a disclosure */
@@ -127,6 +129,30 @@ export default function StepMission({
   }
 
   const sourceProvenance = pilotState?.sourceProvenance ?? null
+
+  const importedFromStructuredSource = Boolean(
+    sourceProvenance?.sourceType
+    && ['rawIso', 'bediXml', 'comet'].includes(sourceProvenance.sourceType),
+  )
+
+  /** High-signal “still empty after import” checklist — not exhaustive vs catalog rules. */
+  const importPriorityMissingLabels = useMemo(() => {
+    if (!importedFromStructuredSource) return []
+    const checks = [
+      ['File identifier', mission.fileId],
+      ['Title', mission.title],
+      ['Abstract', mission.abstract],
+      ['Purpose', mission.purpose],
+      ['Start date', mission.startDate],
+      ['End date', mission.endDate],
+      ['Language', mission.language],
+      ['Organization', mission.org],
+      ['Contact name', mission.individualName],
+      ['Contact email', mission.email],
+      ['Dataset status', mission.status],
+    ]
+    return checks.filter(([, v]) => !String(v ?? '').trim()).map(([label]) => label)
+  }, [importedFromStructuredSource, mission])
 
   return (
     <>
@@ -246,6 +272,13 @@ export default function StepMission({
             </>
           </FieldHintTooltip>
         </h3>
+        <details className="panel mission-collapsible" open={guidedMissionIntro}>
+          <summary className="mission-collapsible__summary">
+            {guidedMissionIntro
+              ? 'Operational context fields (simple layout — you can collapse when done)'
+              : 'Show UxS operational context (layer, outcome, deployment / run / sortie / dive IDs)'}
+          </summary>
+          <div className="mission-collapsible__body">
         <fieldset className="pilot-fieldset mission-field-group">
           <legend className="mission-fieldset-legend">Operational layer &amp; outcome</legend>
           <div className="form-row-2">
@@ -420,6 +453,8 @@ export default function StepMission({
           />
           </fieldset>
         </details>
+          </div>
+        </details>
       </section>
 
       <section className="panel">
@@ -433,6 +468,25 @@ export default function StepMission({
             onMissionPatch({ [key]: value })
           }}
         />
+        {importedFromStructuredSource ? (
+          <div className="pilot-import-attention" role="status">
+            <strong>After import:</strong>{' '}
+            {importPriorityMissingLabels.length ? (
+              <>
+                These export-critical fields are still empty (not in the XML, not mapped yet, or cleared):{' '}
+                <span className="pilot-import-attention__list">{importPriorityMissingLabels.join(', ')}</span>.
+                {' '}
+                Values in <strong>Core identification</strong> above reflect merged state — expand the sections below for
+                dates, contacts, and ISO options.
+              </>
+            ) : (
+              <>
+                The checklist of common required fields looks filled — continue with dates, contact, and status in the
+                sections below, then run validation.
+              </>
+            )}
+          </div>
+        ) : null}
         <fieldset className="pilot-fieldset mission-field-group">
           <legend className="mission-fieldset-legend">Core identification</legend>
         <MantaFieldGlass
@@ -545,6 +599,9 @@ export default function StepMission({
         />
         </fieldset>
 
+        <details className="panel mission-collapsible" open>
+          <summary className="mission-collapsible__summary">Dates &amp; language (period, publication, language)</summary>
+          <div className="mission-collapsible__body">
         <fieldset className="pilot-fieldset mission-field-group">
           <legend className="mission-fieldset-legend">Dataset period, dates &amp; language</legend>
         <div className="field-label-with-hint">
@@ -552,7 +609,7 @@ export default function StepMission({
           <FieldHintTooltip ariaLabel="About dataset period vs metadata record date">
             <>
               <strong>Dataset period</strong> for citation creation / completion and <code>gml:TimePeriod</code> in the XML
-              preview — not the same as <em>metadata record date</em> below (when the metadata document itself was prepared).
+              preview — not the same as <em>metadata record date</em> (see Advanced ISO options).
             </>
           </FieldHintTooltip>
         </div>
@@ -587,6 +644,54 @@ export default function StepMission({
           </div>
         </div>
 
+        <div className="form-row-2">
+          <div>
+            <LabelWithHint
+              htmlFor="publicationDate"
+              label="Dataset publication date (citation)"
+              hint={
+                <>
+                  <code>CI_DateTypeCode</code> publication, separate from completion/end.
+                </>
+              }
+            />
+            <input
+              id="publicationDate"
+              type="datetime-local"
+              className={`form-control${invalid('mission.publicationDate') ? ' form-control--invalid' : ''}`}
+              data-pilot-field="mission.publicationDate"
+              value={toDatetimeLocalValue(mission.publicationDate)}
+              onChange={(e) => onMissionPatch({ publicationDate: fromDatetimeLocalValue(e.target.value) })}
+              onBlur={() => onTouched('mission.publicationDate')}
+            />
+            {show('mission.publicationDate') ? <p className="field-error">{show('mission.publicationDate')}</p> : null}
+          </div>
+          <div>
+            <label htmlFor="language">Language</label>
+            <input
+              id="language"
+              className={`form-control${invalid('mission.language') ? ' form-control--invalid' : ''}`}
+              data-pilot-field="mission.language"
+              placeholder="e.g., eng"
+              value={mission.language || ''}
+              onChange={(e) => onMissionPatch({ language: e.target.value })}
+              onBlur={() => onTouched('mission.language')}
+              aria-required
+            />
+            {show('mission.language') ? <p className="field-error">{show('mission.language')}</p> : null}
+          </div>
+        </div>
+        </fieldset>
+          </div>
+        </details>
+
+        <details className="panel mission-collapsible">
+          <summary className="mission-collapsible__summary">
+            Advanced ISO / XML options (temporal sampling interval, metadata dateStamp freeze, character set)
+          </summary>
+          <div className="mission-collapsible__body">
+        <fieldset className="pilot-fieldset mission-field-group">
+          <legend className="mission-fieldset-legend">Rarely edited technical fields</legend>
         <div className="form-row-2">
           <div>
             <LabelWithHint
@@ -628,88 +733,50 @@ export default function StepMission({
           </div>
         </div>
 
-        <div className="form-row-2">
-          <div>
-            <LabelWithHint
-              htmlFor="metadataRecordDate"
-              label={
-                <>
-                  Metadata record date (<code>gmd:dateStamp</code>)
-                </>
-              }
-              hint={
-                <>
-                  <strong>Metadata record date</strong> for <code>gmd:dateStamp</code>. When blank, the XML preview uses the
-                  current UTC instant so downloads always carry a fresh stamp; set this field to freeze a specific instant
-                  (for example to match a source file you imported).
-                </>
-              }
-            />
-            <input
-              id="metadataRecordDate"
-              type="datetime-local"
-              className={`form-control${invalid('mission.metadataRecordDate') ? ' form-control--invalid' : ''}`}
-              data-pilot-field="mission.metadataRecordDate"
-              value={toDatetimeLocalValue(mission.metadataRecordDate)}
-              onChange={(e) => onMissionPatch({ metadataRecordDate: fromDatetimeLocalValue(e.target.value) })}
-              onBlur={() => onTouched('mission.metadataRecordDate')}
-            />
-            {show('mission.metadataRecordDate') ? (
-              <p className="field-error">{show('mission.metadataRecordDate')}</p>
-            ) : null}
-          </div>
-          <div>
-            <LabelWithHint
-              htmlFor="publicationDate"
-              label="Dataset publication date (citation)"
-              hint={
-                <>
-                  <code>CI_DateTypeCode</code> publication, separate from completion/end.
-                </>
-              }
-            />
-            <input
-              id="publicationDate"
-              type="datetime-local"
-              className={`form-control${invalid('mission.publicationDate') ? ' form-control--invalid' : ''}`}
-              data-pilot-field="mission.publicationDate"
-              value={toDatetimeLocalValue(mission.publicationDate)}
-              onChange={(e) => onMissionPatch({ publicationDate: fromDatetimeLocalValue(e.target.value) })}
-              onBlur={() => onTouched('mission.publicationDate')}
-            />
-            {show('mission.publicationDate') ? <p className="field-error">{show('mission.publicationDate')}</p> : null}
-          </div>
-        </div>
+        <LabelWithHint
+          htmlFor="metadataRecordDate"
+          label={
+            <>
+              Metadata record date (<code>gmd:dateStamp</code>)
+            </>
+          }
+          hint={
+            <>
+              <strong>Metadata record date</strong> for <code>gmd:dateStamp</code>. When blank, the XML preview uses the
+              current UTC instant so downloads always carry a fresh stamp; set this field to freeze a specific instant
+              (for example to match a source file you imported).
+            </>
+          }
+        />
+        <input
+          id="metadataRecordDate"
+          type="datetime-local"
+          className={`form-control${invalid('mission.metadataRecordDate') ? ' form-control--invalid' : ''}`}
+          data-pilot-field="mission.metadataRecordDate"
+          value={toDatetimeLocalValue(mission.metadataRecordDate)}
+          onChange={(e) => onMissionPatch({ metadataRecordDate: fromDatetimeLocalValue(e.target.value) })}
+          onBlur={() => onTouched('mission.metadataRecordDate')}
+        />
+        {show('mission.metadataRecordDate') ? (
+          <p className="field-error">{show('mission.metadataRecordDate')}</p>
+        ) : null}
 
-        <div className="form-row-2">
-          <div>
-            <label htmlFor="language">Language</label>
-            <input
-              id="language"
-              className={`form-control${invalid('mission.language') ? ' form-control--invalid' : ''}`}
-              data-pilot-field="mission.language"
-              placeholder="e.g., eng"
-              value={mission.language || ''}
-              onChange={(e) => onMissionPatch({ language: e.target.value })}
-              onBlur={() => onTouched('mission.language')}
-              aria-required
-            />
-            {show('mission.language') ? <p className="field-error">{show('mission.language')}</p> : null}
-          </div>
-          <div>
-            <label htmlFor="characterSet">Character set</label>
-            <input
-              id="characterSet"
-              className="form-control"
-              data-pilot-field="mission.characterSet"
-              placeholder="e.g., utf8"
-              value={mission.characterSet || ''}
-              onChange={(e) => onMissionPatch({ characterSet: e.target.value })}
-            />
-          </div>
-        </div>
+        <label htmlFor="characterSet">Character set</label>
+        <input
+          id="characterSet"
+          className="form-control"
+          data-pilot-field="mission.characterSet"
+          placeholder="e.g., utf8"
+          value={mission.characterSet || ''}
+          onChange={(e) => onMissionPatch({ characterSet: e.target.value })}
+        />
         </fieldset>
+          </div>
+        </details>
 
+        <details className="panel mission-collapsible">
+          <summary className="mission-collapsible__summary">Topic categories &amp; browse graphic (optional)</summary>
+          <div className="mission-collapsible__body">
         <fieldset className="pilot-fieldset mission-field-group">
           <legend className="mission-fieldset-legend mission-fieldset-legend--hint">
           <span>Topic categories (ISO)</span>
@@ -765,7 +832,16 @@ geoscientificInformation`}
         </div>
         </fieldset>
         </fieldset>
+          </div>
+        </details>
 
+        <details className="panel mission-collapsible">
+          <summary className="mission-collapsible__summary">Citation parties (author / publisher / originator)</summary>
+          <div className="mission-collapsible__body">
+            <p className="hint" style={{ marginTop: 0 }}>
+              One ISO citation block — optional unless your template requires these roles. Distinct from{' '}
+              <strong>point of contact</strong> under Organization.
+            </p>
         <fieldset className="pilot-fieldset mission-field-group">
           <legend className="mission-fieldset-legend mission-fieldset-legend--hint">
           <span>
@@ -831,7 +907,12 @@ geoscientificInformation`}
           onChange={(e) => onMissionPatch({ citationOriginatorOrganisationName: e.target.value })}
         />
         </fieldset>
+          </div>
+        </details>
 
+        <details className="panel mission-collapsible">
+          <summary className="mission-collapsible__summary">Scope &amp; dataset status</summary>
+          <div className="mission-collapsible__body">
         <fieldset className="pilot-fieldset mission-field-group">
           <legend className="mission-fieldset-legend">Scope &amp; dataset status</legend>
         <label htmlFor="scopeCode">Scope code</label>
@@ -873,10 +954,53 @@ geoscientificInformation`}
           </div>
         </div>
         </fieldset>
+          </div>
+        </details>
 
+        <details className="panel mission-collapsible" open>
+          <summary className="mission-collapsible__summary">Organization, contact &amp; identifiers (required for export)</summary>
+          <div className="mission-collapsible__body">
         <fieldset className="pilot-fieldset mission-field-group">
           <legend className="mission-fieldset-legend">Organization, contact &amp; identifiers</legend>
         <h4 className="panel-subtitle">Organization &amp; contact</h4>
+        {contactLibraryEnabled ? (
+          <div className="mission-contact-library panel" style={{ marginBottom: '0.85rem' }}>
+            <p className="hint" style={{ marginTop: 0 }}>
+              <strong>Contact library</strong> — apply a vetted NOAA block, then edit the individual name and email to
+              match your record.
+            </p>
+            <div className="form-row-2">
+              <button
+                type="button"
+                className="button button-secondary"
+                onClick={() =>
+                  onMissionPatch({
+                    org: 'National Oceanic and Atmospheric Administration',
+                    ror: {
+                      id: 'https://ror.org/033thwp43',
+                      name: 'National Oceanic and Atmospheric Administration',
+                      country: 'US',
+                      types: ['Government'],
+                    },
+                  })
+                }
+              >
+                NOAA (agency) + ROR
+              </button>
+              <button
+                type="button"
+                className="button button-secondary"
+                onClick={() =>
+                  onMissionPatch({
+                    org: 'National Centers for Environmental Information, NOAA',
+                  })
+                }
+              >
+                NCEI organization text
+              </button>
+            </div>
+          </div>
+        ) : null}
         <div className="form-row-2">
           <div>
             <label htmlFor="org">Organization *</label>
@@ -1031,6 +1155,8 @@ geoscientificInformation`}
           </div>
         </div>
         </fieldset>
+          </div>
+        </details>
       </section>
 
       <section className="panel">

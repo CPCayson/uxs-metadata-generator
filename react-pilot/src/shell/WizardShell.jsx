@@ -457,6 +457,7 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
   const activeStepMeta = profile.steps.find((s) => s.id === activeStep) ?? profile.steps[0]
 
   const wizardStepProps = {
+    profile,
     pilotState,
     setPilotState,
     touched,
@@ -465,6 +466,7 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     issues: validation.issues,
     mission: pilotState.mission,
     onMissionPatch: (patch) => setPilotState((p) => ({ ...p, mission: { ...p.mission, ...patch } })),
+    contactLibraryEnabled: Boolean(profile.capabilities?.contactLibrary),
     onSourceProvenanceClear: () => setPilotState((p) => ({
       ...p,
       sourceProvenance: { sourceType: 'manual', sourceId: '', importedAt: '', originalFilename: '', originalUuid: '' },
@@ -1072,6 +1074,7 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
                   serverRulesSummary={ma.serverRulesSummary}
                   statusMessage={statusMessage}
                   onIssueNavigate={navigateToPilotField}
+                  pilotState={pilotState}
                   getFieldLabel={
                     typeof profile.getFieldLabel === 'function' ? profile.getFieldLabel.bind(profile) : getPilotFieldLabelFallback
                   }
@@ -1113,9 +1116,11 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
         </div>
 
         <article
+          id="pilot-wizard-form-column"
           ref={mainColumnRef}
           className="card workspace-main pilot-step pilot-step--continuous"
           data-active-step={activeStep}
+          aria-label="Wizard form — all steps"
         >
           {/* Mission: section titles + step pills already identify the step — avoid repeating activeStep label here */}
           {profile.id === 'mission' ? (

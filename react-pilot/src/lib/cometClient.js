@@ -34,7 +34,7 @@ const COMET_AUTH_KEY = 'manta.comet.auth.v1'
 const COMET_AUTH_TTL_MS = 1000 * 60 * 90 // 90 minutes
 
 const PROXY_MISSING_HINT =
-  `CoMET proxy not found (404) at ${PROXY}. Use Netlify Dev / deploy functions, or route /api/comet-proxy to the comet-proxy function.`
+  `CoMET proxy not found (404) at ${PROXY}. Open the app via Netlify dev (usually http://localhost:8888), or run plain Vite with API_PROXY_TARGET=http://127.0.0.1:8888 in .env.development.local while netlify dev is up — see react-pilot/.env.example.`
 
 /**
  * @param {string} url

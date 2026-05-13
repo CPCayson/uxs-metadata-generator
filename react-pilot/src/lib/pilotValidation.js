@@ -397,6 +397,19 @@ function checkSensorKwMismatch(type, variable, keywords) {
 const COMMON_ABSTRACT_ACRONYMS = new Set(['ADCP', 'AUV', 'CTD', 'GCMD', 'ISO', 'NCEI', 'NOAA', 'REMUS', 'ROV', 'UUV'])
 
 /**
+ * Abstract quality treats an all-caps token as “explained” when it appears inside parentheses
+ * (typical pattern: `… (NOAA Pacific Marine Environmental Laboratory (PMEL)) …`).
+ *
+ * @param {string} abstract
+ * @param {string} token
+ * @returns {boolean}
+ */
+export function isAcronymExplainedInAbstractText(abstract, token) {
+  const escaped = String(token).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  return new RegExp(`\\([^)]*\\b${escaped}\\b[^)]*\\)`).test(String(abstract || ''))
+}
+
+/**
  * @param {object} state
  * @returns {Array<{ severity: Severity, field: string, message: string, xpath?: string }>}
  */
@@ -435,10 +448,7 @@ function abstractQualityIssues(state) {
   }
   const acronyms = [...new Set(abstract.match(/\b[A-Z]{2,8}\b/g) || [])]
     .filter((token) => !COMMON_ABSTRACT_ACRONYMS.has(token))
-  const unexplained = acronyms.find((token) => {
-    const escaped = token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-    return !new RegExp(`\\([^)]*\\b${escaped}\\b[^)]*\\)`).test(abstract)
-  })
+  const unexplained = acronyms.find((token) => !isAcronymExplainedInAbstractText(abstract, token))
   if (unexplained) {
     issues.push({
       severity: 'w',
@@ -1008,6 +1018,12 @@ export function defaultPilotState() {
   }
 }
 
+/**
+ * Merge a persisted or imported partial into the pilot baseline.
+ * On success, the return value is always passed through {@link sanitizePilotState} (see final return).
+ * Import or XML-vs-state “gap” heuristics should use this merged result, not the raw parser partial alone,
+ * so defaults and normalizations are not mistaken for mapping failures.
+ */
 export function mergeLoadedPilotState(base, loaded) {
   if (!loaded || typeof loaded !== 'object') return base
   const out = JSON.parse(JSON.stringify(base))

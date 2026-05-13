@@ -411,6 +411,14 @@
   border-bottom: none;
 }
 
+.keyword-metadata-bw__actions {
+  margin-top: 0.55rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+}
+
 .keyword-metadata-bw__list strong {
   font-weight: 700;
   color: #000;
@@ -1390,6 +1398,63 @@
 
 :root[data-theme='dark'] .mission-templates-disclosure__expand-hint {
   color: rgba(148, 163, 184, 0.92);
+}
+
+/* Mission — progressive disclosure (Identification / UxS) */
+.mission-collapsible {
+  margin-bottom: 0.65rem;
+}
+.mission-collapsible > summary.mission-collapsible__summary {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  list-style: none;
+  padding: 0.28rem 0.15rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-color, #0f172a);
+  border-bottom: 1px solid color-mix(in srgb, var(--border-color, #e2e8f0) 88%, transparent);
+  user-select: none;
+}
+.mission-collapsible > summary::-webkit-details-marker {
+  display: none;
+}
+.mission-collapsible > summary.mission-collapsible__summary::before {
+  content: '▸';
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  opacity: 0.55;
+  transition: transform 0.12s ease;
+}
+.mission-collapsible[open] > summary.mission-collapsible__summary::before {
+  transform: rotate(90deg);
+}
+.mission-collapsible__body {
+  padding-top: 0.4rem;
+}
+:root[data-theme='dark'] .mission-collapsible > summary.mission-collapsible__summary {
+  color: #f1f5f9;
+  border-bottom-color: color-mix(in srgb, var(--border-color, #334155) 88%, transparent);
+}
+
+.pilot-import-attention {
+  margin: 0 0 0.75rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--primary-color, #0891b2) 40%, var(--border-color, #e2e8f0));
+  background: color-mix(in srgb, var(--primary-color, #0891b2) 10%, var(--card-bg, #fff));
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--text-color, #0f172a);
+}
+.pilot-import-attention__list {
+  font-weight: 600;
+}
+:root[data-theme='dark'] .pilot-import-attention {
+  color: #f1f5f9;
+  background: color-mix(in srgb, var(--primary-color, #22d3ee) 12%, rgba(15, 23, 42, 0.92));
+  border-color: color-mix(in srgb, var(--primary-color, #22d3ee) 45%, #334155);
 }
 
 /* Collapsible left rail: modes, readiness bundles, issues list */
@@ -2970,6 +3035,19 @@
   line-height: 1.45;
 }
 
+.issue-row-extras {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.65rem;
+  margin-top: 0.15rem;
+  padding: 0 0.25rem 0.2rem;
+  font-size: 0.72rem;
+}
+
+.issue-row-kms-link {
+  font-weight: 600;
+}
+
 .issue-xpath {
   font-size: 0.7rem;
   word-break: break-all;
@@ -3206,6 +3284,78 @@
 
 .kw-chip--uuid-warn {
   box-shadow: 0 0 0 1px color-mix(in srgb, #c27803 45%, var(--border));
+}
+
+/* Keyword chip row: label + optional KMS resolve + remove (supports label-only / empty UUID chips). */
+.kw-chip-cluster {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.22rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.1rem 0.18rem 0.1rem 0.48rem;
+  font-size: 0.8rem;
+  background: color-mix(in srgb, var(--focus-ring) 12%, var(--surface));
+  vertical-align: middle;
+  max-width: min(100%, 42ch);
+}
+
+.kw-chip-cluster--uuid-warn {
+  box-shadow: 0 0 0 1px color-mix(in srgb, #c27803 45%, var(--border));
+}
+
+.kw-chip-cluster__label {
+  max-width: 20ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kw-chip-cluster__kms {
+  font-size: 0.68rem !important;
+  padding: 0.06rem 0.4rem !important;
+  line-height: 1.15;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.kw-chip-cluster__open {
+  flex-shrink: 0;
+  font-size: 0.68rem;
+  line-height: 1.15;
+  padding: 0.06rem 0.35rem;
+  border-radius: 999px;
+  text-decoration: none;
+  border: 1px solid color-mix(in srgb, var(--border) 80%, var(--focus-ring));
+  color: var(--text-muted, #64748b);
+}
+
+.kw-chip-cluster__open:hover {
+  color: var(--text-color, #0f172a);
+  border-color: var(--focus-ring, #2563eb);
+}
+
+.kw-chip-cluster__remove {
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0 0.28rem;
+  font-size: 1.05rem;
+  line-height: 1;
+  color: var(--text-muted, #64748b);
+  border-radius: 999px;
+}
+
+.kw-chip-cluster__remove:hover:not(:disabled) {
+  color: var(--text-color, #0f172a);
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.kw-chip-cluster--leaving {
+  opacity: 0.35;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
 }
 
 .count-badge {

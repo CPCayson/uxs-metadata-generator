@@ -236,14 +236,26 @@ export function useMissionCometActions({
       const status = await getCometAuthStatus()
       setAuthStatus(status)
       setCometPassword('')
-      onStatus('CoMET login succeeded. Session token is now attached to proxy requests.')
+      if (!String(cometUuid || '').trim() && !String(localUuidInput || '').trim()) {
+        const pick = getSimilarKnownCometUuids('', 1)[0]
+        if (pick?.uuid) {
+          setLocalUuidInput(pick.uuid)
+          onStatus(
+            `CoMET login succeeded — session attached. Prefilled pull field with your most recent UUID (${pick.uuid.slice(0, 8)}…); adjust or click Pull.`,
+          )
+        } else {
+          onStatus('CoMET login succeeded. Session token is now attached to proxy requests.')
+        }
+      } else {
+        onStatus('CoMET login succeeded. Session token is now attached to proxy requests.')
+      }
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err)
       onStatus(`CoMET login failed: ${msg}`)
     } finally {
       setAuthBusy(false)
     }
-  }, [cometUsername, cometPassword, onStatus])
+  }, [cometUsername, cometPassword, cometUuid, localUuidInput, onStatus])
 
   const runMetaserverLogin = useCallback(async () => {
     if (!cometUsername.trim() || !cometPassword) {

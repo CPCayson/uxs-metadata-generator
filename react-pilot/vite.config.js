@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -96,21 +96,40 @@ function viteLegacyMainHtml() {
 }
 
 // https://vite.dev/config/
-export default defineConfig({
-  base: './',
-  define: {
-    'import.meta.env.VITE_APP_VERSION': JSON.stringify(pkg.version || '0.0.0'),
-  },
-  plugins: [react(), viteApiDbDevStub(), viteOnestopStatsDevStub(), viteLegacyMainHtml()],
-  optimizeDeps: {
-    include: ['react', 'react-dom'],
-  },
-  server: {
-    port: Number(process.env.PORT) || 5173,
-    // If 5173 is taken, pick the next free port so `npm run dev` still starts.
-    // Netlify dev still targets 5173 via netlify.toml when this instance owns it.
-    strictPort: false,
-    host: true,
-    open: process.env.VITE_OPEN === '0' ? false : true,
-  },
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, __dirname, '')
+  const apiProxyTarget = String(env.API_PROXY_TARGET || process.env.API_PROXY_TARGET || '').trim()
+  /** Forward `/api/db` + `/api/comet-proxy` to Netlify dev (e.g. http://127.0.0.1:8888) while using plain Vite on :5173. */
+  const proxyNetlify = apiProxyTarget
+    ? {
+        '/api/db': { target: apiProxyTarget, changeOrigin: true },
+        '/api/comet-proxy': { target: apiProxyTarget, changeOrigin: true },
+      }
+    : undefined
+
+  return {
+    base: './',
+    define: {
+      'import.meta.env.VITE_APP_VERSION': JSON.stringify(pkg.version || '0.0.0'),
+    },
+    plugins: [
+      react(),
+      ...(apiProxyTarget ? [] : [viteApiDbDevStub()]),
+      viteOnestopStatsDevStub(),
+      viteLegacyMainHtml(),
+    ],
+    optimizeDeps: {
+      include: ['react', 'react-dom'],
+      exclude: ['xmllint-wasm'],
+    },
+    server: {
+      port: Number(process.env.PORT) || 5173,
+      // If 5173 is taken, pick the next free port so `npm run dev` still starts.
+      // Netlify dev still targets 5173 via netlify.toml when this instance owns it.
+      strictPort: false,
+      host: true,
+      open: process.env.VITE_OPEN === '0' ? false : true,
+      ...(proxyNetlify ? { proxy: proxyNetlify } : {}),
+    },
+  }
 })
