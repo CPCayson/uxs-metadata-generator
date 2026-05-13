@@ -110,6 +110,7 @@ export function SectionBar({ label, pct, errors, warnings, onClick, active }) {
  *   activeDefIssue: null | { field: string, message: string },
  *   setActiveDefIssue: (v: unknown) => void,
  *   hideSectionBars?: boolean,
+ *   suppressFloatingLensAsk?: boolean,
  * }} props
  */
 export default function LensScannerWorkspacePanel({
@@ -154,6 +155,7 @@ export default function LensScannerWorkspacePanel({
   setLensAsk,
   activeDefIssue,
   setActiveDefIssue,
+  suppressFloatingLensAsk = false,
 }) {
   const defText = activeDefIssue ? getFieldDefinition(activeDefIssue.field) : null
   const onExit = embeddedInFab ? onFabExit ?? onToggleLens : onToggleLens
@@ -198,31 +200,39 @@ export default function LensScannerWorkspacePanel({
                     : ''}
               </span>
             )}
-            <div className="manta-lens-bar__filters-inline" role="group" aria-label="Issue list scope">
+            <span className="manta-lens-bar__filter-legend" aria-hidden="true">
+              Step
+            </span>
+            <div className="manta-lens-bar__filters-inline" role="group" aria-label="Wizard step scope for inline hints">
               {[
-                { id: 'active', label: 'STEP' },
-                { id: 'all', label: 'ALL' },
+                { id: 'active', label: 'STEP', title: 'Current wizard step only' },
+                { id: 'all', label: 'STEPS', title: 'Every wizard step (full form)' },
               ].map((s) => (
                 <button
                   key={s.id}
                   type="button"
                   className={`manta-lens-filter-chip${lensIssueScope === s.id ? ' manta-lens-filter-chip--active' : ''}`}
+                  title={s.title}
                   onClick={() => setLensIssueScope(s.id)}
                 >
                   {s.label}
                 </button>
               ))}
             </div>
-            <div className="manta-lens-bar__filters-inline" role="group" aria-label="Filter issues by severity">
+            <span className="manta-lens-bar__filter-legend" aria-hidden="true">
+              Sev
+            </span>
+            <div className="manta-lens-bar__filters-inline" role="group" aria-label="Severity filter for inline hints">
               {[
-                { id: 'all', label: 'ALL' },
-                { id: 'errors', label: 'ERR' },
-                { id: 'warnings', label: 'WRN' },
+                { id: 'all', label: 'ALL', title: 'Errors and warnings' },
+                { id: 'errors', label: 'ERR', title: 'Errors only' },
+                { id: 'warnings', label: 'WRN', title: 'Warnings only' },
               ].map((f) => (
                 <button
                   key={f.id}
                   type="button"
                   className={`manta-lens-filter-chip${lensIssueFilter === f.id ? ' manta-lens-filter-chip--active' : ''}`}
+                  title={f.title}
                   onClick={() => setLensIssueFilter(f.id)}
                 >
                   {f.label}
@@ -286,7 +296,7 @@ export default function LensScannerWorkspacePanel({
               title={
                 lensFixGuide
                   ? 'Exit guided fix walk (Esc)'
-                  : 'Guided walk: jump to each field, coaching, quick chips, wizard step sync (j/k n/p; respects STEP / severity filters)'
+                  : 'Guided walk: jump to each field, coaching, quick chips, wizard step sync (j/k n/p; respects Step/Steps and severity chips)'
               }
             >
               {lensFixGuide ? 'Exit walk' : 'Fix walk'}
@@ -321,9 +331,9 @@ export default function LensScannerWorkspacePanel({
           const coaching = getCoachingPrompts(fwIssue)
           const walkChips = getLensChipsForIssue(fwIssue, lensChipPilot)
           return (
-            <div className="manta-lens-fixguide" role="region" aria-label="Guided fix walk">
+            <div className="manta-lens-fixguide" role="region" aria-label="Guided fix">
               <div className="manta-lens-fixguide__head">
-                <span className="manta-lens-fixguide__title">Fix walk</span>
+                <span className="manta-lens-fixguide__title">Guided fix</span>
                 <span className="manta-lens-fixguide__step">
                   {lensFixGuide.index + 1}
                   {' / '}
@@ -425,41 +435,9 @@ export default function LensScannerWorkspacePanel({
         </div>
       )}
 
-      {(lensHlField || lensHelpOpen) && (
-        <div className="manta-lens-glass manta-lens-glass--form">
-          {lensHlField && (
-            <div className="manta-lens-glass__hl-label" aria-live="polite">
-              <span className="manta-lens-glass__hl-dot" aria-hidden="true" />
-              {`field: ${lensHlField}`}
-              <button
-                type="button"
-                className="manta-lens-bar__clear-hl"
-                onClick={() => setLensHlField(null)}
-                title="Clear field highlight"
-              >
-                ✕
-              </button>
-            </div>
-          )}
-          {lensHelpOpen && (
-            <div className="manta-lens-glass__kbd-hint">
-              {lensFixGuide ? (
-                <>
-                  <kbd>Esc</kbd> end fix walk · <kbd>j</kbd><kbd>k</kbd> or <kbd>n</kbd><kbd>p</kbd> next / back
-                </>
-              ) : (
-                <>
-                  <kbd>Esc</kbd> exit · <kbd>j</kbd><kbd>k</kbd> jump issues · Fix walk: guided fields with chips
-                </>
-              )}
-            </div>
-          )}
-        </div>
-      )}
-
-      {(lensAsk || (activeDefIssue && defText)) && (
+      {(lensAsk && !suppressFloatingLensAsk) || (activeDefIssue && defText) ? (
         <div className="manta-lens-floating-stack" aria-live="polite">
-          {lensAsk && (
+          {lensAsk && !suppressFloatingLensAsk ? (
             <div className="manta-lens-ask-answer">
               <div className="manta-lens-ask-answer__label">
                 <span>ℹ</span>
@@ -470,7 +448,7 @@ export default function LensScannerWorkspacePanel({
               </div>
               <p className="manta-lens-ask-answer__text">{lensAsk.answer}</p>
             </div>
-          )}
+          ) : null}
           {activeDefIssue && defText && (
             <div className="manta-def-panel">
               <div className="manta-def-panel__header">
@@ -484,7 +462,7 @@ export default function LensScannerWorkspacePanel({
             </div>
           )}
         </div>
-      )}
+      ) : null}
 
       {embeddedInFab && profile?.label ? (
         <p className="manta-lens-fab-panel__profile-hint" title={profile.label}>

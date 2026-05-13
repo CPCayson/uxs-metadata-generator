@@ -420,6 +420,7 @@ export default function EmbeddableShell({
       <WorkbenchChromeProvider
         assistantLayout={assistantLayout}
         lensActive={Boolean(mantaToolsEnabled && lensMode)}
+        lensTarget={lensTarget}
         workspaceDensity={workspaceDensity}
         setWorkspaceDensity={setWorkspaceDensity}
       >

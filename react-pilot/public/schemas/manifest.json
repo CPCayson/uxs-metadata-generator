@@ -1,0 +1,290 @@
+[
+  {
+    "name": "schema.xsd",
+    "path": "/schemas/schema.xsd"
+  },
+  {
+    "name": "schema/gco/basicTypes.xsd",
+    "path": "/schemas/schema/gco/basicTypes.xsd"
+  },
+  {
+    "name": "schema/gco/gco.xsd",
+    "path": "/schemas/schema/gco/gco.xsd"
+  },
+  {
+    "name": "schema/gco/gcoBase.xsd",
+    "path": "/schemas/schema/gco/gcoBase.xsd"
+  },
+  {
+    "name": "schema/gmd/applicationSchema.xsd",
+    "path": "/schemas/schema/gmd/applicationSchema.xsd"
+  },
+  {
+    "name": "schema/gmd/citation.xsd",
+    "path": "/schemas/schema/gmd/citation.xsd"
+  },
+  {
+    "name": "schema/gmd/constraints.xsd",
+    "path": "/schemas/schema/gmd/constraints.xsd"
+  },
+  {
+    "name": "schema/gmd/content.xsd",
+    "path": "/schemas/schema/gmd/content.xsd"
+  },
+  {
+    "name": "schema/gmd/dataQuality.xsd",
+    "path": "/schemas/schema/gmd/dataQuality.xsd"
+  },
+  {
+    "name": "schema/gmd/distribution.xsd",
+    "path": "/schemas/schema/gmd/distribution.xsd"
+  },
+  {
+    "name": "schema/gmd/extent.xsd",
+    "path": "/schemas/schema/gmd/extent.xsd"
+  },
+  {
+    "name": "schema/gmd/freeText.xsd",
+    "path": "/schemas/schema/gmd/freeText.xsd"
+  },
+  {
+    "name": "schema/gmd/gmd.xsd",
+    "path": "/schemas/schema/gmd/gmd.xsd"
+  },
+  {
+    "name": "schema/gmd/identification.xsd",
+    "path": "/schemas/schema/gmd/identification.xsd"
+  },
+  {
+    "name": "schema/gmd/maintenance.xsd",
+    "path": "/schemas/schema/gmd/maintenance.xsd"
+  },
+  {
+    "name": "schema/gmd/metadataApplication.xsd",
+    "path": "/schemas/schema/gmd/metadataApplication.xsd"
+  },
+  {
+    "name": "schema/gmd/metadataEntity.xsd",
+    "path": "/schemas/schema/gmd/metadataEntity.xsd"
+  },
+  {
+    "name": "schema/gmd/metadataExtension.xsd",
+    "path": "/schemas/schema/gmd/metadataExtension.xsd"
+  },
+  {
+    "name": "schema/gmd/portrayalCatalogue.xsd",
+    "path": "/schemas/schema/gmd/portrayalCatalogue.xsd"
+  },
+  {
+    "name": "schema/gmd/referenceSystem.xsd",
+    "path": "/schemas/schema/gmd/referenceSystem.xsd"
+  },
+  {
+    "name": "schema/gmd/spatialRepresentation.xsd",
+    "path": "/schemas/schema/gmd/spatialRepresentation.xsd"
+  },
+  {
+    "name": "schema/gmi/acquisitionInformation.xsd",
+    "path": "/schemas/schema/gmi/acquisitionInformation.xsd"
+  },
+  {
+    "name": "schema/gmi/contentInformation.xsd",
+    "path": "/schemas/schema/gmi/contentInformation.xsd"
+  },
+  {
+    "name": "schema/gmi/dataQualityInformation.xsd",
+    "path": "/schemas/schema/gmi/dataQualityInformation.xsd"
+  },
+  {
+    "name": "schema/gmi/gmi.xsd",
+    "path": "/schemas/schema/gmi/gmi.xsd"
+  },
+  {
+    "name": "schema/gmi/metadataEntitySet.xsd",
+    "path": "/schemas/schema/gmi/metadataEntitySet.xsd"
+  },
+  {
+    "name": "schema/gmi/spatialRepresentationInformation.xsd",
+    "path": "/schemas/schema/gmi/spatialRepresentationInformation.xsd"
+  },
+  {
+    "name": "schema/gml/basicTypes.xsd",
+    "path": "/schemas/schema/gml/basicTypes.xsd"
+  },
+  {
+    "name": "schema/gml/coordinateOperations.xsd",
+    "path": "/schemas/schema/gml/coordinateOperations.xsd"
+  },
+  {
+    "name": "schema/gml/coordinateReferenceSystems.xsd",
+    "path": "/schemas/schema/gml/coordinateReferenceSystems.xsd"
+  },
+  {
+    "name": "schema/gml/coordinateSystems.xsd",
+    "path": "/schemas/schema/gml/coordinateSystems.xsd"
+  },
+  {
+    "name": "schema/gml/coverage.xsd",
+    "path": "/schemas/schema/gml/coverage.xsd"
+  },
+  {
+    "name": "schema/gml/datums.xsd",
+    "path": "/schemas/schema/gml/datums.xsd"
+  },
+  {
+    "name": "schema/gml/deprecatedTypes.xsd",
+    "path": "/schemas/schema/gml/deprecatedTypes.xsd"
+  },
+  {
+    "name": "schema/gml/dictionary.xsd",
+    "path": "/schemas/schema/gml/dictionary.xsd"
+  },
+  {
+    "name": "schema/gml/direction.xsd",
+    "path": "/schemas/schema/gml/direction.xsd"
+  },
+  {
+    "name": "schema/gml/dynamicFeature.xsd",
+    "path": "/schemas/schema/gml/dynamicFeature.xsd"
+  },
+  {
+    "name": "schema/gml/feature.xsd",
+    "path": "/schemas/schema/gml/feature.xsd"
+  },
+  {
+    "name": "schema/gml/geometryAggregates.xsd",
+    "path": "/schemas/schema/gml/geometryAggregates.xsd"
+  },
+  {
+    "name": "schema/gml/geometryBasic0d1d.xsd",
+    "path": "/schemas/schema/gml/geometryBasic0d1d.xsd"
+  },
+  {
+    "name": "schema/gml/geometryBasic2d.xsd",
+    "path": "/schemas/schema/gml/geometryBasic2d.xsd"
+  },
+  {
+    "name": "schema/gml/geometryComplexes.xsd",
+    "path": "/schemas/schema/gml/geometryComplexes.xsd"
+  },
+  {
+    "name": "schema/gml/geometryPrimitives.xsd",
+    "path": "/schemas/schema/gml/geometryPrimitives.xsd"
+  },
+  {
+    "name": "schema/gml/gml.xsd",
+    "path": "/schemas/schema/gml/gml.xsd"
+  },
+  {
+    "name": "schema/gml/gmlBase.xsd",
+    "path": "/schemas/schema/gml/gmlBase.xsd"
+  },
+  {
+    "name": "schema/gml/grids.xsd",
+    "path": "/schemas/schema/gml/grids.xsd"
+  },
+  {
+    "name": "schema/gml/measures.xsd",
+    "path": "/schemas/schema/gml/measures.xsd"
+  },
+  {
+    "name": "schema/gml/observation.xsd",
+    "path": "/schemas/schema/gml/observation.xsd"
+  },
+  {
+    "name": "schema/gml/referenceSystems.xsd",
+    "path": "/schemas/schema/gml/referenceSystems.xsd"
+  },
+  {
+    "name": "schema/gml/temporal.xsd",
+    "path": "/schemas/schema/gml/temporal.xsd"
+  },
+  {
+    "name": "schema/gml/temporalReferenceSystems.xsd",
+    "path": "/schemas/schema/gml/temporalReferenceSystems.xsd"
+  },
+  {
+    "name": "schema/gml/temporalTopology.xsd",
+    "path": "/schemas/schema/gml/temporalTopology.xsd"
+  },
+  {
+    "name": "schema/gml/topology.xsd",
+    "path": "/schemas/schema/gml/topology.xsd"
+  },
+  {
+    "name": "schema/gml/units.xsd",
+    "path": "/schemas/schema/gml/units.xsd"
+  },
+  {
+    "name": "schema/gml/valueObjects.xsd",
+    "path": "/schemas/schema/gml/valueObjects.xsd"
+  },
+  {
+    "name": "schema/gmx/catalogues.xsd",
+    "path": "/schemas/schema/gmx/catalogues.xsd"
+  },
+  {
+    "name": "schema/gmx/codelistItem.xsd",
+    "path": "/schemas/schema/gmx/codelistItem.xsd"
+  },
+  {
+    "name": "schema/gmx/crsItem.xsd",
+    "path": "/schemas/schema/gmx/crsItem.xsd"
+  },
+  {
+    "name": "schema/gmx/extendedTypes.xsd",
+    "path": "/schemas/schema/gmx/extendedTypes.xsd"
+  },
+  {
+    "name": "schema/gmx/gmx.xsd",
+    "path": "/schemas/schema/gmx/gmx.xsd"
+  },
+  {
+    "name": "schema/gmx/gmxUsage.xsd",
+    "path": "/schemas/schema/gmx/gmxUsage.xsd"
+  },
+  {
+    "name": "schema/gmx/uomItem.xsd",
+    "path": "/schemas/schema/gmx/uomItem.xsd"
+  },
+  {
+    "name": "schema/gsr/gsr.xsd",
+    "path": "/schemas/schema/gsr/gsr.xsd"
+  },
+  {
+    "name": "schema/gsr/spatialReferencing.xsd",
+    "path": "/schemas/schema/gsr/spatialReferencing.xsd"
+  },
+  {
+    "name": "schema/gss/geometry.xsd",
+    "path": "/schemas/schema/gss/geometry.xsd"
+  },
+  {
+    "name": "schema/gss/gss.xsd",
+    "path": "/schemas/schema/gss/gss.xsd"
+  },
+  {
+    "name": "schema/gts/gts.xsd",
+    "path": "/schemas/schema/gts/gts.xsd"
+  },
+  {
+    "name": "schema/gts/temporalObjects.xsd",
+    "path": "/schemas/schema/gts/temporalObjects.xsd"
+  },
+  {
+    "name": "schema/srv/serviceMetadata.xsd",
+    "path": "/schemas/schema/srv/serviceMetadata.xsd"
+  },
+  {
+    "name": "schema/srv/serviceModel.xsd",
+    "path": "/schemas/schema/srv/serviceModel.xsd"
+  },
+  {
+    "name": "schema/srv/srv.xsd",
+    "path": "/schemas/schema/srv/srv.xsd"
+  },
+  {
+    "name": "schema/xlink/xlinks.xsd",
+    "path": "/schemas/schema/xlink/xlinks.xsd"
+  }
+]

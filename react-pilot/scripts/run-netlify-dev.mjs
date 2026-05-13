@@ -17,7 +17,9 @@ process.chdir(pilotRoot)
 const env = { ...process.env }
 if (env.VITE_OPEN === undefined) env.VITE_OPEN = '0'
 
-const child = spawn('npx', ['netlify', 'dev'], {
+// Linked Netlify sites often have repo root above `react-pilot/`; without this, the CLI
+// looks for `../netlify/functions` (empty) and every `/.netlify/functions/*` returns 404.
+const child = spawn('npx', ['netlify', 'dev', '--functions', 'netlify/functions'], {
   stdio: 'inherit',
   shell: true,
   env,

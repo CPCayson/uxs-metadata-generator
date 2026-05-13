@@ -158,6 +158,8 @@ function MantaFieldGlass({
   textLengthThreshold,
   hideAskMore = false,
   compact = false,
+  /** When true, omit the chip / quick-action row (Lens symbiote or plain validation carries that UX). */
+  hideChipsRow = false,
   /** When false, no red required/issue chrome until user touches the field or enables show-all (same as field validation). */
   showValidationChrome = true,
 }) {
@@ -213,38 +215,49 @@ function MantaFieldGlass({
       </div>
 
       {/* chip row */}
-      <div style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        alignItems: 'center',
-        gap: 5,
-        marginTop: 4,
-      }}>
-        {chips.map((chip, i) => (
-          <StatusChip key={i} type={chip.type} label={chip.label} />
-        ))}
-        {/* If field has an error, show Quick Fix button that fires the real auto-fix pipeline */}
-        {hasError && (
-          <button
-            type="button"
-            onClick={() => window.dispatchEvent(new CustomEvent('manta:pilot-auto-fix-request', { detail: { mode: 'lenient' } }))}
-            title="Apply safe mechanical fixes (trim, dates, defaults)"
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: 3,
-              fontSize: '0.68rem', fontWeight: 700,
-              background: '#fee2e2', color: '#7f1d1d',
-              border: '1px solid #dc262644',
-              padding: '1px 8px', borderRadius: 9999, cursor: 'pointer',
-              lineHeight: 1.6,
-            }}
-          >
-            ⚡ Quick fix
-          </button>
-        )}
-        {!hideAskMore && (
-          <AskMoreButton fieldPath={fieldPath} />
-        )}
-      </div>
+      {!hideChipsRow ? (
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            gap: 5,
+            marginTop: 4,
+          }}
+        >
+          {chips.map((chip, i) => (
+            <StatusChip key={i} type={chip.type} label={chip.label} />
+          ))}
+          {hasError && (
+            <button
+              type="button"
+              onClick={() =>
+                window.dispatchEvent(
+                  new CustomEvent('manta:pilot-auto-fix-request', { detail: { mode: 'lenient' } }),
+                )
+              }
+              title="Apply safe mechanical fixes (trim, dates, defaults)"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 3,
+                fontSize: '0.68rem',
+                fontWeight: 700,
+                background: '#fee2e2',
+                color: '#7f1d1d',
+                border: '1px solid #dc262644',
+                padding: '1px 8px',
+                borderRadius: 9999,
+                cursor: 'pointer',
+                lineHeight: 1.6,
+              }}
+            >
+              ⚡ Quick fix
+            </button>
+          )}
+          {!hideAskMore ? <AskMoreButton fieldPath={fieldPath} /> : null}
+        </div>
+      ) : null}
     </div>
   )
 }

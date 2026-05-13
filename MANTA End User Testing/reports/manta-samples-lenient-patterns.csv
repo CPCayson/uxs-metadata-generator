@@ -1,56 +1,58 @@
 hitCount,severity,wizardStep,field,message,files
 19,w,mission,mission.abstract,"Abstract should mention the relevant platform, sensor, or observed variable.",0299833.xml; C01531.xml; C01678.xml; EX1904_collection.xml; EX2306_COLLECTION.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml; LISTEN_GoMex_Raw_Audio.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml; NRS_Raw_Data.xml; SAMPLE_Populated.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
-15,w,keywords,keywords.providers[0].uuid,Add concept UUID for best KMS href,AFSC_GA13_Raw_Data.xml; C01531.xml; C01678.xml; EX1904_collection.xml; EX2306_COLLECTION.xml; LISTEN_GoMex_Raw_Audio.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; NRS_Raw_Data.xml; SAMPLE_Populated.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
+18,e,distribution,distribution.license,Use/License is required,0299833.xml; AFSC_GA13_Raw_Data.xml; C01531.xml; C01678.xml; EX2306_COLLECTION.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml; LISTEN_GoMex_Raw_Audio.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml; NRS_Raw_Data.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
+18,w,mission,mission.licenseUrl,License URL recommended when preset is custom,0299833.xml; AFSC_GA13_Raw_Data.xml; C01531.xml; C01678.xml; EX2306_COLLECTION.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml; LISTEN_GoMex_Raw_Audio.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml; NRS_Raw_Data.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
 14,w,mission,mission.ror,No ROR selected (recommended for organization linkage),0299833.xml; AFSC_GA13_Raw_Data.xml; C01531.xml; C01678.xml; EX1904_collection.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml; NRS_Raw_Data.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml
-13,w,keywords,keywords.instruments[0].uuid,Add concept UUID for best KMS href,AFSC_GA13_Raw_Data.xml; C01531.xml; C01678.xml; EX1904_collection.xml; EX2306_COLLECTION.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml; LISTEN_GoMex_Raw_Audio.xml; NCRMP-Socio-Guam.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml; NRS_Raw_Data.xml; SAMPLE_Populated.xml
-13,w,keywords,keywords.platforms[0].uuid,Add concept UUID for best KMS href,AFSC_GA13_Raw_Data.xml; C01531.xml; C01678.xml; EX1904_collection.xml; EX2306_COLLECTION.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml; LISTEN_GoMex_Raw_Audio.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml; NRS_Raw_Data.xml; SAMPLE_Populated.xml; uxs_test.xml
-12,w,keywords,keywords.datacenters[0].uuid,Add concept UUID for best KMS href,AFSC_GA13_Raw_Data.xml; C01531.xml; C01678.xml; EX1904_collection.xml; EX2306_COLLECTION.xml; LISTEN_GoMex_Raw_Audio.xml; NRS_Raw_Data.xml; SAMPLE_Populated.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml
-12,w,keywords,keywords.sciencekeywords[0].uuid,Add concept UUID for best KMS href,AFSC_GA13_Raw_Data.xml; C01531.xml; C01678.xml; EX1904_collection.xml; EX2306_COLLECTION.xml; LISTEN_GoMex_Raw_Audio.xml; NRS_Raw_Data.xml; SAMPLE_Populated.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml
-12,w,keywords,keywords.sciencekeywords[1].uuid,Add concept UUID for best KMS href,AFSC_GA13_Raw_Data.xml; C01531.xml; C01678.xml; EX1904_collection.xml; EX2306_COLLECTION.xml; LISTEN_GoMex_Raw_Audio.xml; NRS_Raw_Data.xml; SAMPLE_Populated.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml
-11,w,keywords,keywords.locations[0].uuid,Add concept UUID for best KMS href,AFSC_GA13_Raw_Data.xml; C01531.xml; C01678.xml; EX2306_COLLECTION.xml; LISTEN_GoMex_Raw_Audio.xml; NRS_Raw_Data.xml; SAMPLE_Populated.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml
-11,w,keywords,keywords.sciencekeywords[2].uuid,Add concept UUID for best KMS href,AFSC_GA13_Raw_Data.xml; C01531.xml; C01678.xml; EX1904_collection.xml; EX2306_COLLECTION.xml; LISTEN_GoMex_Raw_Audio.xml; NRS_Raw_Data.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml
-11,w,keywords,keywords.sciencekeywords[3].uuid,Add concept UUID for best KMS href,0299833.xml; AFSC_GA13_Raw_Data.xml; C01531.xml; C01678.xml; LISTEN_GoMex_Raw_Audio.xml; NCRMP-Socio-Guam.xml; NRS_Raw_Data.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml
-10,w,keywords,keywords.sciencekeywords[4].uuid,Add concept UUID for best KMS href,AFSC_GA13_Raw_Data.xml; C01531.xml; C01678.xml; LISTEN_GoMex_Raw_Audio.xml; NCRMP-Socio-Guam.xml; NRS_Raw_Data.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml
-9,w,keywords,keywords.projects[0].uuid,Add concept UUID for best KMS href,AFSC_GA13_Raw_Data.xml; C01531.xml; C01678.xml; NRS_Raw_Data.xml; SAMPLE_Populated.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml
-8,e,distribution,distribution.format,Distribution format is required,EX1904_collection.xml; EX2306_COLLECTION.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.62654.xml
-8,w,keywords,keywords.locations[1].uuid,Add concept UUID for best KMS href,AFSC_GA13_Raw_Data.xml; C01678.xml; EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; NRS_Raw_Data.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml
-8,w,keywords,keywords.providers[1].uuid,Add concept UUID for best KMS href,C01531.xml; C01678.xml; EX1904_collection.xml; EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; SAMPLE_Populated.xml; uxs_test.xml
-8,w,keywords,keywords.sciencekeywords[5].uuid,Add concept UUID for best KMS href,AFSC_GA13_Raw_Data.xml; LISTEN_GoMex_Raw_Audio.xml; NCRMP-Socio-Guam.xml; NRS_Raw_Data.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml
-8,w,keywords,keywords.sciencekeywords[6].uuid,Add concept UUID for best KMS href,AFSC_GA13_Raw_Data.xml; LISTEN_GoMex_Raw_Audio.xml; NCRMP-Socio-Guam.xml; NRS_Raw_Data.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml
-7,e,keywords,keywords.projects,Projects: at least one keyword is required,EX1904_collection.xml; EX2306_COLLECTION.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml; LISTEN_GoMex_Raw_Audio.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml
-7,w,keywords,keywords.sciencekeywords[7].uuid,Add concept UUID for best KMS href,AFSC_GA13_Raw_Data.xml; LISTEN_GoMex_Raw_Audio.xml; NRS_Raw_Data.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml
+13,w,keywords,keywords.platforms[0].uuid,Add concept UUID for best KMS href,AFSC_GA13_Raw_Data.xml; C01531.xml; C01678.xml; EX2306_COLLECTION.xml; LISTEN_GoMex_Raw_Audio.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; NRS_Raw_Data.xml; SAMPLE_Populated.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
+13,w,keywords,keywords.projects[0].uuid,Add concept UUID for best KMS href,AFSC_GA13_Raw_Data.xml; C01531.xml; C01678.xml; LISTEN_GoMex_Raw_Audio.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; NRS_Raw_Data.xml; SAMPLE_Populated.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
+13,w,keywords,keywords.sciencekeywords[1].uuid,Add concept UUID for best KMS href,AFSC_GA13_Raw_Data.xml; C01531.xml; C01678.xml; LISTEN_GoMex_Raw_Audio.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; NRS_Raw_Data.xml; SAMPLE_Populated.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
+12,w,keywords,keywords.sciencekeywords[0].uuid,Add concept UUID for best KMS href,AFSC_GA13_Raw_Data.xml; C01531.xml; C01678.xml; LISTEN_GoMex_Raw_Audio.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; NRS_Raw_Data.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
+10,w,keywords,keywords.instruments[0].uuid,Add concept UUID for best KMS href,C01531.xml; EX1904_collection.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; SAMPLE_Populated.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
+10,w,keywords,keywords.locations[0].uuid,Add concept UUID for best KMS href,AFSC_GA13_Raw_Data.xml; C01531.xml; C01678.xml; EX1904_collection.xml; LISTEN_GoMex_Raw_Audio.xml; NRS_Raw_Data.xml; SAMPLE_Populated.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
+10,w,keywords,keywords.sciencekeywords[2].uuid,Add concept UUID for best KMS href,0299833.xml; C01531.xml; C01678.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
+10,w,keywords,keywords.sciencekeywords[4].uuid,Add concept UUID for best KMS href,C01531.xml; C01678.xml; EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
+9,w,keywords,keywords.sciencekeywords[3].uuid,Add concept UUID for best KMS href,C01531.xml; C01678.xml; EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
+8,w,keywords,keywords.locations[1].uuid,Add concept UUID for best KMS href,AFSC_GA13_Raw_Data.xml; C01678.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; NRS_Raw_Data.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml
+8,w,keywords,keywords.sciencekeywords[5].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
+8,w,keywords,keywords.sciencekeywords[6].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
+8,w,keywords,keywords.sciencekeywords[7].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml; LISTEN_GoMex_Raw_Audio.xml; NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
+7,w,keywords,keywords.datacenters[1].uuid,Add concept UUID for best KMS href,C01531.xml; EX1904_collection.xml; EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; SAMPLE_Populated.xml; uxs_test.xml
+7,w,keywords,keywords.providers[0].uuid,Add concept UUID for best KMS href,C01678.xml; EX1904_collection.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml; uxs_test.xml
+7,w,keywords,keywords.providers[1].uuid,Add concept UUID for best KMS href,C01531.xml; EX1904_collection.xml; EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; SAMPLE_Populated.xml; uxs_test.xml
+7,w,keywords,keywords.sciencekeywords[9].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
+6,w,keywords,keywords.sciencekeywords[10].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
+6,w,keywords,keywords.sciencekeywords[8].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
 6,e,mission,mission.endDate,End date is required,EX1904_collection.xml; EX2306_COLLECTION.xml; LISTEN_GoMex_Raw_Audio.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml; SAMPLE_Populated.xml
 6,e,mission,mission.individualName,Individual name is required,C01531.xml; EX1904_collection.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml
-5,w,keywords,keywords.datacenters[1].uuid,Add concept UUID for best KMS href,C01531.xml; C01678.xml; EX1904_collection.xml; EX2306_COLLECTION.xml; SAMPLE_Populated.xml
-5,w,keywords,keywords.instruments[1].uuid,Add concept UUID for best KMS href,AFSC_GA13_Raw_Data.xml; C01678.xml; LISTEN_GoMex_Raw_Audio.xml; NRS_Raw_Data.xml; SAMPLE_Populated.xml
-5,e,keywords,keywords.locations,Locations: at least one keyword is required,EX1904_collection.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml
 5,w,keywords,keywords.locations[2].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; NRS_Raw_Data.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.62654.xml
 5,w,keywords,keywords.locations[3].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; NRS_Raw_Data.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.62654.xml
-5,e,keywords,keywords.platforms,Platforms: at least one keyword is required,NCRMP-Socio-Guam.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml
-5,e,mission,mission.purpose,Purpose (dataset) is required,ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml; gov.noaa.nmfs.inport.52208.xml
-4,e,keywords,keywords.datacenters,Data Centers: at least one keyword is required,ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml
-4,e,keywords,keywords.instruments,Instruments: at least one keyword is required,gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml
-4,w,keywords,keywords.locations[5].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.62654.xml
-4,e,keywords,keywords.providers,Providers: at least one keyword is required,ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml
-4,e,keywords,keywords.sciencekeywords,Science Keywords: at least one keyword is required,ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml
-4,w,keywords,keywords.sciencekeywords[9].uuid,Add concept UUID for best KMS href,NCRMP-Socio-Guam.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.62654.xml
-4,w,mission,mission.abstract,"Abstract uses acronym ""MDBC""; expand it on first use when possible.",ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml
-4,e,mission,mission.accession,NCEI Accession must be alphanumeric,AFSC_GA13_Raw_Data.xml; EX1904_collection.xml; LISTEN_GoMex_Raw_Audio.xml; NRS_Raw_Data.xml
-4,e,sensors,sensors[0].type,Sensor 1: type is required,gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml
-4,e,sensors,sensors[0].variable,Sensor 1: observed variable is required,gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml
-3,w,keywords,keywords.locations[4].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.62654.xml
+5,w,keywords,keywords.projects[1].uuid,Add concept UUID for best KMS href,C01531.xml; C01678.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; uxs_test.xml
+5,w,keywords,keywords.sciencekeywords[11].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
+4,w,keywords,keywords.datacenters[0].uuid,Add concept UUID for best KMS href,C01678.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; uxs_test.xml
+4,w,keywords,keywords.sciencekeywords[12].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
+4,w,keywords,keywords.sciencekeywords[13].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
+4,w,keywords,keywords.sciencekeywords[14].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
+4,w,keywords,keywords.sciencekeywords[15].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
+4,w,keywords,keywords.sciencekeywords[16].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
+4,w,keywords,keywords.sciencekeywords[18].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
+4,w,keywords,keywords.sciencekeywords[19].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
+4,w,keywords,keywords.sciencekeywords[20].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
+4,w,mission,mission.abstract,"Abstract uses acronym ""USM""; expand it on first use when possible.",ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml
+3,w,keywords,keywords.instruments[1].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; SAMPLE_Populated.xml; uxs_test.xml
+3,w,keywords,keywords.locations[5].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; gov.noaa.nmfs.inport.52208.xml
 3,w,keywords,keywords.locations[6].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; gov.noaa.nmfs.inport.62654.xml
-3,w,keywords,keywords.platforms[1].uuid,Add concept UUID for best KMS href,C01531.xml; EX2306_COLLECTION.xml; uxs_test.xml
-3,w,keywords,keywords.projects[1].uuid,Add concept UUID for best KMS href,C01531.xml; C01678.xml; uxs_test.xml
-3,w,keywords,keywords.providers[2].uuid,Add concept UUID for best KMS href,C01531.xml; EX1904_collection.xml; uxs_test.xml
-3,w,keywords,keywords.sciencekeywords[10].uuid,Add concept UUID for best KMS href,gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.62654.xml
-3,w,keywords,keywords.sciencekeywords[25].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
-3,w,keywords,keywords.sciencekeywords[8].uuid,Add concept UUID for best KMS href,gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.62654.xml
+3,w,keywords,keywords.projects[2].uuid,Add concept UUID for best KMS href,C01531.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml
+3,w,keywords,keywords.sciencekeywords[17].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
+3,w,keywords,keywords.sciencekeywords[21].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml
+3,w,keywords,keywords.sciencekeywords[24].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
 3,e,mission,mission.email,Email is required,EX1904_collection.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml
-2,e,distribution,distribution.license,Use/License is required,ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml
-2,w,keywords,keywords.instruments[2].uuid,Add concept UUID for best KMS href,C01678.xml; SAMPLE_Populated.xml
+2,w,keywords,keywords.datacenters[2].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml
+2,w,keywords,keywords.instruments[2].uuid,Add concept UUID for best KMS href,SAMPLE_Populated.xml; uxs_test.xml
 2,w,keywords,keywords.instruments[3].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; SAMPLE_Populated.xml
+2,w,keywords,keywords.locations[4].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.52208.xml
 2,w,keywords,keywords.locations[7].uuid,Add concept UUID for best KMS href,NCRMP-Socio-Guam.xml; gov.noaa.nmfs.inport.62654.xml
+2,w,keywords,keywords.platforms[1].uuid,Add concept UUID for best KMS href,C01531.xml; uxs_test.xml
+2,w,keywords,keywords.platforms[2].uuid,Add concept UUID for best KMS href,C01531.xml; NCRMP-Benthic-FG.xml
 2,w,keywords,keywords.platforms[3].uuid,Add concept UUID for best KMS href,C01531.xml; NCRMP-Benthic-FG.xml
 2,w,keywords,keywords.projects[3].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml
 2,w,keywords,keywords.projects[4].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml
@@ -66,6 +68,7 @@ hitCount,severity,wizardStep,field,message,files
 2,w,keywords,keywords.providers[17].uuid,Add concept UUID for best KMS href,EX1904_collection.xml; uxs_test.xml
 2,w,keywords,keywords.providers[18].uuid,Add concept UUID for best KMS href,EX1904_collection.xml; uxs_test.xml
 2,w,keywords,keywords.providers[19].uuid,Add concept UUID for best KMS href,EX1904_collection.xml; uxs_test.xml
+2,w,keywords,keywords.providers[2].uuid,Add concept UUID for best KMS href,EX1904_collection.xml; uxs_test.xml
 2,w,keywords,keywords.providers[20].uuid,Add concept UUID for best KMS href,EX1904_collection.xml; uxs_test.xml
 2,w,keywords,keywords.providers[21].uuid,Add concept UUID for best KMS href,EX1904_collection.xml; uxs_test.xml
 2,w,keywords,keywords.providers[22].uuid,Add concept UUID for best KMS href,EX1904_collection.xml; uxs_test.xml
@@ -78,13 +81,11 @@ hitCount,severity,wizardStep,field,message,files
 2,w,keywords,keywords.providers[29].uuid,Add concept UUID for best KMS href,EX1904_collection.xml; uxs_test.xml
 2,w,keywords,keywords.providers[3].uuid,Add concept UUID for best KMS href,EX1904_collection.xml; uxs_test.xml
 2,w,keywords,keywords.providers[30].uuid,Add concept UUID for best KMS href,EX1904_collection.xml; uxs_test.xml
-2,w,keywords,keywords.providers[31].uuid,Add concept UUID for best KMS href,EX1904_collection.xml; uxs_test.xml
 2,w,keywords,keywords.providers[32].uuid,Add concept UUID for best KMS href,EX1904_collection.xml; uxs_test.xml
 2,w,keywords,keywords.providers[33].uuid,Add concept UUID for best KMS href,EX1904_collection.xml; uxs_test.xml
 2,w,keywords,keywords.providers[34].uuid,Add concept UUID for best KMS href,EX1904_collection.xml; uxs_test.xml
 2,w,keywords,keywords.providers[35].uuid,Add concept UUID for best KMS href,EX1904_collection.xml; uxs_test.xml
 2,w,keywords,keywords.providers[36].uuid,Add concept UUID for best KMS href,EX1904_collection.xml; uxs_test.xml
-2,w,keywords,keywords.providers[37].uuid,Add concept UUID for best KMS href,EX1904_collection.xml; uxs_test.xml
 2,w,keywords,keywords.providers[38].uuid,Add concept UUID for best KMS href,EX1904_collection.xml; uxs_test.xml
 2,w,keywords,keywords.providers[39].uuid,Add concept UUID for best KMS href,EX1904_collection.xml; uxs_test.xml
 2,w,keywords,keywords.providers[4].uuid,Add concept UUID for best KMS href,EX1904_collection.xml; uxs_test.xml
@@ -99,44 +100,68 @@ hitCount,severity,wizardStep,field,message,files
 2,w,keywords,keywords.providers[7].uuid,Add concept UUID for best KMS href,EX1904_collection.xml; uxs_test.xml
 2,w,keywords,keywords.providers[8].uuid,Add concept UUID for best KMS href,EX1904_collection.xml; uxs_test.xml
 2,w,keywords,keywords.providers[9].uuid,Add concept UUID for best KMS href,EX1904_collection.xml; uxs_test.xml
-2,w,keywords,keywords.sciencekeywords[11].uuid,Add concept UUID for best KMS href,gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.62654.xml
-2,w,keywords,keywords.sciencekeywords[17].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml
-2,w,keywords,keywords.sciencekeywords[18].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml
-2,w,keywords,keywords.sciencekeywords[19].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml
-2,w,keywords,keywords.sciencekeywords[20].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml
-2,w,keywords,keywords.sciencekeywords[21].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml
 2,w,keywords,keywords.sciencekeywords[22].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml
 2,w,keywords,keywords.sciencekeywords[23].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml
-2,w,keywords,keywords.sciencekeywords[24].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml
+2,w,keywords,keywords.sciencekeywords[25].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml
 2,w,keywords,keywords.sciencekeywords[26].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml
 2,w,keywords,keywords.sciencekeywords[27].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml
-2,w,keywords,keywords.sciencekeywords[28].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml
-2,w,keywords,keywords.sciencekeywords[29].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml
-2,w,keywords,keywords.sciencekeywords[30].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml
-2,w,keywords,keywords.sciencekeywords[31].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml
-2,w,keywords,keywords.sciencekeywords[32].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml
-2,w,mission,mission.licenseUrl,License URL recommended when preset is custom,ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml
 2,e,mission,mission.startDate,Creation / Start date is required,SAMPLE_Populated.xml; gov.noaa.nmfs.inport.62654.xml
-1,w,keywords,keywords.datacenters[2].uuid,Add concept UUID for best KMS href,C01531.xml
 1,w,keywords,keywords.datacenters[3].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml
 1,w,keywords,keywords.datacenters[4].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml
 1,w,keywords,keywords.datacenters[5].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml
 1,w,keywords,keywords.datacenters[6].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml
+1,w,keywords,keywords.instruments[10].uuid,Add concept UUID for best KMS href,uxs_test.xml
+1,w,keywords,keywords.instruments[11].uuid,Add concept UUID for best KMS href,uxs_test.xml
 1,w,keywords,keywords.instruments[24].uuid,Add concept UUID for best KMS href,uxs_test.xml
 1,w,keywords,keywords.instruments[25].uuid,Add concept UUID for best KMS href,uxs_test.xml
 1,w,keywords,keywords.instruments[26].uuid,Add concept UUID for best KMS href,uxs_test.xml
 1,w,keywords,keywords.instruments[27].uuid,Add concept UUID for best KMS href,uxs_test.xml
 1,w,keywords,keywords.instruments[28].uuid,Add concept UUID for best KMS href,uxs_test.xml
 1,w,keywords,keywords.instruments[29].uuid,Add concept UUID for best KMS href,uxs_test.xml
+1,w,keywords,keywords.instruments[4].uuid,Add concept UUID for best KMS href,uxs_test.xml
+1,w,keywords,keywords.instruments[5].uuid,Add concept UUID for best KMS href,uxs_test.xml
+1,w,keywords,keywords.instruments[6].uuid,Add concept UUID for best KMS href,uxs_test.xml
+1,w,keywords,keywords.instruments[7].uuid,Add concept UUID for best KMS href,uxs_test.xml
+1,w,keywords,keywords.instruments[8].uuid,Add concept UUID for best KMS href,uxs_test.xml
+1,w,keywords,keywords.instruments[9].uuid,Add concept UUID for best KMS href,uxs_test.xml
 1,w,keywords,keywords.locations[10].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml
-1,w,keywords,keywords.locations[8].uuid,Add concept UUID for best KMS href,gov.noaa.nmfs.inport.62654.xml
 1,w,keywords,keywords.locations[9].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml
-1,w,keywords,keywords.platforms[2].uuid,Add concept UUID for best KMS href,C01531.xml
 1,w,keywords,keywords.platforms[4].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml
-1,w,keywords,keywords.projects[2].uuid,Add concept UUID for best KMS href,C01531.xml
+1,w,keywords,keywords.projects[11].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[12].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[13].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[14].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[15].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[16].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[17].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[18].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[19].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[20].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[21].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[22].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[25].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[26].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[27].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[28].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[29].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[30].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[31].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[32].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[33].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[34].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[35].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[36].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[37].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[38].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[39].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[40].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[41].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
+1,w,keywords,keywords.projects[42].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml
 1,w,keywords,keywords.projects[7].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml
 1,w,keywords,keywords.projects[8].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml
 1,w,keywords,keywords.projects[9].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml
+1,w,keywords,keywords.providers[31].uuid,Add concept UUID for best KMS href,uxs_test.xml
+1,w,keywords,keywords.providers[37].uuid,Add concept UUID for best KMS href,uxs_test.xml
 1,w,keywords,keywords.providers[46].uuid,Add concept UUID for best KMS href,EX1904_collection.xml
 1,w,keywords,keywords.providers[47].uuid,Add concept UUID for best KMS href,EX1904_collection.xml
 1,w,keywords,keywords.providers[48].uuid,Add concept UUID for best KMS href,EX1904_collection.xml
@@ -166,11 +191,11 @@ hitCount,severity,wizardStep,field,message,files
 1,w,keywords,keywords.providers[72].uuid,Add concept UUID for best KMS href,EX1904_collection.xml
 1,w,keywords,keywords.providers[73].uuid,Add concept UUID for best KMS href,EX1904_collection.xml
 1,w,keywords,keywords.providers[74].uuid,Add concept UUID for best KMS href,EX1904_collection.xml
-1,w,keywords,keywords.sciencekeywords[12].uuid,Add concept UUID for best KMS href,gov.noaa.nmfs.inport.62654.xml
-1,w,keywords,keywords.sciencekeywords[13].uuid,Add concept UUID for best KMS href,gov.noaa.nmfs.inport.62654.xml
-1,w,keywords,keywords.sciencekeywords[14].uuid,Add concept UUID for best KMS href,gov.noaa.nmfs.inport.62654.xml
-1,w,keywords,keywords.sciencekeywords[15].uuid,Add concept UUID for best KMS href,gov.noaa.nmfs.inport.62654.xml
-1,w,keywords,keywords.sciencekeywords[16].uuid,Add concept UUID for best KMS href,gov.noaa.nmfs.inport.62654.xml
+1,w,keywords,keywords.sciencekeywords[28].uuid,Add concept UUID for best KMS href,gov.noaa.nmfs.inport.62654.xml
+1,w,keywords,keywords.sciencekeywords[29].uuid,Add concept UUID for best KMS href,gov.noaa.nmfs.inport.62654.xml
+1,w,keywords,keywords.sciencekeywords[30].uuid,Add concept UUID for best KMS href,gov.noaa.nmfs.inport.62654.xml
+1,w,keywords,keywords.sciencekeywords[31].uuid,Add concept UUID for best KMS href,gov.noaa.nmfs.inport.62654.xml
+1,w,keywords,keywords.sciencekeywords[32].uuid,Add concept UUID for best KMS href,gov.noaa.nmfs.inport.62654.xml
 1,w,keywords,keywords.sciencekeywords[38].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml
 1,w,keywords,keywords.sciencekeywords[39].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml
 1,w,keywords,keywords.sciencekeywords[40].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml
@@ -178,17 +203,15 @@ hitCount,severity,wizardStep,field,message,files
 1,w,keywords,keywords.sciencekeywords[42].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml
 1,w,keywords,keywords.sciencekeywords[43].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml
 1,w,keywords,keywords.sciencekeywords[44].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml
-1,w,mission,mission.abstract,"Abstract uses acronym ""CPO""; expand it on first use when possible.",uxs_test.xml
-1,w,mission,mission.abstract,"Abstract uses acronym ""EHIS""; expand it on first use when possible.",C01531.xml
-1,w,mission,mission.abstract,"Abstract uses acronym ""FGBNMS""; expand it on first use when possible.",NCRMP-Benthic-FG.xml
+1,w,mission,mission.abstract,"Abstract uses acronym ""AVHRR""; expand it on first use when possible.",C01678.xml
+1,w,mission,mission.abstract,"Abstract uses acronym ""GOMO""; expand it on first use when possible.",uxs_test.xml
 1,w,mission,mission.abstract,"Abstract uses acronym ""ID""; expand it on first use when possible.",gov.noaa.nmfs.inport.5619.xml
+1,w,mission,mission.abstract,"Abstract uses acronym ""MPS""; expand it on first use when possible.",C01531.xml
 1,w,mission,mission.abstract,"Abstract uses acronym ""NOT""; expand it on first use when possible.",gov.noaa.nmfs.inport.5687.xml
-1,w,mission,mission.abstract,"Abstract uses acronym ""PATMOS""; expand it on first use when possible.",C01678.xml
-1,w,mission,mission.abstract,"Abstract uses acronym ""PIFSC""; expand it on first use when possible.",gov.noaa.nmfs.inport.52208.xml
-1,w,mission,mission.abstract,"Abstract uses acronym ""PMEL""; expand it on first use when possible.",NRS_Raw_Data.xml
 1,w,mission,mission.abstract,"Abstract uses acronym ""QL""; expand it on first use when possible.",0299833.xml
+1,w,mission,mission.abstract,"Abstract uses acronym ""SE""; expand it on first use when possible.",gov.noaa.nmfs.inport.52208.xml
 1,w,mission,mission.abstract,"Abstract uses acronym ""TPOS""; expand it on first use when possible.",SAMPLE_Populated.xml
-1,w,mission,mission.abstract,"Abstract uses acronym ""UCSD""; expand it on first use when possible.",LISTEN_GoMex_Raw_Audio.xml
+1,w,mission,mission.abstract,"Abstract uses acronym ""US""; expand it on first use when possible.",LISTEN_GoMex_Raw_Audio.xml
 1,e,sensors,sensors[1].variable,Sensor 2: observed variable is required,C01678.xml
 1,e,sensors,sensors[2].variable,Sensor 3: observed variable is required,ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml
 1,e,sensors,sensors[3].variable,Sensor 4: observed variable is required,ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml

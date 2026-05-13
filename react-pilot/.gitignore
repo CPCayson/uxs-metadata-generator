@@ -30,3 +30,6 @@ release
 repomix-output.*
 repomix-critical-output.*
 repopack-output.*
+
+# Local Netlify folder
+.netlify

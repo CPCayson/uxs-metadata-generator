@@ -581,55 +581,6 @@ function App() {
       <a href="#pilot-main" className="pilot-skip-link">
         Skip to main content
       </a>
-      <header
-        className={`header pilot-app-header pilot-app-header--fullbleed${
-          mainPane === 'wizard' ? ' pilot-app-header--compact-wizard' : ''
-        }`}
-      >
-        <div className="header-top pilot-header-top--brand-only">
-          <div className="pilot-header-brand">
-            <p className="pilot-header-eyebrow">
-              NCEI · Ocean Exploration &amp; Research
-            </p>
-            <h1 className="pilot-header-title-row">
-              Manta
-              <span className="pilot-header-tagline">UxS Metadata Workbench</span>
-            </h1>
-          </div>
-        </div>
-        <div className="pilot-header-toolbar">
-          {/* Legacy-style single “work strip”: step pills + metadata tools in one light card. */}
-          {mainPane === 'wizard' ? (
-            <div className="pilot-header-mission-workstrip">
-              <div
-                id="pilot-header-steps-slot"
-                className="pilot-header-steps-slot"
-                aria-label="Wizard steps"
-              />
-              <div
-                id="pilot-header-tools-slot"
-                className="pilot-header-tools-slot"
-                role="toolbar"
-                aria-label="Metadata and file tools"
-              />
-            </div>
-          ) : (
-            <>
-              <div
-                id="pilot-header-steps-slot"
-                className="pilot-header-steps-slot"
-                aria-label="Wizard steps"
-              />
-              <div
-                id="pilot-header-tools-slot"
-                className="pilot-header-tools-slot"
-                role="toolbar"
-                aria-label="Metadata and file tools"
-              />
-            </>
-          )}
-        </div>
-      </header>
 
       <div className="pilot-body-band">
         <main
@@ -643,6 +594,61 @@ function App() {
             minHeight: 0,
           }}
         >
+          <header
+            className={`header pilot-app-header pilot-app-header--fullbleed${
+              mainPane === 'wizard' ? ' pilot-app-header--compact-wizard' : ''
+            }`}
+          >
+            <div className="header-top">
+              <div className="pilot-header-brand">
+                <p className="pilot-header-eyebrow">
+                  NCEI · Ocean Exploration &amp; Research
+                </p>
+                <h1 className="pilot-header-title-row">
+                  Manta
+                  <span className="pilot-header-tagline">UxS Metadata Workbench</span>
+                </h1>
+              </div>
+              <div
+                id="pilot-header-meta-slot"
+                className="pilot-header-meta-slot"
+                aria-live="polite"
+              />
+            </div>
+            <div className="pilot-header-toolbar">
+              {/* Legacy-style single “work strip”: step pills + metadata tools in one light card. */}
+              {mainPane === 'wizard' ? (
+                <div className="pilot-header-mission-workstrip">
+                  <div
+                    id="pilot-header-steps-slot"
+                    className="pilot-header-steps-slot"
+                    aria-label="Wizard steps"
+                  />
+                  <div
+                    id="pilot-header-tools-slot"
+                    className="pilot-header-tools-slot"
+                    role="toolbar"
+                    aria-label="Metadata and file tools"
+                  />
+                </div>
+              ) : (
+                <>
+                  <div
+                    id="pilot-header-steps-slot"
+                    className="pilot-header-steps-slot"
+                    aria-label="Wizard steps"
+                  />
+                  <div
+                    id="pilot-header-tools-slot"
+                    className="pilot-header-tools-slot"
+                    role="toolbar"
+                    aria-label="Metadata and file tools"
+                  />
+                </>
+              )}
+            </div>
+          </header>
+
           {mainPane === 'hub' && (
             <div className="pilot-workspace-hub-stack">
               <WorkspaceHubEmbeddableCard activeId={workspaceHubId} onSelect={setWorkspaceHubId}>

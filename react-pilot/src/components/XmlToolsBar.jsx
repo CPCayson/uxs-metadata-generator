@@ -14,7 +14,8 @@ import { getBundledMissionXmlSamples } from '../lib/missionBundledXmlSamples.js'
 /**
  * Header-mounted XML tools strip.
  *
- * Portals into #pilot-header-tools-slot (below #pilot-header-steps-slot in <header>). Primary row shows
+ * Portals into #pilot-header-tools-slot (below #pilot-header-steps-slot) and schema/host/preview/NCEI
+ * chips into #pilot-header-meta-slot (top-right of .header-top). Primary row shows
  * Metadata label + Import / Start over / Export / Summary; paste import, scanner, gap check,
  * CoMET actions, and secondary exports live under the More overflow menu.
  *
@@ -112,6 +113,7 @@ function XmlToolsBar({
   )
 
   const [mountEl, setMountEl] = useState(null)
+  const [metaMountEl, setMetaMountEl] = useState(null)
   const [importOpen, setImportOpen] = useState(false)
   const [importText, setImportText] = useState('')
   const [importError, setImportError] = useState('')
@@ -213,6 +215,25 @@ function XmlToolsBar({
       const node = document.getElementById('pilot-header-tools-slot')
       if (node) {
         setMountEl(node)
+        window.clearInterval(t)
+      } else if (++tries > 30) {
+        window.clearInterval(t)
+      }
+    }, 50)
+    return () => window.clearInterval(t)
+  }, [])
+
+  useEffect(() => {
+    const el = document.getElementById('pilot-header-meta-slot')
+    if (el) {
+      setMetaMountEl(el)
+      return undefined
+    }
+    let tries = 0
+    const t = window.setInterval(() => {
+      const node = document.getElementById('pilot-header-meta-slot')
+      if (node) {
+        setMetaMountEl(node)
         window.clearInterval(t)
       } else if (++tries > 30) {
         window.clearInterval(t)
@@ -445,6 +466,45 @@ function XmlToolsBar({
 
   const showLegacyMeta = canBuildXml || isMission
   const nceiUxSUrl = 'https://www.ncei.noaa.gov/products/uncrewed-system-metadata-templates'
+
+  const legacyMetaBlock = showLegacyMeta ? (
+    <div className="pilot-xml-tools__legacy-meta" aria-label="Export format and host status">
+      {canBuildXml ? (
+        <span className="pilot-xml-tools__schema-line">
+          <span className="pilot-xml-tools__schema-kicker">Target schema</span>
+          <span className="pilot-xml-tools__schema-value">ISO 19115-2</span>
+        </span>
+      ) : null}
+      <span
+        className={`pilot-xml-tools__host-pill${hostBridgeReady ? ' pilot-xml-tools__host-pill--on' : ''}`}
+        title={
+          hostBridgeReady
+            ? 'Same-origin /api/db is reachable (catalog, GeoJSON, DCAT, server checks).'
+            : 'Host bridge offline — use npm run dev:netlify or deploy for /api/db features.'
+        }
+      >
+        <span className="pilot-xml-tools__host-dot" aria-hidden />
+        {hostBridgeReady ? 'Host connected' : 'Host offline'}
+      </span>
+      <span className="pilot-xml-tools__preview-hint" title="Live XML preview updates when you edit the form">
+        Preview updates live
+      </span>
+      {isMission ? (
+        <a
+          href={nceiUxSUrl}
+          className="pilot-xml-tools__ncei-link"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="NCEI Uncrewed Systems metadata templates (opens new tab)"
+        >
+          NCEI UxS templates
+        </a>
+      ) : null}
+    </div>
+  ) : null
+
+  const metaPortal =
+    legacyMetaBlock && metaMountEl ? createPortal(legacyMetaBlock, metaMountEl) : null
 
   const bar = (
     <div className="pilot-xml-tools" data-profile={profile.id}>
@@ -760,42 +820,6 @@ function XmlToolsBar({
         </div>
       </div>
 
-      {showLegacyMeta ? (
-        <div className="pilot-xml-tools__legacy-meta" aria-label="Export format and host status">
-          {canBuildXml ? (
-            <span className="pilot-xml-tools__schema-line">
-              <span className="pilot-xml-tools__schema-kicker">Target schema</span>
-              <span className="pilot-xml-tools__schema-value">ISO 19115-2</span>
-            </span>
-          ) : null}
-          <span
-            className={`pilot-xml-tools__host-pill${hostBridgeReady ? ' pilot-xml-tools__host-pill--on' : ''}`}
-            title={
-              hostBridgeReady
-                ? 'Same-origin /api/db is reachable (catalog, GeoJSON, DCAT, server checks).'
-                : 'Host bridge offline — use npm run dev:netlify or deploy for /api/db features.'
-            }
-          >
-            <span className="pilot-xml-tools__host-dot" aria-hidden />
-            {hostBridgeReady ? 'Host connected' : 'Host offline'}
-          </span>
-          <span className="pilot-xml-tools__preview-hint" title="Live XML preview updates when you edit the form">
-            Preview updates live
-          </span>
-          {isMission ? (
-            <a
-              href={nceiUxSUrl}
-              className="pilot-xml-tools__ncei-link"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="NCEI Uncrewed Systems metadata templates (opens new tab)"
-            >
-              NCEI UxS templates
-            </a>
-          ) : null}
-        </div>
-      ) : null}
-
       {isMission && showGaps ? (
         <div className="pilot-xml-tools__gaps">
           <GapPanel gaps={gaps} onClose={() => setShowGaps(false)} />
@@ -887,6 +911,7 @@ function XmlToolsBar({
     return (
       <>
         {bar}
+        {metaPortal}
         {canScanner
           ? createPortal(
               <ScannerSuggestionsDialog
@@ -909,6 +934,7 @@ function XmlToolsBar({
   return (
     <>
       {createPortal(bar, mountEl)}
+      {metaPortal}
       {canScanner
         ? createPortal(
             <ScannerSuggestionsDialog

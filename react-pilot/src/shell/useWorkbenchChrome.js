@@ -12,6 +12,7 @@ export function useWorkbenchChrome() {
       validatorHostEl: null,
       registerValidatorHost: () => {},
       lensActive: false,
+      lensTarget: 'form',
       workspaceDensity: 'simple',
       setWorkspaceDensity: () => {},
     }

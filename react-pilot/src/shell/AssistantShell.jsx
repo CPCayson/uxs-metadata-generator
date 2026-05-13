@@ -17,10 +17,12 @@
 import { Fragment, useState, useCallback, useEffect, useRef, useMemo } from 'react'
 import MantaScannerFrame from '../components/MantaScannerFrame.jsx'
 import LensScannerWorkspacePanel from '../components/LensScannerWorkspacePanel.jsx'
+import LensSymbioteFrame from '../components/LensSymbioteFrame.jsx'
 import { getFieldElementForPilot, getFieldElementsForLensHighlight } from '../core/registry/FieldRegistry.js'
 import { useMetadataEngine } from './context.js'
 import { defaultPilotState } from '../lib/pilotValidation.js'
 import { readPilotSessionPayload } from '../lib/pilotSessionStorage.js'
+import { getPilotFieldLabelFallback } from '../lib/pilotFieldLabelFallback.js'
 import { computeReadinessSnapshot } from '../lib/readinessSummary.js'
 import { computeCertificationBundles } from '../lib/certificationSummary.js'
 import ReadinessStrip from '../components/ReadinessStrip.jsx'
@@ -1224,6 +1226,186 @@ export default function AssistantShell({
     }
   }, [qualityMode, lensFixGuide, runQualityCheck])
 
+  const lensSymbioteField = useMemo(() => {
+    if (!lensMode || lensCollapsed) return null
+    if (lensFixGuide?.queue?.length) {
+      const cur = lensFixGuide.queue[lensFixGuide.index]
+      if (cur?.field) return String(cur.field)
+    }
+    if (lensHlField) return String(lensHlField)
+    return null
+  }, [lensMode, lensCollapsed, lensFixGuide, lensHlField])
+
+  const lensSymbioteDetail = useMemo(() => {
+    if (!lensSymbioteField) return null
+    const fp = lensSymbioteField
+    const getLabel =
+      profile && typeof profile.getFieldLabel === 'function'
+        ? profile.getFieldLabel.bind(profile)
+        : getPilotFieldLabelFallback
+    let fieldLabel = fp
+    try {
+      const t = getLabel(fp)
+      if (t && String(t).trim()) fieldLabel = String(t).trim()
+    } catch {
+      /* keep fp */
+    }
+
+    const onField = lensIssuesScoped.filter((i) => i.field === fp)
+    let primary = onField[0] ?? null
+    if (lensFixGuide?.queue?.length) {
+      const cur = lensFixGuide.queue[lensFixGuide.index]
+      if (cur?.field === fp) primary = cur
+    }
+    const guidedWalk = Boolean(
+      lensFixGuide?.queue?.length && lensFixGuide.queue[lensFixGuide.index]?.field === fp,
+    )
+    const moreIssueCount = onField.length > 1 ? onField.length - 1 : 0
+
+    const allChips = primary ? getLensChipsForIssue(primary, lensChipPilot) : []
+    const symbioteActionChips = allChips.filter((c) => {
+      if (c.kind === 'fill') return true
+      if (c.kind === 'help' && c.id.includes('abstract-len')) return true
+      return false
+    })
+    const showSymbioteSafe = Boolean(
+      primary && allChips.some((c) => c.kind === 'action' && c.action === 'autofix'),
+    )
+
+    return {
+      fieldLabel,
+      issueMessage: primary?.message ? String(primary.message) : null,
+      issueSeverity: primary?.severity === 'e' ? 'error' : primary?.severity === 'w' ? 'warn' : null,
+      guidedWalk,
+      moreIssueCount,
+      primaryIssue: primary,
+      symbioteActionChips,
+      showSymbioteSafe,
+    }
+  }, [lensSymbioteField, profile, lensFixGuide, lensIssuesScoped, lensChipPilot])
+
+  const lensSymbioteActive = useMemo(
+    () =>
+      Boolean(
+        lensMode &&
+          !lensCollapsed &&
+          (lensTarget === 'form' || lensTarget === 'split') &&
+          lensSymbioteField,
+      ),
+    [lensMode, lensCollapsed, lensTarget, lensSymbioteField],
+  )
+
+  const lensSymbioteInCardSurface = useMemo(
+    () =>
+      Boolean(
+        lensMode &&
+          !lensCollapsed &&
+          (lensTarget === 'form' || lensTarget === 'split'),
+      ),
+    [lensMode, lensCollapsed, lensTarget],
+  )
+
+  /** Same-field “Why?” / help-chip answer shows inside the black field symbiote — hide duplicate FAB toast. */
+  const lensAskInlineInFieldSymbiote = useMemo(
+    () =>
+      Boolean(
+        lensAsk &&
+          lensSymbioteInCardSurface &&
+          lensSymbioteField &&
+          String(lensAsk.issue?.field ?? '') === String(lensSymbioteField),
+      ),
+    [lensAsk, lensSymbioteInCardSurface, lensSymbioteField],
+  )
+
+  useEffect(() => {
+    try {
+      window.dispatchEvent(
+        new CustomEvent('manta:lens-symbiote-active', { detail: { active: lensSymbioteActive } }),
+      )
+    } catch {
+      /* */
+    }
+  }, [lensSymbioteActive])
+
+  const openFabLensActions = useCallback(() => {
+    if (!splitFloat) return
+    setToolsFabSheetOpen(true)
+    setActiveTab('lens')
+  }, [splitFloat])
+
+  const lensSymbioteOnWhy = useCallback(
+    (issue) => {
+      if (!issue) return
+      const def = getFieldDefinition(issue.field)
+      const answer = def
+        ? `${def}\n\n${issue.message ?? ''}`
+        : `${issue.message ?? ''}${issue.field ? `\n\nPath: ${issue.field}` : ''}`
+      setLensAsk({ issue, answer })
+      const inlineSameField =
+        lensSymbioteInCardSurface &&
+        lensSymbioteField &&
+        String(issue.field ?? '') === String(lensSymbioteField)
+      if (!inlineSameField) openFabLensActions()
+    },
+    [openFabLensActions, lensSymbioteInCardSurface, lensSymbioteField],
+  )
+
+  const lensSymbioteOnChip = useCallback(
+    (chip, issue) => {
+      onLensQuickChip(chip, issue)
+      const skipFabForInlineHelp =
+        chip.kind === 'help' &&
+        lensSymbioteInCardSurface &&
+        lensSymbioteField &&
+        issue?.field &&
+        String(issue.field) === String(lensSymbioteField)
+      if (!skipFabForInlineHelp) openFabLensActions()
+    },
+    [onLensQuickChip, openFabLensActions, lensSymbioteInCardSurface, lensSymbioteField],
+  )
+
+  const lensSymbioteOnSafe = useCallback(() => {
+    window.dispatchEvent(
+      new CustomEvent('manta:pilot-auto-fix-request', { detail: { mode: qualityMode || 'lenient' } }),
+    )
+    openFabLensActions()
+  }, [qualityMode, openFabLensActions])
+
+  /** First scoped issue becomes the symbiote anchor so we do not paint per-field inline strips on the whole step. */
+  useEffect(() => {
+    if (!lensMode || lensCollapsed) return
+    if (lensTarget !== 'form' && lensTarget !== 'split') return
+    if (lensFixGuide?.queue?.length) return
+    if (lensHlField) return
+    const first = lensIssuesScoped.find((i) => i.field)
+    if (first?.field) setLensHlField(String(first.field))
+  }, [lensMode, lensCollapsed, lensTarget, lensHlField, lensFixGuide, lensIssuesScoped])
+
+  /** Symbiote portals under the highlighted field group in the wizard (not page footer). */
+  const lensWizardSymbiotePortal =
+    lensSymbioteInCardSurface && lensSymbioteField ? (
+      <LensSymbioteFrame
+        key={`manta-lens-symbiote-${lensSymbioteField}`}
+        show
+        inFixWalk={Boolean(lensFixGuide?.queue?.length)}
+        fieldPath={lensSymbioteField}
+        fieldLabel={lensSymbioteDetail?.fieldLabel}
+        issueMessage={lensSymbioteDetail?.issueMessage}
+        issueSeverity={lensSymbioteDetail?.issueSeverity}
+        guidedWalk={lensSymbioteDetail?.guidedWalk}
+        moreIssueCount={lensSymbioteDetail?.moreIssueCount ?? 0}
+        primaryIssue={lensSymbioteDetail?.primaryIssue ?? null}
+        symbioteActionChips={lensSymbioteDetail?.symbioteActionChips ?? []}
+        showSafeDefaults={lensSymbioteDetail?.showSymbioteSafe ?? false}
+        onWhy={lensSymbioteOnWhy}
+        onSymbioteChip={lensSymbioteOnChip}
+        onSafeDefaults={lensSymbioteOnSafe}
+        onClearField={() => setLensHlField(null)}
+        lensAsk={lensAsk}
+        onDismissLensAsk={() => setLensAsk(null)}
+      />
+    ) : null
+
   /** Inline “glass” strips under fields — uses mutable ref so DOM listeners stay fresh. */
   const lensInlineRef = useRef({
     qualityMode: 'lenient',
@@ -1283,17 +1465,31 @@ export default function AssistantShell({
       restoreSuppressedFieldErrors()
       document.querySelectorAll(INLINE_SEL).forEach((n) => n.remove())
     }
-    if (!lensMode || lensCollapsed || (splitFloat && activeTab !== 'lens')) {
+    if (!lensMode || lensCollapsed) {
       removeInline()
       return removeInline
     }
     removeInline()
+
+    const formLensSurface =
+      lensMode &&
+      !lensCollapsed &&
+      (lensTarget === 'form' || lensTarget === 'split')
 
     const byField = new Map()
     for (const issue of lensIssuesScoped) {
       if (!issue.field) continue
       if (!byField.has(issue.field)) byField.set(issue.field, [])
       byField.get(issue.field).push(issue)
+    }
+
+    /** Symbiote deck is in-flow under the active field — suppress duplicate `.field-error` rows for all scoped issues. */
+    if (formLensSurface) {
+      for (const fieldPath of byField.keys()) {
+        const el = getFieldElementForPilot(fieldPath)
+        if (el) suppressPilotFieldError(el)
+      }
+      return removeInline
     }
 
     for (const [fieldPath, list] of byField) {
@@ -1385,7 +1581,7 @@ export default function AssistantShell({
     }
 
     return removeInline
-  }, [lensMode, lensCollapsed, lensIssuesScoped, splitFloat, activeTab])
+  }, [lensMode, lensCollapsed, lensIssuesScoped, lensTarget])
 
   useEffect(() => {
     if (!lensMode) {
@@ -1546,7 +1742,6 @@ export default function AssistantShell({
         {
           id: 'lens',
           label: '⬡ LENS',
-          /** Status chips in the dock meta row carry errors / readiness — avoid duplicating on the tab dot. */
           dot: null,
         },
         ...TABS_TOOLS,
@@ -1746,6 +1941,7 @@ export default function AssistantShell({
               }}
               lensAsk={lensAsk}
               setLensAsk={setLensAsk}
+              suppressFloatingLensAsk={lensAskInlineInFieldSymbiote}
               activeDefIssue={activeDefIssue}
               setActiveDefIssue={setActiveDefIssue}
               hideSectionBars
@@ -2201,7 +2397,13 @@ export default function AssistantShell({
 
       lensOverlayEl = <MantaScannerFrame>{collapsedContent}</MantaScannerFrame>
       /* split-float: keep rendering bottom cards + validator host under the lens overlay */
-      if (!dockLeft && !splitFloat) return lensOverlayEl
+      if (!dockLeft && !splitFloat)
+        return (
+          <>
+            {lensWizardSymbiotePortal}
+            {lensOverlayEl}
+          </>
+        )
     } else {
     const lensContent = (
       <div className={lensRootClass} role="dialog" aria-label="Manta Ray Lens Mode">
@@ -2261,6 +2463,7 @@ export default function AssistantShell({
           onToggleLens={onToggleLens}
           lensAsk={lensAsk}
           setLensAsk={setLensAsk}
+          suppressFloatingLensAsk={lensAskInlineInFieldSymbiote}
           activeDefIssue={activeDefIssue}
           setActiveDefIssue={setActiveDefIssue}
         />
@@ -2274,7 +2477,13 @@ export default function AssistantShell({
         <MantaScannerFrame>{lensContent}</MantaScannerFrame>
       </Fragment>
     )
-    if (!dockLeft && !splitFloat) return lensOverlayEl
+    if (!dockLeft && !splitFloat)
+      return (
+        <>
+          {lensWizardSymbiotePortal}
+          {lensOverlayEl}
+        </>
+      )
     }
   }
 
@@ -2292,6 +2501,7 @@ export default function AssistantShell({
 
     return (
       <>
+        {lensWizardSymbiotePortal}
         <MantaToolsFabDock
           tabs={fabDockTabs}
           activeTab={activeTab}
@@ -2303,7 +2513,8 @@ export default function AssistantShell({
           liveFieldCount={fabLiveFields}
           errorsCount={errors.length}
           warningsCount={warnings.length}
-          qualityScore={qualityResult?.score}
+          lensFloaterOn={lensMode}
+          onLensFloaterToggle={onToggleLens}
           workspaceDensity={workspaceDensity}
           onWorkspaceDensityChange={setWorkspaceDensity}
           tipFooter={toolsFabTipFooter}
@@ -2402,6 +2613,7 @@ export default function AssistantShell({
         <span className="manta-widget__tip-chevron" aria-hidden="true">›</span>
       </footer>
     </div>
+    {lensWizardSymbiotePortal}
     {lensMode && lensOverlayEl}
     </>
   )

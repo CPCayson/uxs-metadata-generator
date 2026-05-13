@@ -11,7 +11,7 @@
  *   COMET_SESSION_ID — JSESSIONID from an active CoMET browser session (skips login)
  *   COMET_USERNAME + COMET_PASSWORD — form login via proxy `action=login`
  * Env (optional):
- *   COMET_PROXY_URL — default http://127.0.0.1:8888/api/comet-proxy
+ *   COMET_PROXY_URL — default http://127.0.0.1:8888/api/comet-proxy (must be Netlify dev from react-pilot/ — see assertCometProxyReachable)
  *   SAMPLE_DIR — override samples folder
  *
  * Usage (from react-pilot/):
@@ -22,7 +22,13 @@ import fs from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
-import { DEFAULT_COMET_PROXY_BASE, isoValidate, loginFreshSession, sessionPrefix } from './lib/cometProxyManta.mjs'
+import {
+  assertCometProxyReachable,
+  DEFAULT_COMET_PROXY_BASE,
+  isoValidate,
+  loginFreshSession,
+  sessionPrefix,
+} from './lib/cometProxyManta.mjs'
 import { runSampleThroughPreview } from './lib/runSampleThroughPreview.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -77,6 +83,7 @@ console.log(`Proxy:   ${proxyBase}`)
 
 let failed = 0
 try {
+  await assertCometProxyReachable(proxyBase)
   const jsessionid = sessionFromEnv || (await loginFreshSession(proxyBase, username, password))
   console.log(
     sessionFromEnv

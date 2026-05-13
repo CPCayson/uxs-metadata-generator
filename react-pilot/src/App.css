@@ -485,12 +485,10 @@
   text-shadow: none;
 }
 
-/* Default: pilot-main scrolls the page. In split wizard mode: locked so only center form scrolls. */
+/* Default: pilot-main scrolls (hub + wizard). Split wizard shares this scrollport so the in-main header moves with content. */
 #pilot-main {
   overflow-y: auto;
-}
-#pilot-main:has(.workspace-grid--split) {
-  overflow-y: hidden;
+  overscroll-behavior-y: contain;
 }
 
 /* Main fills the band between header + footer (wizard + hub) */
@@ -504,9 +502,9 @@
 }
 
 /* futuristic.css sets overflow:hidden on .workspace-main.pilot-step.card for a border animation.
-   Override only y-axis — x stays hidden (clips the animation), y scrolls the form. */
+   Split cockpit: vertical scroll is #pilot-main — let the card grow with sections (no inner scroll trap). */
 #root .workspace-grid--split .workspace-main.pilot-step.card {
-  overflow-y: auto;
+  overflow-y: visible;
 }
 
 /*
@@ -767,7 +765,8 @@
   flex-direction: column;
   flex: 1;
   min-height: 0;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: visible;
 }
 
 /* Mission nav + XML tools strip sits above the cockpit — never consume flex space meant for the grid */
@@ -1141,9 +1140,8 @@
 
 /* Split mode: left rail (validation), wizard, right rail (preview + schema + CoMET) */
 /*
- * Split cockpit: JS in WizardShell sets an explicit pixel height on the grid
- * via data-grid-h so the center column can scroll internally while rails stay fixed.
- * align-items:stretch makes all three columns fill that height.
+ * Split cockpit: align-items:stretch keeps rails and center column equal row height.
+ * overflow-y visible so tall center content can grow the grid and scroll on #pilot-main (with header).
  */
 .workspace-grid--split {
   grid-template-columns:
@@ -1152,34 +1150,34 @@
     minmax(300px, clamp(320px, 28vw, 560px));
   align-items: stretch;
   gap: 1.25rem 1.35rem;
-  overflow: hidden;
+  overflow-x: clip;
+  overflow-y: visible;
   /* Flush to footer — base .workspace-grid margin-bottom would leave dead band above status bar */
   margin-bottom: 0;
 }
 
 /*
- * Cockpit lives inside .pilot-wizard-lens-stack (flex column). Consume all remaining
- * viewport height so left rail | form | right rail stay on one row; only .workspace-main scrolls vertically.
+ * Cockpit lives inside .pilot-wizard-lens-stack (flex column). Split: the grid is at least
+ * as tall as the lens stack; tall form content grows the grid so #pilot-main scrolls (header + rails + form).
  */
 #root .pilot-wizard-lens-stack > section.workspace-grid.workspace-grid--split {
-  /* flex-basis: 0 — avoid content-sized min height so the grid stays within the viewport
-     and .workspace-main can use overflow-y:auto (see flex “minimum size auto” pitfall). */
-  flex: 1 1 0;
-  min-height: 0;
+  /* Grow with tall form content so #pilot-main scrolls (header + grid move together). */
+  flex: 1 1 auto;
   min-width: 0;
   width: 100%;
   max-width: 100%;
   align-self: stretch;
-  height: 100%;
+  height: auto;
+  min-height: 100%;
   /* Single row consumes full grid height so the center form card stretches with the rails */
   grid-template-rows: minmax(0, 1fr);
 }
 
-/* Center form: block layout (no flex) so content is naturally tall, overflow-y:auto scrolls it */
+/* Center column: vertical scroll is #pilot-main — keep overflow visible so the grid can grow in height */
 .workspace-grid--split .workspace-main {
-  overflow-y: auto;
+  overflow-y: visible;
   overflow-x: hidden;
-  overscroll-behavior: contain;
+  overscroll-behavior: auto;
   padding-right: 0.25rem;
   min-height: 0;
   scrollbar-gutter: stable;
@@ -1914,8 +1912,73 @@
   opacity: 0.92;
 }
 
-.pilot-header-top--brand-only {
-  justify-content: flex-start;
+/* Portaled from XmlToolsBar — top row of app header, right side */
+.pilot-header-meta-slot {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-width: 0;
+}
+
+.pilot-app-header .pilot-header-meta-slot .pilot-xml-tools__legacy-meta {
+  width: auto;
+  max-width: min(100%, 560px);
+  justify-content: flex-end;
+  padding-top: 0;
+  margin-top: 0;
+  margin-left: auto;
+  border-top: none;
+  font-size: 0.62rem;
+  gap: 0.3rem 0.48rem;
+}
+
+.pilot-app-header .pilot-header-meta-slot .pilot-xml-tools__schema-kicker {
+  color: rgba(226, 232, 240, 0.62);
+}
+
+.pilot-app-header .pilot-header-meta-slot .pilot-xml-tools__schema-value {
+  color: #f0f9ff;
+}
+
+.pilot-app-header .pilot-header-meta-slot .pilot-xml-tools__host-pill {
+  background: rgba(15, 23, 42, 0.38);
+  border-color: rgba(148, 163, 184, 0.38);
+  color: rgba(226, 232, 240, 0.9);
+}
+
+.pilot-app-header .pilot-header-meta-slot .pilot-xml-tools__host-pill--on {
+  color: #a7f3d0;
+  border-color: rgba(52, 211, 153, 0.45);
+  background: rgba(16, 185, 129, 0.14);
+}
+
+.pilot-app-header .pilot-header-meta-slot .pilot-xml-tools__host-pill--on .pilot-xml-tools__host-dot {
+  background: #34d399;
+  box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.28);
+}
+
+.pilot-app-header .pilot-header-meta-slot .pilot-xml-tools__preview-hint {
+  color: rgba(186, 230, 253, 0.78);
+}
+
+.pilot-app-header .pilot-header-meta-slot .pilot-xml-tools__ncei-link {
+  color: #a5f3fc;
+}
+
+.pilot-app-header .pilot-header-meta-slot .pilot-xml-tools__ncei-link:hover {
+  color: #e0f2fe;
+}
+
+@media (max-width: 720px) {
+  .pilot-app-header .pilot-header-meta-slot .pilot-xml-tools__preview-hint {
+    display: none;
+  }
+}
+
+.pilot-app-header--compact-wizard .pilot-header-meta-slot .pilot-xml-tools__legacy-meta {
+  font-size: 0.58rem;
+  gap: 0.26rem 0.38rem;
 }
 
 .pilot-app-header--compact-wizard .pilot-header-toolbar {

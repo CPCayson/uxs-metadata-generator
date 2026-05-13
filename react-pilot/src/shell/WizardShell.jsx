@@ -300,17 +300,6 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     const root = lensStackRef.current
     if (!root) return
 
-    // Bound html+body to viewport height — overflow:hidden alone only hides the scrollbar,
-    // the body still grows to content height. height:100dvh caps it so the flex chain works.
-    const prevBodyOverflow = document.body.style.overflow
-    const prevHtmlOverflow = document.documentElement.style.overflow
-    const prevBodyHeight = document.body.style.height
-    const prevHtmlHeight = document.documentElement.style.height
-    document.body.style.overflow = 'hidden'
-    document.documentElement.style.overflow = 'hidden'
-    document.body.style.height = '100dvh'
-    document.documentElement.style.height = '100dvh'
-
     function measure() {
       const grid = root.querySelector('.workspace-grid')
       if (!grid) return
@@ -332,10 +321,6 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     return () => {
       ro.disconnect()
       window.removeEventListener('resize', measure)
-      document.body.style.overflow = prevBodyOverflow
-      document.documentElement.style.overflow = prevHtmlOverflow
-      document.body.style.height = prevBodyHeight
-      document.documentElement.style.height = prevHtmlHeight
     }
   }, [])
 
@@ -729,9 +714,10 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     }
   }, [profile.steps, activeStep, selectWizardStep])
 
-  /** Keep step tabs / Lens step scope aligned with the section nearest the viewport center */
+  /** Keep step tabs / Lens step scope aligned with the section nearest the scrollport center */
   useEffect(() => {
-    const root = mainColumnRef.current
+    const mainScroll = document.getElementById('pilot-main')
+    const root = mainScroll || mainColumnRef.current
     if (!root || !profile.steps?.length) return
     const obs = new IntersectionObserver(
       (entries) => {

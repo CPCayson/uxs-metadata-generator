@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { searchRorOrganizationsClient } from '../../lib/rorClient'
 import { fromDatetimeLocalValue, toDatetimeLocalValue } from '../../lib/datetimeLocal'
 import { useFieldValidation } from '../../components/fields/useFieldValidation'
@@ -7,6 +7,7 @@ import MantaFieldGlass from '../../components/MantaFieldGlass.jsx'
 import MantaFieldInsights from '../../components/MantaFieldInsights.jsx'
 import SourceProvenancePanel from '../../components/SourceProvenancePanel.jsx'
 import FieldHintTooltip, { LabelWithHint } from '../../components/FieldHintTooltip.jsx'
+import { useWorkbenchChrome } from '../../shell/useWorkbenchChrome.js'
 
 /**
  * @param {{
@@ -61,6 +62,24 @@ export default function StepMission({
   const [rorResults, setRorResults] = useState([])
   const [rorError, setRorError] = useState('')
   const [selectedTemplateKey, setSelectedTemplateKey] = useState('')
+  const [lensSymbioteActive, setLensSymbioteActive] = useState(false)
+
+  const { lensActive, lensTarget, assistantLayout } = useWorkbenchChrome()
+
+  useEffect(() => {
+    const onSym = (e) => setLensSymbioteActive(Boolean(e?.detail?.active))
+    window.addEventListener('manta:lens-symbiote-active', onSym)
+    return () => window.removeEventListener('manta:lens-symbiote-active', onSym)
+  }, [])
+
+  /** Form / split lens already surfaces suggestions + actions — drop the extra insights card and chip rows. */
+  const hideMissionLensDuplicateChrome = Boolean(
+    lensActive && (lensTarget === 'form' || lensTarget === 'split'),
+  )
+  /** Split-float: keep chip row until the LENS sheet is open (symbiote mounts); otherwise the step would go bare. */
+  const hideMissionGlassChips = Boolean(
+    hideMissionLensDuplicateChrome && (lensSymbioteActive || assistantLayout !== 'split-float'),
+  )
 
   const { show, invalid } = useFieldValidation({ issues, touched, showAllErrors })
 
@@ -459,15 +478,17 @@ export default function StepMission({
 
       <section className="panel">
         <h3 className="panel-title">Identification</h3>
-        <MantaFieldInsights
-          issues={issues}
-          pilotState={{ mission, platform: {}, spatial: {}, keywords: {} }}
-          activeStep="mission"
-          onApply={(field, value) => {
-            const key = field.replace('mission.', '')
-            onMissionPatch({ [key]: value })
-          }}
-        />
+        {hideMissionLensDuplicateChrome ? null : (
+          <MantaFieldInsights
+            issues={issues}
+            pilotState={{ mission, platform: {}, spatial: {}, keywords: {} }}
+            activeStep="mission"
+            onApply={(field, value) => {
+              const key = field.replace('mission.', '')
+              onMissionPatch({ [key]: value })
+            }}
+          />
+        )}
         {importedFromStructuredSource ? (
           <div className="pilot-import-attention" role="status">
             <strong>After import:</strong>{' '}
@@ -495,6 +516,7 @@ export default function StepMission({
           issues={issues}
           label="File identifier"
           required
+          hideChipsRow={hideMissionGlassChips}
           showValidationChrome={glassShowChrome('mission.fileId')}
           hint={<>NCEI file identifier; optional <code>gov.noaa.ncei.uxs:</code> prefix.</>}
         >
@@ -516,6 +538,7 @@ export default function StepMission({
           issues={issues}
           label="Title"
           required
+          hideChipsRow={hideMissionGlassChips}
           showValidationChrome={glassShowChrome('mission.title')}
         >
           <input
@@ -535,6 +558,7 @@ export default function StepMission({
           issues={issues}
           label="Alternate title"
           hideAskMore
+          hideChipsRow={hideMissionGlassChips}
           showValidationChrome={glassShowChrome('mission.alternateTitle')}
         >
           <input
@@ -553,6 +577,7 @@ export default function StepMission({
           label="Abstract"
           required
           textLengthThreshold={100}
+          hideChipsRow={hideMissionGlassChips}
           showValidationChrome={glassShowChrome('mission.abstract')}
           hint="Include platform type, instruments, survey area, dates, and data products."
         >
@@ -574,6 +599,7 @@ export default function StepMission({
           issues={issues}
           label="Purpose (dataset)"
           required
+          hideChipsRow={hideMissionGlassChips}
           showValidationChrome={glassShowChrome('mission.purpose')}
         >
           <textarea

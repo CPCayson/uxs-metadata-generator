@@ -1,8 +1,8 @@
 {
   "sampleDir": "/Users/connorcayson/Downloads/uSX/MANTA End User Testing/samples",
   "sampleDirRelative": "MANTA End User Testing/samples",
-  "generated": "2026-05-11T16:58:54.500Z",
-  "patternCount": 193,
+  "generated": "2026-05-12T18:30:38.172Z",
+  "patternCount": 216,
   "byFrequency": [
     {
       "field": "mission.abstract",
@@ -33,22 +33,52 @@
       ]
     },
     {
-      "field": "keywords.providers[0].uuid",
-      "message": "Add concept UUID for best KMS href",
-      "severity": "w",
-      "wizardStep": "keywords",
-      "hitCount": 15,
+      "field": "distribution.license",
+      "message": "Use/License is required",
+      "severity": "e",
+      "wizardStep": "distribution",
+      "hitCount": 18,
       "files": [
+        "0299833.xml",
         "AFSC_GA13_Raw_Data.xml",
         "C01531.xml",
         "C01678.xml",
-        "EX1904_collection.xml",
         "EX2306_COLLECTION.xml",
+        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
+        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
         "LISTEN_GoMex_Raw_Audio.xml",
         "NCRMP-Benthic-FG.xml",
         "NCRMP-Socio-Guam.xml",
+        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
+        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
         "NRS_Raw_Data.xml",
-        "SAMPLE_Populated.xml",
+        "gov.noaa.nmfs.inport.52208.xml",
+        "gov.noaa.nmfs.inport.5619.xml",
+        "gov.noaa.nmfs.inport.5687.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    {
+      "field": "mission.licenseUrl",
+      "message": "License URL recommended when preset is custom",
+      "severity": "w",
+      "wizardStep": "mission",
+      "hitCount": 18,
+      "files": [
+        "0299833.xml",
+        "AFSC_GA13_Raw_Data.xml",
+        "C01531.xml",
+        "C01678.xml",
+        "EX2306_COLLECTION.xml",
+        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
+        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
+        "LISTEN_GoMex_Raw_Audio.xml",
+        "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml",
+        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
+        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
+        "NRS_Raw_Data.xml",
         "gov.noaa.nmfs.inport.52208.xml",
         "gov.noaa.nmfs.inport.5619.xml",
         "gov.noaa.nmfs.inport.5687.xml",
@@ -80,28 +110,6 @@
       ]
     },
     {
-      "field": "keywords.instruments[0].uuid",
-      "message": "Add concept UUID for best KMS href",
-      "severity": "w",
-      "wizardStep": "keywords",
-      "hitCount": 13,
-      "files": [
-        "AFSC_GA13_Raw_Data.xml",
-        "C01531.xml",
-        "C01678.xml",
-        "EX1904_collection.xml",
-        "EX2306_COLLECTION.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
-        "NCRMP-Socio-Guam.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
-        "NRS_Raw_Data.xml",
-        "SAMPLE_Populated.xml"
-      ]
-    },
-    {
       "field": "keywords.platforms[0].uuid",
       "message": "Add concept UUID for best KMS href",
       "severity": "w",
@@ -111,37 +119,60 @@
         "AFSC_GA13_Raw_Data.xml",
         "C01531.xml",
         "C01678.xml",
-        "EX1904_collection.xml",
         "EX2306_COLLECTION.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
         "LISTEN_GoMex_Raw_Audio.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
+        "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml",
         "NRS_Raw_Data.xml",
         "SAMPLE_Populated.xml",
+        "gov.noaa.nmfs.inport.5619.xml",
+        "gov.noaa.nmfs.inport.5687.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
         "uxs_test.xml"
       ]
     },
     {
-      "field": "keywords.datacenters[0].uuid",
+      "field": "keywords.projects[0].uuid",
       "message": "Add concept UUID for best KMS href",
       "severity": "w",
       "wizardStep": "keywords",
-      "hitCount": 12,
+      "hitCount": 13,
       "files": [
         "AFSC_GA13_Raw_Data.xml",
         "C01531.xml",
         "C01678.xml",
-        "EX1904_collection.xml",
-        "EX2306_COLLECTION.xml",
         "LISTEN_GoMex_Raw_Audio.xml",
+        "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml",
         "NRS_Raw_Data.xml",
         "SAMPLE_Populated.xml",
         "gov.noaa.nmfs.inport.52208.xml",
         "gov.noaa.nmfs.inport.5619.xml",
         "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    {
+      "field": "keywords.sciencekeywords[1].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 13,
+      "files": [
+        "AFSC_GA13_Raw_Data.xml",
+        "C01531.xml",
+        "C01678.xml",
+        "LISTEN_GoMex_Raw_Audio.xml",
+        "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml",
+        "NRS_Raw_Data.xml",
+        "SAMPLE_Populated.xml",
+        "gov.noaa.nmfs.inport.52208.xml",
+        "gov.noaa.nmfs.inport.5619.xml",
+        "gov.noaa.nmfs.inport.5687.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
       ]
     },
     {
@@ -154,36 +185,34 @@
         "AFSC_GA13_Raw_Data.xml",
         "C01531.xml",
         "C01678.xml",
-        "EX1904_collection.xml",
-        "EX2306_COLLECTION.xml",
         "LISTEN_GoMex_Raw_Audio.xml",
+        "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml",
         "NRS_Raw_Data.xml",
-        "SAMPLE_Populated.xml",
         "gov.noaa.nmfs.inport.52208.xml",
         "gov.noaa.nmfs.inport.5619.xml",
         "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
       ]
     },
     {
-      "field": "keywords.sciencekeywords[1].uuid",
+      "field": "keywords.instruments[0].uuid",
       "message": "Add concept UUID for best KMS href",
       "severity": "w",
       "wizardStep": "keywords",
-      "hitCount": 12,
+      "hitCount": 10,
       "files": [
-        "AFSC_GA13_Raw_Data.xml",
         "C01531.xml",
-        "C01678.xml",
         "EX1904_collection.xml",
-        "EX2306_COLLECTION.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
-        "NRS_Raw_Data.xml",
+        "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml",
         "SAMPLE_Populated.xml",
         "gov.noaa.nmfs.inport.52208.xml",
         "gov.noaa.nmfs.inport.5619.xml",
         "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
       ]
     },
     {
@@ -191,19 +220,18 @@
       "message": "Add concept UUID for best KMS href",
       "severity": "w",
       "wizardStep": "keywords",
-      "hitCount": 11,
+      "hitCount": 10,
       "files": [
         "AFSC_GA13_Raw_Data.xml",
         "C01531.xml",
         "C01678.xml",
-        "EX2306_COLLECTION.xml",
+        "EX1904_collection.xml",
         "LISTEN_GoMex_Raw_Audio.xml",
         "NRS_Raw_Data.xml",
         "SAMPLE_Populated.xml",
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
         "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
       ]
     },
     {
@@ -211,39 +239,18 @@
       "message": "Add concept UUID for best KMS href",
       "severity": "w",
       "wizardStep": "keywords",
-      "hitCount": 11,
-      "files": [
-        "AFSC_GA13_Raw_Data.xml",
-        "C01531.xml",
-        "C01678.xml",
-        "EX1904_collection.xml",
-        "EX2306_COLLECTION.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
-        "NRS_Raw_Data.xml",
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    {
-      "field": "keywords.sciencekeywords[3].uuid",
-      "message": "Add concept UUID for best KMS href",
-      "severity": "w",
-      "wizardStep": "keywords",
-      "hitCount": 11,
+      "hitCount": 10,
       "files": [
         "0299833.xml",
-        "AFSC_GA13_Raw_Data.xml",
         "C01531.xml",
         "C01678.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
+        "NCRMP-Benthic-FG.xml",
         "NCRMP-Socio-Guam.xml",
-        "NRS_Raw_Data.xml",
         "gov.noaa.nmfs.inport.52208.xml",
         "gov.noaa.nmfs.inport.5619.xml",
         "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
       ]
     },
     {
@@ -253,51 +260,34 @@
       "wizardStep": "keywords",
       "hitCount": 10,
       "files": [
-        "AFSC_GA13_Raw_Data.xml",
         "C01531.xml",
         "C01678.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
         "NCRMP-Socio-Guam.xml",
-        "NRS_Raw_Data.xml",
         "gov.noaa.nmfs.inport.52208.xml",
         "gov.noaa.nmfs.inport.5619.xml",
         "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
       ]
     },
     {
-      "field": "keywords.projects[0].uuid",
+      "field": "keywords.sciencekeywords[3].uuid",
       "message": "Add concept UUID for best KMS href",
       "severity": "w",
       "wizardStep": "keywords",
       "hitCount": 9,
       "files": [
-        "AFSC_GA13_Raw_Data.xml",
         "C01531.xml",
         "C01678.xml",
-        "NRS_Raw_Data.xml",
-        "SAMPLE_Populated.xml",
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
         "gov.noaa.nmfs.inport.52208.xml",
         "gov.noaa.nmfs.inport.5619.xml",
         "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    {
-      "field": "distribution.format",
-      "message": "Distribution format is required",
-      "severity": "e",
-      "wizardStep": "distribution",
-      "hitCount": 8,
-      "files": [
-        "EX1904_collection.xml",
-        "EX2306_COLLECTION.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
       ]
     },
     {
@@ -309,29 +299,12 @@
       "files": [
         "AFSC_GA13_Raw_Data.xml",
         "C01678.xml",
-        "EX2306_COLLECTION.xml",
         "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml",
         "NRS_Raw_Data.xml",
         "gov.noaa.nmfs.inport.52208.xml",
         "gov.noaa.nmfs.inport.5687.xml",
         "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    {
-      "field": "keywords.providers[1].uuid",
-      "message": "Add concept UUID for best KMS href",
-      "severity": "w",
-      "wizardStep": "keywords",
-      "hitCount": 8,
-      "files": [
-        "C01531.xml",
-        "C01678.xml",
-        "EX1904_collection.xml",
-        "EX2306_COLLECTION.xml",
-        "NCRMP-Benthic-FG.xml",
-        "NCRMP-Socio-Guam.xml",
-        "SAMPLE_Populated.xml",
-        "uxs_test.xml"
       ]
     },
     {
@@ -341,14 +314,14 @@
       "wizardStep": "keywords",
       "hitCount": 8,
       "files": [
-        "AFSC_GA13_Raw_Data.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
         "NCRMP-Socio-Guam.xml",
-        "NRS_Raw_Data.xml",
         "gov.noaa.nmfs.inport.52208.xml",
         "gov.noaa.nmfs.inport.5619.xml",
         "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
       ]
     },
     {
@@ -358,30 +331,14 @@
       "wizardStep": "keywords",
       "hitCount": 8,
       "files": [
-        "AFSC_GA13_Raw_Data.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
         "NCRMP-Socio-Guam.xml",
-        "NRS_Raw_Data.xml",
         "gov.noaa.nmfs.inport.52208.xml",
         "gov.noaa.nmfs.inport.5619.xml",
         "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    {
-      "field": "keywords.projects",
-      "message": "Projects: at least one keyword is required",
-      "severity": "e",
-      "wizardStep": "keywords",
-      "hitCount": 7,
-      "files": [
-        "EX1904_collection.xml",
-        "EX2306_COLLECTION.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml"
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
       ]
     },
     {
@@ -389,15 +346,110 @@
       "message": "Add concept UUID for best KMS href",
       "severity": "w",
       "wizardStep": "keywords",
-      "hitCount": 7,
+      "hitCount": 8,
       "files": [
-        "AFSC_GA13_Raw_Data.xml",
+        "EX2306_COLLECTION.xml",
         "LISTEN_GoMex_Raw_Audio.xml",
-        "NRS_Raw_Data.xml",
+        "NCRMP-Benthic-FG.xml",
         "gov.noaa.nmfs.inport.52208.xml",
         "gov.noaa.nmfs.inport.5619.xml",
         "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    {
+      "field": "keywords.datacenters[1].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 7,
+      "files": [
+        "C01531.xml",
+        "EX1904_collection.xml",
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml",
+        "SAMPLE_Populated.xml",
+        "uxs_test.xml"
+      ]
+    },
+    {
+      "field": "keywords.providers[0].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 7,
+      "files": [
+        "C01678.xml",
+        "EX1904_collection.xml",
+        "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml",
+        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
+        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
+        "uxs_test.xml"
+      ]
+    },
+    {
+      "field": "keywords.providers[1].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 7,
+      "files": [
+        "C01531.xml",
+        "EX1904_collection.xml",
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml",
+        "SAMPLE_Populated.xml",
+        "uxs_test.xml"
+      ]
+    },
+    {
+      "field": "keywords.sciencekeywords[9].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 7,
+      "files": [
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml",
+        "gov.noaa.nmfs.inport.52208.xml",
+        "gov.noaa.nmfs.inport.5619.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    {
+      "field": "keywords.sciencekeywords[10].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 6,
+      "files": [
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "gov.noaa.nmfs.inport.52208.xml",
+        "gov.noaa.nmfs.inport.5619.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    {
+      "field": "keywords.sciencekeywords[8].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 6,
+      "files": [
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "gov.noaa.nmfs.inport.52208.xml",
+        "gov.noaa.nmfs.inport.5619.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
       ]
     },
     {
@@ -423,48 +475,6 @@
       "hitCount": 6,
       "files": [
         "C01531.xml",
-        "EX1904_collection.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml"
-      ]
-    },
-    {
-      "field": "keywords.datacenters[1].uuid",
-      "message": "Add concept UUID for best KMS href",
-      "severity": "w",
-      "wizardStep": "keywords",
-      "hitCount": 5,
-      "files": [
-        "C01531.xml",
-        "C01678.xml",
-        "EX1904_collection.xml",
-        "EX2306_COLLECTION.xml",
-        "SAMPLE_Populated.xml"
-      ]
-    },
-    {
-      "field": "keywords.instruments[1].uuid",
-      "message": "Add concept UUID for best KMS href",
-      "severity": "w",
-      "wizardStep": "keywords",
-      "hitCount": 5,
-      "files": [
-        "AFSC_GA13_Raw_Data.xml",
-        "C01678.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
-        "NRS_Raw_Data.xml",
-        "SAMPLE_Populated.xml"
-      ]
-    },
-    {
-      "field": "keywords.locations",
-      "message": "Locations: at least one keyword is required",
-      "severity": "e",
-      "wizardStep": "keywords",
-      "hitCount": 5,
-      "files": [
         "EX1904_collection.xml",
         "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
         "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
@@ -501,38 +511,155 @@
       ]
     },
     {
-      "field": "keywords.platforms",
-      "message": "Platforms: at least one keyword is required",
-      "severity": "e",
+      "field": "keywords.projects[1].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
       "wizardStep": "keywords",
       "hitCount": 5,
       "files": [
+        "C01531.xml",
+        "C01678.xml",
+        "NCRMP-Benthic-FG.xml",
         "NCRMP-Socio-Guam.xml",
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
+        "uxs_test.xml"
       ]
     },
     {
-      "field": "mission.purpose",
-      "message": "Purpose (dataset) is required",
-      "severity": "e",
-      "wizardStep": "mission",
+      "field": "keywords.sciencekeywords[11].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
       "hitCount": 5,
       "files": [
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
-        "gov.noaa.nmfs.inport.52208.xml"
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "gov.noaa.nmfs.inport.52208.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
       ]
     },
     {
-      "field": "keywords.datacenters",
-      "message": "Data Centers: at least one keyword is required",
-      "severity": "e",
+      "field": "keywords.datacenters[0].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
       "wizardStep": "keywords",
+      "hitCount": 4,
+      "files": [
+        "C01678.xml",
+        "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml",
+        "uxs_test.xml"
+      ]
+    },
+    {
+      "field": "keywords.sciencekeywords[12].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 4,
+      "files": [
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    {
+      "field": "keywords.sciencekeywords[13].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 4,
+      "files": [
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    {
+      "field": "keywords.sciencekeywords[14].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 4,
+      "files": [
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    {
+      "field": "keywords.sciencekeywords[15].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 4,
+      "files": [
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    {
+      "field": "keywords.sciencekeywords[16].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 4,
+      "files": [
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    {
+      "field": "keywords.sciencekeywords[18].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 4,
+      "files": [
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    {
+      "field": "keywords.sciencekeywords[19].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 4,
+      "files": [
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    {
+      "field": "keywords.sciencekeywords[20].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 4,
+      "files": [
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    {
+      "field": "mission.abstract",
+      "message": "Abstract uses acronym \"USM\"; expand it on first use when possible.",
+      "severity": "w",
+      "wizardStep": "mission",
       "hitCount": 4,
       "files": [
         "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
@@ -542,16 +669,15 @@
       ]
     },
     {
-      "field": "keywords.instruments",
-      "message": "Instruments: at least one keyword is required",
-      "severity": "e",
+      "field": "keywords.instruments[1].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
       "wizardStep": "keywords",
-      "hitCount": 4,
+      "hitCount": 3,
       "files": [
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
+        "NCRMP-Benthic-FG.xml",
+        "SAMPLE_Populated.xml",
+        "uxs_test.xml"
       ]
     },
     {
@@ -559,115 +685,11 @@
       "message": "Add concept UUID for best KMS href",
       "severity": "w",
       "wizardStep": "keywords",
-      "hitCount": 4,
-      "files": [
-        "NCRMP-Benthic-FG.xml",
-        "NCRMP-Socio-Guam.xml",
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    {
-      "field": "keywords.providers",
-      "message": "Providers: at least one keyword is required",
-      "severity": "e",
-      "wizardStep": "keywords",
-      "hitCount": 4,
-      "files": [
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml"
-      ]
-    },
-    {
-      "field": "keywords.sciencekeywords",
-      "message": "Science Keywords: at least one keyword is required",
-      "severity": "e",
-      "wizardStep": "keywords",
-      "hitCount": 4,
-      "files": [
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml"
-      ]
-    },
-    {
-      "field": "keywords.sciencekeywords[9].uuid",
-      "message": "Add concept UUID for best KMS href",
-      "severity": "w",
-      "wizardStep": "keywords",
-      "hitCount": 4,
-      "files": [
-        "NCRMP-Socio-Guam.xml",
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    {
-      "field": "mission.abstract",
-      "message": "Abstract uses acronym \"MDBC\"; expand it on first use when possible.",
-      "severity": "w",
-      "wizardStep": "mission",
-      "hitCount": 4,
-      "files": [
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml"
-      ]
-    },
-    {
-      "field": "mission.accession",
-      "message": "NCEI Accession must be alphanumeric",
-      "severity": "e",
-      "wizardStep": "mission",
-      "hitCount": 4,
-      "files": [
-        "AFSC_GA13_Raw_Data.xml",
-        "EX1904_collection.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
-        "NRS_Raw_Data.xml"
-      ]
-    },
-    {
-      "field": "sensors[0].type",
-      "message": "Sensor 1: type is required",
-      "severity": "e",
-      "wizardStep": "sensors",
-      "hitCount": 4,
-      "files": [
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    {
-      "field": "sensors[0].variable",
-      "message": "Sensor 1: observed variable is required",
-      "severity": "e",
-      "wizardStep": "sensors",
-      "hitCount": 4,
-      "files": [
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    {
-      "field": "keywords.locations[4].uuid",
-      "message": "Add concept UUID for best KMS href",
-      "severity": "w",
-      "wizardStep": "keywords",
       "hitCount": 3,
       "files": [
         "NCRMP-Benthic-FG.xml",
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
+        "NCRMP-Socio-Guam.xml",
+        "gov.noaa.nmfs.inport.52208.xml"
       ]
     },
     {
@@ -683,55 +705,43 @@
       ]
     },
     {
-      "field": "keywords.platforms[1].uuid",
+      "field": "keywords.projects[2].uuid",
       "message": "Add concept UUID for best KMS href",
       "severity": "w",
       "wizardStep": "keywords",
       "hitCount": 3,
       "files": [
         "C01531.xml",
+        "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml"
+      ]
+    },
+    {
+      "field": "keywords.sciencekeywords[17].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 3,
+      "files": [
         "EX2306_COLLECTION.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
         "uxs_test.xml"
       ]
     },
     {
-      "field": "keywords.projects[1].uuid",
+      "field": "keywords.sciencekeywords[21].uuid",
       "message": "Add concept UUID for best KMS href",
       "severity": "w",
       "wizardStep": "keywords",
       "hitCount": 3,
       "files": [
-        "C01531.xml",
-        "C01678.xml",
-        "uxs_test.xml"
-      ]
-    },
-    {
-      "field": "keywords.providers[2].uuid",
-      "message": "Add concept UUID for best KMS href",
-      "severity": "w",
-      "wizardStep": "keywords",
-      "hitCount": 3,
-      "files": [
-        "C01531.xml",
-        "EX1904_collection.xml",
-        "uxs_test.xml"
-      ]
-    },
-    {
-      "field": "keywords.sciencekeywords[10].uuid",
-      "message": "Add concept UUID for best KMS href",
-      "severity": "w",
-      "wizardStep": "keywords",
-      "hitCount": 3,
-      "files": [
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
         "gov.noaa.nmfs.inport.62654.xml"
       ]
     },
     {
-      "field": "keywords.sciencekeywords[25].uuid",
+      "field": "keywords.sciencekeywords[24].uuid",
       "message": "Add concept UUID for best KMS href",
       "severity": "w",
       "wizardStep": "keywords",
@@ -740,18 +750,6 @@
         "NCRMP-Benthic-FG.xml",
         "gov.noaa.nmfs.inport.62654.xml",
         "uxs_test.xml"
-      ]
-    },
-    {
-      "field": "keywords.sciencekeywords[8].uuid",
-      "message": "Add concept UUID for best KMS href",
-      "severity": "w",
-      "wizardStep": "keywords",
-      "hitCount": 3,
-      "files": [
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
       ]
     },
     {
@@ -767,14 +765,14 @@
       ]
     },
     {
-      "field": "distribution.license",
-      "message": "Use/License is required",
-      "severity": "e",
-      "wizardStep": "distribution",
+      "field": "keywords.datacenters[2].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
       "hitCount": 2,
       "files": [
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml"
+        "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml"
       ]
     },
     {
@@ -784,8 +782,8 @@
       "wizardStep": "keywords",
       "hitCount": 2,
       "files": [
-        "C01678.xml",
-        "SAMPLE_Populated.xml"
+        "SAMPLE_Populated.xml",
+        "uxs_test.xml"
       ]
     },
     {
@@ -800,6 +798,17 @@
       ]
     },
     {
+      "field": "keywords.locations[4].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 2,
+      "files": [
+        "NCRMP-Benthic-FG.xml",
+        "gov.noaa.nmfs.inport.52208.xml"
+      ]
+    },
+    {
       "field": "keywords.locations[7].uuid",
       "message": "Add concept UUID for best KMS href",
       "severity": "w",
@@ -808,6 +817,28 @@
       "files": [
         "NCRMP-Socio-Guam.xml",
         "gov.noaa.nmfs.inport.62654.xml"
+      ]
+    },
+    {
+      "field": "keywords.platforms[1].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 2,
+      "files": [
+        "C01531.xml",
+        "uxs_test.xml"
+      ]
+    },
+    {
+      "field": "keywords.platforms[2].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 2,
+      "files": [
+        "C01531.xml",
+        "NCRMP-Benthic-FG.xml"
       ]
     },
     {
@@ -976,6 +1007,17 @@
       ]
     },
     {
+      "field": "keywords.providers[2].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 2,
+      "files": [
+        "EX1904_collection.xml",
+        "uxs_test.xml"
+      ]
+    },
+    {
       "field": "keywords.providers[20].uuid",
       "message": "Add concept UUID for best KMS href",
       "severity": "w",
@@ -1108,17 +1150,6 @@
       ]
     },
     {
-      "field": "keywords.providers[31].uuid",
-      "message": "Add concept UUID for best KMS href",
-      "severity": "w",
-      "wizardStep": "keywords",
-      "hitCount": 2,
-      "files": [
-        "EX1904_collection.xml",
-        "uxs_test.xml"
-      ]
-    },
-    {
       "field": "keywords.providers[32].uuid",
       "message": "Add concept UUID for best KMS href",
       "severity": "w",
@@ -1164,17 +1195,6 @@
     },
     {
       "field": "keywords.providers[36].uuid",
-      "message": "Add concept UUID for best KMS href",
-      "severity": "w",
-      "wizardStep": "keywords",
-      "hitCount": 2,
-      "files": [
-        "EX1904_collection.xml",
-        "uxs_test.xml"
-      ]
-    },
-    {
-      "field": "keywords.providers[37].uuid",
       "message": "Add concept UUID for best KMS href",
       "severity": "w",
       "wizardStep": "keywords",
@@ -1339,72 +1359,6 @@
       ]
     },
     {
-      "field": "keywords.sciencekeywords[11].uuid",
-      "message": "Add concept UUID for best KMS href",
-      "severity": "w",
-      "wizardStep": "keywords",
-      "hitCount": 2,
-      "files": [
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    {
-      "field": "keywords.sciencekeywords[17].uuid",
-      "message": "Add concept UUID for best KMS href",
-      "severity": "w",
-      "wizardStep": "keywords",
-      "hitCount": 2,
-      "files": [
-        "NCRMP-Benthic-FG.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    {
-      "field": "keywords.sciencekeywords[18].uuid",
-      "message": "Add concept UUID for best KMS href",
-      "severity": "w",
-      "wizardStep": "keywords",
-      "hitCount": 2,
-      "files": [
-        "NCRMP-Benthic-FG.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    {
-      "field": "keywords.sciencekeywords[19].uuid",
-      "message": "Add concept UUID for best KMS href",
-      "severity": "w",
-      "wizardStep": "keywords",
-      "hitCount": 2,
-      "files": [
-        "NCRMP-Benthic-FG.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    {
-      "field": "keywords.sciencekeywords[20].uuid",
-      "message": "Add concept UUID for best KMS href",
-      "severity": "w",
-      "wizardStep": "keywords",
-      "hitCount": 2,
-      "files": [
-        "NCRMP-Benthic-FG.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    {
-      "field": "keywords.sciencekeywords[21].uuid",
-      "message": "Add concept UUID for best KMS href",
-      "severity": "w",
-      "wizardStep": "keywords",
-      "hitCount": 2,
-      "files": [
-        "NCRMP-Benthic-FG.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    {
       "field": "keywords.sciencekeywords[22].uuid",
       "message": "Add concept UUID for best KMS href",
       "severity": "w",
@@ -1427,7 +1381,7 @@
       ]
     },
     {
-      "field": "keywords.sciencekeywords[24].uuid",
+      "field": "keywords.sciencekeywords[25].uuid",
       "message": "Add concept UUID for best KMS href",
       "severity": "w",
       "wizardStep": "keywords",
@@ -1460,72 +1414,6 @@
       ]
     },
     {
-      "field": "keywords.sciencekeywords[28].uuid",
-      "message": "Add concept UUID for best KMS href",
-      "severity": "w",
-      "wizardStep": "keywords",
-      "hitCount": 2,
-      "files": [
-        "NCRMP-Benthic-FG.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    {
-      "field": "keywords.sciencekeywords[29].uuid",
-      "message": "Add concept UUID for best KMS href",
-      "severity": "w",
-      "wizardStep": "keywords",
-      "hitCount": 2,
-      "files": [
-        "NCRMP-Benthic-FG.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    {
-      "field": "keywords.sciencekeywords[30].uuid",
-      "message": "Add concept UUID for best KMS href",
-      "severity": "w",
-      "wizardStep": "keywords",
-      "hitCount": 2,
-      "files": [
-        "NCRMP-Benthic-FG.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    {
-      "field": "keywords.sciencekeywords[31].uuid",
-      "message": "Add concept UUID for best KMS href",
-      "severity": "w",
-      "wizardStep": "keywords",
-      "hitCount": 2,
-      "files": [
-        "NCRMP-Benthic-FG.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    {
-      "field": "keywords.sciencekeywords[32].uuid",
-      "message": "Add concept UUID for best KMS href",
-      "severity": "w",
-      "wizardStep": "keywords",
-      "hitCount": 2,
-      "files": [
-        "NCRMP-Benthic-FG.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    {
-      "field": "mission.licenseUrl",
-      "message": "License URL recommended when preset is custom",
-      "severity": "w",
-      "wizardStep": "mission",
-      "hitCount": 2,
-      "files": [
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml"
-      ]
-    },
-    {
       "field": "mission.startDate",
       "message": "Creation / Start date is required",
       "severity": "e",
@@ -1534,16 +1422,6 @@
       "files": [
         "SAMPLE_Populated.xml",
         "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    {
-      "field": "keywords.datacenters[2].uuid",
-      "message": "Add concept UUID for best KMS href",
-      "severity": "w",
-      "wizardStep": "keywords",
-      "hitCount": 1,
-      "files": [
-        "C01531.xml"
       ]
     },
     {
@@ -1584,6 +1462,26 @@
       "hitCount": 1,
       "files": [
         "NCRMP-Benthic-FG.xml"
+      ]
+    },
+    {
+      "field": "keywords.instruments[10].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "uxs_test.xml"
+      ]
+    },
+    {
+      "field": "keywords.instruments[11].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "uxs_test.xml"
       ]
     },
     {
@@ -1647,6 +1545,66 @@
       ]
     },
     {
+      "field": "keywords.instruments[4].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "uxs_test.xml"
+      ]
+    },
+    {
+      "field": "keywords.instruments[5].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "uxs_test.xml"
+      ]
+    },
+    {
+      "field": "keywords.instruments[6].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "uxs_test.xml"
+      ]
+    },
+    {
+      "field": "keywords.instruments[7].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "uxs_test.xml"
+      ]
+    },
+    {
+      "field": "keywords.instruments[8].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "uxs_test.xml"
+      ]
+    },
+    {
+      "field": "keywords.instruments[9].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "uxs_test.xml"
+      ]
+    },
+    {
       "field": "keywords.locations[10].uuid",
       "message": "Add concept UUID for best KMS href",
       "severity": "w",
@@ -1654,16 +1612,6 @@
       "hitCount": 1,
       "files": [
         "NCRMP-Benthic-FG.xml"
-      ]
-    },
-    {
-      "field": "keywords.locations[8].uuid",
-      "message": "Add concept UUID for best KMS href",
-      "severity": "w",
-      "wizardStep": "keywords",
-      "hitCount": 1,
-      "files": [
-        "gov.noaa.nmfs.inport.62654.xml"
       ]
     },
     {
@@ -1677,16 +1625,6 @@
       ]
     },
     {
-      "field": "keywords.platforms[2].uuid",
-      "message": "Add concept UUID for best KMS href",
-      "severity": "w",
-      "wizardStep": "keywords",
-      "hitCount": 1,
-      "files": [
-        "C01531.xml"
-      ]
-    },
-    {
       "field": "keywords.platforms[4].uuid",
       "message": "Add concept UUID for best KMS href",
       "severity": "w",
@@ -1697,13 +1635,303 @@
       ]
     },
     {
-      "field": "keywords.projects[2].uuid",
+      "field": "keywords.projects[11].uuid",
       "message": "Add concept UUID for best KMS href",
       "severity": "w",
       "wizardStep": "keywords",
       "hitCount": 1,
       "files": [
-        "C01531.xml"
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[12].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[13].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[14].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[15].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[16].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[17].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[18].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[19].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[20].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[21].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[22].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[25].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[26].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[27].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[28].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[29].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[30].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[31].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[32].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[33].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[34].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[35].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[36].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[37].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[38].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[39].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[40].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[41].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    {
+      "field": "keywords.projects[42].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
       ]
     },
     {
@@ -1734,6 +1962,26 @@
       "hitCount": 1,
       "files": [
         "NCRMP-Benthic-FG.xml"
+      ]
+    },
+    {
+      "field": "keywords.providers[31].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "uxs_test.xml"
+      ]
+    },
+    {
+      "field": "keywords.providers[37].uuid",
+      "message": "Add concept UUID for best KMS href",
+      "severity": "w",
+      "wizardStep": "keywords",
+      "hitCount": 1,
+      "files": [
+        "uxs_test.xml"
       ]
     },
     {
@@ -2027,7 +2275,7 @@
       ]
     },
     {
-      "field": "keywords.sciencekeywords[12].uuid",
+      "field": "keywords.sciencekeywords[28].uuid",
       "message": "Add concept UUID for best KMS href",
       "severity": "w",
       "wizardStep": "keywords",
@@ -2037,7 +2285,7 @@
       ]
     },
     {
-      "field": "keywords.sciencekeywords[13].uuid",
+      "field": "keywords.sciencekeywords[29].uuid",
       "message": "Add concept UUID for best KMS href",
       "severity": "w",
       "wizardStep": "keywords",
@@ -2047,7 +2295,7 @@
       ]
     },
     {
-      "field": "keywords.sciencekeywords[14].uuid",
+      "field": "keywords.sciencekeywords[30].uuid",
       "message": "Add concept UUID for best KMS href",
       "severity": "w",
       "wizardStep": "keywords",
@@ -2057,7 +2305,7 @@
       ]
     },
     {
-      "field": "keywords.sciencekeywords[15].uuid",
+      "field": "keywords.sciencekeywords[31].uuid",
       "message": "Add concept UUID for best KMS href",
       "severity": "w",
       "wizardStep": "keywords",
@@ -2067,7 +2315,7 @@
       ]
     },
     {
-      "field": "keywords.sciencekeywords[16].uuid",
+      "field": "keywords.sciencekeywords[32].uuid",
       "message": "Add concept UUID for best KMS href",
       "severity": "w",
       "wizardStep": "keywords",
@@ -2148,32 +2396,22 @@
     },
     {
       "field": "mission.abstract",
-      "message": "Abstract uses acronym \"CPO\"; expand it on first use when possible.",
+      "message": "Abstract uses acronym \"AVHRR\"; expand it on first use when possible.",
+      "severity": "w",
+      "wizardStep": "mission",
+      "hitCount": 1,
+      "files": [
+        "C01678.xml"
+      ]
+    },
+    {
+      "field": "mission.abstract",
+      "message": "Abstract uses acronym \"GOMO\"; expand it on first use when possible.",
       "severity": "w",
       "wizardStep": "mission",
       "hitCount": 1,
       "files": [
         "uxs_test.xml"
-      ]
-    },
-    {
-      "field": "mission.abstract",
-      "message": "Abstract uses acronym \"EHIS\"; expand it on first use when possible.",
-      "severity": "w",
-      "wizardStep": "mission",
-      "hitCount": 1,
-      "files": [
-        "C01531.xml"
-      ]
-    },
-    {
-      "field": "mission.abstract",
-      "message": "Abstract uses acronym \"FGBNMS\"; expand it on first use when possible.",
-      "severity": "w",
-      "wizardStep": "mission",
-      "hitCount": 1,
-      "files": [
-        "NCRMP-Benthic-FG.xml"
       ]
     },
     {
@@ -2188,42 +2426,22 @@
     },
     {
       "field": "mission.abstract",
+      "message": "Abstract uses acronym \"MPS\"; expand it on first use when possible.",
+      "severity": "w",
+      "wizardStep": "mission",
+      "hitCount": 1,
+      "files": [
+        "C01531.xml"
+      ]
+    },
+    {
+      "field": "mission.abstract",
       "message": "Abstract uses acronym \"NOT\"; expand it on first use when possible.",
       "severity": "w",
       "wizardStep": "mission",
       "hitCount": 1,
       "files": [
         "gov.noaa.nmfs.inport.5687.xml"
-      ]
-    },
-    {
-      "field": "mission.abstract",
-      "message": "Abstract uses acronym \"PATMOS\"; expand it on first use when possible.",
-      "severity": "w",
-      "wizardStep": "mission",
-      "hitCount": 1,
-      "files": [
-        "C01678.xml"
-      ]
-    },
-    {
-      "field": "mission.abstract",
-      "message": "Abstract uses acronym \"PIFSC\"; expand it on first use when possible.",
-      "severity": "w",
-      "wizardStep": "mission",
-      "hitCount": 1,
-      "files": [
-        "gov.noaa.nmfs.inport.52208.xml"
-      ]
-    },
-    {
-      "field": "mission.abstract",
-      "message": "Abstract uses acronym \"PMEL\"; expand it on first use when possible.",
-      "severity": "w",
-      "wizardStep": "mission",
-      "hitCount": 1,
-      "files": [
-        "NRS_Raw_Data.xml"
       ]
     },
     {
@@ -2238,6 +2456,16 @@
     },
     {
       "field": "mission.abstract",
+      "message": "Abstract uses acronym \"SE\"; expand it on first use when possible.",
+      "severity": "w",
+      "wizardStep": "mission",
+      "hitCount": 1,
+      "files": [
+        "gov.noaa.nmfs.inport.52208.xml"
+      ]
+    },
+    {
+      "field": "mission.abstract",
       "message": "Abstract uses acronym \"TPOS\"; expand it on first use when possible.",
       "severity": "w",
       "wizardStep": "mission",
@@ -2248,7 +2476,7 @@
     },
     {
       "field": "mission.abstract",
-      "message": "Abstract uses acronym \"UCSD\"; expand it on first use when possible.",
+      "message": "Abstract uses acronym \"US\"; expand it on first use when possible.",
       "severity": "w",
       "wizardStep": "mission",
       "hitCount": 1,
@@ -2290,7 +2518,7 @@
   "byField": {
     "mission.abstract": {
       "errors": 0,
-      "warnings": 34,
+      "warnings": 32,
       "samples": 19,
       "files": [
         "0299833.xml",
@@ -2314,21 +2542,49 @@
         "uxs_test.xml"
       ]
     },
-    "keywords.providers[0].uuid": {
+    "mission.licenseUrl": {
       "errors": 0,
-      "warnings": 15,
-      "samples": 15,
+      "warnings": 18,
+      "samples": 18,
       "files": [
+        "0299833.xml",
         "AFSC_GA13_Raw_Data.xml",
         "C01531.xml",
         "C01678.xml",
-        "EX1904_collection.xml",
         "EX2306_COLLECTION.xml",
+        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
+        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
         "LISTEN_GoMex_Raw_Audio.xml",
         "NCRMP-Benthic-FG.xml",
         "NCRMP-Socio-Guam.xml",
+        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
+        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
         "NRS_Raw_Data.xml",
-        "SAMPLE_Populated.xml",
+        "gov.noaa.nmfs.inport.52208.xml",
+        "gov.noaa.nmfs.inport.5619.xml",
+        "gov.noaa.nmfs.inport.5687.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    "distribution.license": {
+      "errors": 18,
+      "warnings": 0,
+      "samples": 18,
+      "files": [
+        "0299833.xml",
+        "AFSC_GA13_Raw_Data.xml",
+        "C01531.xml",
+        "C01678.xml",
+        "EX2306_COLLECTION.xml",
+        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
+        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
+        "LISTEN_GoMex_Raw_Audio.xml",
+        "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml",
+        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
+        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
+        "NRS_Raw_Data.xml",
         "gov.noaa.nmfs.inport.52208.xml",
         "gov.noaa.nmfs.inport.5619.xml",
         "gov.noaa.nmfs.inport.5687.xml",
@@ -2357,6 +2613,26 @@
         "gov.noaa.nmfs.inport.62654.xml"
       ]
     },
+    "keywords.sciencekeywords[1].uuid": {
+      "errors": 0,
+      "warnings": 13,
+      "samples": 13,
+      "files": [
+        "AFSC_GA13_Raw_Data.xml",
+        "C01531.xml",
+        "C01678.xml",
+        "LISTEN_GoMex_Raw_Audio.xml",
+        "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml",
+        "NRS_Raw_Data.xml",
+        "SAMPLE_Populated.xml",
+        "gov.noaa.nmfs.inport.52208.xml",
+        "gov.noaa.nmfs.inport.5619.xml",
+        "gov.noaa.nmfs.inport.5687.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
     "keywords.platforms[0].uuid": {
       "errors": 0,
       "warnings": 13,
@@ -2365,19 +2641,19 @@
         "AFSC_GA13_Raw_Data.xml",
         "C01531.xml",
         "C01678.xml",
-        "EX1904_collection.xml",
         "EX2306_COLLECTION.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
         "LISTEN_GoMex_Raw_Audio.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
+        "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml",
         "NRS_Raw_Data.xml",
         "SAMPLE_Populated.xml",
+        "gov.noaa.nmfs.inport.5619.xml",
+        "gov.noaa.nmfs.inport.5687.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
         "uxs_test.xml"
       ]
     },
-    "keywords.instruments[0].uuid": {
+    "keywords.projects[0].uuid": {
       "errors": 0,
       "warnings": 13,
       "samples": 13,
@@ -2385,16 +2661,16 @@
         "AFSC_GA13_Raw_Data.xml",
         "C01531.xml",
         "C01678.xml",
-        "EX1904_collection.xml",
-        "EX2306_COLLECTION.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
         "LISTEN_GoMex_Raw_Audio.xml",
+        "NCRMP-Benthic-FG.xml",
         "NCRMP-Socio-Guam.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
         "NRS_Raw_Data.xml",
-        "SAMPLE_Populated.xml"
+        "SAMPLE_Populated.xml",
+        "gov.noaa.nmfs.inport.52208.xml",
+        "gov.noaa.nmfs.inport.5619.xml",
+        "gov.noaa.nmfs.inport.5687.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
       ]
     },
     "keywords.sciencekeywords[0].uuid": {
@@ -2405,110 +2681,35 @@
         "AFSC_GA13_Raw_Data.xml",
         "C01531.xml",
         "C01678.xml",
-        "EX1904_collection.xml",
-        "EX2306_COLLECTION.xml",
         "LISTEN_GoMex_Raw_Audio.xml",
-        "NRS_Raw_Data.xml",
-        "SAMPLE_Populated.xml",
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    "keywords.sciencekeywords[1].uuid": {
-      "errors": 0,
-      "warnings": 12,
-      "samples": 12,
-      "files": [
-        "AFSC_GA13_Raw_Data.xml",
-        "C01531.xml",
-        "C01678.xml",
-        "EX1904_collection.xml",
-        "EX2306_COLLECTION.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
-        "NRS_Raw_Data.xml",
-        "SAMPLE_Populated.xml",
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    "keywords.datacenters[0].uuid": {
-      "errors": 0,
-      "warnings": 12,
-      "samples": 12,
-      "files": [
-        "AFSC_GA13_Raw_Data.xml",
-        "C01531.xml",
-        "C01678.xml",
-        "EX1904_collection.xml",
-        "EX2306_COLLECTION.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
-        "NRS_Raw_Data.xml",
-        "SAMPLE_Populated.xml",
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    "keywords.sciencekeywords[3].uuid": {
-      "errors": 0,
-      "warnings": 11,
-      "samples": 11,
-      "files": [
-        "0299833.xml",
-        "AFSC_GA13_Raw_Data.xml",
-        "C01531.xml",
-        "C01678.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
+        "NCRMP-Benthic-FG.xml",
         "NCRMP-Socio-Guam.xml",
         "NRS_Raw_Data.xml",
         "gov.noaa.nmfs.inport.52208.xml",
         "gov.noaa.nmfs.inport.5619.xml",
         "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
       ]
     },
     "keywords.sciencekeywords[2].uuid": {
       "errors": 0,
-      "warnings": 11,
-      "samples": 11,
+      "warnings": 10,
+      "samples": 10,
       "files": [
-        "AFSC_GA13_Raw_Data.xml",
+        "0299833.xml",
         "C01531.xml",
         "C01678.xml",
-        "EX1904_collection.xml",
-        "EX2306_COLLECTION.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
-        "NRS_Raw_Data.xml",
+        "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml",
         "gov.noaa.nmfs.inport.52208.xml",
         "gov.noaa.nmfs.inport.5619.xml",
         "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
       ]
     },
     "keywords.locations[0].uuid": {
-      "errors": 0,
-      "warnings": 11,
-      "samples": 11,
-      "files": [
-        "AFSC_GA13_Raw_Data.xml",
-        "C01531.xml",
-        "C01678.xml",
-        "EX2306_COLLECTION.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
-        "NRS_Raw_Data.xml",
-        "SAMPLE_Populated.xml",
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    "keywords.sciencekeywords[4].uuid": {
       "errors": 0,
       "warnings": 10,
       "samples": 10,
@@ -2516,59 +2717,63 @@
         "AFSC_GA13_Raw_Data.xml",
         "C01531.xml",
         "C01678.xml",
+        "EX1904_collection.xml",
         "LISTEN_GoMex_Raw_Audio.xml",
-        "NCRMP-Socio-Guam.xml",
         "NRS_Raw_Data.xml",
+        "SAMPLE_Populated.xml",
+        "gov.noaa.nmfs.inport.5687.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    "keywords.sciencekeywords[4].uuid": {
+      "errors": 0,
+      "warnings": 10,
+      "samples": 10,
+      "files": [
+        "C01531.xml",
+        "C01678.xml",
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml",
         "gov.noaa.nmfs.inport.52208.xml",
         "gov.noaa.nmfs.inport.5619.xml",
         "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
       ]
     },
-    "keywords.projects[0].uuid": {
+    "keywords.instruments[0].uuid": {
       "errors": 0,
-      "warnings": 9,
-      "samples": 9,
+      "warnings": 10,
+      "samples": 10,
       "files": [
-        "AFSC_GA13_Raw_Data.xml",
         "C01531.xml",
-        "C01678.xml",
-        "NRS_Raw_Data.xml",
+        "EX1904_collection.xml",
+        "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml",
         "SAMPLE_Populated.xml",
         "gov.noaa.nmfs.inport.52208.xml",
         "gov.noaa.nmfs.inport.5619.xml",
         "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
       ]
     },
-    "keywords.sciencekeywords[5].uuid": {
+    "keywords.sciencekeywords[3].uuid": {
       "errors": 0,
-      "warnings": 8,
-      "samples": 8,
+      "warnings": 9,
+      "samples": 9,
       "files": [
-        "AFSC_GA13_Raw_Data.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
-        "NCRMP-Socio-Guam.xml",
-        "NRS_Raw_Data.xml",
+        "C01531.xml",
+        "C01678.xml",
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
         "gov.noaa.nmfs.inport.52208.xml",
         "gov.noaa.nmfs.inport.5619.xml",
         "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    "keywords.sciencekeywords[6].uuid": {
-      "errors": 0,
-      "warnings": 8,
-      "samples": 8,
-      "files": [
-        "AFSC_GA13_Raw_Data.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
-        "NCRMP-Socio-Guam.xml",
-        "NRS_Raw_Data.xml",
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
       ]
     },
     "keywords.locations[1].uuid": {
@@ -2578,21 +2783,65 @@
       "files": [
         "AFSC_GA13_Raw_Data.xml",
         "C01678.xml",
-        "EX2306_COLLECTION.xml",
         "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml",
         "NRS_Raw_Data.xml",
         "gov.noaa.nmfs.inport.52208.xml",
         "gov.noaa.nmfs.inport.5687.xml",
         "gov.noaa.nmfs.inport.62654.xml"
       ]
     },
-    "keywords.providers[1].uuid": {
+    "keywords.sciencekeywords[5].uuid": {
       "errors": 0,
       "warnings": 8,
       "samples": 8,
       "files": [
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml",
+        "gov.noaa.nmfs.inport.52208.xml",
+        "gov.noaa.nmfs.inport.5619.xml",
+        "gov.noaa.nmfs.inport.5687.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    "keywords.sciencekeywords[6].uuid": {
+      "errors": 0,
+      "warnings": 8,
+      "samples": 8,
+      "files": [
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml",
+        "gov.noaa.nmfs.inport.52208.xml",
+        "gov.noaa.nmfs.inport.5619.xml",
+        "gov.noaa.nmfs.inport.5687.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    "keywords.sciencekeywords[7].uuid": {
+      "errors": 0,
+      "warnings": 8,
+      "samples": 8,
+      "files": [
+        "EX2306_COLLECTION.xml",
+        "LISTEN_GoMex_Raw_Audio.xml",
+        "NCRMP-Benthic-FG.xml",
+        "gov.noaa.nmfs.inport.52208.xml",
+        "gov.noaa.nmfs.inport.5619.xml",
+        "gov.noaa.nmfs.inport.5687.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    "keywords.datacenters[1].uuid": {
+      "errors": 0,
+      "warnings": 7,
+      "samples": 7,
+      "files": [
         "C01531.xml",
-        "C01678.xml",
         "EX1904_collection.xml",
         "EX2306_COLLECTION.xml",
         "NCRMP-Benthic-FG.xml",
@@ -2601,47 +2850,46 @@
         "uxs_test.xml"
       ]
     },
-    "distribution.format": {
-      "errors": 8,
-      "warnings": 0,
-      "samples": 8,
-      "files": [
-        "EX1904_collection.xml",
-        "EX2306_COLLECTION.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    "keywords.sciencekeywords[7].uuid": {
+    "keywords.providers[1].uuid": {
       "errors": 0,
       "warnings": 7,
       "samples": 7,
       "files": [
-        "AFSC_GA13_Raw_Data.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
-        "NRS_Raw_Data.xml",
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    "keywords.projects": {
-      "errors": 7,
-      "warnings": 0,
-      "samples": 7,
-      "files": [
+        "C01531.xml",
         "EX1904_collection.xml",
         "EX2306_COLLECTION.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
+        "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml",
+        "SAMPLE_Populated.xml",
+        "uxs_test.xml"
+      ]
+    },
+    "keywords.providers[0].uuid": {
+      "errors": 0,
+      "warnings": 7,
+      "samples": 7,
+      "files": [
+        "C01678.xml",
+        "EX1904_collection.xml",
+        "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml",
         "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml"
+        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
+        "uxs_test.xml"
+      ]
+    },
+    "keywords.sciencekeywords[9].uuid": {
+      "errors": 0,
+      "warnings": 7,
+      "samples": 7,
+      "files": [
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml",
+        "gov.noaa.nmfs.inport.52208.xml",
+        "gov.noaa.nmfs.inport.5619.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
       ]
     },
     "mission.individualName": {
@@ -2670,52 +2918,54 @@
         "SAMPLE_Populated.xml"
       ]
     },
-    "keywords.instruments[1].uuid": {
+    "keywords.sciencekeywords[8].uuid": {
       "errors": 0,
-      "warnings": 5,
-      "samples": 5,
+      "warnings": 6,
+      "samples": 6,
       "files": [
-        "AFSC_GA13_Raw_Data.xml",
-        "C01678.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
-        "NRS_Raw_Data.xml",
-        "SAMPLE_Populated.xml"
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "gov.noaa.nmfs.inport.52208.xml",
+        "gov.noaa.nmfs.inport.5619.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
       ]
     },
-    "keywords.datacenters[1].uuid": {
+    "keywords.sciencekeywords[10].uuid": {
+      "errors": 0,
+      "warnings": 6,
+      "samples": 6,
+      "files": [
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "gov.noaa.nmfs.inport.52208.xml",
+        "gov.noaa.nmfs.inport.5619.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    "keywords.projects[1].uuid": {
       "errors": 0,
       "warnings": 5,
       "samples": 5,
       "files": [
         "C01531.xml",
         "C01678.xml",
-        "EX1904_collection.xml",
+        "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml",
+        "uxs_test.xml"
+      ]
+    },
+    "keywords.sciencekeywords[11].uuid": {
+      "errors": 0,
+      "warnings": 5,
+      "samples": 5,
+      "files": [
         "EX2306_COLLECTION.xml",
-        "SAMPLE_Populated.xml"
-      ]
-    },
-    "keywords.locations": {
-      "errors": 5,
-      "warnings": 0,
-      "samples": 5,
-      "files": [
-        "EX1904_collection.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml"
-      ]
-    },
-    "mission.purpose": {
-      "errors": 5,
-      "warnings": 0,
-      "samples": 5,
-      "files": [
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
-        "gov.noaa.nmfs.inport.52208.xml"
+        "NCRMP-Benthic-FG.xml",
+        "gov.noaa.nmfs.inport.52208.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
       ]
     },
     "keywords.locations[2].uuid": {
@@ -2742,145 +2992,113 @@
         "gov.noaa.nmfs.inport.62654.xml"
       ]
     },
-    "keywords.platforms": {
-      "errors": 5,
-      "warnings": 0,
-      "samples": 5,
-      "files": [
-        "NCRMP-Socio-Guam.xml",
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    "mission.accession": {
-      "errors": 4,
-      "warnings": 0,
-      "samples": 4,
-      "files": [
-        "AFSC_GA13_Raw_Data.xml",
-        "EX1904_collection.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
-        "NRS_Raw_Data.xml"
-      ]
-    },
-    "keywords.sciencekeywords": {
-      "errors": 4,
-      "warnings": 0,
-      "samples": 4,
-      "files": [
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml"
-      ]
-    },
-    "keywords.datacenters": {
-      "errors": 4,
-      "warnings": 0,
-      "samples": 4,
-      "files": [
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml"
-      ]
-    },
-    "keywords.providers": {
-      "errors": 4,
-      "warnings": 0,
-      "samples": 4,
-      "files": [
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml"
-      ]
-    },
-    "keywords.locations[5].uuid": {
+    "keywords.datacenters[0].uuid": {
       "errors": 0,
       "warnings": 4,
       "samples": 4,
       "files": [
+        "C01678.xml",
         "NCRMP-Benthic-FG.xml",
         "NCRMP-Socio-Guam.xml",
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
+        "uxs_test.xml"
       ]
     },
-    "keywords.sciencekeywords[9].uuid": {
+    "keywords.sciencekeywords[12].uuid": {
       "errors": 0,
       "warnings": 4,
       "samples": 4,
       "files": [
-        "NCRMP-Socio-Guam.xml",
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    "sensors[0].type": {
-      "errors": 4,
-      "warnings": 0,
-      "samples": 4,
-      "files": [
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    "sensors[0].variable": {
-      "errors": 4,
-      "warnings": 0,
-      "samples": 4,
-      "files": [
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    "keywords.instruments": {
-      "errors": 4,
-      "warnings": 0,
-      "samples": 4,
-      "files": [
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    "keywords.platforms[1].uuid": {
-      "errors": 0,
-      "warnings": 3,
-      "samples": 3,
-      "files": [
-        "C01531.xml",
         "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
         "uxs_test.xml"
       ]
     },
-    "keywords.projects[1].uuid": {
+    "keywords.sciencekeywords[13].uuid": {
+      "errors": 0,
+      "warnings": 4,
+      "samples": 4,
+      "files": [
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    "keywords.sciencekeywords[14].uuid": {
+      "errors": 0,
+      "warnings": 4,
+      "samples": 4,
+      "files": [
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    "keywords.sciencekeywords[15].uuid": {
+      "errors": 0,
+      "warnings": 4,
+      "samples": 4,
+      "files": [
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    "keywords.sciencekeywords[16].uuid": {
+      "errors": 0,
+      "warnings": 4,
+      "samples": 4,
+      "files": [
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    "keywords.sciencekeywords[18].uuid": {
+      "errors": 0,
+      "warnings": 4,
+      "samples": 4,
+      "files": [
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    "keywords.sciencekeywords[19].uuid": {
+      "errors": 0,
+      "warnings": 4,
+      "samples": 4,
+      "files": [
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    "keywords.sciencekeywords[20].uuid": {
+      "errors": 0,
+      "warnings": 4,
+      "samples": 4,
+      "files": [
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    "keywords.projects[2].uuid": {
       "errors": 0,
       "warnings": 3,
       "samples": 3,
       "files": [
         "C01531.xml",
-        "C01678.xml",
-        "uxs_test.xml"
-      ]
-    },
-    "keywords.providers[2].uuid": {
-      "errors": 0,
-      "warnings": 3,
-      "samples": 3,
-      "files": [
-        "C01531.xml",
-        "EX1904_collection.xml",
-        "uxs_test.xml"
+        "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml"
       ]
     },
     "mission.email": {
@@ -2893,7 +3111,27 @@
         "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml"
       ]
     },
-    "keywords.sciencekeywords[25].uuid": {
+    "keywords.sciencekeywords[17].uuid": {
+      "errors": 0,
+      "warnings": 3,
+      "samples": 3,
+      "files": [
+        "EX2306_COLLECTION.xml",
+        "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    "keywords.sciencekeywords[21].uuid": {
+      "errors": 0,
+      "warnings": 3,
+      "samples": 3,
+      "files": [
+        "EX2306_COLLECTION.xml",
+        "NCRMP-Benthic-FG.xml",
+        "gov.noaa.nmfs.inport.62654.xml"
+      ]
+    },
+    "keywords.sciencekeywords[24].uuid": {
       "errors": 0,
       "warnings": 3,
       "samples": 3,
@@ -2903,14 +3141,24 @@
         "uxs_test.xml"
       ]
     },
-    "keywords.locations[4].uuid": {
+    "keywords.instruments[1].uuid": {
       "errors": 0,
       "warnings": 3,
       "samples": 3,
       "files": [
         "NCRMP-Benthic-FG.xml",
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
+        "SAMPLE_Populated.xml",
+        "uxs_test.xml"
+      ]
+    },
+    "keywords.locations[5].uuid": {
+      "errors": 0,
+      "warnings": 3,
+      "samples": 3,
+      "files": [
+        "NCRMP-Benthic-FG.xml",
+        "NCRMP-Socio-Guam.xml",
+        "gov.noaa.nmfs.inport.52208.xml"
       ]
     },
     "keywords.locations[6].uuid": {
@@ -2923,24 +3171,22 @@
         "gov.noaa.nmfs.inport.62654.xml"
       ]
     },
-    "keywords.sciencekeywords[8].uuid": {
+    "keywords.platforms[1].uuid": {
       "errors": 0,
-      "warnings": 3,
-      "samples": 3,
+      "warnings": 2,
+      "samples": 2,
       "files": [
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
+        "C01531.xml",
+        "uxs_test.xml"
       ]
     },
-    "keywords.sciencekeywords[10].uuid": {
+    "keywords.platforms[2].uuid": {
       "errors": 0,
-      "warnings": 3,
-      "samples": 3,
+      "warnings": 2,
+      "samples": 2,
       "files": [
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
+        "C01531.xml",
+        "NCRMP-Benthic-FG.xml"
       ]
     },
     "keywords.platforms[3].uuid": {
@@ -2952,13 +3198,13 @@
         "NCRMP-Benthic-FG.xml"
       ]
     },
-    "keywords.instruments[2].uuid": {
+    "keywords.providers[2].uuid": {
       "errors": 0,
       "warnings": 2,
       "samples": 2,
       "files": [
-        "C01678.xml",
-        "SAMPLE_Populated.xml"
+        "EX1904_collection.xml",
+        "uxs_test.xml"
       ]
     },
     "keywords.providers[3].uuid": {
@@ -3213,15 +3459,6 @@
         "uxs_test.xml"
       ]
     },
-    "keywords.providers[31].uuid": {
-      "errors": 0,
-      "warnings": 2,
-      "samples": 2,
-      "files": [
-        "EX1904_collection.xml",
-        "uxs_test.xml"
-      ]
-    },
     "keywords.providers[32].uuid": {
       "errors": 0,
       "warnings": 2,
@@ -3259,15 +3496,6 @@
       ]
     },
     "keywords.providers[36].uuid": {
-      "errors": 0,
-      "warnings": 2,
-      "samples": 2,
-      "files": [
-        "EX1904_collection.xml",
-        "uxs_test.xml"
-      ]
-    },
-    "keywords.providers[37].uuid": {
       "errors": 0,
       "warnings": 2,
       "samples": 2,
@@ -3348,69 +3576,6 @@
         "uxs_test.xml"
       ]
     },
-    "mission.licenseUrl": {
-      "errors": 0,
-      "warnings": 2,
-      "samples": 2,
-      "files": [
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml"
-      ]
-    },
-    "distribution.license": {
-      "errors": 2,
-      "warnings": 0,
-      "samples": 2,
-      "files": [
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml"
-      ]
-    },
-    "keywords.sciencekeywords[17].uuid": {
-      "errors": 0,
-      "warnings": 2,
-      "samples": 2,
-      "files": [
-        "NCRMP-Benthic-FG.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    "keywords.sciencekeywords[18].uuid": {
-      "errors": 0,
-      "warnings": 2,
-      "samples": 2,
-      "files": [
-        "NCRMP-Benthic-FG.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    "keywords.sciencekeywords[19].uuid": {
-      "errors": 0,
-      "warnings": 2,
-      "samples": 2,
-      "files": [
-        "NCRMP-Benthic-FG.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    "keywords.sciencekeywords[20].uuid": {
-      "errors": 0,
-      "warnings": 2,
-      "samples": 2,
-      "files": [
-        "NCRMP-Benthic-FG.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    "keywords.sciencekeywords[21].uuid": {
-      "errors": 0,
-      "warnings": 2,
-      "samples": 2,
-      "files": [
-        "NCRMP-Benthic-FG.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
     "keywords.sciencekeywords[22].uuid": {
       "errors": 0,
       "warnings": 2,
@@ -3429,7 +3594,7 @@
         "gov.noaa.nmfs.inport.62654.xml"
       ]
     },
-    "keywords.sciencekeywords[24].uuid": {
+    "keywords.sciencekeywords[25].uuid": {
       "errors": 0,
       "warnings": 2,
       "samples": 2,
@@ -3456,49 +3621,13 @@
         "gov.noaa.nmfs.inport.62654.xml"
       ]
     },
-    "keywords.sciencekeywords[28].uuid": {
+    "keywords.datacenters[2].uuid": {
       "errors": 0,
       "warnings": 2,
       "samples": 2,
       "files": [
         "NCRMP-Benthic-FG.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    "keywords.sciencekeywords[29].uuid": {
-      "errors": 0,
-      "warnings": 2,
-      "samples": 2,
-      "files": [
-        "NCRMP-Benthic-FG.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    "keywords.sciencekeywords[30].uuid": {
-      "errors": 0,
-      "warnings": 2,
-      "samples": 2,
-      "files": [
-        "NCRMP-Benthic-FG.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    "keywords.sciencekeywords[31].uuid": {
-      "errors": 0,
-      "warnings": 2,
-      "samples": 2,
-      "files": [
-        "NCRMP-Benthic-FG.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    "keywords.sciencekeywords[32].uuid": {
-      "errors": 0,
-      "warnings": 2,
-      "samples": 2,
-      "files": [
-        "NCRMP-Benthic-FG.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
+        "NCRMP-Socio-Guam.xml"
       ]
     },
     "keywords.instruments[3].uuid": {
@@ -3508,6 +3637,15 @@
       "files": [
         "NCRMP-Benthic-FG.xml",
         "SAMPLE_Populated.xml"
+      ]
+    },
+    "keywords.locations[4].uuid": {
+      "errors": 0,
+      "warnings": 2,
+      "samples": 2,
+      "files": [
+        "NCRMP-Benthic-FG.xml",
+        "gov.noaa.nmfs.inport.52208.xml"
       ]
     },
     "keywords.projects[3].uuid": {
@@ -3564,37 +3702,13 @@
         "gov.noaa.nmfs.inport.62654.xml"
       ]
     },
-    "keywords.sciencekeywords[11].uuid": {
+    "keywords.instruments[2].uuid": {
       "errors": 0,
       "warnings": 2,
       "samples": 2,
       "files": [
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
-    "keywords.datacenters[2].uuid": {
-      "errors": 0,
-      "warnings": 1,
-      "samples": 1,
-      "files": [
-        "C01531.xml"
-      ]
-    },
-    "keywords.platforms[2].uuid": {
-      "errors": 0,
-      "warnings": 1,
-      "samples": 1,
-      "files": [
-        "C01531.xml"
-      ]
-    },
-    "keywords.projects[2].uuid": {
-      "errors": 0,
-      "warnings": 1,
-      "samples": 1,
-      "files": [
-        "C01531.xml"
+        "SAMPLE_Populated.xml",
+        "uxs_test.xml"
       ]
     },
     "sensors[1].variable": {
@@ -3837,6 +3951,246 @@
         "EX1904_collection.xml"
       ]
     },
+    "keywords.projects[11].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[12].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[13].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[14].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[15].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[16].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[17].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[18].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[19].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[20].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[21].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[22].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[25].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[26].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[27].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[28].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[29].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[30].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[31].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[32].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[33].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[34].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[35].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[36].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[37].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[38].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[39].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[40].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[41].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
+    "keywords.projects[42].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "EX2306_COLLECTION.xml"
+      ]
+    },
     "sensors[3].variable": {
       "errors": 1,
       "warnings": 0,
@@ -3989,7 +4343,7 @@
         "NCRMP-Benthic-FG.xml"
       ]
     },
-    "keywords.sciencekeywords[12].uuid": {
+    "keywords.sciencekeywords[28].uuid": {
       "errors": 0,
       "warnings": 1,
       "samples": 1,
@@ -3997,7 +4351,7 @@
         "gov.noaa.nmfs.inport.62654.xml"
       ]
     },
-    "keywords.sciencekeywords[13].uuid": {
+    "keywords.sciencekeywords[29].uuid": {
       "errors": 0,
       "warnings": 1,
       "samples": 1,
@@ -4005,7 +4359,7 @@
         "gov.noaa.nmfs.inport.62654.xml"
       ]
     },
-    "keywords.sciencekeywords[14].uuid": {
+    "keywords.sciencekeywords[30].uuid": {
       "errors": 0,
       "warnings": 1,
       "samples": 1,
@@ -4013,7 +4367,7 @@
         "gov.noaa.nmfs.inport.62654.xml"
       ]
     },
-    "keywords.sciencekeywords[15].uuid": {
+    "keywords.sciencekeywords[31].uuid": {
       "errors": 0,
       "warnings": 1,
       "samples": 1,
@@ -4021,7 +4375,7 @@
         "gov.noaa.nmfs.inport.62654.xml"
       ]
     },
-    "keywords.sciencekeywords[16].uuid": {
+    "keywords.sciencekeywords[32].uuid": {
       "errors": 0,
       "warnings": 1,
       "samples": 1,
@@ -4029,12 +4383,68 @@
         "gov.noaa.nmfs.inport.62654.xml"
       ]
     },
-    "keywords.locations[8].uuid": {
+    "keywords.instruments[4].uuid": {
       "errors": 0,
       "warnings": 1,
       "samples": 1,
       "files": [
-        "gov.noaa.nmfs.inport.62654.xml"
+        "uxs_test.xml"
+      ]
+    },
+    "keywords.instruments[5].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "uxs_test.xml"
+      ]
+    },
+    "keywords.instruments[6].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "uxs_test.xml"
+      ]
+    },
+    "keywords.instruments[7].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "uxs_test.xml"
+      ]
+    },
+    "keywords.instruments[8].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "uxs_test.xml"
+      ]
+    },
+    "keywords.instruments[9].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "uxs_test.xml"
+      ]
+    },
+    "keywords.instruments[10].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "uxs_test.xml"
+      ]
+    },
+    "keywords.instruments[11].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "uxs_test.xml"
       ]
     },
     "keywords.instruments[24].uuid": {
@@ -4084,23 +4494,39 @@
       "files": [
         "uxs_test.xml"
       ]
+    },
+    "keywords.providers[31].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "uxs_test.xml"
+      ]
+    },
+    "keywords.providers[37].uuid": {
+      "errors": 0,
+      "warnings": 1,
+      "samples": 1,
+      "files": [
+        "uxs_test.xml"
+      ]
     }
   },
   "byWizardStep": {
     "mission": {
-      "errors": 26,
-      "warnings": 50
-    },
-    "keywords": {
-      "errors": 33,
-      "warnings": 415
+      "errors": 17,
+      "warnings": 64
     },
     "distribution": {
-      "errors": 10,
+      "errors": 18,
       "warnings": 0
     },
+    "keywords": {
+      "errors": 0,
+      "warnings": 464
+    },
     "sensors": {
-      "errors": 11,
+      "errors": 3,
       "warnings": 0
     }
   }

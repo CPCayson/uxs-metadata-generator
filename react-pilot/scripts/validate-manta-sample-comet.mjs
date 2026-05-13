@@ -17,6 +17,7 @@
 import path from 'node:path'
 import process from 'node:process'
 import {
+  assertCometProxyReachable,
   DEFAULT_COMET_PROXY_BASE,
   DEFAULT_VALIDATE_FILENAME,
   isoValidate,
@@ -88,6 +89,7 @@ if (!sessionFromEnv && (!username || !password)) {
 const proxyBase = String(process.env.COMET_PROXY_URL || DEFAULT_COMET_PROXY_BASE).trim()
 
 try {
+  await assertCometProxyReachable(proxyBase)
   const jsessionid = sessionFromEnv || (await loginFreshSession(proxyBase, username, password))
   console.log(
     sessionFromEnv

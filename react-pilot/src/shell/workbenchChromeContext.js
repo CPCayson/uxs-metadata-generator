@@ -8,6 +8,7 @@ import { createContext } from 'react'
  *   validatorHostEl: HTMLElement | null,
  *   registerValidatorHost: (el: HTMLElement | null) => void,
  *   lensActive: boolean,
+ *   lensTarget: 'form' | 'xml' | 'split',
  *   workspaceDensity: 'simple' | 'granular',
  *   setWorkspaceDensity: (d: 'simple' | 'granular') => void,
  * }} WorkbenchChromeValue

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="UxS Metadata Generator pilot — mirrors the legacy Index wizard styling."
+      content="UxS Metadata Generator pilot - mirrors the legacy Index wizard styling."
     />
     <title>UxS Metadata React Pilot</title>
     <link
@@ -27,20 +27,7 @@
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <script>
-      ;(function initializeThemeFromStorage() {
-        try {
-          var storedTheme = localStorage.getItem('uxsTheme')
-          if (storedTheme === 'light' || storedTheme === 'dark') {
-            document.documentElement.setAttribute('data-theme', storedTheme)
-            return
-          }
-          if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.documentElement.setAttribute('data-theme', 'dark')
-          }
-        } catch (e) {}
-      })()
-    </script>
+    <script src="/theme-init.js"></script>
   </head>
   <body>
     <div id="root"></div>
