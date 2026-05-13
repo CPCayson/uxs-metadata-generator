@@ -2,7 +2,7 @@
 
 Minimal **Manifest V3** extension to:
 
-- Open your **React pilot** (default `http://127.0.0.1:5173`) in a new tab  
+- Open your **React pilot** (default `http://127.0.0.1:8888` — `npm run dev` in `react-pilot/` runs Netlify dev) in a new tab  
 - Optionally show a **floating “M” capture button** (bottom-right) on normal `http` / `https` pages  
 - Capture the current **selection**, visible page text, XML/source text, or a local dropped file into Manta
 - Still copy the current text selection when you only want clipboard handoff
@@ -16,7 +16,7 @@ Minimal **Manifest V3** extension to:
 
 ## Try it
 
-1. Run the pilot: `cd react-pilot && npm run dev -- --host 127.0.0.1` (`http://127.0.0.1:5173`)  
+1. Run the pilot: `cd react-pilot && npm run dev` (Netlify dev, default **`http://127.0.0.1:8888`**; Vite-only: `npm run dev:vite` → **5173**)  
 2. Open any website, click the extension icon → **Capture selection → Manta**, **Capture page → Manta**, or **Capture XML/source → Manta**
 3. Drop a local XML / JSON / CSV / TXT file into the popup to send it to the pilot
 4. Or enable **Show floating launcher** → reload the page → click the cyan **M** button to capture that page

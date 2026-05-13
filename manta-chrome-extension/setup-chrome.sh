@@ -12,7 +12,7 @@ echo ""
 echo "   $EXT_DIR"
 echo ""
 echo "4) Click the extension pin if you want it on the toolbar."
-echo "5) Start the pilot: cd ../react-pilot && npm run dev  →  then set Pilot URL to http://localhost:5173"
+echo "5) Start the pilot: cd ../react-pilot && npm run dev  →  then set Pilot URL to http://127.0.0.1:8888 (Netlify dev)"
 echo ""
 if [[ "$(uname)" == "Darwin" ]]; then
   if open -a "Google Chrome" "chrome://extensions/" 2>/dev/null; then

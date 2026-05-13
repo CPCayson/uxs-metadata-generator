@@ -25,7 +25,20 @@
   publish   = "dist"
   functions = "netlify/functions"
 
-# Route /api/* → Netlify Functions.
+# Route /api/* → Netlify Functions (explicit paths first — some dev/prod stacks
+# mishandle :splat for hyphenated function names like `comet-proxy`).
+[[redirects]]
+  from   = "/api/comet-proxy"
+  to     = "/.netlify/functions/comet-proxy"
+  status = 200
+  force  = true
+
+[[redirects]]
+  from   = "/api/db"
+  to     = "/.netlify/functions/db"
+  status = 200
+  force  = true
+
 [[redirects]]
   from   = "/api/:splat"
   to     = "/.netlify/functions/:splat"

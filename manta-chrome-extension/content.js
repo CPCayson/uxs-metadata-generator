@@ -2,7 +2,7 @@
 
 const ID = 'manta-pilot-fab-host'
 const PENDING_CAPTURE_KEY = 'mantaPendingCapture'
-const DEFAULT_PILOT = 'http://127.0.0.1:5173'
+const DEFAULT_PILOT = 'http://127.0.0.1:8888'
 
 function readOpts(cb) {
   try {

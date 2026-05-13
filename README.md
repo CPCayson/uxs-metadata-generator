@@ -44,7 +44,7 @@ The **production UI** is the **React pilot** (`react-pilot/`) — a six-step wiz
 
 From repo root, `npm --prefix react-pilot run publish` (or **`npm run pilot:publish`** if you use the root [package.json](package.json)) builds the pilot and copies **`react-pilot/dist`** to **`pilot-share/`** for HTTP preview or packaging. See [PILOT_SHARE_WORKFLOW.md](PILOT_SHARE_WORKFLOW.md). Local sanity checks that mirror README “review” goals (not a substitute for production host QA) are listed there and in the runbook **Appendix A** for the static bundle.
 
-**Hot reload while coding:** from repo root run **`npm run pilot:dev`** (Vite on **http://localhost:5173** by default, with HMR). Use **`pilot:publish`** when you want the same build copied into `pilot-share/` for the static server (e.g. port 4173).
+**Hot reload while coding:** from repo root run **`npm run pilot:dev`** — this starts **Netlify dev** (default **http://127.0.0.1:8888**), so **`/api/db`**, **`/api/comet-proxy`**, and the Vite UI share one origin. Use **`pilot:publish`** when you want the same build copied into `pilot-share/` for the static server (e.g. port 4173).
 
 **Fast verification from root:** run **`npm run pilot:verify`** to execute the React pilot verification chain (`lint` + `build` + XML roundtrip/fixture checks).
 
@@ -80,7 +80,7 @@ These fields are central to mission metadata capture and generation. Representat
 
 ## Setup and deployment
 
-**Primary (React + HTTP):** see [react-pilot/README.md](react-pilot/README.md) and [react-pilot/docs/DEPLOYMENT.md](react-pilot/docs/DEPLOYMENT.md). Use `npm run pilot:dev` with **`netlify dev`** so `/api/db` exists during local work.
+**Primary (React + HTTP):** see [react-pilot/README.md](react-pilot/README.md) and [react-pilot/docs/DEPLOYMENT.md](react-pilot/docs/DEPLOYMENT.md). **`npm run pilot:dev`** runs Netlify dev so **`/api/db`** and **`/api/comet-proxy`** exist on the same origin as the app.
 
 ## Add and update guide
 

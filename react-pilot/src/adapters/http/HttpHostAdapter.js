@@ -13,7 +13,7 @@
 const DB_URL = '/api/db'
 
 /**
- * Plain `npm run dev` (Vite on :5173) registers a middleware stub for `POST /api/db` that
+ * Plain `npm run dev:vite` (Vite on :5173) registers middleware stubs for `POST /api/db` and
  * returns JSON `{ ok: false }` — not Postgres. Netlify dev proxies the app on :8888 (default)
  * where `/api/db` is the real function. Treat Vite-only dev as disconnected so UI does not
  * offer Apply template / drafts against a fake API.

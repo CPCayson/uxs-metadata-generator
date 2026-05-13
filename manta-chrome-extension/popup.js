@@ -1,6 +1,6 @@
 /* global chrome */
 
-const DEFAULT_PILOT = 'http://127.0.0.1:5173'
+const DEFAULT_PILOT = 'http://127.0.0.1:8888'
 
 const $ = (id) => {
   const el = document.getElementById(id)

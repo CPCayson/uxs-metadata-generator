@@ -11,7 +11,7 @@ const LEGACY_INDEX_PATH = path.resolve(__dirname, '..', 'Index.html')
 const pkg = JSON.parse(fs.readFileSync(new URL('./package.json', import.meta.url), 'utf8'))
 
 const VITE_DB_STUB_MESSAGE =
-  'Netlify function `/api/db` is not served by plain Vite. From `react-pilot/`, run `npm run dev:netlify` and open the URL Netlify prints (usually http://localhost:8888) so `/api/db` is available.'
+  'Netlify function `/api/db` is not served by plain Vite. From `react-pilot/`, run `npm run dev` (Netlify dev, usually http://127.0.0.1:8888), or `npm run dev:with-api-proxy` while Netlify is up — see `.env.example`.'
 
 /** Plain `vite` has no Netlify functions — respond to `POST /api/db` with a JSON error instead of 404 so HttpHostAdapter surfaces a clear message. */
 function viteApiDbDevStub() {
@@ -34,7 +34,7 @@ function viteApiDbDevStub() {
 }
 
 const VITE_COMET_PROXY_STUB_MESSAGE =
-  'Netlify function `/api/comet-proxy` is not served by plain Vite. From `react-pilot/`, run `npm run dev:netlify` and open http://127.0.0.1:8888 (or the URL Netlify prints). Split setup: keep `dev:netlify` running, then either open 8888 only, or run plain Vite with `API_PROXY_TARGET=http://127.0.0.1:8888` in `.env.development.local` — see `.env.example`.'
+  'Netlify function `/api/comet-proxy` is not served by plain Vite. From `react-pilot/`, run `npm run dev` (Netlify dev, usually http://127.0.0.1:8888). Split setup: keep that running, then either open 8888 only, or run `npm run dev:with-api-proxy` — see `.env.example`.'
 
 /** Plain Vite has no `comet-proxy` — avoid a bare 404/HTML so CoMET UI shows this JSON instead of the generic resolver error. */
 function viteApiCometProxyDevStub() {
@@ -172,9 +172,8 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       port: Number(process.env.PORT) || 5173,
-      // Must match netlify.toml [dev] targetPort (5173). If 5173 is busy, Vite picks
-      // 5174+ and Netlify Dev still proxies 5173 → blank page / empty MIME for modules.
-      // Plain `npm run dev` only: `VITE_RELAX_PORT=1` allows the next free port when 5173 is taken.
+      // Match netlify.toml [dev] targetPort when using `npm run dev` (Netlify). If 5173 is busy,
+      // Netlify still proxies there → broken modules. `npm run dev:vite` + `VITE_RELAX_PORT=1` allows another port.
       strictPort: process.env.VITE_RELAX_PORT === '1' ? false : true,
       host: true,
       open: process.env.VITE_OPEN === '0' ? false : true,

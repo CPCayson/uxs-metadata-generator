@@ -19,7 +19,7 @@ Classic HTML / generator sources at the repo root (`Index.html`, `*.gs`, …) ar
 - Hold **field parity** with `METADATA_FIELD_MAP.md` **§7** (repo root) and `OVERVIEW_TEMPLATE_ALIGNMENT.csv`.
 - **Six-step** workflow: Mission → Platform → Sensors → **Spatial** → Keywords → Distribution.
 
-## Run locally (Vite + hot reload)
+## Run locally (Netlify dev + Vite — same-origin `/api/*` + CoMET)
 
 ```bash
 cd react-pilot
@@ -27,25 +27,34 @@ npm install
 npm run dev
 ```
 
+This runs **`netlify dev`** (default **http://127.0.0.1:8888**), which proxies to Vite on **5173** and serves **`/api/db`**, **`/api/comet-proxy`**, and other functions on the **same origin** as the UI.
+
+**Vite-only** (no Netlify functions — CoMET / `/api/db` will not work unless you proxy):
+
+```bash
+npm run dev:vite
+```
+
+Split setup: keep `npm run dev` (8888) running, then in another terminal `npm run dev:with-api-proxy` (Vite on 5173 forwarding `/api/*` to 8888).
+
 From **repository root** (after `npm install` inside `react-pilot/` once):
 
 ```bash
 npm run pilot:dev
 ```
 
-The dev server defaults to **port 5173**. Set `VITE_OPEN=0` to skip opening a browser.
-
-Use **`netlify dev`** (or a proxy) so **`/api/db`** is on the **same origin** as the Vite app; otherwise host-backed actions fail at the network layer.
+`VITE_OPEN=0` is already set on the `dev` script so a browser tab is not auto-opened; open **http://127.0.0.1:8888** manually if you want.
 
 ## Desktop app (Electron MVP)
 
 The desktop shell wraps this same React pilot in Electron. It is useful when you want a real app window and native file-open handoff without fighting browser extension permissions.
 
-Development mode uses Vite in one terminal and Electron in another:
+Development mode uses Netlify dev (8888) in one terminal and Electron in another:
 
 ```bash
 cd react-pilot
-VITE_OPEN=0 npm run dev -- --host 127.0.0.1
+npm run dev
+# separate terminal, after 8888 is up:
 npm run desktop:dev
 ```
 

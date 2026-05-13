@@ -39,7 +39,7 @@ export const MANTA_COMET_SESSION_INVALIDATED_EVENT = 'manta:comet-session-invali
 let _lastSessionInvalidatedEmitAt = 0
 
 const PROXY_MISSING_HINT =
-  `CoMET proxy not found (404) at ${PROXY}. Open the app via Netlify dev (usually http://localhost:8888), or run plain Vite with API_PROXY_TARGET=http://127.0.0.1:8888 in .env.development.local while netlify dev is up — see react-pilot/.env.example.`
+  `CoMET proxy not found (404) at ${PROXY}. From react-pilot/, run \`npm run dev\` (Netlify dev, usually http://127.0.0.1:8888). If you use \`npm run dev:vite\` on :5173, either open 8888 for CoMET, or set API_PROXY_TARGET=http://127.0.0.1:8888 in .env.development.local while Netlify dev is up — see react-pilot/.env.example.`
 
 /**
  * @param {string} url
