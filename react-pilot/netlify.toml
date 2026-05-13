@@ -3,7 +3,8 @@
 
 # Local dev: same-origin `/api/*` → functions (run from `react-pilot/`).
 # App URL: http://localhost:8888 (proxy). Vite alone: http://localhost:5173 (`npm run dev`).
-# Usage: `npm run dev:netlify` — use the URL Netlify prints if 8888 is taken.
+# Usage: `npm run dev` (from `react-pilot/` or via `npm --prefix react-pilot run dev`) — uses
+# `scripts/run-netlify-dev.mjs` so cwd is always this folder; Netlify runs `npm run dev:vite` for Vite.
 # Ensure nothing else is bound to 5173 (Vite must match `targetPort` or module loads fail on 8888).
 [dev]
   # Netlify: if both `command` and `targetPort` are set, `framework` must be
@@ -11,7 +12,8 @@
   # `targetPort` and still executes `command` (two Vites → port 5173 busy).
   # See file-based configuration → Netlify Dev (`[dev]`).
   framework = "#custom"
-  command = "npm run dev"
+  # Must be Vite only — `npm run dev` is Netlify; nesting Netlify breaks functions / ports.
+  command = "npm run dev:vite"
   port = 8888
   targetPort = 5173
   autoLaunch = false

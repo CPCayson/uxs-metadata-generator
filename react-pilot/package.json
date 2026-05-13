@@ -7,10 +7,10 @@
   "type": "module",
   "main": "electron/main.cjs",
   "scripts": {
-    "dev": "VITE_OPEN=0 npx netlify dev",
+    "dev": "VITE_OPEN=0 node scripts/run-netlify-dev.mjs",
     "dev:vite": "vite",
     "dev:with-api-proxy": "API_PROXY_TARGET=http://127.0.0.1:8888 vite",
-    "dev:netlify": "VITE_OPEN=0 npx netlify dev",
+    "dev:netlify": "VITE_OPEN=0 node scripts/run-netlify-dev.mjs",
     "build": "vite build",
     "desktop:dev": "ELECTRON_START_URL=http://127.0.0.1:8888 electron .",
     "desktop:start": "npm run build && electron .",
