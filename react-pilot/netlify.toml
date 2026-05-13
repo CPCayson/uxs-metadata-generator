@@ -6,33 +6,38 @@
 # Usage: `npm run dev:netlify` — use the URL Netlify prints if 8888 is taken.
 # Ensure nothing else is bound to 5173 (Vite must match `targetPort` or module loads fail on 8888).
 [dev]
-  # Explicit Vite detection so Netlify Dev proxies /@vite/*, /src/*, etc. to the
-  # framework server instead of treating them like static files or SPA rewrites.
-  framework = "vite"
+  # Netlify: if both `command` and `targetPort` are set, `framework` must be
+  # `#custom` — otherwise the CLI runs a built-in framework server on
+  # `targetPort` and still executes `command` (two Vites → port 5173 busy).
+  # See file-based configuration → Netlify Dev (`[dev]`).
+  framework = "#custom"
   command = "npm run dev"
   port = 8888
   targetPort = 5173
   autoLaunch = false
+  # Do not use `[build].publish` (dist/) here: after `vite build`, `dist/_redirects`
+  # contains the SPA catch-all and Netlify Dev merges publish-dir redirects, which
+  # breaks module URLs the same way as `[[redirects]] /*` in this file.
+  publish = "netlify-dev-static"
 
 [build]
   command   = "npm run build"
   publish   = "dist"
   functions = "netlify/functions"
 
-# Route /api/* → Netlify Functions. Must come BEFORE the SPA catch-all.
+# Route /api/* → Netlify Functions.
 [[redirects]]
   from   = "/api/:splat"
   to     = "/.netlify/functions/:splat"
   status = 200
   force  = true
 
-# SPA: send non-API paths to index.html (production deploys). With `framework = "vite"`,
-# Netlify Dev should proxy module URLs to Vite on `targetPort` — do not add `/*` in
-# `public/_redirects` or every dev request (including /src/*.jsx) rewrites to HTML.
-[[redirects]]
-  from   = "/*"
-  to     = "/index.html"
-  status = 200
+# SPA fallback for **production** is emitted to `dist/_redirects` on `vite build`
+# (see `viteNetlifySpaRedirects` in `vite.config.js`). Do not add `/* → /index.html`
+# here: `netlify dev` applies `netlify.toml` redirects before the Vite proxy, so a
+# catch-all rewrite serves HTML for `/@vite/client`, `/src/*`, etc. (wrong MIME).
+# Also avoid a catch-all in `public/_redirects` — Netlify Dev applies that in local
+# dev the same way.
 
 [build.environment]
   # Netlify build image; keep in sync with local `nvm use` when debugging CI.

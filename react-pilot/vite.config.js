@@ -60,6 +60,33 @@ function viteOnestopStatsDevStub() {
   }
 }
 
+/** Production (Netlify publish = `dist/`): rewrites live only in `dist/_redirects` so `netlify dev` does not apply a global `/*` from `netlify.toml`/`public/`. Netlify evaluates `_redirects` before `netlify.toml`, so list `/api/*` before the SPA rule. */
+function viteNetlifySpaRedirects() {
+  let outDir = 'dist'
+  const rule = [
+    '# Netlify: _redirects runs before netlify.toml — API before SPA catch-all.',
+    '/api/* /.netlify/functions/:splat 200!',
+    '# SPA fallback (build artifact; not used as `public/_redirects`).',
+    '/* /index.html 200',
+    '',
+  ].join('\n')
+  return {
+    name: 'vite-netlify-spa-redirects',
+    configResolved(config) {
+      outDir = config.build.outDir
+    },
+    closeBundle() {
+      try {
+        const dest = path.resolve(__dirname, outDir, '_redirects')
+        fs.mkdirSync(path.dirname(dest), { recursive: true })
+        fs.writeFileSync(dest, rule, 'utf8')
+      } catch {
+        /* non-fatal */
+      }
+    },
+  }
+}
+
 /** Dev + build: expose parent `Index.html` at `legacy-main.html` for the “Form Wizard” legacy portal iframe. */
 function viteLegacyMainHtml() {
   let outDir = 'dist'
@@ -117,6 +144,7 @@ export default defineConfig(({ mode }) => {
       ...(apiProxyTarget ? [] : [viteApiDbDevStub()]),
       viteOnestopStatsDevStub(),
       viteLegacyMainHtml(),
+      viteNetlifySpaRedirects(),
     ],
     optimizeDeps: {
       include: ['react', 'react-dom'],
