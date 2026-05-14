@@ -72,7 +72,10 @@ export function buildAcquisitionInstrumentDescription(sensor, opts) {
   const includeVariableLine = opts?.includeVariableLine !== false
   /** @type {string[]} */
   const lines = []
-  if (includeVariableLine) {
+  const descBlob = String(sensor?.description || '').trim()
+  if (descBlob) {
+    lines.push(descBlob)
+  } else if (includeVariableLine) {
     const v = String(sensor?.variable || '').trim()
     if (v) lines.push(v)
   }
@@ -97,6 +100,7 @@ export function buildAcquisitionInstrumentDescription(sensor, opts) {
  * @type {Readonly<Record<string, string>>}
  */
 export const SENSOR_XML_OPTIONAL_DEFAULTS = Object.freeze({
+  description: '',
   operationMode: '',
   uncertainty: '',
   frequency: '',
@@ -107,6 +111,7 @@ export const SENSOR_XML_OPTIONAL_DEFAULTS = Object.freeze({
 
 /** Labels for optional sensor fields (form + XML import). */
 export const SENSOR_XML_EXTRA_FIELD_LABELS = Object.freeze({
+  description: 'Instrument description',
   operationMode: 'Operation mode',
   uncertainty: 'Uncertainty estimate',
   frequency: 'Frequency',
@@ -124,6 +129,7 @@ export function sensorInstrumentDedupeKey(row) {
     'sensorId',
     'type',
     'variable',
+    'description',
     'firmware',
     'operationMode',
     'uncertainty',

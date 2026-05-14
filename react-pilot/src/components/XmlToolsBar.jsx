@@ -29,6 +29,7 @@ import { getBundledMissionXmlSamples } from '../lib/missionBundledXmlSamples.js'
  *   profile: import('../core/registry/types.js').EntityProfile,
  *   pilotState: object,
  *   onPilotImport: (next: object, meta?: { importWarnings?: string[] }) => void,
+ *   onBeforeApplyXmlImport?: (xmlText: string) => boolean,
  *   onStatus?: (message: string) => void,
  *   hostBridgeReady?: boolean,
  *   exportBusy?: boolean,
@@ -52,6 +53,7 @@ function XmlToolsBar({
   profile,
   pilotState,
   onPilotImport,
+  onBeforeApplyXmlImport,
   onStatus,
   hostBridgeReady = false,
   exportBusy = false,
@@ -311,6 +313,9 @@ function XmlToolsBar({
     setImportSummaryText('')
     setImportBusy(true)
     try {
+      if (typeof onBeforeApplyXmlImport === 'function' && onBeforeApplyXmlImport(importText) === false) {
+        return
+      }
       const meta = {
         originalFilename: pendingImportMetaRef.current?.originalFilename,
         originalUuid:     pendingImportMetaRef.current?.originalUuid,

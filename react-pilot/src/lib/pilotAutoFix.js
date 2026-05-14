@@ -78,7 +78,7 @@ export function applyPilotAutoFixes(_mode, pilot) {
     out.sensors = out.sensors.map((s, i) => {
       if (!s || typeof s !== 'object') return s
       const copy = { ...s }
-      for (const k of ['sensorId', 'type', 'modelId', 'variable', 'firmware', 'localId']) {
+      for (const k of ['sensorId', 'type', 'modelId', 'variable', 'description', 'firmware', 'localId']) {
         if (typeof copy[k] === 'string') {
           const t = copy[k].trim()
           if (t !== copy[k]) {

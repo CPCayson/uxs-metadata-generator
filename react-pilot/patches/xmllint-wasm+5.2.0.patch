@@ -1,0 +1,38 @@
+diff --git a/node_modules/xmllint-wasm/xmllint-browser.mjs b/node_modules/xmllint-wasm/xmllint-browser.mjs
+index 39c5499..325761d 100644
+--- a/node_modules/xmllint-wasm/xmllint-browser.mjs
++++ b/node_modules/xmllint-wasm/xmllint-browser.mjs
+@@ -96,6 +96,8 @@ if (typeof exports === 'object' && typeof module === 'object') {
+ 			maximum: data.maxMemory
+ 		});
+ 
++		// Module() is async and returns a Promise; without .catch(), Emscripten
++		// ErrnoError / wasm load failures become "Uncaught (in promise)" in DevTools.
+ 		Module({
+ 			inputFiles: data.inputFiles,
+ 			arguments: data.args,
+@@ -128,6 +130,24 @@ if (typeof exports === 'object' && typeof module === 'object') {
+ 				// This also makes bundlers automatically pick up the wasm file.
+ 				return new URL('./xmllint.wasm', import.meta.url).href;
+ 			}
++		}).catch((err) => {
++			const errno =
++				err && typeof err === 'object' && 'G' in err
++					? err.G
++					: err && typeof err === 'object' && 'errno' in err
++						? err.errno
++						: undefined;
++			const detail =
++				err && typeof err === 'object' && String(err.name || '') === 'ErrnoError'
++					? `ErrnoError (code ${errno ?? '?'})`
++					: err instanceof Error
++						? err.message
++						: String(err);
++			postMessage({
++				exitCode: -1,
++				stdout: '',
++				stderr: 'xmllint worker bootstrap failed: ' + detail,
++			});
+ 		});
+ 	}
+ 

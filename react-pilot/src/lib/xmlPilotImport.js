@@ -12,6 +12,7 @@ import {
 } from './sensorInstrumentDescription.js'
 import { parseUxsPilotMachineBlockFromSupplemental } from './uxsOperationalModel.js'
 import { isAcronymExplainedInAbstractText, normalizeNceiAccessionToken } from './pilotValidation.js'
+import { resolveMissionPurposeForNcei } from './nceiMissionDefaults.js'
 
 /** ISO / GML namespaces used by the pilot preview and UniversalXMLGenerator. */
 const NS = {
@@ -2997,7 +2998,7 @@ const NOAA_METADATA_ACRONYM_GLOSSES = /** @type {const} */ ({
   ESRL: 'NOAA Earth System Research Laboratories',
   GFDL: 'NOAA Geophysical Fluid Dynamics Laboratory',
   NSSL: 'NOAA National Severe Storms Laboratory',
-  MDBC: 'NOAA Marine Data and Buoy Center',
+  MDBC: 'NOAA Mesophotic and Deep Benthic Communities',
   NDBC: 'NOAA National Data Buoy Center',
   IOOS: 'U.S. Integrated Ocean Observing System',
   OMAO: 'NOAA Office of Marine and Aviation Operations',
@@ -3097,6 +3098,7 @@ function enrichMissionAbstractAndPurposeFromImport(partial) {
   }
   const glossed = appendNoaaMetadataAcronymGlosses(rawAbstract)
   if (glossed && glossed !== rawAbstract) m.abstract = glossed
+  m.purpose = resolveMissionPurposeForNcei(String(m.purpose || ''), String(m.abstract || '').trim())
 }
 
 function enrichMissionLicenseFromPreset(partial) {
@@ -3451,11 +3453,13 @@ function parseOneAcquisitionInstrument(mi) {
   const stype = gcoCharacterString(childNS(mi, NS.gmi, 'type'))
   const descr = gcoCharacterString(childNS(mi, NS.gmd, 'description') || childNS(mi, NS.gmi, 'description'))
   const parsed = parseInstrumentDescriptionBlock(descr)
+  const typeStr = String(stype || '').trim()
   let row = {
     sensorId: sid,
     modelId: sid,
     type: stype,
-    variable: parsed.variable,
+    variable: typeStr,
+    description: String(descr || '').trim(),
     firmware: parsed.firmware,
     operationMode: parsed.operationMode,
     uncertainty: parsed.uncertainty,
@@ -4724,17 +4728,22 @@ function parseAcquisition3(root) {
     const stype = gcs3(cn3(mi, NS3.mac, 'type'))
     const descr = gcs3(cn3(mi, NS3.mac, 'description'))
     const parsed = parseInstrumentDescriptionBlock(descr)
+    const typeStr = String(stype || '').trim()
     let row = {
-      sensorId: sid, modelId: sid, type: stype,
-      variable: parsed.variable, firmware: parsed.firmware,
-      operationMode: parsed.operationMode, uncertainty: parsed.uncertainty,
-      frequency: parsed.frequency, beamCount: parsed.beamCount,
-      depthRating: parsed.depthRating, confidenceInterval: parsed.confidenceInterval,
+      sensorId: sid,
+      modelId: sid,
+      type: stype,
+      variable: typeStr,
+      description: String(descr || '').trim(),
+      firmware: parsed.firmware,
+      operationMode: parsed.operationMode,
+      uncertainty: parsed.uncertainty,
+      frequency: parsed.frequency,
+      beamCount: parsed.beamCount,
+      depthRating: parsed.depthRating,
+      confidenceInterval: parsed.confidenceInterval,
     }
     row = normalizeSensorInstrumentIds(row)
-    if (!String(row.variable || '').trim() && String(stype || '').trim()) {
-      row.variable = stype.trim()
-    }
     return row
   }
 

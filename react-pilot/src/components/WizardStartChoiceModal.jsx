@@ -6,10 +6,12 @@ import { useMemo, useRef, useState } from 'react'
 import { emitPilotAuditEvent } from '../lib/pilotAuditEvents.js'
 import { parseProfileXmlImport } from '../lib/parseProfileXmlImport.js'
 import { getBundledMissionXmlSamples } from '../lib/missionBundledXmlSamples.js'
+import { confirmReplaceDifferentRecord, peekIncomingMissionFileId } from '../lib/pilotImportReplaceGuard.js'
 
 /**
  * @param {{
  *   profile: import('../core/registry/types.js').EntityProfile,
+ *   pilotState?: object | null,
  *   onStartFresh: () => void,
  *   onPilotImportMerged: (merged: object, meta?: { importWarnings?: string[] }) => void,
  *   onStatus?: (msg: string) => void,
@@ -18,6 +20,7 @@ import { getBundledMissionXmlSamples } from '../lib/missionBundledXmlSamples.js'
  */
 export default function WizardStartChoiceModal({
   profile,
+  pilotState = null,
   onStartFresh,
   onPilotImportMerged,
   onStatus,
@@ -47,6 +50,12 @@ export default function WizardStartChoiceModal({
     setImportError('')
     setImportBusy(true)
     try {
+      if (profile.id === 'mission' && pilotState) {
+        const peek = peekIncomingMissionFileId(raw)
+        if (peek.ok && confirmReplaceDifferentRecord(pilotState?.mission?.fileId, peek.fileId) === false) {
+          return
+        }
+      }
       const out = parseProfileXmlImport(profile, raw, metaRef.current || {})
       if (!out.ok) {
         setImportError(out.error || 'Could not parse this XML for this profile.')

@@ -1,3 +1,5 @@
+import { applyPilotAutoFixes } from './pilotAutoFix.js'
+
 /**
  * Run profile XML import parsers on raw text — same contract as XmlToolsBar “Apply”.
  *
@@ -51,10 +53,21 @@ export function parseProfileXmlImport(profile, xmlText, meta = {}) {
     ? profile.mergeLoaded(payload)
     : { ...profile.defaultState(), ...payload }
 
+  const warnings = Array.isArray(result.warnings) ? [...result.warnings] : []
+  const { pilot: fixed, applied } = applyPilotAutoFixes('lenient', merged)
+  for (const line of applied) {
+    if (line.includes('mission.bbox west/east')) {
+      warnings.push(
+        'Bounding box west/east were swapped (west was greater than east) — corrected automatically.',
+      )
+    }
+  }
+  const finalMerged = typeof profile.sanitize === 'function' ? profile.sanitize(fixed) : fixed
+
   return {
     ok: true,
-    merged,
-    warnings: result.warnings,
+    merged: finalMerged,
+    warnings,
     provenance: result.provenance,
   }
 }

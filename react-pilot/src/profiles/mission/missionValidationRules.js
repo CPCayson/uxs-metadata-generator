@@ -15,8 +15,8 @@
 
 import { normalizeMissionInstantString } from '../../lib/datetimeLocal.js'
 import {
+  abstractQualityIssues,
   collectGcmdKeywordUuidWarnings,
-  isAcronymExplainedInAbstractText,
   normalizeNceiAccessionToken,
   sensorRowIsInactive,
 } from '../../lib/pilotValidation.js'
@@ -90,53 +90,6 @@ const KW_FACETS = ['sciencekeywords', 'datacenters', 'platforms', 'instruments',
 
 const KW_XPATH = '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords'
 const ABSTRACT_XPATH = '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract'
-const COMMON_ABSTRACT_ACRONYMS = new Set(['ADCP', 'AUV', 'CTD', 'GCMD', 'ISO', 'NCEI', 'NOAA', 'REMUS', 'ROV', 'UUV'])
-
-function abstractQualityIssues(state) {
-  const m = state?.mission || {}
-  const p = state?.platform || {}
-  const sensors = Array.isArray(state?.sensors) ? state.sensors : []
-  const abstract = String(m.abstract || '').trim()
-  if (!abstract) return []
-  const issues = []
-  if (abstract.length < 120) {
-    issues.push({
-      severity: 'w',
-      field:    'mission.abstract',
-      message:  'Abstract is short; include objective, platform/sensor, area, dates, and data product.',
-      xpath:    ABSTRACT_XPATH,
-    })
-  }
-  const lower = abstract.toLowerCase()
-  const contextTokens = [
-    p.platformId,
-    p.platformName,
-    p.model,
-    ...sensors.flatMap((s) => [s?.sensorId, s?.modelId, s?.variable]),
-  ]
-    .map((v) => String(v || '').trim())
-    .filter((v) => v.length >= 3)
-  if (contextTokens.length && !contextTokens.some((v) => lower.includes(v.toLowerCase()))) {
-    issues.push({
-      severity: 'w',
-      field:    'mission.abstract',
-      message:  'Abstract should mention the relevant platform, sensor, or observed variable.',
-      xpath:    ABSTRACT_XPATH,
-    })
-  }
-  const acronyms = [...new Set(abstract.match(/\b[A-Z]{2,8}\b/g) || [])]
-    .filter((token) => !COMMON_ABSTRACT_ACRONYMS.has(token))
-  const unexplained = acronyms.find((token) => !isAcronymExplainedInAbstractText(abstract, token))
-  if (unexplained) {
-    issues.push({
-      severity: 'w',
-      field:    'mission.abstract',
-      message:  `Abstract uses acronym "${unexplained}"; expand it on first use when possible.`,
-      xpath:    ABSTRACT_XPATH,
-    })
-  }
-  return issues
-}
 
 // ---- core rule set (all modes) ----
 
@@ -171,7 +124,7 @@ const coreRules = [
     severity: 'w',
     message: 'Abstract quality warnings',
     xpath: ABSTRACT_XPATH,
-    check: (s) => abstractQualityIssues(s),
+    check: (s) => abstractQualityIssues(s).map((i) => ({ ...i, xpath: ABSTRACT_XPATH })),
   },
   {
     field: 'mission.startDate',
@@ -314,6 +267,16 @@ const coreRules = [
       const preset = String(s?.mission?.dataLicensePreset || 'custom').trim()
       return !isBlank(s?.mission?.licenseUrl) && !isValidUrl(s.mission.licenseUrl)
         && (preset !== 'custom' || !isBlank(s.mission.licenseUrl))
+    },
+  },
+  {
+    field: 'mission.licenseUrl',
+    severity: 'w',
+    message: 'License URL recommended when preset is custom — or switch to CC-BY-4.0.',
+    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints',
+    check: (s) => {
+      const preset = String(s?.mission?.dataLicensePreset || 'custom').trim()
+      return preset === 'custom' && isBlank(s?.mission?.licenseUrl)
     },
   },
   {
@@ -577,16 +540,6 @@ const coreRules = [
 /** @type {import('../../core/registry/types.js').ValidationRule[]} */
 const lenientOnlyRules = [
   {
-    field: 'mission.licenseUrl',
-    severity: 'w',
-    message: 'License URL recommended when preset is custom',
-    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints',
-    check: (s) => {
-      const preset = String(s?.mission?.dataLicensePreset || 'custom').trim()
-      return preset === 'custom' && isBlank(s?.mission?.licenseUrl)
-    },
-  },
-  {
     field: 'mission.ror',
     severity: 'w',
     message: 'No ROR selected (recommended for organization linkage)',
@@ -599,16 +552,6 @@ const lenientOnlyRules = [
 
 /** @type {import('../../core/registry/types.js').ValidationRule[]} */
 const strictExtraRules = [
-  {
-    field: 'mission.licenseUrl',
-    severity: 'e',
-    message: 'License URL is required when data license preset is custom',
-    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints',
-    check: (s) => {
-      const preset = String(s?.mission?.dataLicensePreset || 'custom').trim()
-      return preset === 'custom' && isBlank(s?.mission?.licenseUrl)
-    },
-  },
   {
     field: 'spatial.gridRepresentation',
     severity: 'e',
@@ -683,16 +626,6 @@ const catalogExtraRules = [
         return isBlank(rel.parentId)
       }
       return false
-    },
-  },
-  {
-    field: 'mission.licenseUrl',
-    severity: 'e',
-    message: 'License URL is required when data license preset is custom',
-    xpath: '/gmi:MI_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints',
-    check: (s) => {
-      const preset = String(s?.mission?.dataLicensePreset || 'custom').trim()
-      return preset === 'custom' && isBlank(s?.mission?.licenseUrl)
     },
   },
   {

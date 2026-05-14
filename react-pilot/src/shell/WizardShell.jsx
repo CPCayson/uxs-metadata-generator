@@ -47,6 +47,7 @@ import { diffPilotStates, applyDecisions } from '../core/fragments/diffPilotStat
 import { summarizePilotImportPopulation } from '../lib/importMergeSummary.js'
 import { useWorkbenchChrome } from './useWorkbenchChrome.js'
 import { defaultPilotState } from '../lib/pilotValidation.js'
+import { confirmReplaceDifferentRecord, peekIncomingMissionFileId } from '../lib/pilotImportReplaceGuard.js'
 
 const IDLE_VALIDATION_RESULT = Object.freeze({
   issues: [],
@@ -756,38 +757,56 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     return () => window.removeEventListener('manta:pilot-session-updated', onSessionWrite)
   }, [])
 
+  /** Full reset to profile defaults + cleared session / import overlays (shared by Start over and wizard “Start fresh”). */
+  const resetPilotWorkspaceToDefaults = useCallback(
+    (opts = {}) => {
+      const skipConfirm = opts.skipConfirm === true
+      if (!skipConfirm) {
+        if (!window.confirm('Clear saved workspace data and reset this wizard to defaults? Unsaved edits will be lost.')) {
+          return false
+        }
+      }
+      const raw = typeof profile.defaultState === 'function' ? profile.defaultState() : defaultPilotState()
+      const fresh = profile.sanitize(raw)
+      baselineSerialized.current = JSON.stringify(fresh)
+      setPilotState(fresh)
+      setValidationPrimed(false)
+      setCometUuid('')
+      setSummary({ platforms: 'not checked', templates: 'not checked' })
+      writePilotSessionPayloadNow(fresh, { validationPrimed: false })
+      setTouched({})
+      setShowAllErrors(false)
+      setPendingImport(null)
+      setImportSampleContext(null)
+      setXmlToolsBarResetKey((k) => k + 1)
+      setActiveStep(profile.steps[0]?.id ?? 'mission')
+      setIsDirty(false)
+      onDirtyChange(false)
+      try {
+        setLastSavedXmlPreview(buildXml(fresh))
+      } catch {
+        setLastSavedXmlPreview('')
+      }
+      setStatusMessage(
+        'Workspace cleared — defaults loaded. Validation stays idle until you import XML, apply a template, load a draft, or edit a field.',
+      )
+      if (assistantLayout === 'split-float') {
+        setLeftCollapsed(true)
+        setRightCollapsed(true)
+      }
+      emitPilotAuditEvent({
+        profileId: profile.id,
+        action: skipConfirm ? 'wizardStartFresh' : 'clearForm',
+        result: 'ok',
+      })
+      return true
+    },
+    [profile, buildXml, onDirtyChange, assistantLayout],
+  )
+
   const handleClearForm = useCallback(() => {
-    if (!window.confirm('Clear saved workspace data and reset this wizard to defaults? Unsaved edits will be lost.')) return
-    const raw = typeof profile.defaultState === 'function' ? profile.defaultState() : defaultPilotState()
-    const fresh = profile.sanitize(raw)
-    baselineSerialized.current = JSON.stringify(fresh)
-    setPilotState(fresh)
-    setValidationPrimed(false)
-    setCometUuid('')
-    setSummary({ platforms: 'not checked', templates: 'not checked' })
-    writePilotSessionPayloadNow(fresh, { validationPrimed: false })
-    setTouched({})
-    setShowAllErrors(false)
-    setPendingImport(null)
-    setImportSampleContext(null)
-    setXmlToolsBarResetKey((k) => k + 1)
-    setActiveStep(profile.steps[0]?.id ?? 'mission')
-    setIsDirty(false)
-    onDirtyChange(false)
-    try {
-      setLastSavedXmlPreview(buildXml(fresh))
-    } catch {
-      setLastSavedXmlPreview('')
-    }
-    setStatusMessage(
-      'Workspace cleared — defaults loaded. Validation stays idle until you import XML, apply a template, load a draft, or edit a field.',
-    )
-    if (assistantLayout === 'split-float') {
-      setLeftCollapsed(true)
-      setRightCollapsed(true)
-    }
-    emitPilotAuditEvent({ profileId: profile.id, action: 'clearForm', result: 'ok' })
-  }, [profile, buildXml, onDirtyChange, assistantLayout])
+    resetPilotWorkspaceToDefaults({ skipConfirm: false })
+  }, [resetPilotWorkspaceToDefaults])
 
   async function runServerCheck() {
     setLoading(true)
@@ -851,7 +870,9 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
       {wizardStartOpen && canProfileImport && (
         <WizardStartChoiceModal
           profile={profile}
+          pilotState={pilotState}
           onStartFresh={() => {
+            resetPilotWorkspaceToDefaults({ skipConfirm: true })
             setWizardStartOpen(false)
             setShowAllErrors(false)
             setTouched({})
@@ -949,6 +970,15 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
             })
           }}
           onPilotImport={handlePilotImport}
+          onBeforeApplyXmlImport={
+            profile.id === 'mission'
+              ? (xmlText) => {
+                  const peek = peekIncomingMissionFileId(xmlText)
+                  if (!peek.ok) return true
+                  return confirmReplaceDifferentRecord(pilotState?.mission?.fileId, peek.fileId)
+                }
+              : undefined
+          }
           onScannerApply={(next) => {
             const s = profile.sanitize(next)
             syncBaselineAfterExternalMerge(s)

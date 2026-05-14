@@ -62,6 +62,7 @@
     "batch:all": "npm run batch:waf:audit && npm run batch:uuid:audit && npm run batch:report",
     "bedi:link-template": "node scripts/bedi/link-resolve-template.mjs",
     "bedi:scrape-docucomp": "node scripts/bedi/scrape-docucomp-refs.mjs",
+    "postinstall": "patch-package",
     "preview": "vite preview"
   },
   "build": {
@@ -103,6 +104,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.5.0",
+    "patch-package": "^8.0.1",
     "repomix": "^1.14.0",
     "vite": "^8.0.10"
   }

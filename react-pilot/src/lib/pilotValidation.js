@@ -2,6 +2,7 @@ import { SENSOR_XML_OPTIONAL_DEFAULTS } from './sensorInstrumentDescription.js'
 import { canonicalMissionInstantForStorage, normalizeMissionInstantString } from './datetimeLocal.js'
 import { normalizeDataLicensePresetKey } from './noaaLicensePresets.js'
 import { previewMetadataXPath } from './metadataXPath.js'
+import { resolveMissionPurposeForNcei } from './nceiMissionDefaults.js'
 
 /**
  * Mission validation runs on the **same** `pilotState` the wizard edits and `buildXmlPreview` serializes.
@@ -87,6 +88,7 @@ export function sensorRowIsInactive(sen) {
     && isBlank(/** @type {{ modelId?: unknown, sensorId?: unknown }} */ (sen).modelId)
     && isBlank(/** @type {{ modelId?: unknown, sensorId?: unknown }} */ (sen).sensorId)
     && isBlank(/** @type {{ variable?: unknown }} */ (sen).variable)
+    && isBlank(/** @type {{ description?: unknown }} */ (sen).description)
   )
 }
 
@@ -270,6 +272,28 @@ export function sanitizePilotState(state) {
       const n = normalizePilotNumericToken(raw)
       m[ax] = isValidNumber(n) ? n : BBOX_DEFAULT[ax]
     }
+    {
+      const rw = String(m.west ?? '').trim()
+      const re = String(m.east ?? '').trim()
+      const rs = String(m.south ?? '').trim()
+      const rn = String(m.north ?? '').trim()
+      if ([rw, re, rs, rn].every(isValidNumber)) {
+        let mw = rw
+        let me = re
+        let ms = rs
+        let mn = rn
+        if (Number(normalizePilotNumericToken(mw)) > Number(normalizePilotNumericToken(me))) {
+          ;[mw, me] = [me, mw]
+        }
+        if (Number(normalizePilotNumericToken(ms)) > Number(normalizePilotNumericToken(mn))) {
+          ;[ms, mn] = [mn, ms]
+        }
+        m.west = mw
+        m.east = me
+        m.south = ms
+        m.north = mn
+      }
+    }
     if (m.accession != null) m.accession = String(m.accession).replace(/\u00a0/g, ' ').trim()
     for (const k of ['vmin', 'vmax']) {
       const t = String(m[k] ?? '').trim()
@@ -296,6 +320,11 @@ export function sanitizePilotState(state) {
     for (const gk of ['graphicOverviewHref', 'graphicOverviewTitle']) {
       if (m[gk] != null) m[gk] = String(m[gk]).trim()
     }
+    const presetNorm = normalizeDataLicensePresetKey(m.dataLicensePreset)
+    if (presetNorm === 'custom' && isBlank(m.licenseUrl)) {
+      m.dataLicensePreset = 'ncei_cc_by_4'
+    }
+    m.purpose = resolveMissionPurposeForNcei(String(m.purpose || ''), String(m.abstract || '').trim())
     m.uxsContext = normalizeUxsContext(m.uxsContext)
   }
 
@@ -401,7 +430,42 @@ function checkSensorKwMismatch(type, variable, keywords) {
   return !list.some((k) => String(k?.label || '').toLowerCase().includes(v))
 }
 
-const COMMON_ABSTRACT_ACRONYMS = new Set(['ADCP', 'AUV', 'CTD', 'GCMD', 'ISO', 'NCEI', 'NOAA', 'REMUS', 'ROV', 'UUV'])
+const COMMON_ABSTRACT_ACRONYMS = new Set([
+  'ADCP', 'AUV', 'CTD', 'DVL', 'GCMD', 'INS', 'ISO', 'MBES', 'MDBC', 'NCEI', 'NOAA', 'OER', 'REMUS', 'ROV', 'SAS', 'UUV', 'USM',
+])
+
+/**
+ * Whether the abstract text appears to reference platform/sensor context (lenient heuristic).
+ * @param {string} lowerAbstract
+ * @param {string} rawAbstract
+ * @param {string[]} contextTokens
+ */
+function abstractMentionsPlatformOrSensor(lowerAbstract, rawAbstract, contextTokens) {
+  if (!contextTokens.length) return true
+  for (const t of contextTokens) {
+    const tl = String(t).toLowerCase()
+    if (tl.length >= 3 && lowerAbstract.includes(tl)) return true
+  }
+  const parts = []
+  for (const t of contextTokens) {
+    for (const seg of String(t).split(/[/,;]+/)) {
+      const s = seg.trim()
+      if (s.length >= 3) parts.push(s.toLowerCase())
+    }
+  }
+  for (const p of parts) {
+    if (p.length >= 3 && lowerAbstract.includes(p)) return true
+  }
+  const words = (rawAbstract.toLowerCase().match(/\b[a-z][a-z0-9.-]{3,}\b/g) || []).filter((w) => w.length >= 4)
+  for (const w of words) {
+    for (const t of contextTokens) {
+      const tl = String(t).toLowerCase()
+      if (tl.length < 3) continue
+      if (tl.includes(w) || w.includes(tl)) return true
+    }
+  }
+  return false
+}
 
 /**
  * Abstract quality treats an all-caps token as “explained” when it appears inside parentheses
@@ -420,7 +484,7 @@ export function isAcronymExplainedInAbstractText(abstract, token) {
  * @param {object} state
  * @returns {Array<{ severity: Severity, field: string, message: string, xpath?: string }>}
  */
-function abstractQualityIssues(state) {
+export function abstractQualityIssues(state) {
   const m = state?.mission || {}
   const p = state?.platform || {}
   const sensors = Array.isArray(state?.sensors) ? state.sensors : []
@@ -441,11 +505,21 @@ function abstractQualityIssues(state) {
     p.platformId,
     p.platformName,
     p.model,
-    ...sensors.flatMap((s) => [s?.sensorId, s?.modelId, s?.variable]),
+    ...sensors.flatMap((s) => [
+      s?.sensorId,
+      s?.modelId,
+      s?.variable,
+      s?.type,
+      s?.description,
+      ...(String(s?.type || '')
+        .split(/[/,]+/)
+        .map((x) => x.trim())
+        .filter(Boolean)),
+    ]),
   ]
     .map((v) => String(v || '').trim())
     .filter((v) => v.length >= 3)
-  if (contextTokens.length && !contextTokens.some((v) => lower.includes(v.toLowerCase()))) {
+  if (contextTokens.length && !abstractMentionsPlatformOrSensor(lower, abstract, contextTokens)) {
     issues.push({
       severity: 'w',
       field:    'mission.abstract',
@@ -607,21 +681,12 @@ export function validatePilotState(mode, state) {
   const licensePreset = String(m.dataLicensePreset || 'custom').trim()
   if (licensePreset === 'custom') {
     if (isBlank(m.licenseUrl)) {
-      if (strict || catalog) {
-        add(
-          'e',
-          'mission.licenseUrl',
-          'License URL is required when data license preset is custom',
-          '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints',
-        )
-      } else {
-        add(
-          'w',
-          'mission.licenseUrl',
-          'License URL recommended when preset is custom',
-          '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints',
-        )
-      }
+      add(
+        'w',
+        'mission.licenseUrl',
+        'License URL recommended when preset is custom — or switch to CC-BY-4.0.',
+        '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints',
+      )
     } else if (!isValidUrl(m.licenseUrl)) {
       add('e', 'mission.licenseUrl', 'License URL must be http(s)', '/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints')
     }
