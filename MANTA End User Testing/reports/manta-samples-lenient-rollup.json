@@ -1,91 +1,9 @@
 {
   "sampleDir": "/Users/connorcayson/Downloads/uSX/MANTA End User Testing/samples",
   "sampleDirRelative": "MANTA End User Testing/samples",
-  "generated": "2026-05-12T18:30:38.172Z",
-  "patternCount": 216,
+  "generated": "2026-05-15T09:40:21.947Z",
+  "patternCount": 207,
   "byFrequency": [
-    {
-      "field": "mission.abstract",
-      "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
-      "severity": "w",
-      "wizardStep": "mission",
-      "hitCount": 19,
-      "files": [
-        "0299833.xml",
-        "C01531.xml",
-        "C01678.xml",
-        "EX1904_collection.xml",
-        "EX2306_COLLECTION.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
-        "NCRMP-Benthic-FG.xml",
-        "NCRMP-Socio-Guam.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
-        "NRS_Raw_Data.xml",
-        "SAMPLE_Populated.xml",
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml",
-        "uxs_test.xml"
-      ]
-    },
-    {
-      "field": "distribution.license",
-      "message": "Use/License is required",
-      "severity": "e",
-      "wizardStep": "distribution",
-      "hitCount": 18,
-      "files": [
-        "0299833.xml",
-        "AFSC_GA13_Raw_Data.xml",
-        "C01531.xml",
-        "C01678.xml",
-        "EX2306_COLLECTION.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
-        "NCRMP-Benthic-FG.xml",
-        "NCRMP-Socio-Guam.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
-        "NRS_Raw_Data.xml",
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml",
-        "uxs_test.xml"
-      ]
-    },
-    {
-      "field": "mission.licenseUrl",
-      "message": "License URL recommended when preset is custom",
-      "severity": "w",
-      "wizardStep": "mission",
-      "hitCount": 18,
-      "files": [
-        "0299833.xml",
-        "AFSC_GA13_Raw_Data.xml",
-        "C01531.xml",
-        "C01678.xml",
-        "EX2306_COLLECTION.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
-        "NCRMP-Benthic-FG.xml",
-        "NCRMP-Socio-Guam.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
-        "NRS_Raw_Data.xml",
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml",
-        "uxs_test.xml"
-      ]
-    },
     {
       "field": "mission.ror",
       "message": "No ROR selected (recommended for organization linkage)",
@@ -453,36 +371,6 @@
       ]
     },
     {
-      "field": "mission.endDate",
-      "message": "End date is required",
-      "severity": "e",
-      "wizardStep": "mission",
-      "hitCount": 6,
-      "files": [
-        "EX1904_collection.xml",
-        "EX2306_COLLECTION.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
-        "SAMPLE_Populated.xml"
-      ]
-    },
-    {
-      "field": "mission.individualName",
-      "message": "Individual name is required",
-      "severity": "e",
-      "wizardStep": "mission",
-      "hitCount": 6,
-      "files": [
-        "C01531.xml",
-        "EX1904_collection.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml"
-      ]
-    },
-    {
       "field": "keywords.locations[2].uuid",
       "message": "Add concept UUID for best KMS href",
       "severity": "w",
@@ -656,19 +544,6 @@
       ]
     },
     {
-      "field": "mission.abstract",
-      "message": "Abstract uses acronym \"USM\"; expand it on first use when possible.",
-      "severity": "w",
-      "wizardStep": "mission",
-      "hitCount": 4,
-      "files": [
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml"
-      ]
-    },
-    {
       "field": "keywords.instruments[1].uuid",
       "message": "Add concept UUID for best KMS href",
       "severity": "w",
@@ -750,18 +625,6 @@
         "NCRMP-Benthic-FG.xml",
         "gov.noaa.nmfs.inport.62654.xml",
         "uxs_test.xml"
-      ]
-    },
-    {
-      "field": "mission.email",
-      "message": "Email is required",
-      "severity": "e",
-      "wizardStep": "mission",
-      "hitCount": 3,
-      "files": [
-        "EX1904_collection.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml"
       ]
     },
     {
@@ -1414,14 +1277,14 @@
       ]
     },
     {
-      "field": "mission.startDate",
-      "message": "Creation / Start date is required",
-      "severity": "e",
+      "field": "mission.abstract",
+      "message": "Abstract uses acronym \"RV\"; expand it on first use when possible.",
+      "severity": "w",
       "wizardStep": "mission",
       "hitCount": 2,
       "files": [
-        "SAMPLE_Populated.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
+        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
+        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml"
       ]
     },
     {
@@ -2396,6 +2259,16 @@
     },
     {
       "field": "mission.abstract",
+      "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
+      "severity": "w",
+      "wizardStep": "mission",
+      "hitCount": 1,
+      "files": [
+        "NCRMP-Benthic-FG.xml"
+      ]
+    },
+    {
+      "field": "mission.abstract",
       "message": "Abstract uses acronym \"AVHRR\"; expand it on first use when possible.",
       "severity": "w",
       "wizardStep": "mission",
@@ -2483,115 +2356,9 @@
       "files": [
         "LISTEN_GoMex_Raw_Audio.xml"
       ]
-    },
-    {
-      "field": "sensors[1].variable",
-      "message": "Sensor 2: observed variable is required",
-      "severity": "e",
-      "wizardStep": "sensors",
-      "hitCount": 1,
-      "files": [
-        "C01678.xml"
-      ]
-    },
-    {
-      "field": "sensors[2].variable",
-      "message": "Sensor 3: observed variable is required",
-      "severity": "e",
-      "wizardStep": "sensors",
-      "hitCount": 1,
-      "files": [
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml"
-      ]
-    },
-    {
-      "field": "sensors[3].variable",
-      "message": "Sensor 4: observed variable is required",
-      "severity": "e",
-      "wizardStep": "sensors",
-      "hitCount": 1,
-      "files": [
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml"
-      ]
     }
   ],
   "byField": {
-    "mission.abstract": {
-      "errors": 0,
-      "warnings": 32,
-      "samples": 19,
-      "files": [
-        "0299833.xml",
-        "C01531.xml",
-        "C01678.xml",
-        "EX1904_collection.xml",
-        "EX2306_COLLECTION.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
-        "NCRMP-Benthic-FG.xml",
-        "NCRMP-Socio-Guam.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
-        "NRS_Raw_Data.xml",
-        "SAMPLE_Populated.xml",
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml",
-        "uxs_test.xml"
-      ]
-    },
-    "mission.licenseUrl": {
-      "errors": 0,
-      "warnings": 18,
-      "samples": 18,
-      "files": [
-        "0299833.xml",
-        "AFSC_GA13_Raw_Data.xml",
-        "C01531.xml",
-        "C01678.xml",
-        "EX2306_COLLECTION.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
-        "NCRMP-Benthic-FG.xml",
-        "NCRMP-Socio-Guam.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
-        "NRS_Raw_Data.xml",
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml",
-        "uxs_test.xml"
-      ]
-    },
-    "distribution.license": {
-      "errors": 18,
-      "warnings": 0,
-      "samples": 18,
-      "files": [
-        "0299833.xml",
-        "AFSC_GA13_Raw_Data.xml",
-        "C01531.xml",
-        "C01678.xml",
-        "EX2306_COLLECTION.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
-        "NCRMP-Benthic-FG.xml",
-        "NCRMP-Socio-Guam.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
-        "NRS_Raw_Data.xml",
-        "gov.noaa.nmfs.inport.52208.xml",
-        "gov.noaa.nmfs.inport.5619.xml",
-        "gov.noaa.nmfs.inport.5687.xml",
-        "gov.noaa.nmfs.inport.62654.xml",
-        "uxs_test.xml"
-      ]
-    },
     "mission.ror": {
       "errors": 0,
       "warnings": 14,
@@ -2670,6 +2437,25 @@
         "gov.noaa.nmfs.inport.5619.xml",
         "gov.noaa.nmfs.inport.5687.xml",
         "gov.noaa.nmfs.inport.62654.xml",
+        "uxs_test.xml"
+      ]
+    },
+    "mission.abstract": {
+      "errors": 0,
+      "warnings": 12,
+      "samples": 12,
+      "files": [
+        "0299833.xml",
+        "C01531.xml",
+        "C01678.xml",
+        "LISTEN_GoMex_Raw_Audio.xml",
+        "NCRMP-Benthic-FG.xml",
+        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
+        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
+        "SAMPLE_Populated.xml",
+        "gov.noaa.nmfs.inport.52208.xml",
+        "gov.noaa.nmfs.inport.5619.xml",
+        "gov.noaa.nmfs.inport.5687.xml",
         "uxs_test.xml"
       ]
     },
@@ -2892,32 +2678,6 @@
         "uxs_test.xml"
       ]
     },
-    "mission.individualName": {
-      "errors": 6,
-      "warnings": 0,
-      "samples": 6,
-      "files": [
-        "C01531.xml",
-        "EX1904_collection.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml"
-      ]
-    },
-    "mission.endDate": {
-      "errors": 6,
-      "warnings": 0,
-      "samples": 6,
-      "files": [
-        "EX1904_collection.xml",
-        "EX2306_COLLECTION.xml",
-        "LISTEN_GoMex_Raw_Audio.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
-        "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
-        "SAMPLE_Populated.xml"
-      ]
-    },
     "keywords.sciencekeywords[8].uuid": {
       "errors": 0,
       "warnings": 6,
@@ -3099,16 +2859,6 @@
         "C01531.xml",
         "NCRMP-Benthic-FG.xml",
         "NCRMP-Socio-Guam.xml"
-      ]
-    },
-    "mission.email": {
-      "errors": 3,
-      "warnings": 0,
-      "samples": 3,
-      "files": [
-        "EX1904_collection.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml"
       ]
     },
     "keywords.sciencekeywords[17].uuid": {
@@ -3693,15 +3443,6 @@
         "gov.noaa.nmfs.inport.62654.xml"
       ]
     },
-    "mission.startDate": {
-      "errors": 2,
-      "warnings": 0,
-      "samples": 2,
-      "files": [
-        "SAMPLE_Populated.xml",
-        "gov.noaa.nmfs.inport.62654.xml"
-      ]
-    },
     "keywords.instruments[2].uuid": {
       "errors": 0,
       "warnings": 2,
@@ -3709,14 +3450,6 @@
       "files": [
         "SAMPLE_Populated.xml",
         "uxs_test.xml"
-      ]
-    },
-    "sensors[1].variable": {
-      "errors": 1,
-      "warnings": 0,
-      "samples": 1,
-      "files": [
-        "C01678.xml"
       ]
     },
     "keywords.providers[46].uuid": {
@@ -4191,22 +3924,6 @@
         "EX2306_COLLECTION.xml"
       ]
     },
-    "sensors[3].variable": {
-      "errors": 1,
-      "warnings": 0,
-      "samples": 1,
-      "files": [
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml"
-      ]
-    },
-    "sensors[2].variable": {
-      "errors": 1,
-      "warnings": 0,
-      "samples": 1,
-      "files": [
-        "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml"
-      ]
-    },
     "keywords.sciencekeywords[38].uuid": {
       "errors": 0,
       "warnings": 1,
@@ -4514,20 +4231,12 @@
   },
   "byWizardStep": {
     "mission": {
-      "errors": 17,
-      "warnings": 64
-    },
-    "distribution": {
-      "errors": 18,
-      "warnings": 0
+      "errors": 0,
+      "warnings": 26
     },
     "keywords": {
       "errors": 0,
       "warnings": 464
-    },
-    "sensors": {
-      "errors": 3,
-      "warnings": 0
     }
   }
 }

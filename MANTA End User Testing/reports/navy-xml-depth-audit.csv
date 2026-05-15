@@ -1,0 +1,21 @@
+file,category,sourceShape,xmlInstruments,importSensorFilled,importSensorTotal,srcScienceKw,impScienceKw,lenientErrors,strictErrors,catalogErrors,previewFails,flags
+ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml,navy-uxs,ISO 19115-3,5,5,5,0,0,0,3,7,0,no-science-keywords-source-or-import;no-locations-keywords-source-or-import
+ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml,navy-uxs,ISO 19115-3,5,5,5,0,0,0,3,7,0,no-science-keywords-source-or-import;no-locations-keywords-source-or-import
+NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml,navy-uxs,ISO 19115-3,10,10,10,0,0,0,2,6,0,no-science-keywords-source-or-import;no-locations-keywords-source-or-import
+NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml,navy-uxs,ISO 19115-3,10,10,10,0,0,0,2,6,0,no-science-keywords-source-or-import;no-locations-keywords-source-or-import
+uxs_test.xml,navy-uxs,ISO 19115-2 gmi,12,12,12,46,41,0,1,4,0,science-keywords-loss-on-import
+9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml,other-eut,ISO 19115-2 gmi,0,1,1,10,7,0,1,2,0,science-keywords-loss-on-import
+PS2418L0-AUV01-norbit-mb-20240505.xml,navy-uxs,ISO 19115-2 gmi,0,1,1,0,0,2,5,10,0,no-science-keywords-source-or-import;lenient-errors
+PS2418L0-UUV01-norbit-mb-20240505-r2.xml,navy-uxs,ISO 19115-2 gmi,2,1,1,1,0,0,1,2,0,partial-sensor-import;science-keywords-loss-on-import;science-keywords-dropped-to-zero
+PS2418L0-UUV01-norbit-mb-20240505.xml,navy-uxs,ISO 19115-2 gmi,2,1,1,1,0,0,1,2,0,partial-sensor-import;science-keywords-loss-on-import;science-keywords-dropped-to-zero
+navy-uxs-gmi-template-2026-r2.xml,navy-uxs,ISO 19115-2 gmi,3,3,3,7,1,0,0,0,0,science-keywords-loss-on-import
+navy-uxs-gmi-template-2026.xml,navy-uxs,ISO 19115-2 gmi,3,2,2,7,1,0,0,0,0,partial-sensor-import;science-keywords-loss-on-import
+navy-uxs-swarm-clean.xml,navy-uxs,ISO 19115-2 gmi,3,3,3,8,1,0,0,0,0,science-keywords-loss-on-import
+sample-mission.xml,other-eut,ISO 19115-2 gmi,0,0,1,0,0,19,22,27,0,no-science-keywords-source-or-import;no-locations-keywords-source-or-import;all-sensor-rows-inactive;lenient-errors
+uxs-md-dataset-preview-a.xml,uxs-acquisition,ISO 19139 gmd,0,1,1,0,0,14,17,22,0,no-science-keywords-source-or-import;lenient-errors
+uxs-md-dataset-preview-b.xml,uxs-acquisition,ISO 19139 gmd,1,1,1,0,0,19,22,27,0,no-science-keywords-source-or-import;lenient-errors
+uxs-ncei-template-preview.xml,uxs-acquisition,ISO 19139 gmd,2,1,1,1,0,2,2,2,0,partial-sensor-import;science-keywords-loss-on-import;science-keywords-dropped-to-zero;lenient-errors
+EX1904_collection.xml,collection,ISO 19115-2 gmi,0,1,1,6,3,0,2,6,0,science-keywords-loss-on-import
+PS2418L0-UUV01-BAD.xml,navy-uxs,ISO 19115-2 gmi,0,1,1,0,0,5,8,13,0,no-science-keywords-source-or-import;lenient-errors
+PS2418L0-UUV01-GOOD.xml,navy-uxs,ISO 19115-2 gmi,1,1,1,2,2,0,1,5,0,
+SAMPLE_Populated.xml,template-populated,ISO 19115-2 gmi,3,3,3,11,2,0,0,0,0,science-keywords-loss-on-import

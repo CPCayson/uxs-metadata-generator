@@ -1,0 +1,2560 @@
+{
+  "generatedAt": "2026-05-15T09:45:18.138Z",
+  "corpus": "navy-uxs-subset",
+  "sampleDir": "MANTA End User Testing/samples",
+  "fileCount": 20,
+  "summary": {
+    "importFail": 0,
+    "mergeFail": 0,
+    "lenientErrorFiles": 6,
+    "strictErrorFiles": 16,
+    "catalogErrorFiles": 16,
+    "previewSanityFail": 0,
+    "instrumentGap": 0,
+    "partialSensors": 4,
+    "scienceLoss": 10,
+    "noScience": 9,
+    "noLocations": 5,
+    "navySubsetCount": 13,
+    "navyInstrumentGap": 0
+  },
+  "byCategory": {
+    "navy-uxs": 13,
+    "other-eut": 2,
+    "uxs-acquisition": 3,
+    "collection": 1,
+    "template-populated": 1
+  },
+  "rows": [
+    {
+      "file": "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
+      "path": "MANTA End User Testing/samples/ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
+      "category": "navy-uxs",
+      "navyUxS": true,
+      "sourceShape": "ISO 19115-3",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 1,
+        "strictErrors": 3,
+        "catalogErrors": 7,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 1
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 27779,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 0,
+          "mac": 5,
+          "total": 5
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 0,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 0,
+          "projects": 0,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 5,
+          "filled": 5,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "PHINS INS",
+              "type": "Inertial Navigation System",
+              "variable": "Inertial Navigation System"
+            },
+            {
+              "index": 1,
+              "sensorId": "AML CTD",
+              "type": "Conductivity, Temperature, Depth Sensor",
+              "variable": "Conductivity, Temperature, Depth Sensor"
+            },
+            {
+              "index": 2,
+              "sensorId": "RDI ADCP",
+              "type": "Acoustic Doppler Current Profiler",
+              "variable": "Acoustic Doppler Current Profiler"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 1,
+          "platforms": 1,
+          "instruments": 1,
+          "locations": 0,
+          "projects": 1,
+          "providers": 1
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "datacenters": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "platforms": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "instruments": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "locations": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "projects": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "providers": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          }
+        },
+        "missionTitle": "RV Expedition 2025 LEG 01 REMUS620 KRAKEN SAS MGM Dive 01",
+        "fileId": "EN2501_REMUS620_401_KRAKEN_SAS_202507023T0116Z"
+      },
+      "flags": [
+        "no-science-keywords-source-or-import",
+        "no-locations-keywords-source-or-import"
+      ]
+    },
+    {
+      "file": "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
+      "path": "MANTA End User Testing/samples/ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
+      "category": "navy-uxs",
+      "navyUxS": true,
+      "sourceShape": "ISO 19115-3",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 1,
+        "strictErrors": 3,
+        "catalogErrors": 7,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 1
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 27687,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 0,
+          "mac": 5,
+          "total": 5
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 0,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 0,
+          "projects": 0,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 5,
+          "filled": 5,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "PHINS INS",
+              "type": "Inertial Navigation System",
+              "variable": "Inertial Navigation System"
+            },
+            {
+              "index": 1,
+              "sensorId": "Kraken SAS",
+              "type": "Synthetic Aperture Sonar",
+              "variable": "Synthetic Aperture Sonar"
+            },
+            {
+              "index": 2,
+              "sensorId": "PDVL 300",
+              "type": "Doppler Velocity Logger",
+              "variable": "Doppler Velocity Logger"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 1,
+          "platforms": 1,
+          "instruments": 1,
+          "locations": 0,
+          "projects": 1,
+          "providers": 1
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "datacenters": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "platforms": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "instruments": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "locations": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "projects": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "providers": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          }
+        },
+        "missionTitle": "RV Expedition 2025 LEG 01 REMUS620 KRAKEN SAS MGM Dive 05",
+        "fileId": "EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z"
+      },
+      "flags": [
+        "no-science-keywords-source-or-import",
+        "no-locations-keywords-source-or-import"
+      ]
+    },
+    {
+      "file": "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
+      "path": "MANTA End User Testing/samples/NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
+      "category": "navy-uxs",
+      "navyUxS": true,
+      "sourceShape": "ISO 19115-3",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 3,
+        "strictErrors": 2,
+        "catalogErrors": 6,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 2
+          },
+          "keywords": {
+            "e": 0,
+            "w": 1
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 41139,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 0,
+          "mac": 10,
+          "total": 10
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 0,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 0,
+          "projects": 0,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 10,
+          "filled": 10,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "Paroscientific Pressure Sensor",
+              "type": "Paroscientific Digiquartz Series 8000 Pressure Sen",
+              "variable": "Paroscientific Digiquartz Series 8000 Pressure Sen"
+            },
+            {
+              "index": 1,
+              "sensorId": "SBE CTD Sensor",
+              "type": "SBE 49 FastCAT CTD Sensor",
+              "variable": "SBE 49 FastCAT CTD Sensor"
+            },
+            {
+              "index": 2,
+              "sensorId": "Masterclock GNSS Receiver",
+              "type": "Masterclock GNSS Receiver GMR Series 1000",
+              "variable": "Masterclock GNSS Receiver GMR Series 1000"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 1,
+          "platforms": 1,
+          "instruments": 1,
+          "locations": 0,
+          "projects": 1,
+          "providers": 1
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "datacenters": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "platforms": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "instruments": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "locations": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "projects": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "providers": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          }
+        },
+        "missionTitle": "Point Sur 2024 Leg 18 Eagle Ray MultiBeam Sonar Data AUV Div",
+        "fileId": "PS2418L0_ER_AUV01_Norbit_MB_20240505T1510Z_MD"
+      },
+      "flags": [
+        "no-science-keywords-source-or-import",
+        "no-locations-keywords-source-or-import"
+      ]
+    },
+    {
+      "file": "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
+      "path": "MANTA End User Testing/samples/NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
+      "category": "navy-uxs",
+      "navyUxS": true,
+      "sourceShape": "ISO 19115-3",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 3,
+        "strictErrors": 2,
+        "catalogErrors": 6,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 2
+          },
+          "keywords": {
+            "e": 0,
+            "w": 1
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 41139,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 0,
+          "mac": 10,
+          "total": 10
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 0,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 0,
+          "projects": 0,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 10,
+          "filled": 10,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "Paroscientific Pressure Sensor",
+              "type": "Paroscientific Digiquartz Series 8000 Pressure Sen",
+              "variable": "Paroscientific Digiquartz Series 8000 Pressure Sen"
+            },
+            {
+              "index": 1,
+              "sensorId": "SBE CTD Sensor",
+              "type": "SBE 49 FastCAT CTD Sensor",
+              "variable": "SBE 49 FastCAT CTD Sensor"
+            },
+            {
+              "index": 2,
+              "sensorId": "Masterclock GNSS Receiver",
+              "type": "Masterclock GNSS Receiver GMR Series 1000",
+              "variable": "Masterclock GNSS Receiver GMR Series 1000"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 1,
+          "platforms": 1,
+          "instruments": 1,
+          "locations": 0,
+          "projects": 1,
+          "providers": 1
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "datacenters": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "platforms": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "instruments": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "locations": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "projects": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "providers": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          }
+        },
+        "missionTitle": "Point Sur 2024 Leg 18 Eagle Ray MultiBeam Sonar Data AUV Div",
+        "fileId": "PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z_MD"
+      },
+      "flags": [
+        "no-science-keywords-source-or-import",
+        "no-locations-keywords-source-or-import"
+      ]
+    },
+    {
+      "file": "uxs_test.xml",
+      "path": "MANTA End User Testing/samples/uxs_test.xml",
+      "category": "navy-uxs",
+      "navyUxS": true,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 93,
+        "strictErrors": 1,
+        "catalogErrors": 4,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 1
+          },
+          "keywords": {
+            "e": 0,
+            "w": 92
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 97574,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 12,
+          "mac": 0,
+          "total": 12
+        },
+        "keywords": {
+          "sciencekeywords": 46,
+          "datacenters": 2,
+          "platforms": 2,
+          "instruments": 30,
+          "locations": 1,
+          "projects": 2,
+          "providers": 46
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 12,
+          "filled": 12,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "anemometer",
+              "type": "anemometer",
+              "variable": "anemometer"
+            },
+            {
+              "index": 1,
+              "sensorId": "barometer",
+              "type": "barometer",
+              "variable": "barometer"
+            },
+            {
+              "index": 2,
+              "sensorId": "clock",
+              "type": "clock",
+              "variable": "clock"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 41,
+          "datacenters": 4,
+          "platforms": 2,
+          "instruments": 30,
+          "locations": 2,
+          "projects": 2,
+          "providers": 46
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 46,
+            "imp": 41,
+            "delta": -5
+          },
+          "datacenters": {
+            "src": 2,
+            "imp": 4,
+            "delta": 2
+          },
+          "platforms": {
+            "src": 2,
+            "imp": 2,
+            "delta": 0
+          },
+          "instruments": {
+            "src": 30,
+            "imp": 30,
+            "delta": 0
+          },
+          "locations": {
+            "src": 1,
+            "imp": 2,
+            "delta": 1
+          },
+          "projects": {
+            "src": 2,
+            "imp": 2,
+            "delta": 0
+          },
+          "providers": {
+            "src": 46,
+            "imp": 46,
+            "delta": 0
+          }
+        },
+        "missionTitle": "Saildrone PMEL TPOS 2018 Mission, drone 1005 (NCEI Accession",
+        "fileId": "gov.noaa.nodc:0297635"
+      },
+      "flags": [
+        "science-keywords-loss-on-import"
+      ]
+    },
+    {
+      "file": "9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml",
+      "path": "react-pilot/fixtures/mission/9f21ce1a-1e11-4461-bc84-81939f73cfc2.xml",
+      "category": "other-eut",
+      "navyUxS": false,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 20,
+        "strictErrors": 1,
+        "catalogErrors": 2,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 2
+          },
+          "keywords": {
+            "e": 0,
+            "w": 18
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 30858,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 0,
+          "mac": 0,
+          "total": 0
+        },
+        "keywords": {
+          "sciencekeywords": 10,
+          "datacenters": 2,
+          "platforms": 1,
+          "instruments": 1,
+          "locations": 1,
+          "projects": 1,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 1,
+          "filled": 1,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "Long_Name",
+              "type": "Short_Name > Long_Name",
+              "variable": "Short_Name > Long_Name"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 7,
+          "datacenters": 4,
+          "platforms": 2,
+          "instruments": 1,
+          "locations": 1,
+          "projects": 1,
+          "providers": 4
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 10,
+            "imp": 7,
+            "delta": -3
+          },
+          "datacenters": {
+            "src": 2,
+            "imp": 4,
+            "delta": 2
+          },
+          "platforms": {
+            "src": 1,
+            "imp": 2,
+            "delta": 1
+          },
+          "instruments": {
+            "src": 1,
+            "imp": 1,
+            "delta": 0
+          },
+          "locations": {
+            "src": 1,
+            "imp": 1,
+            "delta": 0
+          },
+          "projects": {
+            "src": 1,
+            "imp": 1,
+            "delta": 0
+          },
+          "providers": {
+            "src": 0,
+            "imp": 4,
+            "delta": 4
+          }
+        },
+        "missionTitle": "Collection Title",
+        "fileId": "gov.noaa.ncei:951220936016734"
+      },
+      "flags": [
+        "science-keywords-loss-on-import"
+      ]
+    },
+    {
+      "file": "PS2418L0-AUV01-norbit-mb-20240505.xml",
+      "path": "react-pilot/fixtures/mission/PS2418L0-AUV01-norbit-mb-20240505.xml",
+      "category": "navy-uxs",
+      "navyUxS": true,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 2,
+        "lenientWarns": 3,
+        "strictErrors": 5,
+        "catalogErrors": 10,
+        "lenientByStep": {
+          "mission": {
+            "e": 2,
+            "w": 1
+          },
+          "keywords": {
+            "e": 0,
+            "w": 2
+          }
+        },
+        "topLenientErrors": [
+          {
+            "field": "mission.abstract",
+            "message": "Abstract is required"
+          },
+          {
+            "field": "mission.email",
+            "message": "Email is required"
+          }
+        ],
+        "previewLen": 18077,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 0,
+          "mac": 0,
+          "total": 0
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 0,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 0,
+          "projects": 0,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 1,
+          "filled": 1,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "sensor_1",
+              "type": "sensor_1",
+              "variable": "sensor_1"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 1,
+          "platforms": 1,
+          "instruments": 1,
+          "locations": 1,
+          "projects": 1,
+          "providers": 1
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "datacenters": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "platforms": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "instruments": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "locations": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "projects": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "providers": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          }
+        },
+        "missionTitle": "Point Sur 2024 Leg 18 Eagle Ray MultiBeam Sonar Data AUV Div",
+        "fileId": "PS2418L0_ER_AUV01_Norbit_MB_20240505T1510Z_MD"
+      },
+      "flags": [
+        "no-science-keywords-source-or-import",
+        "lenient-errors"
+      ]
+    },
+    {
+      "file": "PS2418L0-UUV01-norbit-mb-20240505-r2.xml",
+      "path": "react-pilot/fixtures/mission/PS2418L0-UUV01-norbit-mb-20240505-r2.xml",
+      "category": "navy-uxs",
+      "navyUxS": true,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 3,
+        "strictErrors": 1,
+        "catalogErrors": 2,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 2
+          },
+          "sensors": {
+            "e": 0,
+            "w": 1
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 23466,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 2,
+          "mac": 0,
+          "total": 2
+        },
+        "keywords": {
+          "sciencekeywords": 1,
+          "datacenters": 1,
+          "platforms": 1,
+          "instruments": 1,
+          "locations": 1,
+          "projects": 1,
+          "providers": 1
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 1,
+          "filled": 1,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "MBES-Norbit",
+              "type": "Earth Remote Sensing Instruments",
+              "variable": "Earth Remote Sensing Instruments"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 1,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 0,
+          "projects": 0,
+          "providers": 0
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 1,
+            "imp": 0,
+            "delta": -1
+          },
+          "datacenters": {
+            "src": 1,
+            "imp": 1,
+            "delta": 0
+          },
+          "platforms": {
+            "src": 1,
+            "imp": 0,
+            "delta": -1
+          },
+          "instruments": {
+            "src": 1,
+            "imp": 0,
+            "delta": -1
+          },
+          "locations": {
+            "src": 1,
+            "imp": 0,
+            "delta": -1
+          },
+          "projects": {
+            "src": 1,
+            "imp": 0,
+            "delta": -1
+          },
+          "providers": {
+            "src": 1,
+            "imp": 0,
+            "delta": -1
+          }
+        },
+        "missionTitle": "Point Sur 2024 Leg 18 Eagle Ray MultiBeam Sonar Data UUV Div",
+        "fileId": "PS2418L0_ER_UUV01_Norbit_MB_20240505T1510Z_MD"
+      },
+      "flags": [
+        "partial-sensor-import",
+        "science-keywords-loss-on-import",
+        "science-keywords-dropped-to-zero"
+      ]
+    },
+    {
+      "file": "PS2418L0-UUV01-norbit-mb-20240505.xml",
+      "path": "react-pilot/fixtures/mission/PS2418L0-UUV01-norbit-mb-20240505.xml",
+      "category": "navy-uxs",
+      "navyUxS": true,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 3,
+        "strictErrors": 1,
+        "catalogErrors": 2,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 2
+          },
+          "sensors": {
+            "e": 0,
+            "w": 1
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 23316,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 2,
+          "mac": 0,
+          "total": 2
+        },
+        "keywords": {
+          "sciencekeywords": 1,
+          "datacenters": 1,
+          "platforms": 1,
+          "instruments": 1,
+          "locations": 1,
+          "projects": 1,
+          "providers": 1
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 1,
+          "filled": 1,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "MBES-Norbit",
+              "type": "Earth Remote Sensing Instruments",
+              "variable": "Earth Remote Sensing Instruments"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 1,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 0,
+          "projects": 0,
+          "providers": 0
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 1,
+            "imp": 0,
+            "delta": -1
+          },
+          "datacenters": {
+            "src": 1,
+            "imp": 1,
+            "delta": 0
+          },
+          "platforms": {
+            "src": 1,
+            "imp": 0,
+            "delta": -1
+          },
+          "instruments": {
+            "src": 1,
+            "imp": 0,
+            "delta": -1
+          },
+          "locations": {
+            "src": 1,
+            "imp": 0,
+            "delta": -1
+          },
+          "projects": {
+            "src": 1,
+            "imp": 0,
+            "delta": -1
+          },
+          "providers": {
+            "src": 1,
+            "imp": 0,
+            "delta": -1
+          }
+        },
+        "missionTitle": "Point Sur 2024 Leg 18 Eagle Ray MultiBeam Sonar Data UUV Div",
+        "fileId": "PS2418L0_ER_UUV01_Norbit_MB_20240505T1510Z_MD"
+      },
+      "flags": [
+        "partial-sensor-import",
+        "science-keywords-loss-on-import",
+        "science-keywords-dropped-to-zero"
+      ]
+    },
+    {
+      "file": "navy-uxs-gmi-template-2026-r2.xml",
+      "path": "react-pilot/fixtures/mission/navy-uxs-gmi-template-2026-r2.xml",
+      "category": "navy-uxs",
+      "navyUxS": true,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 5,
+        "strictErrors": 0,
+        "catalogErrors": 0,
+        "lenientByStep": {
+          "keywords": {
+            "e": 0,
+            "w": 5
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 35241,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 3,
+          "mac": 0,
+          "total": 3
+        },
+        "keywords": {
+          "sciencekeywords": 7,
+          "datacenters": 0,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 0,
+          "projects": 0,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 3,
+          "filled": 3,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "SENSOR-ADCP-001",
+              "type": "Acoustic Doppler Current Profiler",
+              "variable": "Acoustic Doppler Current Profiler"
+            },
+            {
+              "index": 1,
+              "sensorId": "SENSOR-CTD-001",
+              "type": "CTD",
+              "variable": "CTD"
+            },
+            {
+              "index": 2,
+              "sensorId": "SENSOR-CTD-001",
+              "type": "CTD",
+              "variable": "CTD"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 1,
+          "datacenters": 2,
+          "platforms": 1,
+          "instruments": 1,
+          "locations": 1,
+          "projects": 1,
+          "providers": 2
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 7,
+            "imp": 1,
+            "delta": -6
+          },
+          "datacenters": {
+            "src": 0,
+            "imp": 2,
+            "delta": 2
+          },
+          "platforms": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "instruments": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "locations": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "projects": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "providers": {
+            "src": 0,
+            "imp": 2,
+            "delta": 2
+          }
+        },
+        "missionTitle": "Atlantic UxS Hydrographic Demonstration — REMUS 600, April 2",
+        "fileId": "uxs-atlantic-demo-20260424"
+      },
+      "flags": [
+        "science-keywords-loss-on-import"
+      ]
+    },
+    {
+      "file": "navy-uxs-gmi-template-2026.xml",
+      "path": "react-pilot/fixtures/mission/navy-uxs-gmi-template-2026.xml",
+      "category": "navy-uxs",
+      "navyUxS": true,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [
+        "Navy UxS template placeholders detected: provisional values were applied for empty/invalid catalog fields (DOI, ROR, email, URLs, accession, provider keyword, download URL, platform type). Replace with real metadata before publication."
+      ],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 9,
+        "strictErrors": 0,
+        "catalogErrors": 0,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 2
+          },
+          "keywords": {
+            "e": 0,
+            "w": 7
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 31342,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 3,
+          "mac": 0,
+          "total": 3
+        },
+        "keywords": {
+          "sciencekeywords": 7,
+          "datacenters": 0,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 0,
+          "projects": 0,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 2,
+          "filled": 2,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "{INSTRUMENT_ID}}",
+              "type": "TYPE OF INSTRUMENT",
+              "variable": "TYPE OF INSTRUMENT"
+            },
+            {
+              "index": 1,
+              "sensorId": "INSTRUMENT_ID",
+              "type": "TYPE OF INSTRUMENT",
+              "variable": "TYPE OF INSTRUMENT"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 1,
+          "datacenters": 2,
+          "platforms": 1,
+          "instruments": 1,
+          "locations": 1,
+          "projects": 1,
+          "providers": 2
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 7,
+            "imp": 1,
+            "delta": -6
+          },
+          "datacenters": {
+            "src": 0,
+            "imp": 2,
+            "delta": 2
+          },
+          "platforms": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "instruments": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "locations": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "projects": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "providers": {
+            "src": 0,
+            "imp": 2,
+            "delta": 2
+          }
+        },
+        "missionTitle": "Aquisition (data collection) entity should be globally uniqu",
+        "fileId": "Unique Identifier Assigned to Metadata Record"
+      },
+      "flags": [
+        "partial-sensor-import",
+        "science-keywords-loss-on-import"
+      ]
+    },
+    {
+      "file": "navy-uxs-swarm-clean.xml",
+      "path": "react-pilot/fixtures/mission/navy-uxs-swarm-clean.xml",
+      "category": "navy-uxs",
+      "navyUxS": true,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 3,
+        "strictErrors": 0,
+        "catalogErrors": 0,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 1
+          },
+          "keywords": {
+            "e": 0,
+            "w": 2
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 34095,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 3,
+          "mac": 0,
+          "total": 3
+        },
+        "keywords": {
+          "sciencekeywords": 8,
+          "datacenters": 0,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 0,
+          "projects": 0,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 3,
+          "filled": 3,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "CTD-SWARM-01",
+              "type": "CTD",
+              "variable": "CTD"
+            },
+            {
+              "index": 1,
+              "sensorId": "ADCP-SWARM-01",
+              "type": "CTD",
+              "variable": "CTD"
+            },
+            {
+              "index": 2,
+              "sensorId": "ADCP-SWARM-02",
+              "type": "ADCP",
+              "variable": "ADCP"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 1,
+          "datacenters": 2,
+          "platforms": 1,
+          "instruments": 1,
+          "locations": 1,
+          "projects": 1,
+          "providers": 1
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 8,
+            "imp": 1,
+            "delta": -7
+          },
+          "datacenters": {
+            "src": 0,
+            "imp": 2,
+            "delta": 2
+          },
+          "platforms": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "instruments": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "locations": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "projects": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "providers": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          }
+        },
+        "missionTitle": "PS2418L0 UUV Swarm acquisition demo",
+        "fileId": "SWARM_DEMO_001"
+      },
+      "flags": [
+        "science-keywords-loss-on-import"
+      ]
+    },
+    {
+      "file": "sample-mission.xml",
+      "path": "react-pilot/fixtures/mission/sample-mission.xml",
+      "category": "other-eut",
+      "navyUxS": false,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [
+        "No gmd:MD_DataIdentification; mission fields may be incomplete."
+      ],
+      "validation": {
+        "lenientErrors": 19,
+        "lenientWarns": 2,
+        "strictErrors": 22,
+        "catalogErrors": 27,
+        "lenientByStep": {
+          "mission": {
+            "e": 8,
+            "w": 1
+          },
+          "platform": {
+            "e": 3,
+            "w": 0
+          },
+          "sensors": {
+            "e": 1,
+            "w": 0
+          },
+          "keywords": {
+            "e": 6,
+            "w": 1
+          },
+          "distribution": {
+            "e": 1,
+            "w": 0
+          }
+        },
+        "topLenientErrors": [
+          {
+            "field": "mission.title",
+            "message": "Title is required"
+          },
+          {
+            "field": "mission.abstract",
+            "message": "Abstract is required"
+          },
+          {
+            "field": "mission.startDate",
+            "message": "Creation / Start date is required"
+          },
+          {
+            "field": "mission.endDate",
+            "message": "End date is required"
+          },
+          {
+            "field": "mission.org",
+            "message": "Organization name is required"
+          }
+        ],
+        "previewLen": 8607,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 0,
+          "mac": 0,
+          "total": 0
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 0,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 0,
+          "projects": 0,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 1,
+          "filled": 0,
+          "inactive": 1,
+          "samples": []
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 0,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 0,
+          "projects": 1,
+          "providers": 0
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "datacenters": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "platforms": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "instruments": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "locations": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "projects": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "providers": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          }
+        },
+        "missionTitle": "",
+        "fileId": "gov.noaa.ncei.oer:SAMPLE_MISSION"
+      },
+      "flags": [
+        "no-science-keywords-source-or-import",
+        "no-locations-keywords-source-or-import",
+        "all-sensor-rows-inactive",
+        "lenient-errors"
+      ]
+    },
+    {
+      "file": "uxs-md-dataset-preview-a.xml",
+      "path": "react-pilot/fixtures/mission/uxs-md-dataset-preview-a.xml",
+      "category": "uxs-acquisition",
+      "navyUxS": false,
+      "sourceShape": "ISO 19139 gmd",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 14,
+        "lenientWarns": 3,
+        "strictErrors": 17,
+        "catalogErrors": 22,
+        "lenientByStep": {
+          "mission": {
+            "e": 9,
+            "w": 1
+          },
+          "keywords": {
+            "e": 4,
+            "w": 2
+          },
+          "distribution": {
+            "e": 1,
+            "w": 0
+          }
+        },
+        "topLenientErrors": [
+          {
+            "field": "mission.fileId",
+            "message": "File Identifier is required"
+          },
+          {
+            "field": "mission.title",
+            "message": "Title is required"
+          },
+          {
+            "field": "mission.abstract",
+            "message": "Abstract is required"
+          },
+          {
+            "field": "mission.startDate",
+            "message": "Creation / Start date is required"
+          },
+          {
+            "field": "mission.endDate",
+            "message": "End date is required"
+          }
+        ],
+        "previewLen": 13460,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 0,
+          "mac": 0,
+          "total": 0
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 0,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 0,
+          "projects": 0,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 1,
+          "filled": 1,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "sensor_1",
+              "type": "sensor_1",
+              "variable": "sensor_1"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 0,
+          "platforms": 1,
+          "instruments": 1,
+          "locations": 1,
+          "projects": 0,
+          "providers": 0
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "datacenters": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "platforms": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "instruments": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "locations": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "projects": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "providers": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          }
+        },
+        "missionTitle": "",
+        "fileId": ""
+      },
+      "flags": [
+        "no-science-keywords-source-or-import",
+        "lenient-errors"
+      ]
+    },
+    {
+      "file": "uxs-md-dataset-preview-b.xml",
+      "path": "react-pilot/fixtures/mission/uxs-md-dataset-preview-b.xml",
+      "category": "uxs-acquisition",
+      "navyUxS": false,
+      "sourceShape": "ISO 19139 gmd",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 19,
+        "lenientWarns": 2,
+        "strictErrors": 22,
+        "catalogErrors": 27,
+        "lenientByStep": {
+          "mission": {
+            "e": 10,
+            "w": 1
+          },
+          "platform": {
+            "e": 3,
+            "w": 0
+          },
+          "keywords": {
+            "e": 5,
+            "w": 1
+          },
+          "distribution": {
+            "e": 1,
+            "w": 0
+          }
+        },
+        "topLenientErrors": [
+          {
+            "field": "mission.fileId",
+            "message": "File Identifier is required"
+          },
+          {
+            "field": "mission.title",
+            "message": "Title is required"
+          },
+          {
+            "field": "mission.abstract",
+            "message": "Abstract is required"
+          },
+          {
+            "field": "mission.startDate",
+            "message": "Creation / Start date is required"
+          },
+          {
+            "field": "mission.endDate",
+            "message": "End date is required"
+          }
+        ],
+        "previewLen": 12061,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 1,
+          "mac": 0,
+          "total": 1
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 0,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 0,
+          "projects": 0,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 1,
+          "filled": 1,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "Earth_Remote_Sensing_Instruments",
+              "type": "Earth Remote Sensing Instruments",
+              "variable": "Earth Remote Sensing Instruments"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 0,
+          "platforms": 0,
+          "instruments": 1,
+          "locations": 1,
+          "projects": 0,
+          "providers": 0
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "datacenters": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "platforms": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "instruments": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "locations": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "projects": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "providers": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          }
+        },
+        "missionTitle": "",
+        "fileId": ""
+      },
+      "flags": [
+        "no-science-keywords-source-or-import",
+        "lenient-errors"
+      ]
+    },
+    {
+      "file": "uxs-ncei-template-preview.xml",
+      "path": "react-pilot/fixtures/mission/uxs-ncei-template-preview.xml",
+      "category": "uxs-acquisition",
+      "navyUxS": false,
+      "sourceShape": "ISO 19139 gmd",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [
+        "Navy UxS template placeholders detected: provisional values were applied for empty/invalid catalog fields (DOI, ROR, email, URLs, accession, provider keyword, download URL, platform type). Replace with real metadata before publication."
+      ],
+      "validation": {
+        "lenientErrors": 2,
+        "lenientWarns": 2,
+        "strictErrors": 2,
+        "catalogErrors": 2,
+        "lenientByStep": {
+          "mission": {
+            "e": 2,
+            "w": 2
+          }
+        },
+        "topLenientErrors": [
+          {
+            "field": "mission.startDate",
+            "message": "Creation / Start date is required"
+          },
+          {
+            "field": "mission.endDate",
+            "message": "End date is required"
+          }
+        ],
+        "previewLen": 25676,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 2,
+          "mac": 0,
+          "total": 2
+        },
+        "keywords": {
+          "sciencekeywords": 1,
+          "datacenters": 1,
+          "platforms": 1,
+          "instruments": 1,
+          "locations": 1,
+          "projects": 1,
+          "providers": 1
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 1,
+          "filled": 1,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "_TYPE_OF_INSTRUMENT_",
+              "type": "TYPE OF INSTRUMENT",
+              "variable": "TYPE OF INSTRUMENT"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 1,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 0,
+          "projects": 0,
+          "providers": 0
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 1,
+            "imp": 0,
+            "delta": -1
+          },
+          "datacenters": {
+            "src": 1,
+            "imp": 1,
+            "delta": 0
+          },
+          "platforms": {
+            "src": 1,
+            "imp": 0,
+            "delta": -1
+          },
+          "instruments": {
+            "src": 1,
+            "imp": 0,
+            "delta": -1
+          },
+          "locations": {
+            "src": 1,
+            "imp": 0,
+            "delta": -1
+          },
+          "projects": {
+            "src": 1,
+            "imp": 0,
+            "delta": -1
+          },
+          "providers": {
+            "src": 1,
+            "imp": 0,
+            "delta": -1
+          }
+        },
+        "missionTitle": "Aquisition (data collection) entity should be globally uniqu",
+        "fileId": "Unique Identifier Assigned to Metadata Record"
+      },
+      "flags": [
+        "partial-sensor-import",
+        "science-keywords-loss-on-import",
+        "science-keywords-dropped-to-zero",
+        "lenient-errors"
+      ]
+    },
+    {
+      "file": "EX1904_collection.xml",
+      "path": "react-pilot/public/demo-records/EX1904_collection.xml",
+      "category": "collection",
+      "navyUxS": false,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 77,
+        "strictErrors": 2,
+        "catalogErrors": 6,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 1
+          },
+          "keywords": {
+            "e": 0,
+            "w": 76
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 33050,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 0,
+          "mac": 0,
+          "total": 0
+        },
+        "keywords": {
+          "sciencekeywords": 6,
+          "datacenters": 0,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 8,
+          "projects": 0,
+          "providers": 69
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 1,
+          "filled": 1,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "Operations_aboard_the_cruise.",
+              "type": "Operations aboard the cruise.",
+              "variable": "Operations aboard the cruise."
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 3,
+          "datacenters": 2,
+          "platforms": 1,
+          "instruments": 1,
+          "locations": 1,
+          "projects": 1,
+          "providers": 75
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 6,
+            "imp": 3,
+            "delta": -3
+          },
+          "datacenters": {
+            "src": 0,
+            "imp": 2,
+            "delta": 2
+          },
+          "platforms": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "instruments": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "locations": {
+            "src": 8,
+            "imp": 1,
+            "delta": -7
+          },
+          "projects": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "providers": {
+            "src": 69,
+            "imp": 75,
+            "delta": 6
+          }
+        },
+        "missionTitle": "Okeanos Explorer (EX1904): 2019 Technology Demonstrations",
+        "fileId": "gov.noaa.ncei.oer:EX1904_COLLECTION"
+      },
+      "flags": [
+        "science-keywords-loss-on-import"
+      ]
+    },
+    {
+      "file": "PS2418L0-UUV01-BAD.xml",
+      "path": "react-pilot/public/demo-records/PS2418L0-UUV01-BAD.xml",
+      "category": "navy-uxs",
+      "navyUxS": true,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 5,
+        "lenientWarns": 5,
+        "strictErrors": 8,
+        "catalogErrors": 13,
+        "lenientByStep": {
+          "mission": {
+            "e": 1,
+            "w": 3
+          },
+          "sensors": {
+            "e": 2,
+            "w": 0
+          },
+          "keywords": {
+            "e": 2,
+            "w": 2
+          }
+        },
+        "topLenientErrors": [
+          {
+            "field": "mission.email",
+            "message": "Email is required"
+          },
+          {
+            "field": "sensors[0].type",
+            "message": "Sensor 1: type is required"
+          },
+          {
+            "field": "sensors[0].variable",
+            "message": "Sensor 1: observed variable is required"
+          },
+          {
+            "field": "keywords.datacenters",
+            "message": "Data Centers: at least one keyword is required"
+          },
+          {
+            "field": "keywords.instruments",
+            "message": "Instruments: at least one keyword is required"
+          }
+        ],
+        "previewLen": 15976,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 0,
+          "mac": 0,
+          "total": 0
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 0,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 0,
+          "projects": 0,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 1,
+          "filled": 1,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "Platform Identifier",
+              "type": "",
+              "variable": ""
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 0,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 1,
+          "projects": 1,
+          "providers": 1
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "datacenters": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "platforms": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "instruments": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "locations": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "projects": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "providers": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          }
+        },
+        "missionTitle": "Enter title here",
+        "fileId": "Unique Identifier Assigned to Metadata Record"
+      },
+      "flags": [
+        "no-science-keywords-source-or-import",
+        "lenient-errors"
+      ]
+    },
+    {
+      "file": "PS2418L0-UUV01-GOOD.xml",
+      "path": "react-pilot/public/demo-records/PS2418L0-UUV01-GOOD.xml",
+      "category": "navy-uxs",
+      "navyUxS": true,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 2,
+        "strictErrors": 1,
+        "catalogErrors": 5,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 2
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 22868,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 1,
+          "mac": 0,
+          "total": 1
+        },
+        "keywords": {
+          "sciencekeywords": 2,
+          "datacenters": 1,
+          "platforms": 1,
+          "instruments": 1,
+          "locations": 1,
+          "projects": 1,
+          "providers": 1
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 1,
+          "filled": 1,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "Norbit-iWBMS-001",
+              "type": "Multibeam Swath Bathymetry System",
+              "variable": "Multibeam Swath Bathymetry System"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 2,
+          "datacenters": 1,
+          "platforms": 1,
+          "instruments": 0,
+          "locations": 0,
+          "projects": 1,
+          "providers": 1
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 2,
+            "imp": 2,
+            "delta": 0
+          },
+          "datacenters": {
+            "src": 1,
+            "imp": 1,
+            "delta": 0
+          },
+          "platforms": {
+            "src": 1,
+            "imp": 1,
+            "delta": 0
+          },
+          "instruments": {
+            "src": 1,
+            "imp": 0,
+            "delta": -1
+          },
+          "locations": {
+            "src": 1,
+            "imp": 0,
+            "delta": -1
+          },
+          "projects": {
+            "src": 1,
+            "imp": 1,
+            "delta": 0
+          },
+          "providers": {
+            "src": 1,
+            "imp": 1,
+            "delta": 0
+          }
+        },
+        "missionTitle": "Point Sur 2024 Leg 18 Eagle Ray UUV Multibeam Sonar Survey —",
+        "fileId": "PS2418L0_ER_UUV01_Norbit_MB_20240505T1510Z_MD"
+      },
+      "flags": []
+    },
+    {
+      "file": "SAMPLE_Populated.xml",
+      "path": "react-pilot/public/demo-records/SAMPLE_Populated.xml",
+      "category": "template-populated",
+      "navyUxS": false,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [
+        "Navy UxS template placeholders detected: provisional values were applied for empty/invalid catalog fields (DOI, ROR, email, URLs, accession, provider keyword, download URL, platform type). Replace with real metadata before publication."
+      ],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 11,
+        "strictErrors": 0,
+        "catalogErrors": 0,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 1
+          },
+          "keywords": {
+            "e": 0,
+            "w": 10
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 34166,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 3,
+          "mac": 0,
+          "total": 3
+        },
+        "keywords": {
+          "sciencekeywords": 11,
+          "datacenters": 0,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 0,
+          "projects": 0,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 3,
+          "filled": 3,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "Gill Anemometer (W190105)",
+              "type": "Anemometer",
+              "variable": "Anemometer"
+            },
+            {
+              "index": 1,
+              "sensorId": "Rotronic HC2-S3 AT/RH",
+              "type": "Thermometer",
+              "variable": "Thermometer"
+            },
+            {
+              "index": 2,
+              "sensorId": "INSTRUMENT_ID",
+              "type": "TYPE OF INSTRUMENT",
+              "variable": "TYPE OF INSTRUMENT"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 2,
+          "datacenters": 2,
+          "platforms": 1,
+          "instruments": 4,
+          "locations": 1,
+          "projects": 1,
+          "providers": 2
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 11,
+            "imp": 2,
+            "delta": -9
+          },
+          "datacenters": {
+            "src": 0,
+            "imp": 2,
+            "delta": 2
+          },
+          "platforms": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "instruments": {
+            "src": 0,
+            "imp": 4,
+            "delta": 4
+          },
+          "locations": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "projects": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "providers": {
+            "src": 0,
+            "imp": 2,
+            "delta": 2
+          }
+        },
+        "missionTitle": "Saildrone PMEL TPOS 2021 Mission, drone 1066",
+        "fileId": "sd1065_tpos_2021_raw"
+      },
+      "flags": [
+        "science-keywords-loss-on-import"
+      ]
+    }
+  ]
+}

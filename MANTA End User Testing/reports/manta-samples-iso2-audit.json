@@ -1,9 +1,9 @@
 {
   "sampleDir": "/Users/connorcayson/Downloads/uSX/MANTA End User Testing/samples",
   "sampleDirRelative": "MANTA End User Testing/samples",
-  "generated": "2026-05-12T18:30:38.182Z",
+  "generated": "2026-05-15T09:40:21.949Z",
   "lenientRollupSummary": {
-    "patternCount": 216,
+    "patternCount": 207,
     "rollupJson": "MANTA End User Testing/reports/manta-samples-lenient-rollup.json",
     "rollupMd": "MANTA End User Testing/reports/manta-samples-lenient-rollup.md",
     "rollupCsv": "MANTA End User Testing/reports/manta-samples-lenient-patterns.csv"
@@ -15,50 +15,20 @@
       "importOk": true,
       "mergeOk": true,
       "parseOk": true,
-      "lenientErrors": 1,
-      "lenientWarns": 5,
-      "strictErrors": 4,
-      "strictWarns": 3,
-      "catalogErrors": 5,
-      "catalogWarns": 3,
+      "lenientErrors": 0,
+      "lenientWarns": 3,
+      "strictErrors": 2,
+      "strictWarns": 2,
+      "catalogErrors": 3,
+      "catalogWarns": 2,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 31197,
+      "previewLen": 37092,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
         "mission": {
           "e": 0,
-          "w": 4
-        },
-        "platform": {
-          "e": 0,
-          "w": 0
-        },
-        "sensors": {
-          "e": 0,
-          "w": 0
-        },
-        "spatial": {
-          "e": 0,
-          "w": 0
-        },
-        "keywords": {
-          "e": 0,
-          "w": 1
-        },
-        "distribution": {
-          "e": 1,
-          "w": 0
-        },
-        "other": {
-          "e": 0,
-          "w": 0
-        }
-      },
-      "strictByStep": {
-        "mission": {
-          "e": 3,
           "w": 2
         },
         "platform": {
@@ -78,7 +48,37 @@
           "w": 1
         },
         "distribution": {
-          "e": 1,
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 2,
+          "w": 1
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 1
+        },
+        "distribution": {
+          "e": 0,
           "w": 0
         },
         "other": {
@@ -89,21 +89,9 @@
       "lenientIssues": [
         {
           "field": "mission.abstract",
-          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.abstract",
           "message": "Abstract uses acronym \"QL\"; expand it on first use when possible.",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.licenseUrl",
-          "message": "License URL recommended when preset is custom",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints"
         },
         {
           "field": "mission.ror",
@@ -116,12 +104,40 @@
           "message": "Add concept UUID for best KMS href",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ],
+      "strictIssues": [
+        {
+          "field": "mission.doi",
+          "message": "Strict mode: DOI is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
         },
         {
-          "field": "distribution.license",
-          "message": "Use/License is required",
+          "field": "mission.ror",
+          "message": "Strict mode: ROR is required",
           "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:useConstraints"
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        }
+      ],
+      "catalogIssues": [
+        {
+          "field": "mission.doi",
+          "message": "Catalog mode: DOI is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
+        },
+        {
+          "field": "mission.ror",
+          "message": "Catalog mode: ROR is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        },
+        {
+          "field": "distribution.publication",
+          "message": "Catalog mode: publication reference is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:otherCitationDetails"
         }
       ]
     },
@@ -131,21 +147,21 @@
       "importOk": true,
       "mergeOk": true,
       "parseOk": true,
-      "lenientErrors": 1,
-      "lenientWarns": 8,
-      "strictErrors": 4,
+      "lenientErrors": 0,
+      "lenientWarns": 7,
+      "strictErrors": 2,
       "strictWarns": 6,
-      "catalogErrors": 6,
+      "catalogErrors": 4,
       "catalogWarns": 6,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 26459,
+      "previewLen": 33116,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
         "mission": {
           "e": 0,
-          "w": 2
+          "w": 1
         },
         "platform": {
           "e": 0,
@@ -164,7 +180,7 @@
           "w": 6
         },
         "distribution": {
-          "e": 1,
+          "e": 0,
           "w": 0
         },
         "other": {
@@ -174,7 +190,7 @@
       },
       "strictByStep": {
         "mission": {
-          "e": 3,
+          "e": 2,
           "w": 0
         },
         "platform": {
@@ -194,7 +210,7 @@
           "w": 6
         },
         "distribution": {
-          "e": 1,
+          "e": 0,
           "w": 0
         },
         "other": {
@@ -203,12 +219,6 @@
         }
       },
       "lenientIssues": [
-        {
-          "field": "mission.licenseUrl",
-          "message": "License URL recommended when preset is custom",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints"
-        },
         {
           "field": "mission.ror",
           "message": "No ROR selected (recommended for organization linkage)",
@@ -250,12 +260,46 @@
           "message": "Add concept UUID for best KMS href",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ],
+      "strictIssues": [
+        {
+          "field": "mission.accession",
+          "message": "Strict mode: NCEI Accession is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
         },
         {
-          "field": "distribution.license",
-          "message": "Use/License is required",
+          "field": "mission.ror",
+          "message": "Strict mode: ROR is required",
           "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:useConstraints"
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        }
+      ],
+      "catalogIssues": [
+        {
+          "field": "mission.accession",
+          "message": "Catalog mode: NCEI Accession is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
+        },
+        {
+          "field": "mission.ror",
+          "message": "Catalog mode: ROR is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        },
+        {
+          "field": "distribution.publication",
+          "message": "Catalog mode: publication reference is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:otherCitationDetails"
+        },
+        {
+          "field": "distribution.downloadUrl",
+          "message": "Catalog mode: download URL is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage"
         }
       ]
     },
@@ -265,50 +309,20 @@
       "importOk": true,
       "mergeOk": true,
       "parseOk": true,
-      "lenientErrors": 2,
-      "lenientWarns": 20,
-      "strictErrors": 5,
-      "strictWarns": 18,
-      "catalogErrors": 8,
-      "catalogWarns": 18,
+      "lenientErrors": 0,
+      "lenientWarns": 18,
+      "strictErrors": 2,
+      "strictWarns": 17,
+      "catalogErrors": 5,
+      "catalogWarns": 17,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 26867,
+      "previewLen": 33899,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
         "mission": {
-          "e": 1,
-          "w": 4
-        },
-        "platform": {
           "e": 0,
-          "w": 0
-        },
-        "sensors": {
-          "e": 0,
-          "w": 0
-        },
-        "spatial": {
-          "e": 0,
-          "w": 0
-        },
-        "keywords": {
-          "e": 0,
-          "w": 16
-        },
-        "distribution": {
-          "e": 1,
-          "w": 0
-        },
-        "other": {
-          "e": 0,
-          "w": 0
-        }
-      },
-      "strictByStep": {
-        "mission": {
-          "e": 4,
           "w": 2
         },
         "platform": {
@@ -328,7 +342,37 @@
           "w": 16
         },
         "distribution": {
-          "e": 1,
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 2,
+          "w": 1
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 16
+        },
+        "distribution": {
+          "e": 0,
           "w": 0
         },
         "other": {
@@ -339,27 +383,9 @@
       "lenientIssues": [
         {
           "field": "mission.abstract",
-          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.abstract",
           "message": "Abstract uses acronym \"MPS\"; expand it on first use when possible.",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.individualName",
-          "message": "Individual name is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName"
-        },
-        {
-          "field": "mission.licenseUrl",
-          "message": "License URL recommended when preset is custom",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints"
         },
         {
           "field": "mission.ror",
@@ -462,12 +488,52 @@
           "message": "Add concept UUID for best KMS href",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ],
+      "strictIssues": [
+        {
+          "field": "mission.doi",
+          "message": "Strict mode: DOI is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
         },
         {
-          "field": "distribution.license",
-          "message": "Use/License is required",
+          "field": "mission.ror",
+          "message": "Strict mode: ROR is required",
           "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:useConstraints"
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        }
+      ],
+      "catalogIssues": [
+        {
+          "field": "mission.doi",
+          "message": "Catalog mode: DOI is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
+        },
+        {
+          "field": "mission.ror",
+          "message": "Catalog mode: ROR is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        },
+        {
+          "field": "mission.parentProjectTitle",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.parentProject",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.publication",
+          "message": "Catalog mode: publication reference is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:otherCitationDetails"
         }
       ]
     },
@@ -477,28 +543,28 @@
       "importOk": true,
       "mergeOk": true,
       "parseOk": true,
-      "lenientErrors": 2,
-      "lenientWarns": 16,
-      "strictErrors": 4,
-      "strictWarns": 14,
-      "catalogErrors": 7,
-      "catalogWarns": 14,
+      "lenientErrors": 0,
+      "lenientWarns": 14,
+      "strictErrors": 1,
+      "strictWarns": 13,
+      "catalogErrors": 4,
+      "catalogWarns": 13,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 27435,
+      "previewLen": 34576,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
         "mission": {
           "e": 0,
-          "w": 4
+          "w": 2
         },
         "platform": {
           "e": 0,
           "w": 0
         },
         "sensors": {
-          "e": 1,
+          "e": 0,
           "w": 0
         },
         "spatial": {
@@ -510,7 +576,7 @@
           "w": 12
         },
         "distribution": {
-          "e": 1,
+          "e": 0,
           "w": 0
         },
         "other": {
@@ -520,15 +586,15 @@
       },
       "strictByStep": {
         "mission": {
-          "e": 2,
-          "w": 2
+          "e": 1,
+          "w": 1
         },
         "platform": {
           "e": 0,
           "w": 0
         },
         "sensors": {
-          "e": 1,
+          "e": 0,
           "w": 0
         },
         "spatial": {
@@ -540,7 +606,7 @@
           "w": 12
         },
         "distribution": {
-          "e": 1,
+          "e": 0,
           "w": 0
         },
         "other": {
@@ -551,33 +617,15 @@
       "lenientIssues": [
         {
           "field": "mission.abstract",
-          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.abstract",
           "message": "Abstract uses acronym \"AVHRR\"; expand it on first use when possible.",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.licenseUrl",
-          "message": "License URL recommended when preset is custom",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints"
         },
         {
           "field": "mission.ror",
           "message": "No ROR selected (recommended for organization linkage)",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
-        },
-        {
-          "field": "sensors[1].variable",
-          "message": "Sensor 2: observed variable is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:contentInfo/gmi:MI_CoverageDescription/gmd:name"
         },
         {
           "field": "keywords.sciencekeywords[0].uuid",
@@ -650,12 +698,40 @@
           "message": "Add concept UUID for best KMS href",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ],
+      "strictIssues": [
+        {
+          "field": "mission.ror",
+          "message": "Strict mode: ROR is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        }
+      ],
+      "catalogIssues": [
+        {
+          "field": "mission.ror",
+          "message": "Catalog mode: ROR is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
         },
         {
-          "field": "distribution.license",
-          "message": "Use/License is required",
+          "field": "mission.parentProjectTitle",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
           "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:useConstraints"
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.parentProject",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.publication",
+          "message": "Catalog mode: publication reference is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:otherCitationDetails"
         }
       ]
     },
@@ -665,21 +741,21 @@
       "importOk": true,
       "mergeOk": true,
       "parseOk": true,
-      "lenientErrors": 3,
-      "lenientWarns": 78,
-      "strictErrors": 5,
-      "strictWarns": 77,
-      "catalogErrors": 9,
-      "catalogWarns": 77,
+      "lenientErrors": 0,
+      "lenientWarns": 77,
+      "strictErrors": 2,
+      "strictWarns": 76,
+      "catalogErrors": 6,
+      "catalogWarns": 76,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 29044,
+      "previewLen": 33050,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
         "mission": {
-          "e": 3,
-          "w": 2
+          "e": 0,
+          "w": 1
         },
         "platform": {
           "e": 0,
@@ -708,8 +784,8 @@
       },
       "strictByStep": {
         "mission": {
-          "e": 5,
-          "w": 1
+          "e": 2,
+          "w": 0
         },
         "platform": {
           "e": 0,
@@ -737,30 +813,6 @@
         }
       },
       "lenientIssues": [
-        {
-          "field": "mission.abstract",
-          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.endDate",
-          "message": "End date is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement"
-        },
-        {
-          "field": "mission.individualName",
-          "message": "Individual name is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName"
-        },
-        {
-          "field": "mission.email",
-          "message": "Email is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:electronicMailAddress"
-        },
         {
           "field": "mission.ror",
           "message": "No ROR selected (recommended for organization linkage)",
@@ -1223,6 +1275,58 @@
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
         }
+      ],
+      "strictIssues": [
+        {
+          "field": "mission.doi",
+          "message": "Strict mode: DOI is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
+        },
+        {
+          "field": "mission.ror",
+          "message": "Strict mode: ROR is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        }
+      ],
+      "catalogIssues": [
+        {
+          "field": "mission.doi",
+          "message": "Catalog mode: DOI is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
+        },
+        {
+          "field": "mission.ror",
+          "message": "Catalog mode: ROR is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        },
+        {
+          "field": "mission.parentProjectTitle",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.parentProject",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.publication",
+          "message": "Catalog mode: publication reference is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:otherCitationDetails"
+        },
+        {
+          "field": "distribution.landingUrl",
+          "message": "Catalog mode: landing page URL is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage"
+        }
       ]
     },
     {
@@ -1231,21 +1335,21 @@
       "importOk": true,
       "mergeOk": true,
       "parseOk": true,
-      "lenientErrors": 2,
-      "lenientWarns": 54,
-      "strictErrors": 4,
-      "strictWarns": 53,
-      "catalogErrors": 8,
-      "catalogWarns": 53,
+      "lenientErrors": 0,
+      "lenientWarns": 52,
+      "strictErrors": 1,
+      "strictWarns": 52,
+      "catalogErrors": 5,
+      "catalogWarns": 52,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 76008,
+      "previewLen": 70793,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
         "mission": {
-          "e": 1,
-          "w": 2
+          "e": 0,
+          "w": 0
         },
         "platform": {
           "e": 0,
@@ -1264,7 +1368,7 @@
           "w": 52
         },
         "distribution": {
-          "e": 1,
+          "e": 0,
           "w": 0
         },
         "other": {
@@ -1274,8 +1378,8 @@
       },
       "strictByStep": {
         "mission": {
-          "e": 3,
-          "w": 1
+          "e": 1,
+          "w": 0
         },
         "platform": {
           "e": 0,
@@ -1294,7 +1398,7 @@
           "w": 52
         },
         "distribution": {
-          "e": 1,
+          "e": 0,
           "w": 0
         },
         "other": {
@@ -1303,24 +1407,6 @@
         }
       },
       "lenientIssues": [
-        {
-          "field": "mission.abstract",
-          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.endDate",
-          "message": "End date is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement"
-        },
-        {
-          "field": "mission.licenseUrl",
-          "message": "License URL recommended when preset is custom",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints"
-        },
         {
           "field": "keywords.sciencekeywords[3].uuid",
           "message": "Add concept UUID for best KMS href",
@@ -1632,12 +1718,46 @@
           "message": "Add concept UUID for best KMS href",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ],
+      "strictIssues": [
+        {
+          "field": "mission.doi",
+          "message": "Strict mode: DOI is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
+        }
+      ],
+      "catalogIssues": [
+        {
+          "field": "mission.doi",
+          "message": "Catalog mode: DOI is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
         },
         {
-          "field": "distribution.license",
-          "message": "Use/License is required",
+          "field": "mission.parentProjectTitle",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
           "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:useConstraints"
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.parentProject",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.publication",
+          "message": "Catalog mode: publication reference is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:otherCitationDetails"
+        },
+        {
+          "field": "distribution.downloadUrl",
+          "message": "Catalog mode: download URL is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage"
         }
       ]
     },
@@ -1647,277 +1767,21 @@
       "importOk": true,
       "mergeOk": true,
       "parseOk": true,
-      "lenientErrors": 4,
-      "lenientWarns": 4,
-      "strictErrors": 8,
-      "strictWarns": 2,
-      "catalogErrors": 12,
-      "catalogWarns": 2,
+      "lenientErrors": 0,
+      "lenientWarns": 1,
+      "strictErrors": 3,
+      "strictWarns": 0,
+      "catalogErrors": 7,
+      "catalogWarns": 0,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 21317,
+      "previewLen": 27779,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
         "mission": {
-          "e": 2,
-          "w": 4
-        },
-        "platform": {
           "e": 0,
-          "w": 0
-        },
-        "sensors": {
-          "e": 1,
-          "w": 0
-        },
-        "spatial": {
-          "e": 0,
-          "w": 0
-        },
-        "keywords": {
-          "e": 0,
-          "w": 0
-        },
-        "distribution": {
-          "e": 1,
-          "w": 0
-        },
-        "other": {
-          "e": 0,
-          "w": 0
-        }
-      },
-      "strictByStep": {
-        "mission": {
-          "e": 6,
-          "w": 2
-        },
-        "platform": {
-          "e": 0,
-          "w": 0
-        },
-        "sensors": {
-          "e": 1,
-          "w": 0
-        },
-        "spatial": {
-          "e": 0,
-          "w": 0
-        },
-        "keywords": {
-          "e": 0,
-          "w": 0
-        },
-        "distribution": {
-          "e": 1,
-          "w": 0
-        },
-        "other": {
-          "e": 0,
-          "w": 0
-        }
-      },
-      "lenientIssues": [
-        {
-          "field": "mission.abstract",
-          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.abstract",
-          "message": "Abstract uses acronym \"USM\"; expand it on first use when possible.",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.individualName",
-          "message": "Individual name is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName"
-        },
-        {
-          "field": "mission.email",
-          "message": "Email is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:electronicMailAddress"
-        },
-        {
-          "field": "mission.licenseUrl",
-          "message": "License URL recommended when preset is custom",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints"
-        },
-        {
-          "field": "mission.ror",
-          "message": "No ROR selected (recommended for organization linkage)",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
-        },
-        {
-          "field": "sensors[3].variable",
-          "message": "Sensor 4: observed variable is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:contentInfo/gmi:MI_CoverageDescription/gmd:name"
-        },
-        {
-          "field": "distribution.license",
-          "message": "Use/License is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:useConstraints"
-        }
-      ]
-    },
-    {
-      "file": "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
-      "sourceShape": "ISO 19115-3 (mdb / -3)",
-      "importOk": true,
-      "mergeOk": true,
-      "parseOk": true,
-      "lenientErrors": 4,
-      "lenientWarns": 4,
-      "strictErrors": 8,
-      "strictWarns": 2,
-      "catalogErrors": 12,
-      "catalogWarns": 2,
-      "pipelineError": null,
-      "iso2PreviewFails": [],
-      "previewLen": 21180,
-      "previewRoundtripPartial": true,
-      "xmllintOk": true,
-      "lenientByStep": {
-        "mission": {
-          "e": 2,
-          "w": 4
-        },
-        "platform": {
-          "e": 0,
-          "w": 0
-        },
-        "sensors": {
-          "e": 1,
-          "w": 0
-        },
-        "spatial": {
-          "e": 0,
-          "w": 0
-        },
-        "keywords": {
-          "e": 0,
-          "w": 0
-        },
-        "distribution": {
-          "e": 1,
-          "w": 0
-        },
-        "other": {
-          "e": 0,
-          "w": 0
-        }
-      },
-      "strictByStep": {
-        "mission": {
-          "e": 6,
-          "w": 2
-        },
-        "platform": {
-          "e": 0,
-          "w": 0
-        },
-        "sensors": {
-          "e": 1,
-          "w": 0
-        },
-        "spatial": {
-          "e": 0,
-          "w": 0
-        },
-        "keywords": {
-          "e": 0,
-          "w": 0
-        },
-        "distribution": {
-          "e": 1,
-          "w": 0
-        },
-        "other": {
-          "e": 0,
-          "w": 0
-        }
-      },
-      "lenientIssues": [
-        {
-          "field": "mission.abstract",
-          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.abstract",
-          "message": "Abstract uses acronym \"USM\"; expand it on first use when possible.",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.individualName",
-          "message": "Individual name is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName"
-        },
-        {
-          "field": "mission.email",
-          "message": "Email is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:electronicMailAddress"
-        },
-        {
-          "field": "mission.licenseUrl",
-          "message": "License URL recommended when preset is custom",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints"
-        },
-        {
-          "field": "mission.ror",
-          "message": "No ROR selected (recommended for organization linkage)",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
-        },
-        {
-          "field": "sensors[2].variable",
-          "message": "Sensor 3: observed variable is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:contentInfo/gmi:MI_CoverageDescription/gmd:name"
-        },
-        {
-          "field": "distribution.license",
-          "message": "Use/License is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:useConstraints"
-        }
-      ]
-    },
-    {
-      "file": "LISTEN_GoMex_Raw_Audio.xml",
-      "sourceShape": "ISO 19115-2 style (gmi:MI_Metadata)",
-      "importOk": true,
-      "mergeOk": true,
-      "parseOk": true,
-      "lenientErrors": 2,
-      "lenientWarns": 9,
-      "strictErrors": 4,
-      "strictWarns": 8,
-      "catalogErrors": 8,
-      "catalogWarns": 8,
-      "pipelineError": null,
-      "iso2PreviewFails": [],
-      "previewLen": 26239,
-      "previewRoundtripPartial": true,
-      "xmllintOk": true,
-      "lenientByStep": {
-        "mission": {
-          "e": 1,
-          "w": 3
+          "w": 1
         },
         "platform": {
           "e": 0,
@@ -1933,10 +1797,10 @@
         },
         "keywords": {
           "e": 0,
-          "w": 6
+          "w": 0
         },
         "distribution": {
-          "e": 1,
+          "e": 0,
           "w": 0
         },
         "other": {
@@ -1947,7 +1811,277 @@
       "strictByStep": {
         "mission": {
           "e": 3,
-          "w": 2
+          "w": 0
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 0
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "lenientIssues": [
+        {
+          "field": "mission.ror",
+          "message": "No ROR selected (recommended for organization linkage)",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        }
+      ],
+      "strictIssues": [
+        {
+          "field": "mission.doi",
+          "message": "Strict mode: DOI is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
+        },
+        {
+          "field": "mission.accession",
+          "message": "Strict mode: NCEI Accession is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
+        },
+        {
+          "field": "mission.ror",
+          "message": "Strict mode: ROR is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        }
+      ],
+      "catalogIssues": [
+        {
+          "field": "mission.doi",
+          "message": "Catalog mode: DOI is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
+        },
+        {
+          "field": "mission.accession",
+          "message": "Catalog mode: NCEI Accession is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
+        },
+        {
+          "field": "mission.ror",
+          "message": "Catalog mode: ROR is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        },
+        {
+          "field": "mission.parentProjectTitle",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.parentProject",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.publication",
+          "message": "Catalog mode: publication reference is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:otherCitationDetails"
+        },
+        {
+          "field": "distribution.downloadUrl",
+          "message": "Catalog mode: download URL is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage"
+        }
+      ]
+    },
+    {
+      "file": "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
+      "sourceShape": "ISO 19115-3 (mdb / -3)",
+      "importOk": true,
+      "mergeOk": true,
+      "parseOk": true,
+      "lenientErrors": 0,
+      "lenientWarns": 1,
+      "strictErrors": 3,
+      "strictWarns": 0,
+      "catalogErrors": 7,
+      "catalogWarns": 0,
+      "pipelineError": null,
+      "iso2PreviewFails": [],
+      "previewLen": 27687,
+      "previewRoundtripPartial": true,
+      "xmllintOk": true,
+      "lenientByStep": {
+        "mission": {
+          "e": 0,
+          "w": 1
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 0
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 3,
+          "w": 0
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 0
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "lenientIssues": [
+        {
+          "field": "mission.ror",
+          "message": "No ROR selected (recommended for organization linkage)",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        }
+      ],
+      "strictIssues": [
+        {
+          "field": "mission.doi",
+          "message": "Strict mode: DOI is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
+        },
+        {
+          "field": "mission.accession",
+          "message": "Strict mode: NCEI Accession is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
+        },
+        {
+          "field": "mission.ror",
+          "message": "Strict mode: ROR is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        }
+      ],
+      "catalogIssues": [
+        {
+          "field": "mission.doi",
+          "message": "Catalog mode: DOI is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
+        },
+        {
+          "field": "mission.accession",
+          "message": "Catalog mode: NCEI Accession is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
+        },
+        {
+          "field": "mission.ror",
+          "message": "Catalog mode: ROR is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        },
+        {
+          "field": "mission.parentProjectTitle",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.parentProject",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.publication",
+          "message": "Catalog mode: publication reference is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:otherCitationDetails"
+        },
+        {
+          "field": "distribution.downloadUrl",
+          "message": "Catalog mode: download URL is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage"
+        }
+      ]
+    },
+    {
+      "file": "LISTEN_GoMex_Raw_Audio.xml",
+      "sourceShape": "ISO 19115-2 style (gmi:MI_Metadata)",
+      "importOk": true,
+      "mergeOk": true,
+      "parseOk": true,
+      "lenientErrors": 0,
+      "lenientWarns": 7,
+      "strictErrors": 1,
+      "strictWarns": 7,
+      "catalogErrors": 5,
+      "catalogWarns": 7,
+      "pipelineError": null,
+      "iso2PreviewFails": [],
+      "previewLen": 32527,
+      "previewRoundtripPartial": true,
+      "xmllintOk": true,
+      "lenientByStep": {
+        "mission": {
+          "e": 0,
+          "w": 1
         },
         "platform": {
           "e": 0,
@@ -1966,7 +2100,37 @@
           "w": 6
         },
         "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
           "e": 1,
+          "w": 1
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 6
+        },
+        "distribution": {
+          "e": 0,
           "w": 0
         },
         "other": {
@@ -1977,27 +2141,9 @@
       "lenientIssues": [
         {
           "field": "mission.abstract",
-          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.abstract",
           "message": "Abstract uses acronym \"US\"; expand it on first use when possible.",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.endDate",
-          "message": "End date is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement"
-        },
-        {
-          "field": "mission.licenseUrl",
-          "message": "License URL recommended when preset is custom",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints"
         },
         {
           "field": "keywords.sciencekeywords[0].uuid",
@@ -2034,12 +2180,46 @@
           "message": "Add concept UUID for best KMS href",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ],
+      "strictIssues": [
+        {
+          "field": "mission.accession",
+          "message": "Strict mode: NCEI Accession is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
+        }
+      ],
+      "catalogIssues": [
+        {
+          "field": "mission.accession",
+          "message": "Catalog mode: NCEI Accession is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
         },
         {
-          "field": "distribution.license",
-          "message": "Use/License is required",
+          "field": "mission.parentProjectTitle",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
           "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:useConstraints"
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.parentProject",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.publication",
+          "message": "Catalog mode: publication reference is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:otherCitationDetails"
+        },
+        {
+          "field": "distribution.downloadUrl",
+          "message": "Catalog mode: download URL is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage"
         }
       ]
     },
@@ -2049,50 +2229,20 @@
       "importOk": true,
       "mergeOk": true,
       "parseOk": true,
-      "lenientErrors": 1,
-      "lenientWarns": 70,
-      "strictErrors": 2,
+      "lenientErrors": 0,
+      "lenientWarns": 69,
+      "strictErrors": 0,
       "strictWarns": 69,
-      "catalogErrors": 5,
+      "catalogErrors": 3,
       "catalogWarns": 69,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 43589,
+      "previewLen": 49705,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
         "mission": {
           "e": 0,
-          "w": 2
-        },
-        "platform": {
-          "e": 0,
-          "w": 0
-        },
-        "sensors": {
-          "e": 0,
-          "w": 0
-        },
-        "spatial": {
-          "e": 0,
-          "w": 0
-        },
-        "keywords": {
-          "e": 0,
-          "w": 68
-        },
-        "distribution": {
-          "e": 1,
-          "w": 0
-        },
-        "other": {
-          "e": 0,
-          "w": 0
-        }
-      },
-      "strictByStep": {
-        "mission": {
-          "e": 1,
           "w": 1
         },
         "platform": {
@@ -2112,7 +2262,37 @@
           "w": 68
         },
         "distribution": {
-          "e": 1,
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 0,
+          "w": 1
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 68
+        },
+        "distribution": {
+          "e": 0,
           "w": 0
         },
         "other": {
@@ -2126,12 +2306,6 @@
           "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.licenseUrl",
-          "message": "License URL recommended when preset is custom",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints"
         },
         {
           "field": "keywords.sciencekeywords[0].uuid",
@@ -2540,12 +2714,27 @@
           "message": "Add concept UUID for best KMS href",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ],
+      "strictIssues": [],
+      "catalogIssues": [
+        {
+          "field": "mission.parentProjectTitle",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
         },
         {
-          "field": "distribution.license",
-          "message": "Use/License is required",
+          "field": "distribution.parentProject",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
           "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:useConstraints"
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.publication",
+          "message": "Catalog mode: publication reference is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:otherCitationDetails"
         }
       ]
     },
@@ -2555,21 +2744,21 @@
       "importOk": true,
       "mergeOk": true,
       "parseOk": true,
-      "lenientErrors": 1,
-      "lenientWarns": 29,
-      "strictErrors": 2,
-      "strictWarns": 28,
-      "catalogErrors": 5,
-      "catalogWarns": 28,
+      "lenientErrors": 0,
+      "lenientWarns": 27,
+      "strictErrors": 0,
+      "strictWarns": 27,
+      "catalogErrors": 3,
+      "catalogWarns": 27,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 29794,
+      "previewLen": 36314,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
         "mission": {
           "e": 0,
-          "w": 2
+          "w": 0
         },
         "platform": {
           "e": 0,
@@ -2588,7 +2777,7 @@
           "w": 27
         },
         "distribution": {
-          "e": 1,
+          "e": 0,
           "w": 0
         },
         "other": {
@@ -2598,8 +2787,8 @@
       },
       "strictByStep": {
         "mission": {
-          "e": 1,
-          "w": 1
+          "e": 0,
+          "w": 0
         },
         "platform": {
           "e": 0,
@@ -2618,7 +2807,7 @@
           "w": 27
         },
         "distribution": {
-          "e": 1,
+          "e": 0,
           "w": 0
         },
         "other": {
@@ -2627,18 +2816,6 @@
         }
       },
       "lenientIssues": [
-        {
-          "field": "mission.abstract",
-          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.licenseUrl",
-          "message": "License URL recommended when preset is custom",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints"
-        },
         {
           "field": "keywords.sciencekeywords[0].uuid",
           "message": "Add concept UUID for best KMS href",
@@ -2800,12 +2977,27 @@
           "message": "Add concept UUID for best KMS href",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ],
+      "strictIssues": [],
+      "catalogIssues": [
+        {
+          "field": "mission.parentProjectTitle",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
         },
         {
-          "field": "distribution.license",
-          "message": "Use/License is required",
+          "field": "distribution.parentProject",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
           "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:useConstraints"
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.publication",
+          "message": "Catalog mode: publication reference is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:otherCitationDetails"
         }
       ]
     },
@@ -2815,50 +3007,20 @@
       "importOk": true,
       "mergeOk": true,
       "parseOk": true,
-      "lenientErrors": 3,
-      "lenientWarns": 5,
-      "strictErrors": 6,
-      "strictWarns": 3,
-      "catalogErrors": 10,
-      "catalogWarns": 3,
+      "lenientErrors": 0,
+      "lenientWarns": 3,
+      "strictErrors": 2,
+      "strictWarns": 2,
+      "catalogErrors": 6,
+      "catalogWarns": 2,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 37354,
+      "previewLen": 41139,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
         "mission": {
-          "e": 2,
-          "w": 4
-        },
-        "platform": {
           "e": 0,
-          "w": 0
-        },
-        "sensors": {
-          "e": 0,
-          "w": 0
-        },
-        "spatial": {
-          "e": 0,
-          "w": 0
-        },
-        "keywords": {
-          "e": 0,
-          "w": 1
-        },
-        "distribution": {
-          "e": 1,
-          "w": 0
-        },
-        "other": {
-          "e": 0,
-          "w": 0
-        }
-      },
-      "strictByStep": {
-        "mission": {
-          "e": 5,
           "w": 2
         },
         "platform": {
@@ -2878,7 +3040,37 @@
           "w": 1
         },
         "distribution": {
-          "e": 1,
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 2,
+          "w": 1
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 1
+        },
+        "distribution": {
+          "e": 0,
           "w": 0
         },
         "other": {
@@ -2889,33 +3081,9 @@
       "lenientIssues": [
         {
           "field": "mission.abstract",
-          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
+          "message": "Abstract uses acronym \"RV\"; expand it on first use when possible.",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.abstract",
-          "message": "Abstract uses acronym \"USM\"; expand it on first use when possible.",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.endDate",
-          "message": "End date is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement"
-        },
-        {
-          "field": "mission.individualName",
-          "message": "Individual name is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName"
-        },
-        {
-          "field": "mission.licenseUrl",
-          "message": "License URL recommended when preset is custom",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints"
         },
         {
           "field": "mission.ror",
@@ -2928,12 +3096,58 @@
           "message": "Add concept UUID for best KMS href",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ],
+      "strictIssues": [
+        {
+          "field": "mission.doi",
+          "message": "Strict mode: DOI is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
         },
         {
-          "field": "distribution.license",
-          "message": "Use/License is required",
+          "field": "mission.ror",
+          "message": "Strict mode: ROR is required",
           "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:useConstraints"
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        }
+      ],
+      "catalogIssues": [
+        {
+          "field": "mission.doi",
+          "message": "Catalog mode: DOI is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
+        },
+        {
+          "field": "mission.ror",
+          "message": "Catalog mode: ROR is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        },
+        {
+          "field": "mission.parentProjectTitle",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.parentProject",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.publication",
+          "message": "Catalog mode: publication reference is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:otherCitationDetails"
+        },
+        {
+          "field": "distribution.downloadUrl",
+          "message": "Catalog mode: download URL is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage"
         }
       ]
     },
@@ -2943,50 +3157,20 @@
       "importOk": true,
       "mergeOk": true,
       "parseOk": true,
-      "lenientErrors": 3,
-      "lenientWarns": 5,
-      "strictErrors": 6,
-      "strictWarns": 3,
-      "catalogErrors": 10,
-      "catalogWarns": 3,
+      "lenientErrors": 0,
+      "lenientWarns": 3,
+      "strictErrors": 2,
+      "strictWarns": 2,
+      "catalogErrors": 6,
+      "catalogWarns": 2,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 37354,
+      "previewLen": 41139,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
         "mission": {
-          "e": 2,
-          "w": 4
-        },
-        "platform": {
           "e": 0,
-          "w": 0
-        },
-        "sensors": {
-          "e": 0,
-          "w": 0
-        },
-        "spatial": {
-          "e": 0,
-          "w": 0
-        },
-        "keywords": {
-          "e": 0,
-          "w": 1
-        },
-        "distribution": {
-          "e": 1,
-          "w": 0
-        },
-        "other": {
-          "e": 0,
-          "w": 0
-        }
-      },
-      "strictByStep": {
-        "mission": {
-          "e": 5,
           "w": 2
         },
         "platform": {
@@ -3006,105 +3190,7 @@
           "w": 1
         },
         "distribution": {
-          "e": 1,
-          "w": 0
-        },
-        "other": {
           "e": 0,
-          "w": 0
-        }
-      },
-      "lenientIssues": [
-        {
-          "field": "mission.abstract",
-          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.abstract",
-          "message": "Abstract uses acronym \"USM\"; expand it on first use when possible.",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.endDate",
-          "message": "End date is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement"
-        },
-        {
-          "field": "mission.individualName",
-          "message": "Individual name is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:individualName"
-        },
-        {
-          "field": "mission.licenseUrl",
-          "message": "License URL recommended when preset is custom",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints"
-        },
-        {
-          "field": "mission.ror",
-          "message": "No ROR selected (recommended for organization linkage)",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
-        },
-        {
-          "field": "keywords.providers[0].uuid",
-          "message": "Add concept UUID for best KMS href",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
-        },
-        {
-          "field": "distribution.license",
-          "message": "Use/License is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:useConstraints"
-        }
-      ]
-    },
-    {
-      "file": "NRS_Raw_Data.xml",
-      "sourceShape": "ISO 19115-2 style (gmi:MI_Metadata)",
-      "importOk": true,
-      "mergeOk": true,
-      "parseOk": true,
-      "lenientErrors": 1,
-      "lenientWarns": 11,
-      "strictErrors": 3,
-      "strictWarns": 9,
-      "catalogErrors": 5,
-      "catalogWarns": 9,
-      "pipelineError": null,
-      "iso2PreviewFails": [],
-      "previewLen": 25590,
-      "previewRoundtripPartial": true,
-      "xmllintOk": true,
-      "lenientByStep": {
-        "mission": {
-          "e": 0,
-          "w": 3
-        },
-        "platform": {
-          "e": 0,
-          "w": 0
-        },
-        "sensors": {
-          "e": 0,
-          "w": 0
-        },
-        "spatial": {
-          "e": 0,
-          "w": 0
-        },
-        "keywords": {
-          "e": 0,
-          "w": 8
-        },
-        "distribution": {
-          "e": 1,
           "w": 0
         },
         "other": {
@@ -3131,10 +3217,10 @@
         },
         "keywords": {
           "e": 0,
-          "w": 8
+          "w": 1
         },
         "distribution": {
-          "e": 1,
+          "e": 0,
           "w": 0
         },
         "other": {
@@ -3145,16 +3231,154 @@
       "lenientIssues": [
         {
           "field": "mission.abstract",
-          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
+          "message": "Abstract uses acronym \"RV\"; expand it on first use when possible.",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
         },
         {
-          "field": "mission.licenseUrl",
-          "message": "License URL recommended when preset is custom",
+          "field": "mission.ror",
+          "message": "No ROR selected (recommended for organization linkage)",
           "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints"
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
         },
+        {
+          "field": "keywords.providers[0].uuid",
+          "message": "Add concept UUID for best KMS href",
+          "severity": "w",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ],
+      "strictIssues": [
+        {
+          "field": "mission.doi",
+          "message": "Strict mode: DOI is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
+        },
+        {
+          "field": "mission.ror",
+          "message": "Strict mode: ROR is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        }
+      ],
+      "catalogIssues": [
+        {
+          "field": "mission.doi",
+          "message": "Catalog mode: DOI is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
+        },
+        {
+          "field": "mission.ror",
+          "message": "Catalog mode: ROR is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        },
+        {
+          "field": "mission.parentProjectTitle",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.parentProject",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.publication",
+          "message": "Catalog mode: publication reference is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:otherCitationDetails"
+        },
+        {
+          "field": "distribution.downloadUrl",
+          "message": "Catalog mode: download URL is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage"
+        }
+      ]
+    },
+    {
+      "file": "NRS_Raw_Data.xml",
+      "sourceShape": "ISO 19115-2 style (gmi:MI_Metadata)",
+      "importOk": true,
+      "mergeOk": true,
+      "parseOk": true,
+      "lenientErrors": 0,
+      "lenientWarns": 9,
+      "strictErrors": 1,
+      "strictWarns": 8,
+      "catalogErrors": 3,
+      "catalogWarns": 8,
+      "pipelineError": null,
+      "iso2PreviewFails": [],
+      "previewLen": 32241,
+      "previewRoundtripPartial": true,
+      "xmllintOk": true,
+      "lenientByStep": {
+        "mission": {
+          "e": 0,
+          "w": 1
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 8
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 1,
+          "w": 0
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 8
+        },
+        "distribution": {
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "lenientIssues": [
         {
           "field": "mission.ror",
           "message": "No ROR selected (recommended for organization linkage)",
@@ -3208,12 +3432,34 @@
           "message": "Add concept UUID for best KMS href",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ],
+      "strictIssues": [
+        {
+          "field": "mission.ror",
+          "message": "Strict mode: ROR is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        }
+      ],
+      "catalogIssues": [
+        {
+          "field": "mission.ror",
+          "message": "Catalog mode: ROR is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
         },
         {
-          "field": "distribution.license",
-          "message": "Use/License is required",
+          "field": "distribution.publication",
+          "message": "Catalog mode: publication reference is required",
           "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:useConstraints"
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:otherCitationDetails"
+        },
+        {
+          "field": "distribution.downloadUrl",
+          "message": "Catalog mode: download URL is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage"
         }
       ]
     },
@@ -3223,21 +3469,21 @@
       "importOk": true,
       "mergeOk": true,
       "parseOk": true,
-      "lenientErrors": 2,
-      "lenientWarns": 12,
-      "strictErrors": 2,
-      "strictWarns": 12,
-      "catalogErrors": 2,
-      "catalogWarns": 12,
+      "lenientErrors": 0,
+      "lenientWarns": 11,
+      "strictErrors": 0,
+      "strictWarns": 11,
+      "catalogErrors": 0,
+      "catalogWarns": 11,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 29499,
+      "previewLen": 34166,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
         "mission": {
-          "e": 2,
-          "w": 2
+          "e": 0,
+          "w": 1
         },
         "platform": {
           "e": 0,
@@ -3266,8 +3512,8 @@
       },
       "strictByStep": {
         "mission": {
-          "e": 2,
-          "w": 2
+          "e": 0,
+          "w": 1
         },
         "platform": {
           "e": 0,
@@ -3297,27 +3543,9 @@
       "lenientIssues": [
         {
           "field": "mission.abstract",
-          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.abstract",
           "message": "Abstract uses acronym \"TPOS\"; expand it on first use when possible.",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.startDate",
-          "message": "Creation / Start date is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement"
-        },
-        {
-          "field": "mission.endDate",
-          "message": "End date is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement"
         },
         {
           "field": "keywords.sciencekeywords[1].uuid",
@@ -3379,7 +3607,9 @@
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
         }
-      ]
+      ],
+      "strictIssues": [],
+      "catalogIssues": []
     },
     {
       "file": "gov.noaa.nmfs.inport.52208.xml",
@@ -3387,50 +3617,20 @@
       "importOk": true,
       "mergeOk": true,
       "parseOk": true,
-      "lenientErrors": 1,
-      "lenientWarns": 23,
-      "strictErrors": 4,
-      "strictWarns": 21,
-      "catalogErrors": 7,
-      "catalogWarns": 21,
+      "lenientErrors": 0,
+      "lenientWarns": 21,
+      "strictErrors": 2,
+      "strictWarns": 20,
+      "catalogErrors": 5,
+      "catalogWarns": 20,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 20244,
+      "previewLen": 26059,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
         "mission": {
           "e": 0,
-          "w": 4
-        },
-        "platform": {
-          "e": 0,
-          "w": 0
-        },
-        "sensors": {
-          "e": 0,
-          "w": 0
-        },
-        "spatial": {
-          "e": 0,
-          "w": 0
-        },
-        "keywords": {
-          "e": 0,
-          "w": 19
-        },
-        "distribution": {
-          "e": 1,
-          "w": 0
-        },
-        "other": {
-          "e": 0,
-          "w": 0
-        }
-      },
-      "strictByStep": {
-        "mission": {
-          "e": 3,
           "w": 2
         },
         "platform": {
@@ -3450,7 +3650,37 @@
           "w": 19
         },
         "distribution": {
-          "e": 1,
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 2,
+          "w": 1
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 19
+        },
+        "distribution": {
+          "e": 0,
           "w": 0
         },
         "other": {
@@ -3461,21 +3691,9 @@
       "lenientIssues": [
         {
           "field": "mission.abstract",
-          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.abstract",
           "message": "Abstract uses acronym \"SE\"; expand it on first use when possible.",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.licenseUrl",
-          "message": "License URL recommended when preset is custom",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints"
         },
         {
           "field": "mission.ror",
@@ -3596,12 +3814,52 @@
           "message": "Add concept UUID for best KMS href",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ],
+      "strictIssues": [
+        {
+          "field": "mission.doi",
+          "message": "Strict mode: DOI is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
         },
         {
-          "field": "distribution.license",
-          "message": "Use/License is required",
+          "field": "mission.ror",
+          "message": "Strict mode: ROR is required",
           "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:useConstraints"
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        }
+      ],
+      "catalogIssues": [
+        {
+          "field": "mission.doi",
+          "message": "Catalog mode: DOI is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
+        },
+        {
+          "field": "mission.ror",
+          "message": "Catalog mode: ROR is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        },
+        {
+          "field": "mission.parentProjectTitle",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.parentProject",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.downloadUrl",
+          "message": "Catalog mode: download URL is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage"
         }
       ]
     },
@@ -3611,50 +3869,20 @@
       "importOk": true,
       "mergeOk": true,
       "parseOk": true,
-      "lenientErrors": 1,
-      "lenientWarns": 18,
-      "strictErrors": 4,
-      "strictWarns": 16,
-      "catalogErrors": 8,
-      "catalogWarns": 16,
+      "lenientErrors": 0,
+      "lenientWarns": 16,
+      "strictErrors": 2,
+      "strictWarns": 15,
+      "catalogErrors": 6,
+      "catalogWarns": 15,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 19192,
+      "previewLen": 25374,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
         "mission": {
           "e": 0,
-          "w": 4
-        },
-        "platform": {
-          "e": 0,
-          "w": 0
-        },
-        "sensors": {
-          "e": 0,
-          "w": 0
-        },
-        "spatial": {
-          "e": 0,
-          "w": 0
-        },
-        "keywords": {
-          "e": 0,
-          "w": 14
-        },
-        "distribution": {
-          "e": 1,
-          "w": 0
-        },
-        "other": {
-          "e": 0,
-          "w": 0
-        }
-      },
-      "strictByStep": {
-        "mission": {
-          "e": 3,
           "w": 2
         },
         "platform": {
@@ -3674,7 +3902,37 @@
           "w": 14
         },
         "distribution": {
-          "e": 1,
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 2,
+          "w": 1
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 14
+        },
+        "distribution": {
+          "e": 0,
           "w": 0
         },
         "other": {
@@ -3685,21 +3943,9 @@
       "lenientIssues": [
         {
           "field": "mission.abstract",
-          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.abstract",
           "message": "Abstract uses acronym \"ID\"; expand it on first use when possible.",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.licenseUrl",
-          "message": "License URL recommended when preset is custom",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints"
         },
         {
           "field": "mission.ror",
@@ -3790,12 +4036,58 @@
           "message": "Add concept UUID for best KMS href",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ],
+      "strictIssues": [
+        {
+          "field": "mission.doi",
+          "message": "Strict mode: DOI is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
         },
         {
-          "field": "distribution.license",
-          "message": "Use/License is required",
+          "field": "mission.ror",
+          "message": "Strict mode: ROR is required",
           "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:useConstraints"
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        }
+      ],
+      "catalogIssues": [
+        {
+          "field": "mission.doi",
+          "message": "Catalog mode: DOI is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
+        },
+        {
+          "field": "mission.ror",
+          "message": "Catalog mode: ROR is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        },
+        {
+          "field": "mission.parentProjectTitle",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.parentProject",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.publication",
+          "message": "Catalog mode: publication reference is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:otherCitationDetails"
+        },
+        {
+          "field": "distribution.downloadUrl",
+          "message": "Catalog mode: download URL is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage"
         }
       ]
     },
@@ -3805,50 +4097,20 @@
       "importOk": true,
       "mergeOk": true,
       "parseOk": true,
-      "lenientErrors": 1,
-      "lenientWarns": 17,
-      "strictErrors": 4,
-      "strictWarns": 15,
-      "catalogErrors": 8,
-      "catalogWarns": 15,
+      "lenientErrors": 0,
+      "lenientWarns": 15,
+      "strictErrors": 2,
+      "strictWarns": 14,
+      "catalogErrors": 6,
+      "catalogWarns": 14,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 23899,
+      "previewLen": 30325,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
         "mission": {
           "e": 0,
-          "w": 4
-        },
-        "platform": {
-          "e": 0,
-          "w": 0
-        },
-        "sensors": {
-          "e": 0,
-          "w": 0
-        },
-        "spatial": {
-          "e": 0,
-          "w": 0
-        },
-        "keywords": {
-          "e": 0,
-          "w": 13
-        },
-        "distribution": {
-          "e": 1,
-          "w": 0
-        },
-        "other": {
-          "e": 0,
-          "w": 0
-        }
-      },
-      "strictByStep": {
-        "mission": {
-          "e": 3,
           "w": 2
         },
         "platform": {
@@ -3868,7 +4130,37 @@
           "w": 13
         },
         "distribution": {
-          "e": 1,
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 2,
+          "w": 1
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 13
+        },
+        "distribution": {
+          "e": 0,
           "w": 0
         },
         "other": {
@@ -3879,21 +4171,9 @@
       "lenientIssues": [
         {
           "field": "mission.abstract",
-          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.abstract",
           "message": "Abstract uses acronym \"NOT\"; expand it on first use when possible.",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.licenseUrl",
-          "message": "License URL recommended when preset is custom",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints"
         },
         {
           "field": "mission.ror",
@@ -3978,12 +4258,58 @@
           "message": "Add concept UUID for best KMS href",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ],
+      "strictIssues": [
+        {
+          "field": "mission.doi",
+          "message": "Strict mode: DOI is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
         },
         {
-          "field": "distribution.license",
-          "message": "Use/License is required",
+          "field": "mission.ror",
+          "message": "Strict mode: ROR is required",
           "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:useConstraints"
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        }
+      ],
+      "catalogIssues": [
+        {
+          "field": "mission.doi",
+          "message": "Catalog mode: DOI is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
+        },
+        {
+          "field": "mission.ror",
+          "message": "Catalog mode: ROR is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        },
+        {
+          "field": "mission.parentProjectTitle",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.parentProject",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.publication",
+          "message": "Catalog mode: publication reference is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:otherCitationDetails"
+        },
+        {
+          "field": "distribution.downloadUrl",
+          "message": "Catalog mode: download URL is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage"
         }
       ]
     },
@@ -3993,50 +4319,20 @@
       "importOk": true,
       "mergeOk": true,
       "parseOk": true,
-      "lenientErrors": 2,
-      "lenientWarns": 45,
-      "strictErrors": 5,
-      "strictWarns": 43,
-      "catalogErrors": 9,
-      "catalogWarns": 43,
+      "lenientErrors": 0,
+      "lenientWarns": 43,
+      "strictErrors": 2,
+      "strictWarns": 42,
+      "catalogErrors": 6,
+      "catalogWarns": 42,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 22450,
+      "previewLen": 28618,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
         "mission": {
-          "e": 1,
-          "w": 3
-        },
-        "platform": {
           "e": 0,
-          "w": 0
-        },
-        "sensors": {
-          "e": 0,
-          "w": 0
-        },
-        "spatial": {
-          "e": 0,
-          "w": 0
-        },
-        "keywords": {
-          "e": 0,
-          "w": 42
-        },
-        "distribution": {
-          "e": 1,
-          "w": 0
-        },
-        "other": {
-          "e": 0,
-          "w": 0
-        }
-      },
-      "strictByStep": {
-        "mission": {
-          "e": 4,
           "w": 1
         },
         "platform": {
@@ -4056,7 +4352,37 @@
           "w": 42
         },
         "distribution": {
-          "e": 1,
+          "e": 0,
+          "w": 0
+        },
+        "other": {
+          "e": 0,
+          "w": 0
+        }
+      },
+      "strictByStep": {
+        "mission": {
+          "e": 2,
+          "w": 0
+        },
+        "platform": {
+          "e": 0,
+          "w": 0
+        },
+        "sensors": {
+          "e": 0,
+          "w": 0
+        },
+        "spatial": {
+          "e": 0,
+          "w": 0
+        },
+        "keywords": {
+          "e": 0,
+          "w": 42
+        },
+        "distribution": {
+          "e": 0,
           "w": 0
         },
         "other": {
@@ -4065,24 +4391,6 @@
         }
       },
       "lenientIssues": [
-        {
-          "field": "mission.abstract",
-          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.startDate",
-          "message": "Creation / Start date is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:temporalElement"
-        },
-        {
-          "field": "mission.licenseUrl",
-          "message": "License URL recommended when preset is custom",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints"
-        },
         {
           "field": "mission.ror",
           "message": "No ROR selected (recommended for organization linkage)",
@@ -4340,12 +4648,58 @@
           "message": "Add concept UUID for best KMS href",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ],
+      "strictIssues": [
+        {
+          "field": "mission.doi",
+          "message": "Strict mode: DOI is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
         },
         {
-          "field": "distribution.license",
-          "message": "Use/License is required",
+          "field": "mission.ror",
+          "message": "Strict mode: ROR is required",
           "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:useConstraints"
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        }
+      ],
+      "catalogIssues": [
+        {
+          "field": "mission.doi",
+          "message": "Catalog mode: DOI is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
+        },
+        {
+          "field": "mission.ror",
+          "message": "Catalog mode: ROR is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
+        },
+        {
+          "field": "mission.parentProjectTitle",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.parentProject",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.publication",
+          "message": "Catalog mode: publication reference is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:otherCitationDetails"
+        },
+        {
+          "field": "distribution.downloadUrl",
+          "message": "Catalog mode: download URL is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage"
         }
       ]
     },
@@ -4355,21 +4709,21 @@
       "importOk": true,
       "mergeOk": true,
       "parseOk": true,
-      "lenientErrors": 1,
-      "lenientWarns": 95,
-      "strictErrors": 3,
-      "strictWarns": 94,
-      "catalogErrors": 6,
-      "catalogWarns": 94,
+      "lenientErrors": 0,
+      "lenientWarns": 93,
+      "strictErrors": 1,
+      "strictWarns": 93,
+      "catalogErrors": 4,
+      "catalogWarns": 93,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 96225,
+      "previewLen": 97574,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
         "mission": {
           "e": 0,
-          "w": 3
+          "w": 1
         },
         "platform": {
           "e": 0,
@@ -4388,7 +4742,7 @@
           "w": 92
         },
         "distribution": {
-          "e": 1,
+          "e": 0,
           "w": 0
         },
         "other": {
@@ -4398,8 +4752,8 @@
       },
       "strictByStep": {
         "mission": {
-          "e": 2,
-          "w": 2
+          "e": 1,
+          "w": 1
         },
         "platform": {
           "e": 0,
@@ -4418,7 +4772,7 @@
           "w": 92
         },
         "distribution": {
-          "e": 1,
+          "e": 0,
           "w": 0
         },
         "other": {
@@ -4429,21 +4783,9 @@
       "lenientIssues": [
         {
           "field": "mission.abstract",
-          "message": "Abstract should mention the relevant platform, sensor, or observed variable.",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.abstract",
           "message": "Abstract uses acronym \"GOMO\"; expand it on first use when possible.",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.licenseUrl",
-          "message": "License URL recommended when preset is custom",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints"
         },
         {
           "field": "keywords.sciencekeywords[0].uuid",
@@ -4996,12 +5338,40 @@
           "message": "Add concept UUID for best KMS href",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
+        }
+      ],
+      "strictIssues": [
+        {
+          "field": "mission.doi",
+          "message": "Strict mode: DOI is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
+        }
+      ],
+      "catalogIssues": [
+        {
+          "field": "mission.doi",
+          "message": "Catalog mode: DOI is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
         },
         {
-          "field": "distribution.license",
-          "message": "Use/License is required",
+          "field": "mission.parentProjectTitle",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
           "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:useConstraints"
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.parentProject",
+          "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:aggregationInfo/gmd:MD_AggregateInformation/gmd:aggregateDataSetName/gmd:CI_Citation/gmd:title"
+        },
+        {
+          "field": "distribution.publication",
+          "message": "Catalog mode: publication reference is required",
+          "severity": "e",
+          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:otherCitationDetails"
         }
       ]
     }

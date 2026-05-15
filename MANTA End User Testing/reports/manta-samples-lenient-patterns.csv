@@ -1,7 +1,4 @@
 hitCount,severity,wizardStep,field,message,files
-19,w,mission,mission.abstract,"Abstract should mention the relevant platform, sensor, or observed variable.",0299833.xml; C01531.xml; C01678.xml; EX1904_collection.xml; EX2306_COLLECTION.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml; LISTEN_GoMex_Raw_Audio.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml; NRS_Raw_Data.xml; SAMPLE_Populated.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
-18,e,distribution,distribution.license,Use/License is required,0299833.xml; AFSC_GA13_Raw_Data.xml; C01531.xml; C01678.xml; EX2306_COLLECTION.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml; LISTEN_GoMex_Raw_Audio.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml; NRS_Raw_Data.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
-18,w,mission,mission.licenseUrl,License URL recommended when preset is custom,0299833.xml; AFSC_GA13_Raw_Data.xml; C01531.xml; C01678.xml; EX2306_COLLECTION.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml; LISTEN_GoMex_Raw_Audio.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml; NRS_Raw_Data.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
 14,w,mission,mission.ror,No ROR selected (recommended for organization linkage),0299833.xml; AFSC_GA13_Raw_Data.xml; C01531.xml; C01678.xml; EX1904_collection.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml; NRS_Raw_Data.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml
 13,w,keywords,keywords.platforms[0].uuid,Add concept UUID for best KMS href,AFSC_GA13_Raw_Data.xml; C01531.xml; C01678.xml; EX2306_COLLECTION.xml; LISTEN_GoMex_Raw_Audio.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; NRS_Raw_Data.xml; SAMPLE_Populated.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
 13,w,keywords,keywords.projects[0].uuid,Add concept UUID for best KMS href,AFSC_GA13_Raw_Data.xml; C01531.xml; C01678.xml; LISTEN_GoMex_Raw_Audio.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; NRS_Raw_Data.xml; SAMPLE_Populated.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.5687.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
@@ -22,8 +19,6 @@ hitCount,severity,wizardStep,field,message,files
 7,w,keywords,keywords.sciencekeywords[9].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
 6,w,keywords,keywords.sciencekeywords[10].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
 6,w,keywords,keywords.sciencekeywords[8].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.5619.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
-6,e,mission,mission.endDate,End date is required,EX1904_collection.xml; EX2306_COLLECTION.xml; LISTEN_GoMex_Raw_Audio.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml; SAMPLE_Populated.xml
-6,e,mission,mission.individualName,Individual name is required,C01531.xml; EX1904_collection.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml
 5,w,keywords,keywords.locations[2].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; NRS_Raw_Data.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.62654.xml
 5,w,keywords,keywords.locations[3].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; NRS_Raw_Data.xml; gov.noaa.nmfs.inport.52208.xml; gov.noaa.nmfs.inport.62654.xml
 5,w,keywords,keywords.projects[1].uuid,Add concept UUID for best KMS href,C01531.xml; C01678.xml; NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; uxs_test.xml
@@ -37,7 +32,6 @@ hitCount,severity,wizardStep,field,message,files
 4,w,keywords,keywords.sciencekeywords[18].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
 4,w,keywords,keywords.sciencekeywords[19].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
 4,w,keywords,keywords.sciencekeywords[20].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
-4,w,mission,mission.abstract,"Abstract uses acronym ""USM""; expand it on first use when possible.",ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml
 3,w,keywords,keywords.instruments[1].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; SAMPLE_Populated.xml; uxs_test.xml
 3,w,keywords,keywords.locations[5].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; gov.noaa.nmfs.inport.52208.xml
 3,w,keywords,keywords.locations[6].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml; gov.noaa.nmfs.inport.62654.xml
@@ -45,7 +39,6 @@ hitCount,severity,wizardStep,field,message,files
 3,w,keywords,keywords.sciencekeywords[17].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
 3,w,keywords,keywords.sciencekeywords[21].uuid,Add concept UUID for best KMS href,EX2306_COLLECTION.xml; NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml
 3,w,keywords,keywords.sciencekeywords[24].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml; uxs_test.xml
-3,e,mission,mission.email,Email is required,EX1904_collection.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml; ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml
 2,w,keywords,keywords.datacenters[2].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; NCRMP-Socio-Guam.xml
 2,w,keywords,keywords.instruments[2].uuid,Add concept UUID for best KMS href,SAMPLE_Populated.xml; uxs_test.xml
 2,w,keywords,keywords.instruments[3].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; SAMPLE_Populated.xml
@@ -105,7 +98,7 @@ hitCount,severity,wizardStep,field,message,files
 2,w,keywords,keywords.sciencekeywords[25].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml
 2,w,keywords,keywords.sciencekeywords[26].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml
 2,w,keywords,keywords.sciencekeywords[27].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml; gov.noaa.nmfs.inport.62654.xml
-2,e,mission,mission.startDate,Creation / Start date is required,SAMPLE_Populated.xml; gov.noaa.nmfs.inport.62654.xml
+2,w,mission,mission.abstract,"Abstract uses acronym ""RV""; expand it on first use when possible.",NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml; NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml
 1,w,keywords,keywords.datacenters[3].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml
 1,w,keywords,keywords.datacenters[4].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml
 1,w,keywords,keywords.datacenters[5].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml
@@ -203,6 +196,7 @@ hitCount,severity,wizardStep,field,message,files
 1,w,keywords,keywords.sciencekeywords[42].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml
 1,w,keywords,keywords.sciencekeywords[43].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml
 1,w,keywords,keywords.sciencekeywords[44].uuid,Add concept UUID for best KMS href,NCRMP-Benthic-FG.xml
+1,w,mission,mission.abstract,"Abstract should mention the relevant platform, sensor, or observed variable.",NCRMP-Benthic-FG.xml
 1,w,mission,mission.abstract,"Abstract uses acronym ""AVHRR""; expand it on first use when possible.",C01678.xml
 1,w,mission,mission.abstract,"Abstract uses acronym ""GOMO""; expand it on first use when possible.",uxs_test.xml
 1,w,mission,mission.abstract,"Abstract uses acronym ""ID""; expand it on first use when possible.",gov.noaa.nmfs.inport.5619.xml
@@ -212,6 +206,3 @@ hitCount,severity,wizardStep,field,message,files
 1,w,mission,mission.abstract,"Abstract uses acronym ""SE""; expand it on first use when possible.",gov.noaa.nmfs.inport.52208.xml
 1,w,mission,mission.abstract,"Abstract uses acronym ""TPOS""; expand it on first use when possible.",SAMPLE_Populated.xml
 1,w,mission,mission.abstract,"Abstract uses acronym ""US""; expand it on first use when possible.",LISTEN_GoMex_Raw_Audio.xml
-1,e,sensors,sensors[1].variable,Sensor 2: observed variable is required,C01678.xml
-1,e,sensors,sensors[2].variable,Sensor 3: observed variable is required,ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml
-1,e,sensors,sensors[3].variable,Sensor 4: observed variable is required,ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml

@@ -1,0 +1,2411 @@
+{
+  "generatedAt": "2026-05-15T09:45:14.252Z",
+  "corpus": "manta-eut-samples",
+  "sampleDir": "MANTA End User Testing/samples",
+  "fileCount": 20,
+  "summary": {
+    "importFail": 0,
+    "mergeFail": 0,
+    "lenientErrorFiles": 0,
+    "strictErrorFiles": 17,
+    "catalogErrorFiles": 19,
+    "previewSanityFail": 0,
+    "instrumentGap": 0,
+    "partialSensors": 1,
+    "scienceLoss": 13,
+    "noScience": 4,
+    "noLocations": 4,
+    "navySubsetCount": 5,
+    "navyInstrumentGap": 0
+  },
+  "byCategory": {
+    "other-eut": 8,
+    "collection": 2,
+    "navy-uxs": 5,
+    "template-populated": 1,
+    "inport": 4
+  },
+  "rows": [
+    {
+      "file": "0299833.xml",
+      "path": "MANTA End User Testing/samples/0299833.xml",
+      "category": "other-eut",
+      "navyUxS": false,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 3,
+        "strictErrors": 2,
+        "catalogErrors": 3,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 2
+          },
+          "keywords": {
+            "e": 0,
+            "w": 1
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 37092,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 1,
+          "mac": 0,
+          "total": 1
+        },
+        "keywords": {
+          "sciencekeywords": 10,
+          "datacenters": 1,
+          "platforms": 2,
+          "instruments": 2,
+          "locations": 1,
+          "projects": 2,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 1,
+          "filled": 1,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "AVHRR-3",
+              "type": "AVHRR-3",
+              "variable": "AVHRR-3"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 6,
+          "datacenters": 3,
+          "platforms": 2,
+          "instruments": 2,
+          "locations": 2,
+          "projects": 2,
+          "providers": 3
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 10,
+            "imp": 6,
+            "delta": -4
+          },
+          "datacenters": {
+            "src": 1,
+            "imp": 3,
+            "delta": 2
+          },
+          "platforms": {
+            "src": 2,
+            "imp": 2,
+            "delta": 0
+          },
+          "instruments": {
+            "src": 2,
+            "imp": 2,
+            "delta": 0
+          },
+          "locations": {
+            "src": 1,
+            "imp": 2,
+            "delta": 1
+          },
+          "projects": {
+            "src": 2,
+            "imp": 2,
+            "delta": 0
+          },
+          "providers": {
+            "src": 0,
+            "imp": 3,
+            "delta": 3
+          }
+        },
+        "missionTitle": "GHRSST NOAA/OSPO Metop-C AVHRR FRAC ACSPO v2.80 0.02 L3U Dat",
+        "fileId": "gov.noaa.nodc:0299833"
+      },
+      "flags": [
+        "science-keywords-loss-on-import"
+      ]
+    },
+    {
+      "file": "AFSC_GA13_Raw_Data.xml",
+      "path": "MANTA End User Testing/samples/AFSC_GA13_Raw_Data.xml",
+      "category": "other-eut",
+      "navyUxS": false,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 7,
+        "strictErrors": 2,
+        "catalogErrors": 4,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 1
+          },
+          "keywords": {
+            "e": 0,
+            "w": 6
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 33116,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 1,
+          "mac": 0,
+          "total": 1
+        },
+        "keywords": {
+          "sciencekeywords": 8,
+          "datacenters": 1,
+          "platforms": 1,
+          "instruments": 2,
+          "locations": 2,
+          "projects": 1,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 1,
+          "filled": 1,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "SONOBUOY",
+              "type": "long term recorder",
+              "variable": "long term recorder"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 8,
+          "datacenters": 1,
+          "platforms": 1,
+          "instruments": 2,
+          "locations": 2,
+          "projects": 1,
+          "providers": 1
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 8,
+            "imp": 8,
+            "delta": 0
+          },
+          "datacenters": {
+            "src": 1,
+            "imp": 1,
+            "delta": 0
+          },
+          "platforms": {
+            "src": 1,
+            "imp": 1,
+            "delta": 0
+          },
+          "instruments": {
+            "src": 2,
+            "imp": 2,
+            "delta": 0
+          },
+          "locations": {
+            "src": 2,
+            "imp": 2,
+            "delta": 0
+          },
+          "projects": {
+            "src": 1,
+            "imp": 1,
+            "delta": 0
+          },
+          "providers": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          }
+        },
+        "missionTitle": "Gulf of Alaska Line-Transect Survey (GOALS) II: Marine Mamma",
+        "fileId": "gov.noaa.ncei.pad:AFSC_GA13_Raw_Data"
+      },
+      "flags": []
+    },
+    {
+      "file": "C01531.xml",
+      "path": "MANTA End User Testing/samples/C01531.xml",
+      "category": "other-eut",
+      "navyUxS": false,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 18,
+        "strictErrors": 2,
+        "catalogErrors": 5,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 2
+          },
+          "keywords": {
+            "e": 0,
+            "w": 16
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 33899,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 0,
+          "mac": 0,
+          "total": 0
+        },
+        "keywords": {
+          "sciencekeywords": 9,
+          "datacenters": 3,
+          "platforms": 4,
+          "instruments": 1,
+          "locations": 1,
+          "projects": 1,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 1,
+          "filled": 1,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "Geostationary_Operational_Environmental_",
+              "type": "Solar/Space Observing Instruments > Particle Detec",
+              "variable": "Solar/Space Observing Instruments > Particle Detec"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 5,
+          "datacenters": 3,
+          "platforms": 4,
+          "instruments": 1,
+          "locations": 1,
+          "projects": 3,
+          "providers": 3
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 9,
+            "imp": 5,
+            "delta": -4
+          },
+          "datacenters": {
+            "src": 3,
+            "imp": 3,
+            "delta": 0
+          },
+          "platforms": {
+            "src": 4,
+            "imp": 4,
+            "delta": 0
+          },
+          "instruments": {
+            "src": 1,
+            "imp": 1,
+            "delta": 0
+          },
+          "locations": {
+            "src": 1,
+            "imp": 1,
+            "delta": 0
+          },
+          "projects": {
+            "src": 1,
+            "imp": 3,
+            "delta": 2
+          },
+          "providers": {
+            "src": 0,
+            "imp": 3,
+            "delta": 3
+          }
+        },
+        "missionTitle": "NOAA GOES-R Series Space Environment In-Situ Suite (SEISS) I",
+        "fileId": "gov.noaa.ncdc:C01531"
+      },
+      "flags": [
+        "science-keywords-loss-on-import"
+      ]
+    },
+    {
+      "file": "C01678.xml",
+      "path": "MANTA End User Testing/samples/C01678.xml",
+      "category": "other-eut",
+      "navyUxS": false,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 14,
+        "strictErrors": 1,
+        "catalogErrors": 4,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 2
+          },
+          "keywords": {
+            "e": 0,
+            "w": 12
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 34576,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 0,
+          "mac": 0,
+          "total": 0
+        },
+        "keywords": {
+          "sciencekeywords": 6,
+          "datacenters": 2,
+          "platforms": 1,
+          "instruments": 3,
+          "locations": 2,
+          "projects": 2,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 2,
+          "filled": 2,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "AOT_AVHRR_v04r00_-preliminary_daily-avg_",
+              "type": "AOT_AVHRR_v04r00[-preliminary]_daily-avg_[YYYYMMDD",
+              "variable": "AOT_AVHRR_v04r00[-preliminary]_daily-avg_[YYYYMMDD"
+            },
+            {
+              "index": 1,
+              "sensorId": "AOT_AVHRR_v04r00_-preliminary_monthly-av",
+              "type": "AOT_AVHRR_v04r00[-preliminary]_monthly-avg_[YYYYMM",
+              "variable": "AOT_AVHRR_v04r00[-preliminary]_monthly-avg_[YYYYMM"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 5,
+          "datacenters": 2,
+          "platforms": 1,
+          "instruments": 3,
+          "locations": 2,
+          "projects": 2,
+          "providers": 2
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 6,
+            "imp": 5,
+            "delta": -1
+          },
+          "datacenters": {
+            "src": 2,
+            "imp": 2,
+            "delta": 0
+          },
+          "platforms": {
+            "src": 1,
+            "imp": 1,
+            "delta": 0
+          },
+          "instruments": {
+            "src": 3,
+            "imp": 3,
+            "delta": 0
+          },
+          "locations": {
+            "src": 2,
+            "imp": 2,
+            "delta": 0
+          },
+          "projects": {
+            "src": 2,
+            "imp": 2,
+            "delta": 0
+          },
+          "providers": {
+            "src": 0,
+            "imp": 2,
+            "delta": 2
+          }
+        },
+        "missionTitle": "NOAA Climate Data Record (CDR) of AVHRR Daily and Monthly Ae",
+        "fileId": "gov.noaa.ncdc:C01678"
+      },
+      "flags": [
+        "science-keywords-loss-on-import"
+      ]
+    },
+    {
+      "file": "EX1904_collection.xml",
+      "path": "MANTA End User Testing/samples/EX1904_collection.xml",
+      "category": "collection",
+      "navyUxS": false,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 77,
+        "strictErrors": 2,
+        "catalogErrors": 6,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 1
+          },
+          "keywords": {
+            "e": 0,
+            "w": 76
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 33050,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 0,
+          "mac": 0,
+          "total": 0
+        },
+        "keywords": {
+          "sciencekeywords": 6,
+          "datacenters": 0,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 8,
+          "projects": 0,
+          "providers": 69
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 1,
+          "filled": 1,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "Operations_aboard_the_cruise.",
+              "type": "Operations aboard the cruise.",
+              "variable": "Operations aboard the cruise."
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 3,
+          "datacenters": 2,
+          "platforms": 1,
+          "instruments": 1,
+          "locations": 1,
+          "projects": 1,
+          "providers": 75
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 6,
+            "imp": 3,
+            "delta": -3
+          },
+          "datacenters": {
+            "src": 0,
+            "imp": 2,
+            "delta": 2
+          },
+          "platforms": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "instruments": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "locations": {
+            "src": 8,
+            "imp": 1,
+            "delta": -7
+          },
+          "projects": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "providers": {
+            "src": 69,
+            "imp": 75,
+            "delta": 6
+          }
+        },
+        "missionTitle": "Okeanos Explorer (EX1904): 2019 Technology Demonstrations",
+        "fileId": "gov.noaa.ncei.oer:EX1904_COLLECTION"
+      },
+      "flags": [
+        "science-keywords-loss-on-import"
+      ]
+    },
+    {
+      "file": "EX2306_COLLECTION.xml",
+      "path": "MANTA End User Testing/samples/EX2306_COLLECTION.xml",
+      "category": "collection",
+      "navyUxS": false,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 52,
+        "strictErrors": 1,
+        "catalogErrors": 5,
+        "lenientByStep": {
+          "keywords": {
+            "e": 0,
+            "w": 52
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 70793,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 28,
+          "mac": 0,
+          "total": 28
+        },
+        "keywords": {
+          "sciencekeywords": 68,
+          "datacenters": 2,
+          "platforms": 2,
+          "instruments": 0,
+          "locations": 1,
+          "projects": 0,
+          "providers": 1
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 16,
+          "filled": 16,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "Kongsberg EM304",
+              "type": "Multibeam Echosounder",
+              "variable": "Multibeam Echosounder"
+            },
+            {
+              "index": 1,
+              "sensorId": "Simrad EK60",
+              "type": "singlebeam",
+              "variable": "singlebeam"
+            },
+            {
+              "index": 2,
+              "sensorId": "Simrad EK80",
+              "type": "echosounder",
+              "variable": "echosounder"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 22,
+          "datacenters": 2,
+          "platforms": 2,
+          "instruments": 1,
+          "locations": 2,
+          "projects": 43,
+          "providers": 2
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 68,
+            "imp": 22,
+            "delta": -46
+          },
+          "datacenters": {
+            "src": 2,
+            "imp": 2,
+            "delta": 0
+          },
+          "platforms": {
+            "src": 2,
+            "imp": 2,
+            "delta": 0
+          },
+          "instruments": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "locations": {
+            "src": 1,
+            "imp": 2,
+            "delta": 1
+          },
+          "projects": {
+            "src": 0,
+            "imp": 43,
+            "delta": 43
+          },
+          "providers": {
+            "src": 1,
+            "imp": 2,
+            "delta": 1
+          }
+        },
+        "missionTitle": "Seascape Alaska 5: Gulf of Alaska ROV Exploration and Mappin",
+        "fileId": "gov.noaa.ncei.oer:EX2306_COLLECTION"
+      },
+      "flags": [
+        "partial-sensor-import",
+        "science-keywords-loss-on-import"
+      ]
+    },
+    {
+      "file": "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
+      "path": "MANTA End User Testing/samples/ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
+      "category": "navy-uxs",
+      "navyUxS": true,
+      "sourceShape": "ISO 19115-3",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 1,
+        "strictErrors": 3,
+        "catalogErrors": 7,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 1
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 27779,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 0,
+          "mac": 5,
+          "total": 5
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 0,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 0,
+          "projects": 0,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 5,
+          "filled": 5,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "PHINS INS",
+              "type": "Inertial Navigation System",
+              "variable": "Inertial Navigation System"
+            },
+            {
+              "index": 1,
+              "sensorId": "AML CTD",
+              "type": "Conductivity, Temperature, Depth Sensor",
+              "variable": "Conductivity, Temperature, Depth Sensor"
+            },
+            {
+              "index": 2,
+              "sensorId": "RDI ADCP",
+              "type": "Acoustic Doppler Current Profiler",
+              "variable": "Acoustic Doppler Current Profiler"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 1,
+          "platforms": 1,
+          "instruments": 1,
+          "locations": 0,
+          "projects": 1,
+          "providers": 1
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "datacenters": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "platforms": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "instruments": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "locations": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "projects": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "providers": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          }
+        },
+        "missionTitle": "RV Expedition 2025 LEG 01 REMUS620 KRAKEN SAS MGM Dive 01",
+        "fileId": "EN2501_REMUS620_401_KRAKEN_SAS_202507023T0116Z"
+      },
+      "flags": [
+        "no-science-keywords-source-or-import",
+        "no-locations-keywords-source-or-import"
+      ]
+    },
+    {
+      "file": "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
+      "path": "MANTA End User Testing/samples/ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
+      "category": "navy-uxs",
+      "navyUxS": true,
+      "sourceShape": "ISO 19115-3",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 1,
+        "strictErrors": 3,
+        "catalogErrors": 7,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 1
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 27687,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 0,
+          "mac": 5,
+          "total": 5
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 0,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 0,
+          "projects": 0,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 5,
+          "filled": 5,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "PHINS INS",
+              "type": "Inertial Navigation System",
+              "variable": "Inertial Navigation System"
+            },
+            {
+              "index": 1,
+              "sensorId": "Kraken SAS",
+              "type": "Synthetic Aperture Sonar",
+              "variable": "Synthetic Aperture Sonar"
+            },
+            {
+              "index": 2,
+              "sensorId": "PDVL 300",
+              "type": "Doppler Velocity Logger",
+              "variable": "Doppler Velocity Logger"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 1,
+          "platforms": 1,
+          "instruments": 1,
+          "locations": 0,
+          "projects": 1,
+          "providers": 1
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "datacenters": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "platforms": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "instruments": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "locations": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "projects": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "providers": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          }
+        },
+        "missionTitle": "RV Expedition 2025 LEG 01 REMUS620 KRAKEN SAS MGM Dive 05",
+        "fileId": "EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z"
+      },
+      "flags": [
+        "no-science-keywords-source-or-import",
+        "no-locations-keywords-source-or-import"
+      ]
+    },
+    {
+      "file": "LISTEN_GoMex_Raw_Audio.xml",
+      "path": "MANTA End User Testing/samples/LISTEN_GoMex_Raw_Audio.xml",
+      "category": "other-eut",
+      "navyUxS": false,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 7,
+        "strictErrors": 1,
+        "catalogErrors": 5,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 1
+          },
+          "keywords": {
+            "e": 0,
+            "w": 6
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 32527,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 0,
+          "mac": 0,
+          "total": 0
+        },
+        "keywords": {
+          "sciencekeywords": 8,
+          "datacenters": 1,
+          "platforms": 1,
+          "instruments": 2,
+          "locations": 1,
+          "projects": 0,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 1,
+          "filled": 1,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "Fixed_Observation_Stations",
+              "type": "Recorders/Loggers > Passive Acoustic Recorder",
+              "variable": "Recorders/Loggers > Passive Acoustic Recorder"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 8,
+          "datacenters": 1,
+          "platforms": 1,
+          "instruments": 2,
+          "locations": 1,
+          "projects": 1,
+          "providers": 1
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 8,
+            "imp": 8,
+            "delta": 0
+          },
+          "datacenters": {
+            "src": 1,
+            "imp": 1,
+            "delta": 0
+          },
+          "platforms": {
+            "src": 1,
+            "imp": 1,
+            "delta": 0
+          },
+          "instruments": {
+            "src": 2,
+            "imp": 2,
+            "delta": 0
+          },
+          "locations": {
+            "src": 1,
+            "imp": 1,
+            "delta": 0
+          },
+          "projects": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "providers": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          }
+        },
+        "missionTitle": "LISTEN (Long-term Investigations into Soundscapes, Trends, E",
+        "fileId": "gov.noaa.ncei.pad:LISTEN_GoMex_Raw_Audio"
+      },
+      "flags": []
+    },
+    {
+      "file": "NCRMP-Benthic-FG.xml",
+      "path": "MANTA End User Testing/samples/NCRMP-Benthic-FG.xml",
+      "category": "other-eut",
+      "navyUxS": false,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 69,
+        "strictErrors": 0,
+        "catalogErrors": 3,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 1
+          },
+          "keywords": {
+            "e": 0,
+            "w": 68
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 49705,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 2,
+          "mac": 0,
+          "total": 2
+        },
+        "keywords": {
+          "sciencekeywords": 63,
+          "datacenters": 4,
+          "platforms": 4,
+          "instruments": 4,
+          "locations": 11,
+          "projects": 10,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 2,
+          "filled": 2,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "swimmer/diver",
+              "type": "swimmer/diver",
+              "variable": "swimmer/diver"
+            },
+            {
+              "index": 1,
+              "sensorId": "visual observation",
+              "type": "visual observation",
+              "variable": "visual observation"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 46,
+          "datacenters": 9,
+          "platforms": 5,
+          "instruments": 4,
+          "locations": 10,
+          "projects": 10,
+          "providers": 2
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 63,
+            "imp": 46,
+            "delta": -17
+          },
+          "datacenters": {
+            "src": 4,
+            "imp": 9,
+            "delta": 5
+          },
+          "platforms": {
+            "src": 4,
+            "imp": 5,
+            "delta": 1
+          },
+          "instruments": {
+            "src": 4,
+            "imp": 4,
+            "delta": 0
+          },
+          "locations": {
+            "src": 11,
+            "imp": 10,
+            "delta": -1
+          },
+          "projects": {
+            "src": 10,
+            "imp": 10,
+            "delta": 0
+          },
+          "providers": {
+            "src": 0,
+            "imp": 2,
+            "delta": 2
+          }
+        },
+        "missionTitle": "National Coral Reef Monitoring Program: Assessment of coral ",
+        "fileId": "gov.noaa.nodc:NCRMP-Benthic-FGB"
+      },
+      "flags": [
+        "science-keywords-loss-on-import"
+      ]
+    },
+    {
+      "file": "NCRMP-Socio-Guam.xml",
+      "path": "MANTA End User Testing/samples/NCRMP-Socio-Guam.xml",
+      "category": "other-eut",
+      "navyUxS": false,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 27,
+        "strictErrors": 0,
+        "catalogErrors": 3,
+        "lenientByStep": {
+          "keywords": {
+            "e": 0,
+            "w": 27
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 36314,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 0,
+          "mac": 0,
+          "total": 0
+        },
+        "keywords": {
+          "sciencekeywords": 20,
+          "datacenters": 1,
+          "platforms": 0,
+          "instruments": 1,
+          "locations": 6,
+          "projects": 7,
+          "providers": 1
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 1,
+          "filled": 1,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "National_Coral_Reef_Monitoring_Program_S",
+              "type": "Questionnaire",
+              "variable": "Questionnaire"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 10,
+          "datacenters": 4,
+          "platforms": 1,
+          "instruments": 1,
+          "locations": 8,
+          "projects": 7,
+          "providers": 2
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 20,
+            "imp": 10,
+            "delta": -10
+          },
+          "datacenters": {
+            "src": 1,
+            "imp": 4,
+            "delta": 3
+          },
+          "platforms": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "instruments": {
+            "src": 1,
+            "imp": 1,
+            "delta": 0
+          },
+          "locations": {
+            "src": 6,
+            "imp": 8,
+            "delta": 2
+          },
+          "projects": {
+            "src": 7,
+            "imp": 7,
+            "delta": 0
+          },
+          "providers": {
+            "src": 1,
+            "imp": 2,
+            "delta": 1
+          }
+        },
+        "missionTitle": "National Coral Reef Monitoring Program: Socioeconomic survey",
+        "fileId": "gov.noaa.nodc:NCRMP-Socio-Guam"
+      },
+      "flags": [
+        "science-keywords-loss-on-import"
+      ]
+    },
+    {
+      "file": "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
+      "path": "MANTA End User Testing/samples/NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
+      "category": "navy-uxs",
+      "navyUxS": true,
+      "sourceShape": "ISO 19115-3",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 3,
+        "strictErrors": 2,
+        "catalogErrors": 6,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 2
+          },
+          "keywords": {
+            "e": 0,
+            "w": 1
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 41139,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 0,
+          "mac": 10,
+          "total": 10
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 0,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 0,
+          "projects": 0,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 10,
+          "filled": 10,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "Paroscientific Pressure Sensor",
+              "type": "Paroscientific Digiquartz Series 8000 Pressure Sen",
+              "variable": "Paroscientific Digiquartz Series 8000 Pressure Sen"
+            },
+            {
+              "index": 1,
+              "sensorId": "SBE CTD Sensor",
+              "type": "SBE 49 FastCAT CTD Sensor",
+              "variable": "SBE 49 FastCAT CTD Sensor"
+            },
+            {
+              "index": 2,
+              "sensorId": "Masterclock GNSS Receiver",
+              "type": "Masterclock GNSS Receiver GMR Series 1000",
+              "variable": "Masterclock GNSS Receiver GMR Series 1000"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 1,
+          "platforms": 1,
+          "instruments": 1,
+          "locations": 0,
+          "projects": 1,
+          "providers": 1
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "datacenters": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "platforms": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "instruments": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "locations": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "projects": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "providers": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          }
+        },
+        "missionTitle": "Point Sur 2024 Leg 18 Eagle Ray MultiBeam Sonar Data AUV Div",
+        "fileId": "PS2418L0_ER_AUV01_Norbit_MB_20240505T1510Z_MD"
+      },
+      "flags": [
+        "no-science-keywords-source-or-import",
+        "no-locations-keywords-source-or-import"
+      ]
+    },
+    {
+      "file": "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
+      "path": "MANTA End User Testing/samples/NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
+      "category": "navy-uxs",
+      "navyUxS": true,
+      "sourceShape": "ISO 19115-3",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 3,
+        "strictErrors": 2,
+        "catalogErrors": 6,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 2
+          },
+          "keywords": {
+            "e": 0,
+            "w": 1
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 41139,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 0,
+          "mac": 10,
+          "total": 10
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 0,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 0,
+          "projects": 0,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 10,
+          "filled": 10,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "Paroscientific Pressure Sensor",
+              "type": "Paroscientific Digiquartz Series 8000 Pressure Sen",
+              "variable": "Paroscientific Digiquartz Series 8000 Pressure Sen"
+            },
+            {
+              "index": 1,
+              "sensorId": "SBE CTD Sensor",
+              "type": "SBE 49 FastCAT CTD Sensor",
+              "variable": "SBE 49 FastCAT CTD Sensor"
+            },
+            {
+              "index": 2,
+              "sensorId": "Masterclock GNSS Receiver",
+              "type": "Masterclock GNSS Receiver GMR Series 1000",
+              "variable": "Masterclock GNSS Receiver GMR Series 1000"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 0,
+          "datacenters": 1,
+          "platforms": 1,
+          "instruments": 1,
+          "locations": 0,
+          "projects": 1,
+          "providers": 1
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "datacenters": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "platforms": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "instruments": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "locations": {
+            "src": 0,
+            "imp": 0,
+            "delta": 0
+          },
+          "projects": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "providers": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          }
+        },
+        "missionTitle": "Point Sur 2024 Leg 18 Eagle Ray MultiBeam Sonar Data AUV Div",
+        "fileId": "PS2418L0_ER_AUV03_Norbit_MB_20240508T0117Z_MD"
+      },
+      "flags": [
+        "no-science-keywords-source-or-import",
+        "no-locations-keywords-source-or-import"
+      ]
+    },
+    {
+      "file": "NRS_Raw_Data.xml",
+      "path": "MANTA End User Testing/samples/NRS_Raw_Data.xml",
+      "category": "other-eut",
+      "navyUxS": false,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 9,
+        "strictErrors": 1,
+        "catalogErrors": 3,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 1
+          },
+          "keywords": {
+            "e": 0,
+            "w": 8
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 32241,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 1,
+          "mac": 0,
+          "total": 1
+        },
+        "keywords": {
+          "sciencekeywords": 8,
+          "datacenters": 1,
+          "platforms": 1,
+          "instruments": 2,
+          "locations": 4,
+          "projects": 1,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 1,
+          "filled": 1,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "NRS",
+              "type": "long term recorder",
+              "variable": "long term recorder"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 8,
+          "datacenters": 1,
+          "platforms": 1,
+          "instruments": 2,
+          "locations": 4,
+          "projects": 1,
+          "providers": 1
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 8,
+            "imp": 8,
+            "delta": 0
+          },
+          "datacenters": {
+            "src": 1,
+            "imp": 1,
+            "delta": 0
+          },
+          "platforms": {
+            "src": 1,
+            "imp": 1,
+            "delta": 0
+          },
+          "instruments": {
+            "src": 2,
+            "imp": 2,
+            "delta": 0
+          },
+          "locations": {
+            "src": 4,
+            "imp": 4,
+            "delta": 0
+          },
+          "projects": {
+            "src": 1,
+            "imp": 1,
+            "delta": 0
+          },
+          "providers": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          }
+        },
+        "missionTitle": "NOAA Ocean Noise Reference Station Network (NRS) Raw Passive",
+        "fileId": "gov.noaa.ngdc.mgg.pad:NRS_Raw_Data"
+      },
+      "flags": []
+    },
+    {
+      "file": "SAMPLE_Populated.xml",
+      "path": "MANTA End User Testing/samples/SAMPLE_Populated.xml",
+      "category": "template-populated",
+      "navyUxS": false,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [
+        "Navy UxS template placeholders detected: provisional values were applied for empty/invalid catalog fields (DOI, ROR, email, URLs, accession, provider keyword, download URL, platform type). Replace with real metadata before publication."
+      ],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 11,
+        "strictErrors": 0,
+        "catalogErrors": 0,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 1
+          },
+          "keywords": {
+            "e": 0,
+            "w": 10
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 34166,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 3,
+          "mac": 0,
+          "total": 3
+        },
+        "keywords": {
+          "sciencekeywords": 11,
+          "datacenters": 0,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 0,
+          "projects": 0,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 3,
+          "filled": 3,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "Gill Anemometer (W190105)",
+              "type": "Anemometer",
+              "variable": "Anemometer"
+            },
+            {
+              "index": 1,
+              "sensorId": "Rotronic HC2-S3 AT/RH",
+              "type": "Thermometer",
+              "variable": "Thermometer"
+            },
+            {
+              "index": 2,
+              "sensorId": "INSTRUMENT_ID",
+              "type": "TYPE OF INSTRUMENT",
+              "variable": "TYPE OF INSTRUMENT"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 2,
+          "datacenters": 2,
+          "platforms": 1,
+          "instruments": 4,
+          "locations": 1,
+          "projects": 1,
+          "providers": 2
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 11,
+            "imp": 2,
+            "delta": -9
+          },
+          "datacenters": {
+            "src": 0,
+            "imp": 2,
+            "delta": 2
+          },
+          "platforms": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "instruments": {
+            "src": 0,
+            "imp": 4,
+            "delta": 4
+          },
+          "locations": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "projects": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "providers": {
+            "src": 0,
+            "imp": 2,
+            "delta": 2
+          }
+        },
+        "missionTitle": "Saildrone PMEL TPOS 2021 Mission, drone 1066",
+        "fileId": "sd1065_tpos_2021_raw"
+      },
+      "flags": [
+        "science-keywords-loss-on-import"
+      ]
+    },
+    {
+      "file": "gov.noaa.nmfs.inport.52208.xml",
+      "path": "MANTA End User Testing/samples/gov.noaa.nmfs.inport.52208.xml",
+      "category": "inport",
+      "navyUxS": false,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 21,
+        "strictErrors": 2,
+        "catalogErrors": 5,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 2
+          },
+          "keywords": {
+            "e": 0,
+            "w": 19
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 26059,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 0,
+          "mac": 0,
+          "total": 0
+        },
+        "keywords": {
+          "sciencekeywords": 22,
+          "datacenters": 1,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 0,
+          "projects": 0,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 1,
+          "filled": 1,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "Research_Ship",
+              "type": "Fisheries Data Collection",
+              "variable": "Fisheries Data Collection"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 12,
+          "datacenters": 1,
+          "platforms": 1,
+          "instruments": 1,
+          "locations": 6,
+          "projects": 1,
+          "providers": 1
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 22,
+            "imp": 12,
+            "delta": -10
+          },
+          "datacenters": {
+            "src": 1,
+            "imp": 1,
+            "delta": 0
+          },
+          "platforms": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "instruments": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "locations": {
+            "src": 0,
+            "imp": 6,
+            "delta": 6
+          },
+          "projects": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "providers": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          }
+        },
+        "missionTitle": "Fisheries Research Feature Service",
+        "fileId": "gov.noaa.nmfs.inport:52208"
+      },
+      "flags": [
+        "science-keywords-loss-on-import"
+      ]
+    },
+    {
+      "file": "gov.noaa.nmfs.inport.5619.xml",
+      "path": "MANTA End User Testing/samples/gov.noaa.nmfs.inport.5619.xml",
+      "category": "inport",
+      "navyUxS": false,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 16,
+        "strictErrors": 2,
+        "catalogErrors": 6,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 2
+          },
+          "keywords": {
+            "e": 0,
+            "w": 14
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 25374,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 0,
+          "mac": 0,
+          "total": 0
+        },
+        "keywords": {
+          "sciencekeywords": 13,
+          "datacenters": 1,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 0,
+          "projects": 0,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 1,
+          "filled": 1,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "American_Samoa_Commercial_Fisheries_BioS",
+              "type": "Fisheries Data Collection",
+              "variable": "Fisheries Data Collection"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 11,
+          "datacenters": 1,
+          "platforms": 1,
+          "instruments": 1,
+          "locations": 1,
+          "projects": 1,
+          "providers": 1
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 13,
+            "imp": 11,
+            "delta": -2
+          },
+          "datacenters": {
+            "src": 1,
+            "imp": 1,
+            "delta": 0
+          },
+          "platforms": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "instruments": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "locations": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "projects": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "providers": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          }
+        },
+        "missionTitle": "American Samoa Commercial Fisheries BioSampling (CFBS)",
+        "fileId": "gov.noaa.nmfs.inport:5619"
+      },
+      "flags": [
+        "science-keywords-loss-on-import"
+      ]
+    },
+    {
+      "file": "gov.noaa.nmfs.inport.5687.xml",
+      "path": "MANTA End User Testing/samples/gov.noaa.nmfs.inport.5687.xml",
+      "category": "inport",
+      "navyUxS": false,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 15,
+        "strictErrors": 2,
+        "catalogErrors": 6,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 2
+          },
+          "keywords": {
+            "e": 0,
+            "w": 13
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 30325,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 0,
+          "mac": 0,
+          "total": 0
+        },
+        "keywords": {
+          "sciencekeywords": 11,
+          "datacenters": 1,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 0,
+          "projects": 0,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 1,
+          "filled": 1,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "HMSRP_Hawaiian_Monk_Seal_Fisheries_Inter",
+              "type": "Fisheries Data Collection",
+              "variable": "Fisheries Data Collection"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 8,
+          "datacenters": 1,
+          "platforms": 1,
+          "instruments": 1,
+          "locations": 2,
+          "projects": 1,
+          "providers": 1
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 11,
+            "imp": 8,
+            "delta": -3
+          },
+          "datacenters": {
+            "src": 1,
+            "imp": 1,
+            "delta": 0
+          },
+          "platforms": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "instruments": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "locations": {
+            "src": 0,
+            "imp": 2,
+            "delta": 2
+          },
+          "projects": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "providers": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          }
+        },
+        "missionTitle": "HMSRP Hawaiian Monk Seal Fisheries Interactions data",
+        "fileId": "gov.noaa.nmfs.inport:5687"
+      },
+      "flags": [
+        "science-keywords-loss-on-import"
+      ]
+    },
+    {
+      "file": "gov.noaa.nmfs.inport.62654.xml",
+      "path": "MANTA End User Testing/samples/gov.noaa.nmfs.inport.62654.xml",
+      "category": "inport",
+      "navyUxS": false,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 43,
+        "strictErrors": 2,
+        "catalogErrors": 6,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 1
+          },
+          "keywords": {
+            "e": 0,
+            "w": 42
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 28618,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 0,
+          "mac": 0,
+          "total": 0
+        },
+        "keywords": {
+          "sciencekeywords": 46,
+          "datacenters": 1,
+          "platforms": 0,
+          "instruments": 0,
+          "locations": 0,
+          "projects": 0,
+          "providers": 0
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 1,
+          "filled": 1,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "Electronic_Monitoring_in_the_Pacific_Isl",
+              "type": "Fisheries Data Collection",
+              "variable": "Fisheries Data Collection"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 33,
+          "datacenters": 1,
+          "platforms": 1,
+          "instruments": 1,
+          "locations": 9,
+          "projects": 1,
+          "providers": 1
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 46,
+            "imp": 33,
+            "delta": -13
+          },
+          "datacenters": {
+            "src": 1,
+            "imp": 1,
+            "delta": 0
+          },
+          "platforms": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "instruments": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "locations": {
+            "src": 0,
+            "imp": 9,
+            "delta": 9
+          },
+          "projects": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          },
+          "providers": {
+            "src": 0,
+            "imp": 1,
+            "delta": 1
+          }
+        },
+        "missionTitle": "Electronic Monitoring in the Pacific Islands Longline Fisher",
+        "fileId": "gov.noaa.nmfs.inport:62654"
+      },
+      "flags": [
+        "science-keywords-loss-on-import"
+      ]
+    },
+    {
+      "file": "uxs_test.xml",
+      "path": "MANTA End User Testing/samples/uxs_test.xml",
+      "category": "navy-uxs",
+      "navyUxS": true,
+      "sourceShape": "ISO 19115-2 gmi",
+      "xmlParseOk": true,
+      "xmlParseError": "",
+      "importOk": true,
+      "mergeOk": true,
+      "importError": "",
+      "importWarnings": [],
+      "validation": {
+        "lenientErrors": 0,
+        "lenientWarns": 93,
+        "strictErrors": 1,
+        "catalogErrors": 4,
+        "lenientByStep": {
+          "mission": {
+            "e": 0,
+            "w": 1
+          },
+          "keywords": {
+            "e": 0,
+            "w": 92
+          }
+        },
+        "topLenientErrors": [],
+        "previewLen": 97574,
+        "iso2PreviewFailCount": 0,
+        "iso2PreviewFails": []
+      },
+      "source": {
+        "instruments": {
+          "gmi": 12,
+          "mac": 0,
+          "total": 12
+        },
+        "keywords": {
+          "sciencekeywords": 46,
+          "datacenters": 2,
+          "platforms": 2,
+          "instruments": 30,
+          "locations": 1,
+          "projects": 2,
+          "providers": 46
+        }
+      },
+      "imported": {
+        "sensors": {
+          "total": 12,
+          "filled": 12,
+          "inactive": 0,
+          "samples": [
+            {
+              "index": 0,
+              "sensorId": "anemometer",
+              "type": "anemometer",
+              "variable": "anemometer"
+            },
+            {
+              "index": 1,
+              "sensorId": "barometer",
+              "type": "barometer",
+              "variable": "barometer"
+            },
+            {
+              "index": 2,
+              "sensorId": "clock",
+              "type": "clock",
+              "variable": "clock"
+            }
+          ]
+        },
+        "keywords": {
+          "sciencekeywords": 41,
+          "datacenters": 4,
+          "platforms": 2,
+          "instruments": 30,
+          "locations": 2,
+          "projects": 2,
+          "providers": 46
+        },
+        "keywordDeltas": {
+          "sciencekeywords": {
+            "src": 46,
+            "imp": 41,
+            "delta": -5
+          },
+          "datacenters": {
+            "src": 2,
+            "imp": 4,
+            "delta": 2
+          },
+          "platforms": {
+            "src": 2,
+            "imp": 2,
+            "delta": 0
+          },
+          "instruments": {
+            "src": 30,
+            "imp": 30,
+            "delta": 0
+          },
+          "locations": {
+            "src": 1,
+            "imp": 2,
+            "delta": 1
+          },
+          "projects": {
+            "src": 2,
+            "imp": 2,
+            "delta": 0
+          },
+          "providers": {
+            "src": 46,
+            "imp": 46,
+            "delta": 0
+          }
+        },
+        "missionTitle": "Saildrone PMEL TPOS 2018 Mission, drone 1005 (NCEI Accession",
+        "fileId": "gov.noaa.nodc:0297635"
+      },
+      "flags": [
+        "science-keywords-loss-on-import"
+      ]
+    }
+  ]
+}
