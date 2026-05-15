@@ -1,6 +1,6 @@
 # MANTA samples — import audit & ISO 19115-2 preview alignment
 
-Generated: 2026-05-15T09:40:21.952Z
+Generated: 2026-05-15T10:55:38.040Z
 Samples: `MANTA End User Testing/samples` (repo-relative)
 
 For each file: **source shape** (root XML), **import/merge** pipeline, **validation** counts after auto-fix (lenient / strict / **catalog**), **ISO-19115-2 preview sanity**, **preview→import round-trip** (`buildXmlPreview` output fed back through `importPilotPartialStateFromXml`), and **xmllint --noout** when installed.

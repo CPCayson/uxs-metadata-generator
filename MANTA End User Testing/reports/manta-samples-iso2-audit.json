@@ -1,7 +1,7 @@
 {
   "sampleDir": "/Users/connorcayson/Downloads/uSX/MANTA End User Testing/samples",
   "sampleDirRelative": "MANTA End User Testing/samples",
-  "generated": "2026-05-15T09:40:21.949Z",
+  "generated": "2026-05-15T10:55:38.032Z",
   "lenientRollupSummary": {
     "patternCount": 207,
     "rollupJson": "MANTA End User Testing/reports/manta-samples-lenient-rollup.json",
@@ -1343,7 +1343,7 @@
       "catalogWarns": 52,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 70793,
+      "previewLen": 98844,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {

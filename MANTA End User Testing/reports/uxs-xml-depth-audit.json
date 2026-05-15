@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-15T09:45:14.252Z",
+  "generatedAt": "2026-05-15T10:54:59.570Z",
   "corpus": "manta-eut-samples",
   "sampleDir": "MANTA End User Testing/samples",
   "fileCount": 20,
@@ -11,8 +11,8 @@
     "catalogErrorFiles": 19,
     "previewSanityFail": 0,
     "instrumentGap": 0,
-    "partialSensors": 1,
-    "scienceLoss": 13,
+    "partialSensors": 0,
+    "scienceLoss": 0,
     "noScience": 4,
     "noLocations": 4,
     "navySubsetCount": 5,
@@ -65,11 +65,11 @@
           "total": 1
         },
         "keywords": {
-          "sciencekeywords": 10,
-          "datacenters": 1,
+          "sciencekeywords": 6,
+          "datacenters": 3,
           "platforms": 2,
           "instruments": 2,
-          "locations": 1,
+          "locations": 2,
           "projects": 2,
           "providers": 0
         }
@@ -99,14 +99,14 @@
         },
         "keywordDeltas": {
           "sciencekeywords": {
-            "src": 10,
+            "src": 6,
             "imp": 6,
-            "delta": -4
+            "delta": 0
           },
           "datacenters": {
-            "src": 1,
+            "src": 3,
             "imp": 3,
-            "delta": 2
+            "delta": 0
           },
           "platforms": {
             "src": 2,
@@ -119,9 +119,9 @@
             "delta": 0
           },
           "locations": {
-            "src": 1,
+            "src": 2,
             "imp": 2,
-            "delta": 1
+            "delta": 0
           },
           "projects": {
             "src": 2,
@@ -137,9 +137,7 @@
         "missionTitle": "GHRSST NOAA/OSPO Metop-C AVHRR FRAC ACSPO v2.80 0.02 L3U Dat",
         "fileId": "gov.noaa.nodc:0299833"
       },
-      "flags": [
-        "science-keywords-loss-on-import"
-      ]
+      "flags": []
     },
     {
       "file": "AFSC_GA13_Raw_Data.xml",
@@ -293,12 +291,12 @@
           "total": 0
         },
         "keywords": {
-          "sciencekeywords": 9,
+          "sciencekeywords": 5,
           "datacenters": 3,
           "platforms": 4,
           "instruments": 1,
           "locations": 1,
-          "projects": 1,
+          "projects": 3,
           "providers": 0
         }
       },
@@ -327,9 +325,9 @@
         },
         "keywordDeltas": {
           "sciencekeywords": {
-            "src": 9,
+            "src": 5,
             "imp": 5,
-            "delta": -4
+            "delta": 0
           },
           "datacenters": {
             "src": 3,
@@ -352,9 +350,9 @@
             "delta": 0
           },
           "projects": {
-            "src": 1,
+            "src": 3,
             "imp": 3,
-            "delta": 2
+            "delta": 0
           },
           "providers": {
             "src": 0,
@@ -365,9 +363,7 @@
         "missionTitle": "NOAA GOES-R Series Space Environment In-Situ Suite (SEISS) I",
         "fileId": "gov.noaa.ncdc:C01531"
       },
-      "flags": [
-        "science-keywords-loss-on-import"
-      ]
+      "flags": []
     },
     {
       "file": "C01678.xml",
@@ -408,7 +404,7 @@
           "total": 0
         },
         "keywords": {
-          "sciencekeywords": 6,
+          "sciencekeywords": 5,
           "datacenters": 2,
           "platforms": 1,
           "instruments": 3,
@@ -448,9 +444,9 @@
         },
         "keywordDeltas": {
           "sciencekeywords": {
-            "src": 6,
+            "src": 5,
             "imp": 5,
-            "delta": -1
+            "delta": 0
           },
           "datacenters": {
             "src": 2,
@@ -486,9 +482,7 @@
         "missionTitle": "NOAA Climate Data Record (CDR) of AVHRR Daily and Monthly Ae",
         "fileId": "gov.noaa.ncdc:C01678"
       },
-      "flags": [
-        "science-keywords-loss-on-import"
-      ]
+      "flags": []
     },
     {
       "file": "EX1904_collection.xml",
@@ -529,9 +523,9 @@
           "total": 0
         },
         "keywords": {
-          "sciencekeywords": 6,
-          "datacenters": 0,
-          "platforms": 0,
+          "sciencekeywords": 3,
+          "datacenters": 2,
+          "platforms": 1,
           "instruments": 0,
           "locations": 8,
           "projects": 0,
@@ -563,19 +557,19 @@
         },
         "keywordDeltas": {
           "sciencekeywords": {
-            "src": 6,
+            "src": 3,
             "imp": 3,
-            "delta": -3
+            "delta": 0
           },
           "datacenters": {
-            "src": 0,
+            "src": 2,
             "imp": 2,
-            "delta": 2
+            "delta": 0
           },
           "platforms": {
-            "src": 0,
+            "src": 1,
             "imp": 1,
-            "delta": 1
+            "delta": 0
           },
           "instruments": {
             "src": 0,
@@ -601,9 +595,7 @@
         "missionTitle": "Okeanos Explorer (EX1904): 2019 Technology Demonstrations",
         "fileId": "gov.noaa.ncei.oer:EX1904_COLLECTION"
       },
-      "flags": [
-        "science-keywords-loss-on-import"
-      ]
+      "flags": []
     },
     {
       "file": "EX2306_COLLECTION.xml",
@@ -629,7 +621,7 @@
           }
         },
         "topLenientErrors": [],
-        "previewLen": 70793,
+        "previewLen": 98844,
         "iso2PreviewFailCount": 0,
         "iso2PreviewFails": []
       },
@@ -640,19 +632,19 @@
           "total": 28
         },
         "keywords": {
-          "sciencekeywords": 68,
+          "sciencekeywords": 3,
           "datacenters": 2,
           "platforms": 2,
           "instruments": 0,
-          "locations": 1,
+          "locations": 4,
           "projects": 0,
           "providers": 1
         }
       },
       "imported": {
         "sensors": {
-          "total": 16,
-          "filled": 16,
+          "total": 28,
+          "filled": 28,
           "inactive": 0,
           "samples": [
             {
@@ -686,9 +678,9 @@
         },
         "keywordDeltas": {
           "sciencekeywords": {
-            "src": 68,
+            "src": 3,
             "imp": 22,
-            "delta": -46
+            "delta": 19
           },
           "datacenters": {
             "src": 2,
@@ -706,9 +698,9 @@
             "delta": 1
           },
           "locations": {
-            "src": 1,
+            "src": 4,
             "imp": 2,
-            "delta": 1
+            "delta": -2
           },
           "projects": {
             "src": 0,
@@ -724,10 +716,7 @@
         "missionTitle": "Seascape Alaska 5: Gulf of Alaska ROV Exploration and Mappin",
         "fileId": "gov.noaa.ncei.oer:EX2306_COLLECTION"
       },
-      "flags": [
-        "partial-sensor-import",
-        "science-keywords-loss-on-import"
-      ]
+      "flags": []
     },
     {
       "file": "ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
@@ -1129,11 +1118,11 @@
           "total": 2
         },
         "keywords": {
-          "sciencekeywords": 63,
-          "datacenters": 4,
-          "platforms": 4,
+          "sciencekeywords": 46,
+          "datacenters": 9,
+          "platforms": 5,
           "instruments": 4,
-          "locations": 11,
+          "locations": 13,
           "projects": 10,
           "providers": 0
         }
@@ -1169,19 +1158,19 @@
         },
         "keywordDeltas": {
           "sciencekeywords": {
-            "src": 63,
+            "src": 46,
             "imp": 46,
-            "delta": -17
+            "delta": 0
           },
           "datacenters": {
-            "src": 4,
+            "src": 9,
             "imp": 9,
-            "delta": 5
+            "delta": 0
           },
           "platforms": {
-            "src": 4,
+            "src": 5,
             "imp": 5,
-            "delta": 1
+            "delta": 0
           },
           "instruments": {
             "src": 4,
@@ -1189,9 +1178,9 @@
             "delta": 0
           },
           "locations": {
-            "src": 11,
+            "src": 13,
             "imp": 10,
-            "delta": -1
+            "delta": -3
           },
           "projects": {
             "src": 10,
@@ -1207,9 +1196,7 @@
         "missionTitle": "National Coral Reef Monitoring Program: Assessment of coral ",
         "fileId": "gov.noaa.nodc:NCRMP-Benthic-FGB"
       },
-      "flags": [
-        "science-keywords-loss-on-import"
-      ]
+      "flags": []
     },
     {
       "file": "NCRMP-Socio-Guam.xml",
@@ -1246,11 +1233,11 @@
           "total": 0
         },
         "keywords": {
-          "sciencekeywords": 20,
-          "datacenters": 1,
+          "sciencekeywords": 10,
+          "datacenters": 4,
           "platforms": 0,
           "instruments": 1,
-          "locations": 6,
+          "locations": 9,
           "projects": 7,
           "providers": 1
         }
@@ -1280,14 +1267,14 @@
         },
         "keywordDeltas": {
           "sciencekeywords": {
-            "src": 20,
+            "src": 10,
             "imp": 10,
-            "delta": -10
+            "delta": 0
           },
           "datacenters": {
-            "src": 1,
+            "src": 4,
             "imp": 4,
-            "delta": 3
+            "delta": 0
           },
           "platforms": {
             "src": 0,
@@ -1300,9 +1287,9 @@
             "delta": 0
           },
           "locations": {
-            "src": 6,
+            "src": 9,
             "imp": 8,
-            "delta": 2
+            "delta": -1
           },
           "projects": {
             "src": 7,
@@ -1318,9 +1305,7 @@
         "missionTitle": "National Coral Reef Monitoring Program: Socioeconomic survey",
         "fileId": "gov.noaa.nodc:NCRMP-Socio-Guam"
       },
-      "flags": [
-        "science-keywords-loss-on-import"
-      ]
+      "flags": []
     },
     {
       "file": "NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
@@ -1732,12 +1717,12 @@
           "total": 3
         },
         "keywords": {
-          "sciencekeywords": 11,
-          "datacenters": 0,
-          "platforms": 0,
-          "instruments": 0,
-          "locations": 0,
-          "projects": 0,
+          "sciencekeywords": 2,
+          "datacenters": 2,
+          "platforms": 1,
+          "instruments": 4,
+          "locations": 1,
+          "projects": 1,
           "providers": 0
         }
       },
@@ -1778,34 +1763,34 @@
         },
         "keywordDeltas": {
           "sciencekeywords": {
-            "src": 11,
+            "src": 2,
             "imp": 2,
-            "delta": -9
+            "delta": 0
           },
           "datacenters": {
-            "src": 0,
+            "src": 2,
             "imp": 2,
-            "delta": 2
+            "delta": 0
           },
           "platforms": {
-            "src": 0,
+            "src": 1,
             "imp": 1,
-            "delta": 1
+            "delta": 0
           },
           "instruments": {
-            "src": 0,
+            "src": 4,
             "imp": 4,
-            "delta": 4
+            "delta": 0
           },
           "locations": {
-            "src": 0,
+            "src": 1,
             "imp": 1,
-            "delta": 1
+            "delta": 0
           },
           "projects": {
-            "src": 0,
+            "src": 1,
             "imp": 1,
-            "delta": 1
+            "delta": 0
           },
           "providers": {
             "src": 0,
@@ -1816,9 +1801,7 @@
         "missionTitle": "Saildrone PMEL TPOS 2021 Mission, drone 1066",
         "fileId": "sd1065_tpos_2021_raw"
       },
-      "flags": [
-        "science-keywords-loss-on-import"
-      ]
+      "flags": []
     },
     {
       "file": "gov.noaa.nmfs.inport.52208.xml",
@@ -1859,12 +1842,12 @@
           "total": 0
         },
         "keywords": {
-          "sciencekeywords": 22,
+          "sciencekeywords": 12,
           "datacenters": 1,
           "platforms": 0,
           "instruments": 0,
-          "locations": 0,
-          "projects": 0,
+          "locations": 6,
+          "projects": 1,
           "providers": 0
         }
       },
@@ -1893,9 +1876,9 @@
         },
         "keywordDeltas": {
           "sciencekeywords": {
-            "src": 22,
+            "src": 12,
             "imp": 12,
-            "delta": -10
+            "delta": 0
           },
           "datacenters": {
             "src": 1,
@@ -1913,14 +1896,14 @@
             "delta": 1
           },
           "locations": {
-            "src": 0,
+            "src": 6,
             "imp": 6,
-            "delta": 6
+            "delta": 0
           },
           "projects": {
-            "src": 0,
+            "src": 1,
             "imp": 1,
-            "delta": 1
+            "delta": 0
           },
           "providers": {
             "src": 0,
@@ -1931,9 +1914,7 @@
         "missionTitle": "Fisheries Research Feature Service",
         "fileId": "gov.noaa.nmfs.inport:52208"
       },
-      "flags": [
-        "science-keywords-loss-on-import"
-      ]
+      "flags": []
     },
     {
       "file": "gov.noaa.nmfs.inport.5619.xml",
@@ -1974,12 +1955,12 @@
           "total": 0
         },
         "keywords": {
-          "sciencekeywords": 13,
+          "sciencekeywords": 11,
           "datacenters": 1,
           "platforms": 0,
           "instruments": 0,
-          "locations": 0,
-          "projects": 0,
+          "locations": 1,
+          "projects": 1,
           "providers": 0
         }
       },
@@ -2008,9 +1989,9 @@
         },
         "keywordDeltas": {
           "sciencekeywords": {
-            "src": 13,
+            "src": 11,
             "imp": 11,
-            "delta": -2
+            "delta": 0
           },
           "datacenters": {
             "src": 1,
@@ -2028,14 +2009,14 @@
             "delta": 1
           },
           "locations": {
-            "src": 0,
+            "src": 1,
             "imp": 1,
-            "delta": 1
+            "delta": 0
           },
           "projects": {
-            "src": 0,
+            "src": 1,
             "imp": 1,
-            "delta": 1
+            "delta": 0
           },
           "providers": {
             "src": 0,
@@ -2046,9 +2027,7 @@
         "missionTitle": "American Samoa Commercial Fisheries BioSampling (CFBS)",
         "fileId": "gov.noaa.nmfs.inport:5619"
       },
-      "flags": [
-        "science-keywords-loss-on-import"
-      ]
+      "flags": []
     },
     {
       "file": "gov.noaa.nmfs.inport.5687.xml",
@@ -2089,12 +2068,12 @@
           "total": 0
         },
         "keywords": {
-          "sciencekeywords": 11,
+          "sciencekeywords": 8,
           "datacenters": 1,
           "platforms": 0,
           "instruments": 0,
-          "locations": 0,
-          "projects": 0,
+          "locations": 2,
+          "projects": 1,
           "providers": 0
         }
       },
@@ -2123,9 +2102,9 @@
         },
         "keywordDeltas": {
           "sciencekeywords": {
-            "src": 11,
+            "src": 8,
             "imp": 8,
-            "delta": -3
+            "delta": 0
           },
           "datacenters": {
             "src": 1,
@@ -2143,14 +2122,14 @@
             "delta": 1
           },
           "locations": {
-            "src": 0,
+            "src": 2,
             "imp": 2,
-            "delta": 2
+            "delta": 0
           },
           "projects": {
-            "src": 0,
+            "src": 1,
             "imp": 1,
-            "delta": 1
+            "delta": 0
           },
           "providers": {
             "src": 0,
@@ -2161,9 +2140,7 @@
         "missionTitle": "HMSRP Hawaiian Monk Seal Fisheries Interactions data",
         "fileId": "gov.noaa.nmfs.inport:5687"
       },
-      "flags": [
-        "science-keywords-loss-on-import"
-      ]
+      "flags": []
     },
     {
       "file": "gov.noaa.nmfs.inport.62654.xml",
@@ -2204,12 +2181,12 @@
           "total": 0
         },
         "keywords": {
-          "sciencekeywords": 46,
+          "sciencekeywords": 33,
           "datacenters": 1,
           "platforms": 0,
           "instruments": 0,
-          "locations": 0,
-          "projects": 0,
+          "locations": 9,
+          "projects": 1,
           "providers": 0
         }
       },
@@ -2238,9 +2215,9 @@
         },
         "keywordDeltas": {
           "sciencekeywords": {
-            "src": 46,
+            "src": 33,
             "imp": 33,
-            "delta": -13
+            "delta": 0
           },
           "datacenters": {
             "src": 1,
@@ -2258,14 +2235,14 @@
             "delta": 1
           },
           "locations": {
-            "src": 0,
+            "src": 9,
             "imp": 9,
-            "delta": 9
+            "delta": 0
           },
           "projects": {
-            "src": 0,
+            "src": 1,
             "imp": 1,
-            "delta": 1
+            "delta": 0
           },
           "providers": {
             "src": 0,
@@ -2276,9 +2253,7 @@
         "missionTitle": "Electronic Monitoring in the Pacific Islands Longline Fisher",
         "fileId": "gov.noaa.nmfs.inport:62654"
       },
-      "flags": [
-        "science-keywords-loss-on-import"
-      ]
+      "flags": []
     },
     {
       "file": "uxs_test.xml",
@@ -2319,11 +2294,11 @@
           "total": 12
         },
         "keywords": {
-          "sciencekeywords": 46,
-          "datacenters": 2,
+          "sciencekeywords": 41,
+          "datacenters": 4,
           "platforms": 2,
           "instruments": 30,
-          "locations": 1,
+          "locations": 2,
           "projects": 2,
           "providers": 46
         }
@@ -2365,14 +2340,14 @@
         },
         "keywordDeltas": {
           "sciencekeywords": {
-            "src": 46,
+            "src": 41,
             "imp": 41,
-            "delta": -5
+            "delta": 0
           },
           "datacenters": {
-            "src": 2,
+            "src": 4,
             "imp": 4,
-            "delta": 2
+            "delta": 0
           },
           "platforms": {
             "src": 2,
@@ -2385,9 +2360,9 @@
             "delta": 0
           },
           "locations": {
-            "src": 1,
+            "src": 2,
             "imp": 2,
-            "delta": 1
+            "delta": 0
           },
           "projects": {
             "src": 2,
@@ -2403,9 +2378,7 @@
         "missionTitle": "Saildrone PMEL TPOS 2018 Mission, drone 1005 (NCEI Accession",
         "fileId": "gov.noaa.nodc:0297635"
       },
-      "flags": [
-        "science-keywords-loss-on-import"
-      ]
+      "flags": []
     }
   ]
 }

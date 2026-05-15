@@ -3738,9 +3738,18 @@ function parseOneAcquisitionInstrument(mi) {
  * @param {Set<string>} seen
  * @param {Record<string, string>} row
  */
-function addSensorRowDeduped(rows, seen, row) {
-  const key = sensorInstrumentDedupeKey(row)
-  if (seen.has(key)) return
+function addSensorRowDeduped(rows, seen, row, idx = null) {
+  let key = sensorInstrumentDedupeKey(row)
+  if (seen.has(key)) {
+    // When identifier codes collide but index differs, use index as tiebreaker
+    // so a second instrument with the same sensorId is not silently dropped.
+    if (idx !== null) {
+      key = `${key}\t__idx_${idx}`
+      if (seen.has(key)) return
+    } else {
+      return
+    }
+  }
   seen.add(key)
   rows.push(row)
 }
@@ -3843,11 +3852,16 @@ function parseAcquisitionInfo(root) {
   const platformOut = {}
   /** @type {Element | null} */
   let miPlat = null
+  /** @type {Element[]} */
+  const allMiPlats = []
   const xlinkTitles = []
   const xlinkHrefs = []
   for (const platWrap of childrenNS(mia, NS.gmi, 'platform')) {
     const mp = childNS(platWrap, NS.gmi, 'MI_Platform')
-    if (mp && !miPlat) miPlat = mp
+    if (mp) {
+      if (!miPlat) miPlat = mp
+      allMiPlats.push(mp)
+    }
     const title = (platWrap.getAttributeNS(NS.xlink, 'title') || platWrap.getAttribute('xlink:title') || '').trim()
     const href = (platWrap.getAttributeNS(NS.xlink, 'href') || platWrap.getAttribute('xlink:href') || '').trim()
     if (title) xlinkTitles.push(title)
@@ -3900,20 +3914,41 @@ function parseAcquisitionInfo(root) {
     }
   }
 
+  // Populate platformName for ISO 19115-2 (no dedicated name element; derive from description or id)
+  if (!String(platformOut.platformName || '').trim()) {
+    const descForName = String(platformOut.platformDesc || platformOut.model || '').trim()
+    if (descForName) {
+      const mBy = descForName.match(/^Platform:\s*(.+?)\s*(?:by\s|\()/im)
+      if (mBy) {
+        platformOut.platformName = mBy[1].trim()
+      } else {
+        const mModel = descForName.match(/^model:\s*(.+)/im)
+        if (mModel) platformOut.platformName = mModel[1].trim()
+      }
+    }
+    if (!String(platformOut.platformName || '').trim() && String(platformOut.platformId || '').trim()) {
+      platformOut.platformName = String(platformOut.platformId).trim()
+    }
+  }
+
   const sensorRows = []
   const seenSensors = new Set()
+  let instGlobalIdx = 0
   for (const instWrap of childrenNS(mia, NS.gmi, 'instrument')) {
     const mi = childNS(instWrap, NS.gmi, 'MI_Instrument')
     if (!mi) continue
     const row = parseOneAcquisitionInstrument(mi)
-    if (row) addSensorRowDeduped(sensorRows, seenSensors, row)
+    if (row) addSensorRowDeduped(sensorRows, seenSensors, row, instGlobalIdx)
+    instGlobalIdx += 1
   }
-  if (miPlat) {
-    for (const instWrap of childrenNS(miPlat, NS.gmi, 'instrument')) {
+  // Collect instruments from ALL platforms (not just the first one)
+  for (const mp of allMiPlats) {
+    for (const instWrap of childrenNS(mp, NS.gmi, 'instrument')) {
       const mi = childNS(instWrap, NS.gmi, 'MI_Instrument')
       if (!mi) continue
       const row = parseOneAcquisitionInstrument(mi)
-      if (row) addSensorRowDeduped(sensorRows, seenSensors, row)
+      if (row) addSensorRowDeduped(sensorRows, seenSensors, row, instGlobalIdx)
+      instGlobalIdx += 1
     }
   }
 
@@ -5031,6 +5066,7 @@ function parseAcquisition3(root) {
 
   const sensorRows = []
   const seenSensors = new Set()
+  let instGlobalIdx3 = 0
 
   // Instruments nested inside the platform (MDBC/AUV pattern)
   if (miPlat) {
@@ -5038,7 +5074,8 @@ function parseAcquisition3(root) {
       const mi = cn3(instWrap, NS3.mac, 'MI_Instrument')
       if (!mi) continue
       const row = parseInst3(mi)
-      if (acquisitionInstrumentHasContent(row)) addSensorRowDeduped(sensorRows, seenSensors, row)
+      if (acquisitionInstrumentHasContent(row)) addSensorRowDeduped(sensorRows, seenSensors, row, instGlobalIdx3)
+      instGlobalIdx3 += 1
     }
   }
 
@@ -5047,7 +5084,8 @@ function parseAcquisition3(root) {
     const mi = cn3(instWrap, NS3.mac, 'MI_Instrument')
     if (!mi) continue
     const row = parseInst3(mi)
-    if (acquisitionInstrumentHasContent(row)) addSensorRowDeduped(sensorRows, seenSensors, row)
+    if (acquisitionInstrumentHasContent(row)) addSensorRowDeduped(sensorRows, seenSensors, row, instGlobalIdx3)
+    instGlobalIdx3 += 1
   }
 
   return {

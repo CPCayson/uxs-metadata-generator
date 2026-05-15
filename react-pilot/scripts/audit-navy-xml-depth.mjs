@@ -198,6 +198,42 @@ function elText(el) {
   return String(el.textContent || '').replace(/\s+/g, ' ').trim()
 }
 
+const NS_XLINK = 'http://www.w3.org/1999/xlink'
+
+/**
+ * Map thesaurus title / keyword type code to a GCMD-style facet.
+ * Mirrors the importer's facetFromMdKeywordsBlock logic so source counts match import counts.
+ * @param {string} title lowercased thesaurus title
+ * @param {string} typeCode raw MD_KeywordTypeCode value
+ * @returns {string} facet key or '' to skip
+ */
+function facetFromTitleAndType(title, typeCode) {
+  // Thesaurus title takes priority
+  if (title) {
+    if (title.includes('datacenter') || title.includes('data center')) return 'datacenters'
+    if (title.includes('platform')) return 'platforms'
+    if (title.includes('instrument')) return 'instruments'
+    if (title.includes('location') || title.includes('place')) return 'locations'
+    if (title.includes('project')) return 'projects'
+    if (title.includes('provider')) return 'providers'
+    if (title.includes('science') || title.includes('gcmd') || title.includes('earth')) return 'sciencekeywords'
+  }
+  // Fall back to keyword type code (mirrors keywordFacetFromIsoKeywordTypeCode)
+  const tc = String(typeCode || '').trim().toLowerCase().replace(/\s+/g, '')
+  if (tc === 'theme' || tc === 'topic') return 'sciencekeywords'
+  if (tc === 'place') return 'locations'
+  if (tc === 'project') return 'projects'
+  if (tc === 'datacentre' || tc === 'datacenter') return 'datacenters'
+  if (tc === 'platform') return 'platforms'
+  if (tc === 'instrument') return 'instruments'
+  if (tc === 'provider') return 'providers'
+  if (tc === 'temporal' || tc === 'stratum') return '' // skip temporal / stratum
+  // No type and no recognizable thesaurus → skip (importer drops these too)
+  if (!title && !tc) return ''
+  // Unrecognized thesaurus with no type: skip rather than mis-classify as science
+  return ''
+}
+
 /** @param {import('@xmldom/xmldom').Document} doc */
 function countSourceKeywordsByFacet(doc) {
   /** @type {Record<string, number>} */
@@ -210,15 +246,43 @@ function countSourceKeywordsByFacet(doc) {
     const mks = elList(dk, NS.gmd, 'MD_Keywords')
     for (let mi = 0; mi < mks.length; mi += 1) {
       const mk = mks[mi]
-      const titles = elList(mk, NS.gmd, 'title')
-      const title = titles.length ? elText(titles[0]).toLowerCase() : ''
-      let facet = 'sciencekeywords'
-      if (title.includes('datacenter') || title.includes('data center')) facet = 'datacenters'
-      else if (title.includes('platform')) facet = 'platforms'
-      else if (title.includes('instrument')) facet = 'instruments'
-      else if (title.includes('location') || title.includes('place')) facet = 'locations'
-      else if (title.includes('project')) facet = 'projects'
-      else if (title.includes('provider')) facet = 'providers'
+
+      // Read thesaurus title: prefer nested gmd:CI_Citation/gmd:title, then xlink:title on thesaurusName
+      const thesEls = elList(mk, NS.gmd, 'thesaurusName')
+      let title = ''
+      if (thesEls.length) {
+        const titleEls = elList(thesEls[0], NS.gmd, 'title')
+        if (titleEls.length) {
+          title = elText(titleEls[0]).toLowerCase()
+        }
+        if (!title) {
+          // xlink:title attribute on thesaurusName (SAMPLE_Populated.xml pattern)
+          const xlinkAttr =
+            thesEls[0].getAttributeNS?.(NS_XLINK, 'title') ||
+            thesEls[0].getAttribute?.('xlink:title') ||
+            ''
+          title = xlinkAttr.toLowerCase()
+        }
+      }
+
+      // Read keyword type code
+      const typeEls = elList(mk, NS.gmd, 'type')
+      let typeCode = ''
+      if (typeEls.length) {
+        const codeEls = typeEls[0].getElementsByTagNameNS
+          ? (function () {
+              const list = typeEls[0].getElementsByTagNameNS(NS.gmd, 'MD_KeywordTypeCode')
+              return list.length ? list[0] : null
+            })()
+          : null
+        if (codeEls) {
+          typeCode = codeEls.getAttribute?.('codeListValue') || elText(codeEls) || ''
+        }
+      }
+
+      const facet = facetFromTitleAndType(title, typeCode)
+      if (!facet) continue // skip unclassifiable blocks (importer drops them too)
+
       const kws = elList(mk, NS.gmd, 'keyword')
       out[facet] = (out[facet] || 0) + kws.length
     }
