@@ -545,8 +545,8 @@ function App() {
   const [platformHint, setPlatformHint]         = useState(null)
   /** Bumps when starting a fresh mission so EmbeddableShell remounts from cleared session. */
   const [wizardInstanceKey, setWizardInstanceKey] = useState(0)
-  /** When false, Manta FAB / split-float tools dock is hidden and lens stays off. Default off. */
-  const [mantaToolsEnabled, setMantaToolsEnabled] = useState(false)
+  /** When false, Manta FAB / split-float tools dock is hidden and lens stays off. Default on. */
+  const [mantaToolsEnabled, setMantaToolsEnabled] = useState(true)
 
   function handleNewRecord(nextProfileId, nextPlatformHint = null) {
     if (nextProfileId) {
