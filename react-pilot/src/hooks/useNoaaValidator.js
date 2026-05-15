@@ -8,7 +8,9 @@ let schemaCache = null
 let schemaLoadPromise = /** @type {Promise<{ name: string, path: string, content: string }[]> | null} */ (null)
 
 const manifestUrl = () => {
-  const base = import.meta.env.BASE_URL || '/'
+  const raw = import.meta.env.BASE_URL || '/'
+  // Normalise '.' / './' → '/' so we don't get 'https://host./schemas/...'
+  const base = (raw === '.' || raw === './') ? '/' : raw
   const prefix = base.endsWith('/') ? base : `${base}/`
   return new URL('schemas/manifest.json', `${window.location.origin}${prefix}`).href
 }
@@ -21,7 +23,8 @@ function resolveSchemaAssetUrl(entryPath) {
   const raw = String(entryPath || '').trim()
   if (!raw) return raw
   if (/^https?:\/\//i.test(raw)) return raw
-  const base = import.meta.env.BASE_URL || '/'
+  const rawBase = import.meta.env.BASE_URL || '/'
+  const base = (rawBase === '.' || rawBase === './') ? '/' : rawBase
   const prefix = base.endsWith('/') ? base : `${base}/`
   const rel = raw.replace(/^\/+/, '')
   return new URL(rel, `${window.location.origin}${prefix}`).href

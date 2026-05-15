@@ -11,6 +11,7 @@ import { createContext } from 'react'
  *   lensTarget: 'form' | 'xml' | 'split',
  *   workspaceDensity: 'simple' | 'granular',
  *   setWorkspaceDensity: (d: 'simple' | 'granular') => void,
+ *   mantaToolsEnabled: boolean,
  * }} WorkbenchChromeValue
  */
 

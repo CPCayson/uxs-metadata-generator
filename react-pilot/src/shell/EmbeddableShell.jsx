@@ -103,7 +103,9 @@ export default function EmbeddableShell({
   const [widgetOpen,     setWidgetOpen]     = useState(false)
 
   /** Open lens when metadata looks parsed or after import merge (EmbeddableShell sets true). */
-  const [lensMode,       setLensMode]       = useState(false)
+  const [lensMode,       setLensMode]       = useState(
+    () => mantaToolsEnabled && assistantLayout === 'split-float',
+  )
   const [lensTarget,     setLensTarget]     = useState('form')
   const [triggerScore,   setTriggerScore]   = useState(null)   // null | number
   const [triggerPulse,   setTriggerPulse]   = useState(false)  // brief highlight on score update
@@ -284,7 +286,14 @@ export default function EmbeddableShell({
 
   useEffect(() => {
     if (!mantaFloatActive || assistantLayout !== 'split-float' || !mantaToolsEnabled) return
-    if (sessionLooksParsed()) setLensMode(true)
+    setLensMode(true)
+    queueMicrotask(() => {
+      try {
+        window.dispatchEvent(new CustomEvent('manta:side-panel-tab', { detail: { tab: 'lens' } }))
+      } catch {
+        /* */
+      }
+    })
   }, [mantaFloatActive, assistantLayout, profileId, mantaToolsEnabled])
 
   // onCometLoad is called by AssistantShell's COMET tab when the user clicks
@@ -423,6 +432,7 @@ export default function EmbeddableShell({
         lensTarget={lensTarget}
         workspaceDensity={workspaceDensity}
         setWorkspaceDensity={setWorkspaceDensity}
+        mantaToolsEnabled={mantaToolsEnabled}
       >
       {mode === 'full' && includeFloatingManta && assistantLayout === 'split-float' ? (
         <>

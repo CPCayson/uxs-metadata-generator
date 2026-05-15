@@ -7,6 +7,7 @@ import MantaFieldGlass from '../../components/MantaFieldGlass.jsx'
 import MantaFieldInsights from '../../components/MantaFieldInsights.jsx'
 import SourceProvenancePanel from '../../components/SourceProvenancePanel.jsx'
 import FieldHintTooltip, { LabelWithHint } from '../../components/FieldHintTooltip.jsx'
+import { pilotFieldControlAttrs } from '../../lib/pilotFieldControlAttrs.js'
 import { useWorkbenchChrome } from '../../shell/useWorkbenchChrome.js'
 import { NCEI_DEFAULT_MISSION_PURPOSE } from '../../lib/nceiMissionDefaults.js'
 
@@ -51,7 +52,8 @@ function AccordionSection({
   variant = 'default',
   sectionClassName = '',
 }) {
-  const [open, setOpen] = useState(Boolean(defaultOpen || hasValues))
+  /** Match other wizard steps: sections start expanded; user may still collapse. */
+  const [open, setOpen] = useState(true)
   const symphony = variant === 'symphony'
   const rootClass = symphony
     ? `mission-symphony-accordion${open ? ' mission-symphony-accordion--open' : ''}${sectionClassName ? ` ${sectionClassName}` : ''}`
@@ -479,11 +481,8 @@ export default function StepMission({
         onClear={onSourceProvenanceClear ?? (() => {})}
       />
 
-      <div className="step-mission-symphony-shell">
-      <div className="panel pilot-mission-templates-wrap">
-        <AccordionSection title="Mission templates from catalog" variant="symphony" defaultOpen={false}>
-          <fieldset className="pilot-fieldset mission-field-group">
-            <legend className="mission-fieldset-legend">Sheet template catalog</legend>
+      <section className="panel platform-library-panel">
+        <h3 className="panel-title">Mission templates from catalog</h3>
             <p className="card-intro platform-library-intro">
               Load a named template from your Postgres-backed catalog (<code>/api/db</code>). The list loads when you open
               this section; use Refresh after catalog edits. Pick a template in the dropdown, then <strong>Apply template</strong>.
@@ -553,9 +552,7 @@ export default function StepMission({
               </p>
             ) : null}
             {templateCatalogError ? <p className="field-error">{templateCatalogError}</p> : null}
-          </fieldset>
-        </AccordionSection>
-      </div>
+      </section>
 
       {guidedMissionIntro ? (
         <p className="card-intro card-intro--guided">
@@ -577,7 +574,7 @@ export default function StepMission({
         </p>
       ) : null}
 
-      <section className="panel mission-symphony-uxs mission-symphony-uxs--lens" aria-labelledby="uxs-context-heading">
+      <section className="panel mission-symphony-uxs" aria-labelledby="uxs-context-heading">
         <h3 className="panel-title panel-title-hint" id="uxs-context-heading">
           <span>UxS collection context</span>
           <FieldHintTooltip ariaLabel="About UxS collection context">
@@ -587,7 +584,7 @@ export default function StepMission({
             </>
           </FieldHintTooltip>
         </h3>
-        <div className="mission-symphony-glass">
+        <>
           <div className="mission-symphony-context-bar" role="group" aria-label="Operational routing">
             <div className="mission-symphony-context-bar__cell">
               <span className="mission-symphony-context-bar__label">
@@ -651,37 +648,31 @@ export default function StepMission({
               />
             </div>
           </div>
-          <AccordionSection
-            title="View operational details"
-            variant="symphony"
-            defaultOpen={guidedMissionIntro}
-            hasValues={accUxsOperationalDrawer}
-          >
+          <div className="mission-symphony-uxs-details">
+            <h4 className="panel-subtitle">
+              Operational details
+              <FieldHintTooltip ariaLabel="About deployment identifiers">
+                <>
+                  Use field-log labels and IDs where available. Rows follow the selected primary layer; values for hidden
+                  layers remain in state and show again if you switch layers.
+                </>
+              </FieldHintTooltip>
+            </h4>
             <fieldset className="pilot-fieldset mission-field-group mission-symphony-uxs-fieldset">
               <legend className="visually-hidden">Deployment, run, sortie, dive identifiers and note</legend>
-              <p className="hint mission-symphony-uxs-disclosure-intro" style={{ marginTop: 0 }}>
-                <FieldHintTooltip ariaLabel="About deployment identifiers">
-                  <>
-                    Use field-log labels and IDs where available. Rows follow the selected primary layer; values for hidden
-                    layers remain in state and show again if you switch layers.
-                  </>
-                </FieldHintTooltip>
-              </p>
-              <div className="mission-symphony-floating-field">
-                <label htmlFor="uxsDeploymentName" className="mission-symphony-floating-field__label">Deployment name</label>
-                <input
+              <label htmlFor="uxsDeploymentName">Deployment name</label>
+              <input
                   id="uxsDeploymentName"
                   className="form-control"
                   data-pilot-field="mission.uxsContext.deploymentName"
                   value={uxsContext.deploymentName || ''}
                   onChange={(e) => patchUxsContext({ deploymentName: e.target.value })}
                   onBlur={() => onTouched('mission.uxsContext.deploymentName')}
-                />
-              </div>
+              />
               {showUxsRunPair ? (
                 <div className="form-row-2">
-                  <div className="mission-symphony-floating-field">
-                    <label htmlFor="uxsRunName" className="mission-symphony-floating-field__label">Run name</label>
+                  <div>
+                    <label htmlFor="uxsRunName" >Run name</label>
                     <input
                       id="uxsRunName"
                       className="form-control"
@@ -691,8 +682,8 @@ export default function StepMission({
                       onBlur={() => onTouched('mission.uxsContext.runName')}
                     />
                   </div>
-                  <div className="mission-symphony-floating-field">
-                    <label htmlFor="uxsRunId" className="mission-symphony-floating-field__label">Run ID</label>
+                  <div>
+                    <label htmlFor="uxsRunId" >Run ID</label>
                     <input
                       id="uxsRunId"
                       className="form-control"
@@ -706,8 +697,8 @@ export default function StepMission({
               ) : null}
               {showUxsSortiePair ? (
                 <div className="form-row-2">
-                  <div className="mission-symphony-floating-field">
-                    <label htmlFor="uxsSortieName" className="mission-symphony-floating-field__label">Sortie name</label>
+                  <div>
+                    <label htmlFor="uxsSortieName" >Sortie name</label>
                     <input
                       id="uxsSortieName"
                       className="form-control"
@@ -717,8 +708,8 @@ export default function StepMission({
                       onBlur={() => onTouched('mission.uxsContext.sortieName')}
                     />
                   </div>
-                  <div className="mission-symphony-floating-field">
-                    <label htmlFor="uxsSortieId" className="mission-symphony-floating-field__label">Sortie ID</label>
+                  <div>
+                    <label htmlFor="uxsSortieId" >Sortie ID</label>
                     <input
                       id="uxsSortieId"
                       className="form-control"
@@ -732,8 +723,8 @@ export default function StepMission({
               ) : null}
               {showUxsDivePair ? (
                 <div className="form-row-2">
-                  <div className="mission-symphony-floating-field">
-                    <label htmlFor="uxsDiveName" className="mission-symphony-floating-field__label">Dive name</label>
+                  <div>
+                    <label htmlFor="uxsDiveName" >Dive name</label>
                     <input
                       id="uxsDiveName"
                       className="form-control"
@@ -743,8 +734,8 @@ export default function StepMission({
                       onBlur={() => onTouched('mission.uxsContext.diveName')}
                     />
                   </div>
-                  <div className="mission-symphony-floating-field">
-                    <label htmlFor="uxsDiveId" className="mission-symphony-floating-field__label">Dive ID</label>
+                  <div>
+                    <label htmlFor="uxsDiveId" >Dive ID</label>
                     <input
                       id="uxsDiveId"
                       className="form-control"
@@ -756,30 +747,25 @@ export default function StepMission({
                   </div>
                 </div>
               ) : null}
-              <div className="mission-symphony-floating-field mission-symphony-floating-field--textarea">
-                <label htmlFor="uxsContextNarrative" className="mission-symphony-floating-field__label">Operational context note</label>
-                <textarea
-                  id="uxsContextNarrative"
-                  rows={2}
-                  className="form-control"
-                  data-pilot-field="mission.uxsContext.narrative"
-                  value={uxsContext.narrative || ''}
-                  onChange={(e) => patchUxsContext({ narrative: e.target.value })}
+              <label htmlFor="uxsContextNarrative">Operational context note</label>
+              <textarea
+                id="uxsContextNarrative"
+                rows={2}
+                className="form-control"
+                data-pilot-field="mission.uxsContext.narrative"
+                value={uxsContext.narrative || ''}
+                onChange={(e) => patchUxsContext({ narrative: e.target.value })}
                   onBlur={() => onTouched('mission.uxsContext.narrative')}
-                />
-              </div>
+              />
             </fieldset>
-          </AccordionSection>
-        </div>
+          </div>
+        </>
       </section>
 
       <section className="panel mission-step-identification" aria-labelledby="mission-record-heading">
         <h3 className="mission-step-identification__title" id="mission-record-heading">
           Mission identification
         </h3>
-        <p className="mission-step-identification__subtitle">
-          Centered layout — core fields stay open; technical drawers collapse until you need them.
-        </p>
         <div className="step-mission-form-shell mission-step-identification__shell">
         {hideMissionLensDuplicateChrome ? null : (
           <MantaFieldInsights
@@ -860,9 +846,9 @@ export default function StepMission({
           textLengthThreshold={100}
           hideChipsRow={hideMissionGlassChips}
           showValidationChrome={glassShowChrome('mission.abstract')}
-          hint="Include platform type, instruments, survey area, dates, and data products. Use the Symbiote strip for drafting room — connect the Lens on this field for acronym-safe edits."
+          hint="Include platform type, instruments, survey area, dates, and data products. Turn on Lens and focus this field for acronym-safe drafting help."
         >
-          <div className="mission-abstract-with-symbiote">
+          <>
             <textarea
               id="abstract"
               rows={abstractExpanded ? 12 : 5}
@@ -873,12 +859,7 @@ export default function StepMission({
               onBlur={() => onTouched('mission.abstract')}
               aria-required
             />
-            <aside className="mission-symbiote-strip" aria-label="Abstract symbiote drafting">
-              <div className="mission-symbiote-strip__title">Symbiote drafting</div>
-              <p className="mission-symbiote-strip__copy">
-                Expand the canvas for acronym-heavy prose. With the Metadata Lens on this field, the assistant can propose
-                expansions (e.g., UUV → unmanned underwater vehicle) before you lock the abstract.
-              </p>
+            <div className="mission-abstract-expand-row">
               <button
                 type="button"
                 className="button button-tiny button-secondary"
@@ -886,8 +867,8 @@ export default function StepMission({
               >
                 {abstractExpanded ? 'Use compact abstract' : 'Expand editing surface'}
               </button>
-            </aside>
-          </div>
+            </div>
+          </>
         </MantaFieldGlass>
 
         <MantaFieldGlass
@@ -1013,10 +994,9 @@ export default function StepMission({
           <div>
             <label htmlFor="startDate">Start date *</label>
             <input
-              id="startDate"
+              {...pilotFieldControlAttrs('mission.startDate', 'startDate')}
               type="datetime-local"
               className={`form-control${invalid('mission.startDate') ? ' form-control--invalid' : ''}`}
-              data-pilot-field="mission.startDate"
               value={toDatetimeLocalValue(mission.startDate)}
               onChange={(e) => onMissionPatch({ startDate: fromDatetimeLocalValue(e.target.value) })}
               onBlur={() => onTouched('mission.startDate')}
@@ -1027,10 +1007,9 @@ export default function StepMission({
           <div>
             <label htmlFor="endDate">End date *</label>
             <input
-              id="endDate"
+              {...pilotFieldControlAttrs('mission.endDate', 'endDate')}
               type="datetime-local"
               className={`form-control${invalid('mission.endDate') ? ' form-control--invalid' : ''}`}
-              data-pilot-field="mission.endDate"
               value={toDatetimeLocalValue(mission.endDate)}
               onChange={(e) => onMissionPatch({ endDate: fromDatetimeLocalValue(e.target.value) })}
               onBlur={() => onTouched('mission.endDate')}
@@ -1052,10 +1031,9 @@ export default function StepMission({
               }
             />
             <input
-              id="publicationDate"
+              {...pilotFieldControlAttrs('mission.publicationDate', 'publicationDate')}
               type="datetime-local"
               className={`form-control${invalid('mission.publicationDate') ? ' form-control--invalid' : ''}`}
-              data-pilot-field="mission.publicationDate"
               value={toDatetimeLocalValue(mission.publicationDate)}
               onChange={(e) => onMissionPatch({ publicationDate: fromDatetimeLocalValue(e.target.value) })}
               onBlur={() => onTouched('mission.publicationDate')}
@@ -1065,9 +1043,8 @@ export default function StepMission({
           <div>
             <label htmlFor="language">Language</label>
             <select
-              id="language"
+              {...pilotFieldControlAttrs('mission.language', 'language')}
               className={`form-control form-select${invalid('mission.language') ? ' form-control--invalid' : ''}`}
-              data-pilot-field="mission.language"
               value={mission.language || 'eng'}
               onChange={(e) => onMissionPatch({ language: e.target.value })}
               onBlur={() => onTouched('mission.language')}
@@ -1091,9 +1068,8 @@ export default function StepMission({
             <label htmlFor="doi">DOI</label>
             <div className="mission-doi-row__controls">
               <input
-                id="doi"
+                {...pilotFieldControlAttrs('mission.doi', 'doi')}
                 className={`form-control mission-mono-input${invalid('mission.doi') ? ' form-control--invalid' : ''}`}
-                data-pilot-field="mission.doi"
                 placeholder="e.g., 10.7289/V5ABC123"
                 value={mission.doi}
                 onChange={(e) => onMissionPatch({ doi: e.target.value })}
@@ -1989,8 +1965,6 @@ geoscientificInformation`}
         </AccordionSection>
         </div>
       </section>
-
-      </div>
 
       <section className="panel" aria-labelledby="mission-local-draft-heading">
         <h3 className="panel-title" id="mission-local-draft-heading">Local draft</h3>

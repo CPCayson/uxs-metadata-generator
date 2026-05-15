@@ -20,6 +20,9 @@ export function peekIncomingMissionFileId(xmlText) {
   return { ok: true, fileId: id }
 }
 
+/** Prevents stacked `window.confirm` when extension/import fires twice in one turn. */
+let replaceConfirmOpen = false
+
 /**
  * @param {unknown} currentFileId
  * @param {unknown} incomingFileId
@@ -30,8 +33,14 @@ export function confirmReplaceDifferentRecord(currentFileId, incomingFileId) {
   const inc = String(incomingFileId ?? '').trim()
   if (!cur) return true
   if (cur === inc) return true
+  if (replaceConfirmOpen) return false
   const curShort = cur.length > 48 ? `${cur.slice(0, 45)}…` : cur
-  return window.confirm(
-    `This will replace your current record (${curShort}). Continue?`,
-  )
+  replaceConfirmOpen = true
+  try {
+    return window.confirm(
+      `This will replace your current record (${curShort}). Continue?`,
+    )
+  } finally {
+    replaceConfirmOpen = false
+  }
 }

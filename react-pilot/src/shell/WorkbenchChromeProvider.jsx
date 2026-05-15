@@ -8,6 +8,7 @@ import { WorkbenchChromeCtx } from './workbenchChromeContext.js'
  *   lensTarget?: 'form' | 'xml' | 'split',
  *   workspaceDensity?: 'simple' | 'granular',
  *   setWorkspaceDensity?: (d: 'simple' | 'granular') => void,
+ *   mantaToolsEnabled?: boolean,
  *   children: import('react').ReactNode,
  * }} props
  */
@@ -17,6 +18,7 @@ export function WorkbenchChromeProvider({
   lensTarget = 'form',
   workspaceDensity = 'simple',
   setWorkspaceDensity,
+  mantaToolsEnabled = true,
   children,
 }) {
   const [validatorHostEl, setValidatorHostEl] = useState(/** @type {HTMLElement | null} */ (null))
@@ -36,8 +38,9 @@ export function WorkbenchChromeProvider({
       lensTarget,
       workspaceDensity,
       setWorkspaceDensity: typeof setWorkspaceDensity === 'function' ? setWorkspaceDensity : noopDensity,
+      mantaToolsEnabled: Boolean(mantaToolsEnabled),
     }),
-    [assistantLayout, validatorHostEl, registerValidatorHost, lensActive, lensTarget, workspaceDensity, setWorkspaceDensity, noopDensity],
+    [assistantLayout, validatorHostEl, registerValidatorHost, lensActive, lensTarget, workspaceDensity, setWorkspaceDensity, noopDensity, mantaToolsEnabled],
   )
 
   return <WorkbenchChromeCtx.Provider value={value}>{children}</WorkbenchChromeCtx.Provider>

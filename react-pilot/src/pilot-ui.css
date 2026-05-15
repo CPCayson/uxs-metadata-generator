@@ -661,7 +661,9 @@ h4.panel-subtitle.panel-title-hint {
 }
 
 :root[data-theme='dark'] #root .panel.platform-library-panel .form-control:hover:not(:disabled):not(:focus),
-:root[data-theme='dark'] #root .panel.platform-library-panel .form-select:hover:not(:disabled):not(:focus) {
+:root[data-theme='dark'] #root .panel.platform-library-panel .form-select:hover:not(:disabled):not(:focus),
+:root[data-theme='dark'] #root .panel.mission-paper-panel .form-control:hover:not(:disabled):not(:focus),
+:root[data-theme='dark'] #root .panel.mission-paper-panel .form-select:hover:not(:disabled):not(:focus) {
   border-color: #94a3b8 !important;
 }
 

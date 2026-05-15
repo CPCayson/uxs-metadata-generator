@@ -61,16 +61,18 @@ export default function MissionWizardStepPills({
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '0.25rem',
-              padding: '0.35rem 0.45rem',
-              borderRadius: 8,
+              gap: '0.35rem',
+              padding: '0.5rem 0.85rem',
+              borderRadius: 10,
               border: `1px solid ${active ? 'color-mix(in srgb, var(--primary-color, #006994) 55%, var(--border-color))' : 'var(--border-color)'}`,
               background: active
                 ? 'color-mix(in srgb, var(--primary-color, #006994) 10%, var(--card-bg))'
                 : 'color-mix(in srgb, var(--card-bg) 96%, var(--text-color) 2%)',
               cursor: clickable ? 'pointer' : 'default',
               textAlign: 'center',
-              minWidth: 'min-content',
+              minWidth: 0,
+              flex: '1 1 0',
+              width: '100%',
               transition: 'border-color 0.12s, background 0.12s',
             }}
           >

@@ -52,6 +52,16 @@ function getDb() {
   return neon(process.env.DATABASE_URL)
 }
 
+/** Ensure the sensors table has all expected columns (safe to call on every request). */
+async function ensureSensorsSchema(sql) {
+  try {
+    await sql`ALTER TABLE sensors ADD COLUMN IF NOT EXISTS platform_id TEXT DEFAULT ''`
+    await sql`ALTER TABLE sensors ADD COLUMN IF NOT EXISTS observed_variable TEXT DEFAULT ''`
+  } catch {
+    // Table may not exist yet — silently ignore; getSensors will fail descriptively if so.
+  }
+}
+
 /**
  * React pilot sensor cards use `sensorId` / `modelId`; the DB layer expects `id` / `model`.
  * @param {unknown} raw
@@ -145,6 +155,7 @@ async function savePlatform(sql, [platform]) {
 // ── Sensors ────────────────────────────────────────────────────────────────
 
 async function getSensors(sql, args = []) {
+  await ensureSensorsSchema(sql)
   const platformId = args[0] != null ? String(args[0]).trim() : ''
   if (platformId) {
     const rows = await sql`

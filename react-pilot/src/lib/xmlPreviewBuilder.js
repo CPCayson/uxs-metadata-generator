@@ -151,19 +151,31 @@ function previewMissionBoundingDecimals(mission) {
  * Inner XML for `gmd:date` / `gmd:dateStamp` (`gco:Date` vs `gco:DateTime`), using XSD-complete
  * `xs:dateTime` for any instant that includes a clock time (seconds appended when omitted).
  */
+function normalizeToIsoDate(raw) {
+  // Already YYYY-MM-DD
+  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw
+  // MM/DD/YYYY or M/D/YYYY
+  const slash = raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
+  if (slash) return `${slash[3]}-${slash[1].padStart(2, '0')}-${slash[2].padStart(2, '0')}`
+  // MMDDYYYY (8 digits, no separators)
+  if (/^\d{8}$/.test(raw)) return `${raw.slice(4)}-${raw.slice(0, 2)}-${raw.slice(2, 4)}`
+  // YYYY (year only)
+  if (/^\d{4}$/.test(raw)) return raw
+  return null
+}
+
 function gcoDateOrDateTimeInner(v) {
   const raw = String(v ?? '').trim()
   if (!raw) return ''
   const norm = raw.replace(/^(\d{4}-\d{2}-\d{2})[ T](?=\d{2})/, '$1T')
-  if (/^\d{4}-\d{2}-\d{2}$/.test(norm)) {
-    return `<gco:Date>${esc(norm)}</gco:Date>`
-  }
   if (norm.includes('T')) {
     const xs = formatMissionInstantAsXsDateTime(norm)
-    if (!xs) return ''
+    if (!xs) return `<gco:Date gco:nilReason="missing"/>`
     return `<gco:DateTime>${esc(xs)}</gco:DateTime>`
   }
-  return `<gco:Date>${esc(norm)}</gco:Date>`
+  const iso = normalizeToIsoDate(norm)
+  if (iso) return `<gco:Date>${esc(iso)}</gco:Date>`
+  return `<gco:Date gco:nilReason="missing"/>`
 }
 
 /** `gml:beginPosition` / `gml:endPosition` text — same calendar vs instant rules as {@link gcoDateOrDateTimeInner}. */
@@ -171,9 +183,9 @@ function gmlTemporalPositionText(v) {
   const raw = String(v ?? '').trim()
   if (!raw) return ''
   const norm = raw.replace(/^(\d{4}-\d{2}-\d{2})[ T](?=\d{2})/, '$1T')
-  if (/^\d{4}-\d{2}-\d{2}$/.test(norm)) return esc(norm)
   if (norm.includes('T')) return esc(formatMissionInstantAsXsDateTime(norm) || norm)
-  return esc(norm)
+  const iso = normalizeToIsoDate(norm)
+  return esc(iso || norm)
 }
 
 /** Default gmd:dateStamp when the form is blank — stable UTC “Z” instant for preview/export. */
@@ -328,8 +340,11 @@ function gridAxisXml(codeListValue, sizeVal, resVal) {
     size != null
       ? `<gmd:dimensionSize><gco:Integer>${size}</gco:Integer></gmd:dimensionSize>`
       : `<gmd:dimensionSize gco:nilReason="missing"/>`
+  const resNum = res ? parseFloat(res) : NaN
   const resXml = res
-    ? `<gmd:resolution><gco:CharacterString>${esc(res)}</gco:CharacterString></gmd:resolution>`
+    ? !isNaN(resNum)
+      ? `<gmd:resolution><gco:Length uom="m">${resNum}</gco:Length></gmd:resolution>`
+      : ''
     : ''
   return `      <gmd:axisDimensionProperties>
         <gmd:MD_Dimension>
@@ -467,7 +482,7 @@ export function buildXmlPreview(state) {
           (s, i) => {
             const covDesc = buildAcquisitionInstrumentDescription(s, { includeVariableLine: false })
             const attrDesc =
-              String(s.type || s.variable || '').trim() ||
+              String(s.variable || s.type || '').trim() ||
               String(s.sensorId || s.modelId || '').trim() ||
               'notRecorded'
             const dimBits = [
@@ -864,14 +879,14 @@ ${distributionOrderProcessBlock}        </gmd:MD_Distributor>
     .trim() || 'not recorded'
 
   const manufacturerSponsorXml = p.manufacturer
-    ? `          <gmd:sponsor>
+    ? `          <gmi:sponsor>
             <gmd:CI_ResponsibleParty>
               <gmd:organisationName><gco:CharacterString>${esc(p.manufacturer)}</gco:CharacterString></gmd:organisationName>
               <gmd:role>
                 <gmd:CI_RoleCode codeList="${esc(CI_ROLE_CODE_CODELIST)}" codeListValue="collaborator">collaborator</gmd:CI_RoleCode>
               </gmd:role>
             </gmd:CI_ResponsibleParty>
-          </gmd:sponsor>`
+          </gmi:sponsor>`
     : ''
 
   const platformSection = hasPlatformPreview
@@ -1080,6 +1095,9 @@ ${axes.join('\n')}
       <gmd:cellGeometry>
         <gmd:MD_CellGeometryCode codeList="${esc(MD_CELL_GEOMETRY_CODELIST)}" codeListValue="${esc(cell)}">${esc(cell)}</gmd:MD_CellGeometryCode>
       </gmd:cellGeometry>
+      <gmd:transformationParameterAvailability>
+        <gco:Boolean>false</gco:Boolean>
+      </gmd:transformationParameterAvailability>
     </gmd:MD_GridSpatialRepresentation>
   </gmd:spatialRepresentationInfo>\n`
   } else if (String(sp.dimensions || '').trim()) {

@@ -21,8 +21,62 @@
  *   </MantaFieldGlass>
  */
 
-import { memo } from 'react'
+import { Children, Fragment, cloneElement, isValidElement, memo } from 'react'
 import FieldHintTooltip from './FieldHintTooltip.jsx'
+
+const CONTROL_TAGS = new Set(['input', 'textarea', 'select'])
+
+/** @param {string} fieldPath */
+function domIdFromFieldPath(fieldPath) {
+  const leaf = String(fieldPath || '').split('.').pop()
+  return leaf || String(fieldPath || '').replace(/\./g, '-')
+}
+
+/** @param {string} fieldPath */
+function nameFromFieldPath(fieldPath) {
+  return String(fieldPath || '').replace(/\./g, '_')
+}
+
+/**
+ * @param {import('react').ReactNode} node
+ * @returns {boolean}
+ */
+function nodeHasFormControl(node) {
+  let found = false
+  Children.forEach(node, (child) => {
+    if (found || !isValidElement(child)) return
+    if (child.type === Fragment) {
+      if (nodeHasFormControl(child.props.children)) found = true
+      return
+    }
+    const tag = typeof child.type === 'string' ? child.type : ''
+    if (CONTROL_TAGS.has(tag)) found = true
+  })
+  return found
+}
+
+/**
+ * @param {import('react').ReactNode} node
+ * @param {{ id: string, name: string }} attrs
+ * @returns {import('react').ReactNode}
+ */
+function enhanceFormControls(node, attrs) {
+  return Children.map(node, (child) => {
+    if (!isValidElement(child)) return child
+    if (child.type === Fragment) {
+      return cloneElement(child, {}, enhanceFormControls(child.props.children, attrs))
+    }
+    const tag = typeof child.type === 'string' ? child.type : ''
+    if (CONTROL_TAGS.has(tag)) {
+      return cloneElement(child, {
+        id: child.props.id ?? attrs.id,
+        name: child.props.name ?? attrs.name,
+        autoComplete: child.props.autoComplete ?? 'off',
+      })
+    }
+    return child
+  })
+}
 
 // ── Chip definitions ──────────────────────────────────────────────────────────
 
@@ -173,6 +227,13 @@ function MantaFieldGlass({
   })
   const hasError = chips.some((c) => c.type === 'error')
   const hasWarning = chips.some((c) => c.type === 'warning')
+  const controlId = domIdFromFieldPath(fieldPath)
+  const controlName = nameFromFieldPath(fieldPath)
+  const hasControl = nodeHasFormControl(children)
+  const enhancedChildren = hasControl
+    ? enhanceFormControls(children, { id: controlId, name: controlName })
+    : children
+  const LabelTag = hasControl ? 'label' : 'span'
 
   return (
     <div
@@ -185,7 +246,9 @@ function MantaFieldGlass({
     >
       {/* label row — guidance in ⓘ tooltip instead of a paragraph under the field */}
       <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.35rem', marginBottom: 3, flexWrap: 'wrap' }}>
-        <label
+        <LabelTag
+          htmlFor={hasControl ? controlId : undefined}
+          className={hasControl ? undefined : 'mfg-field__label-text'}
           style={{
             fontSize: '0.82rem',
             fontWeight: 600,
@@ -195,7 +258,7 @@ function MantaFieldGlass({
         >
           {label}
           {required && <span style={{ color: '#dc2626', marginLeft: 2 }}>*</span>}
-        </label>
+        </LabelTag>
         {hint ? (
           <FieldHintTooltip ariaLabel={`Guidance for ${label}`}>{hint}</FieldHintTooltip>
         ) : null}
@@ -211,7 +274,7 @@ function MantaFieldGlass({
           : 'none',
         transition: 'outline 0.1s',
       }}>
-        {children}
+        {enhancedChildren}
       </div>
 
       {/* chip row */}

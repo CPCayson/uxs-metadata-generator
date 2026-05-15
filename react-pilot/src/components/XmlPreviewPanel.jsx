@@ -212,25 +212,23 @@ function XmlPreviewPanel({
       >
         <div className="fx-xml-header-title-group">
           <h2>
-            <span className="fx-xml-title-dot" aria-hidden>●</span>
-            LIVE XML <span className="fx-xml-title-sub">// iso-19115-2</span>
+            {compactRailHeader ? (
+              'XML preview'
+            ) : (
+              <>
+                <span className="fx-xml-title-dot" aria-hidden>●</span>
+                LIVE XML <span className="fx-xml-title-sub">// iso-19115-2</span>
+              </>
+            )}
           </h2>
-          <FieldHintTooltip ariaLabel="About the XML preview" className="fx-xml-preview-hint">
-            <>
-              <strong>Live preview</strong> uses the same XML string as <strong>Download preview</strong>,{' '}
-              <strong>{'</>'} ISO XML</strong>, and import reports. Highlighting may trail typing slightly;{' '}
-              <strong>Copy XML</strong> always matches export. Lines are ISO-like GMI/GMD; click a mapped line to jump.
-              <br />
-              <br />
-              <strong>Structural hints</strong> (when shown) flag docucomp/template gaps the analyzer detected in this
-              snapshot.
-              <br />
-              <br />
-              After a successful <strong>draft save</strong>, use <strong>Highlight line delta vs last successful draft
-              save</strong> to compare this preview to the stored XML. Use <strong>Expand</strong> (⤢) when you need a
-              taller panel.
-            </>
-          </FieldHintTooltip>
+          {!compactRailHeader ? (
+            <FieldHintTooltip ariaLabel="About the XML preview" className="fx-xml-preview-hint">
+              <>
+                <strong>Live preview</strong> uses the same XML string as <strong>Download preview</strong>,{' '}
+                <strong>{'</>'} ISO XML</strong>, and import reports.
+              </>
+            </FieldHintTooltip>
+          ) : null}
         </div>
         <div className="fx-xml-header-meta" aria-live="polite">
           <button
@@ -283,12 +281,16 @@ function XmlPreviewPanel({
             </button>
           ) : null}
         </div>
-        <div className="fx-xml-tier2-wrap" style={{ padding: '4px 0 0 4px' }}>
-          <ValidationPill xmlData={previewXml} />
-        </div>
-        <div className="fx-xml-tier3-wrap" style={{ padding: '4px 0 0 4px' }}>
-          <CometValidationPanel xmlData={previewXml} />
-        </div>
+        {!compactRailHeader ? (
+          <>
+            <div className="fx-xml-tier2-wrap" style={{ padding: '4px 0 0 4px' }}>
+              <ValidationPill xmlData={previewXml} />
+            </div>
+            <div className="fx-xml-tier3-wrap" style={{ padding: '4px 0 0 4px' }}>
+              <CometValidationPanel xmlData={previewXml} />
+            </div>
+          </>
+        ) : null}
       </div>
 
       {pilotState?.sourceProvenance?.importIsoXmlFamily === '19115-3' ? (

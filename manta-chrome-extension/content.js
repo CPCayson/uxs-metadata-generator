@@ -105,12 +105,10 @@ function deliverPendingCapture(base) {
     chrome.storage.local.get(PENDING_CAPTURE_KEY, (res) => {
       const capture = res?.[PENDING_CAPTURE_KEY]
       if (!capture) return
-      ;[0, 400, 1200, 2500, 4500].forEach((delay, idx, arr) => {
-        setTimeout(() => {
-          dispatchCapture(capture)
-          if (idx === arr.length - 1) chrome.storage.local.remove(PENDING_CAPTURE_KEY)
-        }, delay)
-      })
+      // Deliver once when the pilot mounts; one delayed retry if XmlToolsBar was not ready yet.
+      dispatchCapture(capture)
+      chrome.storage.local.remove(PENDING_CAPTURE_KEY)
+      setTimeout(() => dispatchCapture(capture), 600)
     })
   } catch {
     /* ignore */

@@ -15,6 +15,7 @@ export function useWorkbenchChrome() {
       lensTarget: 'form',
       workspaceDensity: 'simple',
       setWorkspaceDensity: () => {},
+      mantaToolsEnabled: true,
     }
   }
   return v

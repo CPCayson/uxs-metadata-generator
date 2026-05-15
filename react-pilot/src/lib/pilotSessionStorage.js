@@ -3,6 +3,14 @@ const DEBOUNCE_MS = 450
 
 let timer = null
 
+/** Drop a pending debounced write so it cannot overwrite a fresh session after Start over. */
+export function cancelScheduledPersistPilotSession() {
+  if (timer) {
+    clearTimeout(timer)
+    timer = null
+  }
+}
+
 function notifyPilotSessionWritten() {
   if (typeof window === 'undefined' || typeof CustomEvent === 'undefined') return
   try {
@@ -69,8 +77,8 @@ export function readInitialValidationPrimed() {
 }
 
 /**
- * @param {{ validationPrimed?: boolean }} [prev]
- * @param {{ validationPrimed?: boolean }} [meta]
+ * @param {{ validationPrimed?: boolean, startFresh?: boolean }} [prev]
+ * @param {{ validationPrimed?: boolean, startFresh?: boolean }} [meta]
  */
 function resolveValidationPrimed(prev, meta) {
   if (meta?.validationPrimed !== undefined) return Boolean(meta.validationPrimed)
@@ -79,22 +87,32 @@ function resolveValidationPrimed(prev, meta) {
   return false
 }
 
+/** @param {object | null} prev @param {{ startFresh?: boolean }} [meta] */
+function resolveStartFresh(prev, meta) {
+  if (meta?.startFresh === true) return true
+  if (meta?.startFresh === false) return false
+  return false
+}
+
 /**
  * Write session immediately (used after Manta auto-fix so the widget re-reads fresh state).
  * @param {object} pilotState
- * @param {{ validationPrimed?: boolean }} [meta]
+ * @param {{ validationPrimed?: boolean, startFresh?: boolean }} [meta]
  */
 export function writePilotSessionPayloadNow(pilotState, meta = {}) {
   if (typeof sessionStorage === 'undefined') return
+  cancelScheduledPersistPilotSession()
   try {
     const prev = readPilotSessionPayload()
     const validationPrimed = resolveValidationPrimed(prev, meta)
+    const startFresh = resolveStartFresh(prev, meta)
     sessionStorage.setItem(
       SESSION_KEY,
       JSON.stringify({
         pilot: pilotState,
         savedAt: new Date().toISOString(),
         validationPrimed,
+        ...(startFresh ? { startFresh: true } : {}),
       }),
     )
     notifyPilotSessionWritten()
@@ -121,6 +139,7 @@ export function schedulePersistPilotSession(pilotState, meta = {}) {
           pilot: pilotState,
           savedAt: new Date().toISOString(),
           validationPrimed,
+          startFresh: false,
         }),
       )
       notifyPilotSessionWritten()

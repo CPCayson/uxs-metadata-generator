@@ -130,6 +130,23 @@ function XmlToolsBar({
   const fileInputRef = useRef(null)
   const overflowMenuRef = useRef(null)
   const extensionCaptureKeyRef = useRef('')
+  const importApplyingRef = useRef(false)
+
+  function extensionCaptureDedupeKey(capture) {
+    const text = String(capture?.text || '').trim()
+    return `${capture?.capturedAt || capture?.url || ''}:${capture?.kind || ''}:${text.length}`
+  }
+
+  function shouldSkipExtensionCapture(captureKey) {
+    try {
+      const storageKey = `manta-ext-cap:${captureKey}`
+      if (sessionStorage.getItem(storageKey)) return true
+      sessionStorage.setItem(storageKey, String(Date.now()))
+      return false
+    } catch {
+      return extensionCaptureKeyRef.current === captureKey
+    }
+  }
   /** Map path → bytes while a multi-entry zip is open; cleared after Apply or non-zip load. */
   const zipBytesRef = useRef(/** @type {Record<string, Uint8Array> | null} */ (null))
   /** Filename from last file-picker load; cleared after a successful Apply. */
@@ -248,8 +265,8 @@ function XmlToolsBar({
     function handleCapture(capture) {
       const text = String(capture?.text || '').trim()
       if (!text) return
-      const captureKey = `${capture?.capturedAt || ''}:${capture?.kind || ''}:${text.length}`
-      if (extensionCaptureKeyRef.current === captureKey) return
+      const captureKey = extensionCaptureDedupeKey(capture)
+      if (shouldSkipExtensionCapture(captureKey)) return
       extensionCaptureKeyRef.current = captureKey
       const title = String(capture?.title || capture?.url || 'extension-capture').slice(0, 180)
       const sourceLabel = capture?.source === 'manta-desktop' ? 'desktop' : 'extension'
@@ -259,10 +276,9 @@ function XmlToolsBar({
           originalFilename: title,
           sourceId: capture?.url || `manta-${sourceLabel}`,
         }
-        setImportText(text)
-        setImportOpen(true)
         setImportError('')
-        onStatus?.(`Loaded XML capture from ${sourceLabel} (${text.length} chars). Review and click Apply to form.`)
+        void applyImportText(text)
+        onStatus?.(`Applying XML from ${sourceLabel}…`)
         return
       }
       if (canScanner) {
@@ -271,9 +287,7 @@ function XmlToolsBar({
         onStatus?.(`Loaded page capture from ${sourceLabel} (${text.length} chars). Review scanner suggestions before merging.`)
         return
       }
-      setImportText(text)
-      setImportOpen(true)
-      onStatus?.(`Loaded ${sourceLabel} capture (${text.length} chars).`)
+      onStatus?.(`Loaded ${sourceLabel} capture — no XML recognized.`)
     }
     function onExtensionCapture(/** @type {CustomEvent} */ event) {
       handleCapture(event.detail && typeof event.detail === 'object' ? event.detail : null)
@@ -307,24 +321,26 @@ function XmlToolsBar({
     return () => window.removeEventListener('keydown', onKey)
   }, [importOpen])
 
-  async function applyImport() {
-    if (!canImport) return
+  /** Core import logic — accepts text directly so file/paste paths can auto-apply without state delay. */
+  async function applyImportText(xmlText) {
+    if (!canImport || !xmlText) return
+    if (importApplyingRef.current) return
+    importApplyingRef.current = true
     setImportError('')
     setImportSummaryText('')
     setImportBusy(true)
     try {
-      if (typeof onBeforeApplyXmlImport === 'function' && onBeforeApplyXmlImport(importText) === false) {
+      if (typeof onBeforeApplyXmlImport === 'function' && onBeforeApplyXmlImport(xmlText) === false) {
+        setImportError('Import cancelled — your current record was not changed.')
+        onStatus?.('Import cancelled.')
         return
       }
-      /** @type {Array<Record<string, unknown>>} */
       let sensorLibraryRows = []
       if (hostBridgeReady && hostBridge?.listSensors) {
         try {
           const sr = await hostBridge.listSensors()
           sensorLibraryRows = sr.unexpectedShape ? [] : sr.rows
-        } catch {
-          sensorLibraryRows = []
-        }
+        } catch { sensorLibraryRows = [] }
       }
       const meta = {
         originalFilename: pendingImportMetaRef.current?.originalFilename,
@@ -332,48 +348,40 @@ function XmlToolsBar({
         sourceId:         pendingImportMetaRef.current?.sourceId,
         sensorLibraryRows,
       }
-      const out = parseProfileXmlImport(profile, importText, meta)
+      const out = parseProfileXmlImport(profile, xmlText, meta)
       if (!out.ok) {
         setImportError(out.error || 'Import failed.')
-        setImportSummaryText('')
         onStatus?.(out.error || 'Import failed.')
         return
       }
       pendingImportMetaRef.current = {}
       clearZipImportUi()
-      const rawSnapshot = importText
-      onImportSampleRecorded?.({
-        rawXml: rawSnapshot,
-        filename: meta.originalFilename,
-        warnings: out.warnings,
-      })
+      onImportSampleRecorded?.({ rawXml: xmlText, filename: meta.originalFilename, warnings: out.warnings })
       onPilotImport(out.merged, { importWarnings: out.warnings })
-      emitPilotAuditEvent({
-        profileId: profile.id,
-        action: 'pilotImport',
-        result: 'ok',
-        sourceType: out.provenance?.sourceType ?? 'unknown',
-        originalFilename: meta.originalFilename || null,
-      })
+      emitPilotAuditEvent({ profileId: profile.id, action: 'pilotImport', result: 'ok', sourceType: out.provenance?.sourceType ?? 'unknown', originalFilename: meta.originalFilename || null })
       const pop = summarizePilotImportPopulation(out.merged)
       const w = out.warnings?.length ? ` Parser notes: ${out.warnings.join(' · ')}` : ''
-      const detail = pop.detail ? ` ${pop.detail}` : ''
-      setImportSummaryText(`${pop.summary}${detail}${w}`)
-      setImportOpen(false)
-      setImportText('')
+      setImportSummaryText(`${pop.summary}${pop.detail ? ` ${pop.detail}` : ''}${w}`)
+      clearZipImportUi()
     } finally {
+      importApplyingRef.current = false
       setImportBusy(false)
     }
   }
+
+  async function applyImport() { return applyImportText(importText) }
 
   async function pasteFromClipboard() {
     setImportError('')
     try {
       const t = await navigator.clipboard.readText()
-      setImportText(t)
-      onStatus?.('Pasted from clipboard.')
+      if (t.trim()) {
+        pendingImportMetaRef.current = { originalFilename: 'clipboard-paste' }
+        void applyImportText(t)
+      }
     } catch {
-      setImportError('Clipboard read blocked — paste manually (Cmd+V / Ctrl+V).')
+      setImportError('Clipboard read blocked — grant clipboard permission or use Import to load a file.')
+      onStatus?.('Clipboard read blocked.')
     }
   }
 
@@ -383,7 +391,6 @@ function XmlToolsBar({
     if (!file) return
     setImportError('')
     setImportSummaryText('')
-    setImportOpen(true)
     const lower = file.name.toLowerCase()
     const looksZip = lower.endsWith('.zip') || file.type === 'application/zip' || file.type === 'application/x-zip-compressed'
 
@@ -393,13 +400,13 @@ function XmlToolsBar({
         const buf = reader.result
         if (!(buf instanceof ArrayBuffer)) {
           setImportError('Zip read produced no data.')
+          onStatus?.('Zip read produced no data.')
           return
         }
         try {
           const { map, xmlPaths } = unzipToXmlPaths(buf)
           if (!xmlPaths.length) {
             clearZipImportUi()
-            setImportText('')
             setImportError('No .xml entries found in that zip (skipped __MACOSX).')
             onStatus?.('Zip contained no XML files.')
             return
@@ -411,22 +418,20 @@ function XmlToolsBar({
             const path = xmlPaths[0]
             const text = decodeZipUtf8(map[path])
             pendingImportMetaRef.current = { originalFilename: `${file.name}#${path}` }
-            setImportText(text)
-            onStatus?.(`Loaded ${path} from ${file.name} (${text.length} chars). Apply to merge into the form.`)
+            void applyImportText(text)
             return
           }
+          // Multi-file zip: open panel so user can pick
+          setImportOpen(true)
           setZipXmlPaths(xmlPaths)
           const first = xmlPaths[0]
           setZipPickPath(first)
           const text = decodeZipUtf8(map[first])
           setImportText(text)
           pendingImportMetaRef.current = { originalFilename: `${file.name}#${first}` }
-          onStatus?.(
-            `Zip ${file.name}: ${xmlPaths.length} XML files — pick one below, then Apply.`,
-          )
+          onStatus?.(`Zip ${file.name}: ${xmlPaths.length} XML files — select one from the list.`)
         } catch (err) {
           clearZipImportUi()
-          setImportText('')
           setImportError(err instanceof Error ? err.message : String(err))
           onStatus?.('Zip import failed.')
         }
@@ -444,8 +449,7 @@ function XmlToolsBar({
     reader.onload = () => {
       const text = typeof reader.result === 'string' ? reader.result : ''
       pendingImportMetaRef.current = { originalFilename: file.name }
-      setImportText(text)
-      onStatus?.(`Loaded ${file.name} (${text.length} chars). Review and click Apply to form.`)
+      void applyImportText(text)
     }
     reader.onerror = () => {
       setImportError('Could not read that file.')
@@ -533,7 +537,7 @@ function XmlToolsBar({
           ref={fileInputRef}
           type="file"
           accept=".xml,.XML,.zip,.ZIP,text/xml,application/xml,application/zip,application/x-zip-compressed"
-          className="visually-hidden"
+          className="pilot-xml-tools__file-input"
           aria-hidden
           tabIndex={-1}
           onChange={onXmlFileChosen}
@@ -541,8 +545,12 @@ function XmlToolsBar({
         <button
           type="button"
           className="button button-tiny pilot-xml-tools__action pilot-xml-tools__action--primary"
-          onClick={() => fileInputRef.current?.click()}
-          disabled={!canImport}
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            fileInputRef.current?.click()
+          }}
+          disabled={!canImport || importBusy}
           title={
             canImport
               ? 'Choose a metadata file (.xml) or a zip folder that contains XML — we merge it into your form'
@@ -555,7 +563,11 @@ function XmlToolsBar({
           <button
             type="button"
             className="button button-secondary button-tiny pilot-xml-tools__clear-form pilot-xml-tools__action"
-            onClick={() => onClearForm()}
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              onClearForm()
+            }}
             title="Reset the form to a fresh start (your browser draft is cleared too)"
           >
             Start over
@@ -634,13 +646,12 @@ function XmlToolsBar({
                 className="button button-secondary button-tiny pilot-xml-tools__overflow-item"
                 onClick={() => {
                   setOverflowMenuOpen(false)
-                  setImportOpen((o) => !o)
+                  void pasteFromClipboard()
                 }}
-                aria-expanded={importOpen}
                 disabled={!canImport}
-                title={canImport ? 'Paste metadata text to merge into the form' : 'This profile does not support import'}
+                title={canImport ? 'Read XML from clipboard and import' : 'This profile does not support import'}
               >
-                {importOpen ? 'Hide paste box' : 'Paste from clipboard…'}
+                Paste from clipboard
               </button>
               {isMission && canImport && bundledMissionSamples.length > 0 ? (
                 <>
@@ -661,11 +672,10 @@ function XmlToolsBar({
                         if (!hit) return
                         clearZipImportUi()
                         pendingImportMetaRef.current = { originalFilename: hit.file }
-                        setImportText(hit.xml)
                         setImportError('')
-                        setImportOpen(true)
                         setOverflowMenuOpen(false)
-                        onStatus?.(`Loaded bundled template ${hit.file} (${hit.xml.length} chars). Review and Apply to form.`)
+                        void applyImportText(hit.xml)
+                        onStatus?.(`Applying bundled template ${hit.file}…`)
                       }}
                     >
                       <option value="">Bundled template…</option>
@@ -842,16 +852,11 @@ function XmlToolsBar({
         </div>
       ) : null}
 
-      {canImport && importOpen ? (
-        <div className="xml-import-panel pilot-xml-tools__import">
-          <p className="xml-import-hint">
-            Paste text here, or use <strong>Import</strong> above for a file. One <code>.xml</code> or a <code>.zip</code>{' '}
-            with several files (you can pick which file). We merge into the <strong>{profile.label}</strong> form and skip
-            anything we do not recognize. Press <kbd>Esc</kbd> to close.
-          </p>
+      {canImport && (importBusy || importError || importSummaryText || (zipXmlPaths && zipXmlPaths.length > 1)) ? (
+        <div className="xml-import-panel pilot-xml-tools__import" style={{ padding: '0.5rem 0.75rem' }}>
           {zipXmlPaths && zipXmlPaths.length > 1 ? (
             <label className="xml-import-zip-pick">
-              <span className="xml-import-zip-pick__label">XML inside zip</span>
+              <span className="xml-import-zip-pick__label">Multiple XML files in zip — pick one:</span>
               <select
                 className="form-control"
                 value={zipPickPath}
@@ -861,63 +866,21 @@ function XmlToolsBar({
                   const map = zipBytesRef.current
                   if (!map?.[path]) return
                   const text = decodeZipUtf8(map[path])
-                  setImportText(text)
                   const arc = pendingZipArchiveNameRef.current || 'archive.zip'
                   pendingImportMetaRef.current = { originalFilename: `${arc}#${path}` }
-                  onStatus?.(`Switched import to ${path} (${text.length} chars).`)
+                  void applyImportText(text)
                 }}
                 aria-label="Choose XML file inside zip"
               >
                 {zipXmlPaths.map((p) => (
-                  <option key={p} value={p}>
-                    {p}
-                  </option>
+                  <option key={p} value={p}>{p}</option>
                 ))}
               </select>
             </label>
           ) : null}
-          <textarea
-            className="form-control xml-import-textarea"
-            rows={6}
-            value={importText}
-            onChange={(e) => setImportText(e.target.value)}
-            spellCheck={false}
-            placeholder="Paste XML here…"
-            aria-label="XML to import"
-          />
-          {importText.trim() && !importBusy ? (
-            <p className="xml-import-next-step hint" role="status">
-              Next: click <strong>Apply to form</strong> to merge this XML into the wizard (a review dialog opens when the
-              import would overwrite existing values).
-            </p>
-          ) : null}
-          <div className="xml-import-actions">
-            <button
-              type="button"
-              className="button button-secondary button-tiny"
-              onClick={() => void pasteFromClipboard()}
-            >
-              Read clipboard
-            </button>
-            <button
-              type="button"
-              className="button button-tiny"
-              onClick={applyImport}
-              disabled={importBusy || !importText.trim()}
-            >
-              Apply to form
-            </button>
-          </div>
-          {importSummaryText ? (
-            <p className="xml-import-summary hint" role="status">
-              {importSummaryText}
-            </p>
-          ) : null}
-          {importError ? (
-            <p className="field-error" role="alert">
-              {importError}
-            </p>
-          ) : null}
+          {importBusy ? <p className="hint" role="status">Importing…</p> : null}
+          {importSummaryText ? <p className="xml-import-summary hint" role="status">{importSummaryText}</p> : null}
+          {importError ? <p className="field-error" role="alert">{importError}</p> : null}
         </div>
       ) : null}
     </div>

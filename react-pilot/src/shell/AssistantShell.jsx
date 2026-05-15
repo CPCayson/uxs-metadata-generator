@@ -15,6 +15,7 @@
  */
 
 import { Fragment, useState, useCallback, useEffect, useRef, useMemo } from 'react'
+import { createPortal } from 'react-dom'
 import MantaScannerFrame from '../components/MantaScannerFrame.jsx'
 import LensScannerWorkspacePanel from '../components/LensScannerWorkspacePanel.jsx'
 import LensSymbioteFrame from '../components/LensSymbioteFrame.jsx'
@@ -28,6 +29,7 @@ import { computeCertificationBundles } from '../lib/certificationSummary.js'
 import ReadinessStrip from '../components/ReadinessStrip.jsx'
 import MantaToolsFabDock from '../components/MantaToolsFabDock.jsx'
 import { useWorkbenchChrome } from './useWorkbenchChrome.js'
+import { useDomPortalHost } from './useDomPortalHost.js'
 import { useCometWorkbenchBridge, CometPushPanelFromWorkbench } from './CometWorkbenchBridge.jsx'
 import {
   answerQuestion,
@@ -427,6 +429,10 @@ export default function AssistantShell({
   const { enrichmentService, validationEngine, hostBridge, profile, onCometLoad, workflowEngine } = useMetadataEngine()
 
   const splitFloat = layoutVariant === 'split-float'
+  const askRailHost = useDomPortalHost('manta-ask-rail-host')
+  const lensRailHost = useDomPortalHost('manta-lens-rail-host')
+  const portalAskToRail = splitFloat && Boolean(askRailHost)
+  const portalLensToRail = splitFloat && Boolean(lensRailHost)
   const { payload: cometWorkbenchPayload } = useCometWorkbenchBridge()
   const { workspaceDensity, setWorkspaceDensity } = useWorkbenchChrome()
 
@@ -589,9 +595,15 @@ export default function AssistantShell({
   useEffect(() => {
     function onAssistantTab(/** @type {CustomEvent} */ e) {
       const tab = e?.detail?.tab
-      if (tab !== 'validate' && tab !== 'ask' && tab !== 'search' && tab !== 'live' && tab !== 'comet') return
+      if (tab !== 'validate' && tab !== 'ask' && tab !== 'search' && tab !== 'live' && tab !== 'comet' && tab !== 'lens') return
       if (tab === 'validate' && layoutVariant === 'split-float') {
         runQualityCheck(qualityMode)
+        return
+      }
+      if (tab === 'lens' && layoutVariant === 'split-float') {
+        setActiveTab('lens')
+        onOpenLensOnly?.()
+        setToolsFabSheetOpen(true)
         return
       }
       setActiveTab(tab)
@@ -610,7 +622,18 @@ export default function AssistantShell({
       window.removeEventListener('manta:assistant-tab', onAssistantTab)
       window.removeEventListener('manta:assistant-run-quality-check', onRunQualityCheck)
     }
-  }, [runQualityCheck, qualityMode, layoutVariant])
+  }, [runQualityCheck, qualityMode, layoutVariant, onOpenLensOnly])
+
+  useEffect(() => {
+    if (!splitFloat) return
+    if (activeTab === 'ask' || activeTab === 'lens' || activeTab === 'comet') {
+      try {
+        window.dispatchEvent(new CustomEvent('manta:side-panel-tab', { detail: { tab: activeTab } }))
+      } catch {
+        /* */
+      }
+    }
+  }, [splitFloat, activeTab])
 
   function toggleDef(issue) {
     setActiveDefIssue((prev) =>
@@ -1749,7 +1772,7 @@ export default function AssistantShell({
           label: '⬡ LENS',
           dot: null,
         },
-        ...TABS_TOOLS,
+        ...TABS_TOOLS.filter((t) => t.id !== 'ask'),
       ]
     : TABS_TOOLS
 
@@ -1898,7 +1921,7 @@ export default function AssistantShell({
 
   const toolsTabPanels = (
     <>
-        {splitFloat && activeTab === 'lens' && lensMode && (
+        {splitFloat && activeTab === 'lens' && lensMode && !portalLensToRail && (
           <div className="manta-lens-fab-panel">
             <LensScannerWorkspacePanel
               embeddedInFab
@@ -1954,7 +1977,7 @@ export default function AssistantShell({
           </div>
         )}
         {/* ══════════ ASK ═══════════════════════════════════════════════ */}
-        {activeTab === 'ask' && (
+        {activeTab === 'ask' && !portalAskToRail && (
           <div className="manta-chat">
             {/* Suggested questions */}
             <div className="manta-chat__suggestions">
@@ -2504,9 +2527,126 @@ export default function AssistantShell({
       </footer>
     ) : null
 
+    const askRailPanel = (
+      <div className="manta-chat manta-chat--cmd-rail">
+        <div className="manta-chat__suggestions">
+          {SUGGESTED_QUESTIONS.map((q) => (
+            <button
+              key={q}
+              type="button"
+              className="manta-chat__suggest-chip"
+              onClick={() => submitAsk(q)}
+            >
+              {q}
+            </button>
+          ))}
+        </div>
+        <div className="manta-chat__history">
+          {chatHistory.map((msg, idx) => (
+            <div
+              key={idx}
+              className={`manta-chat__msg manta-chat__msg--${msg.type}`}
+            >
+              {msg.type === 'assistant'
+                ? <RichText text={msg.text} />
+                : msg.text
+              }
+            </div>
+          ))}
+          {askLoading && (
+            <div className="manta-chat__msg manta-chat__msg--thinking">
+              ⬡ thinking…
+            </div>
+          )}
+          <div ref={chatEndRef} />
+        </div>
+        <div className="manta-chat__input-row">
+          <input
+            className="manta-chat__input"
+            placeholder="Ask about any metadata field or concept…"
+            value={askInput}
+            onChange={(e) => setAskInput(e.target.value)}
+            onKeyDown={onAskKeyDown}
+            aria-label="Ask a metadata question"
+          />
+          <button
+            type="button"
+            className="manta-chat__submit"
+            onClick={() => submitAsk()}
+            disabled={!askInput.trim() || askLoading}
+            aria-label="Submit question"
+          >
+            ASK
+          </button>
+        </div>
+      </div>
+    )
+
+    const lensRailPanel = lensMode ? (
+      <div className="manta-lens-fab-panel manta-lens-fab-panel--cmd-rail">
+        <LensScannerWorkspacePanel
+          embeddedInFab
+          profile={profile}
+          qualityResult={qualityResult}
+          errors={errors}
+          warnings={warnings}
+          hasErrors={hasErrors}
+          hasWarnings={hasWarnings}
+          lensIssuesScoped={lensIssuesScoped}
+          lensIssuesFiltered={lensIssuesFiltered}
+          lensIssueScope={lensIssueScope}
+          setLensIssueScope={setLensIssueScope}
+          lensIssueFilter={lensIssueFilter}
+          setLensIssueFilter={setLensIssueFilter}
+          wizardActiveStepId={wizardActiveStepId}
+          lensHlField={lensHlField}
+          setLensHlField={setLensHlField}
+          lensHudExpanded={lensHudExpanded}
+          setLensHudExpanded={setLensHudExpanded}
+          onOpenMantaAssistant={onOpenMantaAssistant}
+          onOpenEditor={onOpenEditor}
+          setLensCollapsed={setLensCollapsed}
+          fixWalkFieldCount={fixWalkFieldCount}
+          lensFixGuide={lensFixGuide}
+          startOrStopFixGuide={startOrStopFixGuide}
+          lensChipPilot={lensChipPilot}
+          onLensQuickChip={onLensQuickChip}
+          stepFixGuide={stepFixGuide}
+          sectionBars={sectionBars}
+          lensHelpOpen={lensHelpOpen}
+          setLensHelpOpen={setLensHelpOpen}
+          runQualityCheck={runQualityCheck}
+          qualityMode={qualityMode}
+          qualityLoading={qualityLoading}
+          onToggleLens={onToggleLens}
+          onFabExit={() => {
+            onCloseLens?.()
+            setActiveTab('ask')
+          }}
+          onFabAskTools={() => {
+            onCloseLens?.()
+            setActiveTab('ask')
+            setToolsFabSheetOpen(true)
+          }}
+          lensAsk={lensAsk}
+          setLensAsk={setLensAsk}
+          suppressFloatingLensAsk={lensAskInlineInFieldSymbiote}
+          activeDefIssue={activeDefIssue}
+          setActiveDefIssue={setActiveDefIssue}
+          hideSectionBars
+        />
+      </div>
+    ) : (
+      <p className="manta-widget__rail-hint">
+        Use the <strong>⬡ LENS</strong> control below the wizard to start the scanner.
+      </p>
+    )
+
     return (
       <>
         {lensWizardSymbiotePortal}
+        {portalAskToRail && askRailHost ? createPortal(askRailPanel, askRailHost) : null}
+        {portalLensToRail && lensRailHost ? createPortal(lensRailPanel, lensRailHost) : null}
         <MantaToolsFabDock
           tabs={fabDockTabs}
           activeTab={activeTab}

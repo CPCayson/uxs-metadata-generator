@@ -18,6 +18,7 @@ import { missionValidationRuleSets } from './missionValidationRules.js'
 import { getMissionFieldLabel } from './missionFieldLabels.js'
 import { buildXmlPreview as buildXmlPreviewXml } from '../../lib/xmlPreviewBuilder.js'
 import { readPilotSessionPayload } from '../../lib/pilotSessionStorage.js'
+import { logPilotWorkspace, pilotWorkspaceSnapshot } from '../../lib/pilotDebugLog.js'
 import { UXS_OPERATION_RELATIONSHIP_TYPES } from '../../lib/uxsOperationalModel.js'
 
 // Step components loaded lazily so the profile can be imported before React renders.
@@ -89,13 +90,26 @@ function seedPilotState() {
 }
 
 function missionInitState() {
+  const session = readPilotSessionPayload()
+  if (session?.startFresh === true) {
+    const fresh = sanitizePilotState(defaultPilotState())
+    logPilotWorkspace('missionInitState', {
+      mode: 'startFresh',
+      after: pilotWorkspaceSnapshot(fresh),
+    })
+    return fresh
+  }
   const seed = seedPilotState()
   let merged = seed
-  const session = readPilotSessionPayload()
   if (session?.pilot && typeof session.pilot === 'object') {
     merged = mergeLoadedPilotState(defaultPilotState(), session.pilot)
   }
-  return sanitizePilotState(merged)
+  const out = sanitizePilotState(merged)
+  logPilotWorkspace('missionInitState', {
+    mode: session?.pilot ? 'sessionMerge' : 'demoSeed',
+    after: pilotWorkspaceSnapshot(out),
+  })
+  return out
 }
 
 // ---------------------------------------------------------------------------

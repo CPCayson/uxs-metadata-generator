@@ -6,7 +6,6 @@ import EmbeddableShell from './shell/EmbeddableShell'
 import WizardShell from './shell/WizardShell'
 import FieldXmlTether from './components/FieldXmlTether'
 import IntakeScreen from './features/intake/IntakeScreen'
-import MissionStatusFooter from './components/MissionStatusFooter'
 import OERPipelineDashboard from './features/oer/OERPipelineDashboard'
 import LibrariesView from './features/libraries/LibrariesView'
 import ArchiveInventoryView from './features/archive/ArchiveInventoryView'
@@ -18,6 +17,7 @@ import { bediCollectionProfile } from './profiles/bedi/bediCollectionProfile'
 import { bediGranuleProfile } from './profiles/bedi/bediGranuleProfile'
 import { registerProfile, hasProfile } from './core/registry/ProfileRegistry'
 import { writePilotSessionPayloadNow } from './lib/pilotSessionStorage'
+import { logPilotWorkspace, pilotWorkspaceSnapshot } from './lib/pilotDebugLog.js'
 import { defaultPilotState, mergeLoadedPilotState, sanitizePilotState } from './lib/pilotValidation'
 import { importPilotPartialStateFromXml } from './lib/xmlPilotImport'
 import { stripMissionPilotIsoImportResidue } from './lib/importMissionIsoResidueStrip.js'
@@ -41,9 +41,7 @@ function resolveInitialTheme() {
   } catch {
     // Ignore storage access errors in restricted environments.
   }
-  if (window.matchMedia?.('(prefers-color-scheme: dark)').matches) return 'dark'
-  /* Default to dark (black-based UI); users can switch to light via header. */
-  return 'dark'
+  return 'light'
 }
 
 // ── Workspace hub (forms + toggled views, no left rail) ─────────────────────
@@ -709,9 +707,15 @@ function App() {
                     label: wizardNavLabel(activeProfileId, platformHint),
                     onHome: () => { setWorkspaceHubId('dashboard'); setMainPane('hub') },
                     onNewRecord: () => {
-                      writePilotSessionPayloadNow(defaultPilotState(), { validationPrimed: false })
+                      const fresh = defaultPilotState()
+                      writePilotSessionPayloadNow(fresh, {
+                        validationPrimed: false,
+                        startFresh: true,
+                      })
+                      logPilotWorkspace('app:onNewRecord', { after: pilotWorkspaceSnapshot(fresh) })
                       setActiveProfileId('mission')
                       setPlatformHint(null)
+                      setIsDirty(false)
                       setWizardInstanceKey((k) => k + 1)
                       setMainPane('wizard')
                     },
@@ -723,25 +727,7 @@ function App() {
         </main>
       </div>
 
-      <MissionStatusFooter
-        isDirty={isDirty}
-        appVersion={appVersion}
-        darkMode={theme === 'dark'}
-        onDarkModeChange={(on) => setTheme(on ? 'dark' : 'light')}
-        formWizard={mainPane === 'wizard'}
-        onFormWizardChange={(on) => {
-          if (on) {
-            setActiveProfileId('mission')
-            setPlatformHint(null)
-            setMainPane('wizard')
-          } else {
-            setWorkspaceHubId('intake')
-            setMainPane('hub')
-          }
-        }}
-        lensEnabled={mantaToolsEnabled}
-        onLensChange={setMantaToolsEnabled}
-      />
+      {/* Mission status footer hidden — workspace uses full viewport height */}
 
       {/* HUD tether: draws a neon line from the focused field to its XML line */}
       <FieldXmlTether />
