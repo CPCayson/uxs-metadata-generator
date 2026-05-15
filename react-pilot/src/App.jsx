@@ -541,6 +541,10 @@ function App() {
     typeof import.meta.env !== 'undefined' && typeof import.meta.env.VITE_APP_VERSION === 'string'
       ? import.meta.env.VITE_APP_VERSION
       : 'dev'
+  const buildId =
+    typeof import.meta.env !== 'undefined' && typeof import.meta.env.VITE_BUILD_ID === 'string'
+      ? import.meta.env.VITE_BUILD_ID
+      : 'dev'
 
   const [activeProfileId, setActiveProfileId]   = useState('mission')
   const [platformHint, setPlatformHint]         = useState(null)
@@ -616,6 +620,12 @@ function App() {
               <div className="pilot-header-brand">
                 <p className="pilot-header-eyebrow">
                   NCEI · Ocean Exploration &amp; Research
+                  {buildId && buildId !== 'dev' ? (
+                    <span className="pilot-header-build-id" title="Deployed build (git commit)">
+                      {' '}
+                      · build {buildId}
+                    </span>
+                  ) : null}
                 </p>
                 <h1 className="pilot-header-title-row">
                   Manta

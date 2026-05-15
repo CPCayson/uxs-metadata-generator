@@ -2168,6 +2168,12 @@
   opacity: 0.72;
 }
 
+.pilot-header-build-id {
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  opacity: 0.85;
+}
+
 #root .pilot-app-header--compact-wizard h1.pilot-header-title-row {
   font-size: 1.2rem;
   line-height: 1.12;

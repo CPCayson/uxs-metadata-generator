@@ -1,3 +1,5 @@
+import { isPilotWorkspaceClearing } from './pilotWorkspaceClearing.js'
+
 const SESSION_KEY = 'uxsReactPilotSessionV1'
 const DEBOUNCE_MS = 450
 
@@ -87,10 +89,18 @@ function resolveValidationPrimed(prev, meta) {
   return false
 }
 
-/** @param {object | null} prev @param {{ startFresh?: boolean }} [meta] */
+/**
+ * Keep `startFresh` until the user imports/edits (validation primed), so reload + debounced
+ * session writes do not resurrect demo seed / sanitized defaults after Start over.
+ *
+ * @param {object | null} prev
+ * @param {{ startFresh?: boolean, validationPrimed?: boolean }} [meta]
+ */
 function resolveStartFresh(prev, meta) {
   if (meta?.startFresh === true) return true
   if (meta?.startFresh === false) return false
+  if (meta?.validationPrimed === true) return false
+  if (prev && typeof prev === 'object' && prev.startFresh === true) return true
   return false
 }
 
@@ -128,19 +138,22 @@ export function writePilotSessionPayloadNow(pilotState, meta = {}) {
  */
 export function schedulePersistPilotSession(pilotState, meta = {}) {
   if (typeof sessionStorage === 'undefined') return
+  if (isPilotWorkspaceClearing()) return
   if (timer) clearTimeout(timer)
   timer = setTimeout(() => {
     timer = null
+    if (isPilotWorkspaceClearing()) return
     try {
       const prev = readPilotSessionPayload()
       const validationPrimed = resolveValidationPrimed(prev, meta)
+      const startFresh = resolveStartFresh(prev, meta)
       sessionStorage.setItem(
         SESSION_KEY,
         JSON.stringify({
           pilot: pilotState,
           savedAt: new Date().toISOString(),
           validationPrimed,
-          startFresh: false,
+          ...(startFresh ? { startFresh: true } : {}),
         }),
       )
       notifyPilotSessionWritten()

@@ -1,0 +1,8 @@
+# Repo-root pointer — Netlify must build the canonical app in `react-pilot/`.
+# Without this, a site linked at the git root may ignore `react-pilot/netlify.toml`
+# and ship an old or failed build while local `npm run dev` from react-pilot works.
+[build]
+  base = "react-pilot"
+  command = "npm run build"
+  publish = "dist"
+  functions = "netlify/functions"

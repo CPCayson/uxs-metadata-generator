@@ -1,5 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import { execSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
@@ -9,6 +10,21 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const LEGACY_INDEX_PATH = path.resolve(__dirname, '..', 'Index.html')
 
 const pkg = JSON.parse(fs.readFileSync(new URL('./package.json', import.meta.url), 'utf8'))
+
+/** Short git SHA for Netlify/production — verify deployed bundle in header. */
+function readBuildId() {
+  const envSha =
+    process.env.COMMIT_REF ||
+    process.env.NETLIFY_COMMIT_REF ||
+    process.env.VITE_BUILD_ID ||
+    ''
+  if (envSha) return String(envSha).slice(0, 7)
+  try {
+    return execSync('git rev-parse --short HEAD', { cwd: __dirname, encoding: 'utf8' }).trim()
+  } catch {
+    return 'dev'
+  }
+}
 
 const VITE_DB_STUB_MESSAGE =
   'Netlify function `/api/db` is not served by plain Vite. From `react-pilot/`, run `npm run dev` (Netlify dev, usually http://127.0.0.1:8888), or `npm run dev:with-api-proxy` while Netlify is up — see `.env.example`.'
@@ -158,6 +174,7 @@ export default defineConfig(({ mode }) => {
     base: './',
     define: {
       'import.meta.env.VITE_APP_VERSION': JSON.stringify(pkg.version || '0.0.0'),
+      'import.meta.env.VITE_BUILD_ID': JSON.stringify(readBuildId()),
       /** Optional override when Netlify dev is not on 127.0.0.1:8888 (see `cometClient.js`). */
       'import.meta.env.VITE_COMET_PROXY_ORIGIN': JSON.stringify(String(env.VITE_COMET_PROXY_ORIGIN || '').trim()),
     },
