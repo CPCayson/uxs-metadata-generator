@@ -221,8 +221,8 @@ export const missionProfile = {
     return missionInitState()
   },
 
-  sanitize(state) {
-    return sanitizePilotState(state)
+  sanitize(state, options) {
+    return sanitizePilotState(state, options ?? {})
   },
 
   /**

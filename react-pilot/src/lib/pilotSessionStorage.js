@@ -13,10 +13,10 @@ export function cancelScheduledPersistPilotSession() {
   }
 }
 
-function notifyPilotSessionWritten() {
+function notifyPilotSessionWritten(detail = {}) {
   if (typeof window === 'undefined' || typeof CustomEvent === 'undefined') return
   try {
-    window.dispatchEvent(new CustomEvent('manta:pilot-session-updated'))
+    window.dispatchEvent(new CustomEvent('manta:pilot-session-updated', { detail }))
   } catch {
     /* ignore */
   }
@@ -107,7 +107,7 @@ function resolveStartFresh(prev, meta) {
 /**
  * Write session immediately (used after Manta auto-fix so the widget re-reads fresh state).
  * @param {object} pilotState
- * @param {{ validationPrimed?: boolean, startFresh?: boolean }} [meta]
+ * @param {{ validationPrimed?: boolean, startFresh?: boolean, clearedDraft?: boolean }} [meta]
  */
 export function writePilotSessionPayloadNow(pilotState, meta = {}) {
   if (typeof sessionStorage === 'undefined') return
@@ -117,16 +117,17 @@ export function writePilotSessionPayloadNow(pilotState, meta = {}) {
     const prev = replaceSession ? null : readPilotSessionPayload()
     const validationPrimed = resolveValidationPrimed(prev, meta)
     const startFresh = resolveStartFresh(prev, meta)
+    const savedAt = new Date().toISOString()
     sessionStorage.setItem(
       SESSION_KEY,
       JSON.stringify({
         pilot: pilotState,
-        savedAt: new Date().toISOString(),
+        savedAt,
         validationPrimed,
         ...(startFresh ? { startFresh: true } : {}),
       }),
     )
-    notifyPilotSessionWritten()
+    notifyPilotSessionWritten({ savedAt, clearedDraft: meta.clearedDraft === true })
   } catch {
     // Quota or privacy mode
   }
@@ -147,16 +148,17 @@ export function schedulePersistPilotSession(pilotState, meta = {}) {
       const prev = readPilotSessionPayload()
       const validationPrimed = resolveValidationPrimed(prev, meta)
       const startFresh = resolveStartFresh(prev, meta)
+      const savedAt = new Date().toISOString()
       sessionStorage.setItem(
         SESSION_KEY,
         JSON.stringify({
           pilot: pilotState,
-          savedAt: new Date().toISOString(),
+          savedAt,
           validationPrimed,
           ...(startFresh ? { startFresh: true } : {}),
         }),
       )
-      notifyPilotSessionWritten()
+      notifyPilotSessionWritten({ savedAt })
     } catch {
       // Quota or privacy mode
     }

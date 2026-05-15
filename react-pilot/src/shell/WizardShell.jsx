@@ -62,6 +62,7 @@ import { diffPilotStates } from '../core/fragments/diffPilotStates.js'
 import { useWorkbenchChrome } from './useWorkbenchChrome.js'
 import { defaultPilotState } from '../lib/pilotValidation.js'
 import { confirmReplaceDifferentRecord, peekIncomingMissionFileId } from '../lib/pilotImportReplaceGuard.js'
+import MissionTemplateCatalogToolbar from '../features/mission/MissionTemplateCatalogToolbar.jsx'
 
 /**
  * @param {{
@@ -118,7 +119,10 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     const session = readPilotSessionPayload()
     const freshShell = session?.startFresh === true
     const s = profile.initState?.() ?? profile.defaultState()
-    const normalized = freshShell ? s : profile.sanitize(s)
+    const normalized = profile.sanitize(
+      s,
+      freshShell ? { skipNceiShellDefaults: true } : {},
+    )
     baselineSerialized.current = JSON.stringify(normalized)
     return normalized
   })
@@ -165,6 +169,11 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
 
   /** False after Clear workspace until import, template load, draft load, or user edits (persisted in session). */
   const [validationPrimed, setValidationPrimed] = useState(readInitialValidationPrimed)
+
+  /** When true, dirty tracking matches Start-over / fresh session (no injected NCEI boilerplate). */
+  const freshSessionSandboxRef = useRef(readPilotSessionPayload()?.startFresh === true)
+  /** Tracks last validationPrimed for false→true baseline realignment. */
+  const validationPrimedPrevRef = useRef(readInitialValidationPrimed())
 
   const livePreviewXml = useMemo(() => {
     try {
@@ -501,16 +510,28 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     sheetTemplateSaveDisabled: ma.sheetTemplateSaveDisabled,
   }
 
+  /** After validation idles → engaged, baseline must match full sanitize so dirty tracking stays stable. */
+  useEffect(() => {
+    const prev = validationPrimedPrevRef.current
+    validationPrimedPrevRef.current = validationPrimed
+    if (!prev && validationPrimed) {
+      freshSessionSandboxRef.current = false
+      baselineSerialized.current = JSON.stringify(profile.sanitize(pilotRef.current))
+    }
+  }, [validationPrimed, profile])
+
   // ── Dirty tracking (debounced: JSON.stringify is expensive) ─────────────
   useEffect(() => {
     const t = window.setTimeout(() => {
-      const cur = JSON.stringify(profile.sanitize(pilotState))
+      const cur = JSON.stringify(
+        profile.sanitize(pilotState, freshSessionSandboxRef.current ? { skipNceiShellDefaults: true } : {}),
+      )
       const dirty = cur !== baselineSerialized.current
       setIsDirty(dirty)
       onDirtyChange(dirty)
     }, 160)
     return () => window.clearTimeout(t)
-  }, [pilotState, profile, onDirtyChange])
+  }, [pilotState, profile, onDirtyChange, validationPrimed])
 
   // ── Session persistence (already throttled internally; now also waits
   //    one paint so the keystroke lands first) ──────────────────────────
@@ -761,6 +782,10 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
   })
   useEffect(() => {
     function onSessionWrite(/** @type {CustomEvent} */ e) {
+      if (e?.detail?.clearedDraft === true) {
+        setSavedAt(null)
+        return
+      }
       const at = e?.detail?.savedAt ?? e?.detail?.payload?.savedAt
       if (at) setSavedAt(new Date(at).toLocaleTimeString())
     }
@@ -776,38 +801,50 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
         requestWorkspaceClear()
         return false
       }
-      cancelScheduledPersistPilotSession()
-      const fresh =
-        typeof profile.defaultState === 'function' ? profile.defaultState() : defaultPilotState()
-      baselineSerialized.current = JSON.stringify(fresh)
-      setPilotState(fresh)
-      setValidationPrimed(false)
-      setCometUuid('')
-      writePilotSessionPayloadNow(fresh, {
-        validationPrimed: false,
-        startFresh: opts.startFresh === true || skipConfirm,
-      })
-      setTouched({})
-      setShowAllErrors(false)
-      setImportSampleContext(null)
-      setXmlToolsBarResetKey((k) => k + 1)
-      setActiveStep(profile.steps[0]?.id ?? 'mission')
-      setIsDirty(false)
-      onDirtyChange(false)
+      setPilotWorkspaceClearing(true)
       try {
-        setLastSavedXmlPreview(buildXml(fresh))
-      } catch {
-        setLastSavedXmlPreview('')
+        cancelScheduledPersistPilotSession()
+        const raw =
+          typeof profile.defaultState === 'function' ? profile.defaultState() : defaultPilotState()
+        const shellOpts = { skipNceiShellDefaults: true }
+        const fresh = profile.sanitize(raw, shellOpts)
+        freshSessionSandboxRef.current = true
+        validationPrimedPrevRef.current = false
+        baselineSerialized.current = JSON.stringify(fresh)
+        flushSync(() => {
+          setPilotState(fresh)
+          setValidationPrimed(false)
+        })
+        setCometUuid('')
+        writePilotSessionPayloadNow(fresh, {
+          validationPrimed: false,
+          startFresh: opts.startFresh === true || skipConfirm,
+          clearedDraft: true,
+        })
+        setTouched({})
+        setShowAllErrors(false)
+        setImportSampleContext(null)
+        setXmlToolsBarResetKey((k) => k + 1)
+        setActiveStep(profile.steps[0]?.id ?? 'mission')
+        setIsDirty(false)
+        onDirtyChange(false)
+        try {
+          setLastSavedXmlPreview(buildXml(fresh))
+        } catch {
+          setLastSavedXmlPreview('')
+        }
+        setStatusMessage(
+          'Workspace cleared — defaults loaded. Validation stays idle until you import XML, apply a template, load a draft, or edit a field.',
+        )
+        emitPilotAuditEvent({
+          profileId: profile.id,
+          action: skipConfirm ? 'wizardStartFresh' : 'clearForm',
+          result: 'ok',
+        })
+        return true
+      } finally {
+        setPilotWorkspaceClearing(false)
       }
-      setStatusMessage(
-        'Workspace cleared — defaults loaded. Validation stays idle until you import XML, apply a template, load a draft, or edit a field.',
-      )
-      emitPilotAuditEvent({
-        profileId: profile.id,
-        action: skipConfirm ? 'wizardStartFresh' : 'clearForm',
-        result: 'ok',
-      })
-      return true
     },
     [profile, buildXml, onDirtyChange],
   )
@@ -855,9 +892,9 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
 
   /**
    * @param {object} next Merged pilot state from XML import
-   * @param {{ importWarnings?: string[] }} [meta] Parser warnings from {@link parseProfileXmlImport}
    */
-  function handlePilotImport(next, _meta = {}) {
+  function handlePilotImport(next) {
+    freshSessionSandboxRef.current = false
     setValidationPrimed(true)
     const changes = diffPilotStates(pilotState, next, next.sourceProvenance?.sourceType ?? 'rawIso')
     if (changes.length === 0) {
@@ -895,9 +932,9 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
             setShowAllErrors(false)
             setTouched({})
           }}
-          onPilotImportMerged={(merged, importMeta) => {
+          onPilotImportMerged={(merged) => {
             setWizardStartOpen(false)
-            handlePilotImport(merged, importMeta)
+            handlePilotImport(merged)
           }}
           onImportSampleRecorded={(d) => {
             setImportSampleContext({
@@ -1042,8 +1079,26 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
             <h2 className="lab-step-title">
               {activeStepMeta.label} <span className="lab-step-title__sub">Configuration</span>
             </h2>
-            <span className="lab-iso-badge">ISO 19115-2 / GMI</span>
+            <div className="lab-step-header__actions">
+              {activeStep === 'mission' && cap.templateCatalog ? (
+                <MissionTemplateCatalogToolbar
+                  hostBridgeReady={hostBridgeReady}
+                  templateCatalogRows={ma.templateCatalogRows}
+                  templateCatalogLoading={ma.templateCatalogLoading}
+                  templateCatalogError={ma.templateCatalogError}
+                  onRefreshTemplateCatalog={ma.refreshTemplateCatalog}
+                  onApplySheetTemplate={applySheetTemplatePrimed}
+                  templateApplyDisabled={ma.templateApplyDisabled}
+                />
+              ) : null}
+              <span className="lab-iso-badge">ISO 19115-2 / GMI</span>
+            </div>
           </div>
+          {activeStep === 'mission' && cap.templateCatalog && ma.templateCatalogError ? (
+            <p className="mission-template-toolbar-error field-error" role="alert">
+              {ma.templateCatalogError}
+            </p>
+          ) : null}
 
           {profile.id === 'mission' ? (
             savedAt ? (
@@ -1426,9 +1481,8 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
             {/* ── Validation Command Center (bottom, fixed) ─────────────── */}
             {!xmlExpanded && sidePanelTab === 'xml' && (() => {
               const allIssues = validationPrimed ? (validation.issues ?? []) : []
-              const errors   = allIssues.filter((i) => i.severity === 'e')
-              const warnings = allIssues.filter((i) => i.severity === 'w')
-              const score    = validation.score ?? 100
+              const errors = allIssues.filter((i) => i.severity === 'e')
+              const score = validation.score ?? 100
               const formClear = errors.length === 0
               const allClear = formClear && previewVerification.previewXmlReady
 

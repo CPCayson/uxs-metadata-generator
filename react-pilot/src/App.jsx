@@ -735,6 +735,7 @@ function App() {
                       writePilotSessionPayloadNow(fresh, {
                         validationPrimed: false,
                         startFresh: true,
+                        clearedDraft: true,
                       })
                       logPilotWorkspace('app:onNewRecord', { after: pilotWorkspaceSnapshot(fresh) })
                       setActiveProfileId('mission')

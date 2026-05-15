@@ -212,7 +212,7 @@
  *   generatedFormSchema?: object,
  *   capabilities: ProfileCapabilities,
  *   defaultState: () => object,
- *   sanitize: (state: object) => object,
+ *   sanitize: (state: object, options?: { skipNceiShellDefaults?: boolean }) => object,
  *   initState?: () => object,
  *   mergeLoaded: (loaded: object) => object,
  *   buildXmlPreview?: (state: object) => string,

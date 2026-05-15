@@ -1159,7 +1159,8 @@ export function defaultPilotState() {
       format: '',
       distributionFormatName: '',
       distributionFileFormat: '',
-      metadataStandard: 'ISO 19115-2 Imagery and Gridded Data',
+      metadataStandard:
+        'ISO 19115-2 Geographic Information - Metadata - Part 2: Extensions for Imagery and Gridded Data',
       metadataVersion: 'ISO 19115-2:2009(E)',
       license: '',
       landingUrl: '',
