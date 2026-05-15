@@ -1,6 +1,10 @@
 # Repo-root pointer — Netlify must build the canonical app in `react-pilot/`.
 # Without this, a site linked at the git root may ignore `react-pilot/netlify.toml`
 # and ship an old or failed build while local `npm run dev` from react-pilot works.
+#
+# If GitHub deploys fail with "Build image no longer supported", upgrade the site to
+# Ubuntu Noble 24.04: Netlify → symphonious-sunshine-843275 → Project configuration →
+# Build & deploy → Build image selection → Ubuntu Noble 24.04 (default).
 [build]
   base = "react-pilot"
   command = "npm run build"
