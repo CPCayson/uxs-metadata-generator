@@ -57,10 +57,16 @@ function buildSuggestions(issues, pilotState, activeStep) {
       })
     }
 
-    // Bounding box
+    // Bounding box — mission + spatial use `west`/`east`/`south`/`north` (not westLon).
     const sp = pilotState?.spatial ?? {}
-    const hasBox = sp.westLon !== undefined && sp.westLon !== '' && sp.westLon !== -180 || false
-    if (!hasBox) {
+    const west = String(mission.west ?? sp.west ?? '').trim()
+    const east = String(mission.east ?? sp.east ?? '').trim()
+    const south = String(mission.south ?? sp.south ?? '').trim()
+    const north = String(mission.north ?? sp.north ?? '').trim()
+    const isGlobalDefault =
+      west === '-180' && east === '180' && south === '-90' && north === '90'
+    const hasRealBox = Boolean(west && east && south && north && !isGlobalDefault)
+    if (!hasRealBox) {
       sugg.push({
         id: 'no-bbox',
         icon: '🗺',
@@ -74,7 +80,7 @@ function buildSuggestions(issues, pilotState, activeStep) {
 
     // GCMD keywords
     const kw = pilotState?.keywords ?? {}
-    const hasGcmd = Array.isArray(kw.scienceKeywords) && kw.scienceKeywords.length > 0
+    const hasGcmd = Array.isArray(kw.sciencekeywords) && kw.sciencekeywords.length > 0
     if (!hasGcmd) {
       sugg.push({
         id: 'no-gcmd',

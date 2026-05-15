@@ -42,9 +42,8 @@ import { setPilotFieldPath } from '../lib/pilotStateFieldSet.js'
 import { acquisitionInstrumentHasContent } from '../lib/sensorInstrumentDescription.js'
 import MantaMissionCapabilityStrip from '../components/MantaMissionCapabilityStrip.jsx'
 import MissionWizardStepPills from '../components/MissionWizardStepPills.jsx'
-import ImportReviewPanel from '../components/ImportReviewPanel.jsx'
 import WizardStartChoiceModal from '../components/WizardStartChoiceModal.jsx'
-import { diffPilotStates, applyDecisions } from '../core/fragments/diffPilotStates.js'
+import { diffPilotStates } from '../core/fragments/diffPilotStates.js'
 import { summarizePilotImportPopulation } from '../lib/importMergeSummary.js'
 import { useWorkbenchChrome } from './useWorkbenchChrome.js'
 import { defaultPilotState } from '../lib/pilotValidation.js'
@@ -176,9 +175,6 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
   const [statusMessage, setStatusMessage] = useState('Ready')
   const [loading, setLoading] = useState(false)
   const [summary, setSummary] = useState({ platforms: 'not checked', templates: 'not checked' })
-
-  // Import review — holds pending import state until user accepts/rejects conflicts
-  const [pendingImport, setPendingImport] = useState(/** @type {{ changes: any[], next: object, sourceType: string, filename?: string, importedAt?: string } | null} */ (null))
 
   /** Raw XML + meta from last XmlToolsBar “Apply” — drives downloadable import report */
   const [importSampleContext, setImportSampleContext] = useState(
@@ -793,7 +789,6 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
       writePilotSessionPayloadNow(fresh, { validationPrimed: false })
       setTouched({})
       setShowAllErrors(false)
-      setPendingImport(null)
       setImportSampleContext(null)
       setXmlToolsBarResetKey((k) => k + 1)
       setActiveStep(profile.steps[0]?.id ?? 'mission')
@@ -850,6 +845,7 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
    * @param {{ importWarnings?: string[] }} [meta] Parser warnings from {@link parseProfileXmlImport}
    */
   function handlePilotImport(next, meta = {}) {
+    setValidationPrimed(true)
     const importWarnings = Array.isArray(meta.importWarnings) ? meta.importWarnings : []
     const changes = diffPilotStates(pilotState, next, next.sourceProvenance?.sourceType ?? 'rawIso')
     if (changes.length === 0) {
@@ -909,30 +905,6 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
             })
           }}
           onStatus={setStatusMessage}
-        />
-      )}
-
-      {/* Import review overlay — shown when an import has fields to review */}
-      {pendingImport && (
-        <ImportReviewPanel
-          changes={pendingImport.changes}
-          sourceType={pendingImport.sourceType}
-          filename={pendingImport.filename}
-          importedAt={pendingImport.importedAt}
-          onApply={(decisions) => {
-            const resolved = applyDecisions(pilotState, pendingImport.next, decisions)
-            const clean = profile.sanitize(resolved)
-            syncBaselineAfterExternalMerge(clean)
-            setPilotState(clean)
-            setTouched({})
-            setShowAllErrors(false)
-            setPendingImport(null)
-            setStatusMessage(
-              'Import applied — merged state is the new baseline. Review checks in the Validation panel.',
-            )
-            window.dispatchEvent(new CustomEvent('manta:metadata-import-merged'))
-          }}
-          onCancel={() => setPendingImport(null)}
         />
       )}
 

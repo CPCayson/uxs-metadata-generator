@@ -60,7 +60,9 @@ export function readInitialValidationPrimed() {
     if (!session) return false
     if (session.validationPrimed === false) return false
     if (session.validationPrimed === true) return true
-    return pilotSessionPilotLooksEngaged(session.pilot)
+    // Legacy payloads without `validationPrimed`: stay idle. Inferring from pilot fields
+    // caused false positives once sanitized defaults / NCEI boilerplate populated title/abstract/etc.
+    return false
   } catch {
     return false
   }
