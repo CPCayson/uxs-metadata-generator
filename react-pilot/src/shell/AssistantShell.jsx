@@ -497,6 +497,24 @@ export default function AssistantShell({
   // ── Tab ───────────────────────────────────────────────────────────────────
   const [activeTab, setActiveTab] = useState(() => (layoutVariant === 'split-float' ? 'ask' : 'validate'))
 
+  /** Split-float: sheet above FAB (ASK / SEARCH / LIVE / CoMET). Declared before any effect that calls {@link setToolsFabSheetOpen} (TDZ-safe). */
+  const TOOLS_FAB_SHEET_SS_KEY = 'manta-tools-fab-sheet-open-v1'
+  const [toolsFabSheetOpen, setToolsFabSheetOpen] = useState(() => {
+    try {
+      const v = sessionStorage.getItem(TOOLS_FAB_SHEET_SS_KEY)
+      if (v === '1' || v === 'true') return true
+      if (v === '0' || v === 'false') return false
+      return false
+    } catch {
+      return false
+    }
+  })
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(TOOLS_FAB_SHEET_SS_KEY, toolsFabSheetOpen ? '1' : '0')
+    } catch { /* */ }
+  }, [toolsFabSheetOpen])
+
   // ── VALIDATE ──────────────────────────────────────────────────────────────
   const [qualityResult,  setQualityResult]  = useState(null)
   const [qualityLoading, setQualityLoading] = useState(false)
@@ -833,24 +851,6 @@ export default function AssistantShell({
       sessionStorage.setItem('manta-lens-collapsed', lensCollapsed ? '1' : '0')
     } catch { /* */ }
   }, [lensCollapsed])
-
-  /** Split-float: sheet above FAB (ASK / SEARCH / LIVE / CoMET) */
-  const TOOLS_FAB_SHEET_SS_KEY = 'manta-tools-fab-sheet-open-v1'
-  const [toolsFabSheetOpen, setToolsFabSheetOpen] = useState(() => {
-    try {
-      const v = sessionStorage.getItem(TOOLS_FAB_SHEET_SS_KEY)
-      if (v === '1' || v === 'true') return true
-      if (v === '0' || v === 'false') return false
-      return false
-    } catch {
-      return false
-    }
-  })
-  useEffect(() => {
-    try {
-      sessionStorage.setItem(TOOLS_FAB_SHEET_SS_KEY, toolsFabSheetOpen ? '1' : '0')
-    } catch { /* */ }
-  }, [toolsFabSheetOpen])
 
   useEffect(() => {
     try {
