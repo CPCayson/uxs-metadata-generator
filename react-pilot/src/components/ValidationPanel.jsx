@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { earthdataSearchUrlForGcmdKeyword, gcmdConceptUrlFromUuid } from '../lib/gcmdKmsUrl.js'
+import PreviewVerificationTierStrip from './PreviewVerificationTierStrip.jsx'
 
 const KEYWORD_UUID_FIELD_RE = /^keywords\.(\w+)\[(\d+)\]\.uuid$/
 
@@ -418,6 +419,14 @@ export default function ValidationPanel({
         issuesFirstRail ? ' validation-panel--issues-first' : ''
       }`}
     >
+      {hideSurfaceIntro ? (
+        <section className="validation-panel__xml-tiers" aria-label="XML verification tiers">
+          <p className="hint validation-panel__xml-tiers-lede">
+            Live preview XML: T1 well-formed · T2 NOAA XSD (wasm) · T3 CoMET preflight.
+          </p>
+          <PreviewVerificationTierStrip variant="verify" />
+        </section>
+      ) : null}
       {surfaceIntro}
       {issuesFirstRail ? (
         <>

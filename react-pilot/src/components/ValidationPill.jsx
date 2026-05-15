@@ -1,37 +1,7 @@
-import { useState, useEffect } from 'react'
-import { useNoaaValidator } from '../hooks/useNoaaValidator'
+import { usePreviewNoaaSchemaValidation } from '../hooks/usePreviewNoaaSchemaValidation.js'
 
 export function ValidationPill({ xmlData }) {
-  const { runStrictValidation } = useNoaaValidator()
-  const [status, setStatus] = useState('idle')
-  const [errors, setErrors] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
-
-  useEffect(() => {
-    if (!xmlData?.trim()) return undefined
-
-    const timer = setTimeout(() => {
-      void (async () => {
-        setIsLoading(true)
-        try {
-          const result = await runStrictValidation(xmlData)
-          if (result.valid) {
-            setStatus('valid')
-            setErrors([])
-          } else {
-            setStatus('error')
-            setErrors(result.errors)
-          }
-        } catch (e) {
-          setStatus('error')
-          setErrors([e instanceof Error ? e.message : String(e)])
-        } finally {
-          setIsLoading(false)
-        }
-      })()
-    }, 500)
-    return () => clearTimeout(timer)
-  }, [xmlData, runStrictValidation])
+  const { status, errors, isLoading } = usePreviewNoaaSchemaValidation(xmlData)
 
   const pillColor = isLoading ? '#888' : status === 'valid' ? '#2e7d32' : status === 'error' ? '#c62828' : '#555'
   const pillLabel = isLoading

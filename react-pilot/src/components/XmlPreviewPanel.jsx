@@ -5,6 +5,7 @@ import { analyzeMissionPreviewXml } from '../lib/xmlPreviewStructuralHints.js'
 import FieldHintTooltip from './FieldHintTooltip.jsx'
 import { ValidationPill } from './ValidationPill.jsx'
 import { CometValidationPanel } from './CometValidationPanel.jsx'
+import PreviewVerificationTierStrip from './PreviewVerificationTierStrip.jsx'
 
 const ALL_FIELD_KEYS = Object.keys(FIELD_ELEMENT_HINT)
 
@@ -241,7 +242,9 @@ function XmlPreviewPanel({
           >
             {copyFlash ? 'Copied' : 'Copy XML'}
           </button>
-          {xmlWellFormed.ok != null ? (
+          {compactRailHeader ? (
+            <PreviewVerificationTierStrip variant="xml-compact" className="fx-xml-tier-strip--compact" />
+          ) : xmlWellFormed.ok != null ? (
             <span
               className={`fx-xml-pill${xmlWellFormed.ok ? ' fx-xml-pill--ok' : ' fx-xml-pill--bad'}`}
               title={
@@ -283,6 +286,7 @@ function XmlPreviewPanel({
         </div>
         {!compactRailHeader ? (
           <>
+            <PreviewVerificationTierStrip variant="xml-expanded" className="fx-xml-tier-strip--expanded" />
             <div className="fx-xml-tier2-wrap" style={{ padding: '4px 0 0 4px' }}>
               <ValidationPill xmlData={previewXml} />
             </div>

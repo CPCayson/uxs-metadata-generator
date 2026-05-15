@@ -47,6 +47,9 @@ import { emitPilotAuditEvent } from '../lib/pilotAuditEvents.js'
 import { setPilotFieldPath } from '../lib/pilotStateFieldSet.js'
 import { acquisitionInstrumentHasContent } from '../lib/sensorInstrumentDescription.js'
 import { downloadPilotPreviewXml } from '../lib/downloadPilotPreviewXml.js'
+import { usePreviewVerificationTiers } from '../hooks/usePreviewVerificationTiers.js'
+import { PreviewVerificationProvider } from '../context/PreviewVerificationContext.jsx'
+import PreviewVerificationTierStrip from '../components/PreviewVerificationTierStrip.jsx'
 import MantaMissionCapabilityStrip from '../components/MantaMissionCapabilityStrip.jsx'
 import MissionWizardStepPills from '../components/MissionWizardStepPills.jsx'
 import WizardStartChoiceModal from '../components/WizardStartChoiceModal.jsx'
@@ -163,6 +166,14 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
   /** False after Clear workspace until import, template load, draft load, or user edits (persisted in session). */
   const [validationPrimed, setValidationPrimed] = useState(readInitialValidationPrimed)
 
+  const livePreviewXml = useMemo(() => {
+    try {
+      return buildXml(pilotState) || ''
+    } catch {
+      return ''
+    }
+  }, [buildXml, pilotState])
+
   const pilotRef = useRef(pilotState)
   pilotRef.current = pilotState
 
@@ -224,6 +235,12 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     onStatus: setStatusMessage,
     onPublish,
     capabilities: cap,
+  })
+
+  const previewVerification = usePreviewVerificationTiers(livePreviewXml, {
+    enabled: validationPrimed,
+    preflightSummary: comet.preflightSummary,
+    preflightBusy: comet.preflightBusy,
   })
 
   const applySheetTemplatePrimed = useCallback(
@@ -893,6 +910,7 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
         />
       )}
 
+      <PreviewVerificationProvider value={previewVerification}>
       <div ref={lensStackRef} className="pilot-wizard-lens-stack manta-workspace-lens-anchor">
         {isDirty ? (
           <div className="pilot-dirty-session-banner" role="status">
@@ -1411,7 +1429,8 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
               const errors   = allIssues.filter((i) => i.severity === 'e')
               const warnings = allIssues.filter((i) => i.severity === 'w')
               const score    = validation.score ?? 100
-              const allClear = errors.length === 0
+              const formClear = errors.length === 0
+              const allClear = formClear && previewVerification.previewXmlReady
 
               // Group errors + warnings by wizard step
               const fieldToStep = (f) => {
@@ -1441,15 +1460,7 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
                 <div className="cmd-center-hub">
                   {/* Tier pills */}
                   <div className="cmd-center-hub__header">
-                    <div className="cmd-center-hub__pills">
-                      <span className="cmd-center-pill cmd-center-pill--ok" title="T1: XML well-formed">T1 ✓</span>
-                      <span className={`cmd-center-pill ${allClear ? 'cmd-center-pill--ok' : 'cmd-center-pill--err'}`} title="T2: ISO 19115-2 schema compliance">
-                        T2 {allClear ? '✓' : `${errors.length}✗`}
-                      </span>
-                      <span className={`cmd-center-pill ${warnings.length === 0 ? 'cmd-center-pill--ok' : 'cmd-center-pill--warn'}`} title="T3: NCEI / CoMET rules">
-                        T3 {warnings.length === 0 ? '✓' : `${warnings.length}⚠`}
-                      </span>
-                    </div>
+                    <PreviewVerificationTierStrip variant="cmd-center" />
                     <div className="cmd-center-hub__score">
                       <div className="cmd-center-score-bar">
                         <div className="cmd-center-score-bar__fill" style={{ width: `${score}%`, background: score >= 80 ? 'var(--primary-color)' : score >= 50 ? '#f59e0b' : '#ef4444' }} />
@@ -1504,7 +1515,15 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
                       onClick={allClear ? comet.pushDraftToComet : undefined}
                       disabled={comet.pushBusy}
                     >
-                      {comet.pushBusy ? 'Pushing…' : allClear ? '↑ Push to CoMET' : `Resolve ${errors.length} error${errors.length !== 1 ? 's' : ''} to publish`}
+                      {comet.pushBusy
+                        ? 'Pushing…'
+                        : allClear
+                          ? '↑ Push to CoMET'
+                          : !formClear
+                            ? `Resolve ${errors.length} form error${errors.length !== 1 ? 's' : ''} to publish`
+                            : !previewVerification.previewXmlReady
+                              ? 'Fix T1/T2 XML verification to publish'
+                              : '↑ Push to CoMET'}
                     </button>
                   </div>
                 </div>
@@ -1520,6 +1539,7 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
         aria-hidden="true"
       />
       </div>
+      </PreviewVerificationProvider>
 
       <DebugLogPanel />
     </>

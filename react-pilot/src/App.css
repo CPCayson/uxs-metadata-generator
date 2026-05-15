@@ -5821,6 +5821,127 @@ li.manta-widget__result-item {
   color: #64748b;
 }
 
+/* Integrated T1 / T2 / T3 preview verification (shared strip) */
+.preview-verification-tier-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+.preview-verification-tier-strip--verify {
+  margin: 0 0 0.65rem;
+  padding: 0.5rem 0.65rem;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+.validation-panel__xml-tiers-lede {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: #64748b;
+}
+.fx-xml-tier-strip--compact {
+  flex: 1 1 100%;
+  margin-top: 2px;
+}
+.fx-xml-tier-strip--compact .cmd-center-pill {
+  font-size: 0.62rem;
+  padding: 2px 6px;
+}
+.fx-xml-tier-strip--expanded {
+  padding: 4px 0 2px 4px;
+}
+
+/* Ask tab portaled into right rail — light surface (futuristic.css chat is dark-terminal) */
+.lab-right-rail-portal-host .manta-chat {
+  background: #f8fafc;
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+.lab-right-rail-portal-host .manta-chat__suggestions {
+  background: #fff;
+  border-bottom-color: #e2e8f0;
+}
+.lab-right-rail-portal-host .manta-chat__suggest-chip {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #0c4a6e;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+.lab-right-rail-portal-host .manta-chat__suggest-chip:hover {
+  background: #e0f2fe;
+  border-color: #38bdf8;
+  color: #0f172a;
+}
+.lab-right-rail-portal-host .manta-chat__history {
+  scrollbar-color: #cbd5e1 transparent;
+}
+.lab-right-rail-portal-host .manta-chat__history::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+}
+.lab-right-rail-portal-host .manta-chat__msg--system {
+  color: #475569;
+  border-top-color: #e2e8f0;
+  border-bottom-color: #e2e8f0;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.74rem;
+  line-height: 1.45;
+}
+.lab-right-rail-portal-host .manta-chat__msg--user {
+  background: #e0f2fe;
+  border-color: #7dd3fc;
+  color: #0c4a6e;
+  box-shadow: none;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+.lab-right-rail-portal-host .manta-chat__msg--assistant {
+  background: #fff;
+  border-color: #e2e8f0;
+  color: #1e293b;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.78rem;
+}
+.lab-right-rail-portal-host .manta-chat__msg--assistant::before {
+  color: #0369a1;
+}
+.lab-right-rail-portal-host .manta-chat__msg--thinking {
+  color: #64748b;
+}
+.lab-right-rail-portal-host .manta-chat__code {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #0e7490;
+}
+.lab-right-rail-portal-host .manta-chat__input-row {
+  background: #fff;
+  border-top-color: #e2e8f0;
+}
+.lab-right-rail-portal-host .manta-chat__input {
+  background: #fff;
+  border-color: #cbd5e1;
+  color: #0f172a;
+  caret-color: #0369a1;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+.lab-right-rail-portal-host .manta-chat__input:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.2);
+}
+.lab-right-rail-portal-host .manta-chat__input::placeholder {
+  color: #94a3b8;
+}
+.lab-right-rail-portal-host .manta-chat__submit {
+  background: linear-gradient(120deg, #0284c7, #0369a1);
+  color: #fff;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+.lab-right-rail-portal-host .manta-chat__submit:hover:not(:disabled) {
+  filter: brightness(1.05);
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.35);
+}
+
 /* Right rail XML header — one clean toolbar row (tiers live in cmd-center hub) */
 .lab-right-panel .fx-xml-header--rail-compact {
   flex-direction: row;
