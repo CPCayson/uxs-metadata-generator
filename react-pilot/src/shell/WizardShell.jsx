@@ -46,6 +46,7 @@ import { isoXmlAdapter } from '../core/export/adapters/isoXmlAdapter.js'
 import { emitPilotAuditEvent } from '../lib/pilotAuditEvents.js'
 import { setPilotFieldPath } from '../lib/pilotStateFieldSet.js'
 import { acquisitionInstrumentHasContent } from '../lib/sensorInstrumentDescription.js'
+import { downloadPilotPreviewXml } from '../lib/downloadPilotPreviewXml.js'
 import MantaMissionCapabilityStrip from '../components/MantaMissionCapabilityStrip.jsx'
 import MissionWizardStepPills from '../components/MissionWizardStepPills.jsx'
 import WizardStartChoiceModal from '../components/WizardStartChoiceModal.jsx'
@@ -93,6 +94,10 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
       ? profile.buildXmlPreview.bind(profile)
       : (state) => isoXmlAdapter.generate(state)),
     [profile],
+  )
+
+  const canExportPreviewXml = Boolean(
+    cap.iso2Export !== false && typeof profile.buildXmlPreview === 'function',
   )
 
   const baselineSerialized = useRef('')
@@ -194,6 +199,16 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     onStateLoaded,
     onXmlPreviewUpdate: setLastSavedXmlPreview,
   })
+
+  const exportPreviewXml = useCallback(() => {
+    if (!canExportPreviewXml) {
+      setStatusMessage('XML preview export is not available for this profile.')
+      return
+    }
+    if (downloadPilotPreviewXml(profile, pilotState, setStatusMessage)) {
+      emitPilotAuditEvent({ profileId: profile.id, action: 'exportPreviewXml', result: 'ok' })
+    }
+  }, [profile, pilotState, canExportPreviewXml])
 
   const comet = useCometActionsForProfile({
     profile,
@@ -1240,16 +1255,17 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
                 </button>
                 <button
                   type="button"
-                  onClick={ma.exportBusy ? null : ma.exportGeoJSONFromServer}
-                  disabled={ma.exportBusy || !cap.geoJsonExport}
+                  onClick={exportPreviewXml}
+                  disabled={!canExportPreviewXml}
                   style={{
                     padding: '0.35rem 0.7rem',
                     fontSize: '0.76rem', fontWeight: 700,
                     background: 'var(--card-bg)', color: 'var(--text-color)',
                     border: '1px solid var(--border-color)', borderRadius: 5,
-                    cursor: 'pointer', opacity: cap.geoJsonExport ? 1 : 0.4,
+                    cursor: canExportPreviewXml ? 'pointer' : 'not-allowed',
+                    opacity: canExportPreviewXml ? 1 : 0.4,
                   }}
-                  title="Export XML"
+                  title="Download ISO preview XML from current form state"
                 >
                   ↓ Export XML
                 </button>
@@ -1489,14 +1505,6 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
                       disabled={comet.pushBusy}
                     >
                       {comet.pushBusy ? 'Pushing…' : allClear ? '↑ Push to CoMET' : `Resolve ${errors.length} error${errors.length !== 1 ? 's' : ''} to publish`}
-                    </button>
-                    <button
-                      type="button"
-                      className="cmd-center-export-btn"
-                      onClick={ma.exportBusy ? undefined : ma.exportGeoJSONFromServer}
-                      disabled={ma.exportBusy || !cap.geoJsonExport}
-                    >
-                      ↓ Export XML
                     </button>
                   </div>
                 </div>

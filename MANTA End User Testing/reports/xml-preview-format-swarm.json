@@ -1,0 +1,135 @@
+{
+  "generatedAt": "2026-05-15T11:56:22.023Z",
+  "includeEut": true,
+  "sampleDir": "/Users/connorcayson/Downloads/uSX/MANTA End User Testing/samples",
+  "total": 21,
+  "failed": 0,
+  "rows": [
+    {
+      "label": "empty-shell",
+      "ok": true,
+      "fails": [],
+      "xmllint": true
+    },
+    {
+      "label": "eut:0299833.xml",
+      "ok": true,
+      "fails": [],
+      "xmllint": true
+    },
+    {
+      "label": "eut:AFSC_GA13_Raw_Data.xml",
+      "ok": true,
+      "fails": [],
+      "xmllint": true
+    },
+    {
+      "label": "eut:C01531.xml",
+      "ok": true,
+      "fails": [],
+      "xmllint": true
+    },
+    {
+      "label": "eut:C01678.xml",
+      "ok": true,
+      "fails": [],
+      "xmllint": true
+    },
+    {
+      "label": "eut:EX1904_collection.xml",
+      "ok": true,
+      "fails": [],
+      "xmllint": true
+    },
+    {
+      "label": "eut:EX2306_COLLECTION.xml",
+      "ok": true,
+      "fails": [],
+      "xmllint": true
+    },
+    {
+      "label": "eut:ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml",
+      "ok": true,
+      "fails": [],
+      "xmllint": true
+    },
+    {
+      "label": "eut:ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml",
+      "ok": true,
+      "fails": [],
+      "xmllint": true
+    },
+    {
+      "label": "eut:LISTEN_GoMex_Raw_Audio.xml",
+      "ok": true,
+      "fails": [],
+      "xmllint": true
+    },
+    {
+      "label": "eut:NCRMP-Benthic-FG.xml",
+      "ok": true,
+      "fails": [],
+      "xmllint": true
+    },
+    {
+      "label": "eut:NCRMP-Socio-Guam.xml",
+      "ok": true,
+      "fails": [],
+      "xmllint": true
+    },
+    {
+      "label": "eut:NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml",
+      "ok": true,
+      "fails": [],
+      "xmllint": true
+    },
+    {
+      "label": "eut:NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml",
+      "ok": true,
+      "fails": [],
+      "xmllint": true
+    },
+    {
+      "label": "eut:NRS_Raw_Data.xml",
+      "ok": true,
+      "fails": [],
+      "xmllint": true
+    },
+    {
+      "label": "eut:SAMPLE_Populated.xml",
+      "ok": true,
+      "fails": [],
+      "xmllint": true
+    },
+    {
+      "label": "eut:gov.noaa.nmfs.inport.52208.xml",
+      "ok": true,
+      "fails": [],
+      "xmllint": true
+    },
+    {
+      "label": "eut:gov.noaa.nmfs.inport.5619.xml",
+      "ok": true,
+      "fails": [],
+      "xmllint": true
+    },
+    {
+      "label": "eut:gov.noaa.nmfs.inport.5687.xml",
+      "ok": true,
+      "fails": [],
+      "xmllint": true
+    },
+    {
+      "label": "eut:gov.noaa.nmfs.inport.62654.xml",
+      "ok": true,
+      "fails": [],
+      "xmllint": true
+    },
+    {
+      "label": "eut:uxs_test.xml",
+      "ok": true,
+      "fails": [],
+      "xmllint": true
+    }
+  ]
+}

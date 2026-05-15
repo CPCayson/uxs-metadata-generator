@@ -330,6 +330,16 @@ function assertMissionPreviewIso191152Sanity(xml) {
   assert.equal(failed.length, 0, `ISO 19115-2 mission preview sanity failed: ${failed.join(', ')}`)
 }
 
+/** Rail/header Export XML must download preview bytes, not server GeoJSON. */
+function checkPreviewXmlExportContract() {
+  const xml = buildXmlPreview(defaultPilotState())
+  const trimmed = String(xml || '').trim()
+  assert.ok(trimmed.length > 0, 'preview XML empty')
+  assert.ok(!trimmed.startsWith('{') && !trimmed.startsWith('['), 'preview must not be JSON/GeoJSON')
+  assert.ok(/^\s*<\?xml\b/i.test(xml) || /<gmi:MI_Metadata\b/.test(trimmed), 'preview must be XML')
+  assertMissionPreviewIso191152Sanity(xml)
+}
+
 function checkMissionIsoImportResidueStrip() {
   const base = defaultPilotState()
   base.mission.fileId = 'gov.noaa.nmfs.inport:5619'
@@ -1542,6 +1552,9 @@ async function main() {
   })
   step('xmllint well-formed check', () => {
     maybeValidateXml(seededXml)
+  })
+  step('preview XML export contract (not GeoJSON)', () => {
+    checkPreviewXmlExportContract()
   })
   step('validation rules parity (runProfileRules == validatePilotState)', () => {
     checkValidationRulesParity()
