@@ -861,6 +861,8 @@ function parseExtent(exExtent) {
   }
   if (!out.startDate && instantSeries[0]) out.startDate = instantSeries[0]
   if (!out.endDate && instantSeries[1]) out.endDate = instantSeries[1]
+  swapWestEastIfReversed(out, undefined, undefined)
+  swapSouthNorthIfReversed(out, undefined, undefined)
   return out
 }
 
@@ -4560,6 +4562,8 @@ function parseExtentSingle3(ex) {
   }
   if (!out.startDate && instantSeries[0]) out.startDate = instantSeries[0]
   if (!out.endDate && instantSeries[1]) out.endDate = instantSeries[1]
+  swapWestEastIfReversed(out, undefined, undefined)
+  swapSouthNorthIfReversed(out, undefined, undefined)
   return out
 }
 
@@ -5258,7 +5262,8 @@ function extractFrom19115_3(root, raw, warnings) {
   if (Object.keys(spatial).length) partial.spatial = spatial
   if (Object.keys(kw).length) partial.keywords = kw
   if (sensors.length) partial.sensors = sensors
-  if (Object.keys(distribution).length) partial.distribution = distribution
+  // Always ensure distribution exists so forceDistributionMetadataStandard19115_2 can set the canonical standard
+  partial.distribution = Object.keys(distribution).length ? distribution : {}
   if (acqParsed.platform && Object.keys(acqParsed.platform).length) {
     partial.platform = pruneObject(/** @type {Record<string, unknown>} */ (acqParsed.platform))
   }
