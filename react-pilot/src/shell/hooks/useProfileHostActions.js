@@ -10,4 +10,6 @@
 
 import { useMissionActions } from './useMissionActions.js'
 
-export const useProfileHostActions = useMissionActions
+export function useProfileHostActions(ctx) {
+  return useMissionActions(ctx)
+}

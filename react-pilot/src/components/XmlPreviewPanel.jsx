@@ -1,4 +1,5 @@
 import { memo, useCallback, useDeferredValue, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { Sparkles } from 'lucide-react'
 import { countLineDiff, highlightXmlToHtml } from '../lib/xmlSyntaxHighlight'
 import { fieldKeyForElement, findFieldLineInXml, FIELD_ELEMENT_HINT } from '../lib/xmlFieldLineLocator'
 import { analyzeMissionPreviewXml } from '../lib/xmlPreviewStructuralHints.js'

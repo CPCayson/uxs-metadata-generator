@@ -433,6 +433,8 @@ export function buildXmlPreview(state) {
 
   const omitRef = dist.omitRootReferenceSystemInfo
   const useNceiMeta = dist.useNceiMetadataContactXlink && !emptyShell
+  const nceiMetaHref = String(dist.nceiMetadataContactHref || '').trim()
+  const nceiMetaTitle = String(dist.nceiMetadataContactTitle || 'NCEI (pointOfContact)').trim()
   const dateStampSource = String(m.metadataRecordDate || '').trim() || utcNowIsoZForDateStamp()
   const dateStampXml = `  <gmd:dateStamp>${gcoDateOrDateTimeInner(dateStampSource)}</gmd:dateStamp>\n`
 
@@ -736,8 +738,6 @@ ${gmdGcoCharacterString('gmd:individualName', missionIndTrim, '          ')}${or
 `
       : ''
 
-  const nceiMetaHref = String(dist.nceiMetadataContactHref || '').trim()
-  const nceiMetaTitle = String(dist.nceiMetadataContactTitle || 'NCEI (pointOfContact)').trim()
   const metadataContactXml = emptyShell
     ? ''
     : useNceiMeta

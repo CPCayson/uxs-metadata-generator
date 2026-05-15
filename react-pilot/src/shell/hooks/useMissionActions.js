@@ -267,6 +267,87 @@ export function useMissionActions({
     }
   }, [hostBridgeReady, hostBridge, setStatusMessage])
 
+  // ── Asset library ────────────────────────────────────────────────────────
+  const [assetLibraryRows, setAssetLibraryRows] = useState([])
+  const [assetLibraryLoading, setAssetLibraryLoading] = useState(false)
+  const [assetLibraryError, setAssetLibraryError] = useState('')
+  const assetLibraryAutoFetchRef = useRef(false)
+
+  const refreshAssetLibrary = useCallback(async () => {
+    if (!hostBridgeReady) { setStatusMessage('Asset library needs a connected host (`/api/db`).'); return }
+    setAssetLibraryLoading(true)
+    setAssetLibraryError('')
+    setStatusMessage('Loading asset library…')
+    try {
+      const res = await hostBridge.listAssets()
+      if (res.unexpectedShape) {
+        setAssetLibraryRows([])
+        setAssetLibraryError('Asset response had an unexpected shape.')
+        setStatusMessage('Asset library returned an unknown payload.')
+        return
+      }
+      const rows = res.rows
+        .filter((row) => row && typeof row === 'object')
+        .map((row, idx) => ({ key: row.id || `asset_${idx}`, row }))
+      setAssetLibraryRows(rows)
+      setStatusMessage(`Loaded ${rows.length} asset(s) from the library.`)
+    } catch (error) {
+      setAssetLibraryRows([])
+      setAssetLibraryError(error.message)
+      setStatusMessage(`Asset library load failed: ${error.message}`)
+    } finally {
+      setAssetLibraryLoading(false)
+    }
+  }, [hostBridgeReady, hostBridge, setStatusMessage])
+
+  const applyAssetFromLibrary = useCallback(async (id) => {
+    const hit = assetLibraryRows.find((r) => r.row.id === id)
+    if (!hit) { setStatusMessage('Select an asset first.'); return }
+    const asset = hit.row
+    
+    setPilotState((p) => ({
+      ...p,
+      platform: {
+        ...p.platform,
+        platformId: asset.id,
+        platformName: asset.name,
+        serialNumber: asset.serial_number,
+        manufacturer: asset.manufacturer || asset.owner_org || p.platform.manufacturer,
+        model: asset.model || p.platform.model,
+      }
+    }))
+    
+    setTouched((prev) => ({
+      ...prev,
+      'platform.platformId': true,
+      'platform.platformName': true,
+    }))
+    
+    if (!hostBridgeReady || typeof hostBridge.getAssetSensors !== 'function') {
+      setStatusMessage(`Applied asset: ${asset.name}`)
+      return
+    }
+
+    setPilotBusy(true)
+    setStatusMessage(`Loading sensors for asset ${asset.name}…`)
+    try {
+      const date = pilotState.platform?.deploymentDate || new Date().toISOString().split('T')[0]
+      const res = await hostBridge.getAssetSensors(asset.id, date)
+      const rows = res.unexpectedShape ? [] : res.rows
+      if (Array.isArray(rows) && rows.length > 0) {
+        const mapped = rows.map((row, i) => mapDbSensorRowToPilotSensor(row, { fromLibrary: true, index: i }))
+        setPilotState((p) => ({ ...p, sensors: mapped }))
+        setStatusMessage(`Applied asset "${asset.name}" and ${mapped.length} sensor(s) valid for ${date}.`)
+      } else {
+        setStatusMessage(`Applied asset "${asset.name}" (no active sensors found for ${date}).`)
+      }
+    } catch (error) {
+      setStatusMessage(`Asset applied; sensor load failed: ${error.message}`)
+    } finally {
+      setPilotBusy(false)
+    }
+  }, [assetLibraryRows, hostBridge, setPilotState, setTouched, setStatusMessage, hostBridgeReady, pilotState.platform?.deploymentDate])
+
   // Auto-fetch when landing on the 'platform' step.
   useEffect(() => {
     if (!cap.platformLibrary) return
@@ -370,86 +451,6 @@ export function useMissionActions({
     }
   }, [hostBridgeReady, pilotState, hostBridge, refreshPlatformLibrary, setStatusMessage])
 
-  // ── Asset library ────────────────────────────────────────────────────────
-  const [assetLibraryRows, setAssetLibraryRows] = useState([])
-  const [assetLibraryLoading, setAssetLibraryLoading] = useState(false)
-  const [assetLibraryError, setAssetLibraryError] = useState('')
-  const assetLibraryAutoFetchRef = useRef(false)
-
-  const refreshAssetLibrary = useCallback(async () => {
-    if (!hostBridgeReady) { setStatusMessage('Asset library needs a connected host (`/api/db`).'); return }
-    setAssetLibraryLoading(true)
-    setAssetLibraryError('')
-    setStatusMessage('Loading asset library…')
-    try {
-      const res = await hostBridge.listAssets()
-      if (res.unexpectedShape) {
-        setAssetLibraryRows([])
-        setAssetLibraryError('Asset response had an unexpected shape.')
-        setStatusMessage('Asset library returned an unknown payload.')
-        return
-      }
-      const rows = res.rows
-        .filter((row) => row && typeof row === 'object')
-        .map((row, idx) => ({ key: row.id || `asset_${idx}`, row }))
-      setAssetLibraryRows(rows)
-      setStatusMessage(`Loaded ${rows.length} asset(s) from the library.`)
-    } catch (error) {
-      setAssetLibraryRows([])
-      setAssetLibraryError(error.message)
-      setStatusMessage(`Asset library load failed: ${error.message}`)
-    } finally {
-      setAssetLibraryLoading(false)
-    }
-  }, [hostBridgeReady, hostBridge, setStatusMessage])
-
-  const applyAssetFromLibrary = useCallback(async (id) => {
-    const hit = assetLibraryRows.find((r) => r.row.id === id)
-    if (!hit) { setStatusMessage('Select an asset first.'); return }
-    const asset = hit.row
-    
-    setPilotState((p) => ({
-      ...p,
-      platform: {
-        ...p.platform,
-        platformId: asset.id,
-        platformName: asset.name,
-        serialNumber: asset.serial_number,
-        manufacturer: asset.manufacturer || asset.owner_org || p.platform.manufacturer,
-        model: asset.model || p.platform.model,
-      }
-    }))
-    
-    setTouched((prev) => ({
-      ...prev,
-      'platform.platformId': true,
-      'platform.platformName': true,
-    }))
-    
-    if (!hostBridgeReady || typeof hostBridge.getAssetSensors !== 'function') {
-      setStatusMessage(`Applied asset: ${asset.name}`)
-      return
-    }
-
-    setPilotBusy(true)
-    setStatusMessage(`Loading sensors for asset ${asset.name}…`)
-    try {
-      const date = pilotState.platform?.deploymentDate || new Date().toISOString().split('T')[0]
-      const res = await hostBridge.getAssetSensors(asset.id, date)
-      const rows = res.unexpectedShape ? [] : res.rows
-      if (Array.isArray(rows) && rows.length > 0) {
-        const mapped = rows.map((row, i) => mapDbSensorRowToPilotSensor(row, { fromLibrary: true, index: i }))
-        setPilotState((p) => ({ ...p, sensors: mapped }))
-        setStatusMessage(`Applied asset "${asset.name}" and ${mapped.length} sensor(s) valid for ${date}.`)
-      } else {
-        setStatusMessage(`Applied asset "${asset.name}" (no active sensors found for ${date}).`)
-      }
-    } catch (error) {
-      setStatusMessage(`Asset applied; sensor load failed: ${error.message}`)
-    } finally {
-      setPilotBusy(false)
-    }
-  }, [assetLibraryRows, hostBridge, setPilotState, setTouched, setStatusMessage, hostBridgeReady, pilotState.platform?.deploymentDate])
 
   // ── Server exports ───────────────────────────────────────────────────────
   const [exportBusy, setExportBusy] = useState(false)

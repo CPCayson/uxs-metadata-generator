@@ -478,65 +478,6 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     sourceProvenance: { sourceType: 'manual', sourceId: '', importedAt: '', originalFilename: '', originalUuid: '' },
   })), [setPilotState])
 
-  const wizardStepProps = {
-    profile,
-    pilotState,
-    setPilotState,
-    touched,
-    onTouched: setTouchedKey,
-    showAllErrors,
-    issues: validation.issues,
-    mission: pilotState.mission,
-    onMissionPatch,
-    onPlatformPatch,
-    onSpatialPatch,
-    contactLibraryEnabled: Boolean(profile.capabilities?.contactLibrary),
-    onSourceProvenanceClear: handleClearSourceProvenance,
-    aiSuggestions,
-    onApplyAiSuggestion: applyAiSuggestion,
-    onIgnoreAiSuggestion: (field) => setAiSuggestions((prev) => {
-      const next = { ...prev }
-      delete next[field]
-      return next
-    }),
-    onLoadDraft: loadPilotDraftPrimed,
-    onSaveDraft: ma.savePilotDraft,
-    loadDisabled: ma.pilotBusy || !hostBridgeReady,
-    saveDisabled: ma.pilotBusy || !hostBridgeReady,
-    draftStatus: ma.draftStatus,
-    hostBridgeReady,
-    templateCatalogRows: ma.templateCatalogRows,
-    templateCatalogLoading: ma.templateCatalogLoading,
-    templateCatalogError: ma.templateCatalogError,
-    onRefreshTemplateCatalog: ma.refreshTemplateCatalog,
-    onApplySheetTemplate: applySheetTemplatePrimed,
-    templateApplyDisabled: ma.templateApplyDisabled,
-    platform: pilotState.platform,
-    platformLibraryRows: ma.platformLibraryRows,
-    platformLibraryLoading: ma.platformLibraryLoading,
-    platformLibraryError: ma.platformLibraryError,
-    onRefreshPlatformLibrary: ma.refreshPlatformLibrary,
-    onApplyPlatformFromLibrary: ma.applyPlatformFromLibraryKey,
-    onSavePlatformToSheets: ma.saveCurrentPlatformToSheets,
-    onSavePlatformKitToLibrary: ma.savePlatformAndSensorsKitToLibrary,
-    platformSaveBusy: ma.platformSaveBusy,
-    libraryKitContributionSuggested,
-    assetLibraryRows: ma.assetLibraryRows,
-    assetLibraryLoading: ma.assetLibraryLoading,
-    assetLibraryError: ma.assetLibraryError,
-    onRefreshAssetLibrary: ma.refreshAssetLibrary,
-    onApplyAssetFromLibrary: ma.applyAssetFromLibrary,
-    sensors: pilotState.sensors,
-    onSetSensors: (next) => setPilotState((p) => ({ ...p, sensors: next })),
-    spatial: pilotState.spatial,
-    keywords: pilotState.keywords,
-    onKeywordsChange: (next) => setPilotState((p) => ({ ...p, keywords: next })),
-    distribution: pilotState.distribution,
-    onDistPatch: (patch) => setPilotState((p) => ({ ...p, distribution: { ...p.distribution, ...patch } })),
-    onSaveSheetTemplate: ma.saveNamedSheetTemplate,
-    sheetTemplateSaveDisabled: ma.sheetTemplateSaveDisabled,
-  }
-
   /** After validation idles → engaged, baseline must match full sanitize so dirty tracking stays stable. */
   useEffect(() => {
     const prev = validationPrimedPrevRef.current
@@ -1046,6 +987,65 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     window.dispatchEvent(new CustomEvent('manta:metadata-import-merged'))
   }
 
+  const wizardStepProps = {
+    profile,
+    pilotState,
+    setPilotState,
+    touched,
+    onTouched: setTouchedKey,
+    showAllErrors,
+    issues: validation.issues,
+    mission: pilotState.mission,
+    onMissionPatch,
+    onPlatformPatch,
+    onSpatialPatch,
+    contactLibraryEnabled: Boolean(profile.capabilities?.contactLibrary),
+    onSourceProvenanceClear: handleClearSourceProvenance,
+    aiSuggestions,
+    onApplyAiSuggestion: applyAiSuggestion,
+    onIgnoreAiSuggestion: (field) => setAiSuggestions((prev) => {
+      const next = { ...prev }
+      delete next[field]
+      return next
+    }),
+    onLoadDraft: loadPilotDraftPrimed,
+    onSaveDraft: ma.savePilotDraft,
+    loadDisabled: ma.pilotBusy || !hostBridgeReady,
+    saveDisabled: ma.pilotBusy || !hostBridgeReady,
+    draftStatus: ma.draftStatus,
+    hostBridgeReady,
+    templateCatalogRows: ma.templateCatalogRows,
+    templateCatalogLoading: ma.templateCatalogLoading,
+    templateCatalogError: ma.templateCatalogError,
+    onRefreshTemplateCatalog: ma.refreshTemplateCatalog,
+    onApplySheetTemplate: applySheetTemplatePrimed,
+    templateApplyDisabled: ma.templateApplyDisabled,
+    platform: pilotState.platform,
+    platformLibraryRows: ma.platformLibraryRows,
+    platformLibraryLoading: ma.platformLibraryLoading,
+    platformLibraryError: ma.platformLibraryError,
+    onRefreshPlatformLibrary: ma.refreshPlatformLibrary,
+    onApplyPlatformFromLibrary: ma.applyPlatformFromLibraryKey,
+    onSavePlatformToSheets: ma.saveCurrentPlatformToSheets,
+    onSavePlatformKitToLibrary: ma.savePlatformAndSensorsKitToLibrary,
+    platformSaveBusy: ma.platformSaveBusy,
+    libraryKitContributionSuggested,
+    assetLibraryRows: ma.assetLibraryRows,
+    assetLibraryLoading: ma.assetLibraryLoading,
+    assetLibraryError: ma.assetLibraryError,
+    onRefreshAssetLibrary: ma.refreshAssetLibrary,
+    onApplyAssetFromLibrary: ma.applyAssetFromLibrary,
+    sensors: pilotState.sensors,
+    onSetSensors: (next) => setPilotState((p) => ({ ...p, sensors: next })),
+    spatial: pilotState.spatial,
+    keywords: pilotState.keywords,
+    onKeywordsChange: (next) => setPilotState((p) => ({ ...p, keywords: next })),
+    distribution: pilotState.distribution,
+    onDistPatch: (patch) => setPilotState((p) => ({ ...p, distribution: { ...p.distribution, ...patch } })),
+    onSaveSheetTemplate: ma.saveNamedSheetTemplate,
+    sheetTemplateSaveDisabled: ma.sheetTemplateSaveDisabled,
+  }
+
   return (
     <>
       {wizardStartOpen && canProfileImport && (
@@ -1286,7 +1286,8 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
           </div>
           )}
 
-          {profile.steps.map((stepMeta) => {
+
+  {profile.steps.map((stepMeta) => {
             const StepComp = stepMeta.component
             if (!StepComp) return null
             return (
