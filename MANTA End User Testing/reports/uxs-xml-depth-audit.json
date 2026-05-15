@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-15T10:54:59.570Z",
+  "generatedAt": "2026-05-15T11:56:28.536Z",
   "corpus": "manta-eut-samples",
   "sampleDir": "MANTA End User Testing/samples",
   "fileCount": 20,
@@ -54,7 +54,7 @@
           }
         },
         "topLenientErrors": [],
-        "previewLen": 37092,
+        "previewLen": 37100,
         "iso2PreviewFailCount": 0,
         "iso2PreviewFails": []
       },
@@ -393,7 +393,7 @@
           }
         },
         "topLenientErrors": [],
-        "previewLen": 34576,
+        "previewLen": 34563,
         "iso2PreviewFailCount": 0,
         "iso2PreviewFails": []
       },
@@ -512,7 +512,7 @@
           }
         },
         "topLenientErrors": [],
-        "previewLen": 33050,
+        "previewLen": 32813,
         "iso2PreviewFailCount": 0,
         "iso2PreviewFails": []
       },
@@ -2283,7 +2283,7 @@
           }
         },
         "topLenientErrors": [],
-        "previewLen": 97574,
+        "previewLen": 97603,
         "iso2PreviewFailCount": 0,
         "iso2PreviewFails": []
       },

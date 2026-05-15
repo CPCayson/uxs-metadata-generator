@@ -1757,13 +1757,15 @@ function firstRootContactOnlineLinkageUrl(root) {
  */
 function onlineResourceSlotKind(u) {
   const blob = `${u.name} ${u.description} ${u.proto} ${u.url}`.toLowerCase()
+  // Check landing-page signals FIRST so resources named "NCEI Dataset Landing Page"
+  // (whose description may mention "download links") are not mis-classified as downloads.
+  if (/\b(metadata\s*record|catalog(ue)?\b|landing\s*page|doi\.org\/|data\.gov)\b/.test(blob)) {
+    return 0
+  }
   if (
     /\b(download|thredds|opendap|granule|file\s*access|\.nc\b|ncss|subset|distribution\s*url)\b/.test(blob)
   ) {
     return 2
-  }
-  if (/\b(metadata\s*record|catalog(ue)?\b|landing\s*page|information\b|doi\.org\/|data\.gov)\b/.test(blob)) {
-    return 0
   }
   return 1
 }
@@ -2024,14 +2026,22 @@ function parseDistribution(root, fileId, fileIdRaw) {
       dist.downloadProtocol = u1.proto || 'HTTPS'
     }
   } else {
+    // sorted[0] is the best landing page candidate (kind 0 or 1).
+    // Use it for both metadataLandingUrl and landingUrl.
+    // Then pick the first remaining resource for downloadUrl.
     dist.metadataLandingUrl = sorted[0].url
     dist.metadataLandingLinkName = sorted[0].name
     dist.metadataLandingDescription = sorted[0].description
     dist.landingUrl = sorted[1].url
-    dist.downloadUrl = sorted[2].url
-    dist.downloadProtocol = sorted[2].proto || 'HTTPS'
-    dist.downloadLinkName = sorted[2].name
-    dist.downloadLinkDescription = sorted[2].description
+    // Prefer an explicit download (kind=2) anywhere in the list; fall back to sorted[2]
+    const explicitDl = sorted.find((u) => onlineResourceSlotKind(u) === 2)
+    const dlEntry = explicitDl || sorted[2]
+    if (dlEntry) {
+      dist.downloadUrl = dlEntry.url
+      dist.downloadProtocol = dlEntry.proto || 'HTTPS'
+      dist.downloadLinkName = dlEntry.name
+      dist.downloadLinkDescription = dlEntry.description
+    }
   }
   return dist
 }
@@ -2211,10 +2221,14 @@ function parseDistribution3(root, fileId, fileIdRaw) {
     dist.metadataLandingLinkName = sorted[0].name
     dist.metadataLandingDescription = sorted[0].description
     dist.landingUrl = sorted[1].url
-    dist.downloadUrl = sorted[2].url
-    dist.downloadProtocol = sorted[2].proto || 'HTTPS'
-    dist.downloadLinkName = sorted[2].name
-    dist.downloadLinkDescription = sorted[2].description
+    const explicitDl3 = sorted.find((u) => onlineResourceSlotKind(u) === 2)
+    const dlEntry3 = explicitDl3 || sorted[2]
+    if (dlEntry3) {
+      dist.downloadUrl = dlEntry3.url
+      dist.downloadProtocol = dlEntry3.proto || 'HTTPS'
+      dist.downloadLinkName = dlEntry3.name
+      dist.downloadLinkDescription = dlEntry3.description
+    }
   }
   return dist
 }
@@ -2364,7 +2378,9 @@ function inferPlatformTypeFromKeywordsAndMissionText(partial) {
     )
   ) {
     pt = 'In Situ Ocean-based Platforms'
-  } else if (/aircraft|airplane|helicopter|\buav\b|\buas\b|drone/i.test(h)) {
+  } else if (/\bsaildrone\b|\busv\b|unmanned surface/i.test(h)) {
+    pt = 'In Situ Ocean-based Platforms'
+  } else if (/aircraft|airplane|helicopter|\buav\b|\buas\b|\bdrone\b/i.test(h)) {
     pt = 'Aircraft'
   } else if (/research vessel|okeanos|research ship|\bcruise\b|\bship\b|noaa ship|research\s+vessel/i.test(h)) {
     pt = 'Ships'
@@ -2988,6 +3004,17 @@ function inferPlatformIdDescFromKeywords(partial) {
       const leaf = (p0.split('>').pop() || p0).trim()
       if (leaf) plat.platformId = leaf.replace(/[^\w\-+.]+/g, '_').replace(/_+/g, '_').slice(0, 128)
     }
+    // Derive platformName: prefer a second keyword that looks like a human-readable name,
+    // or use the leaf of a GCMD-path keyword, or fall back to the first keyword label.
+    if (!String(plat.platformName || '').trim()) {
+      const p1 =
+        platKw[1] && typeof platKw[1] === 'object'
+          ? String(/** @type {{ label?: string }} */ (platKw[1]).label || '').trim()
+          : ''
+      const leaf0 = (p0.split('>').pop() || p0).trim()
+      const nameCandidate = p1 || (p0.includes('>') ? leaf0 : '')
+      if (nameCandidate) plat.platformName = nameCandidate
+    }
   }
 
   const stillNoId = !String(plat.platformId || '').trim()
@@ -3003,6 +3030,10 @@ function inferPlatformIdDescFromKeywords(partial) {
     if (stillNoId && t.length > 10) {
       plat.platformId = t.replace(/[^\w\-+.]+/g, '_').replace(/_+/g, '_').slice(0, 128)
     }
+  }
+  // Final platformName fallback: use platformId when still not set
+  if (!String(plat.platformName || '').trim() && String(plat.platformId || '').trim()) {
+    plat.platformName = String(plat.platformId).trim()
   }
   partial.platform = plat
 }

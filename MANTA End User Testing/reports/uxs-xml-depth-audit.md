@@ -1,6 +1,6 @@
 # UxS / EUT XML — deep import audit (all samples)
 
-Generated: 2026-05-15T10:54:59.570Z
+Generated: 2026-05-15T11:56:28.536Z
 Corpus: **manta-eut-samples** (20 files from `MANTA End User Testing/samples`)
 
 ## Summary
