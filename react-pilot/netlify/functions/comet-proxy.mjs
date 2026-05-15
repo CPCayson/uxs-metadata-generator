@@ -36,6 +36,74 @@
  *   use COMET_SESSION_ID only as a server-side / headless fallback.
  */
 
+// ── Server-side auto-login ─────────────────────────────────────────────────
+// When COMET_USER + COMET_PASS are set and no client session is present,
+// the proxy auto-logs in to cedit and caches the JSESSIONID for the lifetime
+// of the function instance. On 401/403 from upstream it clears the cache and
+// retries once (handles session expiry without manual re-login).
+let _cachedAutoSession = ''
+let _cachedAutoMetaSession = ''
+
+async function _autoLogin(baseUrl) {
+  const user = (process.env.COMET_USER ?? '').trim()
+  const pass = (process.env.COMET_PASS ?? '').trim()
+  if (!user || !pass) return ''
+  try {
+    const res = await fetch(`${baseUrl}/login/wsLogin`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded', Accept: '*/*' },
+      body: `username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`,
+      redirect: 'manual',
+    })
+    const setCookie = res.headers.get('set-cookie') ?? ''
+    const m = setCookie.match(/JSESSIONID=([^;]+)/)
+    return m ? m[1] : ''
+  } catch {
+    return ''
+  }
+}
+
+/**
+ * Resolve the effective cedit JSESSIONID. Tries in order:
+ *   1. Client header (in-app login)
+ *   2. COMET_SESSION_ID env var (static deploy token)
+ *   3. Cached server-side session from COMET_USER/COMET_PASS auto-login
+ *   4. Fresh auto-login (caches result for next invocation)
+ *
+ * @param {string} COMET_BASE
+ * @param {string} headerSession
+ * @param {string} envSession
+ * @returns {Promise<string>}
+ */
+async function resolveSession(COMET_BASE, headerSession, envSession) {
+  if (headerSession) return headerSession
+  if (envSession) return envSession
+  if (_cachedAutoSession) return _cachedAutoSession
+  const auto = await _autoLogin(COMET_BASE)
+  _cachedAutoSession = auto
+  return auto
+}
+
+/**
+ * Same as resolveSession but for the metaserver endpoint.
+ * Shares auto-login credentials; tries metaserver-specific JSESSIONID first.
+ */
+async function resolveMetaSession(METASERVER_BASE, COMET_BASE, headerMetaSession, envMetaSession, headerCometSession, envCometSession) {
+  if (headerMetaSession) return headerMetaSession
+  if (envMetaSession) return envMetaSession
+  if (headerCometSession) return headerCometSession
+  if (envCometSession) return envCometSession
+  if (_cachedAutoMetaSession) return _cachedAutoMetaSession
+  // Try metaserver login first, fall back to cedit login (same NOAA SSO often works)
+  let auto = await _autoLogin(METASERVER_BASE)
+  if (!auto) auto = await _autoLogin(COMET_BASE)
+  _cachedAutoMetaSession = auto
+  if (auto && !_cachedAutoSession) _cachedAutoSession = auto
+  return auto
+}
+
+// ──────────────────────────────────────────────────────────────────────────────
+
 const DEFAULT_ALLOWED_ORIGINS = [
   'http://localhost:5173',
   'http://127.0.0.1:5173',
@@ -308,16 +376,25 @@ export default async (req) => {
     // ── RUBRIC (Rubric V2 score from ISO 19115-2 XML body) ────────────────
     if (action === 'rubric') {
       if (req.method !== 'POST') return jsonError(req, 'rubric requires POST', 405)
-      if (!effectiveSessionId) return jsonError(req, 'No CoMET JSESSIONID available. Log in from the app or set COMET_SESSION_ID.', 401)
 
       const filename = url.searchParams.get('filename') ?? 'record.xml'
       const xmlBody  = await req.text()
 
-      const upstream = await fetch(`${COMET_BASE}/recordServices/rubricV2?filename=${encodeURIComponent(filename)}`, {
+      const session = await resolveSession(COMET_BASE, headerSessionId, envCometSession)
+      if (!session) return jsonError(req, 'No CoMET JSESSIONID available. Set COMET_USER and COMET_PASS env vars, or log in from the app.', 401)
+
+      const makeRubricReq = (sid) => fetch(`${COMET_BASE}/recordServices/rubricV2?filename=${encodeURIComponent(filename)}`, {
         method:  'POST',
-        headers: { 'Content-Type': 'application/xml', Accept: 'application/json', ...cookieHeader },
+        headers: { 'Content-Type': 'application/xml', Accept: 'application/json', Cookie: `JSESSIONID=${sid}` },
         body:    xmlBody,
       })
+
+      let upstream = await makeRubricReq(session)
+      if ((upstream.status === 401 || upstream.status === 403) && !headerSessionId && !envCometSession) {
+        _cachedAutoSession = ''
+        const refreshed = await resolveSession(COMET_BASE, '', '')
+        if (refreshed) upstream = await makeRubricReq(refreshed)
+      }
 
       const body        = await upstream.text()
       const contentType = upstream.headers.get('Content-Type') ?? 'application/json'
@@ -345,19 +422,28 @@ export default async (req) => {
     // Distinct from action=validate which validates a *saved* record by UUID.
     if (action === 'isoValidate') {
       if (req.method !== 'POST') return jsonError(req, 'isoValidate requires POST', 405)
-      if (!effectiveSessionId) return jsonError(req, 'No CoMET JSESSIONID available. Log in from the app or set COMET_SESSION_ID.', 401)
 
       const filename = url.searchParams.get('filename') ?? 'record.xml'
       const xmlBody  = await req.text()
 
-      const upstream = await fetch(
+      const session = await resolveSession(COMET_BASE, headerSessionId, envCometSession)
+      if (!session) return jsonError(req, 'No CoMET JSESSIONID available. Set COMET_USER and COMET_PASS env vars, or log in from the app.', 401)
+
+      const makeValidateReq = (sid) => fetch(
         `${COMET_BASE}/recordServices/validate?filename=${encodeURIComponent(filename)}`,
         {
           method:  'POST',
-          headers: { 'Content-Type': 'application/xml', Accept: 'application/json', ...cookieHeader },
+          headers: { 'Content-Type': 'application/xml', Accept: 'application/json', Cookie: `JSESSIONID=${sid}` },
           body:    xmlBody,
         },
       )
+
+      let upstream = await makeValidateReq(session)
+      if ((upstream.status === 401 || upstream.status === 403) && !headerSessionId && !envCometSession) {
+        _cachedAutoSession = ''
+        const refreshed = await resolveSession(COMET_BASE, '', '')
+        if (refreshed) upstream = await makeValidateReq(refreshed)
+      }
 
       const body        = await upstream.text()
       const contentType = upstream.headers.get('Content-Type') ?? 'application/json'
@@ -367,8 +453,13 @@ export default async (req) => {
     // ── METASERVER VALIDATE (legacy form submit; mirrors metaserv-valid.sh) ─
     if (action === 'metaservValidate') {
       if (req.method !== 'POST') return jsonError(req, 'metaservValidate requires POST', 405)
-      if (!effectiveMetaserverSessionId) {
-        return jsonError(req, 'No MetaServer JSESSIONID available. Log in from the app or set METASERVER_SESSION_ID.', 401)
+      const metaSession = await resolveMetaSession(
+        METASERVER_BASE, COMET_BASE,
+        headerMetaserverSessionId, envMetaserverSession,
+        headerSessionId, envCometSession,
+      )
+      if (!metaSession) {
+        return jsonError(req, 'No MetaServer JSESSIONID available. Set COMET_USER and COMET_PASS env vars, or log in from the app.', 401)
       }
 
       const filename = url.searchParams.get('filename') ?? 'record.xml'
@@ -381,7 +472,7 @@ export default async (req) => {
 
       const upstream = await fetch(`${METASERVER_BASE}/recordServices`, {
         method: 'POST',
-        headers: { Accept: '*/*', ...metaserverCookieHeader },
+        headers: { Accept: '*/*', Cookie: `JSESSIONID=${metaSession}` },
         body: form,
       })
 

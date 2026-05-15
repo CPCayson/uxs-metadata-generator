@@ -1,31 +1,22 @@
 /**
  * useCometValidator — Tier 3 CoMET preflight validation hook
  *
- * Uses cometClient (same-origin /api/comet-proxy, X-Comet-JSessionId from session).
+ * Runs ISO validate and Rubric V2 in parallel; both execute regardless of
+ * whether validate passes so the user always gets a rubric score.
  *
  * @typedef {{
  *   isoValid: boolean,
+ *   isoErrorCount: number | null,
  *   isoErrors: string[],
- *   rubricScore: string | number | null,
+ *   rubricScore: string | null,
  *   rubricBreakdown: object | null,
  *   resolverErrors: string[],
  * }} CometTier3Result
  */
 
 import { useState, useCallback } from 'react'
-import { getRubricScore, resolveXlinks, validateIsoXml, extractCometIsoValidateErrorCount } from '../lib/cometClient.js'
+import { getRubricScore, validateIsoXml, resolveXlinks, extractCometIsoValidateErrorCount } from '../lib/cometClient.js'
 
-/**
- * @param {unknown} payload
- * @returns {number | null}
- */
-function cometIsoErrorCount(payload) {
-  return extractCometIsoValidateErrorCount(payload)
-}
-
-/**
- * @param {string} msg
- */
 function isAuthFailureMessage(msg) {
   const m = String(msg || '').toLowerCase()
   return (
@@ -38,10 +29,6 @@ function isAuthFailureMessage(msg) {
   )
 }
 
-/**
- * @param {unknown} payload
- * @returns {string[]}
- */
 function isoErrorsFromValidatePayload(payload) {
   if (!payload || typeof payload !== 'object') return []
   const o = /** @type {Record<string, unknown>} */ (payload)
@@ -52,15 +39,11 @@ function isoErrorsFromValidatePayload(payload) {
     for (const item of v) {
       if (typeof item === 'string') out.push(item)
       else if (item && typeof item === 'object') {
-        const msg = /** @type {Record<string, unknown>} */ (item).message ?? /** @type {Record<string, unknown>} */ (item).text
-        if (msg != null) out.push(String(msg))
-        else out.push(JSON.stringify(item))
+        const r = /** @type {Record<string, unknown>} */ (item)
+        const msg = r.message ?? r.text
+        out.push(msg != null ? String(msg) : JSON.stringify(item))
       }
     }
-  }
-  const n = cometIsoErrorCount(payload)
-  if (out.length === 0 && n != null && n > 0) {
-    out.push(`CoMET reported ${n} validation issue(s). See full JSON in Network → isoValidate response.`)
   }
   return out
 }
@@ -83,65 +66,77 @@ export function useCometValidator() {
     setError(null)
     setResult(null)
 
+    // Run validate and rubric in parallel — rubric runs regardless of validate result
+    const validatePromise = validateIsoXml(xmlString, 'manta-preview.xml').catch((e) => ({ __err: e }))
+    const rubricPromise = runRubric
+      ? getRubricScore('manta-preview', xmlString).catch(() => null)
+      : Promise.resolve(null)
+    const resolverPromise = runResolver
+      ? resolveXlinks(xmlString).catch((e) => ({ __err: e }))
+      : Promise.resolve(null)
+
     try {
+      const [valRes, rubricRes, resolverRes] = await Promise.all([validatePromise, rubricPromise, resolverPromise])
+
+      // ── Validate ────────────────────────────────────────────────────────
       let isoValid = false
+      let isoErrorCount = null
       let isoErrors = []
 
-      try {
-        const isoRes = await validateIsoXml(xmlString, 'manta-preview.xml')
-        const count = cometIsoErrorCount(isoRes)
-        if (count == null) {
-          isoValid = false
-          isoErrors = ['CoMET ISO validate returned a response we could not score (see Network → isoValidate).']
-        } else {
-          isoValid = count === 0
-          isoErrors = isoValid ? [] : isoErrorsFromValidatePayload(isoRes)
-        }
-      } catch (e) {
-        const msg = e instanceof Error ? e.message : String(e)
+      if (valRes && typeof valRes === 'object' && '__err' in valRes) {
+        const msg = valRes.__err instanceof Error ? valRes.__err.message : String(valRes.__err)
         if (isAuthFailureMessage(msg)) {
           setStatus('unauthenticated')
-          setError('CoMET session expired or missing. Log in via the CoMET panel and try again.')
+          setError('CoMET session expired or missing. Set COMET_USER + COMET_PASS on the server, or log in via the CoMET panel.')
           setIsLoading(false)
           return
         }
-        throw e
+        isoErrors = [msg]
+        isoErrorCount = null
+      } else {
+        const count = extractCometIsoValidateErrorCount(valRes)
+        isoErrorCount = count
+        if (count == null) {
+          isoErrors = ['CoMET validate returned an unrecognized response — see Network → isoValidate.']
+        } else {
+          isoValid = count === 0
+          isoErrors = isoValid ? [] : isoErrorsFromValidatePayload(valRes)
+          if (isoErrors.length === 0 && count > 0) {
+            isoErrors = [`CoMET reported ${count} schema error(s). See Network → isoValidate for details.`]
+          }
+        }
       }
 
+      // ── Rubric ──────────────────────────────────────────────────────────
       let rubricScore = null
       let rubricBreakdown = null
-
-      if (runRubric && isoValid) {
-        try {
-          const rubricRes = await getRubricScore('manta-preview', xmlString)
-          rubricScore = rubricRes?.totalScore ?? null
-          rubricBreakdown = {
-            totalScore: rubricRes?.totalScore,
-            errorCount: rubricRes?.errorCount,
-            categories: rubricRes?.categories,
-          }
-        } catch {
-          /* non-fatal */
+      if (rubricRes) {
+        rubricScore = rubricRes.totalScore ?? null
+        rubricBreakdown = {
+          totalScore: rubricRes.totalScore,
+          errorCount: rubricRes.errorCount,
+          categories: rubricRes.categories,
         }
       }
 
-      let resolverErrors = []
+      // ── Resolver ────────────────────────────────────────────────────────
+      const resolverErrors = resolverRes && typeof resolverRes === 'object' && '__err' in resolverRes
+        ? [resolverRes.__err instanceof Error ? resolverRes.__err.message : String(resolverRes.__err)]
+        : []
 
-      if (runResolver && isoValid) {
-        try {
-          await resolveXlinks(xmlString)
-        } catch (e) {
-          resolverErrors = [e instanceof Error ? e.message : String(e)]
-        }
-      }
-
-      const finalResult = { isoValid, isoErrors, rubricScore, rubricBreakdown, resolverErrors }
+      const finalResult = { isoValid, isoErrorCount, isoErrors, rubricScore, rubricBreakdown, resolverErrors }
       setResult(finalResult)
-      setStatus(isoValid ? 'valid' : 'invalid')
+      setStatus(isoValid ? 'valid' : isoErrorCount != null ? 'invalid' : 'error')
     } catch (err) {
       console.error('CoMET Tier 3 error:', err)
-      setStatus('error')
-      setError(err instanceof Error ? err.message : String(err))
+      const msg = err instanceof Error ? err.message : String(err)
+      if (isAuthFailureMessage(msg)) {
+        setStatus('unauthenticated')
+        setError('CoMET session expired or missing. Set COMET_USER + COMET_PASS on the server, or log in via the CoMET panel.')
+      } else {
+        setStatus('error')
+        setError(msg)
+      }
     } finally {
       setIsLoading(false)
     }
