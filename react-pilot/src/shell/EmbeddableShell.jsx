@@ -103,7 +103,7 @@ export default function EmbeddableShell({
   const [widgetOpen,     setWidgetOpen]     = useState(false)
 
   /** Open lens when metadata looks parsed or after import merge (EmbeddableShell sets true). */
-  const [lensMode,       setLensMode]       = useState(false)
+  const [lensMode,       setLensMode]       = useState(mantaToolsEnabled)
   const [lensTarget,     setLensTarget]     = useState('form')
   const [triggerScore,   setTriggerScore]   = useState(null)   // null | number
   const [triggerPulse,   setTriggerPulse]   = useState(false)  // brief highlight on score update
