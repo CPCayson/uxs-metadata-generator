@@ -5023,8 +5023,27 @@ function parseAcquisition3(root) {
     const mid = idw ? cn3(idw, NS3.mcc, 'MD_Identifier') : null
     const pid = mid ? gcs3(cn3(mid, NS3.mcc, 'code')) : ''
     if (pid) platformOut.platformId = pid
-    const desc = gcs3(cn3(miPlat, NS3.mac, 'description'))
-    if (desc) platformOut.platformDesc = desc
+
+    // MI_Platform may carry multiple <description> elements (one for the platform name/mfg line,
+    // a second for "Specifications: Weight: … Length: …"). Collect all and join with newline.
+    const descElems = cns3(miPlat, NS3.mac, 'description')
+    let descCombined = descElems.map((d) => gcs3(d)).filter(Boolean).join('\n')
+    if (descCombined) {
+      platformOut.platformDesc = descCombined
+      // Parse structured spec lines (Weight, Length, etc.) from combined description
+      parsePlatformSpecsLinesFromDescription(descCombined, platformOut)
+      // Extract manufacturer from "Platform: {name} by {manufacturer}" pattern
+      if (!String(platformOut.manufacturer || '').trim()) {
+        const mMfg = descCombined.match(/\bby\s+([A-Za-z][A-Za-z0-9\s\-&.,]+?)(?:\s+Model:|$)/im)
+        if (mMfg) platformOut.manufacturer = mMfg[1].trim().replace(/\s+Model:.*$/i, '').trim()
+      }
+      // Extract model from "Model: {model}" in combined description
+      if (!String(platformOut.model || '').trim()) {
+        const mMod = descCombined.match(/\bModel:\s*([^\n;|]+)/i)
+        if (mMod) platformOut.model = mMod[1].trim()
+      }
+    }
+
     const macName = gcs3(cn3(miPlat, NS3.mac, 'name'))
     if (String(macName || '').trim()) platformOut.platformName = String(macName).trim()
     const sponsor = cn3(miPlat, NS3.mac, 'sponsor')
@@ -5069,9 +5088,15 @@ function parseAcquisition3(root) {
     const sid = mid ? gcs3(cn3(mid, NS3.mcc, 'code')) : ''
     const stype = gcs3(cn3(mi, NS3.mac, 'type'))
     const descr = gcs3(cn3(mi, NS3.mac, 'description'))
-    const parsed = parseInstrumentDescriptionBlock(descr)
+    // Normalize semicolon-separated "Key: val; Key: val" descriptions to newline-separated
+    // so parseInstrumentDescriptionBlock can extract firmware, model, etc. from each segment.
+    const descrNorm = String(descr || '').replace(/;\s*/g, '\n').trim()
+    const parsed = parseInstrumentDescriptionBlock(descrNorm)
     const typeStr = String(stype || '').trim()
     const descrRaw = String(descr || '').trim()
+    // Extract model from "Model: {name}" for a more informative modelId
+    const mModel = descrRaw.match(/\bModel:\s*([^;\n|]+)/i)
+    const modelFromDesc = mModel ? mModel[1].trim() : ''
     let variableOut = typeStr
     if (!variableOut) {
       const pv = String(parsed.variable || '').trim()
@@ -5079,7 +5104,7 @@ function parseAcquisition3(root) {
     }
     let row = {
       sensorId: sid,
-      modelId: sid,
+      modelId: modelFromDesc || sid,
       type: stype,
       variable: variableOut,
       description: descrRaw,

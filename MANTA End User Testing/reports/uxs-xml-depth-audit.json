@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-15T11:56:28.536Z",
+  "generatedAt": "2026-05-15T12:11:45.862Z",
   "corpus": "manta-eut-samples",
   "sampleDir": "MANTA End User Testing/samples",
   "fileCount": 20,
@@ -742,7 +742,7 @@
           }
         },
         "topLenientErrors": [],
-        "previewLen": 27779,
+        "previewLen": 28599,
         "iso2PreviewFailCount": 0,
         "iso2PreviewFails": []
       },
@@ -866,7 +866,7 @@
           }
         },
         "topLenientErrors": [],
-        "previewLen": 27687,
+        "previewLen": 28503,
         "iso2PreviewFailCount": 0,
         "iso2PreviewFails": []
       },
