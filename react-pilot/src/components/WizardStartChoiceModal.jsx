@@ -12,6 +12,8 @@ import { confirmReplaceDifferentRecord, peekIncomingMissionFileId } from '../lib
  * @param {{
  *   profile: import('../core/registry/types.js').EntityProfile,
  *   pilotState?: object | null,
+ *   hostBridge?: import('../adapters/HostBridge.js').HostBridge | null,
+ *   hostBridgeReady?: boolean,
  *   onStartFresh: () => void,
  *   onPilotImportMerged: (merged: object, meta?: { importWarnings?: string[] }) => void,
  *   onStatus?: (msg: string) => void,
@@ -21,6 +23,8 @@ import { confirmReplaceDifferentRecord, peekIncomingMissionFileId } from '../lib
 export default function WizardStartChoiceModal({
   profile,
   pilotState = null,
+  hostBridge = null,
+  hostBridgeReady = false,
   onStartFresh,
   onPilotImportMerged,
   onStatus,
@@ -40,7 +44,7 @@ export default function WizardStartChoiceModal({
     onStartFresh()
   }
 
-  function applyXml() {
+  async function applyXml() {
     if (!canImport) return
     const raw = String(importText || '').trim()
     if (!raw) {
@@ -56,7 +60,18 @@ export default function WizardStartChoiceModal({
           return
         }
       }
-      const out = parseProfileXmlImport(profile, raw, metaRef.current || {})
+      /** @type {Array<Record<string, unknown>>} */
+      let sensorLibraryRows = []
+      if (hostBridgeReady && hostBridge && typeof hostBridge.listSensors === 'function') {
+        try {
+          const sr = await hostBridge.listSensors()
+          sensorLibraryRows = sr.unexpectedShape ? [] : sr.rows
+        } catch {
+          sensorLibraryRows = []
+        }
+      }
+      const baseMeta = metaRef.current && typeof metaRef.current === 'object' ? metaRef.current : {}
+      const out = parseProfileXmlImport(profile, raw, { ...baseMeta, sensorLibraryRows })
       if (!out.ok) {
         setImportError(out.error || 'Could not parse this XML for this profile.')
         onStatus?.(out.error || 'Import failed.')

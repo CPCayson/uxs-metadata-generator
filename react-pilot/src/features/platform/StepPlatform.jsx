@@ -16,7 +16,9 @@ import { useFieldValidation } from '../../components/fields/useFieldValidation'
  *   onRefreshPlatformLibrary?: () => void,
  *   onApplyPlatformFromLibrary?: (key: string) => void,
  *   onSavePlatformToSheets?: () => void,
+ *   onSavePlatformKitToLibrary?: () => void | Promise<void>,
  *   platformSaveBusy?: boolean,
+ *   libraryKitContributionSuggested?: boolean,
  * }} props
  */
 export default function StepPlatform({
@@ -33,7 +35,9 @@ export default function StepPlatform({
   onRefreshPlatformLibrary,
   onApplyPlatformFromLibrary,
   onSavePlatformToSheets,
+  onSavePlatformKitToLibrary,
   platformSaveBusy = false,
+  libraryKitContributionSuggested = false,
 }) {
   const [selectedPlatformKey, setSelectedPlatformKey] = useState('')
 
@@ -48,6 +52,21 @@ export default function StepPlatform({
 
       <section className="panel platform-library-panel">
         <h3 className="panel-title">Platform library</h3>
+        {libraryKitContributionSuggested && hostBridgeReady ? (
+          <div className="library-kit-contribution-callout" role="status">
+            <p className="library-kit-contribution-callout__text">
+              <strong>Strict validation is clean.</strong> Save this platform and its sensors to the global library so others can reuse the kit.
+            </p>
+            <button
+              type="button"
+              className="button button-tiny"
+              disabled={platformSaveBusy}
+              onClick={() => void onSavePlatformKitToLibrary?.()}
+            >
+              {platformSaveBusy ? 'Saving…' : 'Save platform & sensors to library'}
+            </button>
+          </div>
+        ) : null}
         <p className="card-intro platform-library-intro">
           Load an existing platform from your Postgres-backed catalog (<code>/api/db</code>) and apply it here. The list loads
           when you open this step; use Refresh to reload.
@@ -89,7 +108,7 @@ export default function StepPlatform({
           </button>
           <button
             type="button"
-            className="button button-secondary button-tiny"
+            className={`button button-secondary button-tiny${libraryKitContributionSuggested ? ' library-kit-save-suppressed' : ''}`}
             disabled={!hostBridgeReady || platformLibraryLoading || platformSaveBusy}
             onClick={() => onSavePlatformToSheets?.()}
           >

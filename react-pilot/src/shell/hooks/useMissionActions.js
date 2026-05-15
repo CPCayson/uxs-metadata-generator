@@ -339,13 +339,7 @@ export function useMissionActions({
         .filter((s) => acquisitionInstrumentHasContent(s))
         .map((s) => mapPilotSensorToSavePayload(s, { platformId: pid }))
       if (batch.length) await hostBridge.saveSensorsBatch(batch)
-      const res = await hostBridge.listPlatforms()
-      if (Array.isArray(res.rows)) {
-        const rows = res.rows.filter((row) => row && typeof row === 'object').map((row, idx) => ({ key: platformRowKey(row, idx), row }))
-        setPlatformLibraryRows(rows)
-      } else {
-        await refreshPlatformLibrary()
-      }
+      await refreshPlatformLibrary()
       setStatusMessage(`Saved platform "${payload.id}"${batch.length ? ` and ${batch.length} sensor(s)` : ''} to the library.`)
     } catch (error) {
       setStatusMessage(`Kit save failed: ${error instanceof Error ? error.message : String(error)}`)

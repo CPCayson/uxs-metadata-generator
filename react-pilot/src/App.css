@@ -3386,11 +3386,48 @@
   color: #fde68a;
 }
 
+.sensor-card-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
 .sensor-card-head {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 0.5rem;
+}
+
+.sensor-library-asset-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text-muted, #64748b);
+  border: 1px solid color-mix(in srgb, var(--text-muted, #64748b) 45%, transparent);
+  border-radius: 0.25rem;
+  padding: 0.1rem 0.35rem;
+  white-space: nowrap;
+}
+
+.library-kit-contribution-callout {
+  margin: 0 0 0.75rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 0.35rem;
+  border: 1px solid color-mix(in srgb, var(--accent, #0ea5e9) 35%, transparent);
+  background: color-mix(in srgb, var(--accent, #0ea5e9) 8%, transparent);
+}
+
+.library-kit-contribution-callout__text {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.library-kit-save-suppressed {
+  display: none !important;
 }
 
 .platform-library-intro {

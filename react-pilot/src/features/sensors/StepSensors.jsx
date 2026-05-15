@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
-import { SENSOR_XML_EXTRA_FIELD_LABELS, SENSOR_XML_OPTIONAL_DEFAULTS } from '../../lib/sensorInstrumentDescription.js'
+import {
+  SENSOR_XML_EXTRA_FIELD_LABELS,
+  SENSOR_XML_OPTIONAL_DEFAULTS,
+  acquisitionInstrumentHasContent,
+} from '../../lib/sensorInstrumentDescription.js'
+import { mapDbSensorRowToPilotSensor, mapPilotSensorToSavePayload } from '../../lib/sensorSheetMapping.js'
 import { useFieldValidation } from '../../components/fields/useFieldValidation'
 import { useMetadataEngine } from '../../shell/context.js'
 
@@ -19,9 +24,24 @@ const SENSOR_TYPES = [
  *   onTouched: (key: string) => void,
  *   showAllErrors: boolean,
  *   issues: Array<{ field: string, message: string }>,
+ *   platform?: object,
+ *   libraryKitContributionSuggested?: boolean,
+ *   onSavePlatformKitToLibrary?: () => void | Promise<void>,
+ *   platformSaveBusy?: boolean,
  * }} props
  */
-export default function StepSensors({ sensors, onSetSensors, touched, onTouched, showAllErrors, issues }) {
+export default function StepSensors({
+  sensors,
+  onSetSensors,
+  touched,
+  onTouched,
+  showAllErrors,
+  issues,
+  platform = {},
+  libraryKitContributionSuggested = false,
+  onSavePlatformKitToLibrary,
+  platformSaveBusy = false,
+}) {
   const { hostBridge } = useMetadataEngine()
   const { show: showField } = useFieldValidation({ issues, touched, showAllErrors })
 
@@ -51,32 +71,33 @@ export default function StepSensors({ sensors, onSetSensors, touched, onTouched,
 
   useEffect(() => { loadLibrary() }, [loadLibrary])
 
-  async function applyFromLibrary(row) {
+  function applyFromLibrary(row) {
     if (!row) return
-    onSetSensors([
-      ...sensors,
-      {
-        localId: `sen_${Date.now()}`,
-        sensorId: String(row.sensorId ?? row.id ?? ''),
-        type:     String(row.type ?? row.sensorType ?? ''),
-        modelId:  String(row.modelId ?? row.model ?? ''),
-        variable: String(row.variable ?? row.observedVariable ?? ''),
-        firmware: String(row.firmware ?? ''),
-        ...SENSOR_XML_OPTIONAL_DEFAULTS,
-        ...Object.fromEntries(
-          Object.keys(SENSOR_XML_OPTIONAL_DEFAULTS).map((k) => [k, String(row[k] ?? '')])
-        ),
-      },
-    ])
+    onSetSensors([...sensors, mapDbSensorRowToPilotSensor(row, { fromLibrary: true, index: sensors.length })])
   }
 
   async function saveCurrentSensorsToSheets() {
     if (!hostBridgeReady || !sensors.length) return
+    const platformId = String(platform?.platformId ?? '').trim()
+    /** @type {Array<Record<string, unknown>>} */
+    const batch = []
+    for (const s of sensors) {
+      if (!acquisitionInstrumentHasContent(s)) continue
+      try {
+        batch.push(mapPilotSensorToSavePayload(s, { platformId }))
+      } catch {
+        /* rows without a sensor id cannot be upserted */
+      }
+    }
+    if (!batch.length) {
+      setSaveStatus('Add a sensor ID on each row you want to save to the library.')
+      return
+    }
     setSaveBusy(true)
     setSaveStatus('')
     try {
-      await hostBridge.saveSensorsBatch(sensors)
-      setSaveStatus(`Saved ${sensors.length} sensor${sensors.length !== 1 ? 's' : ''} to the library.`)
+      await hostBridge.saveSensorsBatch(batch)
+      setSaveStatus(`Saved ${batch.length} sensor${batch.length !== 1 ? 's' : ''} to the library.`)
       await loadLibrary()
     } catch (err) {
       setSaveStatus(err instanceof Error ? err.message : 'Save failed.')
@@ -117,6 +138,22 @@ export default function StepSensors({ sensors, onSetSensors, touched, onTouched,
       {showField('sensors') ? <p className="field-error">{showField('sensors')}</p> : null}
 
       {/* ── Sensor library panel (mirrors Platform pattern) ─────────── */}
+      {libraryKitContributionSuggested && hostBridgeReady ? (
+        <div className="library-kit-contribution-callout" role="status">
+          <p className="library-kit-contribution-callout__text">
+            <strong>Strict validation is clean.</strong> Save the full platform + sensor kit from the Platform step, or use the button below.
+          </p>
+          <button
+            type="button"
+            className="button button-tiny"
+            disabled={platformSaveBusy}
+            onClick={() => void onSavePlatformKitToLibrary?.()}
+          >
+            {platformSaveBusy ? 'Saving…' : 'Save platform & sensors to library'}
+          </button>
+        </div>
+      ) : null}
+
       {hostBridgeReady && (
         <section className="library-panel">
           <div className="library-panel-header">
@@ -132,7 +169,7 @@ export default function StepSensors({ sensors, onSetSensors, touched, onTouched,
               </button>
               <button
                 type="button"
-                className="button button-secondary button-tiny"
+                className={`button button-secondary button-tiny${libraryKitContributionSuggested ? ' library-kit-save-suppressed' : ''}`}
                 onClick={saveCurrentSensorsToSheets}
                 disabled={saveBusy || !sensors.length}
                 aria-busy={saveBusy}
@@ -180,9 +217,16 @@ export default function StepSensors({ sensors, onSetSensors, touched, onTouched,
           <section key={sen.localId || idx} className="sensor-card panel">
             <div className="sensor-card-head">
               <h3 className="panel-title">Sensor {idx + 1}</h3>
-              <button type="button" className="button button-secondary button-tiny" onClick={() => removeSensor(idx)}>
-                Remove
-              </button>
+              <div className="sensor-card-head-actions">
+                {sen.fromSensorLibrary ? (
+                  <span className="sensor-library-asset-badge" title="Fields aligned with a Postgres sensor library row">
+                    Library asset
+                  </span>
+                ) : null}
+                <button type="button" className="button button-secondary button-tiny" onClick={() => removeSensor(idx)}>
+                  Remove
+                </button>
+              </div>
             </div>
             <label htmlFor={`${pfx}-sid`}>Sensor ID</label>
             <input
