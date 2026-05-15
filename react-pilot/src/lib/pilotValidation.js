@@ -273,8 +273,13 @@ function missionPurposeMirrorsAbstract(raw, abs) {
   return r === a || r === head || r.startsWith(head)
 }
 
-export function sanitizePilotState(state) {
+/**
+ * @param {object} state
+ * @param {{ skipNceiShellDefaults?: boolean }} [options] When true (Start over / fresh shell), do not inject NCEI purpose/liability boilerplate or flip license preset.
+ */
+export function sanitizePilotState(state, options = {}) {
   if (!state || typeof state !== 'object') return /** @type {object} */ (state)
+  const skipNceiShellDefaults = options.skipNceiShellDefaults === true
   const out = JSON.parse(JSON.stringify(state))
 
   if (!out.keywords || typeof out.keywords !== 'object' || Array.isArray(out.keywords)) {
@@ -344,22 +349,24 @@ export function sanitizePilotState(state) {
     for (const gk of ['graphicOverviewHref', 'graphicOverviewTitle']) {
       if (m[gk] != null) m[gk] = String(m[gk]).trim()
     }
-    const presetNorm = normalizeDataLicensePresetKey(m.dataLicensePreset)
-    if (presetNorm === 'custom' && isBlank(m.licenseUrl)) {
-      m.dataLicensePreset = 'ncei_cc_by_4'
-    }
-    const absForPurpose = String(m.abstract || '').trim()
-    const rawPurpose = String(m.purpose || '').trim()
-    if (missionPurposeMirrorsAbstract(rawPurpose, absForPurpose)) {
-      m.purpose = NCEI_DEFAULT_MISSION_PURPOSE
-    } else {
-      m.purpose = resolveMissionPurposeForNcei(rawPurpose, absForPurpose)
-    }
-    if (isBlank(m.distributionLiability)) {
-      m.distributionLiability = NCEI_DEFAULT_DISTRIBUTION_LIABILITY
-    }
-    if (isBlank(m.otherCiteAs)) {
-      m.otherCiteAs = NCEI_DEFAULT_USE_LIABILITY
+    if (!skipNceiShellDefaults) {
+      const presetNorm = normalizeDataLicensePresetKey(m.dataLicensePreset)
+      if (presetNorm === 'custom' && isBlank(m.licenseUrl)) {
+        m.dataLicensePreset = 'ncei_cc_by_4'
+      }
+      const absForPurpose = String(m.abstract || '').trim()
+      const rawPurpose = String(m.purpose || '').trim()
+      if (missionPurposeMirrorsAbstract(rawPurpose, absForPurpose)) {
+        m.purpose = NCEI_DEFAULT_MISSION_PURPOSE
+      } else {
+        m.purpose = resolveMissionPurposeForNcei(rawPurpose, absForPurpose)
+      }
+      if (isBlank(m.distributionLiability)) {
+        m.distributionLiability = NCEI_DEFAULT_DISTRIBUTION_LIABILITY
+      }
+      if (isBlank(m.otherCiteAs)) {
+        m.otherCiteAs = NCEI_DEFAULT_USE_LIABILITY
+      }
     }
     m.uxsContext = normalizeUxsContext(m.uxsContext)
   }

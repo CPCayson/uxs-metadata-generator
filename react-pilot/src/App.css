@@ -2357,6 +2357,57 @@
   border: 0;
 }
 
+.pilot-confirm-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(2px);
+}
+
+.pilot-confirm-dialog {
+  width: min(420px, 100%);
+  padding: 1.1rem 1.2rem;
+  border-radius: 12px;
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--border-color, #e2e8f0);
+  box-shadow: 0 18px 48px rgba(15, 23, 42, 0.28);
+}
+
+.pilot-confirm-dialog__title {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-color, #0f172a);
+}
+
+.pilot-confirm-dialog__message {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--text-muted, #64748b);
+}
+
+.pilot-confirm-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.pilot-confirm-dialog__confirm--danger {
+  background: #dc2626;
+  border-color: #b91c1c;
+  color: #fff;
+}
+
+.pilot-confirm-dialog__confirm--danger:hover {
+  background: #b91c1c;
+}
+
 /* Legacy Index toolbar: schema label, host pill, preview hint, NCEI link */
 .pilot-xml-tools__legacy-meta {
   display: flex;

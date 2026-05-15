@@ -92,7 +92,7 @@ function seedPilotState() {
 function missionInitState() {
   const session = readPilotSessionPayload()
   if (session?.startFresh === true) {
-    const fresh = sanitizePilotState(defaultPilotState())
+    const fresh = defaultPilotState()
     logPilotWorkspace('missionInitState', {
       mode: 'startFresh',
       after: pilotWorkspaceSnapshot(fresh),

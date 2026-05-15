@@ -263,6 +263,7 @@ function XmlToolsBar({
 
   useEffect(() => {
     function handleCapture(capture) {
+      if (typeof window !== 'undefined' && window.__mantaWorkspaceClearing) return
       const text = String(capture?.text || '').trim()
       if (!text) return
       const captureKey = extensionCaptureDedupeKey(capture)

@@ -6,6 +6,7 @@
  */
 
 import { importPilotPartialStateFromXml } from './xmlPilotImport.js'
+import { isPilotWorkspaceClearing } from './pilotWorkspaceClearing.js'
 
 /**
  * @param {string} xmlText
@@ -29,6 +30,7 @@ let replaceConfirmOpen = false
  * @returns {boolean} true when import should proceed
  */
 export function confirmReplaceDifferentRecord(currentFileId, incomingFileId) {
+  if (isPilotWorkspaceClearing()) return false
   const cur = String(currentFileId ?? '').trim()
   const inc = String(incomingFileId ?? '').trim()
   if (!cur) return true

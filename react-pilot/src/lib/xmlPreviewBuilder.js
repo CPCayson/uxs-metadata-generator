@@ -6,7 +6,10 @@
  */
 import { getDataLicensePresetDef, normalizeDataLicensePresetKey } from './noaaLicensePresets.js'
 import { formatNceiUxsFileIdentifierForXml } from './nceiUxsFileId.js'
-import { buildAcquisitionInstrumentDescription } from './sensorInstrumentDescription.js'
+import {
+  buildAcquisitionInstrumentDescription,
+} from './sensorInstrumentDescription.js'
+import { sensorRowIsInactive } from './pilotValidation.js'
 import { gcmdConceptUrlFromUuid as gcmdKeywordHrefFromStoredUuid } from './gcmdKmsUrl.js'
 import {
   formatUxsPilotMachineBlock,
@@ -401,7 +404,7 @@ ${pads.outer}</gmi:instrument>`
 export function buildXmlPreview(state) {
   const m = state?.mission || {}
   const bbox = previewMissionBoundingDecimals(m)
-  const progressCode = String(m.status || '').trim() || 'completed'
+  const progressCode = String(m.status || '').trim()
   const sp = state?.spatial || {}
   const p = state?.platform || {}
   const sensors = Array.isArray(state?.sensors) ? state.sensors : []
@@ -476,8 +479,9 @@ export function buildXmlPreview(state) {
 `
     : ''
 
-  const sensorContentInfoXml = sensors.length
-    ? sensors
+  const previewSensors = sensors.filter((s) => !sensorRowIsInactive(s))
+  const sensorContentInfoXml = previewSensors.length
+    ? previewSensors
         .map(
           (s, i) => {
             const covDesc = buildAcquisitionInstrumentDescription(s, { includeVariableLine: false })
@@ -1181,10 +1185,13 @@ ${metadataContactXml}${dateStampXml}${metaStdXml}${spatialReprXml}${refSystemXml
         </gmd:CI_Citation>
       </gmd:citation>
       <gmd:abstract><gco:CharacterString>${esc(m.abstract)}</gco:CharacterString></gmd:abstract>
-      <gmd:purpose><gco:CharacterString>${esc(m.purpose)}</gco:CharacterString></gmd:purpose>
-      <gmd:status>
+      ${String(m.purpose || '').trim() ? `<gmd:purpose><gco:CharacterString>${esc(m.purpose)}</gco:CharacterString></gmd:purpose>\n` : ''}      ${
+        progressCode
+          ? `<gmd:status>
         <gmd:MD_ProgressCode codeList="${esc(MD_PROGRESS_CODE_CODELIST)}" codeListValue="${esc(progressCode)}">${esc(progressCode)}</gmd:MD_ProgressCode>
-      </gmd:status>
+      </gmd:status>\n`
+          : ''
+      }
 ${resourcePointOfContactXml}${resourceMaintenanceXml}${graphicOverviewXml}${kwBlock('sciencekeywords')}${kwBlock('datacenters')}${kwBlock('platforms')}${kwBlock('instruments')}${kwBlock('locations')}${kwBlock('projects')}${kwBlock('providers')}${platformInstanceFacetXml}${legalXml}${docucompXml}${aggXml}      <gmd:language>
         <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/php/code_list.php" codeListValue="${esc(m.language)}">${esc(m.language)}</gmd:LanguageCode>
       </gmd:language>

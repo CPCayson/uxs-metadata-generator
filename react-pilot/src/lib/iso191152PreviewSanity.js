@@ -62,8 +62,9 @@ export function missionPreviewIso191152SanityFailures(xml) {
     {
       id: 'preview.progressCodeNonempty',
       passed:
-        /<gmd:MD_ProgressCode\b[^>]*\bcodeListValue\s*=\s*"[^"]+"[\s\S]*?<\/gmd:MD_ProgressCode>/i.test(xml) &&
-        !/<gmd:MD_ProgressCode\b[^>]*\bcodeListValue\s*=\s*""/i.test(xml),
+        !/<gmd:status\b/.test(xml) ||
+        (/<gmd:MD_ProgressCode\b[^>]*\bcodeListValue\s*=\s*"[^"]+"[\s\S]*?<\/gmd:MD_ProgressCode>/i.test(xml) &&
+          !/<gmd:MD_ProgressCode\b[^>]*\bcodeListValue\s*=\s*""/i.test(xml)),
     },
   ]
   return checks.filter((c) => !c.passed).map((c) => c.id)

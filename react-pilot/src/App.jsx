@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import './App.css'
 import './pilot-ui.css'
 import './futuristic.css'
@@ -18,6 +18,8 @@ import { bediGranuleProfile } from './profiles/bedi/bediGranuleProfile'
 import { registerProfile, hasProfile } from './core/registry/ProfileRegistry'
 import { writePilotSessionPayloadNow } from './lib/pilotSessionStorage'
 import { logPilotWorkspace, pilotWorkspaceSnapshot } from './lib/pilotDebugLog.js'
+import PilotConfirmDialog from './components/PilotConfirmDialog.jsx'
+import { runWorkspaceClearExecutor } from './lib/pilotWorkspaceClearBus.js'
 import { defaultPilotState, mergeLoadedPilotState, sanitizePilotState } from './lib/pilotValidation'
 import { importPilotPartialStateFromXml } from './lib/xmlPilotImport'
 import { stripMissionPilotIsoImportResidue } from './lib/importMissionIsoResidueStrip.js'
@@ -546,6 +548,18 @@ function App() {
   const [wizardInstanceKey, setWizardInstanceKey] = useState(0)
   /** When false, Manta FAB / split-float tools dock is hidden and lens stays off. Default on. */
   const [mantaToolsEnabled, setMantaToolsEnabled] = useState(true)
+  const [workspaceClearConfirmOpen, setWorkspaceClearConfirmOpen] = useState(false)
+  const workspaceClearConfirmOpenRef = useRef(false)
+  workspaceClearConfirmOpenRef.current = workspaceClearConfirmOpen
+
+  useEffect(() => {
+    function onRequestClear() {
+      if (workspaceClearConfirmOpenRef.current) return
+      setWorkspaceClearConfirmOpen(true)
+    }
+    window.addEventListener('manta:request-workspace-clear', onRequestClear)
+    return () => window.removeEventListener('manta:request-workspace-clear', onRequestClear)
+  }, [])
 
   function handleNewRecord(nextProfileId, nextPlatformHint = null) {
     if (nextProfileId) {
@@ -731,6 +745,20 @@ function App() {
 
       {/* HUD tether: draws a neon line from the focused field to its XML line */}
       <FieldXmlTether />
+
+      <PilotConfirmDialog
+        open={workspaceClearConfirmOpen}
+        title="Start over?"
+        message="Clear saved workspace data and reset this wizard to defaults? Unsaved edits will be lost."
+        confirmLabel="Start over"
+        cancelLabel="Keep editing"
+        danger
+        onConfirm={() => {
+          setWorkspaceClearConfirmOpen(false)
+          runWorkspaceClearExecutor()
+        }}
+        onCancel={() => setWorkspaceClearConfirmOpen(false)}
+      />
     </div>
   )
 }

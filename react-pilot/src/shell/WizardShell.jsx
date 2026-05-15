@@ -39,6 +39,11 @@ import { acquisitionInstrumentHasContent } from '../lib/sensorInstrumentDescript
 import MantaMissionCapabilityStrip from '../components/MantaMissionCapabilityStrip.jsx'
 import MissionWizardStepPills from '../components/MissionWizardStepPills.jsx'
 import WizardStartChoiceModal from '../components/WizardStartChoiceModal.jsx'
+import { setPilotWorkspaceClearing } from '../lib/pilotWorkspaceClearing.js'
+import {
+  registerWorkspaceClearExecutor,
+  requestWorkspaceClear,
+} from '../lib/pilotWorkspaceClearBus.js'
 import { diffPilotStates } from '../core/fragments/diffPilotStates.js'
 import { summarizePilotImportPopulation } from '../lib/importMergeSummary.js'
 import { useWorkbenchChrome } from './useWorkbenchChrome.js'
@@ -101,9 +106,12 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
   const [pilotState, setPilotState] = useState(() => {
     // Profiles that declare initState() get seeded + session-restored state.
     // All others start from a clean defaultState().
+    const session = readPilotSessionPayload()
+    const freshShell = session?.startFresh === true
     const s = profile.initState?.() ?? profile.defaultState()
-    baselineSerialized.current = JSON.stringify(profile.sanitize(s))
-    return s
+    const normalized = freshShell ? s : profile.sanitize(s)
+    baselineSerialized.current = JSON.stringify(normalized)
+    return normalized
   })
 
   const setMode = useCallback(
@@ -127,17 +135,6 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
   const [wizardStartOpen, setWizardStartOpen] = useState(false)
   const [sidePanelTab, setSidePanelTab] = useState('xml')
   const [xmlExpanded, setXmlExpanded] = useState(false)
-
-  useEffect(() => {
-    if (!splitFloatWorkbench) return
-    function onSidePanelTab(/** @type {CustomEvent} */ e) {
-      const tab = e?.detail?.tab
-      if (tab === 'xml' || tab === 'ask' || tab === 'lens') setSidePanelTab(tab)
-    }
-    window.addEventListener('manta:side-panel-tab', onSidePanelTab)
-    return () => window.removeEventListener('manta:side-panel-tab', onSidePanelTab)
-  }, [splitFloatWorkbench])
-
   /** Header slot next to XML tools — mission step pills portal target */
   const [missionStepsSlotEl, setMissionStepsSlotEl] = useState(/** @type {HTMLElement | null} */ (null))
 
@@ -233,8 +230,8 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
   }, [showCometPanel, cometUuid, comet, registerCometWorkbench])
 
   useEffect(() => {
-    if (sidePanelTab === 'comet' || sidePanelTab === 'schema') setSidePanelTab('lens')
-  }, [sidePanelTab])
+    if (!showCometPanel && sidePanelTab === 'comet') setSidePanelTab('xml')
+  }, [showCometPanel, sidePanelTab])
 
   useEffect(() => {
     const el = document.getElementById('pilot-header-steps-slot')
@@ -671,17 +668,20 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     (opts = {}) => {
       const skipConfirm = opts.skipConfirm === true
       if (!skipConfirm) {
-        if (!window.confirm('Clear saved workspace data and reset this wizard to defaults? Unsaved edits will be lost.')) {
-          return false
-        }
+        requestWorkspaceClear()
+        return false
       }
-      const raw = typeof profile.defaultState === 'function' ? profile.defaultState() : defaultPilotState()
-      const fresh = profile.sanitize(raw)
+      cancelScheduledPersistPilotSession()
+      const fresh =
+        typeof profile.defaultState === 'function' ? profile.defaultState() : defaultPilotState()
       baselineSerialized.current = JSON.stringify(fresh)
       setPilotState(fresh)
       setValidationPrimed(false)
       setCometUuid('')
-      writePilotSessionPayloadNow(fresh, { validationPrimed: false, startFresh: true })
+      writePilotSessionPayloadNow(fresh, {
+        validationPrimed: false,
+        startFresh: opts.startFresh === true || skipConfirm,
+      })
       setTouched({})
       setShowAllErrors(false)
       setImportSampleContext(null)
@@ -708,12 +708,11 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
   )
 
   const clearFormBusyRef = useRef(false)
-  const handleClearForm = useCallback(() => {
+
+  const executeClearForm = useCallback(() => {
     if (clearFormBusyRef.current) return
-    if (!window.confirm('Clear saved workspace data and reset this wizard to defaults? Unsaved edits will be lost.')) {
-      return
-    }
     clearFormBusyRef.current = true
+    setPilotWorkspaceClearing(true)
     try {
       logPilotWorkspace('clearForm:begin', {
         profileId: profile.id,
@@ -721,20 +720,33 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
       })
       cancelScheduledPersistPilotSession()
       emitPilotAuditEvent({ profileId: profile.id, action: 'clearForm', result: 'ok' })
-      resetPilotWorkspaceToDefaults({ skipConfirm: true })
+      resetPilotWorkspaceToDefaults({ skipConfirm: true, startFresh: true })
       const sessionAfter = readPilotSessionPayload()
       logPilotWorkspace('clearForm:afterReset', {
         startFresh: sessionAfter?.startFresh === true,
         after: pilotWorkspaceSnapshot(sessionAfter?.pilot),
       })
       if (breadcrumb?.onNewRecord) {
-        breadcrumb.onNewRecord()
-        logPilotWorkspace('clearForm:remount', { wizardInstanceKey: 'bump' })
+        window.setTimeout(() => {
+          breadcrumb.onNewRecord()
+          logPilotWorkspace('clearForm:remount', { wizardInstanceKey: 'bump' })
+        }, 0)
       }
     } finally {
+      setPilotWorkspaceClearing(false)
       clearFormBusyRef.current = false
     }
   }, [breadcrumb, profile.id, resetPilotWorkspaceToDefaults])
+
+  const handleClearForm = useCallback(() => {
+    if (clearFormBusyRef.current) return
+    requestWorkspaceClear()
+  }, [])
+
+  useEffect(() => {
+    registerWorkspaceClearExecutor(executeClearForm)
+    return () => registerWorkspaceClearExecutor(null)
+  }, [executeClearForm])
 
   /**
    * @param {object} next Merged pilot state from XML import
@@ -784,12 +796,10 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
           hostBridge={hostBridge}
           hostBridgeReady={hostBridgeReady}
           onStartFresh={() => {
+            resetPilotWorkspaceToDefaults({ skipConfirm: true })
             setWizardStartOpen(false)
-            if (breadcrumb?.onNewRecord) {
-              breadcrumb.onNewRecord()
-            } else {
-              resetPilotWorkspaceToDefaults({ skipConfirm: true })
-            }
+            setShowAllErrors(false)
+            setTouched({})
           }}
           onPilotImportMerged={(merged, importMeta) => {
             setWizardStartOpen(false)
@@ -1064,34 +1074,6 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
                     <button
                       type="button"
                       role="tab"
-                      id="side-tab-ask"
-                      aria-selected={sidePanelTab === 'ask'}
-                      aria-controls="side-panel-ask"
-                      tabIndex={sidePanelTab === 'ask' ? 0 : -1}
-                      className={`nav-link${sidePanelTab === 'ask' ? ' active' : ''}`}
-                      onClick={() => setSidePanelTab('ask')}
-                    >
-                      Ask
-                    </button>
-                  </li>
-                  <li className="nav-item" role="presentation">
-                    <button
-                      type="button"
-                      role="tab"
-                      id="side-tab-lens"
-                      aria-selected={sidePanelTab === 'lens'}
-                      aria-controls="side-panel-lens"
-                      tabIndex={sidePanelTab === 'lens' ? 0 : -1}
-                      className={`nav-link${sidePanelTab === 'lens' ? ' active' : ''}`}
-                      onClick={() => setSidePanelTab('lens')}
-                    >
-                      Lens
-                    </button>
-                  </li>
-                  <li className="nav-item" role="presentation">
-                    <button
-                      type="button"
-                      role="tab"
                       id="side-tab-schema"
                       aria-selected={sidePanelTab === 'schema'}
                       aria-controls="side-panel-schema"
@@ -1140,33 +1122,43 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
                 compactRailHeader={!xmlExpanded}
                 railHideFieldPill={!xmlExpanded}
               />
+              <div style={{
+                display: 'flex', gap: 6, padding: '0.5rem 0.5rem 0.25rem',
+                borderTop: '1px solid var(--border-color, #e2e8f0)',
+                background: 'var(--card-bg, #fff)',
+                flexWrap: 'wrap',
+              }}>
+                <button
+                  type="button"
+                  onClick={comet.pushDraftToComet}
+                  disabled={comet.pushBusy}
+                  style={{
+                    flex: 1, minWidth: 120, padding: '0.35rem 0.7rem',
+                    fontSize: '0.76rem', fontWeight: 700,
+                    background: 'var(--primary-color, #006994)', color: '#fff',
+                    border: 'none', borderRadius: 5, cursor: comet.pushBusy ? 'wait' : 'pointer',
+                    opacity: comet.pushBusy ? 0.6 : 1,
+                  }}
+                >
+                  {comet.pushBusy ? 'Pushing…' : '↑ Push draft to CoMET'}
+                </button>
+                <button
+                  type="button"
+                  onClick={ma.exportBusy ? null : ma.exportGeoJSONFromServer}
+                  disabled={ma.exportBusy || !cap.geoJsonExport}
+                  style={{
+                    padding: '0.35rem 0.7rem',
+                    fontSize: '0.76rem', fontWeight: 700,
+                    background: 'var(--card-bg)', color: 'var(--text-color)',
+                    border: '1px solid var(--border-color)', borderRadius: 5,
+                    cursor: 'pointer', opacity: cap.geoJsonExport ? 1 : 0.4,
+                  }}
+                  title="Export XML"
+                >
+                  ↓ Export XML
+                </button>
+              </div>
             </div>
-
-            {/* Ask tab — portals into the FAB dock Ask panel */}
-            {!xmlExpanded && (
-              <div
-                id="side-panel-ask"
-                role="tabpanel"
-                aria-labelledby="side-tab-ask"
-                hidden={sidePanelTab !== 'ask'}
-                className="workspace-side-tabpanel lab-right-rail-tabpanel lab-right-rail-tabpanel--assistant"
-              >
-                <div id="manta-ask-rail-host" className="lab-right-rail-portal-host" />
-              </div>
-            )}
-
-            {/* Lens tab — portals into the FAB dock Lens panel */}
-            {!xmlExpanded && (
-              <div
-                id="side-panel-lens"
-                role="tabpanel"
-                aria-labelledby="side-tab-lens"
-                hidden={sidePanelTab !== 'lens'}
-                className="workspace-side-tabpanel lab-right-rail-tabpanel lab-right-rail-tabpanel--assistant"
-              >
-                <div id="manta-lens-rail-host" className="lab-right-rail-portal-host" />
-              </div>
-            )}
 
             {/* Schema info tab */}
             {!xmlExpanded && (

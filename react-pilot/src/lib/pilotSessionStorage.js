@@ -103,7 +103,8 @@ export function writePilotSessionPayloadNow(pilotState, meta = {}) {
   if (typeof sessionStorage === 'undefined') return
   cancelScheduledPersistPilotSession()
   try {
-    const prev = readPilotSessionPayload()
+    const replaceSession = meta.startFresh === true
+    const prev = replaceSession ? null : readPilotSessionPayload()
     const validationPrimed = resolveValidationPrimed(prev, meta)
     const startFresh = resolveStartFresh(prev, meta)
     sessionStorage.setItem(
