@@ -52,8 +52,10 @@ function AccordionSection({
   variant = 'default',
   sectionClassName = '',
 }) {
-  /** Match other wizard steps: sections start expanded; user may still collapse. */
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(Boolean(defaultOpen))
+  useEffect(() => {
+    if (defaultOpen) setOpen(true)
+  }, [defaultOpen])
   const symphony = variant === 'symphony'
   const rootClass = symphony
     ? `mission-symphony-accordion${open ? ' mission-symphony-accordion--open' : ''}${sectionClassName ? ` ${sectionClassName}` : ''}`
@@ -254,10 +256,10 @@ export default function StepMission({
       mission.citationOriginatorOrganisationName,
     ],
   )
-  const accScope = useMemo(
-    () => Boolean(String(mission.scopeCode || '').trim()),
-    [mission.scopeCode],
-  )
+  const accScope = useMemo(() => {
+    const v = String(mission.scopeCode || '').trim()
+    return Boolean(v && v !== 'dataset')
+  }, [mission.scopeCode])
   const accContactParties = useMemo(
     () =>
       hasText(mission.org)
@@ -277,14 +279,6 @@ export default function StepMission({
       mission.ror,
     ],
   )
-  const accLocation = useMemo(() => {
-    const def = { west: '-180', east: '180', south: '-90', north: '90' }
-    return (
-      ['west', 'east', 'south', 'north'].some((k) => String(mission[k] ?? '').trim() !== def[k])
-      || hasText(mission.vmin)
-      || hasText(mission.vmax)
-    )
-  }, [mission])
   const accConstraints = useMemo(
     () =>
       hasText(mission.citeAs)
@@ -786,7 +780,7 @@ export default function StepMission({
                 These export-critical fields are still empty (not in the XML, not mapped yet, or cleared):{' '}
                 <span className="pilot-import-attention__list">{importPriorityMissingLabels.join(', ')}</span>.
                 {' '}
-                Values in <strong>Core identity</strong> reflect merged state — expand timeline, contacts, and Advanced ISO as needed.
+                Values in <strong>Core identity</strong> reflect merged state — expand timeline, contact, Spatial, and Advanced ISO as needed.
               </>
             ) : (
               <>
@@ -796,7 +790,12 @@ export default function StepMission({
             )}
           </div>
         ) : null}
-        <AccordionSection title="Core identity · anchor" variant="symphony" defaultOpen sectionClassName="mission-module-core">
+        <AccordionSection
+          title="Core identity · anchor"
+          variant="symphony"
+          defaultOpen
+          sectionClassName="mission-module-core"
+        >
           <fieldset className="pilot-fieldset mission-field-group">
             <legend className="mission-fieldset-legend visually-hidden">Core identity</legend>
         <MantaFieldGlass
@@ -976,20 +975,11 @@ export default function StepMission({
         <AccordionSection
           title="Timeline & tracking"
           variant="symphony"
-          defaultOpen={false}
+          defaultOpen={accTimelineTracking}
           hasValues={accTimelineTracking}
         >
         <fieldset className="pilot-fieldset mission-field-group">
           <legend className="mission-fieldset-legend visually-hidden">Timeline and tracking</legend>
-        <div className="field-label-with-hint">
-          <span className="field-label-with-hint__kicker">Dataset period</span>
-          <FieldHintTooltip ariaLabel="About dataset period vs metadata record date">
-            <>
-              <strong>Dataset period</strong> for citation creation / completion and <code>gml:TimePeriod</code> in the XML
-              preview — not the same as <em>metadata record date</em> (see the Advanced ISO drawer at the bottom of this step).
-            </>
-          </FieldHintTooltip>
-        </div>
         <div className="form-row-2">
           <div>
             <label htmlFor="startDate">Start date *</label>
@@ -1021,15 +1011,7 @@ export default function StepMission({
 
         <div className="form-row-2">
           <div>
-            <LabelWithHint
-              htmlFor="publicationDate"
-              label="Dataset publication date (citation)"
-              hint={
-                <>
-                  <code>CI_DateTypeCode</code> publication, separate from completion/end.
-                </>
-              }
-            />
+            <label htmlFor="publicationDate">Publication date (citation)</label>
             <input
               {...pilotFieldControlAttrs('mission.publicationDate', 'publicationDate')}
               type="datetime-local"
@@ -1085,10 +1067,7 @@ export default function StepMission({
               </span>
             </div>
             {show('mission.doi') ? <p className="field-error">{show('mission.doi')}</p> : null}
-            <p className="hint mission-doi-hint">
-              The DOI is the permanent link to your data. Mint via the NCEI portal when available. Example:{' '}
-              <code>10.7289/V5ABC123</code>
-            </p>
+            <p className="hint mission-doi-hint">Permanent data link (DataCite-style <code>10.xxxx/…</code>).</p>
           </div>
           <div>
             <label htmlFor="accession">NCEI accession</label>
@@ -1109,86 +1088,14 @@ export default function StepMission({
         </AccordionSection>
 
         <AccordionSection
-          title="Location (bounding box & vertical)"
-          variant="symphony"
-          defaultOpen={false}
-          hasValues={accLocation}
-        >
-          <fieldset className="pilot-fieldset mission-field-group">
-            <legend className="mission-fieldset-legend visually-hidden">Geographic bounding box and vertical extent</legend>
-            <p className="hint" style={{ marginTop: 0 }}>
-              These values live on <code>mission.west|east|south|north|vmin|vmax</code> — the same fields as the{' '}
-              <strong>Spatial</strong> step (map, CRS, and quality there).
-            </p>
-            <div className="form-row-4">
-              {['west', 'east', 'south', 'north'].map((k) => (
-                <div key={k}>
-                  <label htmlFor={`mission-ident-${k}`}>{k}</label>
-                  <input
-                    id={`mission-ident-${k}`}
-                    className={`form-control${invalid('mission.bbox') ? ' form-control--invalid' : ''}`}
-                    data-pilot-field={`mission.${k}`}
-                    value={mission[k]}
-                    onChange={(e) => onMissionPatch({ [k]: e.target.value })}
-                    onBlur={() => onTouched('mission.bbox')}
-                  />
-                </div>
-              ))}
-            </div>
-            {show('mission.bbox') ? <p className="field-error">{show('mission.bbox')}</p> : null}
-            <div className="form-row-2">
-              <div>
-                <label htmlFor="mission-ident-vmin">Vertical min</label>
-                <input
-                  id="mission-ident-vmin"
-                  className={`form-control${invalid('mission.vmin') ? ' form-control--invalid' : ''}`}
-                  data-pilot-field="mission.vmin"
-                  value={mission.vmin}
-                  onChange={(e) => onMissionPatch({ vmin: e.target.value })}
-                  onBlur={() => onTouched('mission.vmin')}
-                />
-                {show('mission.vmin') ? <p className="field-error">{show('mission.vmin')}</p> : null}
-              </div>
-              <div>
-                <label htmlFor="mission-ident-vmax">Vertical max</label>
-                <input
-                  id="mission-ident-vmax"
-                  className={`form-control${invalid('mission.vmax') ? ' form-control--invalid' : ''}`}
-                  data-pilot-field="mission.vmax"
-                  value={mission.vmax}
-                  onChange={(e) => onMissionPatch({ vmax: e.target.value })}
-                  onBlur={() => onTouched('mission.vmax')}
-                />
-                {show('mission.vmax') ? <p className="field-error">{show('mission.vmax')}</p> : null}
-              </div>
-            </div>
-            {show('mission.vertical') ? <p className="field-error">{show('mission.vertical')}</p> : null}
-          </fieldset>
-        </AccordionSection>
-
-        <AccordionSection
           title="Citation parties (author / publisher / originator)"
           variant="symphony"
           defaultOpen={false}
           hasValues={accCitationParties}
         >
           <div className="mission-collapsible__body" style={{ paddingTop: 0 }}>
-            <p className="hint" style={{ marginTop: 0 }}>
-              One ISO citation block — optional unless your template requires these roles. Distinct from{' '}
-              <strong>point of contact</strong> under Organization.
-            </p>
         <fieldset className="pilot-fieldset mission-field-group">
-          <legend className="mission-fieldset-legend mission-fieldset-legend--hint">
-          <span>
-            Citation parties (<code>CI_Citation</code> / <code>citedResponsibleParty</code>)
-          </span>
-          <FieldHintTooltip ariaLabel="Citation parties vs point of contact">
-            <>
-              Distinct from resource <code>gmd:pointOfContact</code> below — these are author / publisher / originator on
-              the dataset citation.
-            </>
-          </FieldHintTooltip>
-          </legend>
+          <legend className="mission-fieldset-legend visually-hidden">Citation parties</legend>
         <div className="form-row-2">
           <div>
             <label htmlFor="citationAuthorIndividualName">Author — individual</label>
@@ -1270,7 +1177,7 @@ export default function StepMission({
         <AccordionSection
           title="Responsible party · organization &amp; contact"
           variant="symphony"
-          defaultOpen={false}
+          defaultOpen={accContactParties}
           hasValues={accContactParties}
         >
           <div className="mission-collapsible__body" style={{ paddingTop: 0 }}>
@@ -1621,7 +1528,7 @@ geoscientificInformation`}
           </FieldHintTooltip>
         </h3>
         <div className="step-mission-form-shell">
-        <AccordionSection title="Constraints &amp; legal · standardized use" variant="symphony" defaultOpen={false} hasValues={accConstraints}>
+        <AccordionSection title="Constraints &amp; legal · standardized use" variant="symphony" defaultOpen={accConstraints} hasValues={accConstraints}>
         <fieldset className="pilot-fieldset mission-field-group mission-constraints-fieldset">
           <legend className="visually-hidden">Constraints and legal fields</legend>
 
