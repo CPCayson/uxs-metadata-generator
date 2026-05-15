@@ -22,6 +22,8 @@ import './MantaFieldInsights.css'
 
 function buildSuggestions(issues, pilotState, activeStep) {
   const sugg = []
+  // When validation is idle (primed=false), issues is empty — nothing to surface
+  if (!issues.length) return sugg
   const mission = pilotState?.mission ?? {}
   const stepIssues = issues.filter((i) =>
     String(i.field || '').startsWith(activeStep === 'mission' ? 'mission.' : activeStep),

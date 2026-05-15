@@ -18,8 +18,9 @@ import { bediCollectionProfile } from './profiles/bedi/bediCollectionProfile'
 import { bediGranuleProfile } from './profiles/bedi/bediGranuleProfile'
 import { registerProfile, hasProfile } from './core/registry/ProfileRegistry'
 import { writePilotSessionPayloadNow } from './lib/pilotSessionStorage'
-import { defaultPilotState, mergeLoadedPilotState } from './lib/pilotValidation'
+import { defaultPilotState, mergeLoadedPilotState, sanitizePilotState } from './lib/pilotValidation'
 import { importPilotPartialStateFromXml } from './lib/xmlPilotImport'
+import { stripMissionPilotIsoImportResidue } from './lib/importMissionIsoResidueStrip.js'
 
 // Register profiles once at module evaluation time.
 // hasProfile guard prevents double-registration in React StrictMode.
@@ -671,7 +672,11 @@ function App() {
                               base.platform = { ...base.platform, platformType }
                             }
                             const merged = mergeLoadedPilotState(base, parsed.partial)
-                            writePilotSessionPayloadNow(merged, { validationPrimed: true })
+                            const mergedMission =
+                              (profileId ?? 'mission') === 'mission'
+                                ? sanitizePilotState(stripMissionPilotIsoImportResidue(merged))
+                                : sanitizePilotState(merged)
+                            writePilotSessionPayloadNow(mergedMission, { validationPrimed: true })
                             setActiveProfileId(profileId ?? 'mission')
                             setPlatformHint(platformHint ?? null)
                           }

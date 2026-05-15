@@ -52,6 +52,8 @@ CREATE TABLE IF NOT EXISTS sensors (
   weight                 TEXT NOT NULL DEFAULT '',
   warranty               TEXT NOT NULL DEFAULT '',
   notes                  TEXT NOT NULL DEFAULT '',
+  platform_id            TEXT NOT NULL DEFAULT '',
+  observed_variable      TEXT NOT NULL DEFAULT '',
   updated_at             TIMESTAMPTZ   DEFAULT NOW()
 );
 

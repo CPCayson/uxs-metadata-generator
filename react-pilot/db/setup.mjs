@@ -72,9 +72,14 @@ await run('sensors', `
     weight                 TEXT NOT NULL DEFAULT '',
     warranty               TEXT NOT NULL DEFAULT '',
     notes                  TEXT NOT NULL DEFAULT '',
+    platform_id            TEXT NOT NULL DEFAULT '',
+    observed_variable      TEXT NOT NULL DEFAULT '',
     updated_at             TIMESTAMPTZ   DEFAULT NOW()
   )
 `)
+
+await run('sensors_platform_id_col', `ALTER TABLE sensors ADD COLUMN IF NOT EXISTS platform_id TEXT NOT NULL DEFAULT ''`)
+await run('sensors_observed_variable_col', `ALTER TABLE sensors ADD COLUMN IF NOT EXISTS observed_variable TEXT NOT NULL DEFAULT ''`)
 
 await run('templates', `
   CREATE TABLE IF NOT EXISTS templates (
@@ -121,27 +126,29 @@ for (const [id, name, type, mfr, model, weight, length, width, height, ps, nav, 
 console.log('\n── Seeding sensors ──')
 
 const sensors = [
-  ['Anemometer',  'Anemometer',                              'Gill Instruments',               'Windmaster 1590-PK-20', ''],
-  ['Radiometer',  'Radiometer',                              'Eppley',                         'PIR',                   ''],
-  ['CTD',         'Conductivity/Temp/ODO',                   'Sea-Bird Scientific',            'SBE37-SMP-ODO Microcat',''],
-  ['Thermometer', 'Temperature/Humidity Sensor',             'Rotronic',                       'HC2-S3',                ''],
-  ['IRPyrometer',  'IR Pyrometer',                           'Heitronics',                     'CT15.10',               ''],
-  ['LI-COR',      'PAR in Air Detector',                     'LI-COR',                         'LI-192SA',              ''],
-  ['SWRadiometer', 'Shortwave Radiometer',                   'Delta-T',                        'SPN1',                  ''],
-  ['PHINS INS',   'Inertial Navigation System',              'Exail',                          'iXBlue 6000',           'NAV_SUBSEA_1_7_7.a'],
-  ['AML CTD',     'Conductivity, Temperature, Depth Sensor', 'AML Oceanographic',              '',                      '83.3'],
-  ['RDI ADCP',    'Acoustic Doppler Current Profiler',       'Teledyne Marine RD Instruments', '',                      '83.3'],
-  ['PDVL 300',    'Doppler Velocity Logger',                 '',                               '',                      ''],
-  ['Kraken SAS',  'Synthetic Aperture Sonar',                'Kraken Robotics',                '',                      ''],
+  ['Anemometer',  'Anemometer',                              'Gill Instruments',               'Windmaster 1590-PK-20', '', '', ''],
+  ['Radiometer',  'Radiometer',                              'Eppley',                         'PIR',                   '', '', ''],
+  ['CTD',         'Conductivity/Temp/ODO',                   'Sea-Bird Scientific',            'SBE37-SMP-ODO Microcat', '', 'REMUS620_401', 'conductivity temperature depth'],
+  ['Thermometer', 'Temperature/Humidity Sensor',             'Rotronic',                       'HC2-S3',                '', '', ''],
+  ['IRPyrometer',  'IR Pyrometer',                           'Heitronics',                     'CT15.10',               '', '', ''],
+  ['LI-COR',      'PAR in Air Detector',                     'LI-COR',                         'LI-192SA',              '', '', ''],
+  ['SWRadiometer', 'Shortwave Radiometer',                   'Delta-T',                        'SPN1',                  '', '', ''],
+  ['PHINS INS',   'Inertial Navigation System',              'Exail',                          'iXBlue 6000',           'NAV_SUBSEA_1_7_7.a', 'REMUS620_401', 'navigation'],
+  ['AML CTD',     'Conductivity, Temperature, Depth Sensor', 'AML Oceanographic',              '',                      '83.3', 'REMUS620_401', 'CTD'],
+  ['RDI ADCP',    'Acoustic Doppler Current Profiler',       'Teledyne Marine RD Instruments', '',                      '83.3', 'REMUS620_401', 'water velocity'],
+  ['PDVL 300',    'Doppler Velocity Logger',                 '',                               '',                      '', '', ''],
+  ['Kraken SAS',  'Synthetic Aperture Sonar',                'Kraken Robotics',                '',                      '', 'REMUS620_401', 'synthetic aperture sonar'],
 ]
 
-for (const [id, type, mfr, model, firmware] of sensors) {
+for (const row of sensors) {
+  const [id, type, mfr, model, fw, platformId, observedVar] = row
   await run(id, {
-    text: `INSERT INTO sensors (id, type, manufacturer, model, firmware)
-           VALUES ($1,$2,$3,$4,$5)
+    text: `INSERT INTO sensors (id, type, manufacturer, model, firmware, platform_id, observed_variable)
+           VALUES ($1,$2,$3,$4,$5,$6,$7)
            ON CONFLICT (id) DO UPDATE SET type=EXCLUDED.type, manufacturer=EXCLUDED.manufacturer,
-             model=EXCLUDED.model, firmware=EXCLUDED.firmware, updated_at=NOW()`,
-    values: [id, type, mfr, model, firmware],
+             model=EXCLUDED.model, firmware=EXCLUDED.firmware, platform_id=EXCLUDED.platform_id,
+             observed_variable=EXCLUDED.observed_variable, updated_at=NOW()`,
+    values: [id, type, mfr, model, fw, platformId, observedVar],
   })
 }
 

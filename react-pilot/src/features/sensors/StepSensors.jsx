@@ -194,22 +194,20 @@ export default function StepSensors({ sensors, onSetSensors, touched, onTouched,
             />
 
             <label htmlFor={`${pfx}-type`}>Type</label>
-            <select
+            <input
               id={`${pfx}-type`}
+              list={`${pfx}-type-list`}
               data-pilot-field={`sensors[${idx}].type`}
-              className={`form-control form-select${inv(fType) ? ' form-control--invalid' : ''}`}
+              className={`form-control${inv(fType) ? ' form-control--invalid' : ''}`}
               value={sen.type}
               onChange={(e) => patchSensor(idx, { type: e.target.value })}
               onBlur={() => onTouched(fType)}
               aria-required
-            >
-              <option value="">Select…</option>
-              {SENSOR_TYPES.map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
-              ))}
-            </select>
+              placeholder="e.g. Inertial Navigation System"
+            />
+            <datalist id={`${pfx}-type-list`}>
+              {SENSOR_TYPES.map((t) => <option key={t} value={t} />)}
+            </datalist>
             {show(fType) ? <p className="field-error">{show(fType)}</p> : null}
 
             <label htmlFor={`${pfx}-model`}>Model ID</label>

@@ -307,7 +307,7 @@ function XmlToolsBar({
     return () => window.removeEventListener('keydown', onKey)
   }, [importOpen])
 
-  function applyImport() {
+  async function applyImport() {
     if (!canImport) return
     setImportError('')
     setImportSummaryText('')
@@ -316,10 +316,21 @@ function XmlToolsBar({
       if (typeof onBeforeApplyXmlImport === 'function' && onBeforeApplyXmlImport(importText) === false) {
         return
       }
+      /** @type {Array<Record<string, unknown>>} */
+      let sensorLibraryRows = []
+      if (hostBridgeReady && hostBridge?.listSensors) {
+        try {
+          const sr = await hostBridge.listSensors()
+          sensorLibraryRows = sr.unexpectedShape ? [] : sr.rows
+        } catch {
+          sensorLibraryRows = []
+        }
+      }
       const meta = {
         originalFilename: pendingImportMetaRef.current?.originalFilename,
         originalUuid:     pendingImportMetaRef.current?.originalUuid,
         sourceId:         pendingImportMetaRef.current?.sourceId,
+        sensorLibraryRows,
       }
       const out = parseProfileXmlImport(profile, importText, meta)
       if (!out.ok) {

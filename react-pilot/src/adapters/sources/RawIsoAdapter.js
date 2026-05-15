@@ -11,6 +11,7 @@
 
 import { importPilotPartialStateFromXml } from '../../lib/xmlPilotImport.js'
 import { buildSourceProvenance } from '../../lib/sourceProvenance.js'
+import { enrichPartialSensorsFromLibrary } from '../../lib/sensorLibraryResolve.js'
 
 export const RAW_ISO_ADAPTER_ID = 'rawIso'
 
@@ -40,9 +41,14 @@ export function parseRawIsoMissionImportResult(xmlString, meta = {}) {
   const parsed = importPilotPartialStateFromXml(xmlString)
   if (!parsed.ok) return parsed
   const sourceType = meta?.forcedProvenanceType === 'comet' ? 'comet' : 'rawIso'
+  const lib = meta?.sensorLibraryRows
+  const partial =
+    Array.isArray(lib) && lib.length > 0
+      ? enrichPartialSensorsFromLibrary(parsed.partial, lib)
+      : parsed.partial
   return {
     ok:         true,
-    partial:    parsed.partial,
+    partial,
     warnings:   parsed.warnings,
     provenance: buildSourceProvenance(sourceType, meta),
   }

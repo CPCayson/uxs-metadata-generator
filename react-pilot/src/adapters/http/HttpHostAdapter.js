@@ -89,8 +89,9 @@ export function createHttpHostAdapter() {
       return call('savePlatform', [platform])
     },
 
-    async listSensors() {
-      return toListResult(await call('getSensors'))
+    async listSensors(platformId) {
+      const args = platformId != null && String(platformId).trim() ? [String(platformId).trim()] : []
+      return toListResult(await call('getSensors', args))
     },
 
     async saveSensor(sensor) {

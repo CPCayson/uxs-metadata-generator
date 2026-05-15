@@ -1,0 +1,6 @@
+{
+  "name": "Manta Lens",
+  "description": "Guided ISO 19115-2 metadata synthesis tool with AI-powered validation and guided discovery for NCEI collections.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

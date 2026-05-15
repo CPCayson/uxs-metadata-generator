@@ -25,6 +25,7 @@ import { NCEI_UXS_FILE_ID_PREFIX } from '../src/lib/nceiUxsFileId.js'
 import { buildXmlPreview } from '../src/lib/xmlPreviewBuilder.js'
 import { missionPreviewIso191152SanityFailures } from '../src/lib/iso191152PreviewSanity.js'
 import { importPilotPartialStateFromXml } from '../src/lib/xmlPilotImport.js'
+import { stripMissionPilotIsoImportResidue } from '../src/lib/importMissionIsoResidueStrip.js'
 import { extractFragmentsFromIsoXml } from '../src/adapters/sources/IsoXmlFragmentExtractor.js'
 import { classifyInput } from '../src/features/intake/intakeClassifier.js'
 import { normalizeCruiseId, stampFingerprints } from '../src/core/identity/cruiseFingerprint.js'
@@ -327,6 +328,31 @@ function checkCruiseFingerprintNormalization() {
 function assertMissionPreviewIso191152Sanity(xml) {
   const failed = missionPreviewIso191152SanityFailures(xml)
   assert.equal(failed.length, 0, `ISO 19115-2 mission preview sanity failed: ${failed.join(', ')}`)
+}
+
+function checkMissionIsoImportResidueStrip() {
+  const base = defaultPilotState()
+  base.mission.fileId = 'gov.noaa.nmfs.inport:5619'
+  base.mission.title = 'American Samoa Commercial Fisheries BioSampling (CFBS)'
+  base.keywords.sciencekeywords = [{ label: 'Oceans', uuid: '2ef69df0-bf69-4d5e-b7ff-0cece46ed206' }]
+  base.keywords.platforms = [{ label: 'UAV', uuid: '3a1196e4-c0d0-4c8d-9a7d-0f5e0c5e5d01' }]
+  base.mission.doi = '10.7289/V5ABC123'
+  base.mission.citeAs = 'Cite as: NOAA UxS pilot QA dataset (placeholder).'
+  base.distribution.landingUrl = 'https://example.org/dataset'
+  base.platform.platformId = 'UUV-01'
+  base.platform.manufacturer = 'Norbit'
+  base.sensors[0].type = 'Earth Remote Sensing Instruments'
+  base.sensors[0].modelId = 'MBES-Norbit'
+  base.sensors[0].variable = 'bathymetry'
+  const st = sanitizePilotState(base)
+  const out = sanitizePilotState(stripMissionPilotIsoImportResidue(st))
+  assert.equal(out.keywords.sciencekeywords.length, 0)
+  assert.equal(out.keywords.platforms.length, 0)
+  assert.equal(String(out.mission.doi || '').trim(), '')
+  assert.ok(!String(out.mission.citeAs || '').includes('placeholder'))
+  assert.equal(String(out.distribution.landingUrl || '').trim(), '')
+  assert.equal(String(out.platform.platformId || '').trim(), '')
+  assert.equal(String(out.sensors[0]?.type || '').trim(), '')
 }
 
 function checkNceiFileIdPrefixPreviewAndImport() {
@@ -1472,6 +1498,9 @@ async function main() {
   })
   step('named readiness bundle ids', () => {
     checkNamedReadinessBundleIds()
+  })
+  step('mission ISO import residue strip (demo seed vs InPort-style id)', () => {
+    checkMissionIsoImportResidueStrip()
   })
   step('NCEI fileIdentifier prefix (preview + import + off)', () => {
     checkNceiFileIdPrefixPreviewAndImport()

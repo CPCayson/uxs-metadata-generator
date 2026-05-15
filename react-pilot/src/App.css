@@ -485,10 +485,15 @@
   text-shadow: none;
 }
 
-/* Default: pilot-main scrolls (hub + wizard). Split wizard shares this scrollport so the in-main header moves with content. */
+/* Default: pilot-main scrolls (hub + wizard). */
 #pilot-main {
   overflow-y: auto;
   overscroll-behavior-y: contain;
+}
+
+/* Split cockpit: all three columns are bounded by the viewport — #pilot-main must not scroll in split mode */
+#pilot-main:has(.workspace-grid--split) {
+  overflow-y: hidden;
 }
 
 /* Main fills the band between header + footer (wizard + hub) */
@@ -501,10 +506,9 @@
   flex-shrink: 0;
 }
 
-/* futuristic.css sets overflow:hidden on .workspace-main.pilot-step.card for a border animation.
-   Split cockpit: vertical scroll is #pilot-main — let the card grow with sections (no inner scroll trap). */
+/* Split cockpit: center column is its own scroll container — override futuristic.css border-animation clip */
 #root .workspace-grid--split .workspace-main.pilot-step.card {
-  overflow-y: visible;
+  overflow-y: auto;
 }
 
 /*
@@ -1140,8 +1144,8 @@
 
 /* Split mode: left rail (validation), wizard, right rail (preview + schema + CoMET) */
 /*
- * Split cockpit: align-items:stretch keeps rails and center column equal row height.
- * overflow-y visible so tall center content can grow the grid and scroll on #pilot-main (with header).
+ * Split cockpit: all three columns are viewport-bounded and scroll independently.
+ * Height = viewport minus header + footer so the grid never overflows #pilot-main.
  */
 .workspace-grid--split {
   grid-template-columns:
@@ -1151,31 +1155,29 @@
   align-items: stretch;
   gap: 1.25rem 1.35rem;
   overflow-x: clip;
-  overflow-y: visible;
-  /* Flush to footer — base .workspace-grid margin-bottom would leave dead band above status bar */
+  overflow-y: hidden;
+  height: calc(100dvh - var(--header-height, 120px) - var(--pilot-mission-footer-height, 52px) - 1.5rem);
+  /* Flush to footer */
   margin-bottom: 0;
 }
 
 /*
- * Cockpit lives inside .pilot-wizard-lens-stack (flex column). Split: the grid is at least
- * as tall as the lens stack; tall form content grows the grid so #pilot-main scrolls (header + rails + form).
+ * Cockpit: grid height is fixed by .workspace-grid--split above.
+ * Single row fills the fixed height so all three columns stretch to the same height.
  */
 #root .pilot-wizard-lens-stack > section.workspace-grid.workspace-grid--split {
-  /* Grow with tall form content so #pilot-main scrolls (header + grid move together). */
-  flex: 1 1 auto;
+  flex: none;
   min-width: 0;
   width: 100%;
   max-width: 100%;
   align-self: stretch;
-  height: auto;
-  min-height: 100%;
-  /* Single row consumes full grid height so the center form card stretches with the rails */
+  /* Single row consumes full grid height so columns stretch equally */
   grid-template-rows: minmax(0, 1fr);
 }
 
-/* Center column: vertical scroll is #pilot-main — keep overflow visible so the grid can grow in height */
+/* Center column: own scroll container, same height as the rails */
 .workspace-grid--split .workspace-main {
-  overflow-y: visible;
+  overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: auto;
   padding-right: 0.25rem;
@@ -1434,6 +1436,193 @@
 :root[data-theme='dark'] .mission-collapsible > summary.mission-collapsible__summary {
   color: #f1f5f9;
   border-bottom-color: color-mix(in srgb, var(--border-color, #334155) 88%, transparent);
+}
+
+/* Mission step — symphony glass + context bar (StepMission.jsx) */
+.step-mission-symphony-shell {
+  max-width: 660px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mission-symphony-glass {
+  background: rgba(22, 27, 34, 0.82);
+  border: 1px solid rgba(0, 206, 209, 0.3);
+  border-radius: 10px;
+  padding: 14px 14px 12px;
+  box-shadow: 0 0 32px rgba(0, 206, 209, 0.07);
+}
+
+.mission-symphony-context-bar {
+  display: grid;
+  grid-template-columns: 1.15fr 0.95fr 1fr;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+@media (max-width: 720px) {
+  .mission-symphony-context-bar {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mission-symphony-context-bar__cell {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.mission-symphony-context-bar__label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.step-mission-symphony-shell .form-control,
+.step-mission-symphony-shell .form-select {
+  background: #0d1117;
+  border-color: #1e293b;
+  color: #e2e8f0;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.step-mission-symphony-shell .form-control::placeholder {
+  color: #64748b;
+}
+
+.step-mission-symphony-shell .form-control:focus,
+.step-mission-symphony-shell .form-select:focus {
+  border-color: #00ced1;
+  box-shadow: 0 0 0 1px rgba(0, 206, 209, 0.5);
+  outline: none;
+}
+
+.mission-symphony-floating-field {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.mission-symphony-floating-field__label {
+  position: absolute;
+  left: 11px;
+  top: 7px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.mission-symphony-floating-field .form-control {
+  padding-top: 24px;
+  min-height: 46px;
+}
+
+.mission-symphony-floating-field--textarea .form-control {
+  padding-top: 28px;
+  min-height: 88px;
+}
+
+.mission-symphony-uxs-fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mission-symphony-accordion {
+  border: 1px solid rgba(0, 206, 209, 0.22);
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.45);
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.mission-symphony-accordion__trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 12px;
+  background: rgba(13, 17, 23, 0.72);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  color: #f1f5f9;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.mission-symphony-accordion__title {
+  color: #e2e8f0;
+}
+
+.mission-symphony-accordion__chev {
+  font-size: 11px;
+  color: #5eead4;
+  transition: transform 0.18s ease;
+}
+
+.mission-symphony-accordion--open .mission-symphony-accordion__chev {
+  transform: rotate(180deg);
+}
+
+.mission-symphony-accordion__panel {
+  border-top: 1px solid rgba(0, 206, 209, 0.14);
+  animation: missionSymphonyPanelIn 0.22s ease;
+}
+
+@keyframes missionSymphonyPanelIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.mission-symphony-accordion__panel-inner {
+  padding: 12px 12px 14px;
+}
+
+:root:not([data-theme='dark']) .mission-symphony-glass {
+  background: rgba(248, 250, 252, 0.94);
+  border-color: rgba(6, 182, 212, 0.35);
+  box-shadow: 0 1px 0 rgba(15, 23, 42, 0.06);
+}
+
+:root:not([data-theme='dark']) .mission-symphony-context-bar__label {
+  color: #475569;
+}
+
+:root:not([data-theme='dark']) .step-mission-symphony-shell .form-control,
+:root:not([data-theme='dark']) .step-mission-symphony-shell .form-select {
+  background: #fff;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+:root:not([data-theme='dark']) .mission-symphony-accordion {
+  background: rgba(255, 255, 255, 0.75);
+  border-color: rgba(6, 182, 212, 0.25);
+}
+
+:root:not([data-theme='dark']) .mission-symphony-accordion__trigger {
+  background: rgba(241, 245, 249, 0.95);
+  color: #0f172a;
+}
+
+:root:not([data-theme='dark']) .mission-symphony-accordion__title {
+  color: #0f172a;
 }
 
 .pilot-import-attention {

@@ -72,7 +72,9 @@ function normalizeSensorPayload(raw) {
         : {}
   const id = String(s.id ?? s.sensorId ?? '').trim()
   const model = String(s.model ?? s.modelId ?? '').trim()
-  return { ...s, id, model }
+  const platform_id = String(s.platform_id ?? s.platformId ?? '').trim()
+  const observed_variable = String(s.observed_variable ?? s.observedVariable ?? s.variable ?? '').trim()
+  return { ...s, id, model, platform_id, observed_variable }
 }
 
 function intOrZero(v) {
@@ -142,7 +144,43 @@ async function savePlatform(sql, [platform]) {
 
 // ── Sensors ────────────────────────────────────────────────────────────────
 
-async function getSensors(sql) {
+async function getSensors(sql, args = []) {
+  const platformId = args[0] != null ? String(args[0]).trim() : ''
+  if (platformId) {
+    const rows = await sql`
+      SELECT
+        id, type, firmware,
+        install_date           AS "installDate",
+        uncertainty,
+        operation_mode         AS "operationMode",
+        frequency,
+        beam_count             AS "beamCount",
+        depth_rating           AS "depthRating",
+        confidence_interval    AS "confidenceInterval",
+        sensor_language        AS "sensorLanguage",
+        sensor_character_set   AS "sensorCharacterSet",
+        event,
+        pressure_range         AS "pressureRange",
+        conductivity_range     AS "conductivityRange",
+        temperature_range      AS "temperatureRange",
+        manufacturer, model,
+        serial_number          AS "serialNumber",
+        calibration_date       AS "calibrationDate",
+        accuracy, resolution,
+        power_requirement      AS "powerRequirement",
+        data_format            AS "dataFormat",
+        communication_protocol AS "communicationProtocol",
+        operating_temperature  AS "operatingTemperature",
+        operating_pressure     AS "operatingPressure",
+        dimensions, weight, warranty, notes,
+        platform_id            AS "platformId",
+        observed_variable      AS "observedVariable"
+      FROM sensors
+      WHERE platform_id = ${platformId}
+      ORDER BY id
+    `
+    return rows
+  }
   const rows = await sql`
     SELECT
       id, type, firmware,
@@ -168,7 +206,9 @@ async function getSensors(sql) {
       communication_protocol AS "communicationProtocol",
       operating_temperature  AS "operatingTemperature",
       operating_pressure     AS "operatingPressure",
-      dimensions, weight, warranty, notes
+      dimensions, weight, warranty, notes,
+      platform_id            AS "platformId",
+      observed_variable      AS "observedVariable"
     FROM sensors
     ORDER BY id
   `
@@ -179,7 +219,7 @@ async function saveSensor(sql, [sensor]) {
   const s = normalizeSensorPayload(sensor)
   if (!s?.id) throw new Error('Sensor id is required')
   await upsertSensor(sql, s)
-  return getSensors(sql)
+  return getSensors(sql, [])
 }
 
 async function saveSensorsBatch(sql, [sensors]) {
@@ -188,12 +228,14 @@ async function saveSensorsBatch(sql, [sensors]) {
   for (const raw of arr) {
     await upsertSensor(sql, normalizeSensorPayload(raw))
   }
-  return getSensors(sql)
+  return getSensors(sql, [])
 }
 
 async function upsertSensor(sql, raw) {
   const s = normalizeSensorPayload(raw)
   if (!s?.id) throw new Error('Sensor id is required')
+  const pid = String(s.platform_id ?? '').trim()
+  const ov = String(s.observed_variable ?? '').trim()
   await sql`
     INSERT INTO sensors (
       id, type, firmware, install_date, uncertainty, operation_mode,
@@ -203,7 +245,7 @@ async function upsertSensor(sql, raw) {
       manufacturer, model, serial_number, calibration_date,
       accuracy, resolution, power_requirement, data_format,
       communication_protocol, operating_temperature, operating_pressure,
-      dimensions, weight, warranty, notes, updated_at
+      dimensions, weight, warranty, notes, platform_id, observed_variable, updated_at
     ) VALUES (
       ${s.id}, ${s.type ?? ''}, ${s.firmware ?? ''}, ${s.installDate ?? ''},
       ${s.uncertainty ?? ''}, ${s.operationMode ?? ''}, ${s.frequency ?? ''},
@@ -215,6 +257,7 @@ async function upsertSensor(sql, raw) {
       ${s.powerRequirement ?? ''}, ${s.dataFormat ?? ''}, ${s.communicationProtocol ?? ''},
       ${s.operatingTemperature ?? ''}, ${s.operatingPressure ?? ''},
       ${s.dimensions ?? ''}, ${s.weight ?? ''}, ${s.warranty ?? ''}, ${s.notes ?? ''},
+      ${pid}, ${ov},
       NOW()
     )
     ON CONFLICT (id) DO UPDATE SET
@@ -239,6 +282,8 @@ async function upsertSensor(sql, raw) {
       operating_pressure = EXCLUDED.operating_pressure,
       dimensions = EXCLUDED.dimensions, weight = EXCLUDED.weight,
       warranty = EXCLUDED.warranty, notes = EXCLUDED.notes,
+      platform_id = EXCLUDED.platform_id,
+      observed_variable = EXCLUDED.observed_variable,
       updated_at = NOW()
   `
 }
@@ -356,7 +401,7 @@ const NO_DATABASE_FNS = new Set(['generateGeoJSON', 'generateDCAT', 'validateOnS
 const ROUTES = {
   getPlatforms:     (sql, args) => getPlatforms(sql),
   savePlatform:     (sql, args) => savePlatform(sql, args),
-  getSensors:       (sql, args) => getSensors(sql),
+  getSensors:       (sql, args) => getSensors(sql, args),
   saveSensor:       (sql, args) => saveSensor(sql, args),
   saveSensorsBatch: (sql, args) => saveSensorsBatch(sql, args),
   getTemplates:     (sql, args) => getTemplates(sql),

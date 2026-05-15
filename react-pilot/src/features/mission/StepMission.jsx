@@ -10,54 +10,114 @@ import FieldHintTooltip, { LabelWithHint } from '../../components/FieldHintToolt
 import { useWorkbenchChrome } from '../../shell/useWorkbenchChrome.js'
 import { NCEI_DEFAULT_MISSION_PURPOSE } from '../../lib/nceiMissionDefaults.js'
 
+/** Typical NCEI distribution liability prose — shown read-only until user edits. */
+const NCEI_DEFAULT_DISTRIBUTION_LIABILITY =
+  'NOAA and NCEI make no warranty, expressed or implied, regarding these metadata or related data concerning accuracy, completeness, or fitness for a particular purpose.'
+
+const ISO_TOPIC_PRESETS = [
+  { value: '', label: '— Add topic code —' },
+  { value: 'oceans', label: 'oceans' },
+  { value: 'climatologyMeteorologyAtmosphere', label: 'climatologyMeteorologyAtmosphere' },
+  { value: 'geoscientificInformation', label: 'geoscientificInformation' },
+  { value: 'elevation', label: 'elevation' },
+  { value: 'location', label: 'location' },
+  { value: 'inlandWaters', label: 'inlandWaters' },
+  { value: 'imageryBaseMapsEarthCover', label: 'imageryBaseMapsEarthCover' },
+]
+
+const MISSION_ISO639_PRESETS = ['eng', 'spa', 'fra', 'deu', 'zho', 'jpn', 'por', 'rus', 'ita', 'mul', 'und']
+
+const DOI_PATTERN = /^10\.\d{4,9}\/\S+$/i
+
 function hasText(v) {
   return Boolean(String(v ?? '').trim())
 }
 
 /**
- * @param {{ title: string, defaultOpen?: boolean, hasValues?: boolean, children: import('react').ReactNode }} props
+ * @param {{
+ *   title: string,
+ *   defaultOpen?: boolean,
+ *   hasValues?: boolean,
+ *   children: import('react').ReactNode,
+ *   variant?: 'default' | 'symphony',
+ *   sectionClassName?: string,
+ * }} props
  */
-function AccordionSection({ title, defaultOpen = false, hasValues = false, children }) {
+function AccordionSection({
+  title,
+  defaultOpen = false,
+  hasValues = false,
+  children,
+  variant = 'default',
+  sectionClassName = '',
+}) {
   const [open, setOpen] = useState(Boolean(defaultOpen || hasValues))
+  const symphony = variant === 'symphony'
+  const rootClass = symphony
+    ? `mission-symphony-accordion${open ? ' mission-symphony-accordion--open' : ''}${sectionClassName ? ` ${sectionClassName}` : ''}`
+    : sectionClassName.trim() || undefined
+
   return (
     <div
-      style={{
-        borderBottom: '0.5px solid var(--color-border-tertiary, rgba(148, 163, 184, 0.35))',
-        marginBottom: 0,
-      }}
+      className={rootClass}
+      style={
+        symphony
+          ? undefined
+          : {
+              borderBottom: '0.5px solid var(--color-border-tertiary, rgba(148, 163, 184, 0.35))',
+              marginBottom: 0,
+            }
+      }
     >
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        style={{
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '10px 0',
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          fontSize: '13px',
-          fontWeight: 500,
-          color: 'var(--color-text-primary, var(--text-color, #0f172a))',
-          textAlign: 'left',
-        }}
+        className={symphony ? 'mission-symphony-accordion__trigger' : undefined}
+        aria-expanded={open}
+        style={
+          symphony
+            ? undefined
+            : {
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '10px 0',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '13px',
+                fontWeight: 500,
+                color: 'var(--color-text-primary, var(--text-color, #0f172a))',
+                textAlign: 'left',
+              }
+        }
       >
-        <span>{title}</span>
+        <span className={symphony ? 'mission-symphony-accordion__title' : undefined}>{title}</span>
         <span
-          style={{
-            fontSize: '11px',
-            color: 'var(--color-text-secondary, var(--text-muted, #64748b))',
-            transform: open ? 'rotate(180deg)' : 'none',
-            transition: 'transform 0.15s',
-          }}
+          className={symphony ? 'mission-symphony-accordion__chev' : undefined}
+          style={
+            symphony
+              ? undefined
+              : {
+                  fontSize: '11px',
+                  color: 'var(--color-text-secondary, var(--text-muted, #64748b))',
+                  transform: open ? 'rotate(180deg)' : 'none',
+                  transition: 'transform 0.15s',
+                }
+          }
           aria-hidden
         >
           ▾
         </span>
       </button>
-      {open ? <div style={{ paddingBottom: '16px' }}>{children}</div> : null}
+      {symphony ? (
+        <div className="mission-symphony-accordion__panel">
+          <div className="mission-symphony-accordion__panel-inner">{open ? children : null}</div>
+        </div>
+      ) : open ? (
+        <div style={{ paddingBottom: '16px' }}>{children}</div>
+      ) : null}
     </div>
   )
 }
@@ -83,6 +143,7 @@ function AccordionSection({ title, defaultOpen = false, hasValues = false, child
  *   onApplySheetTemplate?: (name: string) => void,
  *   templateApplyDisabled?: boolean,
  *   contactLibraryEnabled?: boolean,
+ *   platform?: object,
  * }} props
  */
 export default function StepMission({
@@ -105,6 +166,7 @@ export default function StepMission({
   onApplySheetTemplate,
   templateApplyDisabled = false,
   contactLibraryEnabled = false,
+  platform = null,
   pilotState = null,
   onSourceProvenanceClear,
   /** Workspace “Simple” density — shorter Mission intro; tuck optional UxS block behind a disclosure */
@@ -117,6 +179,8 @@ export default function StepMission({
   const [selectedTemplateKey, setSelectedTemplateKey] = useState('')
   const [lensSymbioteActive, setLensSymbioteActive] = useState(false)
   const [editPurpose, setEditPurpose] = useState(false)
+  const [abstractExpanded, setAbstractExpanded] = useState(false)
+  const [editLiability, setEditLiability] = useState(false)
 
   const { lensActive, lensTarget, assistantLayout } = useWorkbenchChrome()
 
@@ -140,20 +204,20 @@ export default function StepMission({
   /** Align MantaFieldGlass with useFieldValidation — no red "required" / issue chips until touch or show-all. */
   const glassShowChrome = (fieldKey) => Boolean(touched[fieldKey] || showAllErrors)
 
-  const accDatesIdentifiers = useMemo(
+  /** Dates, language, DOI, accession — file identifier lives under Core identity. */
+  const accTimelineTracking = useMemo(
     () =>
       hasText(mission.startDate)
       || hasText(mission.endDate)
       || hasText(mission.publicationDate)
+      || hasText(mission.language)
       || hasText(mission.doi)
-      || hasText(mission.accession)
-      || hasText(mission.fileId),
-    [mission.startDate, mission.endDate, mission.publicationDate, mission.doi, mission.accession, mission.fileId],
+      || hasText(mission.accession),
+    [mission.startDate, mission.endDate, mission.publicationDate, mission.language, mission.doi, mission.accession],
   )
   const accAdvancedIso = useMemo(
     () =>
-      hasText(mission.purpose)
-      || hasText(mission.supplementalInformation)
+      hasText(mission.supplementalInformation)
       || hasText(mission.temporalExtentIntervalUnit)
       || hasText(mission.temporalExtentIntervalValue)
       || hasText(mission.metadataRecordDate)
@@ -162,7 +226,6 @@ export default function StepMission({
       || hasText(mission.graphicOverviewTitle)
       || (Array.isArray(mission.topicCategories) && mission.topicCategories.length > 0),
     [
-      mission.purpose,
       mission.supplementalInformation,
       mission.temporalExtentIntervalUnit,
       mission.temporalExtentIntervalValue,
@@ -201,9 +264,7 @@ export default function StepMission({
       || hasText(mission.contactPhone)
       || hasText(mission.contactUrl)
       || hasText(mission.contactAddress)
-      || Boolean(mission.ror?.id)
-      || hasText(mission.doi)
-      || hasText(mission.accession),
+      || Boolean(mission.ror?.id),
     [
       mission.org,
       mission.email,
@@ -212,8 +273,6 @@ export default function StepMission({
       mission.contactUrl,
       mission.contactAddress,
       mission.ror,
-      mission.doi,
-      mission.accession,
     ],
   )
   const accLocation = useMemo(() => {
@@ -309,6 +368,40 @@ export default function StepMission({
   }
   const uxsContext = mission.uxsContext && typeof mission.uxsContext === 'object' ? mission.uxsContext : {}
   const uxsLayer = getUxsLayerDefinition(uxsContext)
+  const uxsPrimaryLayer = String(uxsContext.primaryLayer || 'datasetProduct')
+  /** Operational ID rows: only surface fields that match the selected primary layer (full grid for dataset / other). */
+  const showUxsRunPair =
+    uxsPrimaryLayer === 'run'
+    || uxsPrimaryLayer === 'sortie'
+    || uxsPrimaryLayer === 'datasetProduct'
+    || uxsPrimaryLayer === 'other'
+  const showUxsSortiePair =
+    uxsPrimaryLayer === 'sortie' || uxsPrimaryLayer === 'datasetProduct' || uxsPrimaryLayer === 'other'
+  const showUxsDivePair =
+    uxsPrimaryLayer === 'dive' || uxsPrimaryLayer === 'datasetProduct' || uxsPrimaryLayer === 'other'
+
+  const accUxsOperationalDrawer = useMemo(
+    () =>
+      hasText(uxsContext.deploymentName)
+      || hasText(uxsContext.runName)
+      || hasText(uxsContext.runId)
+      || hasText(uxsContext.sortieName)
+      || hasText(uxsContext.sortieId)
+      || hasText(uxsContext.diveName)
+      || hasText(uxsContext.diveId)
+      || hasText(uxsContext.narrative),
+    [
+      uxsContext.deploymentName,
+      uxsContext.runName,
+      uxsContext.runId,
+      uxsContext.sortieName,
+      uxsContext.sortieId,
+      uxsContext.diveName,
+      uxsContext.diveId,
+      uxsContext.narrative,
+    ],
+  )
+
   const stepErrorSummary = (() => {
     /** @type {Array<{ id: string, label: string, match: (field: string) => boolean }>} */
     const stepMatchers = [
@@ -360,6 +453,25 @@ export default function StepMission({
     return checks.filter(([, v]) => !String(v ?? '').trim()).map(([label]) => label)
   }, [importedFromStructuredSource, mission])
 
+  const citeAsSuggestion = useMemo(() => {
+    const title = String(mission.title || '').trim() || '[dataset title]'
+    const who =
+      String(mission.citationAuthorIndividualName || '').trim()
+      || String(mission.individualName || '').trim()
+      || '[responsible party]'
+    return `${who}. ${title}. NOAA National Centers for Environmental Information.`
+  }, [mission.title, mission.citationAuthorIndividualName, mission.individualName])
+
+  const doiShapeOk = Boolean(String(mission.doi || '').trim()) && DOI_PATTERN.test(String(mission.doi || '').trim())
+
+  useEffect(() => {
+    const plat = platform != null && typeof platform === 'object' ? platform : {}
+    const hint = String(plat.manufacturer || '').trim() || String(plat.platformName || '').trim()
+    if (!hint) return
+    if (String(mission.org || '').trim()) return
+    onMissionPatch({ org: hint })
+  }, [platform, mission.org, onMissionPatch])
+
   return (
     <>
       <SourceProvenancePanel
@@ -367,17 +479,14 @@ export default function StepMission({
         onClear={onSourceProvenanceClear ?? (() => {})}
       />
 
-      <details className="panel mission-templates-disclosure">
-        <summary className="mission-templates-disclosure__summary">
-          <span className="mission-templates-disclosure__title">Mission templates from catalog</span>
-          <span className="mission-templates-disclosure__expand-hint">Click to expand</span>
-        </summary>
-        <div className="mission-templates-disclosure__body">
+      <div className="step-mission-symphony-shell">
+      <div className="panel pilot-mission-templates-wrap">
+        <AccordionSection title="Mission templates from catalog" variant="symphony" defaultOpen={false}>
           <fieldset className="pilot-fieldset mission-field-group">
             <legend className="mission-fieldset-legend">Sheet template catalog</legend>
             <p className="card-intro platform-library-intro">
               Load a named template from your Postgres-backed catalog (<code>/api/db</code>). The list loads when you open
-              this step; use Refresh after catalog edits. Pick a template in the dropdown, then <strong>Apply template</strong>.
+              this section; use Refresh after catalog edits. Pick a template in the dropdown, then <strong>Apply template</strong>.
             </p>
             <div className="platform-library-row">
               <select
@@ -445,8 +554,8 @@ export default function StepMission({
             ) : null}
             {templateCatalogError ? <p className="field-error">{templateCatalogError}</p> : null}
           </fieldset>
-        </div>
-      </details>
+        </AccordionSection>
+      </div>
 
       {guidedMissionIntro ? (
         <p className="card-intro card-intro--guided">
@@ -468,7 +577,7 @@ export default function StepMission({
         </p>
       ) : null}
 
-      <section className="panel" aria-labelledby="uxs-context-heading">
+      <section className="panel mission-symphony-uxs mission-symphony-uxs--lens" aria-labelledby="uxs-context-heading">
         <h3 className="panel-title panel-title-hint" id="uxs-context-heading">
           <span>UxS collection context</span>
           <FieldHintTooltip ariaLabel="About UxS collection context">
@@ -478,93 +587,58 @@ export default function StepMission({
             </>
           </FieldHintTooltip>
         </h3>
-        <details className="panel mission-collapsible" open={guidedMissionIntro}>
-          <summary className="mission-collapsible__summary">
-            {guidedMissionIntro
-              ? 'Operational context fields (simple layout — you can collapse when done)'
-              : 'Show UxS operational context (layer, outcome, deployment / run / sortie / dive IDs)'}
-          </summary>
-          <div className="mission-collapsible__body">
-        <fieldset className="pilot-fieldset mission-field-group">
-          <legend className="mission-fieldset-legend">Operational layer &amp; outcome</legend>
-          <div className="form-row-2">
-          <div>
-            <LabelWithHint
-              htmlFor="uxsPrimaryLayer"
-              label="This metadata record primarily describes"
-              hint={
-                <>
-                  Parent project below is the program citation; this block is the operational unit the data came from.
-                  {uxsLayer.idField
-                    ? ` Catalog mode expects ${uxsLayer.label.toLowerCase()} ID/name fields when this layer is selected.`
-                    : ''}
-                </>
-              }
-            />
-            <select
-              id="uxsPrimaryLayer"
-              className="form-control"
-              data-pilot-field="mission.uxsContext.primaryLayer"
-              value={uxsContext.primaryLayer || 'datasetProduct'}
-              onChange={(e) => patchUxsContext({ primaryLayer: e.target.value })}
-              onBlur={() => onTouched('mission.uxsContext.primaryLayer')}
-            >
-              {UXS_LAYER_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <LabelWithHint
-              htmlFor="uxsOperationOutcome"
-              label="Operation outcome"
-              hint={
-                <>
-                  Operational outcome for filtering sorties/runs; separate from dataset status /{' '}
-                  <code>MD_ProgressCode</code>.
-                </>
-              }
-            />
-            <select
-              id="uxsOperationOutcome"
-              className="form-control"
-              data-pilot-field="mission.uxsContext.operationOutcome"
-              value={uxsContext.operationOutcome || ''}
-              onChange={(e) => patchUxsContext({ operationOutcome: e.target.value })}
-              onBlur={() => onTouched('mission.uxsContext.operationOutcome')}
-            >
-              {UXS_OUTCOME_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
-            ))}
-          </select>
-          </div>
-        </div>
-        </fieldset>
-
-        <details>
-          <summary>
-            Deployment, run, sortie, and dive identifiers
-            <FieldHintTooltip ariaLabel="About deployment identifiers">
-              Use field-log labels and IDs where available. These are optional in this first slice and prepare the archive
-              search model before XML aggregation export is expanded.
-            </FieldHintTooltip>
-          </summary>
-          <fieldset className="pilot-fieldset mission-field-group">
-            <legend className="visually-hidden">Deployment, run, sortie, and dive identifiers</legend>
-          <div className="form-row-2">
-            <div>
-              <label htmlFor="uxsDeploymentName">Deployment name</label>
-              <input
-                id="uxsDeploymentName"
+        <div className="mission-symphony-glass">
+          <div className="mission-symphony-context-bar" role="group" aria-label="Operational routing">
+            <div className="mission-symphony-context-bar__cell">
+              <span className="mission-symphony-context-bar__label">
+                Primary layer
+                {uxsLayer.idField ? (
+                  <FieldHintTooltip ariaLabel="Primary layer and catalog expectations">
+                    <>
+                      This block is the operational unit the data came from.
+                      {` Catalog mode expects ${uxsLayer.label.toLowerCase()} ID/name fields when this layer is selected.`}
+                    </>
+                  </FieldHintTooltip>
+                ) : null}
+              </span>
+              <select
+                id="uxsPrimaryLayer"
                 className="form-control"
-                data-pilot-field="mission.uxsContext.deploymentName"
-                value={uxsContext.deploymentName || ''}
-                onChange={(e) => patchUxsContext({ deploymentName: e.target.value })}
-                onBlur={() => onTouched('mission.uxsContext.deploymentName')}
-              />
+                data-pilot-field="mission.uxsContext.primaryLayer"
+                value={uxsContext.primaryLayer || 'datasetProduct'}
+                onChange={(e) => patchUxsContext({ primaryLayer: e.target.value })}
+                onBlur={() => onTouched('mission.uxsContext.primaryLayer')}
+              >
+                {UXS_LAYER_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
+              </select>
             </div>
-            <div>
-              <label htmlFor="uxsDeploymentId">Deployment ID</label>
+            <div className="mission-symphony-context-bar__cell">
+              <span className="mission-symphony-context-bar__label">
+                Outcome
+                <FieldHintTooltip ariaLabel="Operation outcome vs dataset status">
+                  <>
+                    Operational outcome for filtering sorties/runs; separate from dataset status /{' '}
+                    <code>MD_ProgressCode</code>.
+                  </>
+                </FieldHintTooltip>
+              </span>
+              <select
+                id="uxsOperationOutcome"
+                className="form-control"
+                data-pilot-field="mission.uxsContext.operationOutcome"
+                value={uxsContext.operationOutcome || ''}
+                onChange={(e) => patchUxsContext({ operationOutcome: e.target.value })}
+                onBlur={() => onTouched('mission.uxsContext.operationOutcome')}
+              >
+                {UXS_OUTCOME_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
+              </select>
+            </div>
+            <div className="mission-symphony-context-bar__cell">
+              <span className="mission-symphony-context-bar__label">Deployment ID</span>
               <input
                 id="uxsDeploymentId"
                 className="form-control"
@@ -572,100 +646,141 @@ export default function StepMission({
                 value={uxsContext.deploymentId || ''}
                 onChange={(e) => patchUxsContext({ deploymentId: e.target.value })}
                 onBlur={() => onTouched('mission.uxsContext.deploymentId')}
+                placeholder="Field effort ID"
+                autoComplete="off"
               />
             </div>
           </div>
-          <div className="form-row-2">
-            <div>
-              <label htmlFor="uxsRunName">Run name</label>
-              <input
-                id="uxsRunName"
-                className="form-control"
-                data-pilot-field="mission.uxsContext.runName"
-                value={uxsContext.runName || ''}
-                onChange={(e) => patchUxsContext({ runName: e.target.value })}
-                onBlur={() => onTouched('mission.uxsContext.runName')}
-              />
-            </div>
-            <div>
-              <label htmlFor="uxsRunId">Run ID</label>
-              <input
-                id="uxsRunId"
-                className="form-control"
-                data-pilot-field="mission.uxsContext.runId"
-                value={uxsContext.runId || ''}
-                onChange={(e) => patchUxsContext({ runId: e.target.value })}
-                onBlur={() => onTouched('mission.uxsContext.runId')}
-              />
-            </div>
-          </div>
-          <div className="form-row-2">
-            <div>
-              <label htmlFor="uxsSortieName">Sortie name</label>
-              <input
-                id="uxsSortieName"
-                className="form-control"
-                data-pilot-field="mission.uxsContext.sortieName"
-                value={uxsContext.sortieName || ''}
-                onChange={(e) => patchUxsContext({ sortieName: e.target.value })}
-                onBlur={() => onTouched('mission.uxsContext.sortieName')}
-              />
-            </div>
-            <div>
-              <label htmlFor="uxsSortieId">Sortie ID</label>
-              <input
-                id="uxsSortieId"
-                className="form-control"
-                data-pilot-field="mission.uxsContext.sortieId"
-                value={uxsContext.sortieId || ''}
-                onChange={(e) => patchUxsContext({ sortieId: e.target.value })}
-                onBlur={() => onTouched('mission.uxsContext.sortieId')}
-              />
-            </div>
-          </div>
-          <div className="form-row-2">
-            <div>
-              <label htmlFor="uxsDiveName">Dive name</label>
-              <input
-                id="uxsDiveName"
-                className="form-control"
-                data-pilot-field="mission.uxsContext.diveName"
-                value={uxsContext.diveName || ''}
-                onChange={(e) => patchUxsContext({ diveName: e.target.value })}
-                onBlur={() => onTouched('mission.uxsContext.diveName')}
-              />
-            </div>
-            <div>
-              <label htmlFor="uxsDiveId">Dive ID</label>
-              <input
-                id="uxsDiveId"
-                className="form-control"
-                data-pilot-field="mission.uxsContext.diveId"
-                value={uxsContext.diveId || ''}
-                onChange={(e) => patchUxsContext({ diveId: e.target.value })}
-                onBlur={() => onTouched('mission.uxsContext.diveId')}
-              />
-            </div>
-          </div>
-          <label htmlFor="uxsContextNarrative">Operational context note</label>
-          <textarea
-            id="uxsContextNarrative"
-            rows={2}
-            className="form-control"
-            data-pilot-field="mission.uxsContext.narrative"
-            value={uxsContext.narrative || ''}
-            onChange={(e) => patchUxsContext({ narrative: e.target.value })}
-            onBlur={() => onTouched('mission.uxsContext.narrative')}
-          />
-          </fieldset>
-        </details>
-          </div>
-        </details>
+          <AccordionSection
+            title="View operational details"
+            variant="symphony"
+            defaultOpen={guidedMissionIntro}
+            hasValues={accUxsOperationalDrawer}
+          >
+            <fieldset className="pilot-fieldset mission-field-group mission-symphony-uxs-fieldset">
+              <legend className="visually-hidden">Deployment, run, sortie, dive identifiers and note</legend>
+              <p className="hint mission-symphony-uxs-disclosure-intro" style={{ marginTop: 0 }}>
+                <FieldHintTooltip ariaLabel="About deployment identifiers">
+                  <>
+                    Use field-log labels and IDs where available. Rows follow the selected primary layer; values for hidden
+                    layers remain in state and show again if you switch layers.
+                  </>
+                </FieldHintTooltip>
+              </p>
+              <div className="mission-symphony-floating-field">
+                <label htmlFor="uxsDeploymentName" className="mission-symphony-floating-field__label">Deployment name</label>
+                <input
+                  id="uxsDeploymentName"
+                  className="form-control"
+                  data-pilot-field="mission.uxsContext.deploymentName"
+                  value={uxsContext.deploymentName || ''}
+                  onChange={(e) => patchUxsContext({ deploymentName: e.target.value })}
+                  onBlur={() => onTouched('mission.uxsContext.deploymentName')}
+                />
+              </div>
+              {showUxsRunPair ? (
+                <div className="form-row-2">
+                  <div className="mission-symphony-floating-field">
+                    <label htmlFor="uxsRunName" className="mission-symphony-floating-field__label">Run name</label>
+                    <input
+                      id="uxsRunName"
+                      className="form-control"
+                      data-pilot-field="mission.uxsContext.runName"
+                      value={uxsContext.runName || ''}
+                      onChange={(e) => patchUxsContext({ runName: e.target.value })}
+                      onBlur={() => onTouched('mission.uxsContext.runName')}
+                    />
+                  </div>
+                  <div className="mission-symphony-floating-field">
+                    <label htmlFor="uxsRunId" className="mission-symphony-floating-field__label">Run ID</label>
+                    <input
+                      id="uxsRunId"
+                      className="form-control"
+                      data-pilot-field="mission.uxsContext.runId"
+                      value={uxsContext.runId || ''}
+                      onChange={(e) => patchUxsContext({ runId: e.target.value })}
+                      onBlur={() => onTouched('mission.uxsContext.runId')}
+                    />
+                  </div>
+                </div>
+              ) : null}
+              {showUxsSortiePair ? (
+                <div className="form-row-2">
+                  <div className="mission-symphony-floating-field">
+                    <label htmlFor="uxsSortieName" className="mission-symphony-floating-field__label">Sortie name</label>
+                    <input
+                      id="uxsSortieName"
+                      className="form-control"
+                      data-pilot-field="mission.uxsContext.sortieName"
+                      value={uxsContext.sortieName || ''}
+                      onChange={(e) => patchUxsContext({ sortieName: e.target.value })}
+                      onBlur={() => onTouched('mission.uxsContext.sortieName')}
+                    />
+                  </div>
+                  <div className="mission-symphony-floating-field">
+                    <label htmlFor="uxsSortieId" className="mission-symphony-floating-field__label">Sortie ID</label>
+                    <input
+                      id="uxsSortieId"
+                      className="form-control"
+                      data-pilot-field="mission.uxsContext.sortieId"
+                      value={uxsContext.sortieId || ''}
+                      onChange={(e) => patchUxsContext({ sortieId: e.target.value })}
+                      onBlur={() => onTouched('mission.uxsContext.sortieId')}
+                    />
+                  </div>
+                </div>
+              ) : null}
+              {showUxsDivePair ? (
+                <div className="form-row-2">
+                  <div className="mission-symphony-floating-field">
+                    <label htmlFor="uxsDiveName" className="mission-symphony-floating-field__label">Dive name</label>
+                    <input
+                      id="uxsDiveName"
+                      className="form-control"
+                      data-pilot-field="mission.uxsContext.diveName"
+                      value={uxsContext.diveName || ''}
+                      onChange={(e) => patchUxsContext({ diveName: e.target.value })}
+                      onBlur={() => onTouched('mission.uxsContext.diveName')}
+                    />
+                  </div>
+                  <div className="mission-symphony-floating-field">
+                    <label htmlFor="uxsDiveId" className="mission-symphony-floating-field__label">Dive ID</label>
+                    <input
+                      id="uxsDiveId"
+                      className="form-control"
+                      data-pilot-field="mission.uxsContext.diveId"
+                      value={uxsContext.diveId || ''}
+                      onChange={(e) => patchUxsContext({ diveId: e.target.value })}
+                      onBlur={() => onTouched('mission.uxsContext.diveId')}
+                    />
+                  </div>
+                </div>
+              ) : null}
+              <div className="mission-symphony-floating-field mission-symphony-floating-field--textarea">
+                <label htmlFor="uxsContextNarrative" className="mission-symphony-floating-field__label">Operational context note</label>
+                <textarea
+                  id="uxsContextNarrative"
+                  rows={2}
+                  className="form-control"
+                  data-pilot-field="mission.uxsContext.narrative"
+                  value={uxsContext.narrative || ''}
+                  onChange={(e) => patchUxsContext({ narrative: e.target.value })}
+                  onBlur={() => onTouched('mission.uxsContext.narrative')}
+                />
+              </div>
+            </fieldset>
+          </AccordionSection>
+        </div>
       </section>
 
-      <section className="panel">
-        <h3 className="panel-title">Identification</h3>
-        <div className="step-mission-form-shell" style={{ maxWidth: 660, margin: '0 auto' }}>
+      <section className="panel mission-step-identification" aria-labelledby="mission-record-heading">
+        <h3 className="mission-step-identification__title" id="mission-record-heading">
+          Mission identification
+        </h3>
+        <p className="mission-step-identification__subtitle">
+          Centered layout — core fields stay open; technical drawers collapse until you need them.
+        </p>
+        <div className="step-mission-form-shell mission-step-identification__shell">
         {hideMissionLensDuplicateChrome ? null : (
           <MantaFieldInsights
             issues={issues}
@@ -685,8 +800,7 @@ export default function StepMission({
                 These export-critical fields are still empty (not in the XML, not mapped yet, or cleared):{' '}
                 <span className="pilot-import-attention__list">{importPriorityMissingLabels.join(', ')}</span>.
                 {' '}
-                Values in <strong>Core identification</strong> above reflect merged state — expand the sections below for
-                dates, contacts, and ISO options.
+                Values in <strong>Core identity</strong> reflect merged state — expand timeline, contacts, and Advanced ISO as needed.
               </>
             ) : (
               <>
@@ -696,7 +810,7 @@ export default function StepMission({
             )}
           </div>
         ) : null}
-        <AccordionSection title="Core identity" defaultOpen>
+        <AccordionSection title="Core identity · anchor" variant="symphony" defaultOpen sectionClassName="mission-module-core">
           <fieldset className="pilot-fieldset mission-field-group">
             <legend className="mission-fieldset-legend visually-hidden">Core identity</legend>
         <MantaFieldGlass
@@ -746,18 +860,76 @@ export default function StepMission({
           textLengthThreshold={100}
           hideChipsRow={hideMissionGlassChips}
           showValidationChrome={glassShowChrome('mission.abstract')}
-          hint="Include platform type, instruments, survey area, dates, and data products."
+          hint="Include platform type, instruments, survey area, dates, and data products. Use the Symbiote strip for drafting room — connect the Lens on this field for acronym-safe edits."
         >
-          <textarea
-            id="abstract"
-            rows={4}
-            className={`form-control${invalid('mission.abstract') ? ' form-control--invalid' : ''}`}
-            data-pilot-field="mission.abstract"
-            value={mission.abstract}
-            onChange={(e) => onMissionPatch({ abstract: e.target.value })}
-            onBlur={() => onTouched('mission.abstract')}
-            aria-required
-          />
+          <div className="mission-abstract-with-symbiote">
+            <textarea
+              id="abstract"
+              rows={abstractExpanded ? 12 : 5}
+              className={`form-control${invalid('mission.abstract') ? ' form-control--invalid' : ''}`}
+              data-pilot-field="mission.abstract"
+              value={mission.abstract}
+              onChange={(e) => onMissionPatch({ abstract: e.target.value })}
+              onBlur={() => onTouched('mission.abstract')}
+              aria-required
+            />
+            <aside className="mission-symbiote-strip" aria-label="Abstract symbiote drafting">
+              <div className="mission-symbiote-strip__title">Symbiote drafting</div>
+              <p className="mission-symbiote-strip__copy">
+                Expand the canvas for acronym-heavy prose. With the Metadata Lens on this field, the assistant can propose
+                expansions (e.g., UUV → unmanned underwater vehicle) before you lock the abstract.
+              </p>
+              <button
+                type="button"
+                className="button button-tiny button-secondary"
+                onClick={() => setAbstractExpanded((v) => !v)}
+              >
+                {abstractExpanded ? 'Use compact abstract' : 'Expand editing surface'}
+              </button>
+            </aside>
+          </div>
+        </MantaFieldGlass>
+
+        <MantaFieldGlass
+          fieldPath="mission.purpose"
+          value={mission.purpose || ''}
+          issues={issues}
+          label="Purpose (dataset)"
+          required
+          hideChipsRow={hideMissionGlassChips}
+          showValidationChrome={glassShowChrome('mission.purpose')}
+        >
+          {editPurpose ? (
+            <textarea
+              id="purpose"
+              rows={2}
+              className={`form-control${invalid('mission.purpose') ? ' form-control--invalid' : ''}`}
+              data-pilot-field="mission.purpose"
+              value={mission.purpose || ''}
+              onChange={(e) => onMissionPatch({ purpose: e.target.value })}
+              onBlur={() => onTouched('mission.purpose')}
+              aria-required
+            />
+          ) : (
+            <div
+              style={{
+                fontSize: '13px',
+                color: 'var(--color-text-secondary, var(--text-muted, #64748b))',
+                fontStyle: 'italic',
+                lineHeight: 1.45,
+              }}
+            >
+              {String(mission.purpose || '').trim() || NCEI_DEFAULT_MISSION_PURPOSE}
+              <button
+                type="button"
+                className="button button-tiny button-secondary"
+                onClick={() => setEditPurpose(true)}
+                style={{ marginLeft: '8px', fontSize: '11px', verticalAlign: 'baseline' }}
+              >
+                Edit
+              </button>
+            </div>
+          )}
         </MantaFieldGlass>
 
         <MantaFieldGlass
@@ -769,37 +941,29 @@ export default function StepMission({
           hideChipsRow={hideMissionGlassChips}
           showValidationChrome={glassShowChrome('mission.status')}
         >
-          <select
-            id="missionStatus"
-            className={`form-control form-select${invalid('mission.status') ? ' form-control--invalid' : ''}`}
-            data-pilot-field="mission.status"
-            value={mission.status || ''}
-            onChange={(e) => onMissionPatch({ status: e.target.value })}
-            onBlur={() => onTouched('mission.status')}
-            aria-required
-          >
-            <option value="">Select…</option>
-            <option value="completed">completed</option>
-            <option value="historicalArchive">historicalArchive</option>
-            <option value="onGoing">onGoing</option>
-            <option value="planned">planned</option>
-            <option value="underDevelopment">underDevelopment</option>
-            <option value="obsolete">obsolete</option>
-            <option value="required">required</option>
-          </select>
+          <div className="mission-pill-select">
+            <select
+              id="missionStatus"
+              className={`form-control form-select${invalid('mission.status') ? ' form-control--invalid' : ''}`}
+              data-pilot-field="mission.status"
+              value={mission.status || ''}
+              onChange={(e) => onMissionPatch({ status: e.target.value })}
+              onBlur={() => onTouched('mission.status')}
+              aria-required
+            >
+              <option value="">Select…</option>
+              <option value="completed">completed</option>
+              <option value="historicalArchive">historicalArchive</option>
+              <option value="onGoing">onGoing</option>
+              <option value="planned">planned</option>
+              <option value="underDevelopment">underDevelopment</option>
+              <option value="obsolete">obsolete</option>
+              <option value="required">required</option>
+            </select>
+          </div>
           {show('mission.status') ? <p className="field-error">{show('mission.status')}</p> : null}
         </MantaFieldGlass>
 
-          </fieldset>
-        </AccordionSection>
-
-        <AccordionSection
-          title="Dates & identifiers"
-          defaultOpen={false}
-          hasValues={accDatesIdentifiers}
-        >
-        <fieldset className="pilot-fieldset mission-field-group">
-          <legend className="mission-fieldset-legend visually-hidden">Dates and identifiers</legend>
         <MantaFieldGlass
           fieldPath="mission.fileId"
           value={mission.fileId}
@@ -812,22 +976,36 @@ export default function StepMission({
         >
           <input
             id="fileId"
-            className={`form-control${invalid('mission.fileId') ? ' form-control--invalid' : ''}`}
+            className={`form-control mission-mono-input${invalid('mission.fileId') ? ' form-control--invalid' : ''}`}
             data-pilot-field="mission.fileId"
             value={mission.fileId}
             onChange={(e) => onMissionPatch({ fileId: e.target.value })}
             onBlur={() => onTouched('mission.fileId')}
             aria-invalid={invalid('mission.fileId')}
             aria-required
+            spellCheck="false"
+            autoCapitalize="off"
+            autoCorrect="off"
           />
         </MantaFieldGlass>
 
+          </fieldset>
+        </AccordionSection>
+
+        <AccordionSection
+          title="Timeline & tracking"
+          variant="symphony"
+          defaultOpen={false}
+          hasValues={accTimelineTracking}
+        >
+        <fieldset className="pilot-fieldset mission-field-group">
+          <legend className="mission-fieldset-legend visually-hidden">Timeline and tracking</legend>
         <div className="field-label-with-hint">
           <span className="field-label-with-hint__kicker">Dataset period</span>
           <FieldHintTooltip ariaLabel="About dataset period vs metadata record date">
             <>
               <strong>Dataset period</strong> for citation creation / completion and <code>gml:TimePeriod</code> in the XML
-              preview — not the same as <em>metadata record date</em> (see Advanced ISO options).
+              preview — not the same as <em>metadata record date</em> (see the Advanced ISO drawer at the bottom of this step).
             </>
           </FieldHintTooltip>
         </div>
@@ -886,208 +1064,77 @@ export default function StepMission({
           </div>
           <div>
             <label htmlFor="language">Language</label>
-            <input
+            <select
               id="language"
-              className={`form-control${invalid('mission.language') ? ' form-control--invalid' : ''}`}
+              className={`form-control form-select${invalid('mission.language') ? ' form-control--invalid' : ''}`}
               data-pilot-field="mission.language"
-              placeholder="e.g., eng"
-              value={mission.language || ''}
+              value={mission.language || 'eng'}
               onChange={(e) => onMissionPatch({ language: e.target.value })}
               onBlur={() => onTouched('mission.language')}
               aria-required
-            />
+            >
+              {(() => {
+                const rawLang = String(mission.language || '').trim()
+                if (!rawLang || MISSION_ISO639_PRESETS.includes(rawLang)) return null
+                return <option value={rawLang}>{rawLang} (current)</option>
+              })()}
+              {MISSION_ISO639_PRESETS.map((code) => (
+                <option key={code} value={code}>{code}</option>
+              ))}
+            </select>
             {show('mission.language') ? <p className="field-error">{show('mission.language')}</p> : null}
           </div>
         </div>
-        </fieldset>
-        </AccordionSection>
 
-        <AccordionSection
-          title="Advanced ISO"
-          defaultOpen={false}
-          hasValues={accAdvancedIso}
-        >
-        <fieldset className="pilot-fieldset mission-field-group">
-          <legend className="mission-fieldset-legend visually-hidden">Advanced ISO</legend>
-        <MantaFieldGlass
-          fieldPath="mission.purpose"
-          value={mission.purpose || ''}
-          issues={issues}
-          label="Purpose (dataset)"
-          required
-          hideChipsRow={hideMissionGlassChips}
-          showValidationChrome={glassShowChrome('mission.purpose')}
-        >
-          {editPurpose ? (
-            <textarea
-              id="purpose"
-              rows={2}
-              className={`form-control${invalid('mission.purpose') ? ' form-control--invalid' : ''}`}
-              data-pilot-field="mission.purpose"
-              value={mission.purpose || ''}
-              onChange={(e) => onMissionPatch({ purpose: e.target.value })}
-              onBlur={() => onTouched('mission.purpose')}
-              aria-required
-            />
-          ) : (
-            <div
-              style={{
-                fontSize: '13px',
-                color: 'var(--color-text-secondary, var(--text-muted, #64748b))',
-                fontStyle: 'italic',
-                lineHeight: 1.45,
-              }}
-            >
-              {String(mission.purpose || '').trim() || NCEI_DEFAULT_MISSION_PURPOSE}
-              <button
-                type="button"
-                className="button button-tiny button-secondary"
-                onClick={() => setEditPurpose(true)}
-                style={{ marginLeft: '8px', fontSize: '11px', verticalAlign: 'baseline' }}
+        <div className="mission-doi-accession-grid">
+          <div className="mission-doi-row">
+            <label htmlFor="doi">DOI</label>
+            <div className="mission-doi-row__controls">
+              <input
+                id="doi"
+                className={`form-control mission-mono-input${invalid('mission.doi') ? ' form-control--invalid' : ''}`}
+                data-pilot-field="mission.doi"
+                placeholder="e.g., 10.7289/V5ABC123"
+                value={mission.doi}
+                onChange={(e) => onMissionPatch({ doi: e.target.value })}
+                onBlur={() => onTouched('mission.doi')}
+                spellCheck="false"
+              />
+              <span
+                className={`mission-doi-badge${doiShapeOk ? ' mission-doi-badge--ok' : ''}`}
+                title={doiShapeOk ? 'Handle matches DataCite-style DOI pattern' : 'Enter a DOI (10.xxxx/…) to mark shape OK'}
+                aria-label={doiShapeOk ? 'DOI shape looks valid' : 'DOI shape not validated'}
               >
-                Edit
-              </button>
+                {doiShapeOk ? '✓' : '○'}
+              </span>
             </div>
-          )}
-        </MantaFieldGlass>
-
-        <label htmlFor="supplementalInformation" style={{ fontSize: '12px', color: 'var(--color-text-secondary, var(--text-muted, #64748b))', marginBottom: '4px', display: 'block' }}>Supplemental information</label>
-        <textarea
-          id="supplementalInformation"
-          rows={2}
-          className="form-control"
-          data-pilot-field="mission.supplementalInformation"
-          value={mission.supplementalInformation || ''}
-          onChange={(e) => onMissionPatch({ supplementalInformation: e.target.value })}
-        />
-
-        <div className="form-row-2">
-          <div>
-            <LabelWithHint
-              htmlFor="temporalExtentIntervalUnit"
-              label={
-                <>
-                  Temporal sampling interval unit (<code>gml:timeInterval</code> @unit)
-                </>
-              }
-              hint="Optional. NOAA template uses a unit token with a numeric value below."
-            />
-            <input
-              id="temporalExtentIntervalUnit"
-              className="form-control"
-              data-pilot-field="mission.temporalExtentIntervalUnit"
-              placeholder="e.g., day, hour, or UOM URI"
-              value={mission.temporalExtentIntervalUnit || ''}
-              onChange={(e) => onMissionPatch({ temporalExtentIntervalUnit: e.target.value })}
-            />
+            {show('mission.doi') ? <p className="field-error">{show('mission.doi')}</p> : null}
+            <p className="hint mission-doi-hint">
+              The DOI is the permanent link to your data. Mint via the NCEI portal when available. Example:{' '}
+              <code>10.7289/V5ABC123</code>
+            </p>
           </div>
           <div>
-            <LabelWithHint
-              htmlFor="temporalExtentIntervalValue"
-              label="Temporal sampling interval value"
-              hint={
-                <>
-                  Paired with interval unit for <code>gml:timeInterval</code> inside acquisition period.
-                </>
-              }
-            />
+            <label htmlFor="accession">NCEI accession</label>
             <input
-              id="temporalExtentIntervalValue"
-              className="form-control"
-              data-pilot-field="mission.temporalExtentIntervalValue"
-              placeholder="e.g., 1"
-              value={mission.temporalExtentIntervalValue || ''}
-              onChange={(e) => onMissionPatch({ temporalExtentIntervalValue: e.target.value })}
+              id="accession"
+              className={`form-control mission-mono-input${invalid('mission.accession') ? ' form-control--invalid' : ''}`}
+              data-pilot-field="mission.accession"
+              value={mission.accession}
+              onChange={(e) => onMissionPatch({ accession: e.target.value })}
+              onBlur={() => onTouched('mission.accession')}
+              spellCheck="false"
             />
+            {show('mission.accession') ? <p className="field-error">{show('mission.accession')}</p> : null}
           </div>
         </div>
 
-        <LabelWithHint
-          htmlFor="metadataRecordDate"
-          label={
-            <>
-              Metadata record date (<code>gmd:dateStamp</code>)
-            </>
-          }
-          hint={
-            <>
-              <strong>Metadata record date</strong> for <code>gmd:dateStamp</code>. When blank, the XML preview uses the
-              current UTC instant so downloads always carry a fresh stamp; set this field to freeze a specific instant
-              (for example to match a source file you imported).
-            </>
-          }
-        />
-        <input
-          id="metadataRecordDate"
-          type="datetime-local"
-          className={`form-control${invalid('mission.metadataRecordDate') ? ' form-control--invalid' : ''}`}
-          data-pilot-field="mission.metadataRecordDate"
-          value={toDatetimeLocalValue(mission.metadataRecordDate)}
-          onChange={(e) => onMissionPatch({ metadataRecordDate: fromDatetimeLocalValue(e.target.value) })}
-          onBlur={() => onTouched('mission.metadataRecordDate')}
-        />
-        {show('mission.metadataRecordDate') ? (
-          <p className="field-error">{show('mission.metadataRecordDate')}</p>
-        ) : null}
-
-        <label htmlFor="characterSet">Character set</label>
-        <input
-          id="characterSet"
-          className="form-control"
-          data-pilot-field="mission.characterSet"
-          placeholder="e.g., utf8"
-          value={mission.characterSet || ''}
-          onChange={(e) => onMissionPatch({ characterSet: e.target.value })}
-        />
-        <label htmlFor="topicCategories">MD_TopicCategoryCode values (one per line, comma, or semicolon)</label>
-        <textarea
-          id="topicCategories"
-          className="form-control"
-          data-pilot-field="mission.topicCategories"
-          rows={3}
-          placeholder={`e.g.
-oceans
-geoscientificInformation`}
-          value={(Array.isArray(mission.topicCategories) ? mission.topicCategories : []).join('\n')}
-          onChange={(e) =>
-            onMissionPatch({
-              topicCategories: e.target.value.split(/[\n,;]+/).map((s) => s.trim()).filter(Boolean),
-            })
-          }
-        />
-
-        <fieldset className="pilot-fieldset mission-field-group mission-field-group--nested">
-          <legend className="mission-fieldset-legend">Graphic overview (optional)</legend>
-        <div className="form-row-2">
-          <div>
-            <label htmlFor="graphicOverviewHref">Browse graphic xlink href</label>
-            <input
-              id="graphicOverviewHref"
-              className="form-control"
-              data-pilot-field="mission.graphicOverviewHref"
-              placeholder="https://data.noaa.gov/docucomp/…"
-              value={mission.graphicOverviewHref || ''}
-              onChange={(e) => onMissionPatch({ graphicOverviewHref: e.target.value })}
-            />
-          </div>
-          <div>
-            <label htmlFor="graphicOverviewTitle">Graphic title</label>
-            <input
-              id="graphicOverviewTitle"
-              className="form-control"
-              data-pilot-field="mission.graphicOverviewTitle"
-              placeholder="e.g. Default NOAA logo"
-              value={mission.graphicOverviewTitle || ''}
-              onChange={(e) => onMissionPatch({ graphicOverviewTitle: e.target.value })}
-            />
-          </div>
-        </div>
-        </fieldset>
         </fieldset>
         </AccordionSection>
 
         <AccordionSection
           title="Location (bounding box & vertical)"
+          variant="symphony"
           defaultOpen={false}
           hasValues={accLocation}
         >
@@ -1145,6 +1192,7 @@ geoscientificInformation`}
 
         <AccordionSection
           title="Citation parties (author / publisher / originator)"
+          variant="symphony"
           defaultOpen={false}
           hasValues={accCitationParties}
         >
@@ -1221,7 +1269,7 @@ geoscientificInformation`}
           </div>
         </AccordionSection>
 
-        <AccordionSection title="Scope code" defaultOpen={false} hasValues={accScope}>
+        <AccordionSection title="Scope code" variant="symphony" defaultOpen={false} hasValues={accScope}>
           <div className="mission-collapsible__body" style={{ paddingTop: 0 }}>
         <fieldset className="pilot-fieldset mission-field-group">
           <legend className="mission-fieldset-legend">Scope</legend>
@@ -1244,13 +1292,14 @@ geoscientificInformation`}
         </AccordionSection>
 
         <AccordionSection
-          title="Organization, contact & identifiers (required for export)"
+          title="Responsible party · organization &amp; contact"
+          variant="symphony"
           defaultOpen={false}
           hasValues={accContactParties}
         >
           <div className="mission-collapsible__body" style={{ paddingTop: 0 }}>
         <fieldset className="pilot-fieldset mission-field-group">
-          <legend className="mission-fieldset-legend">Organization, contact &amp; identifiers</legend>
+          <legend className="mission-fieldset-legend">Organization &amp; contact (ROR)</legend>
         <h4 className="panel-subtitle">Organization &amp; contact</h4>
         {contactLibraryEnabled ? (
           <div className="mission-contact-library panel" style={{ marginBottom: '0.85rem' }}>
@@ -1417,35 +1466,171 @@ geoscientificInformation`}
           </ul>
         </div>
 
-        <div className="form-row-2">
-          <div>
-            <label htmlFor="doi">DOI</label>
-            <input
-              id="doi"
-              className={`form-control${invalid('mission.doi') ? ' form-control--invalid' : ''}`}
-              data-pilot-field="mission.doi"
-              value={mission.doi}
-              onChange={(e) => onMissionPatch({ doi: e.target.value })}
-              onBlur={() => onTouched('mission.doi')}
-            />
-            {show('mission.doi') ? <p className="field-error">{show('mission.doi')}</p> : null}
-          </div>
-          <div>
-            <label htmlFor="accession">NCEI accession</label>
-            <input
-              id="accession"
-              className={`form-control${invalid('mission.accession') ? ' form-control--invalid' : ''}`}
-              data-pilot-field="mission.accession"
-              value={mission.accession}
-              onChange={(e) => onMissionPatch({ accession: e.target.value })}
-              onBlur={() => onTouched('mission.accession')}
-            />
-            {show('mission.accession') ? <p className="field-error">{show('mission.accession')}</p> : null}
-          </div>
-        </div>
         </fieldset>
           </div>
         </AccordionSection>
+
+        <AccordionSection
+          title="Advanced ISO · technical appendix"
+          variant="symphony"
+          defaultOpen={false}
+          hasValues={accAdvancedIso}
+        >
+        <fieldset className="pilot-fieldset mission-field-group">
+          <legend className="mission-fieldset-legend visually-hidden">Advanced ISO</legend>
+
+        <div className="mission-topic-quickadd" role="group" aria-label="Quick-add topic category codes">
+          {ISO_TOPIC_PRESETS.filter((o) => o.value).map((o) => (
+            <button
+              key={o.value}
+              type="button"
+              className="button button-tiny button-secondary"
+              onClick={() => {
+                const cur = Array.isArray(mission.topicCategories) ? [...mission.topicCategories] : []
+                if (!cur.includes(o.value)) cur.push(o.value)
+                onMissionPatch({ topicCategories: cur })
+              }}
+            >
+              + {o.label}
+            </button>
+          ))}
+        </div>
+        <label htmlFor="topicCategories">MD_TopicCategoryCode values (one per line, comma, or semicolon)</label>
+        <textarea
+          id="topicCategories"
+          className="form-control"
+          data-pilot-field="mission.topicCategories"
+          rows={3}
+          placeholder={`e.g.
+oceans
+geoscientificInformation`}
+          value={(Array.isArray(mission.topicCategories) ? mission.topicCategories : []).join('\n')}
+          onChange={(e) =>
+            onMissionPatch({
+              topicCategories: e.target.value.split(/[\n,;]+/).map((s) => s.trim()).filter(Boolean),
+            })
+          }
+        />
+
+        <label htmlFor="characterSet">Character set</label>
+        <input
+          id="characterSet"
+          className="form-control mission-mono-input"
+          data-pilot-field="mission.characterSet"
+          placeholder="e.g., utf8"
+          value={mission.characterSet || ''}
+          onChange={(e) => onMissionPatch({ characterSet: e.target.value })}
+        />
+
+        <div className="form-row-2">
+          <div>
+            <LabelWithHint
+              htmlFor="temporalExtentIntervalUnit"
+              label={
+                <>
+                  Temporal sampling interval unit (<code>gml:timeInterval</code> @unit)
+                </>
+              }
+              hint="Optional. NOAA template uses a unit token with a numeric value below."
+            />
+            <input
+              id="temporalExtentIntervalUnit"
+              className="form-control"
+              data-pilot-field="mission.temporalExtentIntervalUnit"
+              placeholder="e.g., day, hour, or UOM URI"
+              value={mission.temporalExtentIntervalUnit || ''}
+              onChange={(e) => onMissionPatch({ temporalExtentIntervalUnit: e.target.value })}
+            />
+          </div>
+          <div>
+            <LabelWithHint
+              htmlFor="temporalExtentIntervalValue"
+              label="Temporal sampling interval value"
+              hint={
+                <>
+                  Paired with interval unit for <code>gml:timeInterval</code> inside acquisition period.
+                </>
+              }
+            />
+            <input
+              id="temporalExtentIntervalValue"
+              className="form-control"
+              data-pilot-field="mission.temporalExtentIntervalValue"
+              placeholder="e.g., 1"
+              value={mission.temporalExtentIntervalValue || ''}
+              onChange={(e) => onMissionPatch({ temporalExtentIntervalValue: e.target.value })}
+            />
+          </div>
+        </div>
+
+        <LabelWithHint
+          htmlFor="metadataRecordDate"
+          label={
+            <>
+              Metadata record date (<code>gmd:dateStamp</code>)
+            </>
+          }
+          hint={
+            <>
+              <strong>Metadata record date</strong> for <code>gmd:dateStamp</code>. When blank, the XML preview uses the
+              current UTC instant so downloads always carry a fresh stamp; set this field to freeze a specific instant
+              (for example to match a source file you imported).
+            </>
+          }
+        />
+        <input
+          id="metadataRecordDate"
+          type="datetime-local"
+          className={`form-control${invalid('mission.metadataRecordDate') ? ' form-control--invalid' : ''}`}
+          data-pilot-field="mission.metadataRecordDate"
+          value={toDatetimeLocalValue(mission.metadataRecordDate)}
+          onChange={(e) => onMissionPatch({ metadataRecordDate: fromDatetimeLocalValue(e.target.value) })}
+          onBlur={() => onTouched('mission.metadataRecordDate')}
+        />
+        {show('mission.metadataRecordDate') ? (
+          <p className="field-error">{show('mission.metadataRecordDate')}</p>
+        ) : null}
+
+        <label htmlFor="supplementalInformation" style={{ fontSize: '12px', color: 'var(--color-text-secondary, var(--text-muted, #64748b))', marginBottom: '4px', display: 'block' }}>Supplemental information</label>
+        <textarea
+          id="supplementalInformation"
+          rows={2}
+          className="form-control"
+          data-pilot-field="mission.supplementalInformation"
+          value={mission.supplementalInformation || ''}
+          onChange={(e) => onMissionPatch({ supplementalInformation: e.target.value })}
+        />
+
+        <fieldset className="pilot-fieldset mission-field-group mission-field-group--nested">
+          <legend className="mission-fieldset-legend">Graphic overview (optional)</legend>
+        <div className="form-row-2">
+          <div>
+            <label htmlFor="graphicOverviewHref">Browse graphic xlink href</label>
+            <input
+              id="graphicOverviewHref"
+              className="form-control"
+              data-pilot-field="mission.graphicOverviewHref"
+              placeholder="https://data.noaa.gov/docucomp/…"
+              value={mission.graphicOverviewHref || ''}
+              onChange={(e) => onMissionPatch({ graphicOverviewHref: e.target.value })}
+            />
+          </div>
+          <div>
+            <label htmlFor="graphicOverviewTitle">Graphic title</label>
+            <input
+              id="graphicOverviewTitle"
+              className="form-control"
+              data-pilot-field="mission.graphicOverviewTitle"
+              placeholder="e.g. Default NOAA logo"
+              value={mission.graphicOverviewTitle || ''}
+              onChange={(e) => onMissionPatch({ graphicOverviewTitle: e.target.value })}
+            />
+          </div>
+        </div>
+        </fieldset>
+        </fieldset>
+        </AccordionSection>
+
         </div>
       </section>
 
@@ -1459,10 +1644,22 @@ geoscientificInformation`}
             </>
           </FieldHintTooltip>
         </h3>
-        <div className="step-mission-form-shell" style={{ maxWidth: 660, margin: '0 auto' }}>
-        <AccordionSection title="Constraints &amp; legal" defaultOpen={false} hasValues={accConstraints}>
-        <fieldset className="pilot-fieldset mission-field-group">
+        <div className="step-mission-form-shell">
+        <AccordionSection title="Constraints &amp; legal · standardized use" variant="symphony" defaultOpen={false} hasValues={accConstraints}>
+        <fieldset className="pilot-fieldset mission-field-group mission-constraints-fieldset">
           <legend className="visually-hidden">Constraints and legal fields</legend>
+
+        <div className="mission-cite-as-suggest" aria-live="polite">
+          <span className="mission-cite-as-suggest__label">Suggested cite-as (from title / contact)</span>
+          <div className="mission-cite-as-suggest__output">{citeAsSuggestion}</div>
+          <button
+            type="button"
+            className="button button-tiny button-secondary"
+            onClick={() => onMissionPatch({ citeAs: citeAsSuggestion })}
+          >
+            Apply suggestion
+          </button>
+        </div>
         <label htmlFor="citeAs">Cite as (use limitation)</label>
         <textarea
           id="citeAs"
@@ -1481,21 +1678,46 @@ geoscientificInformation`}
           value={mission.otherCiteAs || ''}
           onChange={(e) => onMissionPatch({ otherCiteAs: e.target.value })}
         />
-        <label htmlFor="dataLicensePreset">Data license preset</label>
-        <select
-          id="dataLicensePreset"
-          className="form-control form-select"
-          data-pilot-field="mission.dataLicensePreset"
-          value={mission.dataLicensePreset || 'custom'}
-          onChange={(e) => onMissionPatch({ dataLicensePreset: e.target.value })}
-        >
-          <option value="custom">custom (use license URL below)</option>
-          <option value="cc0_acdo">cc0_acdo</option>
-          <option value="ncei_cc0">ncei_cc0</option>
-          <option value="ncei_cc_by_4">ncei_cc_by_4</option>
-          <option value="ncei_cc0_internal_noaa">ncei_cc0_internal_noaa</option>
-          <option value="cc0_acdo_and_ncei">cc0_acdo_and_ncei</option>
-        </select>
+
+        <span className="mission-license-cards__label" id="mission-license-cards-label">Data license</span>
+        <div className="mission-license-cards" role="group" aria-labelledby="mission-license-cards-label">
+          {[
+            { preset: 'ncei_cc0', label: 'CC0' },
+            { preset: 'ncei_cc_by_4', label: 'CC-BY-4.0' },
+            { preset: 'custom', label: 'Custom' },
+          ].map(({ preset, label }) => {
+            const active = (mission.dataLicensePreset || 'custom') === preset
+            return (
+              <button
+                key={preset}
+                type="button"
+                className={`mission-license-card${active ? ' mission-license-card--active' : ''}`}
+                aria-pressed={active}
+                onClick={() => onMissionPatch({ dataLicensePreset: preset })}
+              >
+                {label}
+              </button>
+            )
+          })}
+        </div>
+        <details className="mission-license-more">
+          <summary>Other NCEI license presets</summary>
+          <label className="visually-hidden" htmlFor="dataLicensePreset">Data license preset (full list)</label>
+          <select
+            id="dataLicensePreset"
+            className="form-control form-select"
+            data-pilot-field="mission.dataLicensePreset"
+            value={mission.dataLicensePreset || 'custom'}
+            onChange={(e) => onMissionPatch({ dataLicensePreset: e.target.value })}
+          >
+            <option value="custom">custom (use license URL below)</option>
+            <option value="cc0_acdo">cc0_acdo</option>
+            <option value="ncei_cc0">ncei_cc0</option>
+            <option value="ncei_cc_by_4">ncei_cc_by_4</option>
+            <option value="ncei_cc0_internal_noaa">ncei_cc0_internal_noaa</option>
+            <option value="cc0_acdo_and_ncei">cc0_acdo_and_ncei</option>
+          </select>
+        </details>
         <label htmlFor="licenseUrl">License URL {mission.dataLicensePreset === 'custom' ? '(required)' : '(optional)'}</label>
         <input
           id="licenseUrl"
@@ -1549,14 +1771,42 @@ geoscientificInformation`}
           onBlur={() => onTouched('mission.accessConstraints')}
         />
         <label htmlFor="distributionLiability">Distribution liability</label>
-        <textarea
-          id="distributionLiability"
-          rows={2}
-          className="form-control"
-          data-pilot-field="mission.distributionLiability"
-          value={mission.distributionLiability || ''}
-          onChange={(e) => onMissionPatch({ distributionLiability: e.target.value })}
-        />
+        {editLiability ? (
+          <div className="mission-liability-edit">
+            <textarea
+              id="distributionLiability"
+              rows={4}
+              className="form-control"
+              data-pilot-field="mission.distributionLiability"
+              value={mission.distributionLiability || ''}
+              onChange={(e) => onMissionPatch({ distributionLiability: e.target.value })}
+              onBlur={() => onTouched('mission.distributionLiability')}
+            />
+            <button
+              type="button"
+              className="button button-tiny button-secondary"
+              onClick={() => setEditLiability(false)}
+            >
+              Show read-only summary
+            </button>
+          </div>
+        ) : (
+          <div className="mission-legal-readonly">
+            <pre className="mission-legal-readonly__block">{String(mission.distributionLiability || '').trim() || NCEI_DEFAULT_DISTRIBUTION_LIABILITY}</pre>
+            <button
+              type="button"
+              className="button button-tiny button-secondary"
+              onClick={() => {
+                if (!String(mission.distributionLiability || '').trim()) {
+                  onMissionPatch({ distributionLiability: NCEI_DEFAULT_DISTRIBUTION_LIABILITY })
+                }
+                setEditLiability(true)
+              }}
+            >
+              Edit liability text
+            </button>
+          </div>
+        )}
         </fieldset>
         </AccordionSection>
         </div>
@@ -1572,9 +1822,10 @@ geoscientificInformation`}
             </>
           </FieldHintTooltip>
         </h3>
-        <div className="step-mission-form-shell" style={{ maxWidth: 660, margin: '0 auto' }}>
+        <div className="step-mission-form-shell">
         <AccordionSection
-          title="Aggregation &amp; related resources"
+          title="Aggregation · related records &amp; lineage"
+          variant="symphony"
           defaultOpen={false}
           hasValues={accRelatedRecords}
         >
@@ -1738,6 +1989,8 @@ geoscientificInformation`}
         </AccordionSection>
         </div>
       </section>
+
+      </div>
 
       <section className="panel" aria-labelledby="mission-local-draft-heading">
         <h3 className="panel-title" id="mission-local-draft-heading">Local draft</h3>

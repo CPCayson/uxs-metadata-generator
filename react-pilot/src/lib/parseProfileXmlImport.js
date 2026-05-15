@@ -1,4 +1,5 @@
 import { applyPilotAutoFixes } from './pilotAutoFix.js'
+import { stripMissionPilotIsoImportResidue } from './importMissionIsoResidueStrip.js'
 
 /**
  * Run profile XML import parsers on raw text — same contract as XmlToolsBar “Apply”.
@@ -62,7 +63,18 @@ export function parseProfileXmlImport(profile, xmlText, meta = {}) {
       )
     }
   }
-  const finalMerged = typeof profile.sanitize === 'function' ? profile.sanitize(fixed) : fixed
+  const sourceType =
+    /** @type {string | undefined} */ (result.provenance?.sourceType)
+    ?? /** @type {string | undefined} */ (typeof result.partial?.sourceProvenance === 'object'
+      ? result.partial?.sourceProvenance?.sourceType
+      : undefined)
+
+  let finalMerged = typeof profile.sanitize === 'function' ? profile.sanitize(fixed) : fixed
+  if (profile.id === 'mission' && sourceType === 'rawIso') {
+    finalMerged = typeof profile.sanitize === 'function'
+      ? profile.sanitize(stripMissionPilotIsoImportResidue(finalMerged))
+      : stripMissionPilotIsoImportResidue(finalMerged)
+  }
 
   return {
     ok: true,

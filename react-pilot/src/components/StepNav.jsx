@@ -32,9 +32,10 @@ export default function StepNav({ steps, activeStep, onSelect, stepStatus = {} }
     >
       <div className="metadata-nav-inner pilot-step-nav__row pilot-step-nav__row--tabs-only w-100">
         <ul className="nav nav-tabs metadata-tabs pilot-metadata-tabs" role="tablist">
-          {steps.map((step) => {
+          {steps.map((step, idx) => {
             const st = stepStatus[step.id] || 'pending'
             const statusLabel = STEP_STATUS_LABELS[st] || 'Status unknown'
+            const stepIndex = String(idx + 1).padStart(2, '0')
             return (
               <li key={step.id} className="nav-item" role="presentation">
                 <button
@@ -48,6 +49,7 @@ export default function StepNav({ steps, activeStep, onSelect, stepStatus = {} }
                   className={`nav-link nav-link--step-${st}${activeStep === step.id ? ' active' : ''}`}
                   onClick={() => onSelect(step.id)}
                 >
+                  <span className="pilot-step-nav__index" aria-hidden="true">{stepIndex}</span>
                   <span className="pilot-step-nav__label">{step.label}</span>
                   <span className="pilot-step-nav__status" title={statusLabel} aria-hidden="true">
                     {STEP_STATUS_VISIBLE[st] ?? '—'}

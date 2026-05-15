@@ -13,6 +13,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { pilotModeToValidationEngineLevel, pilotStateToLegacyFormData } from '../../lib/pilotToLegacyFormData.js'
 import { mapPlatformRowToPilotPatch, mapPilotPlatformToSavePlatform, platformRowKey } from '../../lib/platformSheetMapping.js'
+import { mapDbSensorRowToPilotSensor, mapPilotSensorToSavePayload } from '../../lib/sensorSheetMapping.js'
+import { acquisitionInstrumentHasContent } from '../../lib/sensorInstrumentDescription.js'
 import { pushPilotDebug } from '../../lib/pilotDebugLog.js'
 import { emitPilotAuditEvent } from '../../lib/pilotAuditEvents.js'
 
@@ -280,6 +282,8 @@ export function useMissionActions({
     const hit = platformLibraryRows.find((r) => r.key === key)
     if (!hit) { setStatusMessage('Select a platform row first.'); return }
     const patch = mapPlatformRowToPilotPatch(hit.row)
+    const platformId = String(patch.platformId || '').trim()
+    const appliedLabel = patch.platformName || patch.platformId || hit.key
     setPilotState((p) => ({ ...p, platform: { ...p.platform, ...patch } }))
     setTouched((prev) => ({
       ...prev,
@@ -287,8 +291,68 @@ export function useMissionActions({
       'platform.platformId': true,
       'platform.platformDesc': true,
     }))
-    setStatusMessage(`Applied platform row: ${patch.platformName || patch.platformId || hit.key}`)
-  }, [platformLibraryRows, setPilotState, setTouched, setStatusMessage])
+    setStatusMessage(`Applied platform row: ${appliedLabel}`)
+
+    if (!hostBridgeReady || !platformId || typeof hostBridge.listSensors !== 'function') return
+
+    void (async () => {
+      try {
+        const res = await hostBridge.listSensors(platformId)
+        const rows = res.unexpectedShape ? [] : res.rows
+        if (!Array.isArray(rows) || rows.length === 0) {
+          setStatusMessage(
+            `Applied platform row: ${appliedLabel} — no sensors linked to platform ${platformId} in the library yet.`,
+          )
+          return
+        }
+        const mapped = rows.map((row, i) => mapDbSensorRowToPilotSensor(row, { fromLibrary: true, index: i }))
+        setPilotState((p) => ({ ...p, sensors: mapped }))
+        setTouched((prev) => {
+          const next = { ...prev }
+          for (let i = 0; i < mapped.length; i += 1) {
+            next[`sensors[${i}].type`] = true
+            next[`sensors[${i}].modelId`] = true
+            next[`sensors[${i}].variable`] = true
+          }
+          return next
+        })
+        setStatusMessage(`Applied platform + ${mapped.length} linked sensor(s) from the library.`)
+      } catch (error) {
+        const msg = error instanceof Error ? error.message : String(error)
+        setStatusMessage(`Platform applied; sensor cascade failed: ${msg}`)
+      }
+    })()
+  }, [platformLibraryRows, setPilotState, setTouched, setStatusMessage, hostBridgeReady, hostBridge])
+
+  const savePlatformAndSensorsKitToLibrary = useCallback(async () => {
+    if (!hostBridgeReady) {
+      setStatusMessage('Saving needs a connected host (`/api/db`).')
+      return
+    }
+    setPlatformSaveBusy(true)
+    setStatusMessage('Saving platform and sensors to library…')
+    try {
+      const payload = mapPilotPlatformToSavePlatform(pilotState.platform)
+      await hostBridge.savePlatform(payload)
+      const pid = String(pilotState.platform?.platformId ?? payload.id ?? '').trim()
+      const batch = (pilotState.sensors || [])
+        .filter((s) => acquisitionInstrumentHasContent(s))
+        .map((s) => mapPilotSensorToSavePayload(s, { platformId: pid }))
+      if (batch.length) await hostBridge.saveSensorsBatch(batch)
+      const res = await hostBridge.listPlatforms()
+      if (Array.isArray(res.rows)) {
+        const rows = res.rows.filter((row) => row && typeof row === 'object').map((row, idx) => ({ key: platformRowKey(row, idx), row }))
+        setPlatformLibraryRows(rows)
+      } else {
+        await refreshPlatformLibrary()
+      }
+      setStatusMessage(`Saved platform "${payload.id}"${batch.length ? ` and ${batch.length} sensor(s)` : ''} to the library.`)
+    } catch (error) {
+      setStatusMessage(`Kit save failed: ${error instanceof Error ? error.message : String(error)}`)
+    } finally {
+      setPlatformSaveBusy(false)
+    }
+  }, [hostBridgeReady, pilotState, hostBridge, refreshPlatformLibrary, setStatusMessage])
 
   const saveCurrentPlatformToSheets = useCallback(async () => {
     if (!hostBridgeReady) { setStatusMessage('Saving platform needs a connected host (`/api/db`).'); return }
@@ -418,6 +482,7 @@ export function useMissionActions({
     platformLibraryError,
     refreshPlatformLibrary,
     applyPlatformFromLibraryKey,
+    savePlatformAndSensorsKitToLibrary,
     saveCurrentPlatformToSheets,
     platformSaveBusy,
     // server exports

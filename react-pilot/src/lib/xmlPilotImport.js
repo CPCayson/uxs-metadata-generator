@@ -1463,11 +1463,21 @@ function parseSensors(root) {
     const variableFromName = gcoCharacterString(childNS(n, NS.gmd, 'name'))
     const desc = gcoCharacterString(childNS(n, NS.gmd, 'description'))
     const parsed = parseInstrumentDescriptionBlock(desc)
+    const typeTrim = String(type || '').trim()
+    const descTrim = String(desc || '').trim()
+    const nameTrim = String(variableFromName || '').trim()
+    let variable = typeTrim
+    if (!variable) {
+      const pv = String(parsed.variable || '').trim()
+      if (nameTrim && !/manufacturer:|model:|s\/n:/i.test(nameTrim)) variable = nameTrim
+      else if (pv && !/manufacturer:|model:|s\/n:/i.test(pv)) variable = pv
+    }
     let row = {
       sensorId: sid,
       type,
       modelId: sid,
-      variable: variableFromName || parsed.variable,
+      description: descTrim,
+      variable,
       firmware: parsed.firmware,
       operationMode: parsed.operationMode,
       uncertainty: parsed.uncertainty,
@@ -3508,14 +3518,17 @@ function normalizeImportedSensorInstrumentRows(partial) {
     let variable = String(r.variable || '').trim()
     const descr = String(r.description || '').trim()
     if (typ) {
+      const blobVar = variable
       r.variable = typ
+      const descParts = [descr].filter(Boolean)
       if (
-        descr
-        && (/manufacturer:|model:|s\/n:/i.test(descr) || /^manufacturer:/im.test(descr))
-        && !r.description
+        blobVar
+        && blobVar !== typ
+        && (/manufacturer:|model:|s\/n:/i.test(blobVar) || blobVar.length > 100)
       ) {
-        r.description = descr
+        descParts.push(blobVar)
       }
+      if (descParts.length) r.description = descParts.join('\n\n')
       return r
     }
     const mLine = descr.match(/^type:\s*([^\n]+)/im) || descr.match(/\ntype:\s*([^\n]+)/im)
@@ -3678,12 +3691,18 @@ function parseOneAcquisitionInstrument(mi) {
   const descr = gcoCharacterString(childNS(mi, NS.gmd, 'description') || childNS(mi, NS.gmi, 'description'))
   const parsed = parseInstrumentDescriptionBlock(descr)
   const typeStr = String(stype || '').trim()
+  const descrRaw = String(descr || '').trim()
+  let variableOut = typeStr
+  if (!variableOut) {
+    const pv = String(parsed.variable || '').trim()
+    if (pv && !/manufacturer:|model:|s\/n:/i.test(pv)) variableOut = pv
+  }
   let row = {
     sensorId: sid,
     modelId: sid,
     type: stype,
-    variable: typeStr,
-    description: String(descr || '').trim(),
+    variable: variableOut,
+    description: descrRaw,
     firmware: parsed.firmware,
     operationMode: parsed.operationMode,
     uncertainty: parsed.uncertainty,
@@ -4955,12 +4974,18 @@ function parseAcquisition3(root) {
     const descr = gcs3(cn3(mi, NS3.mac, 'description'))
     const parsed = parseInstrumentDescriptionBlock(descr)
     const typeStr = String(stype || '').trim()
+    const descrRaw = String(descr || '').trim()
+    let variableOut = typeStr
+    if (!variableOut) {
+      const pv = String(parsed.variable || '').trim()
+      if (pv && !/manufacturer:|model:|s\/n:/i.test(pv)) variableOut = pv
+    }
     let row = {
       sensorId: sid,
       modelId: sid,
       type: stype,
-      variable: typeStr,
-      description: String(descr || '').trim(),
+      variable: variableOut,
+      description: descrRaw,
       firmware: parsed.firmware,
       operationMode: parsed.operationMode,
       uncertainty: parsed.uncertainty,

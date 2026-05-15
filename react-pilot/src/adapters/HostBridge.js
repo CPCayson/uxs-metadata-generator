@@ -91,7 +91,7 @@
  *   saveTemplate(template: TemplateRecord): Promise<void>,
  *   listPlatforms(): Promise<PlatformListResult>,
  *   savePlatform(platform: Record<string, unknown>): Promise<void>,
- *   listSensors(): Promise<SensorListResult>,
+ *   listSensors(platformId?: string): Promise<SensorListResult>,
  *   saveSensor(sensor: Record<string, unknown>): Promise<void>,
  *   saveSensorsBatch(sensors: Array<Record<string, unknown>>): Promise<void>,
  *   validateOnServer(formData: object, level: string): Promise<ServerValidationResult>,

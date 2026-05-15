@@ -269,6 +269,11 @@ export async function runLensScanHeuristic(input) {
 
   const title = String(input?.title || '').trim()
   const abstract = String(input?.abstract || '').trim()
+  if (profileId === 'mission' && (title.length < 20 || abstract.length < 20)) {
+    throw new Error(
+      'Lens scan guard: mission.title and mission.abstract must each be at least 20 characters (GCMD suggestions are skipped).',
+    )
+  }
   const xmlSnippet = String(input?.xmlSnippet || '').trim()
   const uxsText = stringifyUxsContextForSeeds(input?.uxsContext, 1000)
   const fileId = String(input?.fileId || '').trim()
@@ -283,9 +288,6 @@ export async function runLensScanHeuristic(input) {
     .trim()
   if (!seed) {
     throw new Error('Lens scan needs a non-empty title, abstract, UxS operational context, or XML snippet.')
-  }
-  if (profileId === 'mission' && (title.length < 20 || abstract.length < 20)) {
-    throw new Error('Lens scan requires mission.title and mission.abstract each to be at least 20 characters before running GCMD suggestions.')
   }
 
   const wordList = buildSeedTerms(title, abstract, xmlSnippet, uxsText)

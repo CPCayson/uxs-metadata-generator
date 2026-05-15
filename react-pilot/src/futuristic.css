@@ -65,6 +65,13 @@
   --manta-op-warn: #fcd34d;
   --manta-op-error: #fca5a5;
   --manta-op-chip-bg: rgba(15, 23, 42, 0.78);
+
+  /* Manta Lens standalone prototype — shared tokens (UxS callout + optional chrome) */
+  --pilot-lens-canvas: #0d1117;
+  --pilot-lens-raised: #161b22;
+  --pilot-lens-nav-strip: #090c10;
+  --pilot-lens-accent: #2dd4bf;
+  --pilot-lens-border: #30363d;
 }
 
 :root[data-theme='dark'] {
@@ -87,9 +94,6 @@
 
   --primary-color:    #00b4d8;
   --primary-light:    #48cae4;
-  --bg-color:         #020e18;
-  --card-bg:          rgba(0, 22, 42, 0.82);
-  --border-color:     rgba(0, 180, 216, 0.2);
   --text-color:       #cce8f4;
   --muted-text-color: #6a9db8;
   --input-bg:         rgba(0, 10, 20, 0.6);
@@ -100,6 +104,13 @@
   --sidebar-bg:       rgba(0, 10, 20, 0.82);
   --nav-active-bg:    rgba(0, 151, 167, 0.2);
   --nav-active-color: #48cae4;
+
+  /* GitHub-dark canvas (manta-lens parity) — keeps grid/aurora overlays */
+  --bg-color:         var(--pilot-lens-canvas, #0d1117);
+  --fx-bg-base:       var(--pilot-lens-canvas, #0d1117);
+  --fx-bg-deep:       #010409;
+  --card-bg:          rgba(22, 27, 34, 0.94);
+  --border-color:     rgba(48, 54, 61, 0.95);
 }
 
 /*
@@ -9850,4 +9861,375 @@ fieldset.pilot-fieldset.manta-lens-symbiote-field-active .form-control {
 
 .pilot-dash-queue-card__blockers--bad {
   color: #f87171;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   Manta Lens (standalone) alignment — header strip, step rail, UxS callout
+   Dark theme: GitHub-style raised bar + teal underline tabs + numbered steps
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.pilot-step-nav.pilot-step-nav--compact .nav-tabs.metadata-tabs.pilot-metadata-tabs .nav-link {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0.28rem;
+}
+
+.pilot-step-nav--compact .pilot-step-nav__index {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  flex-shrink: 0;
+}
+
+:root[data-theme='dark'] #root .pilot-app-header {
+  background: var(--pilot-lens-raised, #161b22) !important;
+  border-bottom: 1px solid var(--pilot-lens-border, #30363d);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+}
+
+:root[data-theme='dark'] #root .pilot-app-header::before {
+  opacity: 0.22;
+}
+
+:root[data-theme='dark'] #root .pilot-app-header::after {
+  animation: none;
+  height: 1px;
+  opacity: 0.55;
+  filter: none;
+  background: color-mix(in srgb, var(--pilot-lens-accent, #2dd4bf) 70%, transparent);
+}
+
+:root[data-theme='dark'] #root .pilot-app-header h1.pilot-header-title-row {
+  background: none;
+  -webkit-background-clip: unset;
+  background-clip: unset;
+  color: #ffffff;
+  text-shadow: none;
+}
+
+:root[data-theme='dark'] .pilot-step-nav.pilot-step-nav--compact,
+:root[data-theme='dark'] .header .header-nav.pilot-step-nav.metadata-nav-wrap.pilot-step-nav--compact {
+  min-height: 3.35rem;
+  padding: 0 0.75rem;
+  background: var(--pilot-lens-nav-strip, #090c10);
+  border-top: 1px solid var(--pilot-lens-border, #30363d);
+  border-bottom: 1px solid var(--pilot-lens-border, #30363d);
+  box-shadow: none;
+}
+
+:root[data-theme='dark'] .pilot-step-nav.pilot-step-nav--compact::before,
+:root[data-theme='dark'] .pilot-step-nav.pilot-step-nav--compact::after {
+  opacity: 0;
+  animation: none;
+}
+
+:root[data-theme='dark'] #root .pilot-step-nav.pilot-step-nav--compact .nav-tabs.metadata-tabs.pilot-metadata-tabs .nav-link {
+  border-radius: 0;
+  padding: 0.5rem 0.55rem !important;
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 2px solid transparent !important;
+  box-shadow: none !important;
+  color: #64748b !important;
+  text-shadow: none !important;
+  font-size: 0.65rem !important;
+  letter-spacing: 0.12em !important;
+  line-height: 1.15;
+  gap: 0.38rem;
+  align-items: center;
+  min-height: 3.35rem;
+}
+
+:root[data-theme='dark'] #root .pilot-step-nav.pilot-step-nav--compact .nav-tabs.metadata-tabs.pilot-metadata-tabs .nav-link:hover,
+:root[data-theme='dark'] #root .pilot-step-nav.pilot-step-nav--compact .nav-tabs.metadata-tabs.pilot-metadata-tabs .nav-link:focus-visible {
+  color: #cbd5e1 !important;
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+:root[data-theme='dark'] #root .pilot-step-nav.pilot-step-nav--compact .nav-tabs.metadata-tabs.pilot-metadata-tabs .nav-link.active {
+  color: var(--pilot-lens-accent, #2dd4bf) !important;
+  border-bottom-color: var(--pilot-lens-accent, #2dd4bf) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+:root[data-theme='dark'] .pilot-step-nav--compact .pilot-step-nav__index {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: inherit;
+  opacity: 0.95;
+}
+
+:root[data-theme='dark'] .pilot-step-nav--compact .pilot-step-nav__status {
+  font-size: 0.58rem;
+  max-width: 5rem;
+  opacity: 0.88;
+}
+
+:root[data-theme='dark'] .pilot-step-nav--compact .pilot-step-nav__dot {
+  width: 0.35rem;
+  height: 0.35rem;
+}
+
+/* Mission — UxS block: teal wash + left rail (manta-lens “operational context”) */
+.mission-symphony-uxs--lens .mission-symphony-glass {
+  position: relative;
+  background: color-mix(
+    in srgb,
+    var(--pilot-lens-accent, #2dd4bf) 9%,
+    var(--pilot-lens-canvas, #0d1117)
+  );
+  border-color: color-mix(in srgb, var(--pilot-lens-accent, #2dd4bf) 22%, var(--pilot-lens-border, #30363d));
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--pilot-lens-accent, #2dd4bf) 14%, transparent),
+    0 12px 36px rgba(0, 0, 0, 0.22);
+  border-left: 4px solid color-mix(in srgb, var(--pilot-lens-accent, #2dd4bf) 58%, transparent);
+}
+
+:root:not([data-theme='dark']) .mission-symphony-uxs--lens .mission-symphony-glass {
+  background: color-mix(in srgb, var(--pilot-lens-accent, #14b8a6) 7%, #f8fafc);
+  border-color: color-mix(in srgb, var(--pilot-lens-accent, #0d9488) 35%, rgba(99, 102, 241, 0.28));
+  border-left: 4px solid color-mix(in srgb, var(--pilot-lens-accent, #0d9488) 50%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--pilot-lens-accent, #14b8a6) 12%, transparent),
+    0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+/* Mission step — thematic modules (StepMission “perfect layout”) */
+.mission-step-identification__title {
+  margin: 0 0 0.2rem;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-color, #0f172a);
+}
+
+.mission-step-identification__subtitle {
+  margin: 0 0 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--muted-text-color, #64748b);
+  line-height: 1.45;
+}
+
+.mission-step-identification__shell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.mission-abstract-with-symbiote {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.65rem;
+}
+
+@media (min-width: 720px) {
+  .mission-abstract-with-symbiote {
+    grid-template-columns: minmax(0, 1fr) minmax(11rem, 13.5rem);
+    align-items: start;
+  }
+}
+
+.mission-symbiote-strip {
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--pilot-lens-accent, #00ced1) 35%, var(--border-color, #334155));
+  background: color-mix(in srgb, var(--pilot-lens-accent, #00ced1) 7%, var(--card-bg, #0f172a));
+  padding: 0.65rem 0.75rem;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: var(--text-color, #e2e8f0);
+}
+
+.mission-symbiote-strip__title {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pilot-lens-accent, #2dd4bf);
+  margin-bottom: 0.35rem;
+}
+
+.mission-symbiote-strip__copy {
+  margin: 0 0 0.5rem;
+  color: var(--muted-text-color, #94a3b8);
+}
+
+.mission-pill-select .form-select {
+  border-radius: 999px;
+  padding-left: 1rem;
+  padding-right: 2rem;
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+}
+
+.mission-mono-input {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.82rem;
+}
+
+.mission-module-core .form-control:focus,
+.mission-step-identification .form-control:focus,
+.mission-step-identification .form-select:focus {
+  border-color: color-mix(in srgb, var(--pilot-lens-accent, #00ced1) 65%, var(--border-color, #334155));
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--pilot-lens-accent, #00ced1) 45%, transparent),
+    0 0 18px color-mix(in srgb, var(--pilot-lens-accent, #00ced1) 22%, transparent);
+  outline: none;
+}
+
+.mission-doi-accession-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+  margin-top: 0.35rem;
+}
+
+@media (min-width: 640px) {
+  .mission-doi-accession-grid {
+    grid-template-columns: 1.4fr 1fr;
+    align-items: start;
+  }
+}
+
+.mission-doi-row__controls {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.mission-doi-badge {
+  flex-shrink: 0;
+  width: 1.65rem;
+  height: 1.65rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  font-weight: 800;
+  border: 1px solid var(--border-color, #334155);
+  color: var(--muted-text-color, #64748b);
+  background: color-mix(in srgb, var(--card-bg, #0f172a) 92%, transparent);
+}
+
+.mission-doi-badge--ok {
+  border-color: color-mix(in srgb, var(--pilot-lens-accent, #2dd4bf) 55%, transparent);
+  color: var(--pilot-lens-accent, #2dd4bf);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--pilot-lens-accent, #2dd4bf) 25%, transparent);
+}
+
+.mission-doi-hint {
+  margin: 0.35rem 0 0;
+  font-size: 0.68rem;
+}
+
+.mission-license-cards__label {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-text-color, #64748b);
+  margin: 0.85rem 0 0.4rem;
+}
+
+.mission-license-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.mission-license-card {
+  border-radius: 10px;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 1px solid var(--border-color, #334155);
+  background: color-mix(in srgb, var(--card-bg, #0f172a) 94%, transparent);
+  color: var(--text-color, #e2e8f0);
+}
+
+.mission-license-card:hover {
+  border-color: color-mix(in srgb, var(--pilot-lens-accent, #2dd4bf) 45%, transparent);
+}
+
+.mission-license-card--active {
+  border-color: color-mix(in srgb, var(--pilot-lens-accent, #2dd4bf) 65%, transparent);
+  color: var(--pilot-lens-accent, #2dd4bf);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--pilot-lens-accent, #2dd4bf) 35%, transparent);
+}
+
+.mission-license-more {
+  margin-top: 0.5rem;
+  font-size: 0.72rem;
+  color: var(--muted-text-color, #94a3b8);
+}
+
+.mission-license-more[open] summary {
+  margin-bottom: 0.35rem;
+}
+
+.mission-cite-as-suggest {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 0.65rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: 10px;
+  border: 1px dashed color-mix(in srgb, var(--pilot-lens-accent, #2dd4bf) 35%, var(--border-color, #334155));
+  background: color-mix(in srgb, var(--pilot-lens-accent, #2dd4bf) 5%, var(--card-bg, #0f172a));
+}
+
+.mission-cite-as-suggest__label {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted-text-color, #94a3b8);
+}
+
+.mission-cite-as-suggest__output {
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--text-color, #e2e8f0);
+}
+
+.mission-legal-readonly__block {
+  margin: 0 0 0.45rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--text-color, #e2e8f0) 4%, var(--card-bg, #0f172a));
+  border: 1px solid var(--border-color, #334155);
+  font-family: ui-serif, Georgia, serif;
+  font-size: 0.76rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  color: var(--text-color, #e2e8f0);
+}
+
+.mission-liability-edit textarea {
+  margin-bottom: 0.35rem;
+}
+
+.mission-constraints-fieldset {
+  border-radius: 12px;
+}
+
+.mission-topic-quickadd {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.45rem;
 }

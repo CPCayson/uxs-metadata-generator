@@ -2,7 +2,12 @@ import { SENSOR_XML_OPTIONAL_DEFAULTS } from './sensorInstrumentDescription.js'
 import { canonicalMissionInstantForStorage, normalizeMissionInstantString } from './datetimeLocal.js'
 import { normalizeDataLicensePresetKey } from './noaaLicensePresets.js'
 import { previewMetadataXPath } from './metadataXPath.js'
-import { resolveMissionPurposeForNcei, NCEI_DEFAULT_MISSION_PURPOSE } from './nceiMissionDefaults.js'
+import {
+  resolveMissionPurposeForNcei,
+  NCEI_DEFAULT_MISSION_PURPOSE,
+  NCEI_DEFAULT_DISTRIBUTION_LIABILITY,
+  NCEI_DEFAULT_USE_LIABILITY,
+} from './nceiMissionDefaults.js'
 
 /**
  * Mission validation runs on the **same** `pilotState` the wizard edits and `buildXmlPreview` serializes.
@@ -264,7 +269,8 @@ function missionPurposeMirrorsAbstract(raw, abs) {
   const r = String(raw || '').trim()
   const a = String(abs || '').trim()
   if (!r || !a) return false
-  return r === a || r.startsWith(a.slice(0, 60))
+  const head = a.slice(0, 60)
+  return r === a || r === head || r.startsWith(head)
 }
 
 export function sanitizePilotState(state) {
@@ -295,11 +301,9 @@ export function sanitizePilotState(state) {
         let mn = rn
         if (Number(normalizePilotNumericToken(mw)) > Number(normalizePilotNumericToken(me))) {
           ;[mw, me] = [me, mw]
-          console.warn('[sanitizePilotState] mission bbox west/east were swapped (west > east) \u2014 corrected automatically.')
         }
         if (Number(normalizePilotNumericToken(ms)) > Number(normalizePilotNumericToken(mn))) {
           ;[ms, mn] = [mn, ms]
-          console.warn('[sanitizePilotState] mission bbox south/north were swapped (south > north) \u2014 corrected automatically.')
         }
         m.west = mw
         m.east = me
@@ -344,6 +348,12 @@ export function sanitizePilotState(state) {
     } else {
       m.purpose = resolveMissionPurposeForNcei(rawPurpose, absForPurpose)
     }
+    if (isBlank(m.distributionLiability)) {
+      m.distributionLiability = NCEI_DEFAULT_DISTRIBUTION_LIABILITY
+    }
+    if (isBlank(m.otherCiteAs)) {
+      m.otherCiteAs = NCEI_DEFAULT_USE_LIABILITY
+    }
     m.uxsContext = normalizeUxsContext(m.uxsContext)
   }
 
@@ -379,11 +389,9 @@ export function sanitizePilotState(state) {
         let mn = rn
         if (Number(normalizePilotNumericToken(mw)) > Number(normalizePilotNumericToken(me))) {
           ;[mw, me] = [me, mw]
-          console.warn('[sanitizePilotState] spatial bbox west/east were swapped (west > east) — corrected automatically.')
         }
         if (Number(normalizePilotNumericToken(ms)) > Number(normalizePilotNumericToken(mn))) {
           ;[ms, mn] = [mn, ms]
-          console.warn('[sanitizePilotState] spatial bbox south/north were swapped (south > north) — corrected automatically.')
         }
         sp.west = mw
         sp.east = me
@@ -406,9 +414,11 @@ export function sanitizePilotState(state) {
       /19115\s*[-_]?\s*3/.test(metaLow)
       || metaLow.includes('metadata part 3')
       || (metaLow.includes('19115') && /\b3\.0\b/.test(metaLow) && !metaLow.includes('19115-2'))
-      || metaLow.includes('19115-2 imagery')
-      || metaLow.includes('19115-2 geographic')
     ) {
+      d.metadataStandard =
+        'ISO 19115-2 Geographic Information - Metadata - Part 2: Extensions for Imagery and Gridded Data'
+      d.metadataVersion = 'ISO 19115-2:2009(E)'
+    } else if (/^iso\s+19115-2\s+imagery\s+and\s+gridded\s*data$/i.test(metaStd.trim())) {
       d.metadataStandard =
         'ISO 19115-2 Geographic Information - Metadata - Part 2: Extensions for Imagery and Gridded Data'
       d.metadataVersion = 'ISO 19115-2:2009(E)'

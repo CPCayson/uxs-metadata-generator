@@ -39,6 +39,7 @@ import { isoXmlAdapter } from '../core/export/adapters/isoXmlAdapter.js'
 import { getPilotFieldLabelFallback } from '../lib/pilotFieldLabelFallback.js'
 import { emitPilotAuditEvent } from '../lib/pilotAuditEvents.js'
 import { setPilotFieldPath } from '../lib/pilotStateFieldSet.js'
+import { acquisitionInstrumentHasContent } from '../lib/sensorInstrumentDescription.js'
 import MantaMissionCapabilityStrip from '../components/MantaMissionCapabilityStrip.jsx'
 import MissionWizardStepPills from '../components/MissionWizardStepPills.jsx'
 import ImportReviewPanel from '../components/ImportReviewPanel.jsx'
@@ -349,6 +350,20 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     })
   }, [validationPrimed, validationEngine, profile, deferredPilotState])
 
+  const libraryKitContributionSuggested = useMemo(() => {
+    if (!validationPrimed) return false
+    if (!hostBridgeReady) return false
+    if ((deferredPilotState.mode || 'lenient') !== 'strict') return false
+    if (validation.errCount !== 0) return false
+    const plat = deferredPilotState.platform || {}
+    if (!String(plat.platformType || '').trim() || !String(plat.platformId || '').trim() || !String(plat.platformDesc || '').trim()) {
+      return false
+    }
+    const sens = deferredPilotState.sensors || []
+    if (!sens.some((s) => acquisitionInstrumentHasContent(s))) return false
+    return true
+  }, [validationPrimed, hostBridgeReady, deferredPilotState, validation.errCount])
+
   // Split-float: idle validation (cleared / session) → collapse rails so the center form is the focus.
   useEffect(() => {
     if (!splitFloatWorkbench || validationPrimed) return
@@ -477,7 +492,9 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     onRefreshPlatformLibrary: ma.refreshPlatformLibrary,
     onApplyPlatformFromLibrary: ma.applyPlatformFromLibraryKey,
     onSavePlatformToSheets: ma.saveCurrentPlatformToSheets,
+    onSavePlatformKitToLibrary: ma.savePlatformAndSensorsKitToLibrary,
     platformSaveBusy: ma.platformSaveBusy,
+    libraryKitContributionSuggested,
     sensors: pilotState.sensors,
     onSetSensors: (next) => setPilotState((p) => ({ ...p, sensors: next })),
     spatial: pilotState.spatial,
@@ -850,19 +867,20 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
       window.dispatchEvent(new CustomEvent('manta:metadata-import-merged'))
       return
     }
-    const conflicts = changes.filter((c) => c.isConflict).length
+    // Auto-apply: accept all incoming values without showing the review panel.
+    // Imported data always wins — the review step was confusing and redundant.
+    const clean = profile.sanitize(next)
+    syncBaselineAfterExternalMerge(clean)
+    setPilotState(clean)
+    setTouched({})
+    setShowAllErrors(false)
+    const pop = summarizePilotImportPopulation(clean)
+    const w = importWarnings.length ? ` Parser notes: ${importWarnings.join(' · ')}` : ''
     setStatusMessage(
-      conflicts > 0
-        ? `Import parsed (${changes.length} updates, ${conflicts} conflict${conflicts !== 1 ? 's' : ''}). Finish in the Review import overlay — resolve each conflict, then click Apply.`
-        : `Import parsed (${changes.length} update${changes.length !== 1 ? 's' : ''}). Confirm in the Review import overlay, then click Apply.`,
+      `${pop.summary}${w ? `.${w}` : ''}` +
+        ' Review any remaining checks in the Validation panel.',
     )
-    setPendingImport({
-      changes,
-      next,
-      sourceType: next.sourceProvenance?.sourceType ?? 'rawIso',
-      filename: next.sourceProvenance?.originalFilename,
-      importedAt: next.sourceProvenance?.importedAt,
-    })
+    window.dispatchEvent(new CustomEvent('manta:metadata-import-merged'))
   }
 
   return (
@@ -871,6 +889,8 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
         <WizardStartChoiceModal
           profile={profile}
           pilotState={pilotState}
+          hostBridge={hostBridge}
+          hostBridgeReady={hostBridgeReady}
           onStartFresh={() => {
             resetPilotWorkspaceToDefaults({ skipConfirm: true })
             setWizardStartOpen(false)

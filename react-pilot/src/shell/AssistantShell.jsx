@@ -489,7 +489,7 @@ export default function AssistantShell({
   }, [])
 
   // ── Tab ───────────────────────────────────────────────────────────────────
-  const [activeTab, setActiveTab] = useState(() => (layoutVariant === 'split-float' ? 'lens' : 'validate'))
+  const [activeTab, setActiveTab] = useState(() => (layoutVariant === 'split-float' ? 'ask' : 'validate'))
 
   // ── VALIDATE ──────────────────────────────────────────────────────────────
   const [qualityResult,  setQualityResult]  = useState(null)
@@ -509,6 +509,11 @@ export default function AssistantShell({
     setQualityLoading(true)
     try {
       const payload = readPilotSessionPayload()
+      if (!payload?.validationPrimed) {
+        setQualityResult(null)
+        setQualityLoading(false)
+        return
+      }
       const state   = payload?.pilot ?? defaultPilotState()
       const result = validationEngine.run({ profile, state, mode })
       // Detect newly-appeared issues
@@ -794,9 +799,9 @@ export default function AssistantShell({
       const v = sessionStorage.getItem(TOOLS_FAB_SHEET_SS_KEY)
       if (v === '1' || v === 'true') return true
       if (v === '0' || v === 'false') return false
-      return true
+      return false
     } catch {
-      return true
+      return false
     }
   })
   useEffect(() => {

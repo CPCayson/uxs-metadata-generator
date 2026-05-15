@@ -37,7 +37,8 @@ export function createStandaloneHostAdapter() {
       throw new Error('StandaloneHostAdapter: savePlatform — no host connected')
     },
 
-    async listSensors() {
+    async listSensors(platformId) {
+      void platformId
       return { rows: [], unexpectedShape: false }
     },
 
