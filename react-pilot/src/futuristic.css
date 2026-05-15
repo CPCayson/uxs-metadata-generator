@@ -10233,3 +10233,423 @@ fieldset.pilot-fieldset.manta-lens-symbiote-field-active .form-control {
   gap: 0.35rem;
   margin-bottom: 0.45rem;
 }
+
+/* ══════════════════════════════════════════════════════════════════════
+   MANTA LENS LAB — visual parity override (dark mode only)
+   Applies the teal-accent / GitHub-dark / mono-label aesthetic from
+   react-pilot/manta-lens/src/App.tsx without touching any JS logic.
+   ══════════════════════════════════════════════════════════════════════ */
+
+:root[data-theme='dark'] {
+  /* Swap accent from cyan-blue → lab teal */
+  --primary-color:    #2dd4bf;
+  --primary-light:    #5eead4;
+  --nav-active-color: #2dd4bf;
+  --nav-active-bg:    rgba(45, 212, 191, 0.12);
+  --fx-border:        rgba(45, 212, 191, 0.22);
+  --fx-border-soft:   rgba(45, 212, 191, 0.10);
+  /* Code-panel bg (right rail XML area) */
+  --pilot-xml-bg:     #010409;
+}
+
+/* ── Form inputs: lab dark style ─────────────────────────────────────── */
+:root[data-theme='dark'] .form-control,
+:root[data-theme='dark'] .form-select,
+:root[data-theme='dark'] select.form-control {
+  background: #161b22 !important;
+  border-color: #30363d !important;
+  color: #e6edf3 !important;
+  border-radius: 6px;
+}
+:root[data-theme='dark'] .form-control:focus,
+:root[data-theme='dark'] .form-select:focus {
+  border-color: #2dd4bf !important;
+  box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.15) !important;
+  background: #1c2128 !important;
+  outline: none;
+}
+:root[data-theme='dark'] .form-control::placeholder {
+  color: #484f58;
+}
+
+/* ── Panel / card surfaces ──────────────────────────────────────────── */
+:root[data-theme='dark'] #root .card,
+:root[data-theme='dark'] #root .panel {
+  background: rgba(22, 27, 34, 0.97);
+  border-color: rgba(48, 54, 61, 0.9);
+}
+
+/* ── Form labels: all-caps tracking-widest mono style ───────────────── */
+:root[data-theme='dark'] label.form-label,
+:root[data-theme='dark'] .pilot-field-label,
+:root[data-theme='dark'] .mission-fieldset-legend,
+:root[data-theme='dark'] .panel-title {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #6e7681;
+}
+
+/* Active label (field focused) gets teal tint */
+:root[data-theme='dark'] .form-control:focus ~ label,
+:root[data-theme='dark'] label:has(+ .form-control:focus) {
+  color: #2dd4bf;
+}
+
+/* ── Step nav pills: numbered + underline active ─────────────────────── */
+:root[data-theme='dark'] .step-nav .step-nav__item {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #484f58;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  padding-bottom: 0.35rem;
+  transition: color 0.2s, border-color 0.2s;
+}
+:root[data-theme='dark'] .step-nav .step-nav__item.active,
+:root[data-theme='dark'] .step-nav .step-nav__item[aria-current='step'] {
+  color: #2dd4bf;
+  border-bottom-color: #2dd4bf;
+  background: transparent;
+}
+:root[data-theme='dark'] .step-nav .step-nav__item:hover:not(.active) {
+  color: #94a3b8;
+}
+
+/* ── UxS operational context block: teal accent border ──────────────── */
+:root[data-theme='dark'] [id='uxs-context-heading'] ~ * .panel,
+:root[data-theme='dark'] section[aria-labelledby='uxs-context-heading'] {
+  border-color: rgba(45, 212, 191, 0.2) !important;
+  background: rgba(45, 212, 191, 0.04) !important;
+}
+
+/* ── Right rail XML code area ────────────────────────────────────────── */
+:root[data-theme='dark'] .fx-xml-scroll,
+:root[data-theme='dark'] .xml-preview-box--scroll {
+  background: #010409;
+}
+:root[data-theme='dark'] .fx-xml-scroll code,
+:root[data-theme='dark'] .fx-xml-scroll .token-tag,
+:root[data-theme='dark'] .xml-preview-box--scroll {
+  color: rgba(45, 212, 191, 0.8);
+}
+
+/* ── Validation chips: teal success, red error ───────────────────────── */
+:root[data-theme='dark'] .chip-ok,
+:root[data-theme='dark'] .chip.chip-ok {
+  background: rgba(16, 185, 129, 0.12);
+  color: #34d399;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+:root[data-theme='dark'] .chip-err,
+:root[data-theme='dark'] .chip.chip-err {
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.25);
+}
+:root[data-theme='dark'] .chip-warn,
+:root[data-theme='dark'] .chip.chip-warn {
+  background: rgba(245, 158, 11, 0.1);
+  color: #fbbf24;
+  border-color: rgba(245, 158, 11, 0.25);
+}
+
+/* ── Accordion / collapsible section headings ───────────────────────── */
+:root[data-theme='dark'] .accordion-section-heading,
+:root[data-theme='dark'] .pilot-wizard-section__title {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #6e7681;
+  border-bottom: 1px solid #21262d;
+  padding-bottom: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+/* ── Primary button: teal-400 fill ──────────────────────────────────── */
+:root[data-theme='dark'] .btn-primary,
+:root[data-theme='dark'] button[class*='btn-primary'] {
+  background: #2dd4bf !important;
+  border-color: #2dd4bf !important;
+  color: #0d1117 !important;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+:root[data-theme='dark'] .btn-primary:hover {
+  background: #5eead4 !important;
+  border-color: #5eead4 !important;
+}
+
+/* ── Footer mission bar ──────────────────────────────────────────────── */
+:root[data-theme='dark'] .pilot-app-footer.mission-footer {
+  background: #090c10;
+  border-top-color: #21262d;
+}
+:root[data-theme='dark'] .mission-footer__led--ok {
+  background: #2dd4bf;
+  box-shadow: 0 0 6px rgba(45, 212, 191, 0.5);
+}
+
+/* ── Scrollbar: subtle dark ──────────────────────────────────────────── */
+:root[data-theme='dark'] ::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+:root[data-theme='dark'] ::-webkit-scrollbar-track {
+  background: transparent;
+}
+:root[data-theme='dark'] ::-webkit-scrollbar-thumb {
+  background: #30363d;
+  border-radius: 9999px;
+}
+:root[data-theme='dark'] ::-webkit-scrollbar-thumb:hover {
+  background: #484f58;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   COMMAND CENTER — right rail split layout
+   Top: XML preview (flex-1).  Bottom: validation hub (fixed).
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* Right rail card becomes a flex-column so XML + hub stack vertically */
+.cmd-center-rail {
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+}
+
+/* XML preview fills remaining space */
+.cmd-center-rail .workspace-side-tabpanel--xml {
+  flex: 1 1 0 !important;
+  min-height: 0 !important;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Toolbar: "Live ISO XML" label */
+.cmd-center-toolbar .workspace-side-preview-toolbar__title {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #6e7681;
+}
+
+/* ── Validation hub container ──────────────────────────────────────── */
+.cmd-center-hub {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--border-color, #21262d);
+  background: var(--card-bg, rgba(22, 27, 34, 0.97));
+  max-height: 52vh;
+}
+
+/* Header: tier pills + score bar */
+.cmd-center-hub__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.55rem 0.75rem 0.4rem;
+  border-bottom: 1px solid var(--border-color, #21262d);
+}
+
+.cmd-center-hub__pills {
+  display: flex;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.cmd-center-pill {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid;
+}
+.cmd-center-pill--ok   { background: rgba(16,185,129,0.12); color: #34d399; border-color: rgba(16,185,129,0.3); }
+.cmd-center-pill--err  { background: rgba(239,68,68,0.12);  color: #f87171; border-color: rgba(239,68,68,0.3); }
+.cmd-center-pill--warn { background: rgba(245,158,11,0.12); color: #fbbf24; border-color: rgba(245,158,11,0.3); }
+
+.cmd-center-hub__score {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+.cmd-center-score-bar {
+  flex: 1;
+  height: 4px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+.cmd-center-score-bar__fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.4s ease;
+}
+.cmd-center-score-num {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--primary-color, #2dd4bf);
+  flex-shrink: 0;
+}
+
+/* Issue cards list */
+.cmd-center-hub__issues {
+  flex: 1 1 0;
+  overflow-y: auto;
+  padding: 0.4rem 0.5rem;
+  min-height: 0;
+}
+
+.cmd-center-hub__idle,
+.cmd-center-hub__all-clear {
+  font-size: 0.72rem;
+  color: #6e7681;
+  padding: 0.5rem 0.25rem;
+  margin: 0;
+}
+.cmd-center-hub__all-clear { color: #34d399; }
+
+/* Step group */
+.cmd-center-step-group {
+  margin-bottom: 0.4rem;
+}
+.cmd-center-step-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #484f58;
+  padding: 0.2rem 0.25rem 0.15rem;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  margin-bottom: 0.2rem;
+}
+.cmd-center-step-num {
+  font-family: ui-monospace, monospace;
+  color: var(--primary-color, #2dd4bf);
+  opacity: 0.7;
+}
+
+/* Issue card */
+.cmd-center-issue-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 0.3rem 0.4rem;
+  border-radius: 5px;
+  margin-bottom: 3px;
+  border: 1px solid;
+  cursor: default;
+}
+.cmd-center-issue-card--err  { background: rgba(239,68,68,0.06);  border-color: rgba(239,68,68,0.2); }
+.cmd-center-issue-card--warn { background: rgba(245,158,11,0.06); border-color: rgba(245,158,11,0.18); }
+
+.cmd-center-issue-card__icon {
+  font-size: 0.65rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.cmd-center-issue-card--err  .cmd-center-issue-card__icon { color: #f87171; }
+.cmd-center-issue-card--warn .cmd-center-issue-card__icon { color: #fbbf24; }
+
+.cmd-center-issue-card__body {
+  flex: 1;
+  min-width: 0;
+}
+.cmd-center-issue-card__field {
+  font-size: 0.6rem;
+  font-weight: 700;
+  font-family: ui-monospace, monospace;
+  color: #6e7681;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cmd-center-issue-card__msg {
+  font-size: 0.68rem;
+  color: #94a3b8;
+  line-height: 1.3;
+}
+
+.cmd-center-issue-card__jump {
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 4px;
+  color: #6e7681;
+  font-size: 0.7rem;
+  padding: 1px 5px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  align-self: center;
+}
+.cmd-center-issue-card__jump:hover {
+  color: var(--primary-color, #2dd4bf);
+  border-color: var(--primary-color, #2dd4bf);
+}
+
+/* CTA footer */
+.cmd-center-hub__cta {
+  display: flex;
+  gap: 6px;
+  padding: 0.45rem 0.5rem;
+  border-top: 1px solid var(--border-color, #21262d);
+  flex-shrink: 0;
+}
+
+.cmd-center-cta-btn {
+  flex: 1;
+  padding: 0.45rem 0.5rem;
+  border-radius: 6px;
+  border: none;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+}
+.cmd-center-cta-btn--ready {
+  background: var(--primary-color, #2dd4bf);
+  color: #0d1117;
+}
+.cmd-center-cta-btn--ready:hover { opacity: 0.88; transform: scale(1.01); }
+.cmd-center-cta-btn--blocked {
+  background: rgba(255,255,255,0.05);
+  color: #484f58;
+  border: 1px solid rgba(255,255,255,0.08);
+  cursor: default;
+}
+
+.cmd-center-export-btn {
+  padding: 0.45rem 0.6rem;
+  background: none;
+  border: 1px solid var(--border-color, #30363d);
+  border-radius: 6px;
+  color: #6e7681;
+  font-size: 0.68rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s;
+}
+.cmd-center-export-btn:hover:not(:disabled) {
+  color: var(--primary-color, #2dd4bf);
+  border-color: var(--primary-color, #2dd4bf);
+}
+.cmd-center-export-btn:disabled { opacity: 0.35; cursor: not-allowed; }

@@ -277,6 +277,13 @@ export function sanitizePilotState(state) {
   if (!state || typeof state !== 'object') return /** @type {object} */ (state)
   const out = JSON.parse(JSON.stringify(state))
 
+  if (!out.keywords || typeof out.keywords !== 'object' || Array.isArray(out.keywords)) {
+    out.keywords = {}
+  }
+  for (const k of KW_KEYWORD_CHIP_FACETS) {
+    if (!Array.isArray(out.keywords[k])) out.keywords[k] = []
+  }
+
   if (out.mission && typeof out.mission === 'object') {
     const m = out.mission
     for (const k of ['startDate', 'endDate', 'publicationDate', 'metadataRecordDate']) {

@@ -10,7 +10,21 @@ let schemaLoadPromise = /** @type {Promise<{ name: string, path: string, content
 const manifestUrl = () => {
   const base = import.meta.env.BASE_URL || '/'
   const prefix = base.endsWith('/') ? base : `${base}/`
-  return `${prefix}schemas/manifest.json`
+  return new URL('schemas/manifest.json', `${window.location.origin}${prefix}`).href
+}
+
+/**
+ * Resolve a manifest entry path (absolute `/schemas/...` or relative) against the app base.
+ * @param {string} entryPath
+ */
+function resolveSchemaAssetUrl(entryPath) {
+  const raw = String(entryPath || '').trim()
+  if (!raw) return raw
+  if (/^https?:\/\//i.test(raw)) return raw
+  const base = import.meta.env.BASE_URL || '/'
+  const prefix = base.endsWith('/') ? base : `${base}/`
+  const rel = raw.replace(/^\/+/, '')
+  return new URL(rel, `${window.location.origin}${prefix}`).href
 }
 
 /**
@@ -46,7 +60,7 @@ const loadSchemas = async () => {
     const manifest = await res.json()
     const loaded = await Promise.all(
       manifest.map(async (entry) => {
-        const response = await fetch(entry.path)
+        const response = await fetch(resolveSchemaAssetUrl(entry.path))
         if (!response.ok) {
           throw new Error(`Schema fetch failed (${response.status}): ${entry.path}`)
         }
@@ -110,6 +124,7 @@ export function useNoaaValidator() {
 
       const preload = loadedSchemas
         .filter((s) => s.name !== 'schema.xsd')
+        .sort((a, b) => String(a.name).split('/').length - String(b.name).split('/').length)
         .map((s) => ({ fileName: s.name, contents: s.content }))
 
       const result = await validateXmlSafe({

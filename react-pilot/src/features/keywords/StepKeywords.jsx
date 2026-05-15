@@ -28,7 +28,7 @@ const KMS_RESOLVE_MIN_SCORE = 0.72
  *   issues: Array<{ field: string, message: string, severity?: string }>,
  * }} props
  */
-export default function StepKeywords({ mission = {}, keywords, onKeywordsChange, issues }) {
+export default function StepKeywords({ mission = {}, keywords = {}, onKeywordsChange, issues }) {
   const [queries, setQueries] = useState({})
   const [loading, setLoading] = useState({})
   const [results, setResults] = useState({})

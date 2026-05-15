@@ -14,8 +14,6 @@
 import { useCallback, useDeferredValue, useEffect, useLayoutEffect, useMemo, useRef, useState, Suspense } from 'react'
 import { flushSync, createPortal } from 'react-dom'
 import StepNav from '../components/StepNav'
-import ValidationPanel from '../components/ValidationPanel'
-import ReadinessStrip from '../components/ReadinessStrip.jsx'
 import XmlPreviewPanel from '../components/XmlPreviewPanel'
 import XmlToolsBar from '../components/XmlToolsBar'
 import DebugLogPanel from '../components/DebugLogPanel'
@@ -26,17 +24,13 @@ import {
   readInitialValidationPrimed,
 } from '../lib/pilotSessionStorage'
 import { applyPilotAutoFixes } from '../lib/pilotAutoFix.js'
-import { computeReadinessBundles, computeReadinessSnapshot } from '../lib/readinessSummary.js'
-import { computeCertificationBundles } from '../lib/certificationSummary.js'
 import { scrollToField } from '../core/registry/FieldRegistry.js'
-import { pushPilotDebug } from '../lib/pilotDebugLog'
 import { useMetadataEngine } from './context.js'
 import { useCometWorkbenchBridge } from './CometWorkbenchBridge.jsx'
 import { useProfileHostActions } from './hooks/useProfileHostActions.js'
 import { useCometActionsForProfile } from '../features/comet/useCometActionsForProfile.js'
 import CometPushPanel from '../features/comet/CometPushPanel.jsx'
 import { isoXmlAdapter } from '../core/export/adapters/isoXmlAdapter.js'
-import { getPilotFieldLabelFallback } from '../lib/pilotFieldLabelFallback.js'
 import { emitPilotAuditEvent } from '../lib/pilotAuditEvents.js'
 import { setPilotFieldPath } from '../lib/pilotStateFieldSet.js'
 import { acquisitionInstrumentHasContent } from '../lib/sensorInstrumentDescription.js'
@@ -56,15 +50,6 @@ const IDLE_VALIDATION_RESULT = Object.freeze({
   errCount: 0,
   warnCount: 0,
 })
-
-const IDLE_READINESS_SNAPSHOT = Object.freeze({
-  lenient: IDLE_VALIDATION_RESULT,
-  strict: IDLE_VALIDATION_RESULT,
-  catalog: IDLE_VALIDATION_RESULT,
-})
-
-/** Narrow rail column when collapsed — fits drag strip + prominent collapse control */
-const RAIL_COLLAPSED_TRACK_PX = 44
 
 /**
  * @param {{
@@ -140,41 +125,10 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
   const [wizardStartOpen, setWizardStartOpen] = useState(false)
   const [sidePanelTab, setSidePanelTab] = useState('xml')
   const [xmlExpanded, setXmlExpanded] = useState(false)
-  const [leftCollapsed, setLeftCollapsed] = useState(
-    () => assistantLayout === 'split-float' && !readInitialValidationPrimed(),
-  )
-  /** Left rail Validation accordion — open by default */
-  const [validationRailOpen, setValidationRailOpen] = useState(true)
-  const [rightCollapsed, setRightCollapsed] = useState(
-    () => assistantLayout === 'split-float' && !readInitialValidationPrimed(),
-  )
-  const [leftW, setLeftW] = useState(280)
-  const [rightW, setRightW] = useState(360)
   /** Header slot next to XML tools — mission step pills portal target */
   const [missionStepsSlotEl, setMissionStepsSlotEl] = useState(/** @type {HTMLElement | null} */ (null))
 
-  const startRailDrag = useCallback((e, side) => {
-    e.preventDefault()
-    const startX = e.clientX
-    const startW = side === 'left' ? leftW : rightW
-    const setW = side === 'left' ? setLeftW : setRightW
-    document.body.style.userSelect = 'none'
-    function onMove(ev) {
-      const dx = ev.clientX - startX
-      setW(Math.max(180, Math.min(600, startW + (side === 'left' ? dx : -dx))))
-    }
-    function onUp() {
-      window.removeEventListener('pointermove', onMove)
-      window.removeEventListener('pointerup', onUp)
-      document.body.style.userSelect = ''
-    }
-    window.addEventListener('pointermove', onMove)
-    window.addEventListener('pointerup', onUp)
-  }, [leftW, rightW])
-
-  const [statusMessage, setStatusMessage] = useState('Ready')
-  const [loading, setLoading] = useState(false)
-  const [summary, setSummary] = useState({ platforms: 'not checked', templates: 'not checked' })
+  const [, setStatusMessage] = useState('Ready')
 
   /** Raw XML + meta from last XmlToolsBar “Apply” — drives downloadable import report */
   const [importSampleContext, setImportSampleContext] = useState(
@@ -191,7 +145,6 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
   pilotRef.current = pilotState
 
   const hostBridgeReady = hostBridge.isAvailable()
-  const hostRuntimeLabel = hostBridgeReady ? 'Postgres API (HTTP /api/db)' : 'Host bridge not connected'
 
   // Called by profile host actions after any save/load that should reset dirty state.
   const onStateLoaded = useCallback((cleanState) => {
@@ -359,80 +312,6 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     if (!sens.some((s) => acquisitionInstrumentHasContent(s))) return false
     return true
   }, [validationPrimed, hostBridgeReady, deferredPilotState, validation.errCount])
-
-  // Split-float: idle validation (cleared / session) → collapse rails so the center form is the focus.
-  useEffect(() => {
-    if (!splitFloatWorkbench || validationPrimed) return
-    setLeftCollapsed(true)
-    setRightCollapsed(true)
-  }, [splitFloatWorkbench, validationPrimed])
-
-  // Surface blocking issues automatically by expanding the validation rail.
-  useEffect(() => {
-    if (!splitFloatWorkbench) return
-    if (validation.errCount > 0 || validation.warnCount > 0) setLeftCollapsed(false)
-  }, [splitFloatWorkbench, validation.errCount, validation.warnCount])
-
-  // Import / merge completed → show both rails again (preview + checks).
-  useEffect(() => {
-    if (!splitFloatWorkbench) return
-    function onMerged() {
-      setLeftCollapsed(false)
-      setRightCollapsed(false)
-    }
-    window.addEventListener('manta:metadata-import-merged', onMerged)
-    return () => window.removeEventListener('manta:metadata-import-merged', onMerged)
-  }, [splitFloatWorkbench])
-
-  const readinessSnapshot = useMemo(() => {
-    if (!validationPrimed) return IDLE_READINESS_SNAPSHOT
-    return computeReadinessSnapshot(deferredPilotState, validationEngine, profile)
-  }, [validationPrimed, deferredPilotState, validationEngine, profile])
-
-  const readinessBundles = useMemo(() => {
-    if (!validationPrimed) return []
-    return computeReadinessBundles(readinessSnapshot, {
-      preflightSummary: comet.preflightSummary,
-      isDirty,
-    })
-  }, [validationPrimed, readinessSnapshot, comet.preflightSummary, isDirty])
-
-  const certificationXml = useMemo(() => {
-    try {
-      const xml = buildXml(deferredPilotState)
-      return typeof xml === 'string' ? xml : ''
-    } catch {
-      return ''
-    }
-  }, [buildXml, deferredPilotState])
-
-  const certificationBundles = useMemo(() => {
-    if (!validationPrimed) return []
-    return computeCertificationBundles(deferredPilotState, {
-      xml: certificationXml,
-      readinessSnapshot,
-      preflightSummary: comet.preflightSummary,
-      cometUuid,
-      isDirty,
-    })
-  }, [
-    validationPrimed,
-    deferredPilotState,
-    certificationXml,
-    readinessSnapshot,
-    comet.preflightSummary,
-    cometUuid,
-    isDirty,
-  ])
-
-  const readinessAndCertificationBundles = useMemo(
-    () => [...readinessBundles, ...certificationBundles],
-    [readinessBundles, certificationBundles],
-  )
-
-  /** Suppress Draft / ISO-ready / CoMET cert lanes while tuning XML→form import (see .env.example). */
-  const hideReadinessGoalBundles =
-    typeof import.meta !== 'undefined' && import.meta.env?.VITE_HIDE_READINESS_BUNDLES === 'true'
 
   const stepStatuses = useMemo(() => {
     const fromIssues = workflowEngine.stepCompletionFromIssues(validation.issues)
@@ -785,7 +664,6 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
       setPilotState(fresh)
       setValidationPrimed(false)
       setCometUuid('')
-      setSummary({ platforms: 'not checked', templates: 'not checked' })
       writePilotSessionPayloadNow(fresh, { validationPrimed: false })
       setTouched({})
       setShowAllErrors(false)
@@ -802,10 +680,6 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
       setStatusMessage(
         'Workspace cleared — defaults loaded. Validation stays idle until you import XML, apply a template, load a draft, or edit a field.',
       )
-      if (assistantLayout === 'split-float') {
-        setLeftCollapsed(true)
-        setRightCollapsed(true)
-      }
       emitPilotAuditEvent({
         profileId: profile.id,
         action: skipConfirm ? 'wizardStartFresh' : 'clearForm',
@@ -813,32 +687,12 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
       })
       return true
     },
-    [profile, buildXml, onDirtyChange, assistantLayout],
+    [profile, buildXml, onDirtyChange],
   )
 
   const handleClearForm = useCallback(() => {
     resetPilotWorkspaceToDefaults({ skipConfirm: false })
   }, [resetPilotWorkspaceToDefaults])
-
-  async function runServerCheck() {
-    setLoading(true)
-    setStatusMessage('Checking database connection…')
-    try {
-      const [pRes, tRes] = await Promise.all([hostBridge.listPlatforms(), hostBridge.listTemplates()])
-      setSummary({
-        platforms: pRes.unexpectedShape ? 'unknown payload' : `${pRes.rows.length} rows`,
-        templates: tRes.unexpectedShape ? 'unknown payload' : `${tRes.rows.length} rows`,
-      })
-      setStatusMessage('Bridge check succeeded.')
-      pushPilotDebug({ kind: 'bridgeCheck', ok: true, detail: `${pRes.rows?.length ?? 0} platforms / ${tRes.rows?.length ?? 0} templates` })
-    } catch (error) {
-      const msg = error instanceof Error ? error.message : String(error)
-      setStatusMessage(`Bridge check failed: ${msg}`)
-      pushPilotDebug({ kind: 'bridgeCheck', ok: false, detail: msg })
-    } finally {
-      setLoading(false)
-    }
-  }
 
   /**
    * @param {object} next Merged pilot state from XML import
@@ -1022,111 +876,15 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
           />
         )}
 
-        {/* Lens host sits after grid — overlays form + left/right rails (dual surface). */}
+        {/* ── Lab layout: simple flex-row, form left + command-center right ── */}
         <section
-          className="workspace-grid workspace-grid--split"
+          className="lab-cockpit"
           data-quiet-surface={quietSurface ? 'true' : undefined}
-          data-workspace-rails-collapsed={
-            splitFloatWorkbench && leftCollapsed && rightCollapsed ? 'true' : undefined
-          }
-          style={{
-            gridTemplateColumns: `${leftCollapsed ? `${RAIL_COLLAPSED_TRACK_PX}px` : `${leftW}px`} 8px minmax(0, 1fr) 8px ${rightCollapsed ? `${RAIL_COLLAPSED_TRACK_PX}px` : `${rightW}px`}`,
-          }}
         >
-        <aside
-          className={`workspace-side-stack workspace-side-stack--left-rail${leftCollapsed ? ' workspace-side-stack--collapsed' : ''}`}
-          aria-label="Validation and scores"
-        >
-          <div className={`card workspace-side workspace-side--tabbed workspace-side--left-rail-card pilot-rail-curved pilot-rail-curved--left${leftCollapsed ? ' rail-card--hidden' : ''}`}>
-            <details
-              className="workspace-rail-validation-accordion"
-              open={validationRailOpen}
-              onToggle={(e) => setValidationRailOpen(e.currentTarget.open)}
-            >
-              <summary className="workspace-rail-validation-accordion__summary">
-                <span className="workspace-rail-validation-accordion__summary-main">
-                  <h2 className="workspace-rail-validation-head__title">Validation</h2>
-                  <div className="workspace-rail-validation-head__counts">
-                    <span className="chip chip-err">{validation.errCount} error{validation.errCount !== 1 ? 's' : ''}</span>
-                    <span className="chip chip-warn">{validation.warnCount} warning{validation.warnCount !== 1 ? 's' : ''}</span>
-                  </div>
-                </span>
-              </summary>
-              <div className="workspace-rail-validation-accordion__body">
-                {/* Issues first so they sit directly under “Validation” + counts */}
-                <ValidationPanel
-                  hideSurfaceIntro
-                  hideModePills
-                  hideScoreChips
-                  collapseConnectionTools
-                  collapseFieldHints
-                  quietSurface={quietSurface}
-                  railIntroProfileLabel={profile.id === 'mission' ? 'UxS / Mission PED' : ''}
-                  validationIdle={!validationPrimed}
-                  mode={pilotState.mode}
-                  onModeChange={setMode}
-                  score={validation.score}
-                  maxScore={validation.maxScore}
-                  errCount={validation.errCount}
-                  warnCount={validation.warnCount}
-                  issues={validation.issues}
-                  hostBridgeReady={hostBridgeReady}
-                  hostRuntimeLabel={hostRuntimeLabel}
-                  summary={summary}
-                  loading={loading}
-                  onBridgeCheck={runServerCheck}
-                  inlineEverywhere={showAllErrors}
-                  onInlineEverywhereChange={setShowAllErrors}
-                  onServerRulesValidate={cap.serverValidate ? ma.runServerRulesValidation : null}
-                  serverRulesBusy={ma.serverRulesBusy}
-                  serverRulesSummary={ma.serverRulesSummary}
-                  statusMessage={statusMessage}
-                  onIssueNavigate={navigateToPilotField}
-                  pilotState={pilotState}
-                  getFieldLabel={
-                    typeof profile.getFieldLabel === 'function' ? profile.getFieldLabel.bind(profile) : getPilotFieldLabelFallback
-                  }
-                />
-                <ReadinessStrip
-                  hideSectionHead
-                  className="readiness-strip--rail-after-issues"
-                  idleHint={
-                    !validationPrimed
-                      ? 'Readiness scores stay idle until you import XML, apply a sheet template, load a draft, or edit the form.'
-                      : ''
-                  }
-                  snapshot={readinessSnapshot}
-                  bundles={hideReadinessGoalBundles ? [] : readinessAndCertificationBundles}
-                  activeMode={pilotState.mode || 'lenient'}
-                  onSelectMode={(m) => {
-                    setMode(m)
-                    setShowAllErrors(true)
-                  }}
-                />
-              </div>
-            </details>
-          </div>
-        </aside>
-
-        <div
-          className="rail-drag-handle rail-drag-handle--left"
-          onPointerDown={(e) => startRailDrag(e, 'left')}
-        >
-          <button
-            type="button"
-            className="rail-collapse-btn"
-            onClick={() => setLeftCollapsed(c => !c)}
-            title={leftCollapsed ? 'Expand' : 'Collapse'}
-            onPointerDown={(e) => e.stopPropagation()}
-          >
-            {leftCollapsed ? '▶' : '◀'}
-          </button>
-        </div>
-
         <article
           id="pilot-wizard-form-column"
           ref={mainColumnRef}
-          className="card workspace-main pilot-step pilot-step--continuous"
+          className="lab-form-column card workspace-main pilot-step"
           data-active-step={activeStep}
           aria-label="Wizard form — all steps"
         >
@@ -1199,6 +957,7 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
                 data-wizard-step={stepMeta.id}
                 className={`pilot-wizard-section pilot-step--${stepMeta.id}`}
                 aria-labelledby={`pilot-wizard-heading-${stepMeta.id}`}
+                hidden={activeStep !== stepMeta.id}
               >
                 <h2 className="pilot-wizard-section__title" id={`pilot-wizard-heading-${stepMeta.id}`}>
                   {stepMeta.label}
@@ -1223,31 +982,15 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
           />
         </article>
 
-        <div
-          className="rail-drag-handle rail-drag-handle--right"
-          onPointerDown={(e) => startRailDrag(e, 'right')}
-        >
-          <button
-            type="button"
-            className="rail-collapse-btn"
-            onClick={() => setRightCollapsed(c => !c)}
-            title={rightCollapsed ? 'Expand' : 'Collapse'}
-            onPointerDown={(e) => e.stopPropagation()}
-          >
-            {rightCollapsed ? '◀' : '▶'}
-          </button>
-        </div>
-
         <aside
-          className={`workspace-side-stack workspace-side-stack--right-rail${xmlExpanded ? ' workspace-side-stack--xml-full' : ''}${rightCollapsed ? ' workspace-side-stack--collapsed' : ''}`}
+          className="lab-right-panel"
           aria-label="Preview and output"
         >
-          <div
-            className={`card workspace-side workspace-side--tabbed pilot-rail-curved pilot-rail-curved--right${xmlExpanded ? ' workspace-side--xml-full' : ''}${rightCollapsed ? ' rail-card--hidden' : ''}`}
-          >
+          <div className="lab-right-panel__inner cmd-center-rail">
+            {/* ── XML Preview (top, flex-1) ─────────────────────────────── */}
             {!xmlExpanded ? (
-              <div className="workspace-side-preview-toolbar">
-                <span className="workspace-side-preview-toolbar__title">Preview</span>
+              <div className="workspace-side-preview-toolbar cmd-center-toolbar">
+                <span className="workspace-side-preview-toolbar__title">Live ISO XML</span>
                 <ul
                   className="nav nav-tabs metadata-tabs pilot-metadata-tabs workspace-side-tablist workspace-side-tablist--toolbar"
                   role="tablist"
@@ -1319,117 +1062,116 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
                 compactRailHeader={!xmlExpanded}
                 railHideFieldPill={!xmlExpanded}
               />
-              {/* Action footer — always visible in XML tab */}
-              <div style={{
-                display: 'flex', gap: 6, padding: '0.5rem 0.5rem 0.25rem',
-                borderTop: '1px solid var(--border-color, #e2e8f0)',
-                background: 'var(--card-bg, #fff)',
-                flexWrap: 'wrap',
-              }}>
-                <button
-                  type="button"
-                  onClick={comet.pushDraftToComet}
-                  disabled={comet.pushBusy}
-                  style={{
-                    flex: 1, minWidth: 120, padding: '0.35rem 0.7rem',
-                    fontSize: '0.76rem', fontWeight: 700,
-                    background: 'var(--primary-color, #006994)', color: '#fff',
-                    border: 'none', borderRadius: 5, cursor: comet.pushBusy ? 'wait' : 'pointer',
-                    opacity: comet.pushBusy ? 0.6 : 1,
-                  }}
-                >
-                  {comet.pushBusy ? 'Pushing…' : '↑ Push draft to CoMET'}
-                </button>
-                <button
-                  type="button"
-                  onClick={ma.exportBusy ? null : ma.exportGeoJSONFromServer}
-                  disabled={ma.exportBusy || !cap.geoJsonExport}
-                  style={{
-                    padding: '0.35rem 0.7rem',
-                    fontSize: '0.76rem', fontWeight: 700,
-                    background: 'var(--card-bg)', color: 'var(--text-color)',
-                    border: '1px solid var(--border-color)', borderRadius: 5,
-                    cursor: 'pointer', opacity: cap.geoJsonExport ? 1 : 0.4,
-                  }}
-                  title="Export XML"
-                >
-                  ↓ Export XML
-                </button>
-              </div>
             </div>
 
-            {/* Schema info tab */}
-            {!xmlExpanded && (
-              <div
-                id="side-panel-schema"
-                role="tabpanel"
-                aria-labelledby="side-tab-schema"
-                hidden={sidePanelTab !== 'schema'}
-                className="workspace-side-tabpanel workspace-side-tabpanel--schema"
-              >
-                <div style={{ padding: '0.75rem', fontSize: '0.8rem' }}>
-                  <div style={{ fontWeight: 700, marginBottom: 6 }}>Active Schema</div>
-                  <div style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: 6, padding: '0.5rem 0.75rem', marginBottom: 8 }}>
-                    <div style={{ fontWeight: 600 }}>ISO 19115-2:2019</div>
-                    <div style={{ color: 'var(--text-muted)', fontSize: '0.72rem', marginTop: 2 }}>+ NOAA Extensions — gmi:MI_Metadata</div>
-                  </div>
-                  <div style={{ fontWeight: 700, marginBottom: 6 }}>Conformance</div>
-                  <div style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: 6, padding: '0.5rem 0.75rem', marginBottom: 8 }}>
-                    <div style={{ fontWeight: 600, color: 'var(--primary-color)' }}>UxS-Marine-Core</div>
-                    <div style={{ display: 'flex', gap: 4, marginTop: 6 }}>
-                      <div style={{ flex: 1, height: 6, background: 'var(--border-color)', borderRadius: 3 }}>
-                        <div style={{ width: `${Math.round(validation.score ?? 0)}%`, height: '100%', background: 'var(--primary-color)', borderRadius: 3, transition: 'width 0.3s' }} />
+            {/* ── Validation Command Center (bottom, fixed) ─────────────── */}
+            {!xmlExpanded && (() => {
+              const allIssues = validationPrimed ? (validation.issues ?? []) : []
+              const errors   = allIssues.filter((i) => i.severity === 'e')
+              const warnings = allIssues.filter((i) => i.severity === 'w')
+              const score    = validation.score ?? 100
+              const allClear = errors.length === 0
+
+              // Group errors + warnings by wizard step
+              const stepGroups = profile.steps.map((s, idx) => {
+                const stepIssues = allIssues.filter((i) => {
+                  const f = String(i.field || '')
+                  return f.startsWith(s.id + '.') || f === s.id ||
+                    (s.id === 'mission' && (f.startsWith('mission.') || f === 'mission.bbox'))
+                })
+                return { step: s, idx, issues: stepIssues }
+              }).filter((g) => g.issues.length > 0)
+
+              const jumpToIssue = (field) => {
+                const hit = profile.steps.find((s) =>
+                  field.startsWith(s.id + '.') || field === s.id ||
+                  (s.id === 'mission' && (field.startsWith('mission.') || field === 'mission.bbox')),
+                )
+                if (hit) setActiveStep(hit.id)
+                setTimeout(() => scrollToField(field), 80)
+              }
+
+              return (
+                <div className="cmd-center-hub">
+                  {/* Tier pills */}
+                  <div className="cmd-center-hub__header">
+                    <div className="cmd-center-hub__pills">
+                      <span className="cmd-center-pill cmd-center-pill--ok" title="T1: XML well-formed">T1 ✓</span>
+                      <span className={`cmd-center-pill ${allClear ? 'cmd-center-pill--ok' : 'cmd-center-pill--err'}`} title="T2: ISO 19115-2 schema compliance">
+                        T2 {allClear ? '✓' : `${errors.length}✗`}
+                      </span>
+                      <span className={`cmd-center-pill ${warnings.length === 0 ? 'cmd-center-pill--ok' : 'cmd-center-pill--warn'}`} title="T3: NCEI / CoMET rules">
+                        T3 {warnings.length === 0 ? '✓' : `${warnings.length}⚠`}
+                      </span>
+                    </div>
+                    <div className="cmd-center-hub__score">
+                      <div className="cmd-center-score-bar">
+                        <div className="cmd-center-score-bar__fill" style={{ width: `${score}%`, background: score >= 80 ? 'var(--primary-color)' : score >= 50 ? '#f59e0b' : '#ef4444' }} />
                       </div>
-                      <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--primary-color)' }}>{Math.round(validation.score ?? 0)}%</span>
+                      <span className="cmd-center-score-num">{score}%</span>
                     </div>
                   </div>
-                  <div style={{ fontWeight: 700, marginBottom: 6 }}>SWARM rules</div>
-                  <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>
-                    152 compiled rules · {validation.errCount ?? 0} blocking · {validation.warnCount ?? 0} warnings
+
+                  {/* Error + warning cards */}
+                  <div className="cmd-center-hub__issues">
+                    {!validationPrimed ? (
+                      <p className="cmd-center-hub__idle">Validation starts after you import or edit a field.</p>
+                    ) : allClear ? (
+                      <p className="cmd-center-hub__all-clear">✓ All checks pass — ready to publish</p>
+                    ) : (
+                      stepGroups.map(({ step, idx, issues }) => (
+                        <div key={step.id} className="cmd-center-step-group">
+                          <div className="cmd-center-step-label">
+                            <span className="cmd-center-step-num">0{idx + 1}</span>
+                            {step.label.toUpperCase()}
+                          </div>
+                          {issues.map((iss, i) => (
+                            <div
+                              key={`${iss.field}-${i}`}
+                              className={`cmd-center-issue-card ${iss.severity === 'e' ? 'cmd-center-issue-card--err' : 'cmd-center-issue-card--warn'}`}
+                            >
+                              <span className="cmd-center-issue-card__icon" aria-hidden>
+                                {iss.severity === 'e' ? '✗' : '⚠'}
+                              </span>
+                              <div className="cmd-center-issue-card__body">
+                                <div className="cmd-center-issue-card__field">{iss.field}</div>
+                                <div className="cmd-center-issue-card__msg">{iss.message}</div>
+                              </div>
+                              <button
+                                type="button"
+                                className="cmd-center-issue-card__jump"
+                                onClick={() => jumpToIssue(iss.field)}
+                                title="Jump to field"
+                              >→</button>
+                            </div>
+                          ))}
+                        </div>
+                      ))
+                    )}
+                  </div>
+
+                  {/* CTA */}
+                  <div className="cmd-center-hub__cta">
+                    <button
+                      type="button"
+                      className={`cmd-center-cta-btn ${allClear ? 'cmd-center-cta-btn--ready' : 'cmd-center-cta-btn--blocked'}`}
+                      onClick={allClear ? comet.pushDraftToComet : undefined}
+                      disabled={comet.pushBusy}
+                    >
+                      {comet.pushBusy ? 'Pushing…' : allClear ? '↑ Push to CoMET' : `Resolve ${errors.length} error${errors.length !== 1 ? 's' : ''} to publish`}
+                    </button>
+                    <button
+                      type="button"
+                      className="cmd-center-export-btn"
+                      onClick={ma.exportBusy ? undefined : ma.exportGeoJSONFromServer}
+                      disabled={ma.exportBusy || !cap.geoJsonExport}
+                    >
+                      ↓ Export XML
+                    </button>
                   </div>
                 </div>
-              </div>
-            )}
-
-            {!xmlExpanded && showCometPanel ? (
-              <div
-                id="side-panel-comet"
-                role="tabpanel"
-                aria-labelledby="side-tab-comet"
-                hidden={sidePanelTab !== 'comet'}
-                className="workspace-side-tabpanel workspace-side-tabpanel--comet"
-              >
-                <CometPushPanel
-                  cometUuid={cometUuid}
-                  localUuidInput={comet.localUuidInput}
-                  setLocalUuidInput={comet.setLocalUuidInput}
-                  similarUuidCandidates={comet.similarUuidCandidates}
-                  capPull={comet.capPull}
-                  capPreflight={comet.capPreflight}
-                  capPush={comet.capPush}
-                  pullBusy={comet.pullBusy}
-                  pushBusy={comet.pushBusy}
-                  preflightBusy={comet.preflightBusy}
-                  metaserverBusy={comet.metaserverBusy}
-                  preflightSummary={comet.preflightSummary}
-                  metaserverSummary={comet.metaserverSummary}
-                  onPull={comet.pullFromComet}
-                  onPreflight={comet.runPreflightChain}
-                  onMetaserverValidate={comet.runMetaserverValidate}
-                  onPush={comet.pushDraftToComet}
-                  cometUsername={comet.cometUsername}
-                  setCometUsername={comet.setCometUsername}
-                  cometPassword={comet.cometPassword}
-                  setCometPassword={comet.setCometPassword}
-                  authBusy={comet.authBusy}
-                  authStatus={comet.authStatus}
-                  onRefreshAuthStatus={comet.refreshAuthStatus}
-                  onCometLogin={comet.runCometLogin}
-                  onMetaserverLogin={comet.runMetaserverLogin}
-                  onClearAuth={comet.clearAuthSessions}
-                />
-              </div>
-            ) : null}
+              )
+            })()}
           </div>
         </aside>
       </section>

@@ -192,6 +192,13 @@ export function mergeScannerPartialIntoPilotState(basePilotState, partial) {
   const out = clonePilotState(basePilotState)
   if (!partial || typeof partial !== 'object') return out
 
+  if (!out.keywords || typeof out.keywords !== 'object' || Array.isArray(out.keywords)) {
+    out.keywords = {}
+  }
+  for (const k of KEYWORD_FACET_KEYS) {
+    if (!Array.isArray(out.keywords[k])) out.keywords[k] = []
+  }
+
   if (partial.mode) out.mode = partial.mode
 
   if (partial.mission && typeof partial.mission === 'object') {

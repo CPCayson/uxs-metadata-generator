@@ -3507,25 +3507,6 @@ function cleanImportedPlatformKeywordLabels(partial) {
 }
 
 /**
- * Maps ISO `MI_Instrument` / `mac:type` wording to StepSensors `SENSOR_TYPES` dropdown values.
- * @param {string} raw
- * @returns {string}
- */
-function mapMiInstrumentTypeStringToPilotSensorDropdownCategory(raw) {
-  const t = String(raw || '').trim().toLowerCase()
-  if (!t) return ''
-  if (t === 'inertial navigation system') return 'In Situ/Laboratory Instruments'
-  if (t === 'conductivity, temperature, depth sensor') return 'In Situ/Laboratory Instruments'
-  if (t.includes('conductivity') && t.includes('temperature') && t.includes('depth')) {
-    return 'In Situ/Laboratory Instruments'
-  }
-  if (t === 'acoustic doppler current profiler') return 'In Situ/Laboratory Instruments'
-  if (t === 'doppler velocity logger') return 'In Situ/Laboratory Instruments'
-  if (t === 'synthetic aperture sonar') return 'Earth Remote Sensing Instruments'
-  return ''
-}
-
-/**
  * Normalize ISO `MD_ProgressCode` / `mcc:MD_ProgressCode` values to `StepMission` `<option value="…">` tokens.
  * @param {string} raw
  * @returns {string}
@@ -3552,31 +3533,19 @@ function normalizeImportedSensorInstrumentRows(partial) {
   partial.sensors = rows.map((row) => {
     if (!row || typeof row !== 'object') return row
     const r = { .../** @type {Record<string, unknown>} */ (row) }
-    const isoInstrumentType = String(row.type || '').trim()
-    const gcmdCat = mapMiInstrumentTypeStringToPilotSensorDropdownCategory(isoInstrumentType)
-    if (gcmdCat) r.type = gcmdCat
-
-    const typ = gcmdCat ? '' : String(r.type || '').trim()
+    const typ = String(r.type || '').trim()
     let variable = String(r.variable || '').trim()
     const descr = String(r.description || '').trim()
 
-    if (gcmdCat) {
-      if (!variable && isoInstrumentType) r.variable = isoInstrumentType
-      return r
-    }
-
     if (typ) {
-      const blobVar = variable
       r.variable = typ
-      const descParts = [descr].filter(Boolean)
       if (
-        blobVar
-        && blobVar !== typ
-        && (/manufacturer:|model:|s\/n:/i.test(blobVar) || blobVar.length > 100)
+        descr
+        && (/manufacturer:|model:|s\/n:/i.test(descr) || /^manufacturer:/im.test(descr))
+        && !r.description
       ) {
-        descParts.push(blobVar)
+        r.description = descr
       }
-      if (descParts.length) r.description = descParts.join('\n\n')
       return r
     }
     const mLine = descr.match(/^type:\s*([^\n]+)/im) || descr.match(/\ntype:\s*([^\n]+)/im)
