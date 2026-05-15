@@ -117,5 +117,21 @@ export function createHttpHostAdapter() {
     async lensScan(payload) {
       return call('lensScan', [payload])
     },
+
+    async listAssets() {
+      return toListResult(await call('getAssets'))
+    },
+
+    async loadAsset(id) {
+      return call('getAsset', [id])
+    },
+
+    async saveAsset(asset) {
+      return call('saveAsset', [asset])
+    },
+
+    async getAssetSensors(assetId, date) {
+      return toListResult(await call('getAssetSensors', [assetId, date]))
+    },
   }
 }

@@ -52,6 +52,51 @@ function getDb() {
   return neon(process.env.DATABASE_URL)
 }
 
+/** Ensure the assets and deployments tables exist. */
+async function ensureAssetsSchema(sql) {
+  try {
+    await sql`
+      CREATE TABLE IF NOT EXISTS assets (
+        id            TEXT PRIMARY KEY,
+        platform_id   TEXT,
+        serial_number TEXT,
+        name          TEXT,
+        owner_org     TEXT,
+        status        TEXT DEFAULT 'active',
+        notes         TEXT,
+        created_at    TIMESTAMPTZ DEFAULT now()
+      )
+    `
+    await sql`
+      CREATE TABLE IF NOT EXISTS asset_sensor_configs (
+        id               SERIAL PRIMARY KEY,
+        asset_id         TEXT REFERENCES assets(id),
+        sensor_id        TEXT,
+        installed_at     DATE,
+        removed_at       DATE,
+        calibration_date DATE,
+        serial_number    TEXT,
+        firmware         TEXT,
+        notes            TEXT
+      )
+    `
+    await sql`
+      CREATE TABLE IF NOT EXISTS asset_deployments (
+        id          TEXT PRIMARY KEY,
+        asset_id    TEXT REFERENCES assets(id),
+        cruise_id   TEXT,
+        dive_id     TEXT,
+        start_time  TIMESTAMPTZ,
+        end_time    TIMESTAMPTZ,
+        area        TEXT,
+        notes       TEXT
+      )
+    `
+  } catch (err) {
+    console.error('[db] ensureAssetsSchema error:', err.message)
+  }
+}
+
 /** Ensure the sensors table has all expected columns (safe to call on every request). */
 async function ensureSensorsSchema(sql) {
   try {
@@ -299,6 +344,93 @@ async function upsertSensor(sql, raw) {
   `
 }
 
+// ── Assets ─────────────────────────────────────────────────────────────────
+
+async function getAssets(sql) {
+  await ensureAssetsSchema(sql)
+  return await sql`
+    SELECT a.*, p.name AS "platformName", p.type AS "platformType"
+    FROM assets a
+    LEFT JOIN platforms p ON a.platform_id = p.id
+    ORDER BY a.name
+  `
+}
+
+async function getAsset(sql, [id]) {
+  await ensureAssetsSchema(sql)
+  const rows = await sql`
+    SELECT a.*, 
+      (SELECT json_agg(aconf.*) FROM asset_sensor_configs aconf 
+       WHERE aconf.asset_id = a.id 
+       AND (aconf.removed_at IS NULL OR aconf.removed_at > NOW())) as sensor_configs
+    FROM assets a
+    WHERE a.id = ${id}
+  `
+  return rows[0] ?? null
+}
+
+async function saveAsset(sql, [asset]) {
+  await ensureAssetsSchema(sql)
+  const a = typeof asset === 'string' ? JSON.parse(asset) : asset
+  if (!a.id) throw new Error('Asset id is required')
+  
+  await sql`
+    INSERT INTO assets (id, platform_id, serial_number, name, owner_org, status, notes)
+    VALUES (${a.id}, ${a.platform_id || a.platformId}, ${a.serial_number || a.serialNumber}, ${a.name}, ${a.owner_org || a.ownerOrg}, ${a.status || 'active'}, ${a.notes || ''})
+    ON CONFLICT (id) DO UPDATE SET
+      platform_id   = EXCLUDED.platform_id,
+      serial_number = EXCLUDED.serial_number,
+      name          = EXCLUDED.name,
+      owner_org     = EXCLUDED.owner_org,
+      status        = EXCLUDED.status,
+      notes         = EXCLUDED.notes
+  `
+  return getAssets(sql)
+}
+
+async function seedAssets(sql) {
+  await ensureAssetsSchema(sql)
+  
+  // 1. Asset
+  await sql`
+    INSERT INTO assets (id, platform_id, serial_number, name, owner_org, status)
+    VALUES ('remus-620-401', 'remus-620', '401', 'REMUS 620 Unit 401', 'EN2501', 'active')
+    ON CONFLICT (id) DO UPDATE SET 
+      name = EXCLUDED.name,
+      serial_number = EXCLUDED.serial_number
+  `
+
+  // 2. Sensors
+  const configs = [
+    { sensor_id: 'PDVL 300', sn: 'SN-PDVL-401' },
+    { sensor_id: 'PHINS INS', sn: 'SN-PHINS-401' },
+    { sensor_id: 'Kraken SAS', sn: 'SN-SAS-401' }
+  ]
+
+  for (const c of configs) {
+    await sql`
+      INSERT INTO asset_sensor_configs (asset_id, sensor_id, installed_at, serial_number)
+      VALUES ('remus-620-401', ${c.sensor_id}, '2025-01-01', ${c.sn})
+      ON CONFLICT DO NOTHING
+    `
+  }
+  
+  return { ok: true, message: 'Seeded remus-620-401' }
+}
+
+async function getAssetSensors(sql, [assetId, date]) {
+  await ensureAssetsSchema(sql)
+  const d = date || new Date().toISOString().split('T')[0]
+  return await sql`
+    SELECT aconf.*, s.*
+    FROM asset_sensor_configs aconf
+    JOIN sensors s ON s.id = aconf.sensor_id  
+    WHERE aconf.asset_id = ${assetId}
+      AND aconf.installed_at <= ${d}
+      AND (aconf.removed_at IS NULL OR aconf.removed_at > ${d})
+  `
+}
+
 // ── Templates ──────────────────────────────────────────────────────────────
 
 async function getTemplates(sql) {
@@ -415,6 +547,11 @@ const ROUTES = {
   getSensors:       (sql, args) => getSensors(sql, args),
   saveSensor:       (sql, args) => saveSensor(sql, args),
   saveSensorsBatch: (sql, args) => saveSensorsBatch(sql, args),
+  getAssets:        (sql, args) => getAssets(sql),
+  getAsset:         (sql, args) => getAsset(sql, args),
+  saveAsset:        (sql, args) => saveAsset(sql, args),
+  getAssetSensors:  (sql, args) => getAssetSensors(sql, args),
+  seedAssets:       (sql, args) => seedAssets(sql),
   getTemplates:     (sql, args) => getTemplates(sql),
   getTemplate:      (sql, args) => getTemplate(sql, args),
   saveTemplate:     (sql, args) => saveTemplate(sql, args),

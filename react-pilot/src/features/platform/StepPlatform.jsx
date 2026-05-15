@@ -19,6 +19,11 @@ import { useFieldValidation } from '../../components/fields/useFieldValidation'
  *   onSavePlatformKitToLibrary?: () => void | Promise<void>,
  *   platformSaveBusy?: boolean,
  *   libraryKitContributionSuggested?: boolean,
+ *   assetLibraryRows?: Array<{ key: string, row: Record<string, unknown> }>,
+ *   assetLibraryLoading?: boolean,
+ *   assetLibraryError?: string,
+ *   onRefreshAssetLibrary?: () => void,
+ *   onApplyAssetFromLibrary?: (id: string) => void,
  * }} props
  */
 export default function StepPlatform({
@@ -38,8 +43,14 @@ export default function StepPlatform({
   onSavePlatformKitToLibrary,
   platformSaveBusy = false,
   libraryKitContributionSuggested = false,
+  assetLibraryRows = [],
+  assetLibraryLoading = false,
+  assetLibraryError = '',
+  onRefreshAssetLibrary,
+  onApplyAssetFromLibrary,
 }) {
   const [selectedPlatformKey, setSelectedPlatformKey] = useState('')
+  const [selectedAssetId, setSelectedAssetId] = useState('')
 
   const { show, invalid } = useFieldValidation({ issues, touched, showAllErrors })
 
@@ -49,6 +60,52 @@ export default function StepPlatform({
         <strong>Platform identity and specs</strong> — type, ID, description, physical and operational attributes. These fields feed{' '}
         <strong>GCMD platform keywords</strong> (Keywords step) and acquisition XML.
       </p>
+
+      <section className="panel asset-library-panel">
+        <h3 className="panel-title">Asset library (Instance tracking)</h3>
+        <p className="card-intro asset-library-intro">
+          Select a specific vehicle instance (by Serial Number) to load its persistent identity and 
+          current sensor configuration.
+        </p>
+        <div className="platform-library-row">
+          <select
+            className="form-control form-select"
+            value={selectedAssetId}
+            disabled={!hostBridgeReady || assetLibraryLoading}
+            onChange={(e) => setSelectedAssetId(e.target.value)}
+          >
+            <option value="">Select a specific asset…</option>
+            {assetLibraryRows.map(({ key, row }) => {
+              const id = String(row.id || '').trim()
+              const name = String(row.name || '').trim()
+              const sn = String(row.serial_number || '').trim()
+              const label = `${name} (S/N: ${sn})`
+              return (
+                <option key={key} value={id}>
+                  {label}
+                </option>
+              )
+            })}
+          </select>
+          <button
+            type="button"
+            className="button button-secondary button-tiny"
+            disabled={!hostBridgeReady || assetLibraryLoading}
+            onClick={() => onRefreshAssetLibrary?.()}
+          >
+            {assetLibraryLoading ? 'Loading…' : 'Refresh'}
+          </button>
+          <button
+            type="button"
+            className="button button-tiny"
+            disabled={!hostBridgeReady || assetLibraryLoading || !selectedAssetId}
+            onClick={() => onApplyAssetFromLibrary?.(selectedAssetId)}
+          >
+            Apply selected asset
+          </button>
+        </div>
+        {assetLibraryError ? <p className="field-error">{assetLibraryError}</p> : null}
+      </section>
 
       <section className="panel platform-library-panel">
         <h3 className="panel-title">Platform library</h3>

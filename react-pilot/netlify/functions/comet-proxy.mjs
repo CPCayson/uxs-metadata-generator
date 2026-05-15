@@ -178,7 +178,7 @@ export default async (req) => {
       try { bodyJson = JSON.parse(rawBody) } catch { /* not JSON */ }
     }
 
-    const action   = bodyJson.action   || queryAction
+    let action     = bodyJson.action   || queryAction
     const uuid     = bodyJson.uuid     || queryUuid
     const filename = bodyJson.filename || queryFile || 'manta-lens-preview.xml'
     const xmlBody  = bodyJson.xml      || rawBody
