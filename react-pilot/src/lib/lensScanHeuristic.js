@@ -31,6 +31,7 @@ const STOPWORDS = new Set([
   'ground',
   'have',
   'into',
+  'kraken',
   'mapping',
   'mission',
   'ncei',

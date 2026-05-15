@@ -3039,6 +3039,10 @@ const NOAA_METADATA_ACRONYM_GLOSSES = /** @type {const} */ ({
   EHIS: 'NOAA environmental and health information systems (EHIS)',
   UCSD: 'University of California San Diego',
   USGS: 'U.S. Geological Survey',
+  KRAKEN: 'Kraken Robotics Acoustic Synthetic Aperture Sonar',
+  USM: 'University of Southern Mississippi',
+  UUV: 'Uncrewed Underwater Vehicle',
+  MGM: 'Mapping, Ground truthing and Modeling',
 })
 
 /**
@@ -3089,21 +3093,17 @@ function inferPurposeFromAbstractOpening(abstract) {
  * @returns {string}
  */
 function appendNoaaMetadataAcronymGlosses(abstract) {
-  const s = String(abstract || '').trim()
+  let s = String(abstract || '').trim()
   if (!s) return s
   const tokens = Object.keys(NOAA_METADATA_ACRONYM_GLOSSES).sort((a, b) => b.length - a.length)
-  /** @type {string[]} */
-  const glossParts = []
   for (const token of tokens) {
     const expansion = NOAA_METADATA_ACRONYM_GLOSSES[/** @type {keyof typeof NOAA_METADATA_ACRONYM_GLOSSES} */ (token)]
-    const re = new RegExp(`\\b${token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`)
-    if (!re.test(s)) continue
+    const escaped = token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    if (!new RegExp(`\\b${escaped}\\b`).test(s)) continue
     if (isAcronymExplainedInAbstractText(s, token)) continue
-    glossParts.push(`${token}: ${expansion}`)
+    s = s.replace(new RegExp(`\\b${escaped}\\b`), `${token} (${expansion})`)
   }
-  if (!glossParts.length) return s
-  const tail = glossParts.map((g) => `(${g})`).join(' ')
-  return `${s} ${tail}`
+  return s
 }
 
 /**
@@ -3475,6 +3475,8 @@ function coerceMissionLicensePresetFromCustomWhenNoUrl(partial) {
 function cleanSinglePlatformKeywordLabel(label, plat) {
   let lab = String(label || '').trim()
   if (!lab) return lab
+  const mPlatBy = lab.match(/^platform:\s*(.+?)\s+by\b/i)
+  if (mPlatBy && mPlatBy[1].trim()) return mPlatBy[1].trim()
   if (!/^platform:/i.test(lab) && !lab.includes('Model:')) return lab
   const modelMatch = lab.match(/model:\s*([^;\n]+)/i)
   if (modelMatch) return modelMatch[1].trim()
@@ -3505,6 +3507,42 @@ function cleanImportedPlatformKeywordLabels(partial) {
 }
 
 /**
+ * Maps ISO `MI_Instrument` / `mac:type` wording to StepSensors `SENSOR_TYPES` dropdown values.
+ * @param {string} raw
+ * @returns {string}
+ */
+function mapMiInstrumentTypeStringToPilotSensorDropdownCategory(raw) {
+  const t = String(raw || '').trim().toLowerCase()
+  if (!t) return ''
+  if (t === 'inertial navigation system') return 'In Situ/Laboratory Instruments'
+  if (t === 'conductivity, temperature, depth sensor') return 'In Situ/Laboratory Instruments'
+  if (t.includes('conductivity') && t.includes('temperature') && t.includes('depth')) {
+    return 'In Situ/Laboratory Instruments'
+  }
+  if (t === 'acoustic doppler current profiler') return 'In Situ/Laboratory Instruments'
+  if (t === 'doppler velocity logger') return 'In Situ/Laboratory Instruments'
+  if (t === 'synthetic aperture sonar') return 'Earth Remote Sensing Instruments'
+  return ''
+}
+
+/**
+ * Normalize ISO `MD_ProgressCode` / `mcc:MD_ProgressCode` values to `StepMission` `<option value="…">` tokens.
+ * @param {string} raw
+ * @returns {string}
+ */
+function normalizeIso19115ProgressCodeForMission(raw) {
+  const s = String(raw || '').trim()
+  if (!s) return ''
+  const k = s.replace(/\s+/g, '').replace(/_/g, '').toLowerCase()
+  if (k === 'ongoing') return 'onGoing'
+  if (k === 'historicalarchive') return 'historicalArchive'
+  if (k === 'underdevelopment') return 'underDevelopment'
+  if (k === 'completed' || k === 'planned' || k === 'obsolete' || k === 'required') return k
+  if (/^(completed|historicalArchive|onGoing|planned|underDevelopment|obsolete|required)$/.test(s)) return s
+  return s
+}
+
+/**
  * Normalize acquisition rows so `variable` (observed variable) is instrument type, not manufacturer prose.
  * @param {Record<string, unknown>} partial
  */
@@ -3514,9 +3552,19 @@ function normalizeImportedSensorInstrumentRows(partial) {
   partial.sensors = rows.map((row) => {
     if (!row || typeof row !== 'object') return row
     const r = { .../** @type {Record<string, unknown>} */ (row) }
-    const typ = String(r.type || '').trim()
+    const isoInstrumentType = String(row.type || '').trim()
+    const gcmdCat = mapMiInstrumentTypeStringToPilotSensorDropdownCategory(isoInstrumentType)
+    if (gcmdCat) r.type = gcmdCat
+
+    const typ = gcmdCat ? '' : String(r.type || '').trim()
     let variable = String(r.variable || '').trim()
     const descr = String(r.description || '').trim()
+
+    if (gcmdCat) {
+      if (!variable && isoInstrumentType) r.variable = isoInstrumentType
+      return r
+    }
+
     if (typ) {
       const blobVar = variable
       r.variable = typ
@@ -4942,6 +4990,8 @@ function parseAcquisition3(root) {
     if (pid) platformOut.platformId = pid
     const desc = gcs3(cn3(miPlat, NS3.mac, 'description'))
     if (desc) platformOut.platformDesc = desc
+    const macName = gcs3(cn3(miPlat, NS3.mac, 'name'))
+    if (String(macName || '').trim()) platformOut.platformName = String(macName).trim()
     const sponsor = cn3(miPlat, NS3.mac, 'sponsor')
     const resp = sponsor ? cn3(sponsor, NS3.cit, 'CI_Responsibility') : null
     if (resp) {
@@ -4960,6 +5010,18 @@ function parseAcquisition3(root) {
     else if (xlinkTitles[0]) {
       platformOut.platformId = xlinkTitles[0].replace(/[^\w\s-]+/g, '').replace(/\s+/g, '_').slice(0, 128)
     }
+  }
+  if (!String(platformOut.platformName || '').trim()) {
+    const d0 = String(platformOut.platformDesc || '').trim()
+    const mBy = d0.match(/platform:\s*(.+?)\s+by\b/i)
+    if (mBy) platformOut.platformName = mBy[1].trim()
+    else {
+      const mModel = d0.match(/\bmodel:\s*([^;\n|]+)/i)
+      if (mModel) platformOut.platformName = mModel[1].trim()
+    }
+  }
+  if (!String(platformOut.platformName || '').trim() && String(platformOut.platformId || '').trim()) {
+    platformOut.platformName = String(platformOut.platformId).trim()
   }
 
   /**
@@ -5153,7 +5215,7 @@ function extractFrom19115_3(root, raw, warnings) {
     metadataRecordDate: metadataRecordDate || undefined,
     language,
     characterSet,
-    status,
+    status: normalizeIso19115ProgressCodeForMission(status),
     ...(scopeCode ? { scopeCode } : {}),
     doi: ids.doi,
     accession: ids.accession,
@@ -5300,6 +5362,7 @@ function extractFrom19115_3(root, raw, warnings) {
   deepStripUxTemplatePlaceholders(partial)
   enrichNavyUxPlaceholderImport(partial, raw, warnings)
   applyIsoImportHeuristics(partial, warnings)
+  forceDistributionMetadataStandard19115_2(partial)
 
   return { ok: true, partial, warnings }
 }
@@ -5410,7 +5473,7 @@ export function importPilotPartialStateFromXml(xmlString) {
     temporalExtentIntervalValue: ext.temporalExtentIntervalValue || undefined,
     language,
     characterSet,
-    status,
+    status: normalizeIso19115ProgressCodeForMission(status),
     ...(scopeFromRoot ? { scopeCode: scopeFromRoot } : {}),
     doi: ids.doi,
     accession: ids.accession,

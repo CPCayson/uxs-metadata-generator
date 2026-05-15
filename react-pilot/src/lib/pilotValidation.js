@@ -564,8 +564,12 @@ function abstractMentionsPlatformOrSensor(lowerAbstract, rawAbstract, contextTok
  * @returns {boolean}
  */
 export function isAcronymExplainedInAbstractText(abstract, token) {
+  const s = String(abstract || '')
   const escaped = String(token).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-  return new RegExp(`\\([^)]*\\b${escaped}\\b[^)]*\\)`).test(String(abstract || ''))
+  if (new RegExp(`\\([^)]*\\b${escaped}\\b[^)]*\\)`).test(s)) return true
+  // First-use gloss immediately after token: `KRAKEN (Kraken Robotics …)`
+  if (new RegExp(`\\b${escaped}\\s*\\([^)]+\\)`).test(s)) return true
+  return false
 }
 
 /**
