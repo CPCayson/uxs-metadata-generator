@@ -3621,6 +3621,40 @@ function finalizeImportPartialStateFromXml(partial, warnings) {
  * @param {Record<string, unknown>} partial
  * @param {string[]} [warnings]
  */
+/**
+ * Auto-inject ROR IDs for known NOAA/Navy organizations during import.
+ * @param {object} partial
+ */
+function hydrateRorFromOrganisationName(partial) {
+  if (!partial.mission || typeof partial.mission !== 'object') return
+  const mission = /** @type {Record<string, unknown>} */ (partial.mission)
+  const org = String(mission.org || '').trim()
+  
+  // If ror is already present (as an object or string), skip.
+  if (!org || mission.ror) return
+
+  const ROR_MAP = {
+    'National Centers for Environmental Information': 'https://ror.org/033thwp43',
+    'NOAA National Centers for Environmental Information': 'https://ror.org/033thwp43',
+    'NOAA/NESDIS/NCEI': 'https://ror.org/033thwp43',
+    'Naval Oceanographic Office': 'https://ror.org/05vsz0c21',
+    'NAVOCEANO': 'https://ror.org/05vsz0c21',
+    'U.S. Naval Research Laboratory': 'https://ror.org/01bj9p284',
+    'Naval Research Laboratory': 'https://ror.org/01bj9p284',
+    'NRL': 'https://ror.org/01bj9p284',
+    'National Oceanic and Atmospheric Administration': 'https://ror.org/02vct7r21',
+    'NOAA': 'https://ror.org/02vct7r21'
+  }
+
+  const lowOrg = org.toLowerCase()
+  for (const [name, id] of Object.entries(ROR_MAP)) {
+    if (lowOrg.includes(name.toLowerCase())) {
+      mission.ror = { id, displayName: name }
+      return
+    }
+  }
+}
+
 function applyIsoImportHeuristics(partial, warnings) {
   if (!partial || typeof partial !== 'object') return
   normalizeImportedSensorInstrumentRows(partial)
@@ -3634,6 +3668,7 @@ function applyIsoImportHeuristics(partial, warnings) {
   enrichMissionDatesFromCitationWhenTemporalSparse(partial)
   enrichMissionEmailFromNceiContextWhenMissing(partial)
   hydrateGcmdKeywordChipUuidsFromKnownLabels(partial)
+  hydrateRorFromOrganisationName(partial)
   finalizeImportPartialStateFromXml(partial, warnings)
 }
 

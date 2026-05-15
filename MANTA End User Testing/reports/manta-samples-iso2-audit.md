@@ -1,6 +1,6 @@
 # MANTA samples — import audit & ISO 19115-2 preview alignment
 
-Generated: 2026-05-15T10:55:38.040Z
+Generated: 2026-05-15T15:10:57.655Z
 Samples: `MANTA End User Testing/samples` (repo-relative)
 
 For each file: **source shape** (root XML), **import/merge** pipeline, **validation** counts after auto-fix (lenient / strict / **catalog**), **ISO-19115-2 preview sanity**, **preview→import round-trip** (`buildXmlPreview` output fed back through `importPilotPartialStateFromXml`), and **xmllint --noout** when installed.
@@ -13,20 +13,20 @@ Empty **ISO-2 preview fails** means Manta’s emitted preview matches that struc
 
 | File | Source XML shape | Import ok | Merge ok | Lenient E/W | Strict E/W | Catalog E/W | RT | xmllint | ISO-2 preview fails |
 |------|------------------|-----------|----------|-------------|------------|-------------|----|---------|---------------------|
-| 0299833.xml | ISO 19115-2 style (gmi:MI_Metadata) | yes | yes | 0/3 | 2/2 | 3/2 | yes | ok | — |
-| AFSC_GA13_Raw_Data.xml | ISO 19115-2 style (gmi:MI_Metadata) | yes | yes | 0/7 | 2/6 | 4/6 | yes | ok | — |
-| C01531.xml | ISO 19115-2 style (gmi:MI_Metadata) | yes | yes | 0/18 | 2/17 | 5/17 | yes | ok | — |
-| C01678.xml | ISO 19115-2 style (gmi:MI_Metadata) | yes | yes | 0/14 | 1/13 | 4/13 | yes | ok | — |
-| EX1904_collection.xml | ISO 19115-2 style (gmi:MI_Metadata) | yes | yes | 0/77 | 2/76 | 6/76 | yes | ok | — |
+| 0299833.xml | ISO 19115-2 style (gmi:MI_Metadata) | yes | yes | 0/2 | 1/2 | 2/2 | yes | ok | — |
+| AFSC_GA13_Raw_Data.xml | ISO 19115-2 style (gmi:MI_Metadata) | yes | yes | 0/6 | 1/6 | 3/6 | yes | ok | — |
+| C01531.xml | ISO 19115-2 style (gmi:MI_Metadata) | yes | yes | 0/17 | 1/17 | 4/17 | yes | ok | — |
+| C01678.xml | ISO 19115-2 style (gmi:MI_Metadata) | yes | yes | 0/13 | 0/13 | 3/13 | yes | ok | — |
+| EX1904_collection.xml | ISO 19115-2 style (gmi:MI_Metadata) | yes | yes | 0/76 | 1/76 | 5/76 | yes | ok | — |
 | EX2306_COLLECTION.xml | ISO 19115-2 style (gmi:MI_Metadata) | yes | yes | 0/52 | 1/52 | 5/52 | yes | ok | — |
-| ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml | ISO 19115-3 (mdb / -3) | yes | yes | 0/1 | 3/0 | 7/0 | yes | ok | — |
-| ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml | ISO 19115-3 (mdb / -3) | yes | yes | 0/1 | 3/0 | 7/0 | yes | ok | — |
+| ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml | ISO 19115-3 (mdb / -3) | yes | yes | 0/0 | 2/0 | 6/0 | yes | ok | — |
+| ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml | ISO 19115-3 (mdb / -3) | yes | yes | 0/0 | 2/0 | 6/0 | yes | ok | — |
 | LISTEN_GoMex_Raw_Audio.xml | ISO 19115-2 style (gmi:MI_Metadata) | yes | yes | 0/7 | 1/7 | 5/7 | yes | ok | — |
 | NCRMP-Benthic-FG.xml | ISO 19115-2 style (gmi:MI_Metadata) | yes | yes | 0/69 | 0/69 | 3/69 | yes | ok | — |
 | NCRMP-Socio-Guam.xml | ISO 19115-2 style (gmi:MI_Metadata) | yes | yes | 0/27 | 0/27 | 3/27 | yes | ok | — |
-| NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml | ISO 19115-3 (mdb / -3) | yes | yes | 0/3 | 2/2 | 6/2 | yes | ok | — |
-| NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml | ISO 19115-3 (mdb / -3) | yes | yes | 0/3 | 2/2 | 6/2 | yes | ok | — |
-| NRS_Raw_Data.xml | ISO 19115-2 style (gmi:MI_Metadata) | yes | yes | 0/9 | 1/8 | 3/8 | yes | ok | — |
+| NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml | ISO 19115-3 (mdb / -3) | yes | yes | 0/2 | 1/2 | 5/2 | yes | ok | — |
+| NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml | ISO 19115-3 (mdb / -3) | yes | yes | 0/2 | 1/2 | 5/2 | yes | ok | — |
+| NRS_Raw_Data.xml | ISO 19115-2 style (gmi:MI_Metadata) | yes | yes | 0/8 | 0/8 | 2/8 | yes | ok | — |
 | SAMPLE_Populated.xml | ISO 19115-2 style (gmi:MI_Metadata) | yes | yes | 0/11 | 0/11 | 0/11 | yes | ok | — |
 | gov.noaa.nmfs.inport.52208.xml | ISO 19115-2 style (gmi:MI_Metadata) | yes | yes | 0/21 | 2/20 | 5/20 | yes | ok | — |
 | gov.noaa.nmfs.inport.5619.xml | ISO 19115-2 style (gmi:MI_Metadata) | yes | yes | 0/16 | 2/15 | 6/15 | yes | ok | — |
@@ -38,20 +38,20 @@ Empty **ISO-2 preview fails** means Manta’s emitted preview matches that struc
 
 | File | By step (errors/warnings) |
 |------|---------------------------|
-| 0299833.xml | mission:0e/2w · keywords:0e/1w |
-| AFSC_GA13_Raw_Data.xml | mission:0e/1w · keywords:0e/6w |
-| C01531.xml | mission:0e/2w · keywords:0e/16w |
-| C01678.xml | mission:0e/2w · keywords:0e/12w |
-| EX1904_collection.xml | mission:0e/1w · keywords:0e/76w |
+| 0299833.xml | mission:0e/1w · keywords:0e/1w |
+| AFSC_GA13_Raw_Data.xml | keywords:0e/6w |
+| C01531.xml | mission:0e/1w · keywords:0e/16w |
+| C01678.xml | mission:0e/1w · keywords:0e/12w |
+| EX1904_collection.xml | keywords:0e/76w |
 | EX2306_COLLECTION.xml | keywords:0e/52w |
-| ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml | mission:0e/1w |
-| ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml | mission:0e/1w |
+| ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml | — |
+| ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml | — |
 | LISTEN_GoMex_Raw_Audio.xml | mission:0e/1w · keywords:0e/6w |
 | NCRMP-Benthic-FG.xml | mission:0e/1w · keywords:0e/68w |
 | NCRMP-Socio-Guam.xml | keywords:0e/27w |
-| NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml | mission:0e/2w · keywords:0e/1w |
-| NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml | mission:0e/2w · keywords:0e/1w |
-| NRS_Raw_Data.xml | mission:0e/1w · keywords:0e/8w |
+| NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml | mission:0e/1w · keywords:0e/1w |
+| NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml | mission:0e/1w · keywords:0e/1w |
+| NRS_Raw_Data.xml | keywords:0e/8w |
 | SAMPLE_Populated.xml | mission:0e/1w · keywords:0e/10w |
 | gov.noaa.nmfs.inport.52208.xml | mission:0e/2w · keywords:0e/19w |
 | gov.noaa.nmfs.inport.5619.xml | mission:0e/2w · keywords:0e/14w |
@@ -63,20 +63,20 @@ Empty **ISO-2 preview fails** means Manta’s emitted preview matches that struc
 
 | File | By step (errors/warnings) |
 |------|---------------------------|
-| 0299833.xml | mission:2e/1w · keywords:0e/1w |
-| AFSC_GA13_Raw_Data.xml | mission:2e/0w · keywords:0e/6w |
-| C01531.xml | mission:2e/1w · keywords:0e/16w |
-| C01678.xml | mission:1e/1w · keywords:0e/12w |
-| EX1904_collection.xml | mission:2e/0w · keywords:0e/76w |
+| 0299833.xml | mission:1e/1w · keywords:0e/1w |
+| AFSC_GA13_Raw_Data.xml | mission:1e/0w · keywords:0e/6w |
+| C01531.xml | mission:1e/1w · keywords:0e/16w |
+| C01678.xml | mission:0e/1w · keywords:0e/12w |
+| EX1904_collection.xml | mission:1e/0w · keywords:0e/76w |
 | EX2306_COLLECTION.xml | mission:1e/0w · keywords:0e/52w |
-| ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml | mission:3e/0w |
-| ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml | mission:3e/0w |
+| ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250723T0032Z.xml | mission:2e/0w |
+| ISO3_EN2501_REMUS620_401_KRAKEN_SAS_20250727T0247Z.xml | mission:2e/0w |
 | LISTEN_GoMex_Raw_Audio.xml | mission:1e/1w · keywords:0e/6w |
 | NCRMP-Benthic-FG.xml | mission:0e/1w · keywords:0e/68w |
 | NCRMP-Socio-Guam.xml | keywords:0e/27w |
-| NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml | mission:2e/1w · keywords:0e/1w |
-| NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml | mission:2e/1w · keywords:0e/1w |
-| NRS_Raw_Data.xml | mission:1e/0w · keywords:0e/8w |
+| NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV01.xml | mission:1e/1w · keywords:0e/1w |
+| NOAA_MDBC_UxSAcquisition_Metadata_PS2418_AUV03.xml | mission:1e/1w · keywords:0e/1w |
+| NRS_Raw_Data.xml | keywords:0e/8w |
 | SAMPLE_Populated.xml | mission:0e/1w · keywords:0e/10w |
 | gov.noaa.nmfs.inport.52208.xml | mission:2e/1w · keywords:0e/19w |
 | gov.noaa.nmfs.inport.5619.xml | mission:2e/1w · keywords:0e/14w |

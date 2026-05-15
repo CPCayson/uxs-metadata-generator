@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-15T12:11:45.862Z",
+  "generatedAt": "2026-05-15T12:29:49.404Z",
   "corpus": "manta-eut-samples",
   "sampleDir": "MANTA End User Testing/samples",
   "fileCount": 20,
@@ -54,7 +54,7 @@
           }
         },
         "topLenientErrors": [],
-        "previewLen": 37100,
+        "previewLen": 37086,
         "iso2PreviewFailCount": 0,
         "iso2PreviewFails": []
       },
@@ -167,7 +167,7 @@
           }
         },
         "topLenientErrors": [],
-        "previewLen": 33116,
+        "previewLen": 33102,
         "iso2PreviewFailCount": 0,
         "iso2PreviewFails": []
       },
@@ -280,7 +280,7 @@
           }
         },
         "topLenientErrors": [],
-        "previewLen": 33899,
+        "previewLen": 33896,
         "iso2PreviewFailCount": 0,
         "iso2PreviewFails": []
       },
@@ -393,7 +393,7 @@
           }
         },
         "topLenientErrors": [],
-        "previewLen": 34563,
+        "previewLen": 34571,
         "iso2PreviewFailCount": 0,
         "iso2PreviewFails": []
       },
@@ -512,7 +512,7 @@
           }
         },
         "topLenientErrors": [],
-        "previewLen": 32813,
+        "previewLen": 32810,
         "iso2PreviewFailCount": 0,
         "iso2PreviewFails": []
       },
@@ -621,7 +621,7 @@
           }
         },
         "topLenientErrors": [],
-        "previewLen": 98844,
+        "previewLen": 98841,
         "iso2PreviewFailCount": 0,
         "iso2PreviewFails": []
       },
@@ -742,7 +742,7 @@
           }
         },
         "topLenientErrors": [],
-        "previewLen": 28599,
+        "previewLen": 28585,
         "iso2PreviewFailCount": 0,
         "iso2PreviewFails": []
       },
@@ -866,7 +866,7 @@
           }
         },
         "topLenientErrors": [],
-        "previewLen": 28503,
+        "previewLen": 28489,
         "iso2PreviewFailCount": 0,
         "iso2PreviewFails": []
       },
@@ -994,7 +994,7 @@
           }
         },
         "topLenientErrors": [],
-        "previewLen": 32527,
+        "previewLen": 32513,
         "iso2PreviewFailCount": 0,
         "iso2PreviewFails": []
       },
@@ -1107,7 +1107,7 @@
           }
         },
         "topLenientErrors": [],
-        "previewLen": 49705,
+        "previewLen": 49702,
         "iso2PreviewFailCount": 0,
         "iso2PreviewFails": []
       },
@@ -1222,7 +1222,7 @@
           }
         },
         "topLenientErrors": [],
-        "previewLen": 36314,
+        "previewLen": 36311,
         "iso2PreviewFailCount": 0,
         "iso2PreviewFails": []
       },
@@ -1335,7 +1335,7 @@
           }
         },
         "topLenientErrors": [],
-        "previewLen": 41139,
+        "previewLen": 41136,
         "iso2PreviewFailCount": 0,
         "iso2PreviewFails": []
       },
@@ -1463,7 +1463,7 @@
           }
         },
         "topLenientErrors": [],
-        "previewLen": 41139,
+        "previewLen": 41136,
         "iso2PreviewFailCount": 0,
         "iso2PreviewFails": []
       },
@@ -1591,7 +1591,7 @@
           }
         },
         "topLenientErrors": [],
-        "previewLen": 32241,
+        "previewLen": 32238,
         "iso2PreviewFailCount": 0,
         "iso2PreviewFails": []
       },
@@ -1706,7 +1706,7 @@
           }
         },
         "topLenientErrors": [],
-        "previewLen": 34166,
+        "previewLen": 34163,
         "iso2PreviewFailCount": 0,
         "iso2PreviewFails": []
       },
@@ -1831,7 +1831,7 @@
           }
         },
         "topLenientErrors": [],
-        "previewLen": 26059,
+        "previewLen": 26045,
         "iso2PreviewFailCount": 0,
         "iso2PreviewFails": []
       },
@@ -1944,7 +1944,7 @@
           }
         },
         "topLenientErrors": [],
-        "previewLen": 25374,
+        "previewLen": 25360,
         "iso2PreviewFailCount": 0,
         "iso2PreviewFails": []
       },
@@ -2057,7 +2057,7 @@
           }
         },
         "topLenientErrors": [],
-        "previewLen": 30325,
+        "previewLen": 30311,
         "iso2PreviewFailCount": 0,
         "iso2PreviewFails": []
       },
@@ -2170,7 +2170,7 @@
           }
         },
         "topLenientErrors": [],
-        "previewLen": 28618,
+        "previewLen": 28615,
         "iso2PreviewFailCount": 0,
         "iso2PreviewFails": []
       },
@@ -2283,7 +2283,7 @@
           }
         },
         "topLenientErrors": [],
-        "previewLen": 97603,
+        "previewLen": 97589,
         "iso2PreviewFailCount": 0,
         "iso2PreviewFails": []
       },

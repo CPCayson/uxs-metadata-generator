@@ -66,6 +66,7 @@ import MissionTemplateCatalogToolbar from '../features/mission/MissionTemplateCa
 import MantaBarFloatingDock from '../components/MantaBarFloatingDock.jsx'
 import LensSymbioteBubble from '../components/LensSymbioteBubble.jsx'
 import MantaCommandCenter from '../components/MantaCommandCenter.jsx'
+import { bulkResolveKeywords } from '../lib/kmsResolver.js'
 
 /**
  * @param {{
@@ -549,6 +550,23 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     window.addEventListener('manta:pilot-auto-fix-request', onAutoFixRequest)
     return () => window.removeEventListener('manta:pilot-auto-fix-request', onAutoFixRequest)
   }, [profile, validationEngine])
+
+  useEffect(() => {
+    const onResolveKmsReq = async () => {
+      if (!pilotState.keywords) return
+      try {
+        const { next, updated } = await bulkResolveKeywords(pilotState.keywords)
+        if (updated > 0) {
+          setPilotState((p) => ({ ...p, keywords: next }))
+          pushPilotDebug(`Resolved ${updated} missing keyword UUIDs via Lens request.`)
+        }
+      } catch (err) {
+        console.warn('Global KMS resolution failed:', err)
+      }
+    }
+    window.addEventListener('manta:resolve-kms-request', onResolveKmsReq)
+    return () => window.removeEventListener('manta:resolve-kms-request', onResolveKmsReq)
+  }, [pilotState.keywords, setPilotState])
 
   // Lens chip "apply value" / quick set — merges into live wizard state
   useEffect(() => {

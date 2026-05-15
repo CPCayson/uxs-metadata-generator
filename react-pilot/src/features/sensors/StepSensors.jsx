@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { Cpu, Zap, RefreshCw, Plus, Trash2, Database, AlertCircle } from 'lucide-react'
 import {
   SENSOR_XML_EXTRA_FIELD_LABELS,
   SENSOR_XML_OPTIONAL_DEFAULTS,
@@ -155,17 +156,19 @@ export default function StepSensors({
       ) : null}
 
       {hostBridgeReady && (
-        <section className="library-panel">
-          <div className="library-panel-header">
-            <h3 className="library-panel-title">Sensor Library</h3>
-            <div className="library-panel-actions">
+        <section className="panel library-panel" style={{ borderLeft: '4px solid var(--manta-op-accent, #06b6d4)' }}>
+          <header className="panel-header" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+            <Cpu size={20} className="text-accent" style={{ color: 'var(--manta-op-accent, #06b6d4)' }} />
+            <h3 className="panel-title" style={{ margin: 0 }}>Sensor Library</h3>
+            <div className="library-panel-actions" style={{ marginLeft: 'auto', display: 'flex', gap: '0.5rem' }}>
               <button
                 type="button"
                 className="button button-secondary button-tiny"
                 onClick={loadLibrary}
                 disabled={libraryLoading}
+                title="Refresh library"
               >
-                {libraryLoading ? 'Loading…' : '↻ Refresh'}
+                <RefreshCw size={14} className={libraryLoading ? 'animate-spin' : ''} />
               </button>
               <button
                 type="button"
@@ -173,35 +176,50 @@ export default function StepSensors({
                 onClick={saveCurrentSensorsToSheets}
                 disabled={saveBusy || !sensors.length}
                 aria-busy={saveBusy}
+                style={{ display: 'flex', alignItems: 'center', gap: '4px' }}
               >
-                {saveBusy ? 'Saving…' : '↑ Save to library'}
+                <Database size={14} />
+                {saveBusy ? 'Saving…' : 'Save to library'}
               </button>
             </div>
-          </div>
-          {libraryError && <p className="field-error">{libraryError}</p>}
-          {saveStatus && <p className="hint">{saveStatus}</p>}
+          </header>
+
+          <p className="card-intro">
+            Select an instrument from your Postgres catalog to add it to this mission.
+          </p>
+
+          {libraryError && <p className="field-error" style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '0.75rem' }}><AlertCircle size={12} /> {libraryError}</p>}
+          {saveStatus && <p className="hint" style={{ marginBottom: '0.75rem' }}>{saveStatus}</p>}
+
           {libraryRows.length > 0 && (
-            <div className="library-rows">
+            <div className="library-rows" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxHeight: '200px', overflowY: 'auto', paddingRight: '4px' }}>
               {libraryRows.map((row, i) => {
                 const label = [row.sensorId ?? row.id, row.modelId ?? row.model, row.type ?? row.sensorType]
                   .filter(Boolean).join(' · ')
                 return (
-                  <div key={row.sensorId ?? row.id ?? i} className="library-row">
-                    <span className="library-row-label">{label || `Sensor ${i + 1}`}</span>
+                  <div key={row.sensorId ?? row.id ?? i} className="library-row" style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    padding: '8px 12px', 
+                    background: 'var(--card-bg-alt, #f8fafc)', 
+                    borderRadius: '6px',
+                    border: '1px solid var(--border-color, #e2e8f0)',
+                    fontSize: '0.82rem'
+                  }}>
+                    <span className="library-row-label" style={{ flex: 1, fontWeight: 500 }}>{label || `Sensor ${i + 1}`}</span>
                     <button
                       type="button"
                       className="button button-secondary button-tiny"
                       onClick={() => applyFromLibrary(row)}
+                      style={{ display: 'flex', alignItems: 'center', gap: '4px' }}
                     >
-                      + Add
+                      <Plus size={12} />
+                      Add
                     </button>
                   </div>
                 )
               })}
             </div>
-          )}
-          {!libraryLoading && libraryRows.length === 0 && !libraryError && (
-            <p className="hint">No sensors in library yet. Save sensors above to populate it.</p>
           )}
         </section>
       )}

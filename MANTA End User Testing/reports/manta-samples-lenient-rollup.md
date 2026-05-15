@@ -9,13 +9,12 @@ Use this to prioritize **import mapping** (`xmlPilotImport.js`) vs **rule tuning
 | Step | Error hits | Warning hits |
 |------|------------|--------------|
 | keywords | 0 | 464 |
-| mission | 0 | 26 |
+| mission | 0 | 16 |
 
 ## Top fields by total issue count
 
 | Field | Errors | Warnings | Distinct samples |
 |-------|--------|----------|------------------|
-| `mission.ror` | 0 | 14 | 14 |
 | `keywords.sciencekeywords[1].uuid` | 0 | 13 | 13 |
 | `keywords.platforms[0].uuid` | 0 | 13 | 13 |
 | `keywords.projects[0].uuid` | 0 | 13 | 13 |
@@ -49,6 +48,7 @@ Use this to prioritize **import mapping** (`xmlPilotImport.js`) vs **rule tuning
 | `keywords.sciencekeywords[18].uuid` | 0 | 4 | 4 |
 | `keywords.sciencekeywords[19].uuid` | 0 | 4 | 4 |
 | `keywords.sciencekeywords[20].uuid` | 0 | 4 | 4 |
+| `mission.ror` | 0 | 4 | 4 |
 | `keywords.projects[2].uuid` | 0 | 3 | 3 |
 | `keywords.sciencekeywords[17].uuid` | 0 | 3 | 3 |
 | `keywords.sciencekeywords[21].uuid` | 0 | 3 | 3 |
@@ -62,7 +62,6 @@ Use this to prioritize **import mapping** (`xmlPilotImport.js`) vs **rule tuning
 
 | Hits | Sev | Step | Field | Message |
 |------|-----|------|-------|---------|
-| 14 | w | mission | `mission.ror` | No ROR selected (recommended for organization linkage) |
 | 13 | w | keywords | `keywords.platforms[0].uuid` | Add concept UUID for best KMS href |
 | 13 | w | keywords | `keywords.projects[0].uuid` | Add concept UUID for best KMS href |
 | 13 | w | keywords | `keywords.sciencekeywords[1].uuid` | Add concept UUID for best KMS href |
@@ -95,6 +94,7 @@ Use this to prioritize **import mapping** (`xmlPilotImport.js`) vs **rule tuning
 | 4 | w | keywords | `keywords.sciencekeywords[18].uuid` | Add concept UUID for best KMS href |
 | 4 | w | keywords | `keywords.sciencekeywords[19].uuid` | Add concept UUID for best KMS href |
 | 4 | w | keywords | `keywords.sciencekeywords[20].uuid` | Add concept UUID for best KMS href |
+| 4 | w | mission | `mission.ror` | No ROR selected (recommended for organization linkage) |
 | 3 | w | keywords | `keywords.instruments[1].uuid` | Add concept UUID for best KMS href |
 | 3 | w | keywords | `keywords.locations[5].uuid` | Add concept UUID for best KMS href |
 | 3 | w | keywords | `keywords.locations[6].uuid` | Add concept UUID for best KMS href |

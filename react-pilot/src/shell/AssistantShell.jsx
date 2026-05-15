@@ -1261,6 +1261,11 @@ export default function AssistantShell({
       maybeScheduleTrayRefresh()
       return
     }
+    if (chip.kind === 'action' && chip.action === 'resolve-kms') {
+      window.dispatchEvent(new CustomEvent('manta:resolve-kms-request'))
+      maybeScheduleTrayRefresh()
+      return
+    }
     if (chip.kind === 'fill' && chip.fieldPath) {
       window.dispatchEvent(
         new CustomEvent('manta:set-pilot-field', { detail: { field: chip.fieldPath, value: chip.value } }),

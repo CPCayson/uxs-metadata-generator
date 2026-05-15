@@ -112,6 +112,16 @@ export function getLensChipsForIssue(issue, pilotState) {
     }
   }
 
+  // Missing keyword UUID (KMS)
+  if (field.startsWith('keywords.') && field.endsWith('.uuid') && message.toLowerCase().includes('kms')) {
+    chips.push({
+      id: `${idBase}:action-resolve-kms`,
+      kind: 'action',
+      action: 'resolve-kms',
+      label: '✨ Resolve KMS',
+    })
+  }
+
   // ── Safe defaults (always last) ──────────────────────────────────────────
   chips.push({
     id:        `${idBase}:autofix`,

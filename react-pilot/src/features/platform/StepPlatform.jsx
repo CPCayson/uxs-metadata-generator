@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { Ship, RefreshCw, CheckCircle, Database } from 'lucide-react'
 import { useFieldValidation } from '../../components/fields/useFieldValidation'
 
 /**
@@ -51,6 +52,14 @@ export default function StepPlatform({
 }) {
   const [selectedPlatformKey, setSelectedPlatformKey] = useState('')
   const [selectedAssetId, setSelectedAssetId] = useState('')
+  const [lastAppliedAssetId, setLastAppliedAssetId] = useState('')
+
+  // Clear "Applied" status if the selection changes
+  useEffect(() => {
+    if (selectedAssetId !== lastAppliedAssetId) {
+      setLastAppliedAssetId('')
+    }
+  }, [selectedAssetId, lastAppliedAssetId])
 
   const { show, invalid } = useFieldValidation({ issues, touched, showAllErrors })
 
@@ -61,54 +70,85 @@ export default function StepPlatform({
         <strong>GCMD platform keywords</strong> (Keywords step) and acquisition XML.
       </p>
 
-      <section className="panel asset-library-panel">
-        <h3 className="panel-title">Asset library (Instance tracking)</h3>
+      <section className="panel asset-library-panel" style={{ borderLeft: '4px solid var(--manta-op-accent, #06b6d4)' }}>
+        <header className="panel-header" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+          <Ship size={20} className="text-accent" style={{ color: 'var(--manta-op-accent, #06b6d4)' }} />
+          <h3 className="panel-title" style={{ margin: 0 }}>Asset library (Instance tracking)</h3>
+        </header>
+        
         <p className="card-intro asset-library-intro">
           Select a specific vehicle instance (by Serial Number) to load its persistent identity and 
           current sensor configuration.
         </p>
-        <div className="platform-library-row">
-          <select
-            className="form-control form-select"
-            value={selectedAssetId}
-            disabled={!hostBridgeReady || assetLibraryLoading}
-            onChange={(e) => setSelectedAssetId(e.target.value)}
-          >
-            <option value="">Select a specific asset…</option>
-            {assetLibraryRows.map(({ key, row }) => {
-              const id = String(row.id || '').trim()
-              const name = String(row.name || '').trim()
-              const sn = String(row.serial_number || '').trim()
-              const label = `${name} (S/N: ${sn})`
-              return (
-                <option key={key} value={id}>
-                  {label}
-                </option>
-              )
-            })}
-          </select>
+
+        <div className="platform-library-row" style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          <div style={{ flex: 1, position: 'relative' }}>
+            <select
+              className="form-control form-select"
+              value={selectedAssetId}
+              disabled={!hostBridgeReady || assetLibraryLoading}
+              onChange={(e) => setSelectedAssetId(e.target.value)}
+              style={{ width: '100%' }}
+            >
+              <option value="">Select a specific asset…</option>
+              {assetLibraryRows.map(({ key, row }) => {
+                const id = String(row.id || '').trim()
+                const name = String(row.name || '').trim()
+                const sn = String(row.serial_number || '').trim()
+                const label = `${name} (S/N: ${sn})`
+                return (
+                  <option key={key} value={id}>
+                    {label}
+                  </option>
+                )
+              })}
+            </select>
+          </div>
+
           <button
             type="button"
             className="button button-secondary button-tiny"
             disabled={!hostBridgeReady || assetLibraryLoading}
             onClick={() => onRefreshAssetLibrary?.()}
+            title="Refresh asset list"
           >
-            {assetLibraryLoading ? 'Loading…' : 'Refresh'}
+            <RefreshCw size={14} className={assetLibraryLoading ? 'animate-spin' : ''} />
           </button>
+
           <button
             type="button"
             className="button button-tiny"
             disabled={!hostBridgeReady || assetLibraryLoading || !selectedAssetId}
-            onClick={() => onApplyAssetFromLibrary?.(selectedAssetId)}
+            onClick={() => {
+              onApplyAssetFromLibrary?.(selectedAssetId)
+              setLastAppliedAssetId(selectedAssetId)
+            }}
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '4px',
+              backgroundColor: lastAppliedAssetId === selectedAssetId ? 'var(--manta-op-success, #10b981)' : undefined,
+              borderColor: lastAppliedAssetId === selectedAssetId ? 'var(--manta-op-success, #10b981)' : undefined
+            }}
           >
-            Apply selected asset
+            {lastAppliedAssetId === selectedAssetId ? (
+              <>
+                <CheckCircle size={14} />
+                Applied
+              </>
+            ) : (
+              'Apply asset'
+            )}
           </button>
         </div>
-        {assetLibraryError ? <p className="field-error">{assetLibraryError}</p> : null}
+        {assetLibraryError ? <p className="field-error" style={{ marginTop: '0.5rem' }}>{assetLibraryError}</p> : null}
       </section>
 
       <section className="panel platform-library-panel">
-        <h3 className="panel-title">Platform library</h3>
+        <header className="panel-header" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+          <Database size={20} className="text-muted" />
+          <h3 className="panel-title" style={{ margin: 0 }}>Platform library (Templates)</h3>
+        </header>
         {libraryKitContributionSuggested && hostBridgeReady ? (
           <div className="library-kit-contribution-callout" role="status">
             <p className="library-kit-contribution-callout__text">

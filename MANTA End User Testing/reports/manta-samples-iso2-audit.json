@@ -1,7 +1,7 @@
 {
   "sampleDir": "/Users/connorcayson/Downloads/uSX/MANTA End User Testing/samples",
   "sampleDirRelative": "MANTA End User Testing/samples",
-  "generated": "2026-05-15T10:55:38.032Z",
+  "generated": "2026-05-15T15:10:57.655Z",
   "lenientRollupSummary": {
     "patternCount": 207,
     "rollupJson": "MANTA End User Testing/reports/manta-samples-lenient-rollup.json",
@@ -16,20 +16,20 @@
       "mergeOk": true,
       "parseOk": true,
       "lenientErrors": 0,
-      "lenientWarns": 3,
-      "strictErrors": 2,
+      "lenientWarns": 2,
+      "strictErrors": 1,
       "strictWarns": 2,
-      "catalogErrors": 3,
+      "catalogErrors": 2,
       "catalogWarns": 2,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 37092,
+      "previewLen": 37145,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
         "mission": {
           "e": 0,
-          "w": 2
+          "w": 1
         },
         "platform": {
           "e": 0,
@@ -58,7 +58,7 @@
       },
       "strictByStep": {
         "mission": {
-          "e": 2,
+          "e": 1,
           "w": 1
         },
         "platform": {
@@ -94,12 +94,6 @@
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
         },
         {
-          "field": "mission.ror",
-          "message": "No ROR selected (recommended for organization linkage)",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
-        },
-        {
           "field": "keywords.sciencekeywords[2].uuid",
           "message": "Add concept UUID for best KMS href",
           "severity": "w",
@@ -112,12 +106,6 @@
           "message": "Strict mode: DOI is required",
           "severity": "e",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
-        },
-        {
-          "field": "mission.ror",
-          "message": "Strict mode: ROR is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
         }
       ],
       "catalogIssues": [
@@ -126,12 +114,6 @@
           "message": "Catalog mode: DOI is required",
           "severity": "e",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
-        },
-        {
-          "field": "mission.ror",
-          "message": "Catalog mode: ROR is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
         },
         {
           "field": "distribution.publication",
@@ -148,20 +130,20 @@
       "mergeOk": true,
       "parseOk": true,
       "lenientErrors": 0,
-      "lenientWarns": 7,
-      "strictErrors": 2,
+      "lenientWarns": 6,
+      "strictErrors": 1,
       "strictWarns": 6,
-      "catalogErrors": 4,
+      "catalogErrors": 3,
       "catalogWarns": 6,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 33116,
+      "previewLen": 32252,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
         "mission": {
           "e": 0,
-          "w": 1
+          "w": 0
         },
         "platform": {
           "e": 0,
@@ -190,7 +172,7 @@
       },
       "strictByStep": {
         "mission": {
-          "e": 2,
+          "e": 1,
           "w": 0
         },
         "platform": {
@@ -219,12 +201,6 @@
         }
       },
       "lenientIssues": [
-        {
-          "field": "mission.ror",
-          "message": "No ROR selected (recommended for organization linkage)",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
-        },
         {
           "field": "keywords.sciencekeywords[0].uuid",
           "message": "Add concept UUID for best KMS href",
@@ -268,12 +244,6 @@
           "message": "Strict mode: NCEI Accession is required",
           "severity": "e",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
-        },
-        {
-          "field": "mission.ror",
-          "message": "Strict mode: ROR is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
         }
       ],
       "catalogIssues": [
@@ -282,12 +252,6 @@
           "message": "Catalog mode: NCEI Accession is required",
           "severity": "e",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
-        },
-        {
-          "field": "mission.ror",
-          "message": "Catalog mode: ROR is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
         },
         {
           "field": "distribution.publication",
@@ -310,20 +274,20 @@
       "mergeOk": true,
       "parseOk": true,
       "lenientErrors": 0,
-      "lenientWarns": 18,
-      "strictErrors": 2,
+      "lenientWarns": 17,
+      "strictErrors": 1,
       "strictWarns": 17,
-      "catalogErrors": 5,
+      "catalogErrors": 4,
       "catalogWarns": 17,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 33899,
+      "previewLen": 33048,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
         "mission": {
           "e": 0,
-          "w": 2
+          "w": 1
         },
         "platform": {
           "e": 0,
@@ -352,7 +316,7 @@
       },
       "strictByStep": {
         "mission": {
-          "e": 2,
+          "e": 1,
           "w": 1
         },
         "platform": {
@@ -386,12 +350,6 @@
           "message": "Abstract uses acronym \"MPS\"; expand it on first use when possible.",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.ror",
-          "message": "No ROR selected (recommended for organization linkage)",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
         },
         {
           "field": "keywords.sciencekeywords[0].uuid",
@@ -496,12 +454,6 @@
           "message": "Strict mode: DOI is required",
           "severity": "e",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
-        },
-        {
-          "field": "mission.ror",
-          "message": "Strict mode: ROR is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
         }
       ],
       "catalogIssues": [
@@ -510,12 +462,6 @@
           "message": "Catalog mode: DOI is required",
           "severity": "e",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
-        },
-        {
-          "field": "mission.ror",
-          "message": "Catalog mode: ROR is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
         },
         {
           "field": "mission.parentProjectTitle",
@@ -544,20 +490,20 @@
       "mergeOk": true,
       "parseOk": true,
       "lenientErrors": 0,
-      "lenientWarns": 14,
-      "strictErrors": 1,
+      "lenientWarns": 13,
+      "strictErrors": 0,
       "strictWarns": 13,
-      "catalogErrors": 4,
+      "catalogErrors": 3,
       "catalogWarns": 13,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 34576,
+      "previewLen": 33723,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
         "mission": {
           "e": 0,
-          "w": 2
+          "w": 1
         },
         "platform": {
           "e": 0,
@@ -586,7 +532,7 @@
       },
       "strictByStep": {
         "mission": {
-          "e": 1,
+          "e": 0,
           "w": 1
         },
         "platform": {
@@ -620,12 +566,6 @@
           "message": "Abstract uses acronym \"AVHRR\"; expand it on first use when possible.",
           "severity": "w",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
-        },
-        {
-          "field": "mission.ror",
-          "message": "No ROR selected (recommended for organization linkage)",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
         },
         {
           "field": "keywords.sciencekeywords[0].uuid",
@@ -700,21 +640,8 @@
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
         }
       ],
-      "strictIssues": [
-        {
-          "field": "mission.ror",
-          "message": "Strict mode: ROR is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
-        }
-      ],
+      "strictIssues": [],
       "catalogIssues": [
-        {
-          "field": "mission.ror",
-          "message": "Catalog mode: ROR is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
-        },
         {
           "field": "mission.parentProjectTitle",
           "message": "Catalog mode: enter parent project on Mission (aggregation) or Distribution (parent project)",
@@ -742,20 +669,20 @@
       "mergeOk": true,
       "parseOk": true,
       "lenientErrors": 0,
-      "lenientWarns": 77,
-      "strictErrors": 2,
+      "lenientWarns": 76,
+      "strictErrors": 1,
       "strictWarns": 76,
-      "catalogErrors": 6,
+      "catalogErrors": 5,
       "catalogWarns": 76,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 33050,
+      "previewLen": 32826,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
         "mission": {
           "e": 0,
-          "w": 1
+          "w": 0
         },
         "platform": {
           "e": 0,
@@ -784,7 +711,7 @@
       },
       "strictByStep": {
         "mission": {
-          "e": 2,
+          "e": 1,
           "w": 0
         },
         "platform": {
@@ -813,12 +740,6 @@
         }
       },
       "lenientIssues": [
-        {
-          "field": "mission.ror",
-          "message": "No ROR selected (recommended for organization linkage)",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
-        },
         {
           "field": "keywords.datacenters[1].uuid",
           "message": "Add concept UUID for best KMS href",
@@ -1282,12 +1203,6 @@
           "message": "Strict mode: DOI is required",
           "severity": "e",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
-        },
-        {
-          "field": "mission.ror",
-          "message": "Strict mode: ROR is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
         }
       ],
       "catalogIssues": [
@@ -1296,12 +1211,6 @@
           "message": "Catalog mode: DOI is required",
           "severity": "e",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
-        },
-        {
-          "field": "mission.ror",
-          "message": "Catalog mode: ROR is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
         },
         {
           "field": "mission.parentProjectTitle",
@@ -1322,8 +1231,8 @@
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:otherCitationDetails"
         },
         {
-          "field": "distribution.landingUrl",
-          "message": "Catalog mode: landing page URL is required",
+          "field": "distribution.downloadUrl",
+          "message": "Catalog mode: download URL is required",
           "severity": "e",
           "xpath": "/gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage"
         }
@@ -1343,7 +1252,7 @@
       "catalogWarns": 52,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 98844,
+      "previewLen": 98239,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
@@ -1768,20 +1677,20 @@
       "mergeOk": true,
       "parseOk": true,
       "lenientErrors": 0,
-      "lenientWarns": 1,
-      "strictErrors": 3,
+      "lenientWarns": 0,
+      "strictErrors": 2,
       "strictWarns": 0,
-      "catalogErrors": 7,
+      "catalogErrors": 6,
       "catalogWarns": 0,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 27779,
+      "previewLen": 29706,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
         "mission": {
           "e": 0,
-          "w": 1
+          "w": 0
         },
         "platform": {
           "e": 0,
@@ -1810,7 +1719,7 @@
       },
       "strictByStep": {
         "mission": {
-          "e": 3,
+          "e": 2,
           "w": 0
         },
         "platform": {
@@ -1838,14 +1747,7 @@
           "w": 0
         }
       },
-      "lenientIssues": [
-        {
-          "field": "mission.ror",
-          "message": "No ROR selected (recommended for organization linkage)",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
-        }
-      ],
+      "lenientIssues": [],
       "strictIssues": [
         {
           "field": "mission.doi",
@@ -1858,12 +1760,6 @@
           "message": "Strict mode: NCEI Accession is required",
           "severity": "e",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
-        },
-        {
-          "field": "mission.ror",
-          "message": "Strict mode: ROR is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
         }
       ],
       "catalogIssues": [
@@ -1878,12 +1774,6 @@
           "message": "Catalog mode: NCEI Accession is required",
           "severity": "e",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
-        },
-        {
-          "field": "mission.ror",
-          "message": "Catalog mode: ROR is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
         },
         {
           "field": "mission.parentProjectTitle",
@@ -1918,20 +1808,20 @@
       "mergeOk": true,
       "parseOk": true,
       "lenientErrors": 0,
-      "lenientWarns": 1,
-      "strictErrors": 3,
+      "lenientWarns": 0,
+      "strictErrors": 2,
       "strictWarns": 0,
-      "catalogErrors": 7,
+      "catalogErrors": 6,
       "catalogWarns": 0,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 27687,
+      "previewLen": 29610,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
         "mission": {
           "e": 0,
-          "w": 1
+          "w": 0
         },
         "platform": {
           "e": 0,
@@ -1960,7 +1850,7 @@
       },
       "strictByStep": {
         "mission": {
-          "e": 3,
+          "e": 2,
           "w": 0
         },
         "platform": {
@@ -1988,14 +1878,7 @@
           "w": 0
         }
       },
-      "lenientIssues": [
-        {
-          "field": "mission.ror",
-          "message": "No ROR selected (recommended for organization linkage)",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
-        }
-      ],
+      "lenientIssues": [],
       "strictIssues": [
         {
           "field": "mission.doi",
@@ -2008,12 +1891,6 @@
           "message": "Strict mode: NCEI Accession is required",
           "severity": "e",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
-        },
-        {
-          "field": "mission.ror",
-          "message": "Strict mode: ROR is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
         }
       ],
       "catalogIssues": [
@@ -2028,12 +1905,6 @@
           "message": "Catalog mode: NCEI Accession is required",
           "severity": "e",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
-        },
-        {
-          "field": "mission.ror",
-          "message": "Catalog mode: ROR is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
         },
         {
           "field": "mission.parentProjectTitle",
@@ -2075,7 +1946,7 @@
       "catalogWarns": 7,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 32527,
+      "previewLen": 31479,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
@@ -2237,7 +2108,7 @@
       "catalogWarns": 69,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 49705,
+      "previewLen": 49152,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
@@ -2752,7 +2623,7 @@
       "catalogWarns": 27,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 36314,
+      "previewLen": 35761,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
@@ -3008,20 +2879,20 @@
       "mergeOk": true,
       "parseOk": true,
       "lenientErrors": 0,
-      "lenientWarns": 3,
-      "strictErrors": 2,
+      "lenientWarns": 2,
+      "strictErrors": 1,
       "strictWarns": 2,
-      "catalogErrors": 6,
+      "catalogErrors": 5,
       "catalogWarns": 2,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 41139,
+      "previewLen": 41851,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
         "mission": {
           "e": 0,
-          "w": 2
+          "w": 1
         },
         "platform": {
           "e": 0,
@@ -3050,7 +2921,7 @@
       },
       "strictByStep": {
         "mission": {
-          "e": 2,
+          "e": 1,
           "w": 1
         },
         "platform": {
@@ -3086,12 +2957,6 @@
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
         },
         {
-          "field": "mission.ror",
-          "message": "No ROR selected (recommended for organization linkage)",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
-        },
-        {
           "field": "keywords.providers[0].uuid",
           "message": "Add concept UUID for best KMS href",
           "severity": "w",
@@ -3104,12 +2969,6 @@
           "message": "Strict mode: DOI is required",
           "severity": "e",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
-        },
-        {
-          "field": "mission.ror",
-          "message": "Strict mode: ROR is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
         }
       ],
       "catalogIssues": [
@@ -3118,12 +2977,6 @@
           "message": "Catalog mode: DOI is required",
           "severity": "e",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
-        },
-        {
-          "field": "mission.ror",
-          "message": "Catalog mode: ROR is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
         },
         {
           "field": "mission.parentProjectTitle",
@@ -3158,20 +3011,20 @@
       "mergeOk": true,
       "parseOk": true,
       "lenientErrors": 0,
-      "lenientWarns": 3,
-      "strictErrors": 2,
+      "lenientWarns": 2,
+      "strictErrors": 1,
       "strictWarns": 2,
-      "catalogErrors": 6,
+      "catalogErrors": 5,
       "catalogWarns": 2,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 41139,
+      "previewLen": 41851,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
         "mission": {
           "e": 0,
-          "w": 2
+          "w": 1
         },
         "platform": {
           "e": 0,
@@ -3200,7 +3053,7 @@
       },
       "strictByStep": {
         "mission": {
-          "e": 2,
+          "e": 1,
           "w": 1
         },
         "platform": {
@@ -3236,12 +3089,6 @@
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract"
         },
         {
-          "field": "mission.ror",
-          "message": "No ROR selected (recommended for organization linkage)",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
-        },
-        {
           "field": "keywords.providers[0].uuid",
           "message": "Add concept UUID for best KMS href",
           "severity": "w",
@@ -3254,12 +3101,6 @@
           "message": "Strict mode: DOI is required",
           "severity": "e",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
-        },
-        {
-          "field": "mission.ror",
-          "message": "Strict mode: ROR is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
         }
       ],
       "catalogIssues": [
@@ -3268,12 +3109,6 @@
           "message": "Catalog mode: DOI is required",
           "severity": "e",
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code"
-        },
-        {
-          "field": "mission.ror",
-          "message": "Catalog mode: ROR is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
         },
         {
           "field": "mission.parentProjectTitle",
@@ -3308,20 +3143,20 @@
       "mergeOk": true,
       "parseOk": true,
       "lenientErrors": 0,
-      "lenientWarns": 9,
-      "strictErrors": 1,
+      "lenientWarns": 8,
+      "strictErrors": 0,
       "strictWarns": 8,
-      "catalogErrors": 3,
+      "catalogErrors": 2,
       "catalogWarns": 8,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 32241,
+      "previewLen": 31388,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
         "mission": {
           "e": 0,
-          "w": 1
+          "w": 0
         },
         "platform": {
           "e": 0,
@@ -3350,7 +3185,7 @@
       },
       "strictByStep": {
         "mission": {
-          "e": 1,
+          "e": 0,
           "w": 0
         },
         "platform": {
@@ -3379,12 +3214,6 @@
         }
       },
       "lenientIssues": [
-        {
-          "field": "mission.ror",
-          "message": "No ROR selected (recommended for organization linkage)",
-          "severity": "w",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
-        },
         {
           "field": "keywords.sciencekeywords[0].uuid",
           "message": "Add concept UUID for best KMS href",
@@ -3434,21 +3263,8 @@
           "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords"
         }
       ],
-      "strictIssues": [
-        {
-          "field": "mission.ror",
-          "message": "Strict mode: ROR is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
-        }
-      ],
+      "strictIssues": [],
       "catalogIssues": [
-        {
-          "field": "mission.ror",
-          "message": "Catalog mode: ROR is required",
-          "severity": "e",
-          "xpath": "/gmd:MD_Metadata/gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:party/gmd:CI_Organisation/gmd:identifier"
-        },
         {
           "field": "distribution.publication",
           "message": "Catalog mode: publication reference is required",
@@ -3477,7 +3293,7 @@
       "catalogWarns": 11,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 34166,
+      "previewLen": 33574,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
@@ -3625,7 +3441,7 @@
       "catalogWarns": 20,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 26059,
+      "previewLen": 25662,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
@@ -3877,7 +3693,7 @@
       "catalogWarns": 15,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 25374,
+      "previewLen": 25870,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
@@ -4105,7 +3921,7 @@
       "catalogWarns": 14,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 30325,
+      "previewLen": 29306,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
@@ -4327,7 +4143,7 @@
       "catalogWarns": 42,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 28618,
+      "previewLen": 29552,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {
@@ -4717,7 +4533,7 @@
       "catalogWarns": 93,
       "pipelineError": null,
       "iso2PreviewFails": [],
-      "previewLen": 97574,
+      "previewLen": 97040,
       "previewRoundtripPartial": true,
       "xmllintOk": true,
       "lenientByStep": {

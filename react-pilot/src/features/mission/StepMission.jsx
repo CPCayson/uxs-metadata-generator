@@ -30,6 +30,37 @@ const MISSION_ISO639_PRESETS = ['eng', 'spa', 'fra', 'deu', 'zho', 'jpn', 'por',
 
 const DOI_PATTERN = /^10\.\d{4,9}\/\S+$/i
 
+const ROR_PRESETS = [
+  { 
+    displayName: 'National Centers for Environmental Information',
+    id: 'https://ror.org/033thwp43',
+    country: 'United States',
+    types: ['Government'],
+    shortName: 'NCEI'
+  },
+  {
+    displayName: 'Naval Oceanographic Office',
+    id: 'https://ror.org/05vsz0c21',
+    country: 'United States',
+    types: ['Government'],
+    shortName: 'NAVOCEANO'
+  },
+  {
+    displayName: 'U.S. Naval Research Laboratory',
+    id: 'https://ror.org/01bj9p284',
+    country: 'United States',
+    types: ['Government'],
+    shortName: 'NRL'
+  },
+  {
+    displayName: 'National Oceanic and Atmospheric Administration',
+    id: 'https://ror.org/02vct7r21',
+    country: 'United States',
+    types: ['Government'],
+    shortName: 'NOAA'
+  }
+]
+
 function hasText(v) {
   return Boolean(String(v ?? '').trim())
 }
@@ -462,6 +493,67 @@ export default function StepMission({
         sourceProvenance={sourceProvenance}
         onClear={onSourceProvenanceClear ?? (() => {})}
       />
+
+      <div className="mission-compliance-quick-actions" style={{ marginBottom: '1.5rem' }}>
+        <div className="mission-ror-presets-container" style={{ 
+          padding: '16px', 
+          background: 'linear-gradient(135deg, var(--color-bg-secondary, #f1f5f9) 0%, var(--color-bg-primary, #ffffff) 100%)', 
+          borderRadius: '12px', 
+          border: '1px solid var(--color-border-primary, #e2e8f0)',
+          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--manta-op-accent, #0891b2)', boxShadow: '0 0 8px var(--manta-op-accent)' }}></div>
+            <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted, #64748b)' }}>
+              Quick Resolve: Authoritative Organizations (ROR)
+            </p>
+          </div>
+          
+          <div className="ror-presets-gallery" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '8px' }}>
+            {ROR_PRESETS.map(preset => {
+              const active = mission.ror?.id === preset.id
+              return (
+                <button
+                  key={preset.id}
+                  type="button"
+                  onClick={() => selectRor(preset)}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: active ? '2px solid var(--manta-op-accent, #0891b2)' : '1px solid var(--color-border-secondary, #cbd5e1)',
+                    background: active ? 'var(--manta-op-accent-muted, #ecfeff)' : 'var(--color-bg-primary, #ffffff)',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    textAlign: 'left'
+                  }}
+                >
+                  <span style={{ 
+                    fontSize: '11px', 
+                    fontWeight: 700, 
+                    color: active ? 'var(--manta-op-accent, #0891b2)' : 'var(--text-primary, #1e293b)',
+                    marginBottom: '2px'
+                  }}>
+                    {preset.shortName}
+                  </span>
+                  <span style={{ 
+                    fontSize: '9px', 
+                    color: 'var(--text-muted, #64748b)',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    width: '100%'
+                  }}>
+                    {preset.displayName}
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      </div>
 
       {guidedMissionIntro ? (
         <p className="card-intro card-intro--guided">

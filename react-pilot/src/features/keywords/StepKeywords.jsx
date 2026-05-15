@@ -1,7 +1,8 @@
 import { useState, useMemo, useCallback, useEffect } from 'react'
-import { Sparkles } from 'lucide-react'
+import { Sparkles, RefreshCw, CheckCircle, Wand2, AlertCircle } from 'lucide-react'
 import { searchGcmdSchemeClient } from '../../lib/gcmdClient'
 import { gcmdConceptUrlFromUuid } from '../../lib/gcmdKmsUrl.js'
+import { bulkResolveKeywords } from '../../lib/kmsResolver.js'
 import { runLensScanHeuristic } from '../../lib/lensScanHeuristic.js'
 import { getPilotFieldLabelFallback } from '../../lib/pilotFieldLabelFallback.js'
 import {
@@ -123,28 +124,11 @@ export default function StepKeywords({ mission = {}, keywords = {}, onKeywordsCh
     setResolveBusy(true)
     setResolveStatus('')
     try {
-      const next = { ...keywords }
-      let updated = 0
-      for (const { key, scheme } of FACETS) {
-        const list = Array.isArray(next[key]) ? [...next[key]] : []
-        for (let i = 0; i < list.length; i += 1) {
-          const row = list[i]
-          const label = String(row?.label || '').trim()
-          const uuid = String(row?.uuid || '').trim()
-          if (!label || uuid) continue
-          const matches = await searchGcmdSchemeClient(scheme, label, { maxMatches: 10, maxPages: 2 })
-          const top = matches[0]
-          if (top && top.score >= KMS_RESOLVE_MIN_SCORE) {
-            list[i] = { label: top.prefLabel || label, uuid: top.uuid }
-            updated += 1
-          }
-        }
-        next[key] = list
-      }
+      const { next, updated } = await bulkResolveKeywords(keywords)
       onKeywordsChange(next)
       setResolveStatus(
         updated
-          ? `Resolved ${updated} label-only chip(s) with KMS top match (score ≥ ${KMS_RESOLVE_MIN_SCORE}).`
+          ? `Resolved ${updated} label-only chip(s) with KMS top match.`
           : 'No confident KMS match for missing UUIDs — refine labels or use per-facet search.',
       )
     } catch (err) {
@@ -430,6 +414,71 @@ export default function StepKeywords({ mission = {}, keywords = {}, onKeywordsCh
             These warnings do not block export; they help ensure GCMD <code>gmx:Anchor</code> links resolve in the XML
             preview.
           </p>
+          
+          <div className="keyword-metadata-resolve-panel" style={{ 
+            marginTop: '1.25rem', 
+            padding: '16px', 
+            background: 'var(--color-bg-secondary, #f8fafc)', 
+            borderRadius: '12px',
+            border: '1px solid var(--color-border-primary, #e2e8f0)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Wand2 size={16} color="var(--manta-op-accent, #0891b2)" />
+                <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-primary, #1e293b)' }}>KMS Authority Resolver</span>
+              </div>
+              <span style={{ fontSize: '0.7rem', color: 'var(--text-muted, #64748b)', fontWeight: 500 }}>GCMD / Earthdata Cloud</span>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <button
+                type="button"
+                className="button button-primary"
+                disabled={resolveBusy || missingKeywordUuidCount === 0}
+                onClick={resolveMissingKeywordUuids}
+                style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '8px', 
+                  padding: '8px 16px', 
+                  fontSize: '0.85rem',
+                  borderRadius: '20px',
+                  background: 'linear-gradient(90deg, var(--manta-op-accent, #0891b2) 0%, #06b6d4 100%)',
+                  border: 'none',
+                  boxShadow: '0 4px 6px -1px rgba(8, 145, 178, 0.2)'
+                }}
+              >
+                {resolveBusy ? (
+                  <RefreshCw size={14} className="animate-spin" />
+                ) : (
+                  <Sparkles size={14} />
+                )}
+                {resolveBusy ? 'Resolving KMS...' : `Match ${missingKeywordUuidCount} missing UUIDs`}
+              </button>
+              
+              {resolveStatus && (
+                <div style={{ 
+                  flex: 1,
+                  fontSize: '0.75rem', 
+                  padding: '8px 12px', 
+                  background: 'var(--manta-op-accent-muted, #ecfeff)', 
+                  color: 'var(--manta-op-accent, #0891b2)',
+                  borderRadius: '8px',
+                  border: '1px solid var(--manta-op-accent-border, #cffafe)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}>
+                  <CheckCircle size={14} />
+                  <span>{resolveStatus}</span>
+                </div>
+              )}
+            </div>
+          </div>
+
           {keywordMetadataIssues.length > 0 ? (
             <ul className="keyword-metadata-bw__list">
               {keywordMetadataIssues.map((i, idx) => {
