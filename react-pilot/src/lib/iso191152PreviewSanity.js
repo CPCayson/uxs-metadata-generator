@@ -43,10 +43,11 @@ export function missionPreviewIso191152SanityFailures(xml) {
     {
       id: 'bbox.decimalTyped',
       passed:
-        xmlHasBoundingBoxDecimal_(xml, 'westBoundLongitude') &&
-        xmlHasBoundingBoxDecimal_(xml, 'eastBoundLongitude') &&
-        xmlHasBoundingBoxDecimal_(xml, 'southBoundLatitude') &&
-        xmlHasBoundingBoxDecimal_(xml, 'northBoundLatitude'),
+        !/<gmd:geographicElement\b/.test(xml) ||
+        (xmlHasBoundingBoxDecimal_(xml, 'westBoundLongitude') &&
+          xmlHasBoundingBoxDecimal_(xml, 'eastBoundLongitude') &&
+          xmlHasBoundingBoxDecimal_(xml, 'southBoundLatitude') &&
+          xmlHasBoundingBoxDecimal_(xml, 'northBoundLatitude')),
     },
     {
       id: 'preview.noEmptyGcoDecimal',

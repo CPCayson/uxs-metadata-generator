@@ -1197,6 +1197,43 @@ export function defaultPilotState() {
 }
 
 /**
+ * True when the record is still the mission “empty shell” (Start over / defaultPilotState),
+ * before the user imports or fills meaningful mission/distribution/platform content.
+ *
+ * @param {unknown} state
+ * @returns {boolean}
+ */
+export function pilotStateIsEmptyMissionShell(state) {
+  if (!state || typeof state !== 'object') return true
+  const s = /** @type {Record<string, unknown>} */ (state)
+  const m = s.mission && typeof s.mission === 'object' ? /** @type {Record<string, unknown>} */ (s.mission) : {}
+  const dist = s.distribution && typeof s.distribution === 'object' ? /** @type {Record<string, unknown>} */ (s.distribution) : {}
+  const p = s.platform && typeof s.platform === 'object' ? /** @type {Record<string, unknown>} */ (s.platform) : {}
+  const missionTextKeys = [
+    'fileId', 'title', 'alternateTitle', 'abstract', 'purpose', 'startDate', 'endDate',
+    'individualName', 'email', 'org', 'doi', 'accession', 'status',
+  ]
+  if (missionTextKeys.some((k) => String(m[k] ?? '').trim())) return false
+  const distKeys = [
+    'format', 'distributionFormatName', 'landingUrl', 'downloadUrl', 'metadataLandingUrl', 'license',
+  ]
+  if (distKeys.some((k) => String(dist[k] ?? '').trim())) return false
+  if (String(p.platformId || '').trim() || String(p.platformName || '').trim() || String(p.platformType || '').trim()) {
+    return false
+  }
+  const sensors = Array.isArray(s.sensors) ? s.sensors : []
+  if (sensors.some((row) => !sensorRowIsInactive(row))) return false
+  const kw = s.keywords && typeof s.keywords === 'object' ? /** @type {Record<string, unknown>} */ (s.keywords) : {}
+  for (const facet of ['sciencekeywords', 'datacenters', 'platforms', 'instruments', 'locations', 'projects', 'providers']) {
+    const arr = Array.isArray(kw[facet]) ? kw[facet] : []
+    if (arr.some((row) => row && (String(/** @type {{ label?: string, uuid?: string }} */ (row).label || '').trim() || String(/** @type {{ label?: string, uuid?: string }} */ (row).uuid || '').trim()))) {
+      return false
+    }
+  }
+  return true
+}
+
+/**
  * Merge a persisted or imported partial into the pilot baseline.
  * On success, the return value is always passed through {@link sanitizePilotState} (see final return).
  * Import or XML-vs-state “gap” heuristics should use this merged result, not the raw parser partial alone,

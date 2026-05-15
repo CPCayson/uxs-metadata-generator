@@ -9,7 +9,7 @@ import { formatNceiUxsFileIdentifierForXml } from './nceiUxsFileId.js'
 import {
   buildAcquisitionInstrumentDescription,
 } from './sensorInstrumentDescription.js'
-import { sensorRowIsInactive } from './pilotValidation.js'
+import { pilotStateIsEmptyMissionShell, sensorRowIsInactive } from './pilotValidation.js'
 import { gcmdConceptUrlFromUuid as gcmdKeywordHrefFromStoredUuid } from './gcmdKmsUrl.js'
 import {
   formatUxsPilotMachineBlock,
@@ -403,6 +403,7 @@ ${pads.outer}</gmi:instrument>`
  */
 export function buildXmlPreview(state) {
   const m = state?.mission || {}
+  const emptyShell = pilotStateIsEmptyMissionShell(state)
   const bbox = previewMissionBoundingDecimals(m)
   const progressCode = String(m.status || '').trim()
   const sp = state?.spatial || {}
@@ -412,7 +413,7 @@ export function buildXmlPreview(state) {
   const dist = state?.distribution || {}
 
   const omitRef = dist.omitRootReferenceSystemInfo
-  const useNceiMeta = dist.useNceiMetadataContactXlink
+  const useNceiMeta = dist.useNceiMetadataContactXlink && !emptyShell
   const dateStampSource = String(m.metadataRecordDate || '').trim() || utcNowIsoZForDateStamp()
   const dateStampXml = `  <gmd:dateStamp>${gcoDateOrDateTimeInner(dateStampSource)}</gmd:dateStamp>\n`
 
@@ -456,7 +457,9 @@ export function buildXmlPreview(state) {
     .join('\n')
 
   const maintFreq = String(dist.metadataMaintenanceFrequency || 'asNeeded').trim() || 'asNeeded'
-  const resourceMaintenanceXml = `      <gmd:resourceMaintenance>
+  const resourceMaintenanceXml = emptyShell
+    ? ''
+    : `      <gmd:resourceMaintenance>
         <gmd:MD_MaintenanceInformation>
           <gmd:maintenanceAndUpdateFrequency>
             <gmd:MD_MaintenanceFrequencyCode codeList="${esc(MD_MAINTENANCE_FREQUENCY_CODELIST)}" codeListValue="${esc(maintFreq)}">${esc(maintFreq)}</gmd:MD_MaintenanceFrequencyCode>
@@ -627,7 +630,9 @@ ${contactUrlXml}
 `
       : ''
 
-  const resourcePointOfContactXml = `      <gmd:pointOfContact>
+  const resourcePointOfContactXml = emptyShell
+    ? ''
+    : `      <gmd:pointOfContact>
         <gmd:CI_ResponsibleParty>
           <gmd:individualName><gco:CharacterString>${esc(m.individualName)}</gco:CharacterString></gmd:individualName>
 ${organisationNameXml}${resourceCiContactXml}          <gmd:role>
@@ -706,10 +711,12 @@ ${organisationNameXml}${resourceCiContactXml}          <gmd:role>
 
   const nceiMetaHref = String(dist.nceiMetadataContactHref || '').trim()
   const nceiMetaTitle = String(dist.nceiMetadataContactTitle || 'NCEI (pointOfContact)').trim()
-  const metadataContactXml = useNceiMeta
-    ? `  <gmd:contact${nceiMetaHref ? ` xlink:href="${esc(nceiMetaHref)}"` : ''} xlink:title="${esc(nceiMetaTitle)}"/>
+  const metadataContactXml = emptyShell
+    ? ''
+    : useNceiMeta
+      ? `  <gmd:contact${nceiMetaHref ? ` xlink:href="${esc(nceiMetaHref)}"` : ''} xlink:title="${esc(nceiMetaTitle)}"/>
 `
-    : `  <gmd:contact>
+      : `  <gmd:contact>
     <gmd:CI_ResponsibleParty>
           <gmd:individualName><gco:CharacterString>${esc(m.individualName)}</gco:CharacterString></gmd:individualName>
 ${organisationNameXml}${resourceCiContactXml}          <gmd:role>
@@ -1142,7 +1149,24 @@ ${dist.finalNotes ? `  <!-- finalNotes: ${esc(String(dist.finalNotes).trim())} -
       : ''
   })()
 
-  const distributionInfoXml = `  <gmd:distributionInfo>
+  const hasDistributionPreview =
+    String(dist.format || '').trim() ||
+    String(dist.distributionFormatName || '').trim() ||
+    String(dist.distributionFileFormat || '').trim() ||
+    String(dist.landingUrl || '').trim() ||
+    String(dist.downloadUrl || '').trim() ||
+    String(dist.metadataLandingUrl || '').trim() ||
+    nceiDistHref ||
+    distInd ||
+    distOrg ||
+    distEm ||
+    distUrl ||
+    String(dist.distributionFeesText || '').trim() ||
+    String(dist.distributionOrderingInstructions || '').trim()
+  const distributionInfoXml =
+    emptyShell || !hasDistributionPreview
+      ? ''
+      : `  <gmd:distributionInfo>
     <gmd:MD_Distribution>
 ${distributionFormatBlock}${distributorXlinkXml}${transferOptionsBlock}    </gmd:MD_Distribution>
   </gmd:distributionInfo>
@@ -1200,7 +1224,14 @@ ${resourcePointOfContactXml}${resourceMaintenanceXml}${graphicOverviewXml}${kwBl
       </gmd:characterSet>
 ${topicCategoriesXml ? `${topicCategoriesXml}\n` : ''}      <gmd:extent>
         <gmd:EX_Extent>
-${extentDescXml}          <gmd:geographicElement>
+${extentDescXml}${
+        emptyShell &&
+        String(bbox.west) === '-180' &&
+        String(bbox.east) === '180' &&
+        String(bbox.south) === '-90' &&
+        String(bbox.north) === '90'
+          ? ''
+          : `          <gmd:geographicElement>
             <gmd:EX_GeographicBoundingBox>
               <gmd:westBoundLongitude><gco:Decimal>${esc(bbox.west)}</gco:Decimal></gmd:westBoundLongitude>
               <gmd:eastBoundLongitude><gco:Decimal>${esc(bbox.east)}</gco:Decimal></gmd:eastBoundLongitude>
@@ -1208,6 +1239,8 @@ ${extentDescXml}          <gmd:geographicElement>
               <gmd:northBoundLatitude><gco:Decimal>${esc(bbox.north)}</gco:Decimal></gmd:northBoundLatitude>
             </gmd:EX_GeographicBoundingBox>
           </gmd:geographicElement>
+`
+      }
           <gmd:temporalElement>
             <gmd:EX_TemporalExtent>
               <gmd:extent>

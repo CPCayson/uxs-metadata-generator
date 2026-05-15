@@ -5,6 +5,22 @@
  * @module lib/readinessSummary
  */
 
+/** Idle validation — used when the wizard has not primed checks yet (Start over / fresh session). */
+export const IDLE_VALIDATION_RESULT = Object.freeze({
+  issues: [],
+  score: 100,
+  maxScore: 100,
+  errCount: 0,
+  warnCount: 0,
+})
+
+/** Idle readiness strip — all modes at 100% with zero issues. */
+export const IDLE_READINESS_SNAPSHOT = Object.freeze({
+  lenient: IDLE_VALIDATION_RESULT,
+  strict: IDLE_VALIDATION_RESULT,
+  catalog: IDLE_VALIDATION_RESULT,
+})
+
 /**
  * @param {import('../core/validation/ValidationEngine.js').ValidationEngine} engine
  * @param {import('../core/registry/types.js').EntityProfile | null | undefined} profile

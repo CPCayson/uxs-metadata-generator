@@ -124,6 +124,31 @@ function XmlToolsBar({
   const [overflowMenuOpen, setOverflowMenuOpen] = useState(false)
   const [extensionScannerCapture, setExtensionScannerCapture] = useState(null)
   const [importSummaryText, setImportSummaryText] = useState('')
+  const importSummaryDismissRef = useRef(/** @type {ReturnType<typeof setTimeout> | null} */ (null))
+
+  const IMPORT_SUMMARY_DISMISS_MS = 6000
+
+  function clearImportSummary() {
+    if (importSummaryDismissRef.current) {
+      clearTimeout(importSummaryDismissRef.current)
+      importSummaryDismissRef.current = null
+    }
+    setImportSummaryText('')
+  }
+
+  useEffect(() => {
+    if (!importSummaryText) return undefined
+    importSummaryDismissRef.current = setTimeout(() => {
+      importSummaryDismissRef.current = null
+      setImportSummaryText('')
+    }, IMPORT_SUMMARY_DISMISS_MS)
+    return () => {
+      if (importSummaryDismissRef.current) {
+        clearTimeout(importSummaryDismissRef.current)
+        importSummaryDismissRef.current = null
+      }
+    }
+  }, [importSummaryText])
   /** When a zip contains multiple .xml files, list paths and let the user pick one. */
   const [zipXmlPaths, setZipXmlPaths] = useState(/** @type {string[] | null} */ (null))
   const [zipPickPath, setZipPickPath] = useState('')
@@ -328,7 +353,7 @@ function XmlToolsBar({
     if (importApplyingRef.current) return
     importApplyingRef.current = true
     setImportError('')
-    setImportSummaryText('')
+    clearImportSummary()
     setImportBusy(true)
     try {
       if (typeof onBeforeApplyXmlImport === 'function' && onBeforeApplyXmlImport(xmlText) === false) {
@@ -362,7 +387,7 @@ function XmlToolsBar({
       emitPilotAuditEvent({ profileId: profile.id, action: 'pilotImport', result: 'ok', sourceType: out.provenance?.sourceType ?? 'unknown', originalFilename: meta.originalFilename || null })
       const pop = summarizePilotImportPopulation(out.merged)
       const w = out.warnings?.length ? ` Parser notes: ${out.warnings.join(' · ')}` : ''
-      setImportSummaryText(`${pop.summary}${pop.detail ? ` ${pop.detail}` : ''}${w}`)
+      setImportSummaryText(`${pop.summary}${w}`)
       clearZipImportUi()
     } finally {
       importApplyingRef.current = false
@@ -391,7 +416,7 @@ function XmlToolsBar({
     event.target.value = ''
     if (!file) return
     setImportError('')
-    setImportSummaryText('')
+    clearImportSummary()
     const lower = file.name.toLowerCase()
     const looksZip = lower.endsWith('.zip') || file.type === 'application/zip' || file.type === 'application/x-zip-compressed'
 
@@ -853,7 +878,21 @@ function XmlToolsBar({
         </div>
       ) : null}
 
-      {canImport && (importBusy || importError || importSummaryText || (zipXmlPaths && zipXmlPaths.length > 1)) ? (
+      {importSummaryText ? (
+        <div className="xml-import-summary-toast pilot-xml-tools__import-summary" role="status" aria-live="polite">
+          <p className="xml-import-summary hint">{importSummaryText}</p>
+          <button
+            type="button"
+            className="xml-import-summary-dismiss"
+            aria-label="Dismiss import summary"
+            onClick={clearImportSummary}
+          >
+            ×
+          </button>
+        </div>
+      ) : null}
+
+      {canImport && (importBusy || importError || (zipXmlPaths && zipXmlPaths.length > 1)) ? (
         <div className="xml-import-panel pilot-xml-tools__import" style={{ padding: '0.5rem 0.75rem' }}>
           {zipXmlPaths && zipXmlPaths.length > 1 ? (
             <label className="xml-import-zip-pick">
@@ -880,7 +919,6 @@ function XmlToolsBar({
             </label>
           ) : null}
           {importBusy ? <p className="hint" role="status">Importing…</p> : null}
-          {importSummaryText ? <p className="xml-import-summary hint" role="status">{importSummaryText}</p> : null}
           {importError ? <p className="field-error" role="alert">{importError}</p> : null}
         </div>
       ) : null}

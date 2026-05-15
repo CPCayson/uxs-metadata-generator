@@ -24,7 +24,7 @@ import { useMetadataEngine } from './context.js'
 import { defaultPilotState } from '../lib/pilotValidation.js'
 import { readPilotSessionPayload } from '../lib/pilotSessionStorage.js'
 import { getPilotFieldLabelFallback } from '../lib/pilotFieldLabelFallback.js'
-import { computeReadinessSnapshot } from '../lib/readinessSummary.js'
+import { computeReadinessSnapshot, IDLE_READINESS_SNAPSHOT } from '../lib/readinessSummary.js'
 import { computeCertificationBundles } from '../lib/certificationSummary.js'
 import ReadinessStrip from '../components/ReadinessStrip.jsx'
 import MantaToolsFabDock from '../components/MantaToolsFabDock.jsx'
@@ -508,6 +508,8 @@ export default function AssistantShell({
   const [newIssueKeys,   setNewIssueKeys]   = useState(new Set())
   const [activeDefIssue, setActiveDefIssue] = useState(null) // issue object
   const prevIssueKeysRef = useRef(new Set())
+  /** Bumped on `manta:pilot-session-updated` so widget readiness respects validationPrimed / Start over. */
+  const [pilotSessionRevision, setPilotSessionRevision] = useState(0)
 
   const runQualityCheck = useCallback((modeOverride) => {
     const mode = modeOverride ?? qualityMode
@@ -537,13 +539,22 @@ export default function AssistantShell({
   const widgetReadinessSnapshot = useMemo(() => {
     void qualityResult
     void qualityMode
+    void pilotSessionRevision
     const payload = readPilotSessionPayload()
+    if (!payload?.validationPrimed) return IDLE_READINESS_SNAPSHOT
     const state = payload?.pilot ?? defaultPilotState()
     return computeReadinessSnapshot(state, validationEngine, profile)
-  }, [validationEngine, profile, qualityResult, qualityMode])
+  }, [validationEngine, profile, qualityResult, qualityMode, pilotSessionRevision])
+
+  const widgetValidationPrimed = useMemo(() => {
+    void pilotSessionRevision
+    return readPilotSessionPayload()?.validationPrimed === true
+  }, [pilotSessionRevision])
 
   const widgetCertificationBundles = useMemo(() => {
     void qualityResult
+    void pilotSessionRevision
+    if (!widgetValidationPrimed) return []
     const payload = readPilotSessionPayload()
     const state = payload?.pilot ?? defaultPilotState()
     let xml = ''
@@ -556,7 +567,7 @@ export default function AssistantShell({
       xml,
       readinessSnapshot: widgetReadinessSnapshot,
     })
-  }, [profile, qualityResult, widgetReadinessSnapshot])
+  }, [profile, qualityResult, widgetReadinessSnapshot, widgetValidationPrimed, pilotSessionRevision])
 
   const syncValidationModeToWizard = useCallback(
     (m) => {
@@ -586,6 +597,14 @@ export default function AssistantShell({
 
   useEffect(() => {
     function onSessionWrite() {
+      setPilotSessionRevision((r) => r + 1)
+      const payload = readPilotSessionPayload()
+      if (!payload?.validationPrimed) {
+        setQualityResult(null)
+        prevIssueKeysRef.current = new Set()
+        setNewIssueKeys(new Set())
+        return
+      }
       runQualityCheck(qualityMode)
     }
     window.addEventListener('manta:pilot-session-updated', onSessionWrite)
@@ -1799,6 +1818,11 @@ export default function AssistantShell({
           <div className="manta-widget__quality-view">
             <ReadinessStrip
               className="readiness-strip--compact"
+              idleHint={
+                widgetValidationPrimed
+                  ? ''
+                  : 'Validation idle until you import XML, edit a field, or load a template.'
+              }
               snapshot={widgetReadinessSnapshot}
               bundles={widgetCertificationBundles}
               activeMode={qualityMode}

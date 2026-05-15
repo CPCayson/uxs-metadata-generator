@@ -2966,6 +2966,39 @@
   border-bottom: 1px solid var(--border);
 }
 
+.xml-import-summary-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin: 0.35rem 0.75rem 0.5rem;
+  padding: 0.45rem 0.55rem;
+  border-radius: 6px;
+  border: 1px solid rgba(14, 165, 233, 0.28);
+  background: rgba(14, 165, 233, 0.08);
+}
+
+.xml-import-summary-toast .xml-import-summary {
+  margin: 0;
+  flex: 1;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.xml-import-summary-dismiss {
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0 0.15rem;
+  cursor: pointer;
+}
+
+.xml-import-summary-dismiss:hover {
+  color: var(--text-color);
+}
+
 .xml-import-hint {
   margin: 0 0 0.4rem;
   font-size: 0.82rem;

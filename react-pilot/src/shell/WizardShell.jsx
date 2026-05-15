@@ -14,6 +14,8 @@
 import { useCallback, useDeferredValue, useEffect, useLayoutEffect, useMemo, useRef, useState, Suspense } from 'react'
 import { flushSync, createPortal } from 'react-dom'
 import StepNav from '../components/StepNav'
+import ValidationPanel from '../components/ValidationPanel'
+import ReadinessStrip from '../components/ReadinessStrip.jsx'
 import XmlPreviewPanel from '../components/XmlPreviewPanel'
 import XmlToolsBar from '../components/XmlToolsBar'
 import DebugLogPanel from '../components/DebugLogPanel'
@@ -24,8 +26,16 @@ import {
   readInitialValidationPrimed,
   cancelScheduledPersistPilotSession,
 } from '../lib/pilotSessionStorage'
-import { logPilotWorkspace, pilotWorkspaceSnapshot } from '../lib/pilotDebugLog.js'
+import { logPilotWorkspace, pilotWorkspaceSnapshot, pushPilotDebug } from '../lib/pilotDebugLog.js'
 import { applyPilotAutoFixes } from '../lib/pilotAutoFix.js'
+import {
+  computeReadinessBundles,
+  computeReadinessSnapshot,
+  IDLE_READINESS_SNAPSHOT,
+  IDLE_VALIDATION_RESULT,
+} from '../lib/readinessSummary.js'
+import { computeCertificationBundles } from '../lib/certificationSummary.js'
+import { getPilotFieldLabelFallback } from '../lib/pilotFieldLabelFallback.js'
 import { scrollToField } from '../core/registry/FieldRegistry.js'
 import { useMetadataEngine } from './context.js'
 import { useCometWorkbenchBridge } from './CometWorkbenchBridge.jsx'
@@ -45,18 +55,9 @@ import {
   requestWorkspaceClear,
 } from '../lib/pilotWorkspaceClearBus.js'
 import { diffPilotStates } from '../core/fragments/diffPilotStates.js'
-import { summarizePilotImportPopulation } from '../lib/importMergeSummary.js'
 import { useWorkbenchChrome } from './useWorkbenchChrome.js'
 import { defaultPilotState } from '../lib/pilotValidation.js'
 import { confirmReplaceDifferentRecord, peekIncomingMissionFileId } from '../lib/pilotImportReplaceGuard.js'
-
-const IDLE_VALIDATION_RESULT = Object.freeze({
-  issues: [],
-  score: 100,
-  maxScore: 100,
-  errCount: 0,
-  warnCount: 0,
-})
 
 /**
  * @param {{
@@ -139,7 +140,12 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
   const [missionStepsSlotEl, setMissionStepsSlotEl] = useState(/** @type {HTMLElement | null} */ (null))
 
 
-  const [, setStatusMessage] = useState('Ready')
+  const hostBridgeReady = hostBridge.isAvailable()
+
+  const [statusMessage, setStatusMessage] = useState('Ready')
+  const [loading, setLoading] = useState(false)
+  const [summary, setSummary] = useState({ platforms: 'not checked', templates: 'not checked' })
+  const hostRuntimeLabel = hostBridgeReady ? 'Postgres API (HTTP /api/db)' : 'Host bridge not connected'
 
   /** Raw XML + meta from last XmlToolsBar “Apply” — drives downloadable import report */
   const [importSampleContext, setImportSampleContext] = useState(
@@ -154,8 +160,6 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
 
   const pilotRef = useRef(pilotState)
   pilotRef.current = pilotState
-
-  const hostBridgeReady = hostBridge.isAvailable()
 
   // Called by profile host actions after any save/load that should reset dirty state.
   const onStateLoaded = useCallback((cleanState) => {
@@ -214,6 +218,26 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     },
     [ma],
   )
+
+  async function runServerCheck() {
+    setLoading(true)
+    setStatusMessage('Checking database connection…')
+    try {
+      const [pRes, tRes] = await Promise.all([hostBridge.listPlatforms(), hostBridge.listTemplates()])
+      setSummary({
+        platforms: pRes.unexpectedShape ? 'unknown payload' : `${pRes.rows.length} rows`,
+        templates: tRes.unexpectedShape ? 'unknown payload' : `${tRes.rows.length} rows`,
+      })
+      setStatusMessage('Bridge check succeeded.')
+      pushPilotDebug({ kind: 'bridgeCheck', ok: true, detail: `${pRes.rows?.length ?? 0} platforms / ${tRes.rows?.length ?? 0} templates` })
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error)
+      setStatusMessage(`Bridge check failed: ${msg}`)
+      pushPilotDebug({ kind: 'bridgeCheck', ok: false, detail: msg })
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const loadPilotDraftPrimed = useCallback(async () => {
     await ma.loadPilotDraft()
@@ -343,6 +367,55 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     }
     return out
   }, [workflowEngine, validation.issues, touched, profile.steps])
+
+  const readinessSnapshot = useMemo(() => {
+    if (!validationPrimed) return IDLE_READINESS_SNAPSHOT
+    return computeReadinessSnapshot(deferredPilotState, validationEngine, profile)
+  }, [validationPrimed, deferredPilotState, validationEngine, profile])
+
+  const readinessBundles = useMemo(() => {
+    if (!validationPrimed) return []
+    return computeReadinessBundles(readinessSnapshot, {
+      preflightSummary: comet.preflightSummary,
+      isDirty,
+    })
+  }, [validationPrimed, readinessSnapshot, comet.preflightSummary, isDirty])
+
+  const certificationXml = useMemo(() => {
+    try {
+      const xml = buildXml(deferredPilotState)
+      return typeof xml === 'string' ? xml : ''
+    } catch {
+      return ''
+    }
+  }, [buildXml, deferredPilotState])
+
+  const certificationBundles = useMemo(() => {
+    if (!validationPrimed) return []
+    return computeCertificationBundles(deferredPilotState, {
+      xml: certificationXml,
+      readinessSnapshot,
+      preflightSummary: comet.preflightSummary,
+      cometUuid,
+      isDirty,
+    })
+  }, [
+    validationPrimed,
+    deferredPilotState,
+    certificationXml,
+    readinessSnapshot,
+    comet.preflightSummary,
+    cometUuid,
+    isDirty,
+  ])
+
+  const readinessAndCertificationBundles = useMemo(
+    () => [...readinessBundles, ...certificationBundles],
+    [readinessBundles, certificationBundles],
+  )
+
+  const hideReadinessGoalBundles =
+    typeof import.meta !== 'undefined' && import.meta.env?.VITE_HIDE_READINESS_BUNDLES === 'true'
 
   const activeStepMeta = profile.steps.find((s) => s.id === activeStep) ?? profile.steps[0]
 
@@ -752,9 +825,8 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
    * @param {object} next Merged pilot state from XML import
    * @param {{ importWarnings?: string[] }} [meta] Parser warnings from {@link parseProfileXmlImport}
    */
-  function handlePilotImport(next, meta = {}) {
+  function handlePilotImport(next, _meta = {}) {
     setValidationPrimed(true)
-    const importWarnings = Array.isArray(meta.importWarnings) ? meta.importWarnings : []
     const changes = diffPilotStates(pilotState, next, next.sourceProvenance?.sourceType ?? 'rawIso')
     if (changes.length === 0) {
       const clean = profile.sanitize(next)
@@ -762,12 +834,7 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
       setPilotState(clean)
       setTouched({})
       setShowAllErrors(false)
-      const pop = summarizePilotImportPopulation(clean)
-      const w = importWarnings.length ? ` Parser notes: ${importWarnings.join(' · ')}` : ''
-      setStatusMessage(
-        `${pop.summary}${w ? `.${w}` : ''}` +
-          ' Review any remaining checks in the Validation panel.',
-      )
+      setStatusMessage('Ready')
       window.dispatchEvent(new CustomEvent('manta:metadata-import-merged'))
       return
     }
@@ -778,12 +845,7 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     setPilotState(clean)
     setTouched({})
     setShowAllErrors(false)
-    const pop = summarizePilotImportPopulation(clean)
-    const w = importWarnings.length ? ` Parser notes: ${importWarnings.join(' · ')}` : ''
-    setStatusMessage(
-      `${pop.summary}${w ? `.${w}` : ''}` +
-        ' Review any remaining checks in the Validation panel.',
-    )
+    setStatusMessage('Ready')
     window.dispatchEvent(new CustomEvent('manta:metadata-import-merged'))
   }
 
@@ -1074,14 +1136,48 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
                     <button
                       type="button"
                       role="tab"
-                      id="side-tab-schema"
-                      aria-selected={sidePanelTab === 'schema'}
-                      aria-controls="side-panel-schema"
-                      tabIndex={sidePanelTab === 'schema' ? 0 : -1}
-                      className={`nav-link${sidePanelTab === 'schema' ? ' active' : ''}`}
-                      onClick={() => setSidePanelTab('schema')}
+                      id="side-tab-ask"
+                      aria-selected={sidePanelTab === 'ask'}
+                      aria-controls="side-panel-ask"
+                      tabIndex={sidePanelTab === 'ask' ? 0 : -1}
+                      className={`nav-link${sidePanelTab === 'ask' ? ' active' : ''}`}
+                      onClick={() => {
+                        setSidePanelTab('ask')
+                        window.dispatchEvent(new CustomEvent('manta:assistant-tab', { detail: { tab: 'ask' } }))
+                      }}
                     >
-                      Schema
+                      Ask
+                    </button>
+                  </li>
+                  <li className="nav-item" role="presentation">
+                    <button
+                      type="button"
+                      role="tab"
+                      id="side-tab-lens"
+                      aria-selected={sidePanelTab === 'lens'}
+                      aria-controls="side-panel-lens"
+                      tabIndex={sidePanelTab === 'lens' ? 0 : -1}
+                      className={`nav-link${sidePanelTab === 'lens' ? ' active' : ''}`}
+                      onClick={() => {
+                        setSidePanelTab('lens')
+                        window.dispatchEvent(new CustomEvent('manta:assistant-tab', { detail: { tab: 'lens' } }))
+                      }}
+                    >
+                      Lens
+                    </button>
+                  </li>
+                  <li className="nav-item" role="presentation">
+                    <button
+                      type="button"
+                      role="tab"
+                      id="side-tab-verify"
+                      aria-selected={sidePanelTab === 'verify'}
+                      aria-controls="side-panel-verify"
+                      tabIndex={sidePanelTab === 'verify' ? 0 : -1}
+                      className={`nav-link${sidePanelTab === 'verify' ? ' active' : ''}`}
+                      onClick={() => setSidePanelTab('verify')}
+                    >
+                      Verify
                     </button>
                   </li>
                   {showCometPanel ? (
@@ -1160,36 +1256,96 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
               </div>
             </div>
 
-            {/* Schema info tab */}
+            {/* Ask tab — portals into the FAB dock Ask panel */}
             {!xmlExpanded && (
               <div
-                id="side-panel-schema"
+                id="side-panel-ask"
                 role="tabpanel"
-                aria-labelledby="side-tab-schema"
-                hidden={sidePanelTab !== 'schema'}
+                aria-labelledby="side-tab-ask"
+                hidden={sidePanelTab !== 'ask'}
+                className="workspace-side-tabpanel lab-right-rail-tabpanel lab-right-rail-tabpanel--assistant"
+              >
+                <div id="manta-ask-rail-host" className="lab-right-rail-portal-host" />
+                {sidePanelTab === 'ask' && !mantaToolsEnabled ? (
+                  <p className="lab-right-rail-hint">Turn on <strong>Lens</strong> in the app header to use Ask.</p>
+                ) : null}
+              </div>
+            )}
+
+            {/* Lens tab — portals into the FAB dock Lens panel */}
+            {!xmlExpanded && (
+              <div
+                id="side-panel-lens"
+                role="tabpanel"
+                aria-labelledby="side-tab-lens"
+                hidden={sidePanelTab !== 'lens'}
+                className="workspace-side-tabpanel lab-right-rail-tabpanel lab-right-rail-tabpanel--assistant"
+              >
+                <div id="manta-lens-rail-host" className="lab-right-rail-portal-host" />
+                {sidePanelTab === 'lens' && !mantaToolsEnabled ? (
+                  <p className="lab-right-rail-hint">Turn on <strong>Lens</strong> in the app header to use Lens.</p>
+                ) : null}
+              </div>
+            )}
+
+            {/* Verify tab — ValidationPanel (errors/warnings + mode) + ReadinessStrip (catalog/strict/cert) */}
+            {!xmlExpanded && (
+              <div
+                id="side-panel-verify"
+                role="tabpanel"
+                aria-labelledby="side-tab-verify"
+                hidden={sidePanelTab !== 'verify'}
                 className="workspace-side-tabpanel workspace-side-tabpanel--schema"
               >
-                <div style={{ padding: '0.75rem', fontSize: '0.8rem' }}>
-                  <div style={{ fontWeight: 700, marginBottom: 6 }}>Active Schema</div>
-                  <div style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: 6, padding: '0.5rem 0.75rem', marginBottom: 8 }}>
-                    <div style={{ fontWeight: 600 }}>ISO 19115-2:2019</div>
-                    <div style={{ color: 'var(--text-muted)', fontSize: '0.72rem', marginTop: 2 }}>+ NOAA Extensions — gmi:MI_Metadata</div>
-                  </div>
-                  <div style={{ fontWeight: 700, marginBottom: 6 }}>Conformance</div>
-                  <div style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: 6, padding: '0.5rem 0.75rem', marginBottom: 8 }}>
-                    <div style={{ fontWeight: 600, color: 'var(--primary-color)' }}>UxS-Marine-Core</div>
-                    <div style={{ display: 'flex', gap: 4, marginTop: 6 }}>
-                      <div style={{ flex: 1, height: 6, background: 'var(--border-color)', borderRadius: 3 }}>
-                        <div style={{ width: `${Math.round(validation.score ?? 0)}%`, height: '100%', background: 'var(--primary-color)', borderRadius: 3, transition: 'width 0.3s' }} />
-                      </div>
-                      <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--primary-color)' }}>{Math.round(validation.score ?? 0)}%</span>
-                    </div>
-                  </div>
-                  <div style={{ fontWeight: 700, marginBottom: 6 }}>SWARM rules</div>
-                  <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>
-                    152 compiled rules · {validation.errCount ?? 0} blocking · {validation.warnCount ?? 0} warnings
-                  </div>
-                </div>
+                <ValidationPanel
+                  hideSurfaceIntro
+                  hideModePills
+                  hideScoreChips
+                  collapseConnectionTools
+                  collapseFieldHints
+                  quietSurface={quietSurface}
+                  railIntroProfileLabel={profile.id === 'mission' ? 'UxS / Mission PED' : ''}
+                  validationIdle={!validationPrimed}
+                  mode={pilotState.mode}
+                  onModeChange={setMode}
+                  score={validation.score}
+                  maxScore={validation.maxScore}
+                  errCount={validation.errCount}
+                  warnCount={validation.warnCount}
+                  issues={validation.issues}
+                  hostBridgeReady={hostBridgeReady}
+                  hostRuntimeLabel={hostRuntimeLabel}
+                  summary={summary}
+                  loading={loading}
+                  onBridgeCheck={runServerCheck}
+                  inlineEverywhere={showAllErrors}
+                  onInlineEverywhereChange={setShowAllErrors}
+                  onServerRulesValidate={cap.serverValidate ? ma.runServerRulesValidation : null}
+                  serverRulesBusy={ma.serverRulesBusy}
+                  serverRulesSummary={ma.serverRulesSummary}
+                  statusMessage={statusMessage}
+                  onIssueNavigate={navigateToPilotField}
+                  pilotState={pilotState}
+                  getFieldLabel={
+                    typeof profile.getFieldLabel === 'function' ? profile.getFieldLabel.bind(profile) : getPilotFieldLabelFallback
+                  }
+                />
+                <ReadinessStrip
+                  hideSectionHead
+                  className="readiness-strip--rail-after-issues"
+                  idleHint={
+                    !validationPrimed
+                      ? 'Readiness scores stay idle until you import XML, apply a sheet template, load a draft, or edit the form.'
+                      : ''
+                  }
+                  snapshot={readinessSnapshot}
+                  bundles={hideReadinessGoalBundles ? [] : readinessAndCertificationBundles}
+                  activeMode={pilotState.mode || 'lenient'}
+                  onSelectMode={(m) => {
+                    setMode(m)
+                    setShowAllErrors(true)
+                  }}
+                />
               </div>
             )}
 
