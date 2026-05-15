@@ -325,6 +325,7 @@ function XmlPreviewPanel({
         </p>
       ) : null}
 
+
       <div
         ref={scrollRef}
         className="xml-preview-box xml-preview-box--scroll fx-xml-scroll"
@@ -333,13 +334,18 @@ function XmlPreviewPanel({
         <div className="fx-xml-lines" role="document">
           {lines.map((line) => {
             const isActive = line.num === activeLine
+            const field = lineToField.get(line.num)
+            const humanLabel = field ? field.split('.').pop()?.replace(/([A-Z])/g, ' $1').toLowerCase() : null
+            
             const cls = [
               'fx-xml-line',
               isActive ? 'fx-xml-line--active' : '',
               line.changed ? 'fx-xml-line--changed' : '',
+              field ? 'fx-xml-line--annotated' : '',
             ]
               .filter(Boolean)
               .join(' ')
+
             return (
               <div
                 key={line.num}
@@ -351,10 +357,20 @@ function XmlPreviewPanel({
                 data-line={line.num}
                 data-active-xml-line={isActive ? 'true' : undefined}
                 onClick={() => handleLineClick(line.num)}
-                style={{ cursor: lineToField.has(line.num) ? 'pointer' : 'default' }}
+                style={{ cursor: field ? 'pointer' : 'default' }}
               >
+                {field && (
+                  <div className="fx-xml-annotation">
+                    <Sparkles size={10} className="fx-xml-annotation-icon" />
+                    <span>{humanLabel}</span>
+                  </div>
+                )}
                 <span className="fx-xml-line-num" aria-hidden>{String(line.num).padStart(3, ' ')}</span>
                 <code className="fx-xml-line-code" dangerouslySetInnerHTML={{ __html: line.html || '&nbsp;' }} />
+                
+                {line.changed && (
+                  <div className="fx-xml-line-diff-indicator" title="Changed from original" />
+                )}
               </div>
             )
           })}

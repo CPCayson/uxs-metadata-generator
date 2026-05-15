@@ -139,13 +139,6 @@ function AccordionSection({
  *   loadDisabled: boolean,
  *   saveDisabled: boolean,
  *   draftStatus: { timestamp?: string | null, source?: string },
- *   hostBridgeReady?: boolean,
- *   templateCatalogRows?: Array<{ key: string, name: string, category?: string }>,
- *   templateCatalogLoading?: boolean,
- *   templateCatalogError?: string,
- *   onRefreshTemplateCatalog?: () => void,
- *   onApplySheetTemplate?: (name: string) => void,
- *   templateApplyDisabled?: boolean,
  *   contactLibraryEnabled?: boolean,
  *   platform?: object,
  * }} props
@@ -162,25 +155,20 @@ export default function StepMission({
   loadDisabled,
   saveDisabled,
   draftStatus,
-  hostBridgeReady = false,
-  templateCatalogRows = [],
-  templateCatalogLoading = false,
-  templateCatalogError = '',
-  onRefreshTemplateCatalog,
-  onApplySheetTemplate,
-  templateApplyDisabled = false,
   contactLibraryEnabled = false,
   platform = null,
   pilotState = null,
   onSourceProvenanceClear,
   /** Workspace “Simple” density — shorter Mission intro; tuck optional UxS block behind a disclosure */
   guidedMissionIntro = false,
+  aiSuggestions = {},
+  onApplyAiSuggestion,
+  onIgnoreAiSuggestion,
 }) {
   const [rorQuery, setRorQuery] = useState('')
   const [rorLoading, setRorLoading] = useState(false)
   const [rorResults, setRorResults] = useState([])
   const [rorError, setRorError] = useState('')
-  const [selectedTemplateKey, setSelectedTemplateKey] = useState('')
   const [lensSymbioteActive, setLensSymbioteActive] = useState(false)
   const [editPurpose, setEditPurpose] = useState(false)
   const [abstractExpanded, setAbstractExpanded] = useState(false)
@@ -475,79 +463,6 @@ export default function StepMission({
         onClear={onSourceProvenanceClear ?? (() => {})}
       />
 
-      <section className="panel platform-library-panel">
-        <h3 className="panel-title">Mission templates from catalog</h3>
-            <p className="card-intro platform-library-intro">
-              Load a named template from your Postgres-backed catalog (<code>/api/db</code>). The list loads when you open
-              this section; use Refresh after catalog edits. Pick a template in the dropdown, then <strong>Apply template</strong>.
-            </p>
-            <div className="platform-library-row">
-              <select
-                className="form-control form-select"
-                value={selectedTemplateKey}
-                disabled={!hostBridgeReady || templateCatalogLoading}
-                onChange={(e) => setSelectedTemplateKey(e.target.value)}
-              >
-                <option value="">Select a template…</option>
-                {templateCatalogRows.map(({ key, name, category }) => {
-                  const cat = String(category || '').trim()
-                  const label = cat ? `${name} (${cat})` : name
-                  return (
-                    <option key={key} value={key}>
-                      {label}
-                    </option>
-                  )
-                })}
-              </select>
-              <button
-                type="button"
-                className="button button-secondary button-tiny"
-                disabled={!hostBridgeReady || templateCatalogLoading}
-                onClick={() => onRefreshTemplateCatalog?.()}
-              >
-                {templateCatalogLoading ? 'Loading…' : 'Refresh'}
-              </button>
-              <button
-                type="button"
-                className="button button-secondary button-tiny mission-template-clear"
-                disabled={!selectedTemplateKey}
-                onClick={() => setSelectedTemplateKey('')}
-                title="Clear template selection"
-                aria-label="Clear template selection"
-              >
-                Clear
-              </button>
-              <button
-                type="button"
-                className="button button-tiny"
-                disabled={templateApplyDisabled || templateCatalogLoading || !selectedTemplateKey}
-                onClick={() => onApplySheetTemplate?.(selectedTemplateKey)}
-              >
-                Apply template
-              </button>
-            </div>
-            {!hostBridgeReady ? (
-              <p className="hint">
-                <span>Templates need a reachable <code>/api/db</code> on the same origin.</span>{' '}
-                <FieldHintTooltip ariaLabel="Enable catalog templates">
-                  <>
-                    Templates load from Postgres via <code>/api/db</code>.
-                    {import.meta.env.DEV && typeof window !== 'undefined' && window.location.port === '5173'
-                      ? (
-                          <>
-                            {' '}
-                            You are on plain Vite — run <code>npm run dev:netlify</code> and open{' '}
-                            <strong>http://localhost:8888</strong>.
-                          </>
-                        )
-                      : null}
-                  </>
-                </FieldHintTooltip>
-              </p>
-            ) : null}
-            {templateCatalogError ? <p className="field-error">{templateCatalogError}</p> : null}
-      </section>
-
       {guidedMissionIntro ? (
         <p className="card-intro card-intro--guided">
           <strong>Start here:</strong> collection context (below), then use the steps across the top — Platform, Sensors,
@@ -806,6 +721,9 @@ export default function StepMission({
           required
           hideChipsRow={hideMissionGlassChips}
           showValidationChrome={glassShowChrome('mission.title')}
+          aiSuggestion={aiSuggestions['mission.title']}
+          onApplyAiSuggestion={onApplyAiSuggestion}
+          onIgnoreAiSuggestion={onIgnoreAiSuggestion}
         >
           <input
             id="title"
@@ -826,6 +744,9 @@ export default function StepMission({
           hideAskMore
           hideChipsRow={hideMissionGlassChips}
           showValidationChrome={glassShowChrome('mission.alternateTitle')}
+          aiSuggestion={aiSuggestions['mission.alternateTitle']}
+          onApplyAiSuggestion={onApplyAiSuggestion}
+          onIgnoreAiSuggestion={onIgnoreAiSuggestion}
         >
           <input
             id="alternateTitle"
@@ -846,6 +767,9 @@ export default function StepMission({
           hideChipsRow={hideMissionGlassChips}
           showValidationChrome={glassShowChrome('mission.abstract')}
           hint="Include platform type, instruments, survey area, dates, and data products. Turn on Lens and focus this field for acronym-safe drafting help."
+          aiSuggestion={aiSuggestions['mission.abstract']}
+          onApplyAiSuggestion={onApplyAiSuggestion}
+          onIgnoreAiSuggestion={onIgnoreAiSuggestion}
         >
           <>
             <textarea
@@ -878,6 +802,9 @@ export default function StepMission({
           required
           hideChipsRow={hideMissionGlassChips}
           showValidationChrome={glassShowChrome('mission.purpose')}
+          aiSuggestion={aiSuggestions['mission.purpose']}
+          onApplyAiSuggestion={onApplyAiSuggestion}
+          onIgnoreAiSuggestion={onIgnoreAiSuggestion}
         >
           {editPurpose ? (
             <textarea
@@ -1543,15 +1470,28 @@ geoscientificInformation`}
             Apply suggestion
           </button>
         </div>
-        <label htmlFor="citeAs">Cite as (use limitation)</label>
-        <textarea
-          id="citeAs"
-          rows={2}
-          className="form-control"
-          data-pilot-field="mission.citeAs"
+        <MantaFieldGlass
+          fieldPath="mission.citeAs"
           value={mission.citeAs || ''}
-          onChange={(e) => onMissionPatch({ citeAs: e.target.value })}
-        />
+          issues={issues}
+          label="Cite as (use limitation)"
+          hideChipsRow={hideMissionGlassChips}
+          showValidationChrome={glassShowChrome('mission.citeAs')}
+          aiSuggestion={aiSuggestions['mission.citeAs']}
+          onApplyAiSuggestion={onApplyAiSuggestion}
+          onIgnoreAiSuggestion={onIgnoreAiSuggestion}
+          hint="Standard citation string for users of this dataset. Include authors, year, title, and repository."
+        >
+          <textarea
+            id="citeAs"
+            rows={2}
+            className="form-control"
+            data-pilot-field="mission.citeAs"
+            value={mission.citeAs || ''}
+            onChange={(e) => onMissionPatch({ citeAs: e.target.value })}
+            onBlur={() => onTouched('mission.citeAs')}
+          />
+        </MantaFieldGlass>
         <label htmlFor="otherCiteAs">Other cite / plain other constraints</label>
         <textarea
           id="otherCiteAs"

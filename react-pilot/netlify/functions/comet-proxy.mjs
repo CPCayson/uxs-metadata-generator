@@ -163,18 +163,30 @@ export default async (req) => {
   const effectiveMetaserverSessionId = headerMetaserverSessionId || envMetaserverSession
 
   const url    = new URL(req.url)
-  const action = url.searchParams.get('action') ?? ''
-  const uuid   = url.searchParams.get('uuid')   ?? ''
+  const queryAction = url.searchParams.get('action') ?? ''
+  const queryUuid   = url.searchParams.get('uuid')   ?? ''
+  const queryFile   = url.searchParams.get('filename') ?? ''
 
   // Cookie header injected on every authenticated request
   const cookieHeader = effectiveSessionId ? { Cookie: `JSESSIONID=${effectiveSessionId}` } : {}
   const metaserverCookieHeader = effectiveMetaserverSessionId ? { Cookie: `JSESSIONID=${effectiveMetaserverSessionId}` } : {}
 
   try {
+    const rawBody = (req.method === 'POST' || req.method === 'PUT') ? await req.text() : ''
+    let bodyJson = {}
+    if (rawBody.trim().startsWith('{')) {
+      try { bodyJson = JSON.parse(rawBody) } catch { /* not JSON */ }
+    }
+
+    const action   = bodyJson.action   || queryAction
+    const uuid     = bodyJson.uuid     || queryUuid
+    const filename = bodyJson.filename || queryFile || 'manta-lens-preview.xml'
+    const xmlBody  = bodyJson.xml      || rawBody
+
     // ── LOGIN ──────────────────────────────────────────────────────────────
     if (action === 'login') {
       if (req.method !== 'POST') return jsonError(req, 'login requires POST', 405)
-      const body = await req.text() // expects application/x-www-form-urlencoded
+      const body = rawBody // expects application/x-www-form-urlencoded
 
       const upstream = await fetch(`${COMET_BASE}/login/wsLogin`, {
         method: 'POST',
@@ -377,13 +389,17 @@ export default async (req) => {
     if (action === 'rubric') {
       if (req.method !== 'POST') return jsonError(req, 'rubric requires POST', 405)
 
-      const filename = url.searchParams.get('filename') ?? 'record.xml'
-      const xmlBody  = await req.text()
+      if (!xmlBody) return jsonError(req, 'Missing XML body for rubric action')
 
-      const session = await resolveSession(COMET_BASE, headerSessionId, envCometSession)
-      if (!session) return jsonError(req, 'No CoMET JSESSIONID available. Set COMET_USER and COMET_PASS env vars, or log in from the app.', 401)
+      // Use METASERVER_BASE for rubric scoring
+      const session = await resolveMetaSession(
+        METASERVER_BASE, COMET_BASE,
+        headerMetaserverSessionId, envMetaserverSession,
+        headerSessionId, envCometSession,
+      )
+      if (!session) return jsonError(req, 'No MetaServer JSESSIONID available. Set COMET_USER and COMET_PASS env vars, or log in from the app.', 401)
 
-      const makeRubricReq = (sid) => fetch(`${COMET_BASE}/recordServices/rubricV2?filename=${encodeURIComponent(filename)}`, {
+      const makeRubricReq = (sid) => fetch(`${METASERVER_BASE}/recordServices/rubricV2?filename=${encodeURIComponent(filename)}`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/xml', Accept: 'application/json', Cookie: `JSESSIONID=${sid}` },
         body:    xmlBody,
@@ -391,14 +407,14 @@ export default async (req) => {
 
       let upstream = await makeRubricReq(session)
       if ((upstream.status === 401 || upstream.status === 403) && !headerSessionId && !envCometSession) {
-        _cachedAutoSession = ''
-        const refreshed = await resolveSession(COMET_BASE, '', '')
+        _cachedAutoMetaSession = ''
+        const refreshed = await resolveMetaSession(METASERVER_BASE, COMET_BASE, '', '', '', '')
         if (refreshed) upstream = await makeRubricReq(refreshed)
       }
 
-      const body        = await upstream.text()
+      const resBody     = await upstream.text()
       const contentType = upstream.headers.get('Content-Type') ?? 'application/json'
-      return new Response(body, { status: upstream.status, headers: { ...CORS, 'Content-Type': contentType } })
+      return new Response(resBody, { status: upstream.status, headers: { ...CORS, 'Content-Type': contentType } })
     }
 
     // ── RESOLVER (resolve XLinks in ISO 19115-2 XML) ─────────────────────
@@ -423,14 +439,18 @@ export default async (req) => {
     if (action === 'isoValidate') {
       if (req.method !== 'POST') return jsonError(req, 'isoValidate requires POST', 405)
 
-      const filename = url.searchParams.get('filename') ?? 'record.xml'
-      const xmlBody  = await req.text()
+      if (!xmlBody) return jsonError(req, 'Missing XML body for isoValidate action')
 
-      const session = await resolveSession(COMET_BASE, headerSessionId, envCometSession)
-      if (!session) return jsonError(req, 'No CoMET JSESSIONID available. Set COMET_USER and COMET_PASS env vars, or log in from the app.', 401)
+      // Use METASERVER_BASE for stateless ISO validation
+      const session = await resolveMetaSession(
+        METASERVER_BASE, COMET_BASE,
+        headerMetaserverSessionId, envMetaserverSession,
+        headerSessionId, envCometSession,
+      )
+      if (!session) return jsonError(req, 'No MetaServer JSESSIONID available. Set COMET_USER and COMET_PASS env vars, or log in from the app.', 401)
 
       const makeValidateReq = (sid) => fetch(
-        `${COMET_BASE}/recordServices/validate?filename=${encodeURIComponent(filename)}`,
+        `${METASERVER_BASE}/recordServices/validate?filename=${encodeURIComponent(filename)}`,
         {
           method:  'POST',
           headers: { 'Content-Type': 'application/xml', Accept: 'application/json', Cookie: `JSESSIONID=${sid}` },
@@ -440,14 +460,20 @@ export default async (req) => {
 
       let upstream = await makeValidateReq(session)
       if ((upstream.status === 401 || upstream.status === 403) && !headerSessionId && !envCometSession) {
-        _cachedAutoSession = ''
-        const refreshed = await resolveSession(COMET_BASE, '', '')
+        _cachedAutoMetaSession = ''
+        const refreshed = await resolveMetaSession(METASERVER_BASE, COMET_BASE, '', '', '', '')
         if (refreshed) upstream = await makeValidateReq(refreshed)
       }
 
-      const body        = await upstream.text()
+      const resBody     = await upstream.text()
       const contentType = upstream.headers.get('Content-Type') ?? 'application/json'
-      return new Response(body, { status: upstream.status, headers: { ...CORS, 'Content-Type': contentType } })
+      return new Response(resBody, { status: upstream.status, headers: { ...CORS, 'Content-Type': contentType } })
+    }
+    
+    // Support "validate" alias from prompt
+    if (action === 'validate' && req.method === 'POST') {
+        // Redirect to isoValidate logic
+        action = 'isoValidate'
     }
 
     // ── METASERVER VALIDATE (legacy form submit; mirrors metaserv-valid.sh) ─

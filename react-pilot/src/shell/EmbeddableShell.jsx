@@ -49,22 +49,6 @@ function readWorkspaceDensity() {
   return 'simple'
 }
 
-/** True when session payload looks like real metadata (import or filled wizard), not an empty shell. */
-function sessionLooksParsed() {
-  try {
-    const payload = readPilotSessionPayload()
-    const p = payload?.pilot
-    if (!p?.mission) return false
-    const m = p.mission
-    if (String(m.missionTitle || m.title || '').trim().length > 1) return true
-    if (String(m.abstract || '').trim().length > 12) return true
-    if (String(p.ident?.fileIdentifier || '').trim().length > 3) return true
-    if (String(m.contactEmail || '').includes('@')) return true
-    return false
-  } catch {
-    return false
-  }
-}
 
 /**
  * @param {{

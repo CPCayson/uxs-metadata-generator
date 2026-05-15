@@ -67,7 +67,7 @@ export function useCometValidator() {
     setResult(null)
 
     // Run validate and rubric in parallel — rubric runs regardless of validate result
-    const validatePromise = validateIsoXml(xmlString, 'manta-preview.xml').catch((e) => ({ __err: e }))
+    const validatePromise = validateIsoXml(xmlString, 'manta-lens-preview.xml').catch((e) => ({ __err: e }))
     const rubricPromise = runRubric
       ? getRubricScore('manta-preview', xmlString).catch(() => null)
       : Promise.resolve(null)

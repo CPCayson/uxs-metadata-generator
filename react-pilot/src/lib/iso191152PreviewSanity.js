@@ -54,6 +54,10 @@ export function missionPreviewIso191152SanityFailures(xml) {
       passed: !/<gco:Decimal[^>]*>\s*<\/gco:Decimal>/i.test(xml),
     },
     {
+      id: 'preview.noEmptyGcoCharacterString',
+      passed: !/<gco:CharacterString[^>]*>\s*<\/gco:CharacterString>/i.test(xml),
+    },
+    {
       id: 'preview.dateStampNonempty',
       passed:
         /<gmd:dateStamp\b[^>]*>[\s\S]*?<gco:(?:Date|DateTime)\b[^>]*>[\s\S]*?<\/gco:(?:Date|DateTime)>[\s\S]*?<\/gmd:dateStamp>/i.test(

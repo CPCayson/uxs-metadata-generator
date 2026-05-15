@@ -1,4 +1,5 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
+import { Sparkles } from 'lucide-react'
 import { searchGcmdSchemeClient } from '../../lib/gcmdClient'
 import { gcmdConceptUrlFromUuid } from '../../lib/gcmdKmsUrl.js'
 import { runLensScanHeuristic } from '../../lib/lensScanHeuristic.js'
@@ -44,6 +45,60 @@ export default function StepKeywords({ mission = {}, keywords = {}, onKeywordsCh
   const [resolveBusy, setResolveBusy] = useState(false)
   const [resolveStatus, setResolveStatus] = useState('')
   const [perChipResolveBusy, setPerChipResolveBusy] = useState(() => ({}))
+
+  useEffect(() => {
+    const onAiDone = async (e) => {
+      if (e.detail?.field === 'keywords' && e.detail?.result) {
+        const raw = e.detail.result
+        const labels = raw.split(',').map(s => s.trim()).filter(s => s.length > 2)
+        setSuggestStatus(`AI suggested ${labels.length} keywords. Resolving against GCMD KMS...`)
+        
+        const resolved = []
+        for (const label of labels) {
+          try {
+            const matches = await searchGcmdSchemeClient('sciencekeywords', label, { maxMatches: 1 })
+            const top = matches[0]
+            if (top) {
+              const alreadyPresent = Array.isArray(keywords.sciencekeywords) && keywords.sciencekeywords.some(k => k.uuid === top.uuid)
+              resolved.push({
+                key: `sciencekeywords:${top.uuid}`,
+                facetKey: 'sciencekeywords',
+                label: top.prefLabel || label,
+                uuid: top.uuid,
+                alreadyPresent,
+                confidence: 1.0,
+                matchType: 'AI/LLM',
+                seedWord: label,
+                evidence: 'Genkit AI suggestion',
+                source: 'Gemini 1.5 Flash'
+              })
+            }
+          } catch (err) {
+            console.warn('Failed to resolve AI keyword:', label, err)
+          }
+        }
+
+        if (resolved.length === 0) {
+          setSuggestStatus('AI suggested keywords but none could be confidently matched to GCMD KMS.')
+        } else {
+          setSuggestionRows(prev => {
+            // Deduplicate against existing rows
+            const existingKeys = new Set(prev.map(r => r.key))
+            const filtered = resolved.filter(r => !existingKeys.has(r.key))
+            return [...prev, ...filtered]
+          })
+          setAcceptedSuggestionKeys(prev => {
+            const next = new Set(prev)
+            resolved.forEach(r => { if (!r.alreadyPresent) next.add(r.key) })
+            return next
+          })
+          setSuggestStatus(`Added ${resolved.length} AI-suggested GCMD keywords to the review table below.`)
+        }
+      }
+    }
+    window.addEventListener('manta:ai-suggest-finished', onAiDone)
+    return () => window.removeEventListener('manta:ai-suggest-finished', onAiDone)
+  }, [keywords])
 
   const keywordMetadataIssues = useMemo(
     () =>
@@ -421,14 +476,29 @@ export default function StepKeywords({ mission = {}, keywords = {}, onKeywordsCh
           Runs the same deterministic Lens scanner as the scanner dialog: title, abstract, UxS operational context (when
           filled in), and XML-derived text → GCMD KMS matches. Review and remove chips as needed.
         </p>
-        <button
-          type="button"
-          className="button button-secondary"
-          disabled={suggestBusy}
-          onClick={() => void suggestFromTitleAbstract()}
-        >
-          {suggestBusy ? 'Suggesting…' : 'Suggest from title / abstract'}
-        </button>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <button
+            type="button"
+            className="button button-secondary"
+            disabled={suggestBusy}
+            onClick={() => void suggestFromTitleAbstract()}
+          >
+            {suggestBusy ? 'Scanning...' : 'Heuristic Scan'}
+          </button>
+          <button
+            type="button"
+            className="mfg-ai-btn"
+            disabled={suggestBusy}
+            onClick={() => {
+              window.dispatchEvent(new CustomEvent('manta:ai-suggest-request', { 
+                detail: { field: 'keywords', value: '' } 
+              }))
+            }}
+          >
+            <Sparkles size={12} />
+            AI Generate Keywords
+          </button>
+        </div>
         {suggestStatus ? <p className="draft-meta" role="status" aria-live="polite">{suggestStatus}</p> : null}
         {suggestionRows.length ? (
           <div className="scanner-dialog__rows">

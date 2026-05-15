@@ -90,6 +90,26 @@ function emitReal(value, tag) {
   return `<${tag}><gco:Real>${n}</gco:Real></${tag}>`
 }
 
+/** @param {unknown} value */
+function hasGcoText(value) {
+  return Boolean(String(value ?? '').trim())
+}
+
+/**
+ * Emit a gmd:* wrapper with gco:CharacterString only when text is non-empty (mirrors {@link emitReal}).
+ *
+ * @param {string} tagName e.g. 'gmd:title'
+ * @param {unknown} value
+ * @param {string} [indent]
+ * @returns {string}
+ */
+function gmdGcoCharacterString(tagName, value, indent = '') {
+  const t = String(value ?? '').trim()
+  if (!t) return ''
+  const sp = indent ? `${indent}` : ''
+  return `${sp}<${tagName}><gco:CharacterString>${esc(t)}</gco:CharacterString></${tagName}>\n`
+}
+
 /** World extent defaults — aligned with `defaultPilotState` / bbox validation fallbacks. */
 const PREVIEW_BBOX_FALLBACK = { west: '-180', east: '180', south: '-90', north: '90' }
 
@@ -292,10 +312,9 @@ function buildDataQualityInfoXml(sp) {
   const hasErr = String(sp?.errorLevel || '').trim()
   const hasLineage =
     String(sp?.lineageStatement || '').trim() || String(sp?.lineageProcessSteps || '').trim()
-  if (!hasAcc && !hasErr && !hasLineage) return ''
 
   const scopeBlock = `    <gmd:scope>
-      <gmd:DQ_Scope>
+      <gmd:DQ_Scope id="datasetScope">
         <gmd:level>
           <gmd:MD_ScopeCode codeList="${esc(MD_SCOPE_CODE_CODELIST)}" codeListValue="dataset">dataset</gmd:MD_ScopeCode>
         </gmd:level>
@@ -324,7 +343,7 @@ function buildDataQualityInfoXml(sp) {
     </gmd:report>`)
   }
 
-  const lineageXml = hasLineage ? buildLineageXml(sp) : ''
+  const lineageXml = hasLineage ? buildLineageXml(sp) : '    <gmd:lineage/>'
 
   return `  <gmd:dataQualityInfo>
     <gmd:DQ_DataQuality>
@@ -433,7 +452,7 @@ export function buildXmlPreview(state) {
       })
       .filter(Boolean)
       .join('')
-    if (!inner) return `    <!-- ${facet} -->\n`
+    if (!inner) return ''
     return `    <gmd:descriptiveKeywords>\n      <gmd:MD_Keywords>\n${inner}        <gmd:thesaurusName>\n          <gmd:CI_Citation>\n            <gmd:title><gco:CharacterString>GCMD ${esc(facet)}</gco:CharacterString></gmd:title>\n            ${minimalCiPublicationDateXml()}\n          </gmd:CI_Citation>\n        </gmd:thesaurusName>\n      </gmd:MD_Keywords>\n    </gmd:descriptiveKeywords>\n`
   }
 
@@ -518,13 +537,14 @@ export function buildXmlPreview(state) {
 
   const rorIdRaw = m.ror?.id ? String(m.ror.id).trim().replace(/^https?:\/\/ror\.org\//i, '') : ''
   const rorHrefAttr = rorIdRaw ? `https://ror.org/${encodeURIComponent(rorIdRaw)}` : ''
-  const organisationNameXml = rorHrefAttr
-    ? `          <gmd:organisationName>
-            <gmx:Anchor xlink:href="${esc(rorHrefAttr)}" xlink:title="ROR ID" xlink:actuate="onRequest">${esc(m.org)}</gmx:Anchor>
+  const orgTrim = String(m.org || '').trim()
+  const organisationNameXml =
+    rorHrefAttr && orgTrim
+      ? `          <gmd:organisationName>
+            <gmx:Anchor xlink:href="${esc(rorHrefAttr)}" xlink:title="ROR ID" xlink:actuate="onRequest">${esc(orgTrim)}</gmx:Anchor>
           </gmd:organisationName>
 `
-    : `          <gmd:organisationName><gco:CharacterString>${esc(m.org)}</gco:CharacterString></gmd:organisationName>
-`
+      : gmdGcoCharacterString('gmd:organisationName', orgTrim, '          ')
 
   /** ISO keyword block for the platform *instance* id — omit when empty (avoids useless empty MD_Keywords). */
   const platformInstanceFacetXml = (() => {
@@ -630,17 +650,24 @@ ${contactUrlXml}
 `
       : ''
 
-  const resourcePointOfContactXml = emptyShell
-    ? ''
-    : `      <gmd:pointOfContact>
+  const missionIndTrim = String(m.individualName || '').trim()
+  const hasResourceContactParty =
+    missionIndTrim || orgTrim || String(resourceCiContactXml || '').trim()
+  const resourcePointOfContactXml =
+    emptyShell
+      ? ''
+      : useNceiMeta
+        ? `      <gmd:pointOfContact${nceiMetaHref ? ` xlink:href="${esc(nceiMetaHref)}"` : ''} xlink:title="${esc(nceiMetaTitle)}"/>\n`
+        : hasResourceContactParty
+          ? `      <gmd:pointOfContact>
         <gmd:CI_ResponsibleParty>
-          <gmd:individualName><gco:CharacterString>${esc(m.individualName)}</gco:CharacterString></gmd:individualName>
-${organisationNameXml}${resourceCiContactXml}          <gmd:role>
+${gmdGcoCharacterString('gmd:individualName', missionIndTrim, '          ')}${organisationNameXml}${resourceCiContactXml}          <gmd:role>
             <gmd:CI_RoleCode codeList="${esc(CI_ROLE_CODE_CODELIST)}" codeListValue="pointOfContact">pointOfContact</gmd:CI_RoleCode>
           </gmd:role>
         </gmd:CI_ResponsibleParty>
       </gmd:pointOfContact>
 `
+          : ''
 
   const dataQualityXml = buildDataQualityInfoXml(sp)
 
@@ -716,15 +743,16 @@ ${organisationNameXml}${resourceCiContactXml}          <gmd:role>
     : useNceiMeta
       ? `  <gmd:contact${nceiMetaHref ? ` xlink:href="${esc(nceiMetaHref)}"` : ''} xlink:title="${esc(nceiMetaTitle)}"/>
 `
-      : `  <gmd:contact>
+      : hasResourceContactParty
+        ? `  <gmd:contact>
     <gmd:CI_ResponsibleParty>
-          <gmd:individualName><gco:CharacterString>${esc(m.individualName)}</gco:CharacterString></gmd:individualName>
-${organisationNameXml}${resourceCiContactXml}          <gmd:role>
+${gmdGcoCharacterString('gmd:individualName', missionIndTrim, '          ')}${organisationNameXml}${resourceCiContactXml}          <gmd:role>
             <gmd:CI_RoleCode codeList="${esc(CI_ROLE_CODE_CODELIST)}" codeListValue="pointOfContact">pointOfContact</gmd:CI_RoleCode>
           </gmd:role>
     </gmd:CI_ResponsibleParty>
   </gmd:contact>
 `
+        : ''
 
   const nceiDistHref = String(dist.nceiDistributorContactHref || '').trim()
   const nceiDistTitle = String(dist.nceiDistributorContactTitle || 'NCEI (distributor)').trim()
@@ -1139,6 +1167,18 @@ ${dist.finalNotes ? `  <!-- finalNotes: ${esc(String(dist.finalNotes).trim())} -
       : ''
 
   const xmlFileId = formatNceiUxsFileIdentifierForXml(m.fileId, dist)
+  const fileIdentifierXml = hasGcoText(xmlFileId)
+    ? `  <gmd:fileIdentifier>
+    <gco:CharacterString>${esc(xmlFileId)}</gco:CharacterString>
+  </gmd:fileIdentifier>
+`
+    : ''
+  const citationTitleXml = gmdGcoCharacterString('gmd:title', m.title, '          ')
+  const abstractXml = gmdGcoCharacterString('gmd:abstract', m.abstract, '      ')
+  const purposeXml = gmdGcoCharacterString('gmd:purpose', m.purpose || '{{Describe collection purpose/overarching project.}}', '      ')
+  const statusXml = `      <gmd:status>
+        <gmd:MD_ProgressCode codeList="${esc(MD_PROGRESS_CODE_CODELIST)}" codeListValue="${esc(progressCode || 'completed')}">${esc(progressCode || 'completed')}</gmd:MD_ProgressCode>
+      </gmd:status>\n`
 
   const supplementalInfoXml = (() => {
     const userSup = stripUxsPilotMachineBlock(String(m.supplementalInformation || '')).trim()
@@ -1190,33 +1230,20 @@ ${distributionFormatBlock}${distributorXlinkXml}${transferOptionsBlock}    </gmd
        should emit parentIdentifier.  Mission and collection records are
        standalone; adding parentIdentifier to them would create incorrect
        collection-granule relationships in CoMET and OneStop. -->
-  <gmd:fileIdentifier>
-    <gco:CharacterString>${esc(xmlFileId)}</gco:CharacterString>
-  </gmd:fileIdentifier>
-  <gmd:hierarchyLevel>
+${fileIdentifierXml}  <gmd:hierarchyLevel>
     <gmd:MD_ScopeCode codeList="${esc(MD_SCOPE_CODE_CODELIST)}" codeListValue="${esc(scopeToken)}">${esc(scopeToken)}</gmd:MD_ScopeCode>
   </gmd:hierarchyLevel>
+  <gmd:hierarchyLevelName>
+    <gco:CharacterString>${esc(scopeToken)}</gco:CharacterString>
+  </gmd:hierarchyLevelName>
 ${metadataContactXml}${dateStampXml}${metaStdXml}${spatialReprXml}${refSystemXml}  <gmd:identificationInfo>
     <gmd:MD_DataIdentification>
       <gmd:citation>
         <gmd:CI_Citation>
-          <gmd:title><gco:CharacterString>${esc(m.title)}</gco:CharacterString></gmd:title>
-          ${m.alternateTitle ? `<gmd:alternateTitle><gco:CharacterString>${esc(m.alternateTitle)}</gco:CharacterString></gmd:alternateTitle>` : ''}
-          ${citationDatesResolved}
-          ${m.doi ? `<gmd:identifier><gmd:MD_Identifier><gmd:code><gco:CharacterString>${esc(m.doi)}</gco:CharacterString></gmd:code></gmd:MD_Identifier></gmd:identifier>` : ''}
-          ${m.accession ? `<gmd:identifier><gmd:MD_Identifier><gmd:code><gco:CharacterString>${esc(m.accession)}</gco:CharacterString></gmd:code></gmd:MD_Identifier></gmd:identifier>` : ''}
-          ${citationPartiesXml ? `${citationPartiesXml}\n          ` : ''}
-        </gmd:CI_Citation>
+          ${citationTitleXml}${hasGcoText(m.alternateTitle) ? `<gmd:alternateTitle><gco:CharacterString>${esc(m.alternateTitle)}</gco:CharacterString></gmd:alternateTitle>\n          ` : ''}          ${citationDatesResolved}
+          ${m.doi ? `<gmd:identifier><gmd:MD_Identifier><gmd:code><gco:CharacterString>${esc(m.doi)}</gco:CharacterString></gmd:code></gmd:MD_Identifier></gmd:identifier>\n          ` : ''}${m.accession ? `<gmd:identifier><gmd:MD_Identifier><gmd:code><gco:CharacterString>${esc(m.accession)}</gco:CharacterString></gmd:code></gmd:MD_Identifier></gmd:identifier>\n          ` : ''}${citationPartiesXml ? `${citationPartiesXml}\n          ` : ''}        </gmd:CI_Citation>
       </gmd:citation>
-      <gmd:abstract><gco:CharacterString>${esc(m.abstract)}</gco:CharacterString></gmd:abstract>
-      ${String(m.purpose || '').trim() ? `<gmd:purpose><gco:CharacterString>${esc(m.purpose)}</gco:CharacterString></gmd:purpose>\n` : ''}      ${
-        progressCode
-          ? `<gmd:status>
-        <gmd:MD_ProgressCode codeList="${esc(MD_PROGRESS_CODE_CODELIST)}" codeListValue="${esc(progressCode)}">${esc(progressCode)}</gmd:MD_ProgressCode>
-      </gmd:status>\n`
-          : ''
-      }
-${resourcePointOfContactXml}${resourceMaintenanceXml}${graphicOverviewXml}${kwBlock('sciencekeywords')}${kwBlock('datacenters')}${kwBlock('platforms')}${kwBlock('instruments')}${kwBlock('locations')}${kwBlock('projects')}${kwBlock('providers')}${platformInstanceFacetXml}${legalXml}${docucompXml}${aggXml}      <gmd:language>
+${abstractXml}${purposeXml}${statusXml}${resourcePointOfContactXml}${resourceMaintenanceXml}${graphicOverviewXml}${kwBlock('sciencekeywords')}${kwBlock('datacenters')}${kwBlock('platforms')}${kwBlock('instruments')}${kwBlock('locations')}${kwBlock('projects')}${kwBlock('providers')}${platformInstanceFacetXml}${legalXml}${docucompXml}${aggXml}      <gmd:language>
         <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/php/code_list.php" codeListValue="${esc(m.language)}">${esc(m.language)}</gmd:LanguageCode>
       </gmd:language>
       <gmd:characterSet>
@@ -1261,8 +1288,13 @@ ${supplementalInfoXml}    </gmd:MD_DataIdentification>
   </gmd:identificationInfo>
 ${sensorContentInfoXml}
 ${distributionInfoXml}${dataQualityXml}${acquisitionXml ? `${acquisitionXml}` : ''}
-${workflowComment}  <!-- metadataMaintenanceFrequency: ${esc(dist.metadataMaintenanceFrequency || 'asNeeded')} -->
-  <!-- output flags: useNceiMetadataContactXlink=${useNceiMeta} omitRootReferenceSystemInfo=${omitRef} -->
+${workflowComment}  <gmd:metadataMaintenance>
+    <gmd:MD_MaintenanceInformation>
+      <gmd:maintenanceAndUpdateFrequency>
+        <gmd:MD_MaintenanceFrequencyCode codeList="${esc(MD_MAINTENANCE_FREQUENCY_CODELIST)}" codeListValue="${esc(maintFreq)}">${esc(maintFreq)}</gmd:MD_MaintenanceFrequencyCode>
+      </gmd:maintenanceAndUpdateFrequency>
+    </gmd:MD_MaintenanceInformation>
+  </gmd:metadataMaintenance>
 </gmi:MI_Metadata>
 `
 }

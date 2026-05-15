@@ -5715,6 +5715,42 @@ li.manta-widget__result-item {
   align-items: center;
   margin-bottom: 0.65rem;
   gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.lab-step-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+.mission-template-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+.mission-template-toolbar__label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+.mission-template-toolbar__select {
+  width: min(14rem, 42vw);
+  min-width: 8rem;
+  font-size: 0.78rem;
+  padding: 0.2rem 0.45rem;
+  height: auto;
+}
+.mission-template-toolbar__btn {
+  flex-shrink: 0;
+}
+.mission-template-toolbar-error {
+  margin: -0.35rem 0 0.5rem;
+  font-size: 0.78rem;
 }
 .lab-step-title {
   font-size: 1.05rem;

@@ -21,7 +21,8 @@
  *   </MantaFieldGlass>
  */
 
-import { Children, Fragment, cloneElement, isValidElement, memo } from 'react'
+import { Children, Fragment, cloneElement, isValidElement, memo, useState, useEffect } from 'react'
+import { Sparkles } from 'lucide-react'
 import FieldHintTooltip from './FieldHintTooltip.jsx'
 
 const CONTROL_TAGS = new Set(['input', 'textarea', 'select'])
@@ -113,9 +114,6 @@ function StatusChip({ type, label: overrideLabel }) {
 
 function AskMoreButton({ fieldPath }) {
   function handleClick() {
-    // Open Lens first, then navigate to Ask tab and highlight the field.
-    // manta:lens-opened is dispatched by AssistantShell when it opens;
-    // we fire goto-field after a short tick so the lens has time to mount.
     window.dispatchEvent(new CustomEvent('manta:lens-opened'))
     window.dispatchEvent(new CustomEvent('manta:assistant-tab', { detail: { tab: 'ask' } }))
     setTimeout(() => {
@@ -125,26 +123,70 @@ function AskMoreButton({ fieldPath }) {
   return (
     <button
       type="button"
+      className="mfg-ask-btn"
       onClick={handleClick}
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: 3,
-        fontSize: '0.68rem',
-        fontWeight: 700,
-        background: 'var(--card-bg)',
-        color: 'var(--primary-color, #006994)',
-        border: '1px solid var(--border-color)',
-        padding: '1px 9px',
-        borderRadius: 9999,
-        cursor: 'pointer',
-        whiteSpace: 'nowrap',
-        lineHeight: 1.6,
-      }}
       title={`Get Manta guidance for ${fieldPath}`}
     >
       ☆ Ask me more
     </button>
+  )
+}
+
+function AiSuggestButton({ fieldPath, value }) {
+  const [loading, setLoading] = useState(false)
+  
+  useEffect(() => {
+    const onDone = (e) => {
+      if (e.detail?.field === fieldPath) setLoading(false)
+    }
+    window.addEventListener('manta:ai-suggest-finished', onDone)
+    return () => window.removeEventListener('manta:ai-suggest-finished', onDone)
+  }, [fieldPath])
+
+  function handleClick() {
+    setLoading(true)
+    window.dispatchEvent(new CustomEvent('manta:ai-suggest-request', { 
+      detail: { field: fieldPath, value } 
+    }))
+  }
+
+  return (
+    <button
+      type="button"
+      className={`mfg-ai-btn${loading ? ' mfg-ai-btn--loading' : ''}`}
+      onClick={handleClick}
+      disabled={loading}
+      title="AI-assisted metadata improvement"
+    >
+      <Sparkles size={12} />
+      {loading ? '...' : 'AI Suggest'}
+    </button>
+  )
+}
+
+function AiDiffPreview({ suggestedValue, onApply, onIgnore }) {
+  if (!suggestedValue) return null
+  
+  return (
+    <div className="manta-ai-diff">
+      <div className="manta-ai-diff__header">
+        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          <Sparkles size={12} />
+          AI Improvement Suggestion
+        </span>
+      </div>
+      <div className="manta-ai-diff__content">
+        {suggestedValue}
+      </div>
+      <div className="manta-ai-diff__actions">
+        <button type="button" className="btn-ai-accept" onClick={onApply}>
+          Apply Changes
+        </button>
+        <button type="button" className="btn-ai-ignore" onClick={onIgnore}>
+          Ignore
+        </button>
+      </div>
+    </div>
   )
 }
 
@@ -211,7 +253,11 @@ function MantaFieldGlass({
   children,
   textLengthThreshold,
   hideAskMore = false,
+  hideAiSuggest = false,
   compact = false,
+  aiSuggestion = null,
+  onApplyAiSuggestion = null,
+  onIgnoreAiSuggestion = null,
   /** When true, omit the chip / quick-action row (Lens symbiote or plain validation carries that UX). */
   hideChipsRow = false,
   /** When false, no red required/issue chrome until user touches the field or enables show-all (same as field validation). */
@@ -319,8 +365,17 @@ function MantaFieldGlass({
             </button>
           )}
           {!hideAskMore ? <AskMoreButton fieldPath={fieldPath} /> : null}
+          {!hideAiSuggest ? <AiSuggestButton fieldPath={fieldPath} value={value} /> : null}
         </div>
       ) : null}
+
+      {aiSuggestion && (
+        <AiDiffPreview 
+          suggestedValue={aiSuggestion.suggested}
+          onApply={() => onApplyAiSuggestion?.(fieldPath, aiSuggestion.suggested)}
+          onIgnore={() => onIgnoreAiSuggestion?.(fieldPath)}
+        />
+      )}
     </div>
   )
 }

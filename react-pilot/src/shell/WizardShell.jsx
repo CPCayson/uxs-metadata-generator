@@ -63,6 +63,9 @@ import { useWorkbenchChrome } from './useWorkbenchChrome.js'
 import { defaultPilotState } from '../lib/pilotValidation.js'
 import { confirmReplaceDifferentRecord, peekIncomingMissionFileId } from '../lib/pilotImportReplaceGuard.js'
 import MissionTemplateCatalogToolbar from '../features/mission/MissionTemplateCatalogToolbar.jsx'
+import MantaBarFloatingDock from '../components/MantaBarFloatingDock.jsx'
+import LensSymbioteBubble from '../components/LensSymbioteBubble.jsx'
+import MantaCommandCenter from '../components/MantaCommandCenter.jsx'
 
 /**
  * @param {{
@@ -87,6 +90,7 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
 
   // Local CoMET state — owned here, populated via cross-context window event.
   const [cometUuid, setCometUuid] = useState('')
+  const [aiSuggestions, setAiSuggestions] = useState({}) // { fieldPath: { original, suggested } }
   const cap = profile.capabilities ?? {}
   const showCometPanel = Boolean(cap.cometPull || cap.cometPreflight || cap.cometPush)
 
@@ -148,6 +152,12 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
   const [wizardStartOpen, setWizardStartOpen] = useState(false)
   const [sidePanelTab, setSidePanelTab] = useState('xml')
   const [xmlExpanded, setXmlExpanded] = useState(false)
+
+  // Lens Symbiote state
+  const [activeLensField, setActiveLensField] = useState('')
+  const [activeLensRect, setActiveLensRect] = useState(null)
+  const [lensSuggestions, setLensSuggestions] = useState([])
+
   /** Header slot next to XML tools — mission step pills portal target */
   const [missionStepsSlotEl, setMissionStepsSlotEl] = useState(/** @type {HTMLElement | null} */ (null))
 
@@ -460,6 +470,14 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
 
   const activeStepMeta = profile.steps.find((s) => s.id === activeStep) ?? profile.steps[0]
 
+  const onMissionPatch = useCallback((patch) => setPilotState((p) => ({ ...p, mission: { ...p.mission, ...patch } })), [setPilotState])
+  const onPlatformPatch = useCallback((patch) => setPilotState((p) => ({ ...p, platform: { ...p.platform, ...patch } })), [setPilotState])
+  const onSpatialPatch = useCallback((patch) => setPilotState((p) => ({ ...p, spatial: { ...p.spatial, ...patch } })), [setPilotState])
+  const handleClearSourceProvenance = useCallback(() => setPilotState((p) => ({
+    ...p,
+    sourceProvenance: { sourceType: 'manual', sourceId: '', importedAt: '', originalFilename: '', originalUuid: '' },
+  })), [setPilotState])
+
   const wizardStepProps = {
     profile,
     pilotState,
@@ -469,12 +487,18 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     showAllErrors,
     issues: validation.issues,
     mission: pilotState.mission,
-    onMissionPatch: (patch) => setPilotState((p) => ({ ...p, mission: { ...p.mission, ...patch } })),
+    onMissionPatch,
+    onPlatformPatch,
+    onSpatialPatch,
     contactLibraryEnabled: Boolean(profile.capabilities?.contactLibrary),
-    onSourceProvenanceClear: () => setPilotState((p) => ({
-      ...p,
-      sourceProvenance: { sourceType: 'manual', sourceId: '', importedAt: '', originalFilename: '', originalUuid: '' },
-    })),
+    onSourceProvenanceClear: handleClearSourceProvenance,
+    aiSuggestions,
+    onApplyAiSuggestion: applyAiSuggestion,
+    onIgnoreAiSuggestion: (field) => setAiSuggestions((prev) => {
+      const next = { ...prev }
+      delete next[field]
+      return next
+    }),
     onLoadDraft: loadPilotDraftPrimed,
     onSaveDraft: ma.savePilotDraft,
     loadDisabled: ma.pilotBusy || !hostBridgeReady,
@@ -488,7 +512,6 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     onApplySheetTemplate: applySheetTemplatePrimed,
     templateApplyDisabled: ma.templateApplyDisabled,
     platform: pilotState.platform,
-    onPlatformPatch: (patch) => setPilotState((p) => ({ ...p, platform: { ...p.platform, ...patch } })),
     platformLibraryRows: ma.platformLibraryRows,
     platformLibraryLoading: ma.platformLibraryLoading,
     platformLibraryError: ma.platformLibraryError,
@@ -501,7 +524,6 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     sensors: pilotState.sensors,
     onSetSensors: (next) => setPilotState((p) => ({ ...p, sensors: next })),
     spatial: pilotState.spatial,
-    onSpatialPatch: (patch) => setPilotState((p) => ({ ...p, spatial: { ...p.spatial, ...patch } })),
     keywords: pilotState.keywords,
     onKeywordsChange: (next) => setPilotState((p) => ({ ...p, keywords: next })),
     distribution: pilotState.distribution,
@@ -713,14 +735,40 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
   }, [workflowEngine])
 
   useEffect(() => {
-    function onLensGoto(/** @type {CustomEvent} */ e) {
+    function handleGotoField(/** @type {CustomEvent} */ e) {
       const field = e?.detail?.field
       if (typeof field !== 'string' || !field.trim()) return
       navigateToPilotField(field)
     }
-    window.addEventListener('manta:lens-goto-field', onLensGoto)
-    return () => window.removeEventListener('manta:lens-goto-field', onLensGoto)
+    window.addEventListener('manta:lens-goto-field', handleGotoField)
+    return () => window.removeEventListener('manta:lens-goto-field', handleGotoField)
   }, [navigateToPilotField])
+
+  /** Track focus/click to position the Symbiote Bubble */
+  useEffect(() => {
+    function handleGlobalFocus(e) {
+      if (!mantaToolsEnabled) return
+      const el = e.target
+      if (el instanceof HTMLElement && (el.dataset.pilotField || el.name || el.id)) {
+        const field = el.dataset.pilotField || el.name || el.id
+        setActiveLensField(field)
+        setActiveLensRect(el.getBoundingClientRect())
+        
+        // Simple suggestion logic for now
+        if (field.includes('abstract')) {
+          setLensSuggestions(['Mention the REMUS 620 platform for NCEI compliance.'])
+        } else {
+          setLensSuggestions([])
+        }
+      }
+    }
+
+
+    document.addEventListener('focusin', handleGlobalFocus)
+    return () => {
+      document.removeEventListener('focusin', handleGlobalFocus)
+    }
+  }, [mantaToolsEnabled])
 
   useEffect(() => {
     function onGotoStep(/** @type {CustomEvent} */ e) {
@@ -792,6 +840,73 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
     window.addEventListener('manta:pilot-session-updated', onSessionWrite)
     return () => window.removeEventListener('manta:pilot-session-updated', onSessionWrite)
   }, [])
+  const handleAiSuggestRequest = useCallback(
+    async (e) => {
+      const { field, value } = e.detail
+      // Determine action based on field
+      let action = 'expandAcronyms'
+      if (field.startsWith('keywords')) action = 'suggestKeywords'
+      if (field === 'mission.citeAs') action = 'suggestCiteAs'
+
+      const context = {
+        title: pilotState?.mission?.title,
+        abstract: pilotState?.mission?.abstract,
+        org: pilotState?.mission?.org,
+      }
+
+      try {
+        const response = await fetch('/api/ai-metadata', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action, text: value, context }),
+        })
+        
+        if (!response.ok) throw new Error(`AI error: ${response.statusText}`)
+        
+        const data = await response.json()
+        const result = data.result
+        
+        setAiSuggestions((prev) => ({
+          ...prev,
+          [field]: { original: value, suggested: result }
+        }))
+
+        window.dispatchEvent(new CustomEvent('manta:ai-suggest-finished', { 
+          detail: { field, result } 
+        }))
+      } catch (err) {
+        console.error('AI Suggest failed:', err)
+        window.dispatchEvent(new CustomEvent('manta:ai-suggest-finished', { 
+          detail: { field, error: err.message } 
+        }))
+      }
+    },
+    [pilotState],
+  )
+
+  useEffect(() => {
+    const onAi = (e) => handleAiSuggestRequest(e)
+    window.addEventListener('manta:ai-suggest-request', onAi)
+    return () => window.removeEventListener('manta:ai-suggest-request', onAi)
+  }, [handleAiSuggestRequest])
+
+  const applyAiSuggestion = useCallback((field, value) => {
+    if (field.startsWith('mission.')) {
+      const key = field.replace('mission.', '')
+      onMissionPatch({ [key]: value })
+    } else if (field.startsWith('platform.')) {
+      const key = field.replace('platform.', '')
+      onPlatformPatch({ [key]: value })
+    } else if (field.startsWith('spatial.')) {
+      const key = field.replace('spatial.', '')
+      onSpatialPatch({ [key]: value })
+    }
+    setAiSuggestions((prev) => {
+      const next = { ...prev }
+      delete next[field]
+      return next
+    })
+  }, [onMissionPatch, onPlatformPatch, onSpatialPatch, setAiSuggestions])
 
   /** Full reset to profile defaults + cleared session / import overlays (shared by Start over and wizard “Start fresh”). */
   const resetPilotWorkspaceToDefaults = useCallback(
@@ -818,7 +933,7 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
         setCometUuid('')
         writePilotSessionPayloadNow(fresh, {
           validationPrimed: false,
-          startFresh: opts.startFresh === true || skipConfirm,
+          startFresh: true,
           clearedDraft: true,
         })
         setTouched({})
@@ -828,6 +943,14 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
         setActiveStep(profile.steps[0]?.id ?? 'mission')
         setIsDirty(false)
         onDirtyChange(false)
+        
+        // Full session clear for the assistant and lens
+        try {
+          sessionStorage.removeItem('manta-lens-issue-scope')
+          sessionStorage.removeItem('manta-lens-drag-offset-v1')
+          sessionStorage.removeItem('manta-tools-fab-sheet-open-v1')
+          window.dispatchEvent(new CustomEvent('manta:assistant-reset'))
+        } catch (e) { console.warn('Reset storage failed', e) }
         try {
           setLastSavedXmlPreview(buildXml(fresh))
         } catch {
@@ -1482,7 +1605,6 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
             {!xmlExpanded && sidePanelTab === 'xml' && (() => {
               const allIssues = validationPrimed ? (validation.issues ?? []) : []
               const errors = allIssues.filter((i) => i.severity === 'e')
-              const score = validation.score ?? 100
               const formClear = errors.length === 0
               const allClear = formClear && previewVerification.previewXmlReady
 
@@ -1511,76 +1633,20 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
               }
 
               return (
-                <div className="cmd-center-hub">
-                  {/* Tier pills */}
-                  <div className="cmd-center-hub__header">
-                    <PreviewVerificationTierStrip variant="cmd-center" />
-                    <div className="cmd-center-hub__score">
-                      <div className="cmd-center-score-bar">
-                        <div className="cmd-center-score-bar__fill" style={{ width: `${score}%`, background: score >= 80 ? 'var(--primary-color)' : score >= 50 ? '#f59e0b' : '#ef4444' }} />
-                      </div>
-                      <span className="cmd-center-score-num">{score}%</span>
-                    </div>
-                  </div>
-
-                  {/* Error + warning cards */}
-                  <div className="cmd-center-hub__issues">
-                    {!validationPrimed ? (
-                      <p className="cmd-center-hub__idle">Validation starts after you import or edit a field.</p>
-                    ) : allClear ? (
-                      <p className="cmd-center-hub__all-clear">✓ All checks pass — ready to publish</p>
-                    ) : (
-                      stepGroups.map(({ step, idx, issues }) => (
-                        <div key={step.id} className="cmd-center-step-group">
-                          <div className="cmd-center-step-label">
-                            <span className="cmd-center-step-num">0{idx + 1}</span>
-                            {step.label.toUpperCase()}
-                          </div>
-                          {issues.map((iss, i) => (
-                            <div
-                              key={`${iss.field}-${i}`}
-                              className={`cmd-center-issue-card ${iss.severity === 'e' ? 'cmd-center-issue-card--err' : 'cmd-center-issue-card--warn'}`}
-                            >
-                              <span className="cmd-center-issue-card__icon" aria-hidden>
-                                {iss.severity === 'e' ? '✗' : '⚠'}
-                              </span>
-                              <div className="cmd-center-issue-card__body">
-                                <div className="cmd-center-issue-card__field">{iss.field}</div>
-                                <div className="cmd-center-issue-card__msg">{iss.message}</div>
-                              </div>
-                              <button
-                                type="button"
-                                className="cmd-center-issue-card__jump"
-                                onClick={() => jumpToIssue(iss.field)}
-                                title="Jump to field"
-                              >→</button>
-                            </div>
-                          ))}
-                        </div>
-                      ))
-                    )}
-                  </div>
-
-                  {/* CTA */}
-                  <div className="cmd-center-hub__cta">
-                    <button
-                      type="button"
-                      className={`cmd-center-cta-btn ${allClear ? 'cmd-center-cta-btn--ready' : 'cmd-center-cta-btn--blocked'}`}
-                      onClick={allClear ? comet.pushDraftToComet : undefined}
-                      disabled={comet.pushBusy}
-                    >
-                      {comet.pushBusy
-                        ? 'Pushing…'
-                        : allClear
-                          ? '↑ Push to CoMET'
-                          : !formClear
-                            ? `Resolve ${errors.length} form error${errors.length !== 1 ? 's' : ''} to publish`
-                            : !previewVerification.previewXmlReady
-                              ? 'Fix T1/T2 XML verification to publish'
-                              : '↑ Push to CoMET'}
-                    </button>
-                  </div>
-                </div>
+                <MantaCommandCenter
+                  issues={validation.issues}
+                  stepGroups={stepGroups}
+                  score={validation.score}
+                  validationPrimed={validationPrimed}
+                  allClear={allClear}
+                  formClear={formClear}
+                  errors={errors}
+                  previewVerification={previewVerification}
+                  onJumpToIssue={jumpToIssue}
+                  onMagicFixAll={() => applyPilotAutoFixes(validation.issues)}
+                  onPushToComet={comet.pushDraftToComet}
+                  pushBusy={comet.pushBusy}
+                />
               )
             })()}
           </div>
@@ -1595,7 +1661,32 @@ export default function WizardShell({ onDirtyChange, breadcrumb }) {
       </div>
       </PreviewVerificationProvider>
 
+
       <DebugLogPanel />
+
+      <MantaBarFloatingDock
+        active={mantaToolsEnabled}
+        score={validation.score}
+        issueCount={validation.issues.length}
+        t1Status={previewVerification.xmlWellFormed ? 'ok' : 'err'}
+        t2Status={previewVerification.xsdValid ? 'ok' : 'err'}
+        t3Status={previewVerification.cometResult?.valid ? 'ok' : 'pending'}
+        onOpenLens={() => setSidePanelTab('lens')}
+        onMagicFix={() => applyPilotAutoFixes(validation.issues)}
+      />
+
+      <LensSymbioteBubble
+        active={mantaToolsEnabled && activeLensField}
+        field={activeLensField}
+        anchorRect={activeLensRect}
+        issues={validation.issues.filter(i => i.field === activeLensField)}
+        suggestions={lensSuggestions}
+        onClose={() => setActiveLensField('')}
+        onMagicFix={(f) => {
+          const iss = validation.issues.filter(i => i.field === f);
+          applyPilotAutoFixes(iss);
+        }}
+      />
     </>
   )
 }
