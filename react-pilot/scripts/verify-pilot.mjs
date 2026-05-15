@@ -2208,6 +2208,107 @@ async function main() {
     assert.equal(r.fragmentCount, 1)
     assert.equal(r.sourceCount, 1)
   })
+  // ── Bug-fix regression tests ─────────────────────────────────────────────────
+  step('bug-fix: bbox swap warning + purpose echo + sensor variable + metaStd + license + scanner guard', () => {
+    // Bug 1: sanitizePilotState swaps reversed bbox silently (warnings go to console.warn)
+    const bboxState = sanitizePilotState({
+      ...defaultPilotState(),
+      mission: { ...defaultPilotState().mission, west: '10', east: '-10', south: '5', north: '-5' },
+    })
+    assert.equal(bboxState.mission.west, '-10', 'bug1: west/east should be swapped')
+    assert.equal(bboxState.mission.east, '10',  'bug1: east/west should be swapped')
+    assert.equal(bboxState.mission.south, '-5', 'bug1: south/north should be swapped')
+    assert.equal(bboxState.mission.north, '5',  'bug1: north/south should be swapped')
+
+    // Bug 2: purpose that STARTS WITH the abstract should be replaced with NCEI default
+    const NCEI_PURPOSE = 'This data is available to the public for a wide variety of uses including scientific research and analysis.'
+    const longAbstract = 'Acoustic Doppler profiling was conducted using a Norbit iWBMSh multibeam echosounder during the mission.'
+    const purposeEcho = sanitizePilotState({
+      ...defaultPilotState(),
+      mission: { ...defaultPilotState().mission, abstract: longAbstract, purpose: longAbstract + ' Additional context.' },
+    })
+    assert.equal(purposeEcho.mission.purpose, NCEI_PURPOSE, 'bug2: purpose starting with abstract should become NCEI default')
+
+    const importedWithEchoPurpose = importPilotPartialStateFromXml(`<?xml version="1.0"?>
+<gmi:MI_Metadata xmlns:gmi="http://www.isotc211.org/2005/gmi" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco">
+  <gmd:identificationInfo>
+    <gmd:MD_DataIdentification>
+      <gmd:citation><gmd:CI_Citation><gmd:title><gco:CharacterString>T</gco:CharacterString></gmd:title></gmd:CI_Citation></gmd:citation>
+      <gmd:abstract><gco:CharacterString>${longAbstract}</gco:CharacterString></gmd:abstract>
+      <gmd:purpose><gco:CharacterString>${longAbstract}</gco:CharacterString></gmd:purpose>
+    </gmd:MD_DataIdentification>
+  </gmd:identificationInfo>
+</gmi:MI_Metadata>`)
+    assert.equal(importedWithEchoPurpose.ok, true, 'bug2: import should succeed')
+    const mergedPurpose = mergeLoadedPilotState(defaultPilotState(), importedWithEchoPurpose.partial)
+    assert.equal(mergedPurpose.mission.purpose, NCEI_PURPOSE, 'bug2: import: purpose echoing abstract should become NCEI default')
+
+    // Bug 3: sensor variable gets MI_Instrument/type, not description prose
+    const sensorXml = `<?xml version="1.0"?>
+<gmi:MI_Metadata xmlns:gmi="http://www.isotc211.org/2005/gmi" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco">
+  <gmd:contentInfo>
+    <gmi:MI_CoverageDescription>
+      <gmd:attributeDescription gco:nilReason="unknown"/>
+      <gmd:contentType><gmd:MD_CoverageContentTypeCode codeListValue="physicalMeasurement"/></gmd:contentType>
+    </gmi:MI_CoverageDescription>
+  </gmd:contentInfo>
+  <gmi:acquisitionInformation>
+    <gmi:MI_AcquisitionInformation>
+      <gmi:instrument>
+        <gmi:MI_Instrument>
+          <gmd:identifier><gmd:MD_Identifier><gmd:code><gco:CharacterString>PHINS INS</gco:CharacterString></gmd:code></gmd:MD_Identifier></gmd:identifier>
+          <gmi:type><gco:CharacterString>Inertial Navigation System</gco:CharacterString></gmi:type>
+          <gmi:description><gco:CharacterString>Manufacturer: Exail; Model: iXBlue 6000; S/N: PH4063</gco:CharacterString></gmi:description>
+        </gmi:MI_Instrument>
+      </gmi:instrument>
+    </gmi:MI_AcquisitionInformation>
+  </gmi:acquisitionInformation>
+</gmi:MI_Metadata>`
+    const sensorParsed = importPilotPartialStateFromXml(sensorXml)
+    assert.equal(sensorParsed.ok, true, 'bug3: sensor XML should import')
+    const sensors = sensorParsed.partial?.sensors || []
+    assert.ok(sensors.length > 0, 'bug3: at least one sensor should be parsed')
+    const ins = sensors[0]
+    assert.equal(ins.variable, 'Inertial Navigation System', 'bug3: variable should be type, not description')
+    assert.ok(
+      !String(ins.variable || '').includes('Manufacturer'),
+      'bug3: variable must not contain manufacturer prose',
+    )
+
+    // Bug 4: metadata standard is always canonical after sanitize (short default → full canonical)
+    const shortStd = sanitizePilotState({
+      ...defaultPilotState(),
+      distribution: { ...defaultPilotState().distribution, metadataStandard: 'ISO 19115-2 Imagery and Gridded Data' },
+    })
+    assert.equal(
+      shortStd.distribution.metadataStandard,
+      'ISO 19115-2 Geographic Information - Metadata - Part 2: Extensions for Imagery and Gridded Data',
+      'bug4: short ISO 19115-2 variant should normalize to canonical string',
+    )
+    assert.equal(shortStd.distribution.metadataVersion, 'ISO 19115-2:2009(E)', 'bug4: metadataVersion should be canonical')
+
+    // Bug 5a: distribution.license echoing abstract should be cleared (test with a preset that does not auto-fill)
+    const licStateA = sanitizePilotState({
+      ...defaultPilotState(),
+      mission: { ...defaultPilotState().mission, abstract: longAbstract, dataLicensePreset: 'custom', licenseUrl: 'https://example.org/lic' },
+      distribution: { ...defaultPilotState().distribution, license: longAbstract },
+    })
+    assert.equal(licStateA.distribution.license, '', 'bug5a: license that echoes abstract should be cleared when preset has a URL')
+    // Bug 5b: custom preset + no licenseUrl → coerce to ncei_cc_by_4
+    const licStateB = sanitizePilotState({
+      ...defaultPilotState(),
+      mission: { ...defaultPilotState().mission, dataLicensePreset: 'custom', licenseUrl: '' },
+    })
+    assert.equal(licStateB.mission.dataLicensePreset, 'ncei_cc_by_4', 'bug5b: custom preset + no URL should coerce to ncei_cc_by_4')
+
+    // Bug 6: scanner throws before GCMD call when title/abstract < 20 chars
+    assert.rejects(
+      () => runLensScanHeuristic({ title: 'Short', abstract: 'Also short', profileId: 'mission' }),
+      /20 characters/,
+      'bug6: scanner should reject when title or abstract < 20 chars',
+    )
+  })
+
   step('Netlify /api/db legacy GeoJSON + DCAT + validate path', () => {
     const state = defaultPilotState()
     state.mission.west = '-120'

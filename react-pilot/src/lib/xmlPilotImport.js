@@ -12,7 +12,7 @@ import {
 } from './sensorInstrumentDescription.js'
 import { parseUxsPilotMachineBlockFromSupplemental } from './uxsOperationalModel.js'
 import { isAcronymExplainedInAbstractText, normalizeNceiAccessionToken } from './pilotValidation.js'
-import { resolveMissionPurposeForNcei } from './nceiMissionDefaults.js'
+import { NCEI_DEFAULT_MISSION_PURPOSE, resolveMissionPurposeForNcei } from './nceiMissionDefaults.js'
 
 /** ISO / GML namespaces used by the pilot preview and UniversalXMLGenerator. */
 const NS = {
@@ -44,6 +44,11 @@ const NS3 = {
 }
 
 const KMS_UUID_INLINE_RE = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i
+
+/** Canonical preview/export metadata standard (always 19115-2-shaped output). */
+const PILOT_EXPORT_METADATA_STANDARD =
+  'ISO 19115-2 Geographic Information - Metadata - Part 2: Extensions for Imagery and Gridded Data'
+const PILOT_EXPORT_METADATA_VERSION = 'ISO 19115-2:2009(E)'
 
 /**
  * GCMD / KMS concept UUID, query uuid=, or full URL for round-trip with `gmx:Anchor`.
@@ -2802,7 +2807,17 @@ function inferKeywordFacetsFromAcquisition(partial) {
         ? /** @type {Record<string, unknown>} */ (partial.platform)
         : null
     const label = plat
-      ? String(plat.platformType || plat.platformDesc || plat.platformId || '').trim()
+      ? (() => {
+          const t = String(plat.platformType || '').trim()
+          if (t) return t
+          const desc = String(plat.platformDesc || '')
+          if (/^platform:|(^|\n)model:/i.test(desc) || /manufacturer:/i.test(desc)) {
+            const model = desc.match(/model:\s*([^;\n]+)/i)
+            if (model) return model[1].trim()
+            return String(plat.platformId || '').trim() || 'Unmanned Underwater Vehicle'
+          }
+          return String(plat.platformDesc || plat.platformId || '').trim()
+        })()
       : ''
     if (label) pushKeywordChipIfNew(kwPlat, { label })
   }
@@ -3080,6 +3095,24 @@ function appendNoaaMetadataAcronymGlosses(abstract) {
 }
 
 /**
+ * @param {string} rawPurpose
+ * @param {string} rawAbstract
+ * @returns {string}
+ */
+function resolveImportMissionPurposeForNcei(rawPurpose, rawAbstract) {
+  const raw = String(rawPurpose ?? '').trim()
+  const abs = String(rawAbstract ?? '').trim()
+  if (!raw) return NCEI_DEFAULT_MISSION_PURPOSE
+  if (
+    abs.length > 0
+    && (raw === abs || raw.startsWith(abs.slice(0, 60)))
+  ) {
+    return NCEI_DEFAULT_MISSION_PURPOSE
+  }
+  return resolveMissionPurposeForNcei(raw, abs)
+}
+
+/**
  * Fills `mission.purpose` when ISO purpose is blank and expands known-acronym glosses on `mission.abstract`.
  *
  * @param {Record<string, unknown>} partial
@@ -3098,7 +3131,7 @@ function enrichMissionAbstractAndPurposeFromImport(partial) {
   }
   const glossed = appendNoaaMetadataAcronymGlosses(rawAbstract)
   if (glossed && glossed !== rawAbstract) m.abstract = glossed
-  m.purpose = resolveMissionPurposeForNcei(String(m.purpose || ''), String(m.abstract || '').trim())
+  m.purpose = resolveImportMissionPurposeForNcei(String(m.purpose || ''), String(m.abstract || '').trim())
 }
 
 function enrichMissionLicenseFromPreset(partial) {
@@ -3280,23 +3313,6 @@ function enrichDistributionLicenseFromImportConstraints(partial) {
     }
   }
 
-  const abstract = String(m.abstract || '').trim()
-  if (abstract) {
-    const inferredAbs = inferDataLicensePresetFromProse(abstract)
-    if (String(inferredAbs.distributionLicense || '').trim()) {
-      d.license = String(inferredAbs.distributionLicense).trim()
-      return
-    }
-    const absLine = abstract
-      .split(/\n+/)
-      .map((t) => t.trim())
-      .find((t) => t.length > 48)
-    if (absLine) {
-      d.license = absLine.length > 800 ? `${absLine.slice(0, 797)}…` : absLine
-      return
-    }
-  }
-
   d.license =
     'Use limitations were not stated in the imported metadata; verify restrictions with the data steward before reuse.'
 }
@@ -3335,11 +3351,216 @@ function enrichMissionDatesFromCitationWhenTemporalSparse(partial) {
 }
 
 /**
- * Post-parse enrichment for legacy ISO records (not only Navy UxS templates).
+ * @param {string} lic
+ * @param {string} abs
+ * @returns {boolean}
+ */
+function distributionLicenseEchoesAbstract(lic, abs) {
+  const L = String(lic || '').trim()
+  const A = String(abs || '').trim()
+  if (!L || !A) return false
+  return L === A || A.startsWith(L.slice(0, 60)) || L.startsWith(A.slice(0, 60))
+}
+
+/**
+ * @param {string[]} [warnings]
+ * @param {string} msg
+ */
+function pushImportWarning(warnings, msg) {
+  if (Array.isArray(warnings)) warnings.push(msg)
+}
+
+/** @param {Record<string, unknown> | null | undefined} obj */
+function swapWestEastIfReversed(obj, warnings, msg) {
+  if (!obj || typeof obj !== 'object') return
+  const w = String(obj.west ?? '').trim()
+  const e = String(obj.east ?? '').trim()
+  if (!w || !e) return
+  const fw = Number.parseFloat(w)
+  const fe = Number.parseFloat(e)
+  if (!Number.isFinite(fw) || !Number.isFinite(fe) || fw <= fe) return
+  const t = obj.west
+  obj.west = obj.east
+  obj.east = t
+  pushImportWarning(warnings, msg)
+}
+
+/** @param {Record<string, unknown> | null | undefined} obj */
+function swapSouthNorthIfReversed(obj, warnings, msg) {
+  if (!obj || typeof obj !== 'object') return
+  const s = String(obj.south ?? '').trim()
+  const n = String(obj.north ?? '').trim()
+  if (!s || !n) return
+  const fs = Number.parseFloat(s)
+  const fn = Number.parseFloat(n)
+  if (!Number.isFinite(fs) || !Number.isFinite(fn) || fs <= fn) return
+  const t = obj.south
+  obj.south = obj.north
+  obj.north = t
+  pushImportWarning(warnings, msg)
+}
+
+/**
+ * @param {Record<string, unknown>} partial
+ * @param {string[]} [warnings]
+ */
+function applyBboxCornerSwapsToImportPartial(partial, warnings) {
+  const msgWe = 'Bounding box west/east were swapped (west > east in source) — corrected automatically.'
+  const msgSn = 'Bounding box south/north were swapped (south > north in source) — corrected automatically.'
+  const m = partial.mission && typeof partial.mission === 'object' ? /** @type {Record<string, unknown>} */ (partial.mission) : null
+  const sp = partial.spatial && typeof partial.spatial === 'object' ? /** @type {Record<string, unknown>} */ (partial.spatial) : null
+  swapWestEastIfReversed(m, warnings, msgWe)
+  swapWestEastIfReversed(sp, warnings, msgWe)
+  swapSouthNorthIfReversed(m, warnings, msgSn)
+  swapSouthNorthIfReversed(sp, warnings, msgSn)
+}
+
+/**
  * @param {Record<string, unknown>} partial
  */
-function applyIsoImportHeuristics(partial) {
+function forceDistributionMetadataStandard19115_2(partial) {
+  if (!partial.distribution || typeof partial.distribution !== 'object') {
+    partial.distribution = {
+      metadataStandard: PILOT_EXPORT_METADATA_STANDARD,
+      metadataVersion: PILOT_EXPORT_METADATA_VERSION,
+    }
+    return
+  }
+  const d = /** @type {Record<string, unknown>} */ (partial.distribution)
+  d.metadataStandard = PILOT_EXPORT_METADATA_STANDARD
+  d.metadataVersion = PILOT_EXPORT_METADATA_VERSION
+}
+
+/**
+ * @param {Record<string, unknown>} partial
+ */
+function stripDistributionLicenseIfAbstractEcho(partial) {
+  const m = partial.mission && typeof partial.mission === 'object' ? /** @type {Record<string, unknown>} */ (partial.mission) : null
+  const d = partial.distribution && typeof partial.distribution === 'object' ? /** @type {Record<string, unknown>} */ (partial.distribution) : null
+  if (!m || !d) return
+  const abs = String(m.abstract || '').trim()
+  const lic = String(d.license || '').trim()
+  if (!lic) return
+  if (distributionLicenseEchoesAbstract(lic, abs)) d.license = ''
+}
+
+/**
+ * @param {Record<string, unknown>} partial
+ */
+function coerceMissionLicensePresetFromCustomWhenNoUrl(partial) {
+  const m = partial.mission && typeof partial.mission === 'object' ? /** @type {Record<string, unknown>} */ (partial.mission) : null
+  if (!m) return
+  if (normalizeDataLicensePresetKey(m.dataLicensePreset) === 'custom' && !String(m.licenseUrl || '').trim()) {
+    m.dataLicensePreset = 'ncei_cc_by_4'
+  }
+}
+
+/**
+ * @param {string} label
+ * @param {Record<string, unknown> | null} plat
+ * @returns {string}
+ */
+function cleanSinglePlatformKeywordLabel(label, plat) {
+  let lab = String(label || '').trim()
+  if (!lab) return lab
+  if (!/^platform:/i.test(lab) && !lab.includes('Model:')) return lab
+  const modelMatch = lab.match(/model:\s*([^;\n]+)/i)
+  if (modelMatch) return modelMatch[1].trim()
+  const platRec = plat && typeof plat === 'object' ? plat : null
+  const fromType = platRec ? String(platRec.platformType || '').trim() : ''
+  if (fromType) return fromType
+  const fromId = platRec ? String(platRec.platformId || '').trim() : ''
+  if (fromId) return fromId
+  return lab.replace(/^platform:\s*/i, '').replace(/\s+by\s+.*$/i, '').trim() || lab
+}
+
+/**
+ * @param {Record<string, unknown>} partial
+ */
+function cleanImportedPlatformKeywordLabels(partial) {
+  if (!partial.keywords || typeof partial.keywords !== 'object') return
+  const kw = /** @type {Record<string, unknown>} */ (partial.keywords)
+  const plat = partial.platform && typeof partial.platform === 'object' ? /** @type {Record<string, unknown>} */ (partial.platform) : null
+  const arr = kw.platforms
+  if (!Array.isArray(arr)) return
+  for (let i = 0; i < arr.length; i += 1) {
+    const row = arr[i]
+    if (!row || typeof row !== 'object') continue
+    const r = /** @type {{ label?: string }} */ (row)
+    const next = cleanSinglePlatformKeywordLabel(String(r.label || ''), plat)
+    if (next) r.label = next
+  }
+}
+
+/**
+ * Normalize acquisition rows so `variable` (observed variable) is instrument type, not manufacturer prose.
+ * @param {Record<string, unknown>} partial
+ */
+function normalizeImportedSensorInstrumentRows(partial) {
+  const rows = partial?.sensors
+  if (!Array.isArray(rows)) return
+  partial.sensors = rows.map((row) => {
+    if (!row || typeof row !== 'object') return row
+    const r = { .../** @type {Record<string, unknown>} */ (row) }
+    const typ = String(r.type || '').trim()
+    let variable = String(r.variable || '').trim()
+    const descr = String(r.description || '').trim()
+    if (typ) {
+      r.variable = typ
+      if (
+        descr
+        && (/manufacturer:|model:|s\/n:/i.test(descr) || /^manufacturer:/im.test(descr))
+        && !r.description
+      ) {
+        r.description = descr
+      }
+      return r
+    }
+    const mLine = descr.match(/^type:\s*([^\n]+)/im) || descr.match(/\ntype:\s*([^\n]+)/im)
+    const typeFromDesc = mLine ? mLine[1] : ''
+    if (String(typeFromDesc).trim()) {
+      const t2 = String(typeFromDesc).trim()
+      r.type = t2
+      r.variable = t2
+      return r
+    }
+    if (
+      variable
+      && (
+        (descr && (variable === descr || /^manufacturer:/im.test(descr)))
+        || variable.length > 100
+        || /manufacturer:|model:|s\/n:/i.test(variable)
+      )
+    ) {
+      r.variable = ''
+      if (!r.description) r.description = descr || variable
+    }
+    return r
+  })
+}
+
+/**
+ * Last-pass import normalization (bbox, export metadata standard, license / preset hygiene, platform keyword labels).
+ * @param {Record<string, unknown>} partial
+ * @param {string[]} [warnings]
+ */
+function finalizeImportPartialStateFromXml(partial, warnings) {
   if (!partial || typeof partial !== 'object') return
+  forceDistributionMetadataStandard19115_2(partial)
+  stripDistributionLicenseIfAbstractEcho(partial)
+  coerceMissionLicensePresetFromCustomWhenNoUrl(partial)
+  applyBboxCornerSwapsToImportPartial(partial, warnings)
+  cleanImportedPlatformKeywordLabels(partial)
+}
+
+/**
+ * Post-parse enrichment for legacy ISO records (not only Navy UxS templates).
+ * @param {Record<string, unknown>} partial
+ * @param {string[]} [warnings]
+ */
+function applyIsoImportHeuristics(partial, warnings) {
+  if (!partial || typeof partial !== 'object') return
+  normalizeImportedSensorInstrumentRows(partial)
   inferKeywordFacetsFromAcquisition(partial)
   inferPlatformTypeFromKeywordsAndMissionText(partial)
   inferPlatformIdDescFromKeywords(partial)
@@ -3350,6 +3571,7 @@ function applyIsoImportHeuristics(partial) {
   enrichMissionDatesFromCitationWhenTemporalSparse(partial)
   enrichMissionEmailFromNceiContextWhenMissing(partial)
   hydrateGcmdKeywordChipUuidsFromKnownLabels(partial)
+  finalizeImportPartialStateFromXml(partial, warnings)
 }
 
 /**
@@ -5047,7 +5269,7 @@ function extractFrom19115_3(root, raw, warnings) {
 
   deepStripUxTemplatePlaceholders(partial)
   enrichNavyUxPlaceholderImport(partial, raw, warnings)
-  applyIsoImportHeuristics(partial)
+  applyIsoImportHeuristics(partial, warnings)
 
   return { ok: true, partial, warnings }
 }
@@ -5310,7 +5532,7 @@ export function importPilotPartialStateFromXml(xmlString) {
 
   deepStripUxTemplatePlaceholders(partial)
   enrichNavyUxPlaceholderImport(partial, raw, warnings)
-  applyIsoImportHeuristics(partial)
+  applyIsoImportHeuristics(partial, warnings)
 
   stampIsoImportProvenance(partial, root)
   return { ok: true, partial, warnings }

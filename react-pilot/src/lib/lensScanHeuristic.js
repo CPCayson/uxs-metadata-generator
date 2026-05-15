@@ -19,17 +19,28 @@ const STOPWORDS = new Set([
   'about',
   'along',
   'based',
+  'collect',
+  'conduct',
   'data',
   'dataset',
+  'dive',
   'during',
+  'eagle',
+  'equipped',
   'from',
+  'ground',
   'have',
   'into',
+  'mapping',
   'mission',
   'ncei',
   'noaa',
   'oer',
+  'other',
+  'point',
+  'ray',
   'results',
+  'sensor',
   'study',
   'survey',
   'team',
@@ -39,6 +50,7 @@ const STOPWORDS = new Set([
   'this',
   'using',
   'uxs',
+  'will',
   'with',
 ])
 
@@ -271,6 +283,9 @@ export async function runLensScanHeuristic(input) {
     .trim()
   if (!seed) {
     throw new Error('Lens scan needs a non-empty title, abstract, UxS operational context, or XML snippet.')
+  }
+  if (profileId === 'mission' && (title.length < 20 || abstract.length < 20)) {
+    throw new Error('Lens scan requires mission.title and mission.abstract each to be at least 20 characters before running GCMD suggestions.')
   }
 
   const wordList = buildSeedTerms(title, abstract, xmlSnippet, uxsText)

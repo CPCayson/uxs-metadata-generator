@@ -2,7 +2,7 @@ import { SENSOR_XML_OPTIONAL_DEFAULTS } from './sensorInstrumentDescription.js'
 import { canonicalMissionInstantForStorage, normalizeMissionInstantString } from './datetimeLocal.js'
 import { normalizeDataLicensePresetKey } from './noaaLicensePresets.js'
 import { previewMetadataXPath } from './metadataXPath.js'
-import { resolveMissionPurposeForNcei } from './nceiMissionDefaults.js'
+import { resolveMissionPurposeForNcei, NCEI_DEFAULT_MISSION_PURPOSE } from './nceiMissionDefaults.js'
 
 /**
  * Mission validation runs on the **same** `pilotState` the wizard edits and `buildXmlPreview` serializes.
@@ -256,6 +256,17 @@ function normalizePilotNumericToken(v) {
  * @param {unknown} state
  * @returns {object}
  */
+/**
+ * @param {string} raw
+ * @param {string} abs
+ */
+function missionPurposeMirrorsAbstract(raw, abs) {
+  const r = String(raw || '').trim()
+  const a = String(abs || '').trim()
+  if (!r || !a) return false
+  return r === a || r.startsWith(a.slice(0, 60))
+}
+
 export function sanitizePilotState(state) {
   if (!state || typeof state !== 'object') return /** @type {object} */ (state)
   const out = JSON.parse(JSON.stringify(state))
@@ -284,9 +295,11 @@ export function sanitizePilotState(state) {
         let mn = rn
         if (Number(normalizePilotNumericToken(mw)) > Number(normalizePilotNumericToken(me))) {
           ;[mw, me] = [me, mw]
+          console.warn('[sanitizePilotState] mission bbox west/east were swapped (west > east) \u2014 corrected automatically.')
         }
         if (Number(normalizePilotNumericToken(ms)) > Number(normalizePilotNumericToken(mn))) {
           ;[ms, mn] = [mn, ms]
+          console.warn('[sanitizePilotState] mission bbox south/north were swapped (south > north) \u2014 corrected automatically.')
         }
         m.west = mw
         m.east = me
@@ -324,7 +337,13 @@ export function sanitizePilotState(state) {
     if (presetNorm === 'custom' && isBlank(m.licenseUrl)) {
       m.dataLicensePreset = 'ncei_cc_by_4'
     }
-    m.purpose = resolveMissionPurposeForNcei(String(m.purpose || ''), String(m.abstract || '').trim())
+    const absForPurpose = String(m.abstract || '').trim()
+    const rawPurpose = String(m.purpose || '').trim()
+    if (missionPurposeMirrorsAbstract(rawPurpose, absForPurpose)) {
+      m.purpose = NCEI_DEFAULT_MISSION_PURPOSE
+    } else {
+      m.purpose = resolveMissionPurposeForNcei(rawPurpose, absForPurpose)
+    }
     m.uxsContext = normalizeUxsContext(m.uxsContext)
   }
 
@@ -340,6 +359,38 @@ export function sanitizePilotState(state) {
       const n = normalizePilotNumericToken(sp[k])
       if (n !== '' && !isValidNumber(n)) sp[k] = ''
     }
+    const bboxAxesSpatial = ['west', 'east', 'south', 'north']
+    const spHasBbox = bboxAxesSpatial.some((ax) => Object.prototype.hasOwnProperty.call(sp, ax) && String(sp[ax] ?? '').trim() !== '')
+    if (spHasBbox) {
+      for (const ax of bboxAxesSpatial) {
+        if (!(ax in sp) || sp[ax] == null) continue
+        const raw = pickBboxAxis(sp[ax], BBOX_DEFAULT[ax])
+        const n = normalizePilotNumericToken(raw)
+        sp[ax] = isValidNumber(n) ? n : BBOX_DEFAULT[ax]
+      }
+      const rw = String(sp.west ?? '').trim()
+      const re = String(sp.east ?? '').trim()
+      const rs = String(sp.south ?? '').trim()
+      const rn = String(sp.north ?? '').trim()
+      if ([rw, re, rs, rn].every(isValidNumber)) {
+        let mw = rw
+        let me = re
+        let ms = rs
+        let mn = rn
+        if (Number(normalizePilotNumericToken(mw)) > Number(normalizePilotNumericToken(me))) {
+          ;[mw, me] = [me, mw]
+          console.warn('[sanitizePilotState] spatial bbox west/east were swapped (west > east) — corrected automatically.')
+        }
+        if (Number(normalizePilotNumericToken(ms)) > Number(normalizePilotNumericToken(mn))) {
+          ;[ms, mn] = [mn, ms]
+          console.warn('[sanitizePilotState] spatial bbox south/north were swapped (south > north) — corrected automatically.')
+        }
+        sp.west = mw
+        sp.east = me
+        sp.south = ms
+        sp.north = mn
+      }
+    }
   }
 
   if (out.distribution && typeof out.distribution === 'object') {
@@ -348,6 +399,28 @@ export function sanitizePilotState(state) {
       const t = String(d.nceiFileIdPrefix).trim()
       if (t === '') delete d.nceiFileIdPrefix
       else d.nceiFileIdPrefix = truthyFlag(d.nceiFileIdPrefix)
+    }
+    const metaStd = String(d.metadataStandard || '')
+    const metaLow = metaStd.toLowerCase()
+    if (
+      /19115\s*[-_]?\s*3/.test(metaLow)
+      || metaLow.includes('metadata part 3')
+      || (metaLow.includes('19115') && /\b3\.0\b/.test(metaLow) && !metaLow.includes('19115-2'))
+      || metaLow.includes('19115-2 imagery')
+      || metaLow.includes('19115-2 geographic')
+    ) {
+      d.metadataStandard =
+        'ISO 19115-2 Geographic Information - Metadata - Part 2: Extensions for Imagery and Gridded Data'
+      d.metadataVersion = 'ISO 19115-2:2009(E)'
+    }
+    const absLic = String(out.mission?.abstract || '').trim()
+    const licSan = String(d.license || '').trim()
+    if (
+      absLic
+      && licSan
+      && (licSan === absLic || absLic.startsWith(licSan.slice(0, 60)) || licSan.startsWith(absLic.slice(0, 60)))
+    ) {
+      d.license = ''
     }
     const preset = normalizeDataLicensePresetKey(out.mission?.dataLicensePreset)
     if (!String(d.license || '').trim()) {
@@ -372,7 +445,12 @@ export function sanitizePilotState(state) {
     })
     const ins = out.keywords?.instruments
     const firstInst = Array.isArray(ins) && ins[0]?.label ? String(ins[0].label).trim() : ''
-    if (firstInst) {
+    const firstInstOk =
+      firstInst
+      && !/^platform:/i.test(firstInst)
+      && !/\bmodel:/i.test(firstInst)
+      && !/manufacturer:/i.test(firstInst)
+    if (firstInstOk) {
       out.sensors = out.sensors.map((s, i) => {
         if (i !== 0) return s
         let next = { ...s }
